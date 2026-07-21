@@ -1,0 +1,32 @@
+[DEBUG] 2026-07-21 10:04:32.467 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml"
+[TRACE] 2026-07-21 10:04:33.259 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-21 10:04:33.259 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-21 10:04:33.262 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-21 10:04:33.262 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-21 10:04:33.262 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-21 10:04:33.263 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-21 10:04:33.263 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-21 10:04:33.263 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-21 10:04:33.263 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-21 10:04:33.263 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-21 10:04:33.267 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:FinancialMovementsTest.CustomerReceiptTest@3069a360] -1833553542
+[TRACE] 2026-07-21 10:04:33.267 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-21 10:04:33.268 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-21 10:04:33.268 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-21 10:04:33.268 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-21 10:04:33.272 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerReceiptTest.AddNewResetWithSaveAndPrint()[pri:3, instance:FinancialMovementsTest.CustomerReceiptTest@3069a360] -990874241
+[TRACE] 2026-07-21 10:04:33.273 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-21 10:04:33.273 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-21 10:04:33.273 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-21 10:04:33.273 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-21 10:04:33.275 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:FinancialMovementsTest.CustomerReceiptTest@3069a360] 1061936131
+[TRACE] 2026-07-21 10:04:33.275 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-21 10:04:33.275 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-21 10:04:33.275 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-21 10:04:33.275 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-21 10:04:33.327 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml
+
+[ERROR] 2026-07-21 10:04:44.673 [main                ] [NamingUtils                        ] - Could not find parameter user
+[ERROR] 2026-07-21 10:04:44.674 [main                ] [NamingUtils                        ] - Could not find parameter pass
+[ERROR] 2026-07-21 10:05:12.506 [main                ] [NamingUtils                        ] - Could not find parameter todayDate

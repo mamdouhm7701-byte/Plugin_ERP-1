@@ -1,0 +1,29 @@
+[DEBUG] 2026-07-06 14:00:05.797 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml"
+[TRACE] 2026-07-06 14:00:06.273 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-06 14:00:06.274 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 14:00:06.276 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 14:00:06.277 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 14:00:06.277 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 14:00:06.278 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-06 14:00:06.278 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 14:00:06.278 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 14:00:06.278 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 14:00:06.278 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 14:00:06.283 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest@35e26d05] -1741751521
+[TRACE] 2026-07-06 14:00:06.283 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 14:00:06.283 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 14:00:06.283 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 14:00:06.283 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 14:00:06.288 [main                ] [Graph                              ] - [Graph] ADDING NODE TaypeOfDiscountTest.DeleteTypeOfDiscount()[pri:3, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest@35e26d05] 817450393
+[TRACE] 2026-07-06 14:00:06.289 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 14:00:06.289 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 14:00:06.289 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 14:00:06.289 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 14:00:06.291 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest@35e26d05] 1153738152
+[TRACE] 2026-07-06 14:00:06.291 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 14:00:06.291 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 14:00:06.291 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 14:00:06.291 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-06 14:00:06.328 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml
+

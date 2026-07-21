@@ -1,0 +1,30 @@
+[DEBUG] 2026-07-08 16:37:00.297 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml"
+[TRACE] 2026-07-08 16:37:00.782 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-08 16:37:00.782 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-08 16:37:00.785 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-08 16:37:00.786 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-08 16:37:00.786 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-08 16:37:00.787 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-08 16:37:00.787 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-08 16:37:00.787 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-08 16:37:00.787 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-08 16:37:00.787 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-08 16:37:00.793 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:FinancialMovementsTest.CustomerDiscountNoticeTest@423c5404] -1534533090
+[TRACE] 2026-07-08 16:37:00.793 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-08 16:37:00.794 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-08 16:37:00.794 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-08 16:37:00.794 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-08 16:37:00.800 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerDiscountNoticeTest.AddCustomerDiscountNoticeAnd_VerifyCalculationsAndReport()[pri:1, instance:FinancialMovementsTest.CustomerDiscountNoticeTest@423c5404] -62720157
+[TRACE] 2026-07-08 16:37:00.801 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-08 16:37:00.801 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-08 16:37:00.801 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-08 16:37:00.801 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-08 16:37:00.802 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:FinancialMovementsTest.CustomerDiscountNoticeTest@423c5404] 1360956583
+[TRACE] 2026-07-08 16:37:00.802 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-08 16:37:00.802 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-08 16:37:00.802 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-08 16:37:00.803 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-08 16:37:00.843 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml
+
+[ERROR] 2026-07-08 16:37:33.708 [main                ] [NamingUtils                        ] - Could not find parameter todayDate

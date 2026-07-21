@@ -1,0 +1,30 @@
+[DEBUG] 2026-07-13 11:54:52.863 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml"
+[TRACE] 2026-07-13 11:54:53.307 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-13 11:54:53.309 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-13 11:54:53.311 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-13 11:54:53.312 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-13 11:54:53.312 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-13 11:54:53.313 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-13 11:54:53.313 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-13 11:54:53.313 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-13 11:54:53.313 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-13 11:54:53.313 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-13 11:54:53.319 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:StoreTest.ExchangeOrderTest@303f1234] -1836343218
+[TRACE] 2026-07-13 11:54:53.319 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-13 11:54:53.319 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-13 11:54:53.319 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-13 11:54:53.319 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-13 11:54:53.326 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AssertExsistCustomre()[pri:7, instance:StoreTest.ExchangeOrderTest@303f1234] -1192437377
+[TRACE] 2026-07-13 11:54:53.326 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-13 11:54:53.326 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-13 11:54:53.326 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-13 11:54:53.326 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-13 11:54:53.327 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:StoreTest.ExchangeOrderTest@303f1234] 1059146455
+[TRACE] 2026-07-13 11:54:53.328 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-13 11:54:53.328 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-13 11:54:53.328 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-13 11:54:53.328 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-13 11:54:53.380 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml
+
+[ERROR] 2026-07-13 11:54:56.156 [main                ] [AllureLifecycle                    ] - Could not update test container: container with uuid 9725e657-fb25-4f45-a709-7cee87a3b5b7 not found

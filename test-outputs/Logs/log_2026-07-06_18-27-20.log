@@ -1,0 +1,203 @@
+[DEBUG] 2026-07-06 18:27:20.547 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\Desktop\Plugin_ERP\src\test\resources\Test-Data\FinanicalMovment.xml"
+[TRACE] 2026-07-06 18:27:21.064 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-06 18:27:21.064 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 18:27:21.067 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 18:27:21.067 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 18:27:21.068 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 18:27:21.068 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-06 18:27:21.069 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 18:27:21.069 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 18:27:21.069 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 18:27:21.069 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 18:27:21.075 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-06 18:27:21.076 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 18:27:21.076 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 18:27:21.076 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 18:27:21.076 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 18:27:21.077 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-06 18:27:21.077 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 18:27:21.077 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 18:27:21.077 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 18:27:21.077 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 18:27:21.080 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-06 18:27:21.081 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 18:27:21.081 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 18:27:21.081 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 18:27:21.081 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 18:27:21.082 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-06 18:27:21.083 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 18:27:21.083 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 18:27:21.083 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 18:27:21.083 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 18:27:21.087 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-06 18:27:21.087 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 18:27:21.087 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 18:27:21.087 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 18:27:21.087 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 18:27:21.088 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-06 18:27:21.088 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 18:27:21.088 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 18:27:21.088 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 18:27:21.088 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 18:27:21.091 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-06 18:27:21.091 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 18:27:21.091 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 18:27:21.091 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 18:27:21.091 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 18:27:21.091 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-06 18:27:21.092 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 18:27:21.092 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 18:27:21.092 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 18:27:21.092 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 18:27:21.096 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-06 18:27:21.096 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 18:27:21.097 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 18:27:21.097 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 18:27:21.097 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 18:27:21.097 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-06 18:27:21.097 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 18:27:21.097 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 18:27:21.097 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 18:27:21.097 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 18:27:21.101 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:FinancialMovementsTest.CustomerReceiptTest@37baddde] -1710789640
+[TRACE] 2026-07-06 18:27:21.101 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 18:27:21.102 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 18:27:21.102 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 18:27:21.102 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 18:27:21.109 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerReceiptTest.AddCustomerWithSaveAndCustomerReceiptTest()[pri:1, instance:FinancialMovementsTest.CustomerReceiptTest@37baddde] -1466823517
+[TRACE] 2026-07-06 18:27:21.109 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerReceiptTest.AssertRequiredErrorsMessageForPaymentMethod()[pri:8, instance:FinancialMovementsTest.CustomerReceiptTest@37baddde] 1189696769
+[TRACE] 2026-07-06 18:27:21.110 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerReceiptTest.DeleteCustomerReceiptTest()[pri:5, instance:FinancialMovementsTest.CustomerReceiptTest@37baddde] 1191717749
+[TRACE] 2026-07-06 18:27:21.110 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerReceiptTest.AddResetWithSaveTest()[pri:2, instance:FinancialMovementsTest.CustomerReceiptTest@37baddde] 2131907223
+[TRACE] 2026-07-06 18:27:21.110 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerReceiptTest.AssertRequiredErrorsMessageForPaymentMethodOption()[pri:9, instance:FinancialMovementsTest.CustomerReceiptTest@37baddde] 556097182
+[TRACE] 2026-07-06 18:27:21.110 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerReceiptTest.AddOldDAte()[pri:10, instance:FinancialMovementsTest.CustomerReceiptTest@37baddde] -971169824
+[TRACE] 2026-07-06 18:27:21.110 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerReceiptTest.AssertRequiredErrorsMessageForAgent()[pri:6, instance:FinancialMovementsTest.CustomerReceiptTest@37baddde] 2064024007
+[TRACE] 2026-07-06 18:27:21.110 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerReceiptTest.AddNewResetWithSaveAndPrint()[pri:3, instance:FinancialMovementsTest.CustomerReceiptTest@37baddde] -868110339
+[TRACE] 2026-07-06 18:27:21.110 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerReceiptTest.AssertRequiredErrorsMessageForAmount()[pri:7, instance:FinancialMovementsTest.CustomerReceiptTest@37baddde] -1189428866
+[TRACE] 2026-07-06 18:27:21.110 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerReceiptTest.EditeAfterReportTest()[pri:4, instance:FinancialMovementsTest.CustomerReceiptTest@37baddde] -1136162765
+[TRACE] 2026-07-06 18:27:21.110 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierBillOfExchangeTest.AddSupplierBillOfExchangeTest()[pri:1, instance:FinancialMovementsTest.SupplierBillOfExchangeTest@6c0905f6] -810642729
+[TRACE] 2026-07-06 18:27:21.110 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierBillOfExchangeTest.AssertRequiredErrorsMessageForPaymentMethod()[pri:8, instance:FinancialMovementsTest.SupplierBillOfExchangeTest@6c0905f6] 365942690
+[TRACE] 2026-07-06 18:27:21.110 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierBillOfExchangeTest.DeleteSupplierReceiptTest()[pri:5, instance:FinancialMovementsTest.SupplierBillOfExchangeTest@6c0905f6] -1157712444
+[TRACE] 2026-07-06 18:27:21.110 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierBillOfExchangeTest.AddResetWithSaveTest()[pri:2, instance:FinancialMovementsTest.SupplierBillOfExchangeTest@6c0905f6] -478878412
+[TRACE] 2026-07-06 18:27:21.111 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierBillOfExchangeTest.AssertRequiredErrorsMessageForPaymentMethodOption()[pri:9, instance:FinancialMovementsTest.SupplierBillOfExchangeTest@6c0905f6] -1013232851
+[TRACE] 2026-07-06 18:27:21.111 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierBillOfExchangeTest.AddOldDAte()[pri:10, instance:FinancialMovementsTest.SupplierBillOfExchangeTest@6c0905f6] 412291779
+[TRACE] 2026-07-06 18:27:21.111 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierBillOfExchangeTest.AssertRequiredErrorsMessageForAgent()[pri:6, instance:FinancialMovementsTest.SupplierBillOfExchangeTest@6c0905f6] -337058332
+[TRACE] 2026-07-06 18:27:21.111 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierBillOfExchangeTest.AddNewResetWithSaveAndPrint()[pri:3, instance:FinancialMovementsTest.SupplierBillOfExchangeTest@6c0905f6] -1805619762
+[TRACE] 2026-07-06 18:27:21.111 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierBillOfExchangeTest.AssertRequiredErrorsMessageForAmount()[pri:7, instance:FinancialMovementsTest.SupplierBillOfExchangeTest@6c0905f6] 602154573
+[TRACE] 2026-07-06 18:27:21.111 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierBillOfExchangeTest.EditeAfterReportTest()[pri:4, instance:FinancialMovementsTest.SupplierBillOfExchangeTest@6c0905f6] 776529040
+[TRACE] 2026-07-06 18:27:21.111 [main                ] [Graph                              ] - [Graph] ADDING NODE OtherRevenueMovementTest.IsAmountRequiredErrorDisplayed()[pri:6, instance:FinancialMovementsTest.OtherRevenueMovementTest@6ca372ef] -1785018436
+[TRACE] 2026-07-06 18:27:21.111 [main                ] [Graph                              ] - [Graph] ADDING NODE OtherRevenueMovementTest.AddOpenOtherRevenueMovementPageEithSAveAndPrint()[pri:1, instance:FinancialMovementsTest.OtherRevenueMovementTest@6ca372ef] -1599534238
+[TRACE] 2026-07-06 18:27:21.111 [main                ] [Graph                              ] - [Graph] ADDING NODE OtherRevenueMovementTest.AddOpenOtherRevenueMovementPageEithSAve()[pri:3, instance:FinancialMovementsTest.OtherRevenueMovementTest@6ca372ef] 1556062444
+[TRACE] 2026-07-06 18:27:21.111 [main                ] [Graph                              ] - [Graph] ADDING NODE OtherRevenueMovementTest.EditOpenOtherRevenueMovementPage()[pri:2, instance:FinancialMovementsTest.OtherRevenueMovementTest@6ca372ef] 1160293568
+[TRACE] 2026-07-06 18:27:21.111 [main                ] [Graph                              ] - [Graph] ADDING NODE OtherRevenueMovementTest.IsPaymentMethodRequiredErrorDisplayed()[pri:7, instance:FinancialMovementsTest.OtherRevenueMovementTest@6ca372ef] -2093242251
+[TRACE] 2026-07-06 18:27:21.111 [main                ] [Graph                              ] - [Graph] ADDING NODE OtherRevenueMovementTest.IsTypeRequiredErrorDisplayed()[pri:5, instance:FinancialMovementsTest.OtherRevenueMovementTest@6ca372ef] 967560798
+[TRACE] 2026-07-06 18:27:21.111 [main                ] [Graph                              ] - [Graph] ADDING NODE OtherRevenueMovementTest.DeleteOtherRevenueMovement()[pri:4, instance:FinancialMovementsTest.OtherRevenueMovementTest@6ca372ef] -1340568984
+[TRACE] 2026-07-06 18:27:21.112 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierDiscountNoticeTest.Delete()[pri:5, instance:FinancialMovementsTest.SupplierDiscountNoticeTest@4d3c6593] 798754977
+[TRACE] 2026-07-06 18:27:21.112 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierDiscountNoticeTest.InvalidAgentName()[pri:7, instance:FinancialMovementsTest.SupplierDiscountNoticeTest@4d3c6593] 1059107763
+[TRACE] 2026-07-06 18:27:21.112 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierDiscountNoticeTest.EditSupplierDiscountNoticeAnd_VerifyCalculationsAndReport()[pri:2, instance:FinancialMovementsTest.SupplierDiscountNoticeTest@4d3c6593] -2112130773
+[TRACE] 2026-07-06 18:27:21.112 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierDiscountNoticeTest.InvalidDate()[pri:6, instance:FinancialMovementsTest.SupplierDiscountNoticeTest@4d3c6593] 1636691959
+[TRACE] 2026-07-06 18:27:21.112 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierDiscountNoticeTest.AddSupplierDiscountNoticeAnd_VerifyCalculationsAndCustom()[pri:3, instance:FinancialMovementsTest.SupplierDiscountNoticeTest@4d3c6593] -1114125787
+[TRACE] 2026-07-06 18:27:21.112 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierDiscountNoticeTest.AddSupplierDiscountNoticeAnd_VerifyCalculationsAndSave()[pri:4, instance:FinancialMovementsTest.SupplierDiscountNoticeTest@4d3c6593] -1262917895
+[TRACE] 2026-07-06 18:27:21.112 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierDiscountNoticeTest.InvalidValue()[pri:8, instance:FinancialMovementsTest.SupplierDiscountNoticeTest@4d3c6593] 534524562
+[TRACE] 2026-07-06 18:27:21.112 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierDiscountNoticeTest.AddSupplierDiscountNoticeAnd_VerifyCalculationsAndReport()[pri:1, instance:FinancialMovementsTest.SupplierDiscountNoticeTest@4d3c6593] -40385966
+[TRACE] 2026-07-06 18:27:21.112 [main                ] [Graph                              ] - [Graph] ADDING NODE ExpenseMovementTest.AssertPaymentMethodErrorMessage()[pri:7, instance:FinancialMovementsTest.ExpenseMovementTest@633cc6b5] -19021826
+[TRACE] 2026-07-06 18:27:21.112 [main                ] [Graph                              ] - [Graph] ADDING NODE ExpenseMovementTest.AddExpenseMovementWithSelectTax_AssertValue()[pri:1, instance:FinancialMovementsTest.ExpenseMovementTest@633cc6b5] -139473761
+[TRACE] 2026-07-06 18:27:21.112 [main                ] [Graph                              ] - [Graph] ADDING NODE ExpenseMovementTest.AddExpenseMovementWithSelectAccountantAndClickSave()[pri:3, instance:FinancialMovementsTest.ExpenseMovementTest@633cc6b5] 1242463502
+[TRACE] 2026-07-06 18:27:21.112 [main                ] [Graph                              ] - [Graph] ADDING NODE ExpenseMovementTest.AssertValueErrorMessage()[pri:9, instance:FinancialMovementsTest.ExpenseMovementTest@633cc6b5] -513312348
+[TRACE] 2026-07-06 18:27:21.113 [main                ] [Graph                              ] - [Graph] ADDING NODE ExpenseMovementTest.EditExpenseMovementWithSelectTax_AssertValue()[pri:2, instance:FinancialMovementsTest.ExpenseMovementTest@633cc6b5] -210804874
+[TRACE] 2026-07-06 18:27:21.113 [main                ] [Graph                              ] - [Graph] ADDING NODE ExpenseMovementTest.AssertPayment_OptionMethodErrorMessage()[pri:8, instance:FinancialMovementsTest.ExpenseMovementTest@633cc6b5] 1263685546
+[TRACE] 2026-07-06 18:27:21.113 [main                ] [Graph                              ] - [Graph] ADDING NODE ExpenseMovementTest.AddExpenseMovementWithSelectExpenseAndClickSave()[pri:4, instance:FinancialMovementsTest.ExpenseMovementTest@633cc6b5] 2050165360
+[TRACE] 2026-07-06 18:27:21.113 [main                ] [Graph                              ] - [Graph] ADDING NODE ExpenseMovementTest.DeleteExpenseMovement()[pri:5, instance:FinancialMovementsTest.ExpenseMovementTest@633cc6b5] -365997038
+[TRACE] 2026-07-06 18:27:21.113 [main                ] [Graph                              ] - [Graph] ADDING NODE ExpenseMovementTest.AssertTypeExpenseErrorMessage()[pri:6, instance:FinancialMovementsTest.ExpenseMovementTest@633cc6b5] -2060531705
+[TRACE] 2026-07-06 18:27:21.113 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.Delete()[pri:19, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] -996873006
+[TRACE] 2026-07-06 18:27:21.113 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromAgentToCash()[pri:11, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] 1070723316
+[TRACE] 2026-07-06 18:27:21.113 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromAgentToAgent()[pri:13, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] 61694678
+[TRACE] 2026-07-06 18:27:21.113 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromBankToSupplier()[pri:10, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] 1953385176
+[TRACE] 2026-07-06 18:27:21.113 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromBankToAgent()[pri:9, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] -284173935
+[TRACE] 2026-07-06 18:27:21.113 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.AddNewTransferAndSettlement_SaveAndPrint_AndAssertResults()[pri:1, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] 621534697
+[TRACE] 2026-07-06 18:27:21.113 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromSupplierToSupplier()[pri:18, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] 694016584
+[TRACE] 2026-07-06 18:27:21.114 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.AssertValueErorrMessage()[pri:21, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] 144465245
+[TRACE] 2026-07-06 18:27:21.114 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.AddFromCashToCash_SaveAndPrint_AndAssertResults()[pri:3, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] 352205979
+[TRACE] 2026-07-06 18:27:21.114 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.AddFromCashToBank_SaveAndPrint_AndAssertResults()[pri:4, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] -1715499390
+[TRACE] 2026-07-06 18:27:21.114 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.FromCashToSupplier()[pri:6, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] 37201809
+[TRACE] 2026-07-06 18:27:21.114 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromAgentToSupplier()[pri:14, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] -1330503125
+[TRACE] 2026-07-06 18:27:21.114 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromSupplierToBank()[pri:16, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] -1325379240
+[TRACE] 2026-07-06 18:27:21.114 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromAgentToBank()[pri:12, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] 1061621499
+[TRACE] 2026-07-06 18:27:21.114 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromSupplierToAgent()[pri:17, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] -109179423
+[TRACE] 2026-07-06 18:27:21.114 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromBankToBank()[pri:8, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] 1613812776
+[TRACE] 2026-07-06 18:27:21.114 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.AssertselectEverySideOption()[pri:22, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] -1251148496
+[TRACE] 2026-07-06 18:27:21.114 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromSupplierToCash()[pri:15, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] -1324021967
+[TRACE] 2026-07-06 18:27:21.115 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.EditTransferAndSettlement_SaveAndPrint_AndAssertResults()[pri:2, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] -823284132
+[TRACE] 2026-07-06 18:27:21.115 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromBankToCash()[pri:7, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] 1614757377
+[TRACE] 2026-07-06 18:27:21.115 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.AddFromCashToAgent_SaveAndPrint_AndAssertResults()[pri:5, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] -1743508389
+[TRACE] 2026-07-06 18:27:21.115 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.AssertTypeDontSendToSameType()[pri:20, instance:FinancialMovementsTest.TransfersAndSettlementsTest@2513a118] -1211274015
+[TRACE] 2026-07-06 18:27:21.115 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 18:27:21.120 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 18:27:21.120 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 18:27:21.120 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 18:27:21.123 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:FinancialMovementsTest.CustomerReceiptTest@37baddde] 1184700033
+[TRACE] 2026-07-06 18:27:21.123 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 18:27:21.124 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 18:27:21.124 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 18:27:21.124 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-06 18:27:21.223 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\Desktop\Plugin_ERP\src\test\resources\Test-Data\FinanicalMovment.xml
+
+[ERROR] 2026-07-06 18:27:56.570 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:28:11.061 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:28:21.941 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:28:43.797 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:29:38.867 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:29:46.692 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:29:55.356 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:30:04.466 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:30:14.591 [main                ] [NamingUtils                        ] - Could not find parameter pastYearDate
+[ERROR] 2026-07-06 18:30:25.490 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:30:42.178 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:30:55.779 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:31:15.959 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:33:08.488 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:33:18.484 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:33:27.106 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:33:36.047 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:33:45.528 [main                ] [NamingUtils                        ] - Could not find parameter pastYearDate
+[ERROR] 2026-07-06 18:33:56.019 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:34:08.304 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:34:21.903 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:34:38.246 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:34:47.163 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:34:57.386 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:35:06.956 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:35:20.591 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:35:35.433 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:36:20.165 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:36:34.567 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:36:42.580 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:36:55.132 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:37:15.704 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:37:30.020 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:37:47.101 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:37:56.619 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:38:14.719 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:38:24.346 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:38:43.457 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:39:05.994 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:39:20.435 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:39:34.394 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:39:43.176 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:39:56.539 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:40:10.306 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:40:23.689 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:40:37.246 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:40:54.582 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:41:07.843 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:41:20.941 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:41:34.060 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:41:47.168 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:42:01.194 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:42:14.225 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:42:26.720 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:42:39.052 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:42:51.316 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:45:36.302 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:45:43.362 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-06 18:45:56.791 [main                ] [NamingUtils                        ] - Could not find parameter todayDate

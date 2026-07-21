@@ -1,0 +1,283 @@
+package Plugin_ERP.System_Modules.Login;
+
+import Plugin_ERP.Bots.LogUtils;
+import io.qameta.allure.Step;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.time.Duration;
+import java.util.List;
+
+public class AbstractForDealer extends Abstract {
+    public AbstractForDealer(WebDriver driver) {
+        super(driver);
+    }
+
+    //Locators
+
+    private By NewButton = By.xpath("//div[contains(@class,'justify-content-end')]//button[@data-action-type='new']");
+    private By DateInput = By.xpath("//input[@placeholder='YYYY-MM-DD']");
+    private By AllowanceDays = By.cssSelector("input[name='allowanceDays']");
+    private By commercialRegisterNumber = By.cssSelector("input[name='commercialRegisterNumber']");
+    private By DiscountValue = By.cssSelector("input[placeholder='قيمة الخصم']");
+    private By ValueLimit = By.cssSelector("input[name='value']");
+    private By AddNote = By.xpath("//textarea[contains(@class,'form-control') and @label='Notes']");
+    private By ContactDataTab = By.cssSelector("a.nav-link[aria-posinset='2']");
+    private By ContactPersonName = By.cssSelector("input[name='contactPerson']");
+    private By LandLine = By.cssSelector("div[data-title='التليفون الأرضي'] input");
+    private By Email = By.cssSelector("input[name='email']");
+    private By ExtraNumber = By.cssSelector("input[name='extraNumber']");
+    private By AnotherId = By.cssSelector("input[name='anotherId']");
+    private By BankName = By.cssSelector("input[name='bankName']");
+    private By AccountNumber = By.cssSelector("input[name='accountNumber']");
+    private By AgentPhone = By.cssSelector("label[for='agentPhone'] + input");
+    private By Iban = By.cssSelector("input[name='iban']");
+    private By TaxNumber = By.cssSelector("input[name='taxNumber']");
+    private By Country = By.cssSelector("input[name='country']");
+    private By City = By.cssSelector("input[name='city']");
+    private By District = By.cssSelector("input[name='district']");
+    private By BuildingNumber = By.cssSelector("input[name='buildingNumber']");
+    private By PostalCode = By.cssSelector("input[name='postalCode']");
+    private By StreetName = By.cssSelector("input[name='streetName']");
+    private By customerControlTab = By.cssSelector("a.nav-link[aria-posinset='5']");
+    private By SupplerControlTab = By.cssSelector("a.nav-link[aria-posinset='4']");
+    private By AssertTaxNumber  = By.xpath("//small[contains(text(),'الحقل رقم المبني يجب ان يحتوي على 4 حروف على الأقل')]");
+    private By AssertPostNumber  = By.xpath("//small[contains(text(),'الحقل الرمز البريدي يجب ان يحتوي على 5 حروف على الأقل')]");
+
+    private By AssertAdress  = By.xpath("//small[contains(text(),'عنوان العميل مطلوب')]");
+    private By AssertAgentNatural = By.xpath("//small[contains(text(),'طبيعه المندوب مطلوب')]");
+    private By AssertClassification = By.xpath("//small[contains(text(),'نوع التصنيف مطلوب')]");
+    private By AssertMainDealer = By.xpath("//small[contains(text(),'النوع مطلوب')]");
+
+
+
+
+
+
+    //الميثودات
+//ميثودات الضغط
+    @Step("الضغط على زر جديد")
+    public void ClickNewButtonForDealer() {
+        utilites.ClickElement(NewButton);
+    }
+
+    @Step("الضغط على تاب بيانات التواصل")
+    public void ClickContactDataTab() {
+        utilites.ClickElement(ContactDataTab);
+    }
+
+    @Step("الضغط على تاب التحكم في العميل")
+    public void ClickCustomerControlTab() {
+        utilites.ClickElement(customerControlTab);
+    }
+
+
+    @Step("الضغط على تاب التحكم في المورد")
+    public void ClickSupplierControlTab() {
+        utilites.ClickElement(SupplerControlTab);
+    }
+
+    //ميثودات الإضافة
+    @Step("إضافة التاريخ: {todayDate}")
+    public void AddDateForDealer() {
+        utilites.waits().waitForOverlayToDisappear();
+        String todayDate = utilites.Utility().TypeTodayDate("dd/MM/yyyy");
+        utilites.TaypeTextB(DateInput, todayDate);
+        utilites.waits().waitForOverlayToDisappear();
+    }
+
+    @Step("إضافة أيام السماح: {allowanceDays}")
+    public void AddAllowanceDays(String allowanceDays) {
+        utilites.TaypeTextB(AllowanceDays, allowanceDays);
+    }
+
+    @Step("إضافة رقم السجل التجاري: {commercialRegisterNumber}")
+    public void AddCommercialRegisterNumber(String commercialRegisterNumber) {
+        utilites.TaypeTextB(this.commercialRegisterNumber, commercialRegisterNumber);
+    }
+
+    @Step("إضافة قيمة الخصم: {discountValue}")
+    public void AddDiscountValue(String discountValue) {
+        utilites.TaypeTextB(DiscountValue, discountValue);
+    }
+
+    @Step("إضافة حد القيمة: {valueLimit}")
+    public void AddValueLimit(String valueLimit) {
+        utilites.TaypeTextB(ValueLimit, valueLimit);
+    }
+
+    @Step("إضافة ملاحظة: {note}")
+    public void AddNoteForDealer(String note) {
+        utilites.TaypeTextB(AddNote, note);
+    }
+
+    @Step("إضافة اسم جهة الاتصال: {contactPersonName}")
+    public void AddContactPersonName(String contactPersonName) {
+        utilites.TaypeTextB(ContactPersonName, contactPersonName);
+    }
+
+    @Step("إضافة الخط الأرضي: {landLine}")
+    public void AddLandLine(String landLine) {
+        utilites.TaypeTextB(LandLine, landLine);
+    }
+
+    @Step("إضافة البريد الإلكتروني: {email}")
+    public void AddEmail(String email) {
+        utilites.TaypeTextB(Email, email);
+    }
+
+    @Step("إضافة رقم إضافي: {extraNumber}")
+    public void AddExtraNumber(String extraNumber) {
+        utilites.TaypeTextB(ExtraNumber, extraNumber);
+    }
+
+    @Step("إضافة رقم تعريفي آخر: {anotherId}")
+    public void AddAnotherId(String anotherId) {
+        utilites.TaypeTextB(AnotherId, anotherId);
+    }
+
+    @Step("إضافة اسم البنك: {bankName}")
+    public void AddBankName(String bankName) {
+        utilites.TaypeTextB(BankName, bankName);
+    }
+
+    @Step("إضافة رقم الحساب: {accountNumber}")
+    public void AddAccountNumber(String accountNumber) {
+        utilites.TaypeTextB(AccountNumber, accountNumber);
+    }
+
+    @Step("إضافة رقم هاتف الوكيل: {agentPhone}")
+    public void AddAgentPhone(String agentPhone) {
+        utilites.TaypeTextB(AgentPhone, agentPhone);
+    }
+
+    @Step("إضافة رقم الآيبان: {iban}")
+    public void AddIban(String iban) {
+        utilites.TaypeTextB(Iban, iban);
+    }
+
+    @Step("إضافة الرقم الضريبي: {taxNumber}")
+    public void AddTaxNumber(String taxNumber) {
+        utilites.TaypeTextB(TaxNumber, taxNumber);
+    }
+
+    @Step("إضافة الدولة: {country}")
+    public void AddCountry(String country) {
+        utilites.TaypeTextB(Country, country);
+    }
+
+    @Step("إضافة المدينة: {city}")
+    public void AddCity(String city) {
+        utilites.TaypeTextB(City, city);
+    }
+
+    @Step("إضافة الحي: {district}")
+    public void AddDistrict(String district) {
+        utilites.TaypeTextB(District, district);
+    }
+
+    @Step("إضافة رقم المبنى: {buildingNumber}")
+    public void AddBuildingNumber(String buildingNumber) {
+        utilites.TaypeTextB(BuildingNumber, buildingNumber);
+    }
+
+    @Step("إضافة الرمز البريدي: {postalCode}")
+    public void AddPostalCode(String postalCode) {
+        utilites.TaypeTextB(PostalCode, postalCode);
+    }
+
+    @Step("إضافة اسم الشارع: {streetName}")
+    public void AddStreetName(String streetName) {
+        utilites.TaypeTextB(StreetName, streetName);
+    }
+
+
+    //ميثودات الـ Checkbox
+    @Step("تعيين قيمة الـ Checkbox: {text} إلى {shouldBeChecked}")
+    public void SetCheckboxValueForDealer(String text, boolean shouldBeChecked) {
+        utilites.checkbox().setCheckboxForDealer(text, shouldBeChecked);
+    }
+
+    @Step("تعيين قيمة الـ Checkbox الضريبي: {text} إلى {shouldBeChecked}")
+    public void SetCheckboxValueForTax(String text, boolean shouldBeChecked) {
+        utilites.checkbox().setCheckboxForTax(text, shouldBeChecked);
+    }
+
+
+    //ميثودات التحقق
+    @Step("التأكد من أن رقم المبنى يحتوي على 4 أرقام")
+    public boolean AssertBuildingNumber() {
+        return utilites.isDisplayed(AssertTaxNumber);
+    }
+
+    @Step("التأكد من أن العنوان مطلوب بعد اختيار Checkbox عميل شركة")
+    public boolean AssertAdress() {
+        return utilites.isDisplayed(AssertAdress);
+    }
+
+    @Step("التأكد من أن الرقم البريدي 5 أرقام بعد اختيار Checkbox عميل شركة")
+    public boolean AssertPostNumber() {
+        return utilites.isDisplayed(AssertPostNumber);
+    }
+
+@Step("التاكد ان طبيعه المندوب مطلوبه")
+public boolean AssertAgentNatural() {
+    return utilites.isDisplayed(AssertAgentNatural);
+}
+    @Step("التاكد اننوع التصنيف مطلوب")
+    public boolean AssertClassification() {
+        return utilites.isDisplayed(AssertClassification);
+    }
+    @Step("التأكد ان النوع مطلوب")
+    public boolean AssertKind() {
+        return utilites.isDisplayed(AssertMainDealer);
+    }
+
+
+@Step("الانتظار حتى ظهور البيانات")
+public void waitForTableDataToLoad(){
+        utilites.grid().waitForTableDataToLoad(2);
+
+}
+
+@Step("التأكد من أن البيانات موجودة في الجدول")
+public boolean isDataPresentInTable() {
+    return utilites.grid().isTableDataDisplayed();
+
+}
+
+@Step("التاكد من عدد الصفوف")
+public int getRowCount()
+{int count = utilites.grid().getTableRowsCount();
+    LogUtils.info("عدد الصفوف في الجدول: " + count);
+    return count;
+}
+
+
+
+
+
+
+    @Step("الاختيار بالأزرار: {option}")
+    public void SelectByKeysForDealers(String option) {
+        actions.sendKeys(Keys.TAB)
+                .sendKeys(Keys.TAB)
+                .pause(Duration.ofMillis(500))
+                .sendKeys(option)
+                .pause(Duration.ofMillis(500))
+                .sendKeys(Keys.ENTER)
+                .perform();
+        utilites.waits().waitForOverlayToDisappear();
+    }
+
+
+
+
+
+
+
+
+
+}

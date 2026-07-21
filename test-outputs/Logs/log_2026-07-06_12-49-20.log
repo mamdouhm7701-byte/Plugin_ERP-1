@@ -1,0 +1,29 @@
+[DEBUG] 2026-07-06 12:49:20.706 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml"
+[TRACE] 2026-07-06 12:49:21.222 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-06 12:49:21.223 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 12:49:21.225 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 12:49:21.226 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 12:49:21.226 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 12:49:21.227 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-06 12:49:21.227 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 12:49:21.227 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 12:49:21.227 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 12:49:21.227 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 12:49:21.231 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TreasuryHandoverTest@194d329e] 2073673912
+[TRACE] 2026-07-06 12:49:21.232 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 12:49:21.232 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 12:49:21.232 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 12:49:21.232 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 12:49:21.235 [main                ] [Graph                              ] - [Graph] ADDING NODE TreasuryHandoverTest.ValidTreasuryHandoverTest()[pri:1, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TreasuryHandoverTest@194d329e] 2109158936
+[TRACE] 2026-07-06 12:49:21.236 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 12:49:21.236 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 12:49:21.236 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 12:49:21.236 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 12:49:21.237 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TreasuryHandoverTest@194d329e] 674196289
+[TRACE] 2026-07-06 12:49:21.237 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 12:49:21.237 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 12:49:21.237 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 12:49:21.237 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-06 12:49:21.278 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml
+

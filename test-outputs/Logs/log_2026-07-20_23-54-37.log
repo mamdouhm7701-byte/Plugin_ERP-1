@@ -1,0 +1,114 @@
+[DEBUG] 2026-07-20 23:54:37.686 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml"
+[TRACE] 2026-07-20 23:54:38.359 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-20 23:54:38.359 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 23:54:38.362 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 23:54:38.362 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 23:54:38.362 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 23:54:38.363 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-20 23:54:38.363 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 23:54:38.363 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 23:54:38.363 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 23:54:38.363 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 23:54:38.367 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-20 23:54:38.367 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 23:54:38.367 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 23:54:38.367 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 23:54:38.367 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 23:54:38.367 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-20 23:54:38.367 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 23:54:38.367 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 23:54:38.367 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 23:54:38.367 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 23:54:38.369 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-20 23:54:38.369 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 23:54:38.370 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 23:54:38.370 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 23:54:38.370 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 23:54:38.370 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-20 23:54:38.371 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 23:54:38.371 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 23:54:38.371 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 23:54:38.371 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 23:54:38.373 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-20 23:54:38.373 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 23:54:38.373 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 23:54:38.373 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 23:54:38.373 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 23:54:38.373 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-20 23:54:38.373 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 23:54:38.373 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 23:54:38.374 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 23:54:38.374 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 23:54:38.376 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-20 23:54:38.376 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 23:54:38.377 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 23:54:38.377 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 23:54:38.377 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 23:54:38.377 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-20 23:54:38.377 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 23:54:38.377 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 23:54:38.377 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 23:54:38.377 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 23:54:38.380 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-20 23:54:38.380 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 23:54:38.380 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 23:54:38.381 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 23:54:38.381 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 23:54:38.381 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-20 23:54:38.381 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 23:54:38.381 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 23:54:38.381 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 23:54:38.381 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 23:54:38.385 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:FinancialMovementsTest.CustomerReceiptTest@3b55dd15] -1650300113
+[TRACE] 2026-07-20 23:54:38.385 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 23:54:38.385 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 23:54:38.385 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 23:54:38.385 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 23:54:38.401 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerReceiptTest.AddOldDate()[pri:10, instance:FinancialMovementsTest.CustomerReceiptTest@3b55dd15] -909980937
+[TRACE] 2026-07-20 23:54:38.401 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerReceiptTest.AddNewResetWithSaveAndPrint()[pri:3, instance:FinancialMovementsTest.CustomerReceiptTest@3b55dd15] -807620812
+[TRACE] 2026-07-20 23:54:38.401 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerReceiptTest.EditeAfterReportTest()[pri:4, instance:FinancialMovementsTest.CustomerReceiptTest@3b55dd15] -1075673238
+[TRACE] 2026-07-20 23:54:38.401 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierBillOfExchangeTest.AddSupplierBillWithSaveAndPrint()[pri:3, instance:FinancialMovementsTest.SupplierBillOfExchangeTest@72976b4] 1689167592
+[TRACE] 2026-07-20 23:54:38.401 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierBillOfExchangeTest.EditSupplierBillAfterReport()[pri:4, instance:FinancialMovementsTest.SupplierBillOfExchangeTest@72976b4] 280124290
+[TRACE] 2026-07-20 23:54:38.401 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierBillOfExchangeTest.AddOldDate()[pri:10, instance:FinancialMovementsTest.SupplierBillOfExchangeTest@72976b4] -1281161311
+[TRACE] 2026-07-20 23:54:38.401 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierBillOfExchangeTest.DeleteSupplierBillTest()[pri:5, instance:FinancialMovementsTest.SupplierBillOfExchangeTest@72976b4] 659243909
+[TRACE] 2026-07-20 23:54:38.401 [main                ] [Graph                              ] - [Graph] ADDING NODE OtherRevenueMovementTest.EditOtherRevenueMovement()[pri:2, instance:FinancialMovementsTest.OtherRevenueMovementTest@e784320] -1350405674
+[TRACE] 2026-07-20 23:54:38.401 [main                ] [Graph                              ] - [Graph] ADDING NODE OtherRevenueMovementTest.AddOtherRevenueMovementWithSaveAndPrint()[pri:1, instance:FinancialMovementsTest.OtherRevenueMovementTest@e784320] -1263620282
+[TRACE] 2026-07-20 23:54:38.401 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierDiscountNoticeTest.EditSupplierDiscountNoticeAnd_VerifyCalculationsAndReport()[pri:2, instance:FinancialMovementsTest.SupplierDiscountNoticeTest@3069a360] 1699262200
+[TRACE] 2026-07-20 23:54:38.401 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierDiscountNoticeTest.AddSupplierDiscountNoticeAnd_VerifyCalculationsAndCustom()[pri:3, instance:FinancialMovementsTest.SupplierDiscountNoticeTest@3069a360] -1597700110
+[TRACE] 2026-07-20 23:54:38.401 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierDiscountNoticeTest.AddSupplierDiscountNoticeAnd_VerifyCalculationsAndReport()[pri:1, instance:FinancialMovementsTest.SupplierDiscountNoticeTest@3069a360] -523960289
+[TRACE] 2026-07-20 23:54:38.401 [main                ] [Graph                              ] - [Graph] ADDING NODE ExpenseMovementTest.AddExpenseMovementWithSelectTax_AssertValue()[pri:1, instance:FinancialMovementsTest.ExpenseMovementTest@6215366a] -158843820
+[TRACE] 2026-07-20 23:54:38.401 [main                ] [Graph                              ] - [Graph] ADDING NODE ExpenseMovementTest.EditExpenseMovementWithSelectTax_AssertValue()[pri:2, instance:FinancialMovementsTest.ExpenseMovementTest@6215366a] -230174933
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromAgentToCash()[pri:11, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] 1707745245
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromAgentToAgent()[pri:13, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] 698716607
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromBankToSupplier()[pri:10, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] -1704560191
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromBankToAgent()[pri:9, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] 352847994
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.AddNewTransferAndSettlement_SaveAndPrint_AndAssertResults()[pri:1, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] 1258556626
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromSupplierToSupplier()[pri:18, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] 1331038513
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.FromCashToSupplier()[pri:6, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] 674223738
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.AddFromCashToBank_SaveAndPrint_AndAssertResults()[pri:4, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] -1078477461
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromAgentToSupplier()[pri:14, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] -693481196
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromSupplierToBank()[pri:16, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] -688357311
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromAgentToBank()[pri:12, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] 1698643428
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromSupplierToAgent()[pri:17, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] 527842506
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromBankToBank()[pri:8, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] -2044132591
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromSupplierToCash()[pri:15, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] -687000038
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.fromBankToCash()[pri:7, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] -2043187990
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.EditTransferAndSettlement_SaveAndPrint_AndAssertResults()[pri:2, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] -186262203
+[TRACE] 2026-07-20 23:54:38.402 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.AssertTypeDontSendToSameType()[pri:20, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] -574252086
+[TRACE] 2026-07-20 23:54:38.403 [main                ] [Graph                              ] - [Graph] ADDING NODE TransfersAndSettlementsTest.AddFromCashToAgent_SaveAndPrint_AndAssertResults()[pri:5, instance:FinancialMovementsTest.TransfersAndSettlementsTest@4b0bd001] -1106486460
+[TRACE] 2026-07-20 23:54:38.403 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 23:54:38.407 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 23:54:38.407 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 23:54:38.407 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 23:54:38.409 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:FinancialMovementsTest.CustomerReceiptTest@3b55dd15] 1245189560
+[TRACE] 2026-07-20 23:54:38.409 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 23:54:38.409 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 23:54:38.409 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 23:54:38.409 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-20 23:54:38.486 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml
+
+[ERROR] 2026-07-20 23:54:49.752 [main                ] [NamingUtils                        ] - Could not find parameter user
+[ERROR] 2026-07-20 23:54:49.752 [main                ] [NamingUtils                        ] - Could not find parameter pass
+[ERROR] 2026-07-20 23:55:07.913 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-20 23:55:33.516 [main                ] [NamingUtils                        ] - Could not find parameter todayDate

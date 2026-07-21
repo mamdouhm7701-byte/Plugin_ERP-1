@@ -1,0 +1,41 @@
+[DEBUG] 2026-07-20 16:18:27.654 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml"
+[TRACE] 2026-07-20 16:18:28.445 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-20 16:18:28.446 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 16:18:28.448 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 16:18:28.449 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 16:18:28.449 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 16:18:28.450 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-20 16:18:28.450 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 16:18:28.450 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 16:18:28.450 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 16:18:28.451 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 16:18:28.457 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:StoreTest.ExchangeOrderTest@76ececd] 1773886695
+[TRACE] 2026-07-20 16:18:28.457 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 16:18:28.457 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 16:18:28.457 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 16:18:28.457 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 16:18:28.463 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.EditExchange()[pri:4, instance:StoreTest.ExchangeOrderTest@76ececd] 1899423935
+[TRACE] 2026-07-20 16:18:28.464 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AddExchangeByName()[pri:2, instance:StoreTest.ExchangeOrderTest@76ececd] -639889558
+[TRACE] 2026-07-20 16:18:28.464 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AssertCustomerRequired()[pri:7, instance:StoreTest.ExchangeOrderTest@76ececd] -133713459
+[TRACE] 2026-07-20 16:18:28.464 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AssertErrorWhenSavingWithoutProducts()[pri:10, instance:StoreTest.ExchangeOrderTest@76ececd] -1473846374
+[TRACE] 2026-07-20 16:18:28.464 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AddExchangeByBarcode()[pri:3, instance:StoreTest.ExchangeOrderTest@76ececd] 351221863
+[TRACE] 2026-07-20 16:18:28.464 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AssertItemTypeRequired()[pri:6, instance:StoreTest.ExchangeOrderTest@76ececd] -116245090
+[TRACE] 2026-07-20 16:18:28.464 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AssertDistributionEntityRequired()[pri:9, instance:StoreTest.ExchangeOrderTest@76ececd] -1447949632
+[TRACE] 2026-07-20 16:18:28.464 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AddOldDate()[pri:11, instance:StoreTest.ExchangeOrderTest@76ececd] 6271448
+[TRACE] 2026-07-20 16:18:28.464 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AddExchangeWithItemsList()[pri:1, instance:StoreTest.ExchangeOrderTest@76ececd] 9340440
+[TRACE] 2026-07-20 16:18:28.465 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.DeleteExchange()[pri:5, instance:StoreTest.ExchangeOrderTest@76ececd] -1962299582
+[TRACE] 2026-07-20 16:18:28.465 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AssertAgentRequired()[pri:8, instance:StoreTest.ExchangeOrderTest@76ececd] 780878802
+[TRACE] 2026-07-20 16:18:28.465 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 16:18:28.468 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 16:18:28.468 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 16:18:28.468 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 16:18:28.471 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:StoreTest.ExchangeOrderTest@76ececd] 374409072
+[TRACE] 2026-07-20 16:18:28.471 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 16:18:28.472 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 16:18:28.472 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 16:18:28.472 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-20 16:18:28.532 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml
+
+[ERROR] 2026-07-20 16:18:38.090 [main                ] [NamingUtils                        ] - Could not find parameter user
+[ERROR] 2026-07-20 16:18:38.090 [main                ] [NamingUtils                        ] - Could not find parameter pass

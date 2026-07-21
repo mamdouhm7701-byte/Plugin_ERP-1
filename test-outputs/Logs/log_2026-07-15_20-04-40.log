@@ -1,0 +1,164 @@
+[DEBUG] 2026-07-15 20:04:40.945 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\Desktop\Plugin_ERP\src\test\resources\Test-Data\BasicData.xml"
+[TRACE] 2026-07-15 20:04:41.551 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-15 20:04:41.551 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.554 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.555 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.555 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.556 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-15 20:04:41.556 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.556 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.556 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.556 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.562 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-15 20:04:41.562 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.562 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.562 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.562 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.563 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-15 20:04:41.563 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.563 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.564 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.564 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.568 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-15 20:04:41.569 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.569 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.569 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.569 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.570 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-15 20:04:41.570 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.570 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.570 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.570 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.573 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-15 20:04:41.573 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.573 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.573 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.573 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.574 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-15 20:04:41.574 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.574 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.574 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.574 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.577 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-15 20:04:41.577 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.577 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.577 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.577 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.577 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-15 20:04:41.578 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.578 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.578 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.578 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.581 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-15 20:04:41.581 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.581 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.581 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.581 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.582 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-15 20:04:41.582 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.582 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.582 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.582 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.586 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-15 20:04:41.587 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.587 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.587 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.587 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.588 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-15 20:04:41.588 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.588 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.588 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.588 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.591 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-15 20:04:41.591 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.591 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.591 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.591 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.591 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-15 20:04:41.592 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.592 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.592 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.592 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.594 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-15 20:04:41.594 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.594 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.594 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.594 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.594 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-15 20:04:41.594 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.595 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.595 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.595 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.597 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-15 20:04:41.597 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.598 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.598 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.598 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.599 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-15 20:04:41.599 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.599 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.599 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.599 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.603 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest@4667c4c1] -1464577317
+[TRACE] 2026-07-15 20:04:41.603 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.603 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.603 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.603 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.609 [main                ] [Graph                              ] - [Graph] ADDING NODE CashTest.EditCash()[pri:2, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest@4667c4c1] 849373093
+[TRACE] 2026-07-15 20:04:41.609 [main                ] [Graph                              ] - [Graph] ADDING NODE CashTest.ValidCashTest()[pri:1, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest@4667c4c1] 29457985
+[TRACE] 2026-07-15 20:04:41.609 [main                ] [Graph                              ] - [Graph] ADDING NODE CashTest.DeleteCash()[pri:3, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest@4667c4c1] 1095130276
+[TRACE] 2026-07-15 20:04:41.609 [main                ] [Graph                              ] - [Graph] ADDING NODE CashTest.InvalidCashTest()[pri:4, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest@4667c4c1] 745152166
+[TRACE] 2026-07-15 20:04:41.610 [main                ] [Graph                              ] - [Graph] ADDING NODE BankTest.DeleteBankTest()[pri:3, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest@4b31a708] 2074293113
+[TRACE] 2026-07-15 20:04:41.610 [main                ] [Graph                              ] - [Graph] ADDING NODE BankTest.InvalidEmailBankTest()[pri:5, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest@4b31a708] 1032221551
+[TRACE] 2026-07-15 20:04:41.610 [main                ] [Graph                              ] - [Graph] ADDING NODE BankTest.InvalidBankNumberTest()[pri:6, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest@4b31a708] 2107412898
+[TRACE] 2026-07-15 20:04:41.610 [main                ] [Graph                              ] - [Graph] ADDING NODE BankTest.InvalidBankTest()[pri:4, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest@4b31a708] -750486819
+[TRACE] 2026-07-15 20:04:41.610 [main                ] [Graph                              ] - [Graph] ADDING NODE BankTest.EditBankTest()[pri:2, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest@4b31a708] -73754312
+[TRACE] 2026-07-15 20:04:41.610 [main                ] [Graph                              ] - [Graph] ADDING NODE BankTest.ValidBankTest()[pri:1, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest@4b31a708] -1195055930
+[TRACE] 2026-07-15 20:04:41.610 [main                ] [Graph                              ] - [Graph] ADDING NODE PaymentTest.InvalidPaymentTest()[pri:4, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.PaymentTest@60c73e58] 1885331517
+[TRACE] 2026-07-15 20:04:41.610 [main                ] [Graph                              ] - [Graph] ADDING NODE PaymentTest.AssertBankNameRequiredMessage()[pri:5, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.PaymentTest@60c73e58] 632139731
+[TRACE] 2026-07-15 20:04:41.610 [main                ] [Graph                              ] - [Graph] ADDING NODE PaymentTest.ValidPaymentTest()[pri:1, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.PaymentTest@60c73e58] 2106103864
+[TRACE] 2026-07-15 20:04:41.610 [main                ] [Graph                              ] - [Graph] ADDING NODE PaymentTest.DeletePayment()[pri:3, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.PaymentTest@60c73e58] 320690515
+[TRACE] 2026-07-15 20:04:41.610 [main                ] [Graph                              ] - [Graph] ADDING NODE PaymentTest.EditPayment()[pri:2, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.PaymentTest@60c73e58] -623347208
+[TRACE] 2026-07-15 20:04:41.610 [main                ] [Graph                              ] - [Graph] ADDING NODE RoutLineTest.EditRoutLine()[pri:2, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.RoutLineTest@3a8d467e] -1395967080
+[TRACE] 2026-07-15 20:04:41.610 [main                ] [Graph                              ] - [Graph] ADDING NODE RoutLineTest.DuplicateRoutLineTest()[pri:4, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.RoutLineTest@3a8d467e] -534036561
+[TRACE] 2026-07-15 20:04:41.610 [main                ] [Graph                              ] - [Graph] ADDING NODE RoutLineTest.DeleteRoutLine()[pri:5, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.RoutLineTest@3a8d467e] 1051576345
+[TRACE] 2026-07-15 20:04:41.610 [main                ] [Graph                              ] - [Graph] ADDING NODE RoutLineTest.InvalidRoutLineTest()[pri:3, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.RoutLineTest@3a8d467e] -572352741
+[TRACE] 2026-07-15 20:04:41.610 [main                ] [Graph                              ] - [Graph] ADDING NODE RoutLineTest.ValidRoutLineTest()[pri:1, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.RoutLineTest@3a8d467e] -594403204
+[TRACE] 2026-07-15 20:04:41.611 [main                ] [Graph                              ] - [Graph] ADDING NODE AreaTest.InvalidAreaTest()[pri:4, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest@575e572f] -278871420
+[TRACE] 2026-07-15 20:04:41.611 [main                ] [Graph                              ] - [Graph] ADDING NODE AreaTest.EditArea()[pri:2, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest@575e572f] 1053300483
+[TRACE] 2026-07-15 20:04:41.611 [main                ] [Graph                              ] - [Graph] ADDING NODE AreaTest.DeleteArea()[pri:3, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest@575e572f] -2055814514
+[TRACE] 2026-07-15 20:04:41.611 [main                ] [Graph                              ] - [Graph] ADDING NODE AreaTest.ValidAreaTest()[pri:1, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest@575e572f] -588111825
+[TRACE] 2026-07-15 20:04:41.611 [main                ] [Graph                              ] - [Graph] ADDING NODE RevenuesTest.EditRevenuesTest()[pri:2, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest@6f798482] 328540588
+[TRACE] 2026-07-15 20:04:41.611 [main                ] [Graph                              ] - [Graph] ADDING NODE RevenuesTest.EmptyRevenuesTest()[pri:4, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest@6f798482] -1457890671
+[TRACE] 2026-07-15 20:04:41.611 [main                ] [Graph                              ] - [Graph] ADDING NODE RevenuesTest.ValidRevenuesTest()[pri:1, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest@6f798482] 1395455554
+[TRACE] 2026-07-15 20:04:41.611 [main                ] [Graph                              ] - [Graph] ADDING NODE RevenuesTest.DeleteRevenuesTest()[pri:3, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest@6f798482] 1658726131
+[TRACE] 2026-07-15 20:04:41.611 [main                ] [Graph                              ] - [Graph] ADDING NODE ExpensesTest.InvalidExpensesTest()[pri:4, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.ExpensesTest@2db4ad1] 629006438
+[TRACE] 2026-07-15 20:04:41.611 [main                ] [Graph                              ] - [Graph] ADDING NODE ExpensesTest.DeleteExpenses()[pri:3, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.ExpensesTest@2db4ad1] -428955676
+[TRACE] 2026-07-15 20:04:41.611 [main                ] [Graph                              ] - [Graph] ADDING NODE ExpensesTest.EditeExpenses()[pri:2, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.ExpensesTest@2db4ad1] 1754502260
+[TRACE] 2026-07-15 20:04:41.611 [main                ] [Graph                              ] - [Graph] ADDING NODE ExpensesTest.ValidExpensesTest()[pri:1, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.ExpensesTest@2db4ad1] 652699793
+[TRACE] 2026-07-15 20:04:41.612 [main                ] [Graph                              ] - [Graph] ADDING NODE TaypeOfDiscountTest.AssertArabicNameRequired()[pri:4, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest@2b5c4f17] -2102773012
+[TRACE] 2026-07-15 20:04:41.612 [main                ] [Graph                              ] - [Graph] ADDING NODE TaypeOfDiscountTest.AssertSecretCodeRequired()[pri:5, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest@2b5c4f17] -1086319578
+[TRACE] 2026-07-15 20:04:41.612 [main                ] [Graph                              ] - [Graph] ADDING NODE TaypeOfDiscountTest.ValidTaypeOfDiscountTest()[pri:1, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest@2b5c4f17] 1891824025
+[TRACE] 2026-07-15 20:04:41.612 [main                ] [Graph                              ] - [Graph] ADDING NODE TaypeOfDiscountTest.EditTypeOfDiscount()[pri:2, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest@2b5c4f17] 1644385708
+[TRACE] 2026-07-15 20:04:41.612 [main                ] [Graph                              ] - [Graph] ADDING NODE TaypeOfDiscountTest.DeleteTypeOfDiscount()[pri:3, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest@2b5c4f17] 640888747
+[TRACE] 2026-07-15 20:04:41.612 [main                ] [Graph                              ] - [Graph] ADDING NODE TaypeOfDiscountTest.AssertPercentageRequired()[pri:6, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest@2b5c4f17] -1779591799
+[TRACE] 2026-07-15 20:04:41.612 [main                ] [Graph                              ] - [Graph] ADDING NODE TreasuryHandoverTest.InvalidTreasuryHandoverTest()[pri:2, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TreasuryHandoverTest@1e236278] 1260411389
+[TRACE] 2026-07-15 20:04:41.612 [main                ] [Graph                              ] - [Graph] ADDING NODE TreasuryHandoverTest.ValidTreasuryHandoverTest()[pri:1, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TreasuryHandoverTest@1e236278] -2104662542
+[TRACE] 2026-07-15 20:04:41.612 [main                ] [Graph                              ] - [Graph] ADDING NODE TreasuryHandoverTest.OpenTreasuryHandover()[pri:3, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TreasuryHandoverTest@1e236278] -1824964010
+[TRACE] 2026-07-15 20:04:41.612 [main                ] [Graph                              ] - [Graph] ADDING NODE DisEntTest.EditeDistributionEntity()[pri:2, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.DisEntTest@3119cf6f] 1125230408
+[TRACE] 2026-07-15 20:04:41.612 [main                ] [Graph                              ] - [Graph] ADDING NODE DisEntTest.ValidDisEntTest()[pri:1, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.DisEntTest@3119cf6f] 687745327
+[TRACE] 2026-07-15 20:04:41.612 [main                ] [Graph                              ] - [Graph] ADDING NODE DisEntTest.InvalidDisEntTest()[pri:4, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.DisEntTest@3119cf6f] 1336067652
+[TRACE] 2026-07-15 20:04:41.612 [main                ] [Graph                              ] - [Graph] ADDING NODE DisEntTest.DeleteDistributionEntity()[pri:3, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.DisEntTest@3119cf6f] 391005176
+[TRACE] 2026-07-15 20:04:41.612 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.618 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.619 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.619 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-15 20:04:41.621 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest@4667c4c1] 1430912356
+[TRACE] 2026-07-15 20:04:41.621 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-15 20:04:41.621 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-15 20:04:41.622 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-15 20:04:41.622 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-15 20:04:41.707 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\Desktop\Plugin_ERP\src\test\resources\Test-Data\BasicData.xml
+
+[ERROR] 2026-07-15 20:05:46.858 [main                ] [AllureLifecycle                    ] - Could not update test container: container with uuid 39235405-6feb-4330-96f1-65aff6b77887 not found

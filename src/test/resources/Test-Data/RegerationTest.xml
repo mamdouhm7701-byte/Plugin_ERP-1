@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Plugin_ERP_All_Tests" verbose="1">
+
+    <suite-files>
+        <suite-file path="BasicData.xml"/>
+        <suite-file path="ProductCategories.xml"/>
+        <suite-file path="FinanicalMovment.xml"/>
+        <suite-file path="Dealer.xml"/>
+        <suite-file path="StoreTest.xml"/>
+
+    </suite-files>
+
+</suite>

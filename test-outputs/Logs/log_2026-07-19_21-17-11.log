@@ -1,0 +1,97 @@
+[DEBUG] 2026-07-19 21:17:11.494 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\Desktop\Plugin_ERP\src\test\resources\Test-Data\Dealer.xml"
+[TRACE] 2026-07-19 21:17:12.253 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-19 21:17:12.253 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-19 21:17:12.255 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-19 21:17:12.256 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-19 21:17:12.256 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-19 21:17:12.257 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-19 21:17:12.257 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-19 21:17:12.257 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-19 21:17:12.257 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-19 21:17:12.257 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-19 21:17:12.262 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-19 21:17:12.262 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-19 21:17:12.263 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-19 21:17:12.263 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-19 21:17:12.263 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-19 21:17:12.263 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-19 21:17:12.263 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-19 21:17:12.264 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-19 21:17:12.264 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-19 21:17:12.264 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-19 21:17:12.266 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-19 21:17:12.266 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-19 21:17:12.266 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-19 21:17:12.266 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-19 21:17:12.267 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-19 21:17:12.267 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-19 21:17:12.267 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-19 21:17:12.267 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-19 21:17:12.267 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-19 21:17:12.268 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-19 21:17:12.270 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-19 21:17:12.271 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-19 21:17:12.271 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-19 21:17:12.271 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-19 21:17:12.271 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-19 21:17:12.271 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-19 21:17:12.272 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-19 21:17:12.272 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-19 21:17:12.272 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-19 21:17:12.272 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-19 21:17:12.277 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:DealerModelTest.CustomersTest@1bf14704] 2117981470
+[TRACE] 2026-07-19 21:17:12.277 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-19 21:17:12.277 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-19 21:17:12.278 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-19 21:17:12.278 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-19 21:17:12.285 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomersTest.Delete()[pri:6, instance:DealerModelTest.CustomersTest@1bf14704] -1899922059
+[TRACE] 2026-07-19 21:17:12.285 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomersTest.AsserShowErrorPopUpPhoneNumberDubelicateAndClickCansel()[pri:16, instance:DealerModelTest.CustomersTest@1bf14704] -239905203
+[TRACE] 2026-07-19 21:17:12.285 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomersTest.EnterWrongBankNumber()[pri:9, instance:DealerModelTest.CustomersTest@1bf14704] -1831502812
+[TRACE] 2026-07-19 21:17:12.285 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomersTest.AssertPostNumberInclode5number()[pri:13, instance:DealerModelTest.CustomersTest@1bf14704] -163494667
+[TRACE] 2026-07-19 21:17:12.286 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomersTest.Edit()[pri:5, instance:DealerModelTest.CustomersTest@1bf14704] -509035468
+[TRACE] 2026-07-19 21:17:12.286 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomersTest.AddCustomerFourthPage()[pri:4, instance:DealerModelTest.CustomersTest@1bf14704] 597199602
+[TRACE] 2026-07-19 21:17:12.286 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomersTest.SaveWithOutArabicName()[pri:7, instance:DealerModelTest.CustomersTest@1bf14704] -453870772
+[TRACE] 2026-07-19 21:17:12.286 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomersTest.AsserShowErrorPopUpPhoneNumberDubelicateAndClickYes()[pri:15, instance:DealerModelTest.CustomersTest@1bf14704] -548722512
+[TRACE] 2026-07-19 21:17:12.286 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomersTest.AddCustomerFirstPage()[pri:1, instance:DealerModelTest.CustomersTest@1bf14704] 1092630506
+[TRACE] 2026-07-19 21:17:12.286 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomersTest.AssertAdress()[pri:14, instance:DealerModelTest.CustomersTest@1bf14704] -562084930
+[TRACE] 2026-07-19 21:17:12.286 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomersTest.AddCustomerThirdPage()[pri:3, instance:DealerModelTest.CustomersTest@1bf14704] -325118215
+[TRACE] 2026-07-19 21:17:12.286 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomersTest.AddCustomerSecondPage()[pri:2, instance:DealerModelTest.CustomersTest@1bf14704] -1687435956
+[TRACE] 2026-07-19 21:17:12.286 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomersTest.AssertErrorMessagesInDataTax()[pri:10, instance:DealerModelTest.CustomersTest@1bf14704] 750174000
+[TRACE] 2026-07-19 21:17:12.286 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomersTest.EnterWrongEmail()[pri:8, instance:DealerModelTest.CustomersTest@1bf14704] -1901019671
+[TRACE] 2026-07-19 21:17:12.286 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomersTest.AssertBuildingNumber()[pri:12, instance:DealerModelTest.CustomersTest@1bf14704] -825614579
+[TRACE] 2026-07-19 21:17:12.286 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomersTest.AssertTaxNumberStartNumber3andEndStareNumber3()[pri:11, instance:DealerModelTest.CustomersTest@1bf14704] -1275238469
+[TRACE] 2026-07-19 21:17:12.287 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierTest.Delete()[pri:5, instance:DealerModelTest.SupplierTest@6bcb12e6] -35948890
+[TRACE] 2026-07-19 21:17:12.287 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierTest.AddSupplierSupplierControlTab()[pri:3, instance:DealerModelTest.SupplierTest@6bcb12e6] -1641962452
+[TRACE] 2026-07-19 21:17:12.287 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierTest.AddSupplierFirstPage()[pri:1, instance:DealerModelTest.SupplierTest@6bcb12e6] -7778801
+[TRACE] 2026-07-19 21:17:12.287 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierTest.AddSupplierWithOutArabicName()[pri:6, instance:DealerModelTest.SupplierTest@6bcb12e6] 2014141903
+[TRACE] 2026-07-19 21:17:12.287 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierTest.Edit()[pri:4, instance:DealerModelTest.SupplierTest@6bcb12e6] -1709025561
+[TRACE] 2026-07-19 21:17:12.287 [main                ] [Graph                              ] - [Graph] ADDING NODE SupplierTest.AddSupplierSecondPage()[pri:2, instance:DealerModelTest.SupplierTest@6bcb12e6] -899156403
+[TRACE] 2026-07-19 21:17:12.287 [main                ] [Graph                              ] - [Graph] ADDING NODE MainDealerTest.Delete()[pri:4, instance:DealerModelTest.MainDealerTest@6ff0b1cc] -246142382
+[TRACE] 2026-07-19 21:17:12.287 [main                ] [Graph                              ] - [Graph] ADDING NODE MainDealerTest.AddCustomerMain()[pri:1, instance:DealerModelTest.MainDealerTest@6ff0b1cc] 1671539717
+[TRACE] 2026-07-19 21:17:12.287 [main                ] [Graph                              ] - [Graph] ADDING NODE MainDealerTest.AssertMessageArabicName()[pri:5, instance:DealerModelTest.MainDealerTest@6ff0b1cc] -555865115
+[TRACE] 2026-07-19 21:17:12.287 [main                ] [Graph                              ] - [Graph] ADDING NODE MainDealerTest.Edit()[pri:3, instance:DealerModelTest.MainDealerTest@6ff0b1cc] 774281043
+[TRACE] 2026-07-19 21:17:12.288 [main                ] [Graph                              ] - [Graph] ADDING NODE MainDealerTest.AssertMessageEnglishName()[pri:6, instance:DealerModelTest.MainDealerTest@6ff0b1cc] -530003197
+[TRACE] 2026-07-19 21:17:12.288 [main                ] [Graph                              ] - [Graph] ADDING NODE MainDealerTest.AddSupplierMain()[pri:2, instance:DealerModelTest.MainDealerTest@6ff0b1cc] -474791753
+[TRACE] 2026-07-19 21:17:12.288 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerClassificationTest.Delete()[pri:5, instance:DealerModelTest.CustomerClassificationTest@5416f8db] 1107996275
+[TRACE] 2026-07-19 21:17:12.288 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerClassificationTest.AddCustomerClassification()[pri:1, instance:DealerModelTest.CustomerClassificationTest@5416f8db] -1031084619
+[TRACE] 2026-07-19 21:17:12.288 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerClassificationTest.AddAgentClassification()[pri:3, instance:DealerModelTest.CustomerClassificationTest@5416f8db] 559131412
+[TRACE] 2026-07-19 21:17:12.288 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerClassificationTest.AssertMessageArabicName()[pri:6, instance:DealerModelTest.CustomerClassificationTest@5416f8db] 901297250
+[TRACE] 2026-07-19 21:17:12.288 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerClassificationTest.AssertMessageClassification()[pri:7, instance:DealerModelTest.CustomerClassificationTest@5416f8db] -320374089
+[TRACE] 2026-07-19 21:17:12.288 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerClassificationTest.AddSupplierClassification()[pri:2, instance:DealerModelTest.CustomerClassificationTest@5416f8db] 451606155
+[TRACE] 2026-07-19 21:17:12.288 [main                ] [Graph                              ] - [Graph] ADDING NODE CustomerClassificationTest.Edit()[pri:4, instance:DealerModelTest.CustomerClassificationTest@5416f8db] 764603636
+[TRACE] 2026-07-19 21:17:12.288 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-19 21:17:12.294 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-19 21:17:12.294 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-19 21:17:12.294 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-19 21:17:12.297 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:DealerModelTest.CustomersTest@1bf14704] 718503847
+[TRACE] 2026-07-19 21:17:12.297 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-19 21:17:12.298 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-19 21:17:12.298 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-19 21:17:12.298 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-19 21:17:12.355 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\Desktop\Plugin_ERP\src\test\resources\Test-Data\Dealer.xml
+
+[ERROR] 2026-07-19 21:17:34.935 [main                ] [NamingUtils                        ] - Could not find parameter user
+[ERROR] 2026-07-19 21:17:34.936 [main                ] [NamingUtils                        ] - Could not find parameter pass
+[ERROR] 2026-07-19 21:18:15.231 [main                ] [NamingUtils                        ] - Could not find parameter todayDate
+[ERROR] 2026-07-19 21:20:26.285 [main                ] [NamingUtils                        ] - Could not find parameter todayDate

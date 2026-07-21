@@ -1,0 +1,61 @@
+[DEBUG] 2026-07-20 09:58:33.107 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\Desktop\Plugin_ERP\src\test\resources\Test-Data\StoreTest.xml"
+[TRACE] 2026-07-20 09:58:33.789 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-20 09:58:33.790 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 09:58:33.793 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 09:58:33.793 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 09:58:33.793 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 09:58:33.794 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-20 09:58:33.794 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 09:58:33.794 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 09:58:33.795 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 09:58:33.795 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 09:58:33.801 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-20 09:58:33.801 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 09:58:33.801 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 09:58:33.801 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 09:58:33.801 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 09:58:33.802 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-20 09:58:33.802 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 09:58:33.802 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 09:58:33.802 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 09:58:33.802 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 09:58:33.806 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:StoreTest.ExchangeOrderTest@152c4495] 2004406959
+[TRACE] 2026-07-20 09:58:33.806 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 09:58:33.807 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 09:58:33.807 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 09:58:33.807 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 09:58:33.811 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.EditExchange()[pri:4, instance:StoreTest.ExchangeOrderTest@152c4495] 2129944199
+[TRACE] 2026-07-20 09:58:33.811 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AddExchangeByName()[pri:2, instance:StoreTest.ExchangeOrderTest@152c4495] -409369294
+[TRACE] 2026-07-20 09:58:33.811 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AssertErrorWhenSavingWithoutProducts()[pri:10, instance:StoreTest.ExchangeOrderTest@152c4495] -1243326110
+[TRACE] 2026-07-20 09:58:33.812 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AssertCustomerRequired()[pri:7, instance:StoreTest.ExchangeOrderTest@152c4495] 96806805
+[TRACE] 2026-07-20 09:58:33.812 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AddExchangeByBarcode()[pri:3, instance:StoreTest.ExchangeOrderTest@152c4495] 581742127
+[TRACE] 2026-07-20 09:58:33.812 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AssertItemTypeRequired()[pri:6, instance:StoreTest.ExchangeOrderTest@152c4495] 114275174
+[TRACE] 2026-07-20 09:58:33.812 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AssertDistributionEntityRequired()[pri:9, instance:StoreTest.ExchangeOrderTest@152c4495] -1217429368
+[TRACE] 2026-07-20 09:58:33.812 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AddOldDate()[pri:11, instance:StoreTest.ExchangeOrderTest@152c4495] 236791712
+[TRACE] 2026-07-20 09:58:33.812 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AddExchangeWithItemsList()[pri:1, instance:StoreTest.ExchangeOrderTest@152c4495] 239860704
+[TRACE] 2026-07-20 09:58:33.812 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.DeleteExchange()[pri:5, instance:StoreTest.ExchangeOrderTest@152c4495] -1731779318
+[TRACE] 2026-07-20 09:58:33.812 [main                ] [Graph                              ] - [Graph] ADDING NODE ExchangeOrderTest.AssertAgentRequired()[pri:8, instance:StoreTest.ExchangeOrderTest@152c4495] 1011399066
+[TRACE] 2026-07-20 09:58:33.812 [main                ] [Graph                              ] - [Graph] ADDING NODE AdditionOrderTest.EditAddition()[pri:4, instance:StoreTest.AdditionOrderTest@3f96f020] 225313650
+[TRACE] 2026-07-20 09:58:33.812 [main                ] [Graph                              ] - [Graph] ADDING NODE AdditionOrderTest.AssertErrorWhenSavingWithoutProducts()[pri:10, instance:StoreTest.AdditionOrderTest@3f96f020] -1912773118
+[TRACE] 2026-07-20 09:58:33.812 [main                ] [Graph                              ] - [Graph] ADDING NODE AdditionOrderTest.AssertCustomerRequired()[pri:7, instance:StoreTest.AdditionOrderTest@3f96f020] 538711287
+[TRACE] 2026-07-20 09:58:33.813 [main                ] [Graph                              ] - [Graph] ADDING NODE AdditionOrderTest.AddAdditionByBarcode()[pri:3, instance:StoreTest.AdditionOrderTest@3f96f020] -1282086532
+[TRACE] 2026-07-20 09:58:33.813 [main                ] [Graph                              ] - [Graph] ADDING NODE AdditionOrderTest.AssertItemTypeRequired()[pri:6, instance:StoreTest.AdditionOrderTest@3f96f020] 2098794758
+[TRACE] 2026-07-20 09:58:33.813 [main                ] [Graph                              ] - [Graph] ADDING NODE AdditionOrderTest.AddAdditionOrderTestByName()[pri:2, instance:StoreTest.AdditionOrderTest@3f96f020] -1335650283
+[TRACE] 2026-07-20 09:58:33.813 [main                ] [Graph                              ] - [Graph] ADDING NODE AdditionOrderTest.AssertDistributionEntityRequired()[pri:9, instance:StoreTest.AdditionOrderTest@3f96f020] -1384580292
+[TRACE] 2026-07-20 09:58:33.813 [main                ] [Graph                              ] - [Graph] ADDING NODE AdditionOrderTest.AddOldDate()[pri:11, instance:StoreTest.AdditionOrderTest@3f96f020] 373887940
+[TRACE] 2026-07-20 09:58:33.813 [main                ] [Graph                              ] - [Graph] ADDING NODE AdditionOrderTest.DeleteAddition()[pri:5, instance:StoreTest.AdditionOrderTest@3f96f020] -65111885
+[TRACE] 2026-07-20 09:58:33.813 [main                ] [Graph                              ] - [Graph] ADDING NODE AdditionOrderTest.AdditionOrderTest()[pri:1, instance:StoreTest.AdditionOrderTest@3f96f020] 662460724
+[TRACE] 2026-07-20 09:58:33.813 [main                ] [Graph                              ] - [Graph] ADDING NODE AdditionOrderTest.AssertAgentRequired()[pri:8, instance:StoreTest.AdditionOrderTest@3f96f020] 143737802
+[TRACE] 2026-07-20 09:58:33.813 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 09:58:33.816 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 09:58:33.817 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 09:58:33.817 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 09:58:33.818 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:StoreTest.ExchangeOrderTest@152c4495] 604929336
+[TRACE] 2026-07-20 09:58:33.818 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 09:58:33.818 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 09:58:33.818 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 09:58:33.818 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-20 09:58:33.880 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\Desktop\Plugin_ERP\src\test\resources\Test-Data\StoreTest.xml
+
+[ERROR] 2026-07-20 10:01:55.484 [main                ] [AllureLifecycle                    ] - Could not update test container: container with uuid 29106542-fb90-4d74-ae94-a8af0e0db2ad not found

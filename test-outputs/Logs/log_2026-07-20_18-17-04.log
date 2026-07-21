@@ -1,0 +1,36 @@
+[DEBUG] 2026-07-20 18:17:05.007 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml"
+[TRACE] 2026-07-20 18:17:05.682 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-20 18:17:05.682 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 18:17:05.686 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 18:17:05.686 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 18:17:05.687 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 18:17:05.687 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-20 18:17:05.688 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 18:17:05.688 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 18:17:05.688 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 18:17:05.688 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 18:17:05.693 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:StoreTest.ManufacturingTest@6c8dbf56] -824554128
+[TRACE] 2026-07-20 18:17:05.693 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 18:17:05.693 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 18:17:05.693 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 18:17:05.693 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 18:17:05.698 [main                ] [Graph                              ] - [Graph] ADDING NODE ManufacturingTest.AssertErorrPopUpWhenAddProuctWithOutStore()[pri:6, instance:StoreTest.ManufacturingTest@6c8dbf56] -403564549
+[TRACE] 2026-07-20 18:17:05.699 [main                ] [Graph                              ] - [Graph] ADDING NODE ManufacturingTest.AssertStoreRequired()[pri:5, instance:StoreTest.ManufacturingTest@6c8dbf56] 1901903272
+[TRACE] 2026-07-20 18:17:05.699 [main                ] [Graph                              ] - [Graph] ADDING NODE ManufacturingTest.DeleteManufacturingByBarcodeTest()[pri:4, instance:StoreTest.ManufacturingTest@6c8dbf56] -754205894
+[TRACE] 2026-07-20 18:17:05.699 [main                ] [Graph                              ] - [Graph] ADDING NODE ManufacturingTest.AddManufacturingByNameTest()[pri:3, instance:StoreTest.ManufacturingTest@6c8dbf56] 405342163
+[TRACE] 2026-07-20 18:17:05.699 [main                ] [Graph                              ] - [Graph] ADDING NODE ManufacturingTest.AddManufacturingByBarcodeTest()[pri:2, instance:StoreTest.ManufacturingTest@6c8dbf56] 38642924
+[TRACE] 2026-07-20 18:17:05.699 [main                ] [Graph                              ] - [Graph] ADDING NODE ManufacturingTest.AddManufacturingTest()[pri:1, instance:StoreTest.ManufacturingTest@6c8dbf56] 999829341
+[TRACE] 2026-07-20 18:17:05.699 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 18:17:05.703 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 18:17:05.704 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 18:17:05.704 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 18:17:05.706 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:StoreTest.ManufacturingTest@6c8dbf56] 2070935545
+[TRACE] 2026-07-20 18:17:05.707 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 18:17:05.707 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 18:17:05.707 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 18:17:05.707 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-20 18:17:05.764 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml
+
+[ERROR] 2026-07-20 18:17:21.311 [main                ] [NamingUtils                        ] - Could not find parameter user
+[ERROR] 2026-07-20 18:17:21.311 [main                ] [NamingUtils                        ] - Could not find parameter pass

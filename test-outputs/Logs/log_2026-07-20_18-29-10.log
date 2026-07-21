@@ -1,0 +1,31 @@
+[DEBUG] 2026-07-20 18:29:10.383 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml"
+[TRACE] 2026-07-20 18:29:11.028 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-20 18:29:11.028 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 18:29:11.031 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 18:29:11.032 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 18:29:11.032 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 18:29:11.033 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-20 18:29:11.033 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 18:29:11.033 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 18:29:11.033 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 18:29:11.033 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 18:29:11.039 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:StoreTest.ManufacturingTest@4548d254] -1483382674
+[TRACE] 2026-07-20 18:29:11.039 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 18:29:11.039 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 18:29:11.039 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 18:29:11.039 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 18:29:11.046 [main                ] [Graph                              ] - [Graph] ADDING NODE ManufacturingTest.AssertErorrPopUpWhenAddProuctWithOutStore()[pri:6, instance:StoreTest.ManufacturingTest@4548d254] -1062393095
+[TRACE] 2026-07-20 18:29:11.046 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 18:29:11.046 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 18:29:11.046 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 18:29:11.046 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-20 18:29:11.048 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:StoreTest.ManufacturingTest@4548d254] 1412106999
+[TRACE] 2026-07-20 18:29:11.048 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-20 18:29:11.048 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-20 18:29:11.048 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-20 18:29:11.048 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-20 18:29:11.105 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml
+
+[ERROR] 2026-07-20 18:29:22.221 [main                ] [NamingUtils                        ] - Could not find parameter user
+[ERROR] 2026-07-20 18:29:22.222 [main                ] [NamingUtils                        ] - Could not find parameter pass

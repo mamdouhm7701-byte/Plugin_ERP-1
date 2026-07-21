@@ -1,0 +1,31 @@
+[DEBUG] 2026-07-14 15:22:00.612 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml"
+[TRACE] 2026-07-14 15:22:01.111 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-14 15:22:01.112 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-14 15:22:01.116 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-14 15:22:01.116 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-14 15:22:01.116 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-14 15:22:01.118 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-14 15:22:01.118 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-14 15:22:01.118 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-14 15:22:01.118 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-14 15:22:01.118 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-14 15:22:01.123 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:StoreTest.AdditionOrderTest@655a01d8] -945385486
+[TRACE] 2026-07-14 15:22:01.123 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-14 15:22:01.123 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-14 15:22:01.124 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-14 15:22:01.124 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-14 15:22:01.133 [main                ] [Graph                              ] - [Graph] ADDING NODE AdditionOrderTest.AddOldDate()[pri:11, instance:StoreTest.AdditionOrderTest@655a01d8] 1007428988
+[TRACE] 2026-07-14 15:22:01.133 [main                ] [Graph                              ] - [Graph] ADDING NODE AdditionOrderTest.AssertAgentRequired()[pri:8, instance:StoreTest.AdditionOrderTest@655a01d8] 777278850
+[TRACE] 2026-07-14 15:22:01.134 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-14 15:22:01.136 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-14 15:22:01.136 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-14 15:22:01.136 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-14 15:22:01.138 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:StoreTest.AdditionOrderTest@655a01d8] 1950104187
+[TRACE] 2026-07-14 15:22:01.139 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-14 15:22:01.139 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-14 15:22:01.139 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-14 15:22:01.139 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-14 15:22:01.188 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml
+
+[ERROR] 2026-07-14 15:22:21.218 [main                ] [NamingUtils                        ] - Could not find parameter pastYearDate

@@ -1,0 +1,30 @@
+[DEBUG] 2026-07-06 13:39:38.799 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml"
+[TRACE] 2026-07-06 13:39:39.286 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-06 13:39:39.287 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 13:39:39.290 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 13:39:39.291 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 13:39:39.291 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 13:39:39.292 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-06 13:39:39.292 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 13:39:39.292 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 13:39:39.292 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 13:39:39.292 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 13:39:39.297 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest@1bb740f2] 2114178828
+[TRACE] 2026-07-06 13:39:39.297 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 13:39:39.297 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 13:39:39.297 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 13:39:39.297 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 13:39:39.303 [main                ] [Graph                              ] - [Graph] ADDING NODE TaypeOfDiscountTest.ValidTaypeOfDiscountTest()[pri:1, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest@1bb740f2] 1629348724
+[TRACE] 2026-07-06 13:39:39.303 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 13:39:39.303 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 13:39:39.303 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 13:39:39.303 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 13:39:39.305 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest@1bb740f2] 714701205
+[TRACE] 2026-07-06 13:39:39.305 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 13:39:39.305 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 13:39:39.305 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 13:39:39.306 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-06 13:39:39.351 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml
+
+[ERROR] 2026-07-06 13:39:53.451 [main                ] [NamingUtils                        ] - Could not find parameter digit

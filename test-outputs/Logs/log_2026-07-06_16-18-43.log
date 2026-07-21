@@ -1,0 +1,42 @@
+[DEBUG] 2026-07-06 16:18:43.628 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml"
+[TRACE] 2026-07-06 16:18:44.154 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-06 16:18:44.155 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 16:18:44.157 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 16:18:44.158 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 16:18:44.158 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 16:18:44.159 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-06 16:18:44.159 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 16:18:44.159 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 16:18:44.159 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 16:18:44.159 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 16:18:44.164 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:ProductsTest.AddProductsTest@696b4a95] -877143889
+[TRACE] 2026-07-06 16:18:44.164 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 16:18:44.164 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 16:18:44.164 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 16:18:44.164 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 16:18:44.171 [main                ] [Graph                              ] - [Graph] ADDING NODE AddProductsTest.EditProduct()[pri:2, instance:ProductsTest.AddProductsTest@696b4a95] 628065148
+[TRACE] 2026-07-06 16:18:44.171 [main                ] [Graph                              ] - [Graph] ADDING NODE AddProductsTest.AddProductWithSameUnite()[pri:9, instance:ProductsTest.AddProductsTest@696b4a95] -970070850
+[TRACE] 2026-07-06 16:18:44.171 [main                ] [Graph                              ] - [Graph] ADDING NODE AddProductsTest.AddProductWithOutStock()[pri:8, instance:ProductsTest.AddProductsTest@696b4a95] -1493470253
+[TRACE] 2026-07-06 16:18:44.171 [main                ] [Graph                              ] - [Graph] ADDING NODE AddProductsTest.AddProductWithOutCategory()[pri:6, instance:ProductsTest.AddProductsTest@696b4a95] -1171103889
+[TRACE] 2026-07-06 16:18:44.171 [main                ] [Graph                              ] - [Graph] ADDING NODE AddProductsTest.AddTransWithoutBarcode()[pri:11, instance:ProductsTest.AddProductsTest@696b4a95] -1868392970
+[TRACE] 2026-07-06 16:18:44.171 [main                ] [Graph                              ] - [Graph] ADDING NODE AddProductsTest.addNewProductWithValidData()[pri:1, instance:ProductsTest.AddProductsTest@696b4a95] 1221855367
+[TRACE] 2026-07-06 16:18:44.171 [main                ] [Graph                              ] - [Graph] ADDING NODE AddProductsTest.AddProductWithOutUnit()[pri:7, instance:ProductsTest.AddProductsTest@696b4a95] 1219454261
+[TRACE] 2026-07-06 16:18:44.171 [main                ] [Graph                              ] - [Graph] ADDING NODE AddProductsTest.DeleteProduct()[pri:4, instance:ProductsTest.AddProductsTest@696b4a95] -851898405
+[TRACE] 2026-07-06 16:18:44.171 [main                ] [Graph                              ] - [Graph] ADDING NODE AddProductsTest.AddProductWithOutBarcode()[pri:5, instance:ProductsTest.AddProductsTest@696b4a95] -1945268611
+[TRACE] 2026-07-06 16:18:44.171 [main                ] [Graph                              ] - [Graph] ADDING NODE AddProductsTest.AddProductEitNoTransUnit()[pri:10, instance:ProductsTest.AddProductsTest@696b4a95] 1354619008
+[TRACE] 2026-07-06 16:18:44.172 [main                ] [Graph                              ] - [Graph] ADDING NODE AddProductsTest.AddComponent()[pri:3, instance:ProductsTest.AddProductsTest@696b4a95] 706060979
+[TRACE] 2026-07-06 16:18:44.172 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 16:18:44.175 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 16:18:44.176 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 16:18:44.176 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 16:18:44.177 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:ProductsTest.AddProductsTest@696b4a95] 2018345784
+[TRACE] 2026-07-06 16:18:44.178 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 16:18:44.178 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 16:18:44.178 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 16:18:44.178 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-06 16:18:44.231 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml
+
+[ERROR] 2026-07-06 16:19:19.389 [main                ] [NamingUtils                        ] - Could not find parameter digit
+[ERROR] 2026-07-06 16:20:07.016 [main                ] [NamingUtils                        ] - Could not find parameter digit
+[ERROR] 2026-07-06 16:20:18.767 [main                ] [NamingUtils                        ] - Could not find parameter digit

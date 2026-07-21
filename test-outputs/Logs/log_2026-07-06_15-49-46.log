@@ -1,0 +1,30 @@
+[DEBUG] 2026-07-06 15:49:46.392 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml"
+[TRACE] 2026-07-06 15:49:46.929 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-06 15:49:46.930 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 15:49:46.932 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 15:49:46.933 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 15:49:46.933 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 15:49:46.934 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-06 15:49:46.934 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 15:49:46.934 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 15:49:46.934 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 15:49:46.935 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 15:49:46.940 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:ProductsTest.AddProductsTest@14998e21] 1994791995
+[TRACE] 2026-07-06 15:49:46.941 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 15:49:46.941 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 15:49:46.941 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 15:49:46.941 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 15:49:46.947 [main                ] [Graph                              ] - [Graph] ADDING NODE AddProductsTest.EditProduct()[pri:2, instance:ProductsTest.AddProductsTest@14998e21] -794966264
+[TRACE] 2026-07-06 15:49:46.948 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 15:49:46.948 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 15:49:46.948 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 15:49:46.948 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-06 15:49:46.950 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:ProductsTest.AddProductsTest@14998e21] 595314372
+[TRACE] 2026-07-06 15:49:46.950 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-06 15:49:46.950 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-06 15:49:46.950 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-06 15:49:46.950 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-06 15:49:46.997 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml
+
+[ERROR] 2026-07-06 15:50:00.745 [main                ] [NamingUtils                        ] - Could not find parameter digit

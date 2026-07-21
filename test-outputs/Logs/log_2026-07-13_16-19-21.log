@@ -1,0 +1,29 @@
+[DEBUG] 2026-07-13 16:19:21.335 [main                ] [TestNG                             ] - suiteXmlPath: "C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml"
+[TRACE] 2026-07-13 16:19:21.799 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:null] 1161578150
+[TRACE] 2026-07-13 16:19:21.800 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-13 16:19:21.802 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-13 16:19:21.803 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-13 16:19:21.803 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-13 16:19:21.804 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:null] -546134275
+[TRACE] 2026-07-13 16:19:21.804 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-13 16:19:21.805 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-13 16:19:21.805 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-13 16:19:21.805 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-13 16:19:21.810 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.setup()[pri:0, instance:StoreTest.AdditionOrderTest@655a01d8] -945385486
+[TRACE] 2026-07-13 16:19:21.811 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-13 16:19:21.811 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-13 16:19:21.811 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-13 16:19:21.811 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-13 16:19:21.814 [main                ] [Graph                              ] - [Graph] ADDING NODE AdditionOrderTest.AdditionOrderTest()[pri:0, instance:StoreTest.AdditionOrderTest@655a01d8] 1296001772
+[TRACE] 2026-07-13 16:19:21.814 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-13 16:19:21.815 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-13 16:19:21.815 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-13 16:19:21.815 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[TRACE] 2026-07-13 16:19:21.816 [main                ] [Graph                              ] - [Graph] ADDING NODE BaseTest.tearDown()[pri:0, instance:StoreTest.AdditionOrderTest@655a01d8] 1950104187
+[TRACE] 2026-07-13 16:19:21.817 [main                ] [Graph                              ] - [Graph] ================ SORTING
+[TRACE] 2026-07-13 16:19:21.817 [main                ] [Graph                              ] - [Graph] =============== DONE SORTING
+[TRACE] 2026-07-13 16:19:21.817 [main                ] [Graph                              ] - [Graph] ====== SORTED NODES
+[TRACE] 2026-07-13 16:19:21.817 [main                ] [Graph                              ] - [Graph] ====== END SORTED NODES
+[INFO] 2026-07-13 16:19:21.865 [main                ] [Utils                              ] - [TestNG] Running:
+  C:\Users\pcx\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml
+

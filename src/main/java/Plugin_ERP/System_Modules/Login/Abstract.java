@@ -170,13 +170,8 @@ public void AddAdress(String adress) {
     public void ClickSaveButton() {
         utilites.waits().waitForOverlayToDisappear();
         utilites.ClickElement(SaveButton);
-        utilites.waits().waitForOverlayToDisappear();
         LogUtils.info("تم الضغط على زر الحفظ");
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
 

@@ -1,5 +1,2 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","45411","TransBetweenStoreAddWithNameTest","Default Suite","Wed Jul 22 11:59:32 EEST 2026","passed","Wed Jul 22 12:00:18 EEST 2026","StoreTest.TransBetweenStoreTest","Plugin_ERP","StoreTest.TransBetweenStoreTest","TransBetweenStoreAddWithNameTest"
-"","79042","DeleteAllTest","Default Suite","Wed Jul 22 12:00:18 EEST 2026","passed","Wed Jul 22 12:01:37 EEST 2026","StoreTest.TransBetweenStoreTest","Plugin_ERP","StoreTest.TransBetweenStoreTest","DeleteAllTest"
-"","35826","TransBetweenStoreAddWWithBarcodeTest","Default Suite","Wed Jul 22 11:58:56 EEST 2026","passed","Wed Jul 22 11:59:32 EEST 2026","StoreTest.TransBetweenStoreTest","Plugin_ERP","StoreTest.TransBetweenStoreTest","TransBetweenStoreAddWWithBarcodeTest"
-"","39569","TransBetweenStoreTest","Default Suite","Wed Jul 22 11:58:17 EEST 2026","passed","Wed Jul 22 11:58:56 EEST 2026","StoreTest.TransBetweenStoreTest","Plugin_ERP","StoreTest.TransBetweenStoreTest","TransBetweenStoreTest"
+"","19170","EditTransBetweenStore","Default Suite","Wed Jul 22 12:07:02 EEST 2026","passed","Wed Jul 22 12:07:21 EEST 2026","StoreTest.TransBetweenStoreTest","Plugin_ERP","StoreTest.TransBetweenStoreTest","EditTransBetweenStore"

@@ -71,7 +71,26 @@ public class TransBetweenStoreTest extends BaseTest {
         t.AssertReceiptAdded("مخزن الكافيه");
     }
 
+    @Test(priority = 4)
+    public void EditTransBetweenStore() {
 
+        TransBetweenStors t=new TransBetweenStors(driver);
+        t.NavigationHelper(Pages.STORGETRANS);
+        t.Edit();
+        t.SetQuantitiesForRows(1,100,2,300);
+        t.ClickOnNameRadioBtn();
+        t.SearchAndSelectProduct("سلك لحام");
+        t.ClickOnBarcodeRadioBtn();
+        t.Search("5170383250");
+        t.ClickEnter();
+        t.AddNoteForStorgTrans("تست معدل");
+        Map<String, String> dataBeforeSave = t.GetNamesAndQuantities();
+        System.out.println("البيانات قبل الحفظ: " + dataBeforeSave);
+        t.ClickSaveAndPrintButton();
+        t.CompareNamesAndQuantitiesWithReport(dataBeforeSave);
+        t.CloserReport();
+        t.AssertReceiptAdded("مخزن الكافيه");
+    }
 
     @Test(priority=5)
     public void DeleteAllTest() {

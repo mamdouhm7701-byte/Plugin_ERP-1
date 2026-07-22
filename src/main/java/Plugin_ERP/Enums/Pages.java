@@ -36,7 +36,8 @@ public enum Pages {
     ADDITION("/#/addition-order/new"),
     ORDERS("/#/orders/"),
     CRM("/invoices"),
-    MANUFACTURING("/manufacturing#/manufacturing-order/new")
+    MANUFACTURING("/manufacturing#/manufacturing-order/new"),
+    STORGETRANS("/#/storage-transfer/"),
 ;
 
     private final String route;

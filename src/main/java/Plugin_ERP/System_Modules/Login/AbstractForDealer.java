@@ -50,7 +50,7 @@ public class AbstractForDealer extends Abstract {
     private By AssertAgentNatural = By.xpath("//small[contains(text(),'طبيعه المندوب مطلوب')]");
     private By AssertClassification = By.xpath("//small[contains(text(),'نوع التصنيف مطلوب')]");
     private By AssertMainDealer = By.xpath("//small[contains(text(),'النوع مطلوب')]");
-
+    private By AddNoteForStorgTrans =By.xpath("//textarea[@label-text='notes']");
 
 
 
@@ -88,6 +88,12 @@ public class AbstractForDealer extends Abstract {
         utilites.waits().waitForOverlayToDisappear();
     }
 
+    @Step("اضافه ملاحظات :{notes}")
+    public void AddNoteForStorgTrans(String notes) {
+        utilites.waits().waitForOverlayToDisappear();
+        utilites.TaypeTextB(AddNoteForStorgTrans,notes);
+        utilites.waits().waitForOverlayToDisappear();
+    }
     @Step("إضافة أيام السماح: {allowanceDays}")
     public void AddAllowanceDays(String allowanceDays) {
         utilites.TaypeTextB(AllowanceDays, allowanceDays);

@@ -24,36 +24,79 @@ public class TransBetweenStoreTest extends BaseTest {
         System.out.println("البيانات قبل الحفظ: " + dataBeforeSave);
         t.ClickSaveAndPrintButton();
         t.CompareNamesAndQuantitiesWithReport(dataBeforeSave);
+        t.CloserReport();
         t.AssertReceiptAdded("مخزن الكافيه");
 
     }
 
     @Test(priority =2)
-    public void TransBetweenStoreAddWtnBarcodeTest() {
+    public void TransBetweenStoreAddWWithBarcodeTest() {
 
         TransBetweenStors t=new TransBetweenStors(driver);
+        t.NavigationHelper(Pages.STORGETRANS);
+        t.ClickNew();
         t.SelectFromDropDawn("مخزن الكافيه","من مخزن");
         t.SelectFromDropDawn("المخزن الرئيسى","الي مخزن");
         t.ClickOnBarcodeRadioBtn();
         t.Search("8218648422");
         t.ClickEnter();
         t.SetQuantitiesForRows(1,10);
-        t.AddNoteForDealer("ملاحظات عامه");
+        t.AddNoteForStorgTrans("ملاحظات عامه");
         Map<String, String> dataBeforeSave = t.GetNamesAndQuantities();
         System.out.println("البيانات قبل الحفظ: " + dataBeforeSave);
         t.ClickSaveAndPrintButton();
         t.CompareNamesAndQuantitiesWithReport(dataBeforeSave);
+        t.CloserReport();
         t.AssertReceiptAdded("مخزن الكافيه");
     }
 
+    @Test(priority = 3)
+    public void TransBetweenStoreAddWithNameTest() {
+        TransBetweenStors t=new TransBetweenStors(driver);
+        t.NavigationHelper(Pages.STORGETRANS);
+        t.ClickNew();
+        t.SelectFromDropDawn("مخزن الكافيه","من مخزن");
+        t.SelectFromDropDawn("المخزن الرئيسى","الي مخزن");
+        t.ClickOnNameRadioBtn();
+        t.SearchAndSelectProduct("جبنه رودس");
+        t.SearchAndSelectProduct("جبنه فيتا");
+        t.SearchAndSelectProduct("قمح");
+        t.SetQuantitiesForRows(1,50,2,50);
+        t.AddNoteForStorgTrans("تست");
+        Map<String, String> dataBeforeSave = t.GetNamesAndQuantities();
+        System.out.println("البيانات قبل الحفظ: " + dataBeforeSave);
+        t.ClickSaveAndPrintButton();
+        t.CompareNamesAndQuantitiesWithReport(dataBeforeSave);
+        t.CloserReport();
+        t.AssertReceiptAdded("مخزن الكافيه");
+    }
 
+    @Test(priority = 4)
+    public void EditTransBetweenStore() {
 
+        TransBetweenStors t=new TransBetweenStors(driver);
+        t.NavigationHelper(Pages.STORGETRANS);
+        t.Edit();
+        t.SetQuantitiesForRows(1,100,2,300);
+        t.ClickOnNameRadioBtn();
+        t.SearchAndSelectProduct("سلك لحام");
+        t.ClickOnBarcodeRadioBtn();
+        t.Search("5170383250");
+        t.ClickEnter();
+        t.AddNoteForStorgTrans("تست معدل");
+        Map<String, String> dataBeforeSave = t.GetNamesAndQuantities();
+        System.out.println("البيانات قبل الحفظ: " + dataBeforeSave);
+        t.ClickSaveAndPrintButton();
+        t.CompareNamesAndQuantitiesWithReport(dataBeforeSave);
+        t.CloserReport();
+        t.AssertReceiptAdded("مخزن الكافيه");
+    }
 
     @Test(priority=5)
     public void DeleteAllTest() {
         TransBetweenStors t=new TransBetweenStors(driver);
         t.NavigationHelper(Pages.STORGETRANS);
-        t.DeleteAll();
+        t.DeleteByName("التحويل بين المخازن");
     }
 
 

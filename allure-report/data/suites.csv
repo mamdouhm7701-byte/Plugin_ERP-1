@@ -1,2 +1,2 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","19170","EditTransBetweenStore","Default Suite","Wed Jul 22 12:07:02 EEST 2026","passed","Wed Jul 22 12:07:21 EEST 2026","StoreTest.TransBetweenStoreTest","Plugin_ERP","StoreTest.TransBetweenStoreTest","EditTransBetweenStore"
+"","21191","AssertErorrWhenChosenOneStore","Default Suite","Wed Jul 22 17:24:40 EEST 2026","passed","Wed Jul 22 17:25:01 EEST 2026","StoreTest.TransBetweenStoreTest","Plugin_ERP","StoreTest.TransBetweenStoreTest","AssertErorrWhenChosenOneStore"

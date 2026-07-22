@@ -88,5 +88,17 @@ public void AssertErorrPopUpWhenAddProuctWithOutStore()
 }
 
 
+@Test(priority = 7)
+public void AssertStorePopUpWhenAddProuctWithOutBalancee() {
+    ManufacturingPage m = new ManufacturingPage(driver);
+    m.NavigationHelper(Pages.MANUFACTURING);
+    m.SelectFromDropDawn("مخزن الكافيه","المخزن");
+    m.ClickAddItemsBtn();
+    m.ClickPlusButtonByRow(1,2);
+    m.ClickSaveForProductBtn();
+    m.SetQuantitiesForRows(1,1000);
+    m.ClickSaveButton();
+    Assert.assertTrue(m.isErrorPopupDisplayed());
 
+}
 }

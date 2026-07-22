@@ -3,6 +3,7 @@ package StoreTest;
 import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.System_Modules.Login.StoreModel.TransBetweenStors;
 import Plugin_ERP.Tests.LoginTest.BaseTest;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Map;
@@ -92,12 +93,36 @@ public class TransBetweenStoreTest extends BaseTest {
         t.AssertReceiptAdded("مخزن الكافيه");
     }
 
+
+
+
     @Test(priority=5)
     public void DeleteAllTest() {
         TransBetweenStors t=new TransBetweenStors(driver);
         t.NavigationHelper(Pages.STORGETRANS);
-        t.DeleteByName("التحويل بين المخازن");
+        t.DeleteAll();
     }
 
+
+    @Test(priority = 6)
+public void AssertToStoreRequired(){
+
+        TransBetweenStors t=new TransBetweenStors(driver);
+        t.NavigationHelper(Pages.STORGETRANS);
+        t.ClickNew();
+        Assert.assertTrue(t.AssertToStore(),"الرسالة مظهرتش");
+
+    }
+
+
+    @Test(priority = 7)
+    public void AssertErorrWhenChosenOneStore(){
+        TransBetweenStors t=new TransBetweenStors(driver);
+        t.NavigationHelper(Pages.STORGETRANS);
+        t.ClickNew();
+        t.SelectFromDropDawn("مخزن الكافيه","من مخزن");
+        t.ClickAddItemsBtn();
+        Assert.assertTrue(t.AssertToStore(),"الرسالة مظهرتش");
+    }
 
 }

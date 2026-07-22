@@ -66,7 +66,7 @@ public void AddManufacturingByNameTest()  {
     public void DeleteManufacturingByBarcodeTest()  {
     ManufacturingPage m = new ManufacturingPage(driver);
     m.NavigationHelper(Pages.ORDERS);
-    m.DeleteManufacturer("إذن تصنيع");
+    m.DeleteByName("إذن تصنيع");
 }
 
 @Test(priority = 5)

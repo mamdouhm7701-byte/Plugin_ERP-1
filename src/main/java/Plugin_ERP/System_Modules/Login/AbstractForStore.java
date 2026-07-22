@@ -363,7 +363,7 @@ public Boolean AssertSupplier(){
     }
 
     @Step("حذف اذن التصنيع")
-    public void DeleteManufacturer(String Text  ) {
+    public void DeleteByName(String Text  ) {
         utilites.waits().waitForOverlayToDisappear();
         utilites.grid().deleteAllRowsByType(Text,Clickyestodelet);
     }

@@ -57,6 +57,7 @@ public class TransBetweenStoreTest extends BaseTest {
         t.ClickNew();
         t.SelectFromDropDawn("مخزن الكافيه","من مخزن");
         t.SelectFromDropDawn("المخزن الرئيسى","الي مخزن");
+        t.ClickOnNameRadioBtn();
         t.SearchAndSelectProduct("جبنه رودس");
         t.SearchAndSelectProduct("جبنه فيتا");
         t.SearchAndSelectProduct("قمح");
@@ -76,7 +77,7 @@ public class TransBetweenStoreTest extends BaseTest {
     public void DeleteAllTest() {
         TransBetweenStors t=new TransBetweenStors(driver);
         t.NavigationHelper(Pages.STORGETRANS);
-        t.DeleteAll();
+        t.DeleteByName("التحويل بين المخازن");
     }
 
 

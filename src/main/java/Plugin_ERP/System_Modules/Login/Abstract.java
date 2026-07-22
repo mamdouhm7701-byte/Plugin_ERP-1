@@ -267,7 +267,10 @@ public void AddAdress(String adress) {
     public void AssertCheckboxIsChecked(String checkboxName, boolean expectedState) {
         utilites.checkbox().assertCheckboxState(checkboxName, expectedState);
     }
-
+@Step("التحقق ان زرارالحفظ غير قابل للضغط")
+public boolean AssertSaveButtonIsNotChecked(){
+        return utilites.isDisplayed(SaveButton);
+}
 
     //ميثودات الاختيار
     @Step("الاختيار من القائمة المنسدلة: {Name} من: {Type}")

@@ -122,7 +122,27 @@ public void AssertToStoreRequired(){
         t.ClickNew();
         t.SelectFromDropDawn("مخزن الكافيه","من مخزن");
         t.ClickAddItemsBtn();
-        Assert.assertTrue(t.AssertToStore(),"الرسالة مظهرتش");
+        Assert.assertTrue(t.isErrorPopupDisplayed(),"الرسالة مظهرتش");
+    }
+    @Test(priority = 8)
+    public void CantChosenSameStore(){
+        TransBetweenStors t=new TransBetweenStors(driver);
+        t.NavigationHelper(Pages.STORGETRANS);
+        t.ClickNew();
+        t.SelectFromDropDawn("مخزن الكافيه","من مخزن");
+        t.SelectFromDropDawn("مخزن الكافيه","الي مخزن");
+        Assert.assertTrue(t.isErrorPopupDisplayed(),"الرسالة مظهرتش");
+    }
+
+
+    @Test(priority = 9)
+    public void CantSaveWithOutChosenProduct(){
+        TransBetweenStors t=new TransBetweenStors(driver);
+        t.NavigationHelper(Pages.STORGETRANS);
+        t.ClickNew();
+        t.SelectFromDropDawn("مخزن الكافيه","من مخزن");
+        t.SelectFromDropDawn("المخزن الرئيسى","الي مخزن");
+        Assert.assertTrue(t.AssertSaveButtonIsNotChecked());
     }
 
 }

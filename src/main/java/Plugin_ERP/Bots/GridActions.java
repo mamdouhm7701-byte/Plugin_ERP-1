@@ -115,6 +115,29 @@ public class GridActions extends BaseAction {
         throw new RuntimeException("❌ ما لقاش أول صف للتعديل بعد 3 محاولات");
     }
 
+    public void deleteAllRowsSvg(By confirmDeleteButton) {
+
+        int deletedCount = 0;
+
+        while (driver.findElements(By.xpath("//*[name()='svg' and @data-action-type='delete']")).size() > 0) {
+
+            waitActions.waitForOverlayToDisappear();
+
+            deleteRow(
+                    By.xpath("(//*[name()='svg' and @data-action-type='delete'])[1]"),
+                    confirmDeleteButton
+            );
+
+            deletedCount++;
+
+            System.out.println("🔁 Total deleted so far: " + deletedCount);
+        }
+
+        System.out.println("🏁 Done! Total rows deleted: " + deletedCount);
+    }
+
+
+
 
     public By getLastDeleteButton() {
         int attempts = 0;

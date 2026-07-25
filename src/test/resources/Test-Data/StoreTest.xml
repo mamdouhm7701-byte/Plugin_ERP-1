@@ -7,6 +7,8 @@
             <class name="StoreTest.ExchangeOrderTest"/>
             <class name="StoreTest.AdditionOrderTest"/>
             <class name="StoreTest.ManufacturingTest"/>
+            <class name="StoreTest.TransBetweenStoreTest"/>
+            <class name="StoreTest.DamageAdjustmentTest"/>
 
 
         </classes>

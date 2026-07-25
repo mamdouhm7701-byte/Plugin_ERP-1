@@ -492,6 +492,14 @@ public GridActions grid() {
 
     }
 
+    public By getLastEditButtonForAdjustDamage() {
+
+
+        return By.xpath("(//*[@data-action-type='edit'])[1]");
+    }
+
+
+
     public void ClickPlusButtonByRow(int numberOfRows, int timesPerRow) {
         // استنى لحد ما كل الصفوف المطلوبة تكون موجودة فعليًا في الجدول
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));

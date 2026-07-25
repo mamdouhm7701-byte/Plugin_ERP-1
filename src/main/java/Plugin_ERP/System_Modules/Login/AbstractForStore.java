@@ -208,6 +208,23 @@ public Boolean AssertSupplier(){
         LogUtils.info("تم الضغط على تعديل اخر صف موجود");
     }
 
+    @Step("التعديل على اخر صف موجود")
+    public void EditForDamage(){
+        utilites.waits().waitForOverlayToDisappear();
+
+        utilites.ClickElement(
+                utilites.getLastEditButtonForAdjustDamage()
+        );
+        WaitEditeForBills();
+        LogUtils.info("تم الضغط على تعديل اخر صف موجود");
+    }
+
+
+    public void DeleteForDamage(){
+        utilites.grid().deleteAllRowsSvg(Clickyestodelet);
+        LogUtils.info("تم حذف جميع السجلات في الجريد");
+    }
+
 
 
     @Step("اختيار الكميات : {rowNumber} {quantity}")

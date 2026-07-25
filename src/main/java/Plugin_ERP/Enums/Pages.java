@@ -38,6 +38,8 @@ public enum Pages {
     CRM("/invoices"),
     MANUFACTURING("/manufacturing#/manufacturing-order/new"),
     STORGETRANS("/#/storage-transfer/"),
+    DAMAGEADUSTMENT("/#/damage-adjustment/"),
+
 ;
 
     private final String route;

@@ -46,3 +46,11 @@ test-outputs/
 allure-results/
 allure-report/
 *.log
+
+
+# Test artifacts
+screenshots/
+allure-results/
+allure-report/
+test-output/
+target/

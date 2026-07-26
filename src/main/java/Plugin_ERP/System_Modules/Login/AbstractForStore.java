@@ -385,4 +385,93 @@ public Boolean AssertSupplier(){
         utilites.grid().deleteAllRowsByType(Text,Clickyestodelet);
     }
 
+
+    //Purches
+
+    @Step("تعديل قيمة الصف {rowNumber} فى العمود {columnName} إلى {value}")
+    public void SetValueByRow(String columnName, int rowNumber, int value) {
+
+        WebElement input = utilites.waits().waitForInputByRow(columnName, rowNumber);
+
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block:'center'});",
+                input
+        );
+
+        input.click();
+        input.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        input.sendKeys(Keys.DELETE);
+        input.sendKeys(String.valueOf(value));
+
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].dispatchEvent(new Event('input',{bubbles:true}));" +
+                        "arguments[0].dispatchEvent(new Event('change',{bubbles:true}));",
+                input
+        );
+
+        input.sendKeys(Keys.TAB);
+
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(d -> {
+            String actual = utilites.waits()
+                    .waitForInputByRow(columnName, rowNumber)
+                    .getAttribute("value");
+
+            return actual != null &&
+                    normalizeQuantity(actual).equals(String.valueOf(value));
+        });
+
+        LogUtils.info(columnName + " فى الصف " + rowNumber + " أصبح " + value);
+    }
+    @Step("إضافة قيم فى العمود {columnName}")
+    public void SetValuesForRows(String columnName, int... values) {
+
+        utilites.waits().waitForOverlayToDisappear();
+
+        if (values.length % 2 != 0) {
+            throw new IllegalArgumentException("Values must be pairs: rowNumber, value");
+        }
+
+        for (int i = 0; i < values.length; i += 2) {
+            SetValueByRow(columnName, values[i], values[i + 1]);
+        }
+    }
+    public Map<String, String> GetNamesAndValues(String columnName) {
+
+        Map<String, String> data = new LinkedHashMap<>();
+
+        String columnIndex = driver.findElement(
+                By.xpath("//th[@role='columnheader'][.//div[normalize-space()='" + columnName + "']]")
+        ).getAttribute("aria-colindex");
+
+        List<WebElement> rows = driver.findElements(
+                By.xpath("//tbody//tr[@role='row']")
+        );
+
+        for (WebElement row : rows) {
+
+            String name = row.findElement(
+                    By.xpath(".//td[@aria-colindex='3']")
+            ).getText().trim();
+
+            String value = row.findElement(
+                    By.xpath(".//td[@aria-colindex='" + columnIndex + "']//input[not(@type='hidden')]")
+            ).getAttribute("value").trim();
+
+            LogUtils.info(name + " -> " + columnName + " = " + value);
+
+            data.put(name, value);
+        }
+
+        return data;
+    }
+
+
+
+
+
+
+
+
+
+
 }

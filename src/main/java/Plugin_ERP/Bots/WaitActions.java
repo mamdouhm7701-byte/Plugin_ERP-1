@@ -234,4 +234,31 @@ public class WaitActions extends BaseAction{
         });
     }
 
+    public WebElement waitForInputByRow(String columnName, int rowNumber) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        return wait.until(d -> {
+
+            String columnIndex = d.findElement(
+                    By.xpath("//th[@role='columnheader'][.//div[normalize-space()='" + columnName + "']]")
+            ).getAttribute("aria-colindex");
+
+            List<WebElement> rows = d.findElements(EditableRows);
+
+            if (rows.size() < rowNumber) {
+                return null;
+            }
+
+            WebElement targetRow = rows.get(rowNumber - 1);
+
+            List<WebElement> inputs = targetRow.findElements(
+                    By.xpath(".//td[@aria-colindex='" + columnIndex + "']//input[not(@type='hidden')]")
+            );
+
+            return inputs.isEmpty() || !inputs.get(0).isDisplayed()
+                    ? null
+                    : inputs.get(0);
+        });
+    }
+
 }

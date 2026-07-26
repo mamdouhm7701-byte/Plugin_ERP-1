@@ -53,7 +53,7 @@ public class TransBetweenStoreTest extends BaseTest {
         t.ClickOnBarcodeRadioBtn();
         t.Search("8218648422");
         t.ClickEnter();
-        t.SetQuantitiesForRows(1, 10);
+        t.SetValuesForRows("الكمية", 1, 10);
         t.AddNoteForStorgTrans("ملاحظات عامه");
         Map<String, String> dataBeforeSave = t.GetNamesAndQuantities();
         System.out.println("البيانات قبل الحفظ: " + dataBeforeSave);

@@ -39,6 +39,8 @@ public enum Pages {
     MANUFACTURING("/manufacturing#/manufacturing-order/new"),
     STORGETRANS("/#/storage-transfer/"),
     DAMAGEADUSTMENT("/#/damage-adjustment/"),
+    PURCHINVOICE("/#/purch-invoice/new"),
+    PURCHESINVOICELIST("/#/purch-invoice-list"),
 
 ;
 

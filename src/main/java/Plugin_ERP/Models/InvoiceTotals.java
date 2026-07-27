@@ -1,7 +1,5 @@
 package Plugin_ERP.Models;
 
-
-
 import java.math.BigDecimal;
 
 public class InvoiceTotals {

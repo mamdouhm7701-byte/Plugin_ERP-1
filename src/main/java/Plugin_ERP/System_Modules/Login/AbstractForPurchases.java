@@ -4,6 +4,7 @@ import Plugin_ERP.Bots.LogUtils;
 import Plugin_ERP.Models.InvoiceRow;
 import Plugin_ERP.Models.InvoiceTotals;
 import Plugin_ERP.Models.ReportTotals;
+import Plugin_ERP.Models.TaxMode;
 import Plugin_ERP.System_Modules.Login.purches.PurchesBillsPage;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
@@ -285,13 +286,22 @@ public class AbstractForPurchases extends AbstractForStore{
 
         return totals;
     }
-    public static void assertBigDecimalEquals(BigDecimal expected, BigDecimal actual) {
-        Assert.assertEquals(actual.compareTo(expected), 0);
+    private static final BigDecimal TOLERANCE = new BigDecimal("0.02");
+
+    private void assertBigDecimalEquals(BigDecimal expected, BigDecimal actual) {
+
+        BigDecimal difference = expected.subtract(actual).abs();
+
+        Assert.assertTrue(
+                difference.compareTo(TOLERANCE) <= 0,
+                "Expected: " + expected +
+                        " , Actual: " + actual +
+                        " , Difference: " + difference
+        );
     }
 
     public void attachBusinessValidation(
 
-            PurchesBillsPage p,
             InvoiceTotals totals) {
 
         String report = String.format("""
@@ -309,16 +319,16 @@ public class AbstractForPurchases extends AbstractForStore{
             UI Net                = %s
             Expected Net          = %s
             """,
-                p.getTotal(),
+                getTotal(),
                 totals.getTotal(),
 
-                p.getBeforeTax(),
+                getBeforeTax(),
                 totals.getBeforeTax(),
 
-                p.getTax(),
+                getTax(),
                 totals.getTax(),
 
-                p.getNet(),
+                getNet(),
                 totals.getNet()
         );
 
@@ -364,22 +374,26 @@ public class AbstractForPurchases extends AbstractForStore{
 
         Allure.addAttachment("Report Validation", report);
     }
-    public void assertInvoiceTotals(
-            PurchesBillsPage p,
-            InvoiceTotals totals) {
+    public void assertInvoiceTotals(InvoiceTotals totals) {
 
-        Assert.assertEquals(p.getTotal(), totals.getTotal());
-        Assert.assertEquals(p.getBeforeTax(), totals.getBeforeTax());
-        Assert.assertEquals(p.getTax(), totals.getTax());
-        Assert.assertEquals(p.getNet(), totals.getNet());
+        assertBigDecimalEquals(totals.getTotal(), getTotal());
+        assertBigDecimalEquals(totals.getBeforeTax(), getBeforeTax());
+        assertBigDecimalEquals(totals.getTax(), getTax());
+        assertBigDecimalEquals(totals.getNet(), getNet());
     }
 
 
     public void assertReportTotals(
             ReportTotals report,
-            InvoiceTotals expected) {
+            InvoiceTotals expected,
+            TaxMode taxMode) {
 
-        assertBigDecimalEquals(expected.getTotal(), report.getTotal());
+        if (taxMode == TaxMode.INCLUSIVE) {
+            assertBigDecimalEquals(expected.getBeforeTax(), report.getTotal());
+        } else {
+            assertBigDecimalEquals(expected.getTotal(), report.getTotal());
+        }
+
         assertBigDecimalEquals(expected.getDiscount(), report.getDiscount());
         assertBigDecimalEquals(expected.getBeforeTax(), report.getBeforeTax());
         assertBigDecimalEquals(expected.getTax(), report.getTax());

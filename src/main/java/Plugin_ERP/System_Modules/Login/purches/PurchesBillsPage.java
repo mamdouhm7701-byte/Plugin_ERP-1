@@ -6,4 +6,9 @@ import org.openqa.selenium.WebDriver;
 
 public class PurchesBillsPage extends AbstractForPurchases {
     public PurchesBillsPage(WebDriver driver) {super(driver);}
+
+
+
+
+
 }

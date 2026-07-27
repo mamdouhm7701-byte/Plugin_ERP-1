@@ -1,18 +1,56 @@
 package Plugin_ERP.Business.Calculator;
 
-import Plugin_ERP.Models.DiscountType;
-import Plugin_ERP.Models.InvoiceRow;
-import Plugin_ERP.Models.InvoiceTotals;
+import Plugin_ERP.Models.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 public class InvoiceCalculator {
+
     public static InvoiceTotals calculate(
             List<InvoiceRow> rows,
             BigDecimal discount,
             DiscountType discountType,
-            BigDecimal taxPercentage) {
+            BigDecimal taxPercentage,
+            TaxMode taxMode,
+            int precision) {
+
+        switch (taxMode) {
+
+            case EXCLUSIVE:
+                return calculateExclusive(
+                        rows,
+                        discount,
+                        discountType,
+                        taxPercentage,
+                        precision
+                );
+
+            case INCLUSIVE:
+                return calculateInclusive(
+                        rows,
+                        discount,
+                        discountType,
+                        taxPercentage,
+                        precision
+                );
+
+            default:
+                throw new IllegalArgumentException("Unsupported TaxMode");
+        }
+    }
+
+    private static BigDecimal round(BigDecimal value, int precision) {
+        return value.setScale(precision, RoundingMode.HALF_UP);
+    }
+
+    private static InvoiceTotals calculateExclusive(
+            List<InvoiceRow> rows,
+            BigDecimal discount,
+            DiscountType discountType,
+            BigDecimal taxPercentage,
+            int precision) {
 
         InvoiceTotals totals = new InvoiceTotals();
 
@@ -22,6 +60,7 @@ public class InvoiceCalculator {
             total = total.add(row.getLineTotal());
         }
 
+        total = round(total, precision);
         totals.setTotal(total);
 
         BigDecimal discountValue;
@@ -31,24 +70,81 @@ public class InvoiceCalculator {
         } else {
             discountValue = total
                     .multiply(discount)
-                    .divide(BigDecimal.valueOf(100));
+                    .divide(BigDecimal.valueOf(100), precision + 4, RoundingMode.HALF_UP);
         }
 
+        discountValue = round(discountValue, precision);
         totals.setDiscount(discountValue);
 
-        BigDecimal beforeTax = total.subtract(discountValue);
-
+        BigDecimal beforeTax = round(total.subtract(discountValue), precision);
         totals.setBeforeTax(beforeTax);
 
         BigDecimal tax = beforeTax
                 .multiply(taxPercentage)
-                .divide(BigDecimal.valueOf(100));
+                .divide(BigDecimal.valueOf(100), precision + 4, RoundingMode.HALF_UP);
 
+        tax = round(tax, precision);
         totals.setTax(tax);
 
-        BigDecimal net = beforeTax.add(tax);
-
+        BigDecimal net = round(beforeTax.add(tax), precision);
         totals.setNet(net);
+
+        return totals;
+    }
+
+    private static InvoiceTotals calculateInclusive(
+            List<InvoiceRow> rows,
+            BigDecimal discount,
+            DiscountType discountType,
+            BigDecimal taxPercentage,
+            int precision) {
+
+        InvoiceTotals totals = new InvoiceTotals();
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (InvoiceRow row : rows) {
+            total = total.add(row.getLineTotal());
+        }
+
+        total = round(total, precision);
+        totals.setTotal(total);
+
+        BigDecimal discountValue;
+
+        if (discountType == DiscountType.VALUE) {
+            discountValue = discount;
+        } else {
+            discountValue = total
+                    .multiply(discount)
+                    .divide(BigDecimal.valueOf(100), precision + 4, RoundingMode.HALF_UP);
+        }
+
+        discountValue = round(discountValue, precision);
+        totals.setDiscount(discountValue);
+
+        BigDecimal net = round(total.subtract(discountValue), precision);
+        totals.setNet(net);
+
+        BigDecimal divisor = BigDecimal.ONE.add(
+                taxPercentage.divide(
+                        BigDecimal.valueOf(100),
+                        precision + 4,
+                        RoundingMode.HALF_UP
+                )
+        );
+
+        BigDecimal beforeTax = net.divide(
+                divisor,
+                precision,
+                RoundingMode.HALF_UP
+        );
+
+        beforeTax = round(beforeTax, precision);
+        totals.setBeforeTax(beforeTax);
+
+        BigDecimal tax = round(net.subtract(beforeTax), precision);
+        totals.setTax(tax);
 
         return totals;
     }

@@ -3,10 +3,7 @@ package Purches;
 
 import Plugin_ERP.Business.Calculator.InvoiceCalculator;
 import Plugin_ERP.Enums.Pages;
-import Plugin_ERP.Models.DiscountType;
-import Plugin_ERP.Models.InvoiceRow;
-import Plugin_ERP.Models.InvoiceTotals;
-import Plugin_ERP.Models.ReportTotals;
+import Plugin_ERP.Models.*;
 import Plugin_ERP.System_Modules.Login.purches.PurchesBillsPage;
 import Plugin_ERP.Tests.LoginTest.BaseTest;
 import io.qameta.allure.Allure;
@@ -39,16 +36,29 @@ public class PurchesBillsTest extends BaseTest {
 
         // ================= Business Validation =================
 
-        List<InvoiceRow> rows = p.getInvoiceRows();
+        TaxMode taxMode = TaxMode.INCLUSIVE;
 
+        List<InvoiceRow> rows = p.getInvoiceRows();
+        for (InvoiceRow row : rows) {
+            System.out.println("----------------");
+            System.out.println("Qty       = " + row.getQuantity());
+            System.out.println("Price     = " + row.getPrice());
+            System.out.println("LineTotal = " + row.getLineTotal());
+        }
         InvoiceTotals totals = InvoiceCalculator.calculate(
                 rows,
                 p.getDiscount(),
                 DiscountType.VALUE,
-                new BigDecimal("15")
+                new BigDecimal("15"),
+                taxMode,
+                2
         );
-        p.attachBusinessValidation(p, totals);
-        p.assertInvoiceTotals(p, totals);
+
+        p.attachBusinessValidation(totals);
+
+        System.out.println(totals);
+
+        p.assertInvoiceTotals(totals);
 
         // ================= Report Validation =================
 
@@ -58,9 +68,18 @@ public class PurchesBillsTest extends BaseTest {
 
         p.CompareNamesQuantitiesAndPricesWithReport(dataBeforeSave);
 
+        System.out.println("----------------");
+
+        System.out.println("Calc Total     = " + totals.getTotal());
+        System.out.println("Calc BeforeTax = " + totals.getBeforeTax());
+        System.out.println("Calc Tax       = " + totals.getTax());
+        System.out.println("Calc Net       = " + totals.getNet());
+
         ReportTotals reportTotals = p.getReportTotals();
-        p. attachReportValidation(reportTotals, totals);
-        p.assertReportTotals(reportTotals, totals);
+
+        p.attachReportValidation(reportTotals, totals);
+
+        p.assertReportTotals(reportTotals, totals, taxMode);
 
         p.CloserReport();
 

@@ -25,11 +25,29 @@ public class AbstractForPurchases extends AbstractForStore{
     private By DiscountValue= By.xpath("//input[@name='discountValue']");
     private By DiscountPercntge= By.xpath("//input[@placeholder='النسبة']");
 
+    private By ClickCash = By.xpath("//label[.//span[normalize-space()='خزينة']]");
+    private By ClickOtherPay = By.xpath("//label[.//span[normalize-space()='آخرى']]");
+    private By ClickPlusToAddPay = By.xpath("(//button[contains(@class,'btn-gradient-primary')])[2]");
 
 
 
+    @Step("الضغط على طريقه الدفع خزينة")
+    public void ClickCash(){
+        utilites.waits().waitForOverlayToDisappear();
+        utilites.ClickElement(ClickCash);
+    }
 
+    @Step("الضغط على طريقه الدفع اخري")
+    public void ClickOtherPay(){
+        utilites.waits().waitForOverlayToDisappear();
+        utilites.ClickElement(ClickOtherPay);
+    }
 
+    @Step("")
+    public void ClickPlusToAddPay(){
+        utilites.waits().waitForOverlayToDisappear();
+        utilites.ClickElement(ClickPlusToAddPay);
+    }
 
     @Step("اضافه خصم النسبة")
     public void AddDiscountPercntge(String discountPercntge) {

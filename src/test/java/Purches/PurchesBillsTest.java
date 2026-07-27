@@ -6,10 +6,7 @@ import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.Models.*;
 import Plugin_ERP.System_Modules.Login.purches.PurchesBillsPage;
 import Plugin_ERP.Tests.LoginTest.BaseTest;
-import io.qameta.allure.Allure;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.testng.Assert;
+
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
@@ -34,17 +31,13 @@ public class PurchesBillsTest extends BaseTest {
         p.ClickPlusButtonByRow(2, 2);
         p.ClickSaveForProductBtn();
 
-        // ================= Business Validation =================
+// ================= Business Validation =================
 
-        TaxMode taxMode = TaxMode.INCLUSIVE;
+        TaxMode taxMode = TaxMode.EXCLUSIVE;
+        boolean isExclusive = taxMode == TaxMode.EXCLUSIVE;
 
         List<InvoiceRow> rows = p.getInvoiceRows();
-        for (InvoiceRow row : rows) {
-            System.out.println("----------------");
-            System.out.println("Qty       = " + row.getQuantity());
-            System.out.println("Price     = " + row.getPrice());
-            System.out.println("LineTotal = " + row.getLineTotal());
-        }
+
         InvoiceTotals totals = InvoiceCalculator.calculate(
                 rows,
                 p.getDiscount(),
@@ -60,7 +53,7 @@ public class PurchesBillsTest extends BaseTest {
 
         p.assertInvoiceTotals(totals);
 
-        // ================= Report Validation =================
+// ================= Report Validation =================
 
         Map<String, String> dataBeforeSave = p.GetNamesQuantitiesAndPrices();
 
@@ -68,16 +61,9 @@ public class PurchesBillsTest extends BaseTest {
 
         p.CompareNamesQuantitiesAndPricesWithReport(dataBeforeSave);
 
-        System.out.println("----------------");
-
-        System.out.println("Calc Total     = " + totals.getTotal());
-        System.out.println("Calc BeforeTax = " + totals.getBeforeTax());
-        System.out.println("Calc Tax       = " + totals.getTax());
-        System.out.println("Calc Net       = " + totals.getNet());
-
         ReportTotals reportTotals = p.getReportTotals();
 
-        p.attachReportValidation(reportTotals, totals);
+        p.attachReportValidation(reportTotals, totals, isExclusive);
 
         p.assertReportTotals(reportTotals, totals, taxMode);
 
@@ -89,6 +75,8 @@ public class PurchesBillsTest extends BaseTest {
 
         p.AssertReceiptAdded("محمد ممدوح");
     }
+
+
 
 
 

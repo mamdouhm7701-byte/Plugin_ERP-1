@@ -334,30 +334,38 @@ public class AbstractForPurchases extends AbstractForStore{
 
         Allure.addAttachment("Invoice Calculation", report);
     }
+
+
     public void attachReportValidation(
             ReportTotals reportTotals,
-            InvoiceTotals totals) {
+            InvoiceTotals totals,
+            boolean isExclusive) {
+
+        BigDecimal expectedReportTotal =
+                isExclusive
+                        ? totals.getTotal()
+                        : totals.getBeforeTax();
 
         String report = String.format("""
-            Report Validation
+        Report Validation
 
-            Report Total          = %s
-            Expected Total        = %s
+        Report Total          = %s
+        Expected Total        = %s
 
-            Report Discount       = %s
-            Expected Discount     = %s
+        Report Discount       = %s
+        Expected Discount     = %s
 
-            Report Before Tax     = %s
-            Expected Before Tax   = %s
+        Report Before Tax     = %s
+        Expected Before Tax   = %s
 
-            Report Tax            = %s
-            Expected Tax          = %s
+        Report Tax            = %s
+        Expected Tax          = %s
 
-            Report Net            = %s
-            Expected Net          = %s
-            """,
+        Report Net            = %s
+        Expected Net          = %s
+        """,
                 reportTotals.getTotal(),
-                totals.getTotal(),
+                expectedReportTotal,
 
                 reportTotals.getDiscount(),
                 totals.getDiscount(),

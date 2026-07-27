@@ -10,21 +10,6 @@ public class PurchesBillsPage extends AbstractForPurchases {
     public PurchesBillsPage(WebDriver driver) {super(driver);}
 
 
-private By DiscountValue= By.xpath("//input[@name='discountValue']");
-private By DiscountPercntge= By.xpath("//input[@placeholder='النسبة']");
-
-
-
-
-
-
-
-@Step("اضافه خصم النسبة")
-public void AddDiscountPercntge(String discountPercntge){
-    utilites.waits().waitForOverlayToDisappear();
-    utilites.TaypeTextB(DiscountPercntge,discountPercntge);
-
-
 
 }
 
@@ -38,4 +23,4 @@ public void AddDiscountPercntge(String discountPercntge){
 
 
 
-}
+

@@ -5,7 +5,6 @@ import Plugin_ERP.Models.InvoiceRow;
 import Plugin_ERP.Models.InvoiceTotals;
 import Plugin_ERP.Models.ReportTotals;
 import Plugin_ERP.Models.TaxMode;
-import Plugin_ERP.System_Modules.Login.purches.PurchesBillsPage;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.openqa.selenium.*;
@@ -23,9 +22,26 @@ public class AbstractForPurchases extends AbstractForStore{
     public AbstractForPurchases(WebDriver driver){super(driver);}
 
 
+    private By DiscountValue= By.xpath("//input[@name='discountValue']");
+    private By DiscountPercntge= By.xpath("//input[@placeholder='النسبة']");
 
 
 
+
+
+
+
+    @Step("اضافه خصم النسبة")
+    public void AddDiscountPercntge(String discountPercntge) {
+        utilites.waits().waitForOverlayToDisappear();
+        utilites.TaypeTextB(DiscountPercntge, discountPercntge);
+    }
+
+    @Step("اضافه خصم القيمة")
+    public void AddDiscountValue(String discountValue) {
+        utilites.waits().waitForOverlayToDisappear();
+        utilites.TaypeTextB(DiscountValue, discountValue);
+    }
 
     //Purches
 

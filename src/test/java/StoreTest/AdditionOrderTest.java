@@ -173,7 +173,7 @@ public class AdditionOrderTest extends BaseTest {
     public void DeleteAddition() {
         AdditionOrderPage a = new AdditionOrderPage(driver);
         a.NavigationHelper(Pages.ORDERS);
-        a.DeleteAll();
+        a.DeleteByName("اذن استلام");
     }
 
 

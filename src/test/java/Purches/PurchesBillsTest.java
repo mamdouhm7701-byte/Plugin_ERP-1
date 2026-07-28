@@ -7,6 +7,7 @@ import Plugin_ERP.Models.*;
 import Plugin_ERP.System_Modules.Login.purches.PurchesBillsPage;
 import Plugin_ERP.Tests.LoginTest.BaseTest;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
@@ -78,74 +79,74 @@ public class PurchesBillsTest extends BaseTest {
     }
 
 
-@Test(priority = 2)
-public void AddPurchesBillsByBarcodTest() {
+    @Test(priority = 2)
+    public void AddPurchesBillsByBarcodTest() {
 
-    PurchesBillsPage p = new PurchesBillsPage(driver);
+        PurchesBillsPage p = new PurchesBillsPage(driver);
 
-    p.NavigationHelper(Pages.PURCHINVOICE);
-    p.AddDate();
-    p.SelectFromDropDawn("آجل", "نوع السداد");
-    p.SelectFromDropDawn("مخزن الكافيه", "المخزن");
-    p.ClickShift();
-    p.SelectByKeys("محمد ممدوح");
-    p.SelectFromDropDawn("تست", "مندوب");
-    p.ClickOnBarcodeRadioBtn();
-    p.Search("8218648422");
-    p.ClickEnter();
-    p.SetQuantitiesForRows( 1, 10);
-    p.SetValueByRow("سعر الشراء", 1, 200);
-    p.AddDiscountPercntge("10");
+        p.NavigationHelper(Pages.PURCHINVOICE);
+        p.AddDate();
+        p.SelectFromDropDawn("آجل", "نوع السداد");
+        p.SelectFromDropDawn("مخزن الكافيه", "المخزن");
+        p.ClickShift();
+        p.SelectByKeys("محمد ممدوح");
+        p.SelectFromDropDawn("تست", "مندوب");
+        p.ClickOnBarcodeRadioBtn();
+        p.Search("8218648422");
+        p.ClickEnter();
+        p.SetQuantitiesForRows(1, 10);
+        p.SetValueByRow("سعر الشراء", 1, 200);
+        p.AddDiscountPercntge("10");
 
 
 // ================= Business Validation =================
 
-    TaxMode taxMode = TaxMode.EXCLUSIVE;
-    boolean isExclusive = taxMode == TaxMode.EXCLUSIVE;
+        TaxMode taxMode = TaxMode.EXCLUSIVE;
+        boolean isExclusive = taxMode == TaxMode.EXCLUSIVE;
 
-    List<InvoiceRow> rows = p.getInvoiceRows();
+        List<InvoiceRow> rows = p.getInvoiceRows();
 
-    InvoiceTotals totals = InvoiceCalculator.calculate(
-            rows,
-            p.getDiscount(),
-            DiscountType.VALUE,
-            new BigDecimal("15"),
-            taxMode,
-            2
-    );
+        InvoiceTotals totals = InvoiceCalculator.calculate(
+                rows,
+                p.getDiscount(),
+                DiscountType.VALUE,
+                new BigDecimal("15"),
+                taxMode,
+                2
+        );
 
-    p.attachBusinessValidation(totals);
+        p.attachBusinessValidation(totals);
 
-    System.out.println(totals);
+        System.out.println(totals);
 
-    p.assertInvoiceTotals(totals);
+        p.assertInvoiceTotals(totals);
 
 // ================= Report Validation =================
 
-    Map<String, String> dataBeforeSave = p.GetNamesQuantitiesAndPrices();
+        Map<String, String> dataBeforeSave = p.GetNamesQuantitiesAndPrices();
 
-    p.ClickSaveAndPrintButton();
+        p.ClickSaveAndPrintButton();
 
-    p.CompareNamesQuantitiesAndPricesWithReport(dataBeforeSave);
+        p.CompareNamesQuantitiesAndPricesWithReport(dataBeforeSave);
 
-    ReportTotals reportTotals = p.getReportTotals();
+        ReportTotals reportTotals = p.getReportTotals();
 
-    p.attachReportValidation(reportTotals, totals, isExclusive);
+        p.attachReportValidation(reportTotals, totals, isExclusive);
 
-    p.assertReportTotals(reportTotals, totals, taxMode);
+        p.assertReportTotals(reportTotals, totals, taxMode);
 
-    p.CloserReport();
+        p.CloserReport();
 
-    // ================= Receipt Validation =================
+        // ================= Receipt Validation =================
 
-    p.NavigationHelper(Pages.PURCHESINVOICELIST);
+        p.NavigationHelper(Pages.PURCHESINVOICELIST);
 
-    p.AssertReceiptAdded("محمد ممدوح");
-}
+        p.AssertReceiptAdded("محمد ممدوح");
+    }
 
 
-@Test(priority = 3)
-public void AddPurchesBillsByNameTest() {
+    @Test(priority = 3)
+    public void AddPurchesBillsByNameTest() {
         PurchesBillsPage p = new PurchesBillsPage(driver);
         p.NavigationHelper(Pages.PURCHINVOICE);
 
@@ -157,153 +158,238 @@ public void AddPurchesBillsByNameTest() {
         p.SearchAndSelectProduct("سكر");
         p.SearchAndSelectProduct("كرواسون");
         p.SearchAndSelectProduct("دقيق");
-        p.SetQuantitiesForRows(1, 10, 2, 10,3,10);
+        p.SetQuantitiesForRows(1, 10, 2, 10, 3, 10);
         p.SetValueByRow("سعر الشراء", 1, 200);
         p.SetValueByRow("سعر الشراء", 2, 200);
         p.SetValueByRow("سعر الشراء", 3, 200);
 
         // ================= Business Validation =================
 
-            TaxMode taxMode = TaxMode.EXCLUSIVE;
-            boolean isExclusive = taxMode == TaxMode.EXCLUSIVE;
+        TaxMode taxMode = TaxMode.EXCLUSIVE;
+        boolean isExclusive = taxMode == TaxMode.EXCLUSIVE;
 
-            List<InvoiceRow> rows = p.getInvoiceRows();
+        List<InvoiceRow> rows = p.getInvoiceRows();
 
-            InvoiceTotals totals = InvoiceCalculator.calculate(
-                    rows,
-                    p.getDiscount(),
-                    DiscountType.VALUE,
-                    new BigDecimal("15"),
-                    taxMode,
-                    2
-            );
+        InvoiceTotals totals = InvoiceCalculator.calculate(
+                rows,
+                p.getDiscount(),
+                DiscountType.VALUE,
+                new BigDecimal("15"),
+                taxMode,
+                2
+        );
 
-            p.attachBusinessValidation(totals);
+        p.attachBusinessValidation(totals);
 
-            System.out.println(totals);
+        System.out.println(totals);
 
-            p.assertInvoiceTotals(totals);
+        p.assertInvoiceTotals(totals);
 
         // ================= Report Validation =================
 
-            Map<String, String> dataBeforeSave = p.GetNamesQuantitiesAndPrices();
+        Map<String, String> dataBeforeSave = p.GetNamesQuantitiesAndPrices();
 
-            p.ClickSaveAndPrintButton();
+        p.ClickSaveAndPrintButton();
 
-            p.CompareNamesQuantitiesAndPricesWithReport(dataBeforeSave);
+        p.CompareNamesQuantitiesAndPricesWithReport(dataBeforeSave);
 
-            ReportTotals reportTotals = p.getReportTotals();
+        ReportTotals reportTotals = p.getReportTotals();
 
-            p.attachReportValidation(reportTotals, totals, isExclusive);
+        p.attachReportValidation(reportTotals, totals, isExclusive);
 
-            p.assertReportTotals(reportTotals, totals, taxMode);
+        p.assertReportTotals(reportTotals, totals, taxMode);
 
-            p.CloserReport();
+        p.CloserReport();
 
-            // ================= Receipt Validation =================
+        // ================= Receipt Validation =================
 
-            p.NavigationHelper(Pages.PURCHESINVOICELIST);
+        p.NavigationHelper(Pages.PURCHESINVOICELIST);
 
-            p.AssertReceiptAdded("محمد ممدوح");
+        p.AssertReceiptAdded("محمد ممدوح");
+    }
+
+
+    @Test(priority = 4)
+    public void AddPurchesBillsByPriceWithCashPayTest() {
+
+        PurchesBillsPage p = new PurchesBillsPage(driver);
+        p.NavigationHelper(Pages.PURCHINVOICE);
+
+        p.SelectFromDropDawn("مخزن الكافيه", "المخزن");
+        p.ClickShift();
+        p.SelectByKeys("محمد ممدوح");
+        p.ClickOnNameRadioBtn();
+        p.SearchAndSelectProduct("سكر");
+        p.SearchAndSelectProduct("كرواسون");
+        p.SearchAndSelectProduct("دقيق");
+        p.SetQuantitiesForRows(1, 10, 2, 10, 3, 10);
+        p.SetValueByRow("سعر الشراء", 1, 200);
+        p.SetValueByRow("سعر الشراء", 2, 200);
+        p.SetValueByRow("سعر الشراء", 3, 200);
+
+        // ================= Business Validation =================
+
+        TaxMode taxMode = TaxMode.EXCLUSIVE;
+        boolean isExclusive = taxMode == TaxMode.EXCLUSIVE;
+
+        List<InvoiceRow> rows = p.getInvoiceRows();
+
+        InvoiceTotals totals = InvoiceCalculator.calculate(
+                rows,
+                p.getDiscount(),
+                DiscountType.VALUE,
+                new BigDecimal("15"),
+                taxMode,
+                2
+        );
+
+        p.attachBusinessValidation(totals);
+
+        System.out.println(totals);
+
+        p.assertInvoiceTotals(totals);
+
+
+        // ================= Report Validation =================
+
+        Map<String, String> dataBeforeSave = p.GetNamesQuantitiesAndPrices();
+        p.ClickCash();
+        p.ClickPlusToAddPay();
+
+        p.ClickOnNameRadioBtn();
+        p.ClickSaveAndPrintButton();
+
+        p.CompareNamesQuantitiesAndPricesWithReport(dataBeforeSave);
+
+        ReportTotals reportTotals = p.getReportTotals();
+
+        p.attachReportValidation(reportTotals, totals, isExclusive);
+
+        p.assertReportTotals(reportTotals, totals, taxMode);
+
+        p.CloserReport();
+
+        // ================= Receipt Validation =================
+
+        p.NavigationHelper(Pages.PURCHESINVOICELIST);
+
+        p.AssertReceiptAdded("محمد ممدوح");
+        p.AssertReceiptAdded("نقدي");
+
+
+    }
+
+    @Test(priority = 5)
+
+    public void AddPurchesBillsByPriceWithOtherPayTest() {
+        PurchesBillsPage p = new PurchesBillsPage(driver);
+        p.NavigationHelper(Pages.PURCHINVOICE);
+
+        p.SelectFromDropDawn("مخزن الكافيه", "المخزن");
+        p.ClickShift();
+        p.SelectByKeys("محمد ممدوح");
+        p.ClickOnNameRadioBtn();
+        p.SearchAndSelectProduct("سكر");
+        p.SearchAndSelectProduct("كرواسون");
+        p.SearchAndSelectProduct("دقيق");
+        p.SetQuantitiesForRows(1, 10, 2, 10, 3, 10);
+        p.SetValueByRow("سعر الشراء", 1, 200);
+        p.SetValueByRow("سعر الشراء", 2, 200);
+        p.SetValueByRow("سعر الشراء", 3, 200);
+
+        // ================= Business Validation =================
+
+        TaxMode taxMode = TaxMode.EXCLUSIVE;
+        boolean isExclusive = taxMode == TaxMode.EXCLUSIVE;
+
+        List<InvoiceRow> rows = p.getInvoiceRows();
+
+        InvoiceTotals totals = InvoiceCalculator.calculate(
+                rows,
+                p.getDiscount(),
+                DiscountType.VALUE,
+                new BigDecimal("15"),
+                taxMode,
+                2
+        );
+
+        p.attachBusinessValidation(totals);
+
+        System.out.println(totals);
+
+        p.assertInvoiceTotals(totals);
+
+
+        // ================= Report Validation =================
+
+        Map<String, String> dataBeforeSave = p.GetNamesQuantitiesAndPrices();
+
+        p.ClickOtherPay();
+        p.ClickPlusToAddPay();
+
+        p.ClickOnNameRadioBtn();
+        p.ClickSaveAndPrintButton();
+
+        p.CompareNamesQuantitiesAndPricesWithReport(dataBeforeSave);
+
+        ReportTotals reportTotals = p.getReportTotals();
+
+        p.attachReportValidation(reportTotals,totals,isExclusive);
+
+        p.assertReportTotals(reportTotals,totals,taxMode);
+
+        p.CloserReport();
+
+        // ================= Receipt Validation =================
+
+        p.NavigationHelper(Pages.PURCHESINVOICELIST);
+
+        p.AssertReceiptAdded("محمد ممدوح");
+        p.AssertReceiptAdded("نقدي");
+
+
 }
 
 
 
 
-@Test(priority = 4)
-public void AddPurchesBillsByPriceWithCashPayTest() {
+@Test(priority = 6)
+    public void DeleteAll(){
+
+    PurchesBillsPage p = new PurchesBillsPage(driver);
+
+    p.NavigationHelper(Pages.PURCHESINVOICELIST);
+    p.DeleteByName("فاتورة مشتريات");
+}
+
+
+
+@Test(priority = 7)
+    public void AddWithOutSupplier(){
 
     PurchesBillsPage p = new PurchesBillsPage(driver);
     p.NavigationHelper(Pages.PURCHINVOICE);
 
     p.SelectFromDropDawn("مخزن الكافيه", "المخزن");
     p.ClickShift();
-    p.SelectByKeys("محمد ممدوح");
     p.ClickOnNameRadioBtn();
     p.SearchAndSelectProduct("سكر");
-    p.SearchAndSelectProduct("كرواسون");
-    p.SearchAndSelectProduct("دقيق");
-    p.SetQuantitiesForRows(1, 10, 2, 10,3,10);
-    p.SetValueByRow("سعر الشراء", 1, 200);
-    p.SetValueByRow("سعر الشراء", 2, 200);
-    p.SetValueByRow("سعر الشراء", 3, 200);
-
-    // ================= Business Validation =================
-
-    TaxMode taxMode = TaxMode.EXCLUSIVE;
-    boolean isExclusive = taxMode == TaxMode.EXCLUSIVE;
-
-    List<InvoiceRow> rows = p.getInvoiceRows();
-
-    InvoiceTotals totals = InvoiceCalculator.calculate(
-            rows,
-            p.getDiscount(),
-            DiscountType.VALUE,
-            new BigDecimal("15"),
-            taxMode,
-            2
-    );
-
-    p.attachBusinessValidation(totals);
-
-    System.out.println(totals);
-
-    p.assertInvoiceTotals(totals);
-
-
-
-    // ================= Report Validation =================
-
-    Map<String, String> dataBeforeSave = p.GetNamesQuantitiesAndPrices();
-    p.ClickCash();
-    p.ClickPlusToAddPay();
-
-    p.ClickOnNameRadioBtn();
-    p.ClickSaveAndPrintButton();
-
-    p.CompareNamesQuantitiesAndPricesWithReport(dataBeforeSave);
-
-    ReportTotals reportTotals = p.getReportTotals();
-
-    p.attachReportValidation(reportTotals, totals, isExclusive);
-
-    p.assertReportTotals(reportTotals, totals, taxMode);
-
-    p.CloserReport();
-
-    // ================= Receipt Validation =================
-
-    p.NavigationHelper(Pages.PURCHESINVOICELIST);
-
-    p.AssertReceiptAdded("محمد ممدوح");
-
-
-
+    p.SelectFromDropDawn("آجل", "نوع السداد");
+    p.ClickSaveButton();
+    Assert.assertTrue(p.isErrorPopupDisplayed());
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-@Test
-    public void DeleteAll(){
+@Test(priority = 8)
+public void AddWithOutProduct(){
 
     PurchesBillsPage p = new PurchesBillsPage(driver);
-
-    p.NavigationHelper(Pages.PURCHESINVOICELIST);
-    p.DeleteAll();
-}
-
-
-
+    p.NavigationHelper(Pages.PURCHINVOICE);
+    p.SelectFromDropDawn("مخزن الكافيه", "المخزن");
+    p.ClickShift();
+    p.SelectByKeys("محمد ممدوح");
+    p.SelectFromDropDawn("آجل", "نوع السداد");
+    Assert.assertTrue(p.AssertSaveButtonIsNotChecked());
+    }
 
 
 

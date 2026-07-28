@@ -144,7 +144,7 @@ public class ExchangeOrderTest extends BaseTest {
     public void DeleteExchange() {
         ExchangeOrderPage e = new ExchangeOrderPage(driver);
         e.NavigationHelper(Pages.ORDERS);
-        e.DeleteAll();
+        e.DeleteByName("إذن صرف");
     }
 
     @Test(priority = 6)

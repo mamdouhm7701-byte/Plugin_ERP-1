@@ -386,7 +386,7 @@ public Boolean AssertSupplier(){
         }
     }
 
-    @Step("حذف :{}")
+    @Step("حذف كل :{Text}")
     public void DeleteByName(String Text  ) {
         utilites.waits().waitForOverlayToDisappear();
         utilites.grid().deleteAllRowsByType(Text,Clickyestodelet);

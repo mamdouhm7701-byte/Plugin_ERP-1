@@ -15,15 +15,9 @@ public class SupplierDiscountNoticeTest extends BaseTest {
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("Web Cloud")
-    @Feature("Financial Movements")
-    @Story("Add Supplier Discount Notice")
-    @Description("This test case verifies the functionality of adding a supplier discount notice," +
-            " ensuring that the calculations for net before tax, tax, and total are accurate." +
-            " It also validates that the report generated reflects the correct supplier information, amount, date, " +
-            "notes, and financial calculations. The test includes steps to assert that the total amount is correctly calculated" +
-            " as the sum of net before tax and tax, and that the tax is accurately calculated as 15% of the net before tax. Finally," +
-            " it confirms that the supplier receipt is added successfully with the correct details.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+    @Feature("إشعار خصم المورد")
+    @Story("إضافة إشعار خصم مورد مع التحقق من الحسابات والتقرير")
+    @Description("يتحقق هذا الاختبار من إنشاء إشعار خصم مورد جديد مع إدخال قيمة الخصم واختيار المورد والمندوب وإضافة الملاحظات، ثم التحقق من صحة حسابات صافي المبلغ قبل الضريبة والضريبة والإجمالي، ومطابقة بيانات التقرير والتأكد من إضافة الإشعار بنجاح.")
     @Test(priority = 1)
     public void AddSupplierDiscountNoticeAnd_VerifyCalculationsAndReport() {
         SupplierDiscountNoticePage supplierDiscountNoticePage = new SupplierDiscountNoticePage(driver);
@@ -91,15 +85,9 @@ supplierDiscountNoticePage.ClickNew();
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("Web Cloud")
-    @Feature("Financial Movements")
-    @Story("Edit Supplier Discount Notice")
-    @Description("This test case verifies the functionality of Editing a Supplier discount notice," +
-            " ensuring that the calculations for net before tax, tax, and total are accurate." +
-            " It also validates that the report generated reflects the correct Supplier information, amount, date, " +
-            "notes, and financial calculations. The test includes steps to assert that the total amount is correctly calculated" +
-            " as the sum of net before tax and tax, and that the tax is accurately calculated as 15% of the net before tax. Finally," +
-            " it confirms that the Supplier receipt is added successfully with the correct details.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+    @Feature("إشعار خصم المورد")
+    @Story("تعديل إشعار خصم مورد")
+    @Description("يتحقق هذا الاختبار من تعديل إشعار خصم مورد موجود مع تحديث المورد والقيمة والملاحظات والمندوب، ثم التحقق من صحة الحسابات المالية ومطابقة بيانات التقرير والتأكد من حفظ التعديلات بنجاح.")
     @Test(priority = 2)
     public void EditSupplierDiscountNoticeAnd_VerifyCalculationsAndReport() {
         SupplierDiscountNoticePage supplierDiscountNoticePage = new SupplierDiscountNoticePage(driver);
@@ -166,15 +154,9 @@ supplierDiscountNoticePage.Edit();
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("Web Cloud")
-    @Feature("Financial Movements")
-    @Story("Add  Supplier Discount Notice")
-    @Description("This test case verifies the functionality of adding a supplier discount notice with custom receipt handling," +
-            " ensuring that the calculations for net before tax, tax, and total are accurate." +
-            " It also validates that the report generated reflects the correct supplier information, amount, date, " +
-            "notes, and financial calculations. The test includes steps to assert that the total amount is correctly calculated" +
-            " as the sum of net before tax and tax, and that the tax is accurately calculated as 15% of the net before tax. Finally," +
-            " it confirms that the supplier receipt is added successfully with the correct details after handling custom receipt.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+    @Feature("إشعار خصم المورد")
+    @Story("إضافة إشعار خصم مورد مع سند مخصص")
+    @Description("يتحقق هذا الاختبار من إنشاء إشعار خصم مورد جديد باستخدام السند المخصص، ثم معالجة بيانات السند والتأكد من صحة الحسابات المالية وإضافة الإشعار بنجاح.")
     @Test(priority = 3)
     public void AddSupplierDiscountNoticeAnd_VerifyCalculationsAndCustom() {
         SupplierDiscountNoticePage supplierDiscountNoticePage = new SupplierDiscountNoticePage(driver);
@@ -236,15 +218,9 @@ supplierDiscountNoticePage.ClickNew();
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("Web Cloud")
-    @Feature("Financial Movements")
-    @Story(" Add Supplier Discount Notice")
-    @Description("This test case verifies the functionality of adding a supplier discount notice," +
-            " ensuring that the calculations for net before tax, tax, and total are accurate." +
-            " It also validates that the report generated reflects the correct supplier information, amount, date, " +
-            "notes, and financial calculations. The test includes steps to assert that the total amount is correctly calculated" +
-            " as the sum of net before tax and tax, and that the tax is accurately calculated as 15% of the net before tax. Finally," +
-            " it confirms that the supplier receipt is added successfully with the correct details.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+    @Feature("إشعار خصم المورد")
+    @Story("إضافة إشعار خصم مورد وحفظه مباشرة")
+    @Description("يتحقق هذا الاختبار من إنشاء إشعار خصم مورد جديد وحفظه مباشرة بدون طباعة، مع التحقق من صحة الحسابات المالية والتأكد من إضافة الإشعار بنجاح.")
     @Test(priority = 4)
     public void AddSupplierDiscountNoticeAnd_VerifyCalculationsAndSave() {
         SupplierDiscountNoticePage supplierDiscountNoticePage = new SupplierDiscountNoticePage(driver);
@@ -305,13 +281,9 @@ supplierDiscountNoticePage.ClickNew();
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("Web Cloud")
-    @Feature("Financial Movements")
-    @Story(" Delete  Supplier Discount Notice")
-    @Description("This test case verifies the functionality of deleting a supplier discount notice," +
-            " ensuring that the deletion process works correctly and that the notice is removed from the system." +
-            " It includes steps to open the supplier discount notice page, perform the deletion action, and confirm that" +
-            " the notice is no longer present in the system after deletion.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+    @Feature("إشعار خصم المورد")
+    @Story("حذف جميع إشعارات خصم المورد")
+    @Description("يتحقق هذا الاختبار من حذف جميع إشعارات خصم المورد الموجودة داخل النظام والتأكد من تنفيذ عملية الحذف بنجاح.")
     @Test(priority = 5)
     public void Delete() {
         SupplierDiscountNoticePage supplierDiscountNoticePage = new SupplierDiscountNoticePage(driver);
@@ -327,15 +299,11 @@ supplierDiscountNoticePage.DeleteAll();
 
 
     @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
+    @Severity(SeverityLevel.NORMAL)
     @Epic("Web Cloud")
-    @Feature("Financial Movements")
-    @Story(" Add Supplier Discount Notice With Invalid Date")
-    @Description("This test case verifies the functionality of adding a supplier discount notice with an invalid date," +
-            " ensuring that the system correctly identifies and handles the error condition." +
-            " It includes steps to open the supplier discount notice page, enter an invalid date, and attempt to save the notice." +
-            " The test asserts that an error popup is displayed, indicating that the date entered is not valid.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+    @Feature("إشعار خصم المورد")
+    @Story("التحقق من عدم الحفظ ببيانات تاريخ غير صحيحة")
+    @Description("يتحقق هذا الاختبار من ظهور رسالة خطأ عند محاولة حفظ إشعار خصم مورد ببيانات تاريخ غير صحيحة، والتأكد من منع حفظ الإشعار.")
     @Test(priority = 6)
     public void InvalidDate() {
         SupplierDiscountNoticePage supplierDiscountNoticePage = new SupplierDiscountNoticePage(driver);
@@ -350,15 +318,11 @@ supplierDiscountNoticePage.ClickNew();
     }
 
     @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
+    @Severity(SeverityLevel.NORMAL)
     @Epic("Web Cloud")
-    @Feature("Financial Movements")
-    @Story(" Add Supplier Discount Notice With Invalid Agent Name")
-    @Description("This test case verifies the functionality of adding a supplier discount notice with an invalid agent name," +
-            " ensuring that the system correctly identifies and handles the error condition." +
-            " It includes steps to open the supplier discount notice page, enter an invalid agent name, and attempt to save the notice." +
-            " The test asserts that an error popup is displayed, indicating that the agent name entered is not valid.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+    @Feature("إشعار خصم المورد")
+    @Story("التحقق من إلزامية اختيار المورد")
+    @Description("يتحقق هذا الاختبار من ظهور رسالة خطأ عند محاولة حفظ إشعار خصم مورد بدون اختيار المورد، والتأكد من منع حفظ الإشعار.")
     @Test(priority = 7)
     public void InvalidAgentName() {
         SupplierDiscountNoticePage supplierDiscountNoticePage = new SupplierDiscountNoticePage(driver);
@@ -372,15 +336,11 @@ supplierDiscountNoticePage.ClickNew();
     }
 
     @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
+    @Severity(SeverityLevel.NORMAL)
     @Epic("Web Cloud")
-    @Feature("Financial Movements")
-    @Story(" Add Supplier Discount Notice With Invalid Value")
-    @Description("This test case verifies the functionality of adding a supplier discount notice with an invalid value," +
-            " ensuring that the system correctly identifies and handles the error condition." +
-            " It includes steps to open the supplier discount notice page, enter an invalid value, and attempt to save the notice." +
-            " The test asserts that an error popup is displayed, indicating that the value entered is not valid.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+    @Feature("إشعار خصم المورد")
+    @Story("التحقق من إلزامية إدخال قيمة الخصم")
+    @Description("يتحقق هذا الاختبار من ظهور رسالة خطأ عند محاولة حفظ إشعار خصم مورد بدون إدخال قيمة الخصم، والتأكد من منع حفظ الإشعار.")
     @Test(priority = 8)
     public void InvalidValue() {
         SupplierDiscountNoticePage supplierDiscountNoticePage = new SupplierDiscountNoticePage(driver);

@@ -1,6 +1,7 @@
 package Plugin_ERP.Business.Calculator;
 
 import Plugin_ERP.Models.*;
+import Plugin_ERP.Utiel.PropertyReader;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -147,5 +148,36 @@ public class InvoiceCalculator {
         totals.setTax(tax);
 
         return totals;
+    }
+
+    public static InvoiceTotals calculate(
+            List<InvoiceRow> rows,
+            BigDecimal discount,
+            DiscountType discountType,
+            BigDecimal taxPercentage,
+            int precision) {
+
+        return calculate(
+                rows,
+                discount,
+                discountType,
+                taxPercentage,
+                PropertyReader.PolicyManager.getTaxMode(),
+                precision
+        );
+    }
+
+    public static InvoiceTotals calculate(
+            List<InvoiceRow> rows,
+            BigDecimal discount) {
+
+        return calculate(
+                rows,
+                discount,
+                PropertyReader.PolicyManager.getDiscountType(),
+                PropertyReader.PolicyManager.getTaxPercentage(),
+                PropertyReader.PolicyManager.getTaxMode(),
+                PropertyReader.PolicyManager.getPrecision()
+        );
     }
 }

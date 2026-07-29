@@ -1,10 +1,12 @@
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.LogUtils;
+import Plugin_ERP.Business.Calculator.InvoiceCalculator;
 import Plugin_ERP.Models.InvoiceRow;
 import Plugin_ERP.Models.InvoiceTotals;
 import Plugin_ERP.Models.ReportTotals;
 import Plugin_ERP.Models.TaxMode;
+import Plugin_ERP.Utiel.PropertyReader;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.openqa.selenium.*;
@@ -424,7 +426,9 @@ public class AbstractForPurchases extends AbstractForStore{
         assertBigDecimalEquals(totals.getNet(), getNet());
     }
 
-
+    // TODO:
+// Current report parsing depends on report labels.
+// Replace with a generic report parser in the future to support customized reports.
     public void assertReportTotals(
             ReportTotals report,
             InvoiceTotals expected,
@@ -447,12 +451,78 @@ public class AbstractForPurchases extends AbstractForStore{
 
 
 
+    public void attachReportValidation(
+            ReportTotals reportTotals,
+            InvoiceTotals totals) {
+
+        attachReportValidation(
+                reportTotals,
+                totals,
+                PropertyReader.PolicyManager.isExclusive()
+        );}
+    // TODO:
+// Current report parsing depends on report labels.
+// Replace with a generic report parser in the future to support customized reports.
+        public void assertReportTotals(
+                ReportTotals report,
+                InvoiceTotals expected) {
+
+            assertReportTotals(
+                    report,
+                    expected,
+                    PropertyReader.PolicyManager.getTaxMode()
+            );
+        }
 
 
 
 
 
 
+    public InvoiceTotals validateBusinessTotals() {
+
+        InvoiceTotals totals = InvoiceCalculator.calculate(
+                getInvoiceRows(),
+                getDiscount()
+        );
+
+        attachBusinessValidation(totals);
+
+        System.out.println(totals);
+
+        assertInvoiceTotals(totals);
+
+        return totals;
+    }
+
+    public void saveAndPrintForReport(){Map<String, String> dataBeforeSave =
+            GetNamesQuantitiesAndPrices();
+
+        ClickSaveAndPrintButton();
+
+        CompareNamesQuantitiesAndPricesWithReport(dataBeforeSave);}
+
+
+    public void validateReport(InvoiceTotals totals) {
+
+        ReportTotals reportTotals = getReportTotals();
+
+        attachReportValidation(reportTotals, totals);
+
+        assertReportTotals(reportTotals, totals);
+
+        CloserReport();
+    }
+
+
+    public void validateInvoiceAllBusiness() {
+
+        InvoiceTotals totals = validateBusinessTotals();
+
+        saveAndPrintForReport();
+
+        validateReport(totals);
+    }
 
 
 

@@ -1,11 +1,14 @@
 package Plugin_ERP.Utiel;
 
 import Plugin_ERP.Bots.LogUtils;
+import Plugin_ERP.Models.DiscountType;
+import Plugin_ERP.Models.TaxMode;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Properties;
@@ -94,4 +97,38 @@ public class PropertyReader {
         return getProperty(tenant + ".Password");
     }
 
+
+
+    public class PolicyManager {
+
+        private PolicyManager(){}
+
+        public static TaxMode getTaxMode() {
+            return TaxMode.valueOf(
+                    PropertyReader.getProperty("TaxMode").trim().toUpperCase()
+            );
+        }
+
+        public static DiscountType getDiscountType() {
+            return DiscountType.valueOf(
+                    PropertyReader.getProperty("DiscountType").trim().toUpperCase()
+            );
+        }
+
+        public static BigDecimal getTaxPercentage() {
+            return new BigDecimal(
+                    PropertyReader.getProperty("TaxPercentage")
+            );
+        }
+
+        public static int getPrecision() {
+            return Integer.parseInt(
+                    PropertyReader.getProperty("Precision")
+            );
+        }
+
+        public static boolean isExclusive() {
+            return getTaxMode()==TaxMode.EXCLUSIVE;
+        }
+    }
 }

@@ -15,7 +15,6 @@ import java.util.Properties;
 
 public class PropertyReader {
 
-    // هيتنفذ مرة واحدة أول ما الـ class تتحمل
     static {
         loadProperties();
     }

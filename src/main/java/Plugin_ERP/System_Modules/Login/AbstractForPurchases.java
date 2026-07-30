@@ -478,7 +478,7 @@ public class AbstractForPurchases extends AbstractForStore{
 
 
 
-
+@Step("احتساب  ارقام الفاتوره ومطابقتها بالفرونت")
     public InvoiceTotals validateBusinessTotals() {
 
         InvoiceTotals totals = InvoiceCalculator.calculate(
@@ -495,13 +495,18 @@ public class AbstractForPurchases extends AbstractForStore{
         return totals;
     }
 
-    public void saveAndPrintForReport(){Map<String, String> dataBeforeSave =
+
+    @Step("الاحتفاظ بارقام الفواتير لمراجعتها مع التقرير")
+
+    public void saveAndPrintForReport()
+    {Map<String, String> dataBeforeSave =
             GetNamesQuantitiesAndPrices();
 
         ClickSaveAndPrintButton();
 
         CompareNamesQuantitiesAndPricesWithReport(dataBeforeSave);}
 
+    @Step("مراجعه ارقام الفاتوره بالتقرير")
 
     public void validateReport(InvoiceTotals totals) {
 
@@ -514,6 +519,7 @@ public class AbstractForPurchases extends AbstractForStore{
         CloserReport();
     }
 
+    @Step("احتساب الفاتورة ومطابقتها مع الفرونت والحفظ والمطابقه مع التقرير")
 
     public void validateInvoiceAllBusiness() {
 

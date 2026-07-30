@@ -87,8 +87,10 @@ public class PurchesBillsTest extends BaseTest {
         InvoiceTotals totals = p.validateBusinessTotals();
 
         Map<String, String> dataBeforeSave =
-                p. GetNamesQuantitiesAndPrices();
+        p. GetNamesQuantitiesAndPrices();
+
         p.ClickOtherPay();
+        p.SelectFromDropDawn("تست", "طريقة الدفع");
         p.ClickPlusToAddPay();
         p.ClickSaveAndPrintButton();
         p.CompareNamesQuantitiesAndPricesWithReport(dataBeforeSave);
@@ -156,6 +158,8 @@ public class PurchesBillsTest extends BaseTest {
         p.SetValueByRow("سعر الشراء", 1, 200);
         p.SetValueByRow("سعر الشراء", 2, 200);
         p.SetValueByRow("سعر الشراء", 3, 200);
+
+
         p.validateInvoiceAllBusiness();
         p.NavigationHelper(Pages.PURCHESINVOICELIST);
 
@@ -188,6 +192,8 @@ public class PurchesBillsTest extends BaseTest {
         p.SetValueByRow("سعر الشراء", 1, 200);
         p.SetValueByRow("سعر الشراء", 2, 200);
         p.SetValueByRow("سعر الشراء", 3, 200);
+
+
         p.validateInvoiceAllBusiness();
         p.NavigationHelper(Pages.PURCHESINVOICELIST);
 

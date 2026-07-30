@@ -41,6 +41,8 @@ public enum Pages {
     DAMAGEADUSTMENT("/#/damage-adjustment/"),
     PURCHINVOICE("/#/purch-invoice/new"),
     PURCHESINVOICELIST("/#/purch-invoice-list"),
+    PURCHORDER("/#/purchOrder/new"),
+
 
 ;
 

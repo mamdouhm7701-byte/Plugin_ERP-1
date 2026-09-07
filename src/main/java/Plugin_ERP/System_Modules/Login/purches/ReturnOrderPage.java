@@ -9,8 +9,10 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -75,10 +77,18 @@ public class ReturnOrderPage extends AbstractForPurchases {
                 break;
 
             default:
-                return super.getSummaryValue(label);
+                BigDecimal value = super.getSummaryValue(label);
+                System.out.println(
+                        "SUMMARY FROM SUPER => " + label + " = " + value
+                );
+                return value;
         }
 
         String value = input.getAttribute("value");
+
+        System.out.println(
+                "SUMMARY FROM RETURN => " + label + " = [" + value + "]"
+        );
 
         if (value == null || value.trim().isEmpty()) {
             return BigDecimal.ZERO;
@@ -225,5 +235,42 @@ public class ReturnOrderPage extends AbstractForPurchases {
     @Step("التأكيد ان الموردين مطلوب")
     public Boolean AssertSupplierForReturnOrder(){
         return utilites.isDisplayed(AssertSupplierForReturn);
+    }
+
+
+
+    public void waitUntilSummaryValuesLoaded() {
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        wait.until(driver -> {
+            try {
+
+                String beforeTax = driver.findElement(
+                        By.xpath(
+                                "//label[normalize-space()='قبل الضريبة']" +
+                                        "/parent::div/following-sibling::div//input"
+                        )
+                ).getAttribute("value");
+
+                String tax = driver.findElement(
+                        By.xpath(
+                                "//label[normalize-space()='الضريبة']" +
+                                        "/parent::div/following-sibling::div//input"
+                        )
+                ).getAttribute("value");
+
+                String net = driver.findElement(
+                        By.cssSelector("input[name='Net']")
+                ).getAttribute("value");
+
+                return beforeTax != null && !beforeTax.trim().isEmpty()
+                        && tax != null && !tax.trim().isEmpty()
+                        && net != null && !net.trim().isEmpty();
+
+            } catch (Exception e) {
+                return false;
+            }
+        });
     }
 }

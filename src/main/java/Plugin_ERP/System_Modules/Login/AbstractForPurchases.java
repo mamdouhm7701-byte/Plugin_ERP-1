@@ -45,7 +45,7 @@ public class AbstractForPurchases extends AbstractForStore{
         utilites.ClickElement(ClickOtherPay);
     }
 
-    @Step("")
+    @Step("الضغط على علامه ال+ لاضافه طريقه الدفع")
     public void ClickPlusToAddPay(){
         utilites.waits().waitForOverlayToDisappear();
         utilites.ClickElement(ClickPlusToAddPay);
@@ -255,7 +255,7 @@ public class AbstractForPurchases extends AbstractForStore{
         return invoiceRows;
     }
 
-    private BigDecimal getSummaryValue(String label) {
+    protected  BigDecimal getSummaryValue(String label) {
 
         WebElement input = driver.findElement(By.xpath(
                 "//span[normalize-space()='" + label + "']/ancestor::div[contains(@class,'align-items-center')]" +

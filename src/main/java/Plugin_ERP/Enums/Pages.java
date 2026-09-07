@@ -42,6 +42,8 @@ public enum Pages {
     PURCHINVOICE("/#/purch-invoice/new"),
     PURCHESINVOICELIST("/#/purch-invoice-list"),
     PURCHORDER("/#/purchOrder/new"),
+    RETURNPURCH("/#/return-purch/new"),
+
 
 
 ;

@@ -43,7 +43,7 @@ public class PurchesBillsTest extends BaseTest {
         InvoiceTotals totals = p.validateBusinessTotals();
 
         Map<String, String> dataBeforeSave =
-               p. GetNamesQuantitiesAndPrices();
+                p. GetNamesQuantitiesAndPrices();
         p.ClickCash();
         p.ClickPlusToAddPay();
         p.ClickSaveAndPrintButton();
@@ -247,7 +247,7 @@ public class PurchesBillsTest extends BaseTest {
     @Feature("فواتير المشتريات")
     @Story("حذف جميع فواتير المشتريات")
     @Description("يتحقق هذا الاختبار من حذف جميع فواتير المشتريات الموجودة داخل النظام والتأكد من تنفيذ عملية الحذف بنجاح.")
-    @Test(priority = 6)
+    @Test(priority = 7)
     public void DeleteAll() {
 
         PurchesBillsPage p = new PurchesBillsPage(driver);

@@ -125,7 +125,9 @@ public class TransBetweenStoreTest extends BaseTest {
     @Story("حذف جميع عمليات التحويل")
     @Description("يتحقق هذا الاختبار من حذف جميع عمليات التحويل بين المخازن المسجلة داخل النظام والتأكد من تنفيذ عملية الحذف بنجاح.")
     @Test(priority = 5)
-    public void DeleteAllTest() {
+    public void DeleteAllTest()
+
+    {
 
         TransBetweenStors t = new TransBetweenStors(driver);
         t.NavigationHelper(Pages.STORGETRANS);

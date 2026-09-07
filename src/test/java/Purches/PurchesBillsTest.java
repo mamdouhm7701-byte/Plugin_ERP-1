@@ -128,6 +128,8 @@ public class PurchesBillsTest extends BaseTest {
         p.SetValueByRow("سعر الشراء", 2, 200);
         p.SetValueByRow("سعر الشراء", 3, 200);
         p.validateInvoiceAllBusiness();
+        p.ClickSaveButton();
+
         p.NavigationHelper(Pages.PURCHESINVOICELIST);
 
         p.AssertReceiptAdded("محمد ممدوح");
@@ -295,4 +297,6 @@ public class PurchesBillsTest extends BaseTest {
         p.SelectFromDropDawn("آجل", "نوع السداد");
         Assert.assertTrue(p.AssertSaveButtonIsNotChecked());
     }
+
+
 }

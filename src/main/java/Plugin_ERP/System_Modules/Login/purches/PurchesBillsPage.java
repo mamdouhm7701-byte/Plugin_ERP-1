@@ -5,11 +5,28 @@ import Plugin_ERP.System_Modules.Login.AbstractForStore;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class PurchesBillsPage extends AbstractForPurchases {
     public PurchesBillsPage(WebDriver driver) {super(driver);}
 
+private By ClickToTransToReturnOrder=By.xpath("//button[.//*[contains(@id,'fileText-icon')]]");
 
+
+
+    public void  ClickToTransToReturnOrder() {
+        utilites.waits().waitForOverlayToDisappear();
+        utilites.ClickElement(ClickToTransToReturnOrder);
+        utilites.waits().waitForOverlayToDisappear();
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.presenceOfElementLocated(
+                        By.xpath("//th[@role='columnheader'][.//div[normalize-space()='الاسم']]")
+                ));
+
+    }
 
 }
 

@@ -108,7 +108,7 @@ customerClassification.Edit();
 customerClassification.NavigationHelper(Pages.CUSTOMERCLASS);
 customerClassification.Delete();
         customerClassification.Delete();
-        customerClassification.Delete();
+
     }
 
     @Test(priority=6)

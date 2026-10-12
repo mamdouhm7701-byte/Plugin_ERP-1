@@ -34,7 +34,7 @@ public class PaymentTest extends BaseTest {
         paymentPage.AddArabicName("طريقة دفع");
         paymentPage.AddEnglishName("Payment Method");
         paymentPage.AddNoteForDealer("Payment Method");
-        paymentPage.SelectFromDropDawn("تست","اسم البنك");
+        paymentPage.SelectFromDropDawn("البنك الاول","اسم البنك");
         paymentPage.SelectCheckboxByText("عام",true);
         paymentPage.SelectCheckboxByText("طريقة دفع افتراضية للتكامل",true);
         paymentPage.ClickSaveButton();
@@ -56,7 +56,7 @@ public class PaymentTest extends BaseTest {
         paymentPage.AddArabicName("طريقة دفع معدلة");
         paymentPage.AddEnglishName("Payment Method Modified");
         paymentPage.AddNoteForDealer("Payment Method Modified");
-        paymentPage.SelectFromDropDawn("تست تعديل","اسم البنك");
+        paymentPage.SelectFromDropDawn("بنك اتوميشن","اسم البنك");
         paymentPage.SelectCheckboxByText("عام",false);
         paymentPage.SelectCheckboxByText("طريقة دفع افتراضية للتكامل",false);
         paymentPage.ClickSaveButton();

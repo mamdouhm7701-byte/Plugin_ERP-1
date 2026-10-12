@@ -25,15 +25,15 @@ public class AgentTest extends BaseTest {
         agent.ClickNew();
         agent.AddArabicName("مندوب 1");
         agent.AddEnglishName("Agent 1");
-        agent.SelectFromDropDawn("55","اسم المنطقة");
+        agent.SelectFromDropDawn("جديد","اسم المنطقة");
         agent.AddAgentMobileNumber();
         agent.AddEmail("Mo@mo.com");
         agent.SelectFromDropDawn("بيع","طبيعه المندوب");
         agent.SelectFromDropDawn("بيع","نوع العمولة");
         agent.SelectFromDropDawn("مبيعات","إحتساب العموله");
-        agent.SelectFromDropDawn("55","المخزن الأفتراضى");
+        agent.SelectFromDropDawn("المخزن الرئيسي","المخزن الأفتراضى");
         agent.SelectFromDropDawn("مناديب","تصنيف المندوب");
-        agent.SelectFromDropDawn("vip","قوائم الأسعار");
+        agent.SelectFromDropDawn("قائمه اسعار","قوائم الأسعار");
         agent.SmartCheck("منع اصدار فاتورة خارج موقع العميل",true);
         agent.AssertCheckboxIsChecked("منع اصدار فاتورة خارج موقع العميل",true);
         agent.AssertCheckboxIsChecked("مفعل",true);
@@ -52,11 +52,7 @@ public class AgentTest extends BaseTest {
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void AddAgentFDAtaSecondPAgeForAgentCommission() {
         Agent agent = new Agent(driver);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
         agent.NavigationHelper(Pages.AGENTS);
         agent.ClickNew();
         agent.AddArabicName("مندوب 2");
@@ -81,16 +77,12 @@ public class AgentTest extends BaseTest {
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void AddAgentThirdPageProductCommission(){
         Agent agent = new Agent(driver);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        driver.navigate().refresh();
         agent.NavigationHelper(Pages.AGENTS);
         agent.ClickNew();
         agent.AddArabicName("اضافه الفئة");
         agent.SelectFromDropDawn("بيع", "طبيعه المندوب");
-        agent.SelectFromDropDawn("55","المخزن الأفتراضى");
+        agent.SelectFromDropDawn("المخزن الرئيسي","المخزن الأفتراضى");
         agent.ClickItemCommissionTab();
         agent.SelectFromDropDawn("مقاولات","الفئة");
         agent.waitForTableDataToLoad();
@@ -112,16 +104,12 @@ public class AgentTest extends BaseTest {
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void AddAgentByAllProducts(){
         Agent agent = new Agent(driver);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
         agent.NavigationHelper(Pages.AGENTS);
         agent.ClickNew();
         agent.AddArabicName("اضافه كل الاصناف");
         agent.SelectFromDropDawn("بيع", "طبيعه المندوب");
-        agent.SelectFromDropDawn("55","المخزن الأفتراضى");
+        agent.SelectFromDropDawn("المخزن الرئيسي","المخزن الأفتراضى");
         agent.ClickItemCommissionTab();
         agent.ClickAddAllItems();
         agent.waitForTableDataToLoad();
@@ -143,16 +131,12 @@ public class AgentTest extends BaseTest {
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void AddAgentBySearchProduct(){
         Agent agent = new Agent(driver);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
         agent.NavigationHelper(Pages.AGENTS);
         agent.ClickNew();
         agent.AddArabicName("مندوب بحث");
         agent.SelectFromDropDawn("بيع", "طبيعه المندوب");
-        agent.SelectFromDropDawn("55","المخزن الأفتراضى");
+        agent.SelectFromDropDawn("المخزن الرئيسي","المخزن الأفتراضى");
         agent.ClickItemCommissionTab();
         agent.SearchProduct("124345511");
         agent.ClickEnter();
@@ -176,16 +160,12 @@ public class AgentTest extends BaseTest {
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void AddAgentWithChoseItem() {
         Agent agent = new Agent(driver);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
         agent.NavigationHelper(Pages.AGENTS);
         agent.ClickNew();
         agent.AddArabicName("اختيار اصناف");
         agent.SelectFromDropDawn("بيع", "طبيعه المندوب");
-        agent.SelectFromDropDawn("55","المخزن الأفتراضى");
+        agent.SelectFromDropDawn("المخزن الرئيسي","المخزن الأفتراضى");
         agent.ClickItemCommissionTab();
         agent.ClickAddItemsButton();
         agent.AddNewProductList(2);

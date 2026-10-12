@@ -4,7 +4,7 @@ import Plugin_ERP.System_Modules.Login.BasicData.AreaPage;
 
 public enum Pages {
 
-    AGENTS("/#/agents"),
+    AGENTS("/#/agents/"),
     AREA("/#/areas"),
     BANK("/#/banks"),
     SAFES("/#/safes"),
@@ -43,6 +43,8 @@ public enum Pages {
     PURCHESINVOICELIST("/#/purch-invoice-list"),
     PURCHORDER("/#/purchOrder/new"),
     RETURNPURCH("/#/return-purch/new"),
+    INVOICE("/#/invoice/new"),
+
 
 
 

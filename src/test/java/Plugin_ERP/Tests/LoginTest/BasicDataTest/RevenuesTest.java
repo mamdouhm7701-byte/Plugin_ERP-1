@@ -36,7 +36,7 @@ public class RevenuesTest extends BaseTest {
         revenuesPage.ClickNew();
         revenuesPage.AddArabicName("ايراد جديد");
         revenuesPage.AddEnglishName("New Revenues");
-        revenuesPage.SelectFromDropDawn("ممدوح", "رقم الحساب");
+        revenuesPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
         revenuesPage.SelectCheckboxByText("عام",true);
         revenuesPage.ClickSaveButton();
         revenuesPage.AssertReceiptAdded("ايراد جديد");
@@ -56,7 +56,7 @@ public class RevenuesTest extends BaseTest {
         revenuesPage.Edit();
         revenuesPage.AddArabicName("ايراد جديد معدل");
         revenuesPage.AddEnglishName("New Revenues");
-        revenuesPage.SelectFromDropDawn("المبيعات", "رقم الحساب");
+        revenuesPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
         revenuesPage.SelectCheckboxByText("عام",false);
         revenuesPage.ClickSaveButton();
         revenuesPage.AssertReceiptAdded("ايراد جديد معدل");

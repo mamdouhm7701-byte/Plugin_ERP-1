@@ -296,11 +296,10 @@ public class AbstractForPurchases extends AbstractForStore{
         return getSummaryValue("خصم");
     }
 
-    private BigDecimal getReportTotal(String title) {
-
+    protected BigDecimal getReportTotal(String label) {
         String xpath = String.format(
                 "//tr[.//*[normalize-space()='%s']]//td[1]//div[last()]",
-                title
+                label
         );
 
         return new BigDecimal(driver.findElement(By.xpath(xpath)).getText().trim());

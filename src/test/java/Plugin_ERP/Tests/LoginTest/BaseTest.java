@@ -44,7 +44,11 @@ public class BaseTest {
         System.out.println("login-email exists = "
                 + driver.getPageSource().contains("login-email"));
 
+
         login();
+     //  Thread.sleep(5000);
+
+      //  login();
     }
 
 

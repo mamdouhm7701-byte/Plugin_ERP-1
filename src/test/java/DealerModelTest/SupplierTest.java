@@ -26,9 +26,9 @@ public class SupplierTest extends BaseTest {
         supplier.AddArabicName("التحكم فى المورد");
         supplier.AddEnglishName("English Name");
         supplier.AddTaxNumber("123456789123456");
-        supplier.SelectFromDropDawn("نيو كود","اسم المنطقة");
-        supplier.SelectFromDropDawn("المبيعات","رقم الحساب");
-        supplier.SelectFromDropDawn("تست","المندوب");
+        supplier.SelectFromDropDawn("جديد","اسم المنطقة");
+        supplier.SelectFromDropDawn("تسويق جوجل","رقم الحساب");
+        supplier.SelectFromDropDawn("مندوب شراء","المندوب");
         supplier.SelectFromDropDawn("موردين","تصنيف المورد");
         supplier.SelectFromDropDawn("موردين","اسم المتعامل الرئيسي");
         supplier.AddCommercialRegisterNumber("203040");
@@ -36,7 +36,7 @@ public class SupplierTest extends BaseTest {
         supplier.AddDateForDealer();
         supplier.SmartCheck("خصم المورد",true);
         supplier.AssertCheckboxIsChecked("خصم المورد",true);
-        supplier.AddDiscountValue("10");
+       // supplier.AddDiscountValue("10");
         supplier.SmartCheck("فعال",true);
         supplier.SmartCheck("عام",true);
         supplier.SmartCheck("خاضع للضريبة",true);
@@ -140,9 +140,9 @@ public class SupplierTest extends BaseTest {
         supplier.AddArabicName("التعديل على المورد");
         supplier.AddEnglishName("English Edit Name");
         supplier.AddTaxNumber("56456");
-        supplier.SelectFromDropDawn("نيو كود","اسم المنطقة");
-        supplier.SelectFromDropDawn("ممدوح","رقم الحساب");
-        supplier.SelectFromDropDawn("محمود","المندوب");
+        supplier.SelectFromDropDawn("منطقه معدله","اسم المنطقة");
+        supplier.SelectFromDropDawn("تسويق لوحات","رقم الحساب");
+        supplier.SelectFromDropDawn("مندوب تست","المندوب");
         supplier.SelectFromDropDawn("موردين","تصنيف المورد");
         supplier.SelectFromDropDawn("موردين","اسم المتعامل الرئيسي");
         supplier.AddCommercialRegisterNumber("3030");

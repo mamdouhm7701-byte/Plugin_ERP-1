@@ -385,7 +385,7 @@ public boolean AssertSaveButtonIsNotChecked(){
 
         browserAction.OpenNavigationHelper(Pages.valueOf(route.name()));
         utilites.waits().waitForOverlayToDisappear();
-      //  driver.navigate().refresh();
+       driver.navigate().refresh();
         utilites.waits().waitForOverlayToDisappear();
 
         try {

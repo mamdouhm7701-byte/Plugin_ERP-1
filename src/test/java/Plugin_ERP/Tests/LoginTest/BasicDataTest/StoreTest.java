@@ -33,7 +33,7 @@ public class StoreTest extends BaseTest {
         storePage.AddArabicName("مخزن جديد");
         storePage.AddEnglishName("New Store");
         storePage.AddNoteForDealer("This is a new store");
-        storePage.SelectFromDropDawn("المبيعات","رقم الحساب");
+        storePage.SelectFromDropDawn("تسويق جوجل","رقم الحساب");
         storePage.ClickSaveButton();
         storePage.AssertReceiptAdded("مخزن جديد");
     }
@@ -53,7 +53,7 @@ public class StoreTest extends BaseTest {
         storePage.AddArabicName("مخزن معدل");
         storePage.AddEnglishName("Edited Store");
         storePage.AddNoteForDealer("This is an edited store");
-        storePage.SelectFromDropDawn("ممدوح","رقم الحساب");
+        storePage.SelectFromDropDawn("تسويق جوجل","رقم الحساب");
         storePage.ClickSaveButton();
         storePage.AssertReceiptAdded("مخزن معدل");
     }

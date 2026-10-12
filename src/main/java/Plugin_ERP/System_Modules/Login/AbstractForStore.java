@@ -154,6 +154,37 @@ public Boolean AssertSupplier(){
         }
     }
 
+    /**
+     * Invoice-specific selection path. Once the suggestion is clicked, do not
+     * click it again just because the invoice grid updates asynchronously.
+     */
+    protected void searchAndSelectInvoiceProduct(String productName) {
+        utilites.waits().waitForOverlayToDisappear();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement searchInput = wait.until(
+                ExpectedConditions.elementToBeClickable(SearchInput)
+        );
+        searchInput.click();
+        searchInput.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        searchInput.sendKeys(Keys.BACK_SPACE);
+        searchInput.sendKeys(productName);
+
+        By suggestion = getSuggestionItem(productName);
+        WebElement suggestionElement = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(suggestion)
+        );
+        suggestionElement.click();
+
+        // Wait until the clicked suggestion is consumed, rather than clicking
+        // it again when the grid's row markup differs from other screens.
+        wait.until(ExpectedConditions.stalenessOf(suggestionElement));
+        wait.until(d -> {
+            String value = d.findElement(SearchInput).getAttribute("value");
+            return value == null || value.isBlank();
+        });
+    }
+
     private WebElement SearchInputElement() {
         return driver.findElement(SearchInput);
     }

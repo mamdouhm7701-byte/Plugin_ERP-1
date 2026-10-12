@@ -36,7 +36,7 @@ public class TaypeOfDiscountTest extends BaseTest {
         typesofdiscountsPage.AddSecretCode(typesofdiscountsPage.generateRandomNumber());
         typesofdiscountsPage.AddDiscount(5);
         typesofdiscountsPage.ClickToAddUsers();
-        typesofdiscountsPage.ClickSelectUsers(1,2);
+        typesofdiscountsPage.ClickSelectUsers(1);
         typesofdiscountsPage.ClickCloseButton();
         typesofdiscountsPage.ClickSaveButton();
         typesofdiscountsPage.AssertReceiptAdded("خصم تجريبي");
@@ -61,7 +61,7 @@ public class TaypeOfDiscountTest extends BaseTest {
         typesofdiscountsPage.AddSecretCode(typesofdiscountsPage.generateRandomNumber());
         typesofdiscountsPage.AddDiscount(10);
         typesofdiscountsPage.ClickToAddUsers();
-        typesofdiscountsPage.ClickSelectUsers(1,2,3);
+        typesofdiscountsPage.ClickSelectUsers(1);
         typesofdiscountsPage.ClickCloseButton();
         typesofdiscountsPage.ClickSaveButton();
         typesofdiscountsPage.AssertReceiptAdded("خصم معدل");

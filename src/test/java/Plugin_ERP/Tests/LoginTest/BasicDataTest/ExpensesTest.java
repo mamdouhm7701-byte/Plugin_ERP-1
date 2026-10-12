@@ -32,7 +32,7 @@ public class ExpensesTest extends BaseTest {
         expensesPage.ClickNew();
         expensesPage.AddArabicName("مصروفات");
         expensesPage.AddEnglishName("Expenses");
-        expensesPage.SelectFromDropDawn("ممدوح", "رقم الحساب");
+        expensesPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
         expensesPage.SelectCheckboxByText("عام", true);
         expensesPage.ClickSaveButton();
         expensesPage.AssertReceiptAdded("مصروفات");

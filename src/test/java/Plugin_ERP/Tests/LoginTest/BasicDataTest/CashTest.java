@@ -31,7 +31,7 @@ public class CashTest extends BaseTest {
         cashPage.AddArabicName("55");
         cashPage.AddEnglishName("55");
         cashPage.AddNoteForDealer("تست");
-        cashPage.SelectFromDropDawn("المبيعات","رقم الحساب");
+        cashPage.SelectFromDropDawn("تسويق جوجل","رقم الحساب");
         cashPage.SelectCheckboxByText("عام",true);
         cashPage.ClickSaveButton();
         cashPage.AssertReceiptAdded("55");

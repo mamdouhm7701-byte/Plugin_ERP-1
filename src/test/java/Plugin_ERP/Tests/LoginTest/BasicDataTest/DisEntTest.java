@@ -32,7 +32,7 @@ public class DisEntTest extends BaseTest {
         distributionEntityPage.ClickNew();
         distributionEntityPage.AddArabicName("جهة صرف جديدة");
         distributionEntityPage.AddEnglishName("New DisEnt");
-        distributionEntityPage.SelectFromDropDawn("ممدوح","رقم الحساب");
+        distributionEntityPage.SelectFromDropDawn("تسويق جوجل","رقم الحساب");
         distributionEntityPage.ClickSaveButton();
         distributionEntityPage.AssertReceiptAdded("جهة صرف جديدة");
     }
@@ -51,7 +51,7 @@ public class DisEntTest extends BaseTest {
         distributionEntityPage.Edit();
         distributionEntityPage.AddArabicName("جهة صرف جديدة تعديل");
         distributionEntityPage.AddEnglishName("New DisEnt Edit");
-        distributionEntityPage.SelectFromDropDawn("المبيعات","رقم الحساب");
+        distributionEntityPage.SelectFromDropDawn("تسويق جوجل","رقم الحساب");
         distributionEntityPage.ClickSaveButton();
         distributionEntityPage.AssertReceiptAdded("جهة صرف جديدة تعديل");
     }

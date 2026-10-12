@@ -31,7 +31,7 @@ public class BankTest extends BaseTest {
         bankPage.AddAdress("عنوان تفصيلى");
         bankPage.AddPhoneNumber(bankPage.generateRandomNumber());
         bankPage.AddEmail("mm@Example.com");
-        bankPage.SelectFromDropDawn("المبيعات","رقم الحساب");
+        bankPage.SelectFromDropDawn("تسويق جوجل","رقم الحساب");
         bankPage.AddAccountNumber(bankPage.generateRandomNumber());
         bankPage.AddIban(bankPage.generateRandomNumber());
         bankPage.AddNoteForDealer("تفاصيل البنك ");

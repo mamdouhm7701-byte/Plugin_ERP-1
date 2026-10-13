@@ -17,12 +17,135 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 
 public class CashTest extends BaseTest {
 
-    @Test(priority = 1)
+    @Test(priority = 0)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-001 فتح شاشة الخزن وعرض القائمة")
+    @Description("يتحقق من ظهور أعمدة قائمة الخزن وأزرار التعديل والحذف للصفوف الموجودة.")
+    public void WH_001_SafeListStructureIsDisplayed() {
+        CashPage cashPage = new CashPage(driver);
+        cashPage.NavigationHelper(Pages.SAFES);
+
+        Assert.assertTrue(
+                cashPage.isSafeListStructureDisplayed(),
+                "WH-001: يجب أن تظهر أعمدة الكود واسم الخزنة ورقم الحساب مع أزرار التعديل والحذف"
+        );
+    }
+
+    @Test(priority = 0)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-002 فتح نافذة إضافة خزنة")
+    @Description("يتحقق من ظهور الحقول والأزرار المحددة في مواصفة WH-002.")
+    public void WH_002_CashCreationFormControlsAreDisplayed() {
+        CashPage cashPage = new CashPage(driver);
+        cashPage.NavigationHelper(Pages.SAFES);
+        cashPage.ClickNew();
+
+        String missingControls = cashPage.getMissingCashCreationFormControls();
+        Assert.assertTrue(
+                missingControls.isEmpty(),
+                "WH-002: لم تظهر عناصر النموذج التالية: " + missingControls
+        );
+        cashPage.ClickCloseButton();
+    }
+
+    @Test(priority = 0)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-014 إغلاق نافذة الإضافة دون حفظ")
+    @Description("يتحقق من إغلاق نافذة الإضافة بعد إدخال قيمة غير محفوظة، وعدم ظهورها ضمن نتائج القائمة.")
+    public void WH_014_CloseCreationFormWithoutSaving() {
+        CashPage cashPage = new CashPage(driver);
+
+
+        cashPage.NavigationHelper(Pages.SAFES);
+        String unsavedName = "خزنة غير محفوظة " + System.currentTimeMillis();
+        cashPage.ClickNew();
+        cashPage.AddArabicName(unsavedName);
+        cashPage.ClickCloseButton();
+        cashPage.searchSafes(unsavedName);
+
+        Assert.assertFalse(
+                cashPage.isSafeVisibleInSearchResults(unsavedName),
+                "WH-014: لا يجب إنشاء سجل عند إغلاق نافذة الإضافة دون حفظ"
+        );
+        cashPage.searchSafes("");
+    }
+
+    @Test(priority = 0)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-020 فتح سجل للتعديل مع تحميل البيانات الحالية")
+    @Description("يقارن كود الخزنة واسمها العربي ورقم الحساب في الصف بالقيم المحملة في نموذج التعديل، ثم يغلق دون حفظ.")
+    public void WH_020_EditFormLoadsCurrentSafeName() {
+        CashPage cashPage = new CashPage(driver);
+        cashPage.NavigationHelper(Pages.SAFES);
+        String codeInList = cashPage.getFirstSafeCellByHeader("الكود");
+        String nameInList = cashPage.getFirstSafeCellByHeader("اسم الخزنة");
+        String accountInList = cashPage.getFirstSafeCellByHeader("رقم الحساب");
+
+        cashPage.openFirstSafeForEdit();
+        Assert.assertEquals(
+                cashPage.getSafeCodeInputValue(),
+                codeInList,
+                "WH-020/034: يجب أن يتطابق كود النموذج مع كود الصف"
+        );
+        Assert.assertEquals(
+                cashPage.getArabicNameInputValue().trim(),
+                nameInList,
+                "WH-020: يجب تحميل الاسم العربي الحالي من السجل المحدد"
+        );
+        Assert.assertEquals(
+                cashPage.getSafeAccountValue(),
+                accountInList,
+                "WH-034: يجب أن يتطابق رقم الحساب في النموذج مع رقم الحساب في الصف"
+        );
+        cashPage.ClickCloseButton();
+    }
+
+    @Test(priority = 0)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-022 إلغاء التعديل دون حفظ")
+    @Description("يغيّر الاسم داخل نموذج التعديل ثم يغلقه دون حفظ، ويتأكد من بقاء الاسم الأصلي بعد إعادة فتح السجل.")
+    public void WH_022_CancelSafeEditWithoutSaving() {
+        CashPage cashPage = new CashPage(driver);
+        String originalName;
+        String temporaryName = "تعديل غير محفوظ " + System.currentTimeMillis();
+
+        cashPage.NavigationHelper(Pages.SAFES);
+        originalName = cashPage.getFirstSafeCellByHeader("اسم الخزنة");
+        cashPage.openFirstSafeForEdit();
+        cashPage.AddArabicName(temporaryName);
+        cashPage.ClickCloseButton();
+
+        cashPage.openFirstSafeForEdit();
+        Assert.assertEquals(
+                cashPage.getArabicNameInputValue().trim(),
+                originalName,
+                "WH-022: يجب أن تظل القيمة الأصلية بعد إغلاق التعديل دون حفظ"
+        );
+        cashPage.ClickCloseButton();
+    }
+
+    @Test(enabled = false, description = "Replaced by WH-003 using unique data and exact-name cleanup")
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("Web Cloud")
@@ -44,7 +167,7 @@ public class CashTest extends BaseTest {
         cashPage.AssertReceiptAdded("55");
     }
 
-    @Test(priority = 2)
+    @Test(enabled = false, description = "Unsafe legacy test edited the last existing row; replaced by WH-021")
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("Web Cloud")
@@ -61,7 +184,7 @@ public class CashTest extends BaseTest {
         cashPage.AssertReceiptAdded("معدل");
     }
 
-    @Test(priority = 3)
+    @Test(enabled = false, description = "Unsafe legacy test deleted the last existing row; replaced by WH-023")
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("Web Cloud")
@@ -80,16 +203,23 @@ public class CashTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     @Epic("Web Cloud")
     @Feature("الخزن")
-    @Story("التحقق - الاسم العربي إلزامي")
+    @Story("WH-004 التحقق من إلزامية الاسم العربي")
     @Description("يتحقق هذا الاختبار من أن النظام يمنع إضافة خزنة بدون إدخال الاسم العربي، ويتحقق من ظهور رسالة خطأ تفيد بأن الاسم العربي حقل إلزامي.")
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void InvalidCashTest() {
-        System.out.println("Invalid Cash test started");
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);
         cashPage.ClickNew();
         cashPage.AddArabicName("");
-        Assert.assertTrue(cashPage.IsArabicNameRequiredErrorDisplayed());
+        cashPage.AddEnglishName("Required field validation");
+        cashPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
+        int rowCountBefore = cashPage.getSafeTotalRowCount();
+        cashPage.ClickSaveButton();
+        Assert.assertTrue(cashPage.IsArabicNameRequiredErrorDisplayed(),
+                "WH-004: يجب إظهار رسالة تحقق الاسم العربي الفارغ");
+        Assert.assertEquals(cashPage.getSafeTotalRowCount(), rowCountBefore,
+                "WH-004: يجب ألا ينشأ سجل عند غياب الاسم العربي");
+        cashPage.ClickCloseButton();
     }
 
     @Test(priority = 5)
@@ -97,11 +227,12 @@ public class CashTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     @Epic("Web Cloud")
     @Feature("الخزن")
-    @Story("منع الحفظ عند ترك جميع الحقول فارغة")
+    @Story("WH-006 محاولة الحفظ مع جميع الحقول فارغة")
     @Description("يتحقق من أن حفظ نموذج خزنة فارغ يعرض تحقق الاسم العربي المطلوب ولا ينشئ سجلًا.")
     public void EmptyCashFormIsRejected() {
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);
+        int rowCountBefore = cashPage.getSafeTotalRowCount();
         cashPage.ClickNew();
         cashPage.ClickSaveButton();
 
@@ -109,6 +240,9 @@ public class CashTest extends BaseTest {
                 cashPage.IsArabicNameRequiredErrorDisplayed(),
                 "يجب أن يظهر تحقق الاسم العربي عند حفظ نموذج فارغ"
         );
+        Assert.assertEquals(cashPage.getSafeTotalRowCount(), rowCountBefore,
+                "WH-006: يجب ألا ينشأ سجل عند ترك النموذج فارغًا");
+        cashPage.ClickCloseButton();
     }
 
     @Test(priority = 6)
@@ -116,19 +250,25 @@ public class CashTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     @Epic("Web Cloud")
     @Feature("الخزن")
-    @Story("رفض الاسم العربي المكوّن من مسافات")
+    @Story("WH-005 منع الاسم العربي المكوّن من مسافات فقط")
     @Description("يتحقق من معاملة المسافات فقط في الاسم العربي كقيمة فارغة.")
     public void CashArabicNameWhitespaceIsRejected() {
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);
+        int rowCountBefore = cashPage.getSafeTotalRowCount();
         cashPage.ClickNew();
         cashPage.AddArabicName("   ");
+        cashPage.AddEnglishName("Whitespace validation");
+        cashPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
         cashPage.ClickSaveButton();
 
         Assert.assertTrue(
                 cashPage.IsArabicNameRequiredErrorDisplayed(),
                 "يجب رفض الاسم العربي المكوّن من مسافات فقط"
         );
+        Assert.assertEquals(cashPage.getSafeTotalRowCount(), rowCountBefore,
+                "WH-005: يجب ألا ينشأ سجل للاسم المكوّن من مسافات");
+        cashPage.ClickCloseButton();
     }
 
     @Test(priority = 7)
@@ -136,7 +276,7 @@ public class CashTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     @Epic("Web Cloud")
     @Feature("الخزن")
-    @Story("تصحيح الاسم بعد ظهور رسالة الخطأ")
+    @Story("WH-013 Correct Arabic name after validation error")
     @Description("يتحقق من إمكانية تصحيح الاسم العربي بعد إظهار رسالة الإلزامية ثم حفظ الخزنة.")
     public void CorrectArabicNameAfterValidationError() {
         CashPage cashPage = new CashPage(driver);
@@ -144,19 +284,28 @@ public class CashTest extends BaseTest {
         String arabicName = "خزنة تصحيح " + uniqueSuffix;
 
         cashPage.NavigationHelper(Pages.SAFES);
-        cashPage.ClickNew();
-        cashPage.ClickSaveButton();
-        Assert.assertTrue(cashPage.IsArabicNameRequiredErrorDisplayed());
+        try {
+            cashPage.ClickNew();
+            cashPage.ClickSaveButton();
+            Assert.assertTrue(cashPage.IsArabicNameRequiredErrorDisplayed(),
+                    "WH-013: يجب إظهار تحقق الاسم العربي قبل التصحيح");
 
-        cashPage.AddArabicName(arabicName);
-        cashPage.AddEnglishName("Corrected Safe " + uniqueSuffix);
-        cashPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
-        cashPage.ClickSaveButton();
-        cashPage.AssertReceiptAdded(arabicName);
+            cashPage.AddArabicName(arabicName);
+            cashPage.AddEnglishName("Corrected Safe " + uniqueSuffix);
+            cashPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
+            cashPage.ClickSaveButton();
+            cashPage.searchSafes(arabicName);
+            Assert.assertEquals(cashPage.getExactSafeMatchCount(arabicName), 1,
+                    "WH-013: يجب حفظ الاسم المصحح");
 
-        driver.navigate().refresh();
-        cashPage.NavigationHelper(Pages.SAFES);
-        cashPage.AssertReceiptAdded(arabicName);
+            driver.navigate().refresh();
+            cashPage.NavigationHelper(Pages.SAFES);
+            cashPage.searchSafes(arabicName);
+            Assert.assertEquals(cashPage.getExactSafeMatchCount(arabicName), 1,
+                    "WH-013: يجب استمرار السجل بعد التحديث");
+        } finally {
+            cleanupTestSafe(cashPage, arabicName);
+        }
     }
 
     @Test(priority = 8)
@@ -164,19 +313,10 @@ public class CashTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     @Epic("Web Cloud")
     @Feature("الخزن")
-    @Story("الحفظ دون رقم حساب أو ملاحظات مع خيار عام غير محدد")
+    @Story("WH-007/008/010 Optional fields and unchecked General")
     @Description("يتحقق من قبول الاسم العربي وحده عند ترك رقم الحساب والملاحظات فارغين وخيار عام غير محدد.")
     public void OptionalCashFieldsCanBeEmpty() {
-        CashPage cashPage = new CashPage(driver);
-        String uniqueSuffix = String.valueOf(System.currentTimeMillis());
-        String arabicName = "خزنة اختيارية " + uniqueSuffix;
-
-        cashPage.NavigationHelper(Pages.SAFES);
-        cashPage.ClickNew();
-        cashPage.AddArabicName(arabicName);
-        cashPage.SelectCheckboxByText("عام", false);
-        cashPage.ClickSaveButton();
-        cashPage.AssertReceiptAdded(arabicName);
+        verifyOptionalSafeScenario(null, false, "WH-007/008/010");
     }
 
     @Test(priority = 9)
@@ -184,7 +324,7 @@ public class CashTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     @Epic("Web Cloud")
     @Feature("الخزن")
-    @Story("فتح نموذج إضافة خزنة")
+    @Story("WH-002 Open cash creation form")
     @Description("يتحقق من فتح نموذج إضافة الخزنة عند الضغط على زر جديد.")
     public void OpenCashCreationForm() {
         CashPage cashPage = new CashPage(driver);
@@ -202,7 +342,7 @@ public class CashTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     @Epic("Web Cloud")
     @Feature("الخزن")
-    @Story("عرض قائمة الخزن")
+    @Story("WH-001 Display safe list")
     @Description("يتحقق من ظهور سجلات الخزن في الجدول دون فتح نموذج الإضافة.")
     public void CashListDisplaysRecords() {
         CashPage cashPage = new CashPage(driver);
@@ -219,14 +359,16 @@ public class CashTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     @Epic("Web Cloud")
     @Feature("الخزن")
-    @Story("البحث بالكود والاسم ومسح البحث")
+    @Story("WH-015/016/018/019 Search safe list")
     @Description("يتحقق من البحث بالكود والاسم، ومن ظهور نتائج فارغة لقيمة غير موجودة ثم استعادة القائمة بعد مسح البحث.")
     public void SearchSafesByCodeAndName() {
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);
 
-        cashPage.searchSafes("3");
-        Assert.assertTrue(cashPage.isSafeVisibleInSearchResults("3"), "يجب إظهار الخزنة ذات الكود 3");
+        String visibleCode = cashPage.getFirstSafeCellByHeader("الكود");
+        cashPage.searchSafes(visibleCode);
+        Assert.assertTrue(cashPage.isSafeVisibleInSearchResults(visibleCode),
+                "يجب إظهار الخزنة عند البحث بكود موجود في القائمة");
 
         cashPage.searchSafes("الخزنة الرئيسية");
         Assert.assertTrue(
@@ -252,6 +394,316 @@ public class CashTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     @Epic("Web Cloud")
     @Feature("الخزن")
+    @Story("WH-017 البحث بالاسم الإنجليزي")
+    @Description("يتحقق من البحث باستخدام نص الاسم الإنجليزي الموجود في أول سجل دون تعديل بياناته.")
+    public void WH_017_SearchSafesByEnglishName() {
+        CashPage cashPage = new CashPage(driver);
+        cashPage.NavigationHelper(Pages.SAFES);
+        cashPage.openFirstSafeForEdit();
+        String englishName = cashPage.getEnglishNameInputValue().trim();
+        cashPage.ClickCloseButton();
+        Assert.assertFalse(englishName.isBlank(), "WH-017: يجب توفر اسم إنجليزي في السجل المستخدم للبحث");
+
+        cashPage.searchSafes(englishName);
+        Assert.assertTrue(cashPage.isSafeVisibleInSearchResults(englishName),
+                "WH-017: يجب أن تظهر الخزنة عند البحث بالاسم الإنجليزي");
+        cashPage.searchSafes("");
+    }
+
+    @Test(priority = 13)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-028 ترتيب قائمة الخزن")
+    @Description("يتحقق من إمكانية تغيير ترتيب القائمة بالنقر على عنوان عمود الكود وملاحظة تغير ترتيب الصفوف.")
+    public void WH_028_SafeListCanBeSortedByCode() {
+        CashPage cashPage = new CashPage(driver);
+        cashPage.NavigationHelper(Pages.SAFES);
+        List<String> codesBeforeSort = cashPage.getSafeColumnValues("الكود");
+        cashPage.clickSafeColumnHeader("الكود");
+        List<String> ascendingCodes = cashPage.getSafeColumnValues("الكود");
+        cashPage.clickSafeColumnHeader("الكود");
+        List<String> descendingCodes = cashPage.getSafeColumnValues("الكود");
+
+        if (codesBeforeSort.size() < 2) {
+            return;
+        }
+        Assert.assertEquals(
+                ascendingCodes,
+                cashPage.sortCodes(ascendingCodes, true),
+                "WH-028: يجب أن تكون القيم مرتبة تصاعديًا بعد النقرة الأولى"
+        );
+        Assert.assertEquals(
+                descendingCodes,
+                cashPage.sortCodes(descendingCodes, false),
+                "WH-028: يجب أن تكون القيم مرتبة تنازليًا بعد النقرة الثانية"
+        );
+    }
+
+    @Test(priority = 14)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.MINOR)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-029 تغيير عدد الصفوف المعروضة")
+    @Description("يتحقق من أن تغيير اختيار حجم الصفحة يغير عدد الصفوف المعروضة إلى القيمة المختارة.")
+    public void WH_029_ChangingPageSizeUpdatesVisibleRows() {
+        CashPage cashPage = new CashPage(driver);
+        cashPage.NavigationHelper(Pages.SAFES);
+        int defaultPageSize = cashPage.getSelectedSafePageSize();
+        int rowsBeforeChange = cashPage.getVisibleSafeRowCount();
+        int availablePageSize = cashPage.getAlternativeSafePageSize(defaultPageSize);
+
+        Assert.assertTrue(availablePageSize > defaultPageSize,
+                "WH-029: يلزم وجود خيار حجم صفحة أكبر من القيمة الحالية");
+        cashPage.selectSafePageSize(availablePageSize);
+        Assert.assertEquals(
+                cashPage.getVisibleSafeRowCount(),
+                Math.min(rowsBeforeChange, availablePageSize),
+                "WH-029: يجب أن يتغير عدد الصفوف حسب حجم الصفحة أو إجمالي السجلات المتاحة"
+        );
+    }
+
+    @Test(priority = 15)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-030 التنقل بين صفحات قائمة الخزن")
+    @Description("يتحقق من الانتقال للصفحة التالية والعودة للسابق فقط عندما تتوفر صفحات متعددة.")
+    public void WH_030_NavigateSafeListPagesWhenAvailable() {
+        CashPage cashPage = new CashPage(driver);
+        cashPage.NavigationHelper(Pages.SAFES);
+        if (!cashPage.isSafeNextPageEnabled()) {
+            Assert.assertFalse(cashPage.isSafeNextPageEnabled(),
+                    "WH-030: لا يجب تفعيل التالي عند عدم توفر صفحة أخرى");
+            return;
+        }
+
+        String firstPageCode = cashPage.getFirstSafeCellByHeader("الكود");
+        cashPage.goToNextSafePage();
+        String secondPageCode = cashPage.getFirstSafeCellByHeader("الكود");
+        Assert.assertNotEquals(secondPageCode, firstPageCode,
+                "WH-030: يجب أن تعرض الصفحة التالية سجلات مختلفة");
+
+        cashPage.goToPreviousSafePage();
+        Assert.assertEquals(cashPage.getFirstSafeCellByHeader("الكود"), firstPageCode,
+                "WH-030: الرجوع يجب أن يعرض سجلات الصفحة الأولى");
+    }
+
+    @Test(priority = 16)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-003 إضافة خزنة ببيانات صحيحة")
+    public void WH_003_CreateValidSafeAndVerifyFields() {
+        CashPage cashPage = new CashPage(driver);
+        String suffix = String.valueOf(System.currentTimeMillis());
+        String arabicName = "خزنة آلية " + suffix;
+        String englishName = "Automation Safe " + suffix;
+        cashPage.NavigationHelper(Pages.SAFES);
+        try {
+            createSafe(cashPage, arabicName, englishName, "تسويق جوجل", false, "Created by automation");
+            cashPage.openSafeForEditByName(arabicName);
+            Assert.assertEquals(cashPage.getArabicNameInputValue().trim(), arabicName,
+                    "WH-003: يجب حفظ الاسم العربي المدخل");
+            Assert.assertEquals(cashPage.getEnglishNameInputValue().trim(), englishName,
+                    "WH-003: يجب حفظ الاسم الإنجليزي المدخل");
+            Assert.assertEquals(cashPage.isSafeGeneralChecked(), false,
+                    "WH-003: يجب أن تبقى خانة عام غير محددة");
+            cashPage.ClickCloseButton();
+        } finally {
+            cleanupTestSafe(cashPage, arabicName);
+        }
+    }
+
+    @Test(priority = 17)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-007 رقم الحساب غير محدد")
+    public void WH_007_SaveSafeWithoutAccount() {
+        verifyOptionalSafeScenario(null, false, "WH-007");
+    }
+
+    @Test(priority = 18)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-008 حفظ الخزنة وخيار عام غير محدد")
+    public void WH_008_SaveSafeWithGeneralUnchecked() {
+        verifyOptionalSafeScenario("تسويق جوجل", false, "WH-008");
+    }
+
+    @Test(priority = 19)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-009 حفظ الخزنة وخيار عام محدد")
+    public void WH_009_SaveSafeWithGeneralChecked() {
+        verifyOptionalSafeScenario("تسويق جوجل", true, "WH-009");
+    }
+
+    @Test(priority = 20)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.MINOR)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-010 حفظ الملاحظات فارغة")
+    public void WH_010_SaveSafeWithEmptyNotes() {
+        verifyOptionalSafeScenario("تسويق جوجل", false, "WH-010");
+    }
+
+
+    @Test(priority = 22)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-012 منع إنشاء سجل مكرر عند الضغط على حفظ مرتين")
+    public void WH_012_RapidDoubleSaveCreatesSingleSafe() {
+        CashPage cashPage = new CashPage(driver);
+        String suffix = String.valueOf(System.currentTimeMillis());
+        String arabicName = "خزنة حفظ مزدوج " + suffix;
+        cashPage.NavigationHelper(Pages.SAFES);
+        try {
+            cashPage.ClickNew();
+            cashPage.AddArabicName(arabicName);
+            cashPage.AddEnglishName("Double Save " + suffix);
+            cashPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
+            cashPage.clickSaveTwiceRapidly();
+            cashPage.searchSafes(arabicName);
+            Assert.assertEquals(cashPage.getExactSafeMatchCount(arabicName), 1,
+                    "WH-012: يجب إنشاء سجل واحد فقط لكل حفظ ناجح");
+        } finally {
+            cleanupTestSafe(cashPage, arabicName);
+        }
+    }
+
+    @Test(priority = 23)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-021 تعديل اسم الخزنة وحفظ التغيير")
+    public void WH_021_EditOwnedTestSafeAndSave() {
+        CashPage cashPage = new CashPage(driver);
+        String suffix = String.valueOf(System.currentTimeMillis());
+        String originalName = "خزنة تعديل آلية " + suffix;
+        String editedName = originalName + " معدلة";
+        cashPage.NavigationHelper(Pages.SAFES);
+        try {
+            createSafe(cashPage, originalName, "Edit Safe " + suffix, "تسويق جوجل", false, "");
+            cashPage.openSafeForEditByName(originalName);
+            cashPage.AddArabicName(editedName);
+            cashPage.ClickSaveButton();
+            cashPage.searchSafes(editedName);
+            Assert.assertEquals(cashPage.getExactSafeMatchCount(editedName), 1,
+                    "WH-021: يجب تحديث الاسم العربي في السجل المملوك للاختبار");
+        } finally {
+            cleanupTestSafe(cashPage, editedName);
+        }
+    }
+
+    @Test(priority = 24)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-023 طلب حذف خزنة اختبار")
+    public void WH_023_DeleteOnlyOwnedTestSafe() {
+        CashPage cashPage = new CashPage(driver);
+        String safeName = "خزنة حذف آلية " + System.currentTimeMillis();
+        cashPage.NavigationHelper(Pages.SAFES);
+        try {
+            createSafe(cashPage, safeName, "Delete Safe " + System.currentTimeMillis(), "تسويق جوجل", false, "");
+            cashPage.searchSafes(safeName);
+            cashPage.requestDeleteSafeByName(safeName);
+            cashPage.confirmSafeDelete();
+            driver.navigate().refresh();
+            cashPage.NavigationHelper(Pages.SAFES);
+            cashPage.searchSafes(safeName);
+            Assert.assertEquals(cashPage.getExactSafeMatchCount(safeName), 0,
+                    "WH-023: يجب اختفاء سجل الاختبار بعد تأكيد حذفه");
+        } finally {
+            cleanupTestSafe(cashPage, safeName);
+        }
+    }
+
+    @Test(priority = 25)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-024 إلغاء حذف الخزنة")
+    public void WH_024_CancelDeleteOfOwnedTestSafe() {
+        CashPage cashPage = new CashPage(driver);
+        String safeName = "خزنة إلغاء حذف آلية " + System.currentTimeMillis();
+        cashPage.NavigationHelper(Pages.SAFES);
+        try {
+            createSafe(cashPage, safeName, "Cancel Delete " + System.currentTimeMillis(), "تسويق جوجل", false, "");
+            cashPage.searchSafes(safeName);
+            cashPage.requestDeleteSafeByName(safeName);
+            cashPage.cancelSafeDelete();
+            Assert.assertEquals(cashPage.getExactSafeMatchCount(safeName), 1,
+                    "WH-024: يجب أن يبقى سجل الاختبار بعد إلغاء الحذف");
+        } finally {
+            cleanupTestSafe(cashPage, safeName);
+        }
+    }
+
+    @Test(priority = 26)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-031 تحديث القائمة بعد الإضافة")
+    public void WH_031_NewSafeAppearsAfterListRefresh() {
+        verifySafePersistsAcrossRefresh("WH-031");
+    }
+
+    @Test(priority = 27)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-032 استمرارية حفظ السجل بعد تحديث الصفحة")
+    public void WH_032_SafePersistsAfterBrowserRefresh() {
+        verifySafePersistsAcrossRefresh("WH-032");
+    }
+
+    @Test(priority = 28)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
+    @Story("WH-035 عدم تكرار السجل بعد إعادة فتح القائمة")
+    public void WH_035_ReopeningListDoesNotDuplicateSafe() {
+        CashPage cashPage = new CashPage(driver);
+        String safeName = "خزنة إعادة فتح آلية " + System.currentTimeMillis();
+        cashPage.NavigationHelper(Pages.SAFES);
+        try {
+            createSafe(cashPage, safeName, "Reopen Safe " + System.currentTimeMillis(), "تسويق جوجل", false, "");
+            driver.navigate().refresh();
+            cashPage.NavigationHelper(Pages.SAFES);
+            cashPage.searchSafes(safeName);
+            Assert.assertEquals(cashPage.getExactSafeMatchCount(safeName), 1,
+                    "WH-035: يجب أن يظهر سجل الاختبار مرة واحدة بعد إعادة فتح القائمة");
+        } finally {
+            cleanupTestSafe(cashPage, safeName);
+        }
+    }
+
+    @Test(priority = 29)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("Web Cloud")
+    @Feature("الخزن")
     @Story("تصدير قائمة الخزن إلى PDF")
     @Description("يتحقق من تنزيل ملف PDF غير فارغ يبدأ بتوقيع PDF الصحيح.")
     public void ExportSafesToPdf() throws Exception {
@@ -271,7 +723,7 @@ public class CashTest extends BaseTest {
         );
     }
 
-    @Test(priority = 13)
+    @Test(priority = 30)
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.NORMAL)
     @Epic("Web Cloud")
@@ -292,6 +744,94 @@ public class CashTest extends BaseTest {
                 Files.size(downloadedFile) > 0,
                 "ملف Excel الناتج فارغ"
         );
+    }
+
+    private void createSafe(CashPage cashPage, String arabicName, String englishName,
+                            String accountName, boolean general, String notes) {
+        cashPage.ClickNew();
+        cashPage.AddArabicName(arabicName);
+        cashPage.AddEnglishName(englishName);
+        if (accountName != null && !accountName.isBlank()) {
+            cashPage.SelectFromDropDawn(accountName, "رقم الحساب");
+        }
+        cashPage.SelectCheckboxByText("عام", general);
+        if (notes != null && !notes.isEmpty()) {
+            cashPage.AddNoteForDealer(notes);
+        }
+        cashPage.ClickSaveButton();
+        cashPage.searchSafes(arabicName);
+        Assert.assertEquals(cashPage.getExactSafeMatchCount(arabicName), 1,
+                "يجب إنشاء سجل الاختبار الفريد مرة واحدة: " + arabicName);
+    }
+
+    private void verifyOptionalSafeScenario(String accountName, boolean general, String tcId) {
+        CashPage cashPage = new CashPage(driver);
+        String suffix = String.valueOf(System.currentTimeMillis());
+        String safeName = "خزنة " + tcId + " " + suffix;
+        cashPage.NavigationHelper(Pages.SAFES);
+        try {
+            createSafe(cashPage, safeName, "Automation " + tcId + " " + suffix,
+                    accountName, general, "");
+            cashPage.openSafeForEditByName(safeName);
+            Assert.assertEquals(cashPage.getArabicNameInputValue().trim(), safeName,
+                    tcId + ": يجب أن تظهر بيانات السجل بعد الحفظ");
+            Assert.assertEquals(cashPage.isSafeGeneralChecked(), general,
+                    tcId + ": يجب حفظ حالة خيار عام كما تم تحديدها");
+            if ("WH-010".equals(tcId)) {
+                Assert.assertEquals(cashPage.getSafeAccountValue(), accountName,
+                        "WH-010: يجب أن يبقى الحساب المختار محفوظًا");
+            }
+            cashPage.ClickCloseButton();
+        } finally {
+            cleanupTestSafe(cashPage, safeName);
+        }
+    }
+
+    private void verifySafePersistsAcrossRefresh(String tcId) {
+        CashPage cashPage = new CashPage(driver);
+        String suffix = String.valueOf(System.currentTimeMillis());
+        String safeName = "خزنة استمرارية " + tcId + " " + suffix;
+        cashPage.NavigationHelper(Pages.SAFES);
+        try {
+            createSafe(cashPage, safeName, "Persistence " + tcId + " " + suffix,
+                    "تسويق جوجل", false, "");
+            driver.navigate().refresh();
+            cashPage.NavigationHelper(Pages.SAFES);
+            cashPage.searchSafes(safeName);
+            Assert.assertEquals(cashPage.getExactSafeMatchCount(safeName), 1,
+                    tcId + ": يجب أن يبقى السجل ظاهرًا مرة واحدة بعد التحديث");
+        } finally {
+            cleanupTestSafe(cashPage, safeName);
+        }
+    }
+
+    private void cleanupTestSafe(CashPage cashPage, String safeName) {
+        if (safeName == null || safeName.isBlank()) {
+            return;
+        }
+        if (cashPage.isCashCreationFormDisplayed()) {
+            cashPage.ClickCloseButton();
+        }
+        if (cashPage.isSafeDeleteConfirmationDisplayed()) {
+            cashPage.cancelSafeDelete();
+        }
+        cashPage.searchSafes("");
+        cashPage.searchSafes(safeName);
+        int matches = cashPage.getExactSafeMatchCount(safeName);
+        if (matches == 0) {
+            return;
+        }
+        if (matches != 1) {
+            throw new AssertionError("Cleanup refused: expected exactly one owned test safe, found " + matches);
+        }
+        cashPage.requestDeleteSafeByName(safeName);
+        cashPage.confirmSafeDelete();
+        driver.navigate().refresh();
+        cashPage.NavigationHelper(Pages.SAFES);
+        cashPage.searchSafes(safeName);
+        Assert.assertEquals(cashPage.getExactSafeMatchCount(safeName), 0,
+                "يجب تنظيف سجل الاختبار المملوك: " + safeName);
+        cashPage.searchSafes("");
     }
 
     private Path prepareExportDirectory() throws IOException {
@@ -374,6 +914,5 @@ public class CashTest extends BaseTest {
         } catch (IOException e) {
             return false;
         }
-    }
-
+}
 }

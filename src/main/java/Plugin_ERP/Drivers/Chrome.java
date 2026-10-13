@@ -9,6 +9,9 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URL;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Chrome extends AbstractDriver {
     private ChromeOptions getOptions()
@@ -26,6 +29,16 @@ public class Chrome extends AbstractDriver {
         options.addArguments("--disable-gpu");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
+
+        Map<String, Object> downloadPreferences = new HashMap<>();
+        downloadPreferences.put(
+                "download.default_directory",
+                Path.of(System.getProperty("user.dir"), "target", "cash-export-downloads")
+                        .toAbsolutePath().toString()
+        );
+        downloadPreferences.put("download.prompt_for_download", false);
+        downloadPreferences.put("download.directory_upgrade", true);
+        options.setExperimentalOption("prefs", downloadPreferences);
         if (PropertyReader.getProperty("ExecutionType").equalsIgnoreCase("LocalHeadless")) {
             PropertyReader.getProperty("ExecutionType").equalsIgnoreCase("Remote"); {
             options.addArguments("--headless=new");

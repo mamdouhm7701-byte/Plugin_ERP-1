@@ -10,6 +10,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.math.BigDecimal;
@@ -18,11 +19,157 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Invoice extends AbstractForPurchases {
 
+    private static final By INVOICE_FULLSCREEN_TOGGLE = By.xpath(
+            "//button[normalize-space()='توزيع مراكز التكلفة']/following-sibling::button[2]"
+    );
+    private static final By INVOICE_SIDE_MENU = By.xpath(
+            "//a[@aria-label='الصفحة الرئيسية'] | //a[contains(@href,'#/invoice-list')]"
+    );
+    private static final By ADD_CUSTOMER_SHORTCUT = By.xpath(
+            "//*[normalize-space()='العميل']/following::img[1]/ancestor::*[self::button or self::a or @role='button'][1]"
+    );
+    private static final By ADD_PRODUCT_SHORTCUT = By.cssSelector(
+            "button[title='إضافة صنف جديد في قائمة الأصناف']"
+    );
+    private static final By FORM_DIALOG = By.cssSelector(".modal-content");
+
     public Invoice(WebDriver driver) {
         super(driver);
+    }
+
+    @Step("قراءة خيارات القائمة المنسدلة: {label}")
+    public List<String> getDropdownOptions(String label) {
+        By dropdownInput = dropdownInput(label);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement input = wait.until(ExpectedConditions.elementToBeClickable(dropdownInput));
+        input.click();
+
+        By optionsLocator = By.xpath("//ul[contains(@id,'__listbox')]//li");
+        List<WebElement> options = wait.until(d -> {
+            List<WebElement> visibleOptions = d.findElements(optionsLocator).stream()
+                    .filter(WebElement::isDisplayed)
+                    .collect(Collectors.toList());
+            return visibleOptions.isEmpty() ? null : visibleOptions;
+        });
+
+        List<String> optionTexts = options.stream()
+                .map(WebElement::getText)
+                .map(String::trim)
+                .filter(text -> !text.isEmpty())
+                .collect(Collectors.toList());
+        input.sendKeys(org.openqa.selenium.Keys.ESCAPE);
+        return optionTexts;
+    }
+
+    @Step("قراءة الاختيار الحالي من القائمة المنسدلة: {label}")
+    public String getSelectedDropdownOption(String label) {
+        By selectedOption = selectedDropdownOption(label);
+        return new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(selectedOption))
+                .getText()
+                .trim();
+    }
+
+    @Step("البحث في نافذة إضافة الأصناف باستخدام {fieldLabel}: {query}")
+    public void searchInAddItemsDialog(String fieldLabel, String query) {
+        By radioOption = By.cssSelector(".modal-content input[type='radio'][value='" +
+                (fieldLabel.equals("الباركود") ? "barcode" : "name") + "']");
+        By searchField = By.cssSelector(".modal-content input[placeholder='بحث ....']");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(radioOption)).click();
+        WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(searchField));
+        input.click();
+        input.sendKeys(org.openqa.selenium.Keys.chord(org.openqa.selenium.Keys.CONTROL, "a"));
+        input.sendKeys(org.openqa.selenium.Keys.BACK_SPACE);
+        input.sendKeys(query);
+        utilites.waits().waitForOverlayToDisappear();
+
+        By updatedResult = By.xpath(
+                "//div[contains(@class,'modal-content')]//tbody//tr[" +
+                        "contains(normalize-space(.), '" + query + "') or " +
+                        "contains(normalize-space(.), 'لا يوجد بيانات')]"
+        );
+        wait.until(ExpectedConditions.visibilityOfElementLocated(updatedResult));
+    }
+
+    @Step("قراءة صفوف الأصناف الظاهرة في نافذة الإضافة")
+    public List<String> getAddItemsDialogRows() {
+        By rowsLocator = By.cssSelector(".modal-content tbody tr");
+        return new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(d -> {
+                    List<WebElement> rows = d.findElements(rowsLocator).stream()
+                            .filter(WebElement::isDisplayed)
+                            .collect(Collectors.toList());
+                    return rows.isEmpty() ? null : rows;
+                })
+                .stream()
+                .map(WebElement::getText)
+                .map(String::trim)
+                .filter(text -> !text.isEmpty() && !text.contains("لا يوجد بيانات"))
+                .collect(Collectors.toList());
+    }
+
+    @Step("تغيير خيار عرض الأصناف المختارة إلى {shouldBeChecked}")
+    public void setShowSelectedItems(boolean shouldBeChecked) {
+        utilites.checkbox().stableFastSetCheckboxByText("عرض الأصناف المختارة", shouldBeChecked);
+    }
+
+    @Step("التحقق من ظهور خانة اسم العميل")
+    public boolean isCustomerNameFieldDisplayed() {
+        By nameField = By.xpath("//*[normalize-space()='اسم العميل']/following::input[1]");
+        return new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(nameField))
+                .isDisplayed();
+    }
+
+    @Step("تبديل وضع عرض شاشة فاتورة المبيعات")
+    public void toggleInvoiceFullscreen() {
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(INVOICE_FULLSCREEN_TOGGLE))
+                .click();
+    }
+
+    @Step("التحقق من ظهور القائمة الجانبية")
+    public boolean isInvoiceSideMenuDisplayed() {
+        return driver.findElements(INVOICE_SIDE_MENU).stream().anyMatch(WebElement::isDisplayed);
+    }
+
+    @Step("الضغط على اختصار إضافة عميل جديد")
+    public void clickAddCustomerShortcut() {
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(ADD_CUSTOMER_SHORTCUT))
+                .click();
+    }
+
+    @Step("الضغط على اختصار إضافة صنف جديد")
+    public void clickAddProductShortcut() {
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(ADD_PRODUCT_SHORTCUT))
+                .click();
+    }
+
+    @Step("بدء فاتورة مبيعات جديدة")
+    public void clickNewInvoice() {
+        By newInvoiceButton = By.xpath("//button[normalize-space()='جديد']");
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(newInvoiceButton))
+                .click();
+        utilites.waits().waitForOverlayToDisappear();
+    }
+
+    @Step("انتظار نافذة إضافة بيانات جديدة")
+    public boolean isFormDialogDisplayed() {
+        try {
+            return new WebDriverWait(driver, Duration.ofSeconds(5))
+                    .until(ExpectedConditions.visibilityOfElementLocated(FORM_DIALOG))
+                    .isDisplayed();
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 
     /** Sales-invoice search override: avoid retrying a successful suggestion click. */
@@ -162,7 +309,7 @@ public class Invoice extends AbstractForPurchases {
 
         List<WebElement> rows = driver.findElements(
                 By.xpath("//tbody//tr[@role='row']")
-        );
+        ).stream().filter(WebElement::isDisplayed).collect(Collectors.toList());
 
 
         for (WebElement row : rows) {
@@ -179,32 +326,30 @@ public class Invoice extends AbstractForPurchases {
                 continue;
             }
 
+            List<WebElement> quantityInputs = row.findElements(By.xpath(
+                    ".//td[@aria-colindex='" + quantityColIndex + "']//input[not(@type='hidden')]"
+            ));
+            List<WebElement> priceInputs = row.findElements(By.xpath(
+                    ".//td[@aria-colindex='" + priceColIndex + "']//input[not(@type='hidden')]"
+            ));
+            if (quantityInputs.isEmpty() || priceInputs.isEmpty()) {
+                continue;
+            }
+
             String name = nameCells.get(0)
                     .getText()
                     .trim();
 
 
             BigDecimal quantity = new BigDecimal(
-                    row.findElement(
-                                    By.xpath(
-                                            ".//td[@aria-colindex='" +
-                                                    quantityColIndex +
-                                                    "']//input[not(@type='hidden')]"
-                                    )
-                            )
+                    quantityInputs.get(0)
                             .getAttribute("value")
                             .trim()
             );
 
 
             BigDecimal price = new BigDecimal(
-                    row.findElement(
-                                    By.xpath(
-                                            ".//td[@aria-colindex='" +
-                                                    priceColIndex +
-                                                    "']//input[not(@type='hidden')]"
-                                    )
-                            )
+                    priceInputs.get(0)
                             .getAttribute("value")
                             .trim()
             );
@@ -220,6 +365,27 @@ public class Invoice extends AbstractForPurchases {
         }
 
         return invoiceRows;
+    }
+
+    private By dropdownInput(String label) {
+        if (label.equals("العميل") || label.equals("العملاء")) {
+            return By.id("vs3__combobox");
+        }
+        return By.xpath(
+                "//*[self::legend or self::label][normalize-space()='" + label + "']" +
+                        "/following::input[contains(@class,'vs__search')][1]"
+        );
+    }
+
+    private By selectedDropdownOption(String label) {
+        if (label.equals("العميل") || label.equals("العملاء")) {
+            return By.xpath("//input[@id='vs3__combobox']/ancestor::div[contains(@class,'vs__dropdown-toggle')][1]" +
+                    "//*[contains(concat(' ', normalize-space(@class), ' '), ' vs__selected ')]");
+        }
+        return By.xpath(
+                "//*[self::legend or self::label][normalize-space()='" + label + "']" +
+                        "/following::*[contains(concat(' ', normalize-space(@class), ' '), ' vs__selected ')][1]"
+        );
     }
 
 

@@ -14,6 +14,9 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.stream.Stream;
 
 public class TestNGListeners implements IExecutionListener, ITestListener {
 
@@ -48,10 +51,29 @@ public class TestNGListeners implements IExecutionListener, ITestListener {
         } catch (Exception ignored) {}
 
         // مهم: ما ترميش RuntimeException هنا
-        try {
-            AllureBinaryManger.generateAndOpenDetached();
+        if (hasAllureResults()) {
+            try {
+                AllureBinaryManger.generateAndOpenDetached();
+            } catch (Exception e) {
+                LogUtils.error("Allure report generation failed but tests finished: " + e.getMessage());
+            }
+        } else {
+            LogUtils.info("No Allure test results were produced; report generation skipped.");
+        }
+    }
+
+    private boolean hasAllureResults() {
+        Path resultsDir = Path.of(System.getProperty("user.dir"), "allure-results");
+        if (!Files.isDirectory(resultsDir)) return false;
+
+        try (Stream<Path> files = Files.list(resultsDir)) {
+            return files.anyMatch(path -> {
+                String name = path.getFileName().toString();
+                return name.endsWith("-result.json") || name.endsWith("-container.json");
+            });
         } catch (Exception e) {
-            LogUtils.error("Allure open failed but tests finished: " + e.getMessage());
+            LogUtils.error("Could not inspect Allure results: " + e.getMessage());
+            return false;
         }
     }
 

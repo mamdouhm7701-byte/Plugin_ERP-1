@@ -16,20 +16,9 @@ public class Firfox extends AbstractDriver {
 
     {//options
         FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--start-maximized");
-        options.addArguments("--remote-allow-origins=*");
-        options.addArguments("--disable-notifications");
-        options.addArguments("--incognito");
-        options.addArguments("--disable-popup-blocking");
-        options.addArguments("--disable-infobars");
-        options.addArguments("--disable-extensions");
-        options.addArguments("--disable-gpu");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        if (PropertyReader.getProperty("ExecutionType").equalsIgnoreCase("LocalHeadless")) {
-            PropertyReader.getProperty("ExecutionType").equalsIgnoreCase("Remote"); {
-                options.addArguments("--headless=new");
-            }
+        String executionType = PropertyReader.getProperty("ExecutionType");
+        if ("LocalHeadless".equalsIgnoreCase(executionType)) {
+            options.addArguments("-headless");
         }
         options.setAcceptInsecureCerts(true);
         options.setPageLoadStrategy(PageLoadStrategy.EAGER);

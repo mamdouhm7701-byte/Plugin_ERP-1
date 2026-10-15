@@ -26,10 +26,10 @@ public class Edge extends AbstractDriver{
         options.addArguments("--disable-gpu");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
-        if (PropertyReader.getProperty("ExecutionType").equalsIgnoreCase("LocalHeadless")) {
-            PropertyReader.getProperty("ExecutionType").equalsIgnoreCase("Remote"); {
-                options.addArguments("--headless=new");
-            }
+        String executionType = PropertyReader.getProperty("ExecutionType");
+        if ("LocalHeadless".equalsIgnoreCase(executionType)) {
+            options.addArguments("--headless=new");
+            options.addArguments("--window-size=1920,1080");
         }
         options.setAcceptInsecureCerts(true);
         options.setPageLoadStrategy(PageLoadStrategy.EAGER);

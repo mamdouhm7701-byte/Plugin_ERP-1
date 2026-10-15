@@ -11,7 +11,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
 
-import java.io.File;
 import java.time.Duration;
 
 @Listeners({
@@ -46,9 +45,7 @@ public class BaseTest {
 
 
         login();
-     //  Thread.sleep(5000);
 
-      //  login();
     }
 
 
@@ -83,37 +80,5 @@ public class BaseTest {
 
         } catch (Exception ignored) {}
 
-        generateAllureReport();
-    }
-
-
-    // ================= ALLURE =================
-    private void generateAllureReport() {
-
-        try {
-
-            Process generate = new ProcessBuilder(
-                    "cmd",
-                    "/c",
-                    "allure generate allure-results --clean -o allure-report"
-            )
-                    .directory(new File(System.getProperty("user.dir")))
-                    .start();
-
-            generate.waitFor();
-
-            new ProcessBuilder(
-                    "cmd",
-                    "/c",
-                    "start allure-report\\index.html"
-            )
-                    .directory(new File(System.getProperty("user.dir")))
-                    .start();
-
-            System.out.println("✅ Allure Report Generated & Opened");
-
-        } catch (Exception e) {
-            System.out.println("❌ Allure Error: " + e.getMessage());
-        }
     }
 }

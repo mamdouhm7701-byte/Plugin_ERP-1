@@ -7,9 +7,7 @@ import org.openqa.selenium.support.ThreadGuard;
 
 public class WebDriverFactory {
 
-    private static String browserType;
-
-    private static ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
     private WebDriverFactory() {}
 
@@ -20,12 +18,14 @@ public class WebDriverFactory {
     }
 
     public static WebDriver initDriver() {
-        if (browserType == null) {
-            browserType = PropertyReader.getProperty("BrowserType");
+        String browserType = PropertyReader.getProperty("BrowserType");
+        if (browserType == null || browserType.isBlank()) {
+            throw new IllegalArgumentException("BrowserType is missing or blank");
         }
-        WebDriver driver = ThreadGuard.protect(getDriver(browserType));
+        WebDriver driver = ThreadGuard.protect(getDriver(browserType.trim()));
         driverThreadLocal.set(driver);
-        LogUtils.info("Initialized WebDriver for browser: " + browserType);
+        LogUtils.info("Initialized WebDriver for browser: " + browserType
+                + ", execution type: " + PropertyReader.getProperty("ExecutionType"));
         return driverThreadLocal.get();
     }
 

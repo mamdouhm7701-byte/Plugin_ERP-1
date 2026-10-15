@@ -53,12 +53,7 @@ public class PropertyReader {
     }
 
     public static String getProperty(String key) {
-        try {
-            return System.getProperty(key);
-        } catch (Exception e) {
-            LogUtils.info("Error getting property for key: " + key + " -); " + e.getMessage());
-            return null;
-        }
+        return System.getProperty(key);
     }
     public static String getApplicationUrl() {
 

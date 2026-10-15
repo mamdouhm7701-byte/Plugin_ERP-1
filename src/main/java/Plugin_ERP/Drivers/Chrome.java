@@ -39,10 +39,10 @@ public class Chrome extends AbstractDriver {
         downloadPreferences.put("download.prompt_for_download", false);
         downloadPreferences.put("download.directory_upgrade", true);
         options.setExperimentalOption("prefs", downloadPreferences);
-        if (PropertyReader.getProperty("ExecutionType").equalsIgnoreCase("LocalHeadless")) {
-            PropertyReader.getProperty("ExecutionType").equalsIgnoreCase("Remote"); {
+        String executionType = PropertyReader.getProperty("ExecutionType");
+        if ("LocalHeadless".equalsIgnoreCase(executionType)) {
             options.addArguments("--headless=new");
-        }
+            options.addArguments("--window-size=1920,1080");
         }
         options.setAcceptInsecureCerts(true);
         options.setPageLoadStrategy(PageLoadStrategy.NORMAL);

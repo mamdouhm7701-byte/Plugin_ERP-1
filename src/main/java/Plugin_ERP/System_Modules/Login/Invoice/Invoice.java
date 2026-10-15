@@ -22,7 +22,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Invoice extends AbstractForPurchases {
-
+    private By ArabicNameInput = By.xpath("//input[@name='arabicName']");
+    private By SearchInput = By.xpath("//input[@id='barcode' and @name='barcode']");
     private static final By INVOICE_FULLSCREEN_TOGGLE = By.xpath(
             "//button[normalize-space()='توزيع مراكز التكلفة']/following-sibling::button[2]"
     );
@@ -30,10 +31,15 @@ public class Invoice extends AbstractForPurchases {
             "//a[@aria-label='الصفحة الرئيسية'] | //a[contains(@href,'#/invoice-list')]"
     );
     private static final By ADD_CUSTOMER_SHORTCUT = By.xpath(
-            "//*[normalize-space()='العميل']/following::img[1]/ancestor::*[self::button or self::a or @role='button'][1]"
+            "//*[normalize-space()='العميل']/following::*[self::button or self::a or @role='button' or self::img][1] | " +
+                    "//input[@id='vs3__combobox']/ancestor::*[contains(@class,'vs__dropdown-toggle')][1]" +
+                    "//button | //input[@id='vs3__combobox']/ancestor::*[contains(@class,'vs__dropdown-toggle')][1]//img"
     );
-    private static final By ADD_PRODUCT_SHORTCUT = By.cssSelector(
-            "button[title='إضافة صنف جديد في قائمة الأصناف']"
+    private static final By ADD_PRODUCT_SHORTCUT = By.xpath(
+            "//button[contains(@title,'إضافة صنف') or contains(@aria-label,'إضافة صنف') or " +
+                    "contains(@data-bs-original-title,'إضافة صنف')] | " +
+                    "//*[contains(@title,'إضافة صنف') or contains(@aria-label,'إضافة صنف') or " +
+                    "contains(@alt,'إضافة صنف')]"
     );
     private static final By FORM_DIALOG = By.cssSelector(".modal-content");
 
@@ -48,13 +54,20 @@ public class Invoice extends AbstractForPurchases {
         WebElement input = wait.until(ExpectedConditions.elementToBeClickable(dropdownInput));
         input.click();
 
-        By optionsLocator = By.xpath("//ul[contains(@id,'__listbox')]//li");
-        List<WebElement> options = wait.until(d -> {
-            List<WebElement> visibleOptions = d.findElements(optionsLocator).stream()
-                    .filter(WebElement::isDisplayed)
-                    .collect(Collectors.toList());
-            return visibleOptions.isEmpty() ? null : visibleOptions;
-        });
+        String listboxId = input.getAttribute("aria-controls");
+        if (listboxId == null || listboxId.isBlank()) {
+            String comboboxId = input.findElement(By.xpath("ancestor::div[contains(@class,'v-select')]")).getAttribute("id");
+            listboxId = comboboxId == null ? "" : comboboxId.replace("__combobox", "__listbox");
+        }
+        if (listboxId.isBlank()) {
+            throw new IllegalStateException("تعذر تحديد قائمة الخيارات للحقل: " + label);
+        }
+
+        By optionsLocator = By.cssSelector("#" + listboxId + " li");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(optionsLocator));
+        List<WebElement> options = driver.findElements(optionsLocator).stream()
+                .filter(WebElement::isDisplayed)
+                .collect(Collectors.toList());
 
         List<String> optionTexts = options.stream()
                 .map(WebElement::getText)
@@ -368,13 +381,16 @@ public class Invoice extends AbstractForPurchases {
     }
 
     private By dropdownInput(String label) {
-        if (label.equals("العميل") || label.equals("العملاء")) {
-            return By.id("vs3__combobox");
-        }
-        return By.xpath(
-                "//*[self::legend or self::label][normalize-space()='" + label + "']" +
-                        "/following::input[contains(@class,'vs__search')][1]"
-        );
+        return switch (label) {
+            case "المخزن" -> By.cssSelector(".v-select[name='StoreId'] input.vs__search");
+            case "العميل", "العملاء" -> By.cssSelector("fieldset[label='arabicName'] input.vs__search");
+            case "مندوب" -> By.cssSelector(".v-select[name='agent'] input.vs__search");
+            case "قوائم الأسعار" -> By.cssSelector(".v-select[name='priceLists'] input.vs__search");
+            default -> By.xpath(
+                    "//*[self::legend or self::label][normalize-space()='" + label + "']" +
+                            "/following::input[contains(@class,'vs__search')][1]"
+            );
+        };
     }
 
     private By selectedDropdownOption(String label) {
@@ -638,4 +654,19 @@ public class Invoice extends AbstractForPurchases {
 
         return data;
     }
+    @Step("البحث عن : {searchText}")
+    public void SearchBarcodForInv(String searchText) {
+        utilites.waits().waitForOverlayToDisappear();
+        utilites.TaypeTextB(SearchInput,searchText);
+    }
+
+    @Step("الضغط على ايقونه الاسم وارسال الاسم {searchText}")
+    public void ClickOnNameRadioBtnForInv(String searchText) {
+        utilites.waits().waitForOverlayToDisappear();
+        utilites.ClickElement(ArabicNameInput );
+        utilites.waits().waitForOverlayToDisappear();
+        utilites.TaypeTextB(ArabicNameInput, searchText);
+    }
+
+
 }

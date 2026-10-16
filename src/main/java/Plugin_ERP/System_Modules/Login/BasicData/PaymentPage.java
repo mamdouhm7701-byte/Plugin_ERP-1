@@ -1,59 +1,295 @@
 package Plugin_ERP.System_Modules.Login.BasicData;
 
-import Plugin_ERP.Bots.AlertAction;
-import Plugin_ERP.Bots.ElmentAction;
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;
 import io.qameta.allure.Step;
-import junit.framework.Assert;
+import java.time.Duration;
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class PaymentPage extends AbstractForDealer {
+  private final By rows = By.cssSelector("table tbody tr[role='row']"),
+      headers = By.cssSelector("table thead th"),
+      save = By.cssSelector("button[data-action-type='save']");
 
-    //Constructors
-    public PaymentPage(WebDriver driver) {
-        super(driver);
+  public PaymentPage(WebDriver driver) {
+    super(driver);
+  }
+
+  private boolean visible(By b) {
+    return driver.findElements(b).stream().anyMatch(WebElement::isDisplayed);
+  }
+
+  private void waitLoading() {
+    new WebDriverWait(driver, Duration.ofSeconds(20))
+        .until(
+            d ->
+                d
+                    .findElements(
+                        By.cssSelector(
+                            "div.b-overlay,div.position-absolute.bg-light.rounded-lg,.loading-bg,.spinner-border"))
+                    .stream()
+                    .noneMatch(
+                        e -> {
+                          try {
+                            return e.isDisplayed();
+                          } catch (Exception ignored) {
+                            return false;
+                          }
+                        }));
+  }
+
+  @Override
+  public void ClickNew() {
+    waitLoading();
+    super.ClickNew();
+    new WebDriverWait(driver, Duration.ofSeconds(15))
+        .until(ExpectedConditions.visibilityOfElementLocated(save));
+  }
+
+  @Override
+  public void ClickCloseButton() {
+    if (visible(By.xpath("//button[normalize-space()='إغلاق']"))) super.ClickCloseButton();
+  }
+
+  @Override
+  public void ClickSaveButton() {
+    super.ClickSaveButton();
+    By success =
+        By.xpath(
+            "//div[contains(@class,'swal2-popup') and contains(normalize-space(.),'تم الحفظ')]");
+    try {
+      new WebDriverWait(driver, Duration.ofSeconds(3))
+          .until(ExpectedConditions.visibilityOfElementLocated(success));
+      DismissAlertIfPresent();
+    } catch (org.openqa.selenium.TimeoutException ignored) {
     }
+    waitLoading();
+  }
 
-        //Locators
-        private By OpenBasicData = By.xpath("//span[contains(@class,\"menu-title\") and contains(text(),\"البيانات الأساسية\")]");
-        private By OpenPayment = By.xpath("//span[contains(@class,'menu-title') and contains(text(),'طرق الدفع')]");
-        private By BankNameRequiredMsg =  By.xpath("//small[contains(text(),'الاسم العربي مطلوب')]");
+  private void waitAlert() {
+    new WebDriverWait(driver, Duration.ofSeconds(10))
+        .until(
+            d ->
+                d.findElements(By.cssSelector(".swal2-container.swal2-backdrop-show")).stream()
+                    .noneMatch(
+                        e -> {
+                          try {
+                            return e.isDisplayed();
+                          } catch (Exception ignored) {
+                            return false;
+                          }
+                        }));
+  }
 
+  @Step("إغلاق نموذج الدفع المفتوح إن وجد")
+  public void CloseFormIfOpen() {
+    ClickCloseButton();
+  }
 
-    //Methods
-    @Step("فتح صفحه طرق الدفع")
-    public void OpenPaymentPage() {
-        utilites.ClickElement(OpenBasicData);
-        utilites.waits().waitForOverlayToDisappear();
-
-        utilites.ClickElement(OpenPayment);
-        utilites.waits().waitForOverlayToDisappear();
-
-        utilites.ClickElement(OpenBasicData);
-        utilites.waits().waitForOverlayToDisappear();
-
+  @Step("إغلاق التنبيه الظاهر")
+  public void DismissAlertIfPresent() {
+    try {
+      List<WebElement> b =
+          driver.findElements(
+              By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-confirm"));
+      if (!b.isEmpty())
+        ((org.openqa.selenium.JavascriptExecutor) driver)
+            .executeScript("arguments[0].click();", b.get(0));
+      waitAlert();
+    } catch (Exception ignored) {
     }
+  }
 
-    @Step("التأكد من أن اسم البنك مطلوب")
-    public boolean IsBankRequiredErrorDisplayed() {
-        return utilites.isDisplayed(BankNameRequiredMsg);
+  @Step("التحقق من أعمدة قائمة طرق الدفع")
+  public boolean IsListStructureDisplayed() {
+    List<String> h =
+        driver.findElements(headers).stream()
+            .filter(WebElement::isDisplayed)
+            .map(e -> e.getText().trim())
+            .toList();
+    boolean headings =
+        h.stream().anyMatch(s -> s.contains("الكود"))
+            && h.stream().anyMatch(s -> s.contains("طريقة الدفع"));
+    List<WebElement> editable =
+        driver.findElements(rows).stream()
+            .filter(WebElement::isDisplayed)
+            .filter(
+                r -> !r.findElements(By.cssSelector("button[data-action-type='edit']")).isEmpty())
+            .toList();
+    return headings
+        && !editable.isEmpty()
+        && editable.stream()
+            .allMatch(
+                r ->
+                    !r.findElements(By.cssSelector("button[data-action-type='delete']")).isEmpty());
+  }
+
+  @Step("التحقق من عناصر نموذج الدفع")
+  public String GetMissingControls() {
+    List<String> m = new java.util.ArrayList<>();
+    if (!visible(By.cssSelector("input[name='code']"))) m.add("الكود");
+    if (!visible(By.cssSelector("input[name='arabicName']"))) m.add("الاسم العربي");
+    if (!visible(By.cssSelector("input[name='englishName']"))) m.add("الاسم الإنجليزي");
+    if (!visible(
+        By.cssSelector(
+            "textarea[label='Notes'],textarea[label-text='Notes'],textarea[name='notes']")))
+      m.add("الملاحظات");
+    if (!visible(By.cssSelector(".modal-body .vs__dropdown-toggle"))) m.add("اسم البنك");
+    if (driver.findElements(By.cssSelector("input[type='checkbox']")).size() < 2)
+      m.add("خيارات التحديد");
+    if (!visible(save)) m.add("حفظ");
+    if (!visible(By.xpath("//button[normalize-space()='إغلاق']"))) m.add("إغلاق");
+    return String.join("، ", m);
+  }
+
+  @Step("عدد السجلات المطابقة بالاسم الدقيق")
+  public int GetExactMatchCount(String n) {
+    int count = 0;
+    for (WebElement r : driver.findElements(rows))
+      try {
+        if (!r.isDisplayed()) continue;
+        for (WebElement c : r.findElements(By.cssSelector("td")))
+          if (c.getText().trim().equals(n)) {
+            count++;
+            break;
+          }
+      } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
+      }
+    return count;
+  }
+
+  private WebElement row(String n) {
+    return new WebDriverWait(driver, Duration.ofSeconds(10))
+        .until(
+            d ->
+                d.findElements(rows).stream()
+                    .filter(WebElement::isDisplayed)
+                    .filter(
+                        r ->
+                            r.findElements(By.cssSelector("td")).stream()
+                                .anyMatch(c -> c.getText().trim().equals(n)))
+                    .findFirst()
+                    .orElse(null));
+  }
+
+  private void openEdit(WebElement r) {
+    r.findElement(By.cssSelector("button[data-action-type='edit']")).click();
+    new WebDriverWait(driver, Duration.ofSeconds(10))
+        .until(ExpectedConditions.visibilityOfElementLocated(save));
+  }
+
+  @Step("فتح طريقة الدفع المطابقة للتعديل")
+  public void OpenForEditByName(String n) {
+    openEdit(row(n));
+  }
+
+  private String value(By b) {
+    return driver.findElement(b).getAttribute("value").trim();
+  }
+
+  public String GetArabicNameValue() {
+    return value(By.cssSelector("input[name='arabicName']"));
+  }
+
+  public String GetEnglishNameValue() {
+    return value(By.cssSelector("input[name='englishName']"));
+  }
+
+  public String GetSelectedBankValue() {
+    List<WebElement> x = driver.findElements(By.cssSelector(".modal-body .vs__selected"));
+    return x.isEmpty() ? "" : x.get(0).getText().trim();
+  }
+
+  private WebElement checkbox(String text) {
+    return driver.findElement(
+        By.xpath(
+            "//label[contains(normalize-space(),'"
+                + text
+                + "')]/following::input[@type='checkbox'][1]"));
+  }
+
+  @Step("تغيير خيار طريقة الدفع {text}")
+  public void SetPaymentCheckbox(String text, boolean checked) {
+    WebElement x = checkbox(text);
+    if (x.isSelected() == checked) return;
+    String id = x.getAttribute("id");
+    WebElement label = driver.findElement(By.cssSelector("label[for='" + id + "']"));
+    ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", label);
+    new WebDriverWait(driver, Duration.ofSeconds(3))
+        .until(d -> checkbox(text).isSelected() == checked);
+  }
+
+  public boolean IsPaymentCheckboxChecked(String text) {
+    return checkbox(text).isSelected();
+  }
+
+  public boolean IsArabicNameRequiredErrorDisplayed() {
+    return visible(By.xpath("//*[contains(normalize-space(),'الاسم العربي مطلوب')]"))
+        || visible(By.cssSelector("input[name='arabicName'].is-invalid"));
+  }
+
+  public boolean IsBankRequiredErrorDisplayed() {
+    return visible(
+            By.xpath(
+                "//*[contains(normalize-space(),'اسم البنك مطلوب') or"
+                    + " contains(normalize-space(),'البنك مطلوب')]"))
+        || visible(By.cssSelector(".vs__dropdown-toggle.is-invalid"));
+  }
+
+  @Step("طلب حذف طريقة الدفع المطابقة للاسم")
+  public void RequestDeleteByName(String n) {
+    row(n).findElement(By.cssSelector("button[data-action-type='delete']")).click();
+    new WebDriverWait(driver, Duration.ofSeconds(10))
+        .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".swal2-popup")));
+  }
+
+  public boolean IsDeleteConfirmationDisplayed() {
+    return visible(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-confirm"))
+        && visible(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"));
+  }
+
+  @Step("تأكيد حذف طريقة الدفع المملوكة للاختبار")
+  public void ConfirmDelete() {
+    new WebDriverWait(driver, Duration.ofSeconds(10))
+        .until(
+            ExpectedConditions.elementToBeClickable(
+                By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-confirm")))
+        .click();
+    new WebDriverWait(driver, Duration.ofSeconds(10))
+        .until(
+            d ->
+                d
+                    .findElements(
+                        By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"))
+                    .stream()
+                    .noneMatch(
+                        e -> {
+                          try {
+                            return e.isDisplayed();
+                          } catch (Exception ignored) {
+                            return false;
+                          }
+                        }));
+    waitLoading();
+    By success =
+        By.xpath(
+            "//div[contains(@class,'swal2-popup') and contains(normalize-space(.),'تم الحذف')]");
+    try {
+      new WebDriverWait(driver, Duration.ofSeconds(3))
+          .until(ExpectedConditions.visibilityOfElementLocated(success));
+      DismissAlertIfPresent();
+    } catch (org.openqa.selenium.TimeoutException ignored) {
     }
+  }
 
-
-
-
-
-
-
-
-    }
-
-
-
-
-
-
-
-
-
+  public void CancelDelete() {
+    driver
+        .findElement(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"))
+        .click();
+    waitAlert();
+  }
+}

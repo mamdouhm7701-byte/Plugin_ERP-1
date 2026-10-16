@@ -1,91 +1,514 @@
 package Plugin_ERP.Tests.LoginTest.BasicDataTest;
 
-import Plugin_ERP.Drivers.WebDriverFactory;
 import Plugin_ERP.Enums.Pages;
-import Plugin_ERP.Listners.TestNGListeners;
 import Plugin_ERP.System_Modules.Login.BasicData.AreaPage;
-import Plugin_ERP.System_Modules.Login.Login.LoginPage;
 import Plugin_ERP.Tests.LoginTest.BaseTest;
-import Plugin_ERP.Utiel.PropertyReader;
 import io.qameta.allure.*;
-import io.qameta.allure.testng.AllureTestNg;
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Listeners;
+import java.util.List;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class AreaTest extends BaseTest {
+  private String uniqueName(String caseId) {
+    return "QA-AREA-" + caseId + "-" + System.currentTimeMillis();
+  }
 
+  private AreaPage openAreas() {
+    AreaPage page = new AreaPage(driver);
+    page.NavigationHelper(Pages.AREA);
+    return page;
+  }
 
+  private void createArea(AreaPage page, String arabicName, String englishName, String notes) {
+    page.ClickNew();
+    page.AddArabicName(arabicName);
+    if (englishName != null) page.AddEnglishName(englishName);
+    if (notes != null) page.AddNoteForDealer(notes);
+    page.ClickSaveButton();
+    page.SearchArea(arabicName);
+    Assert.assertEquals(
+        page.GetExactAreaMatchCount(arabicName),
+        1,
+        "يجب أن يظهر سجل الاختبار الفريد مرة واحدة: " + arabicName);
+  }
 
-    @Test(priority = 1)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("المناطق")
-    @Story("إضافة منطقة ببيانات صحيحة")
-    @Description("يتحقق هذا الاختبار من أن المستخدم يستطيع إضافة منطقة جديدة ببيانات صحيحة، ويشمل إدخال الاسم العربي والإنجليزي والملاحظات وحفظ البيانات والتحقق من إضافة السجل بنجاح.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void ValidAreaTest() {
-        AreaPage areaPage = new AreaPage(driver);
-        areaPage.NavigationHelper(Pages.AREA);
-        areaPage.ClickNew();
-        areaPage.AddArabicName("تست");
-        areaPage.AddEnglishName("Test");
-        areaPage.AddNoteForDealer("Test Notes");
-        areaPage.ClickSaveButton();
-        areaPage.AssertReceiptAdded("تست");
+  private void cleanupArea(AreaPage page, String... names) {
+    for (String name : names) {
+      if (name == null || name.isBlank()) continue;
+      try {
+        page.SearchArea("");
+        if (page.GetExactAreaMatchCount(name) == 0) continue;
+        page.RequestDeleteAreaByName(name);
+        page.ConfirmAreaDelete();
+      } catch (Exception cleanupError) {
+        System.err.println(
+            "Could not clean up owned Area test record '"
+                + name
+                + "': "
+                + cleanupError.getMessage());
+      }
     }
-
-    @Test(priority = 2)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("المناطق")
-    @Story("تعديل منطقة ببيانات صحيحة")
-    @Description("يتحقق هذا الاختبار من أن المستخدم يستطيع تعديل منطقة موجودة ببيانات صحيحة، ويشمل تعديل الاسم العربي والإنجليزي والملاحظات وحفظ التعديلات والتحقق من تحديث السجل بنجاح.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void EditArea(){
-        AreaPage areaPage = new AreaPage(driver);
-        areaPage.NavigationHelper(Pages.AREA);
-        areaPage.Edit();
-        areaPage.AddArabicName("تست تعديل");
-        areaPage.AddEnglishName("Test Edit");
-        areaPage.AddNoteForDealer("Test Edit Notes");
-        areaPage.ClickSaveButton();
-        areaPage.AssertReceiptAdded("تست تعديل");
+    try {
+      page.SearchArea("");
+    } catch (Exception ignored) {
     }
+  }
 
-    @Test(priority = 3)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("المناطق")
-    @Story("حذف منطقة")
-    @Description("يتحقق هذا الاختبار من أن المستخدم يستطيع حذف منطقة موجودة بنجاح.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void DeleteArea(){
-        AreaPage areaPage = new AreaPage(driver);
-        areaPage.NavigationHelper(Pages.AREA);
-        areaPage.Delete();
-    }
+  @Test(priority = 0)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.CRITICAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-001 عرض بنية قائمة المناطق")
+  @Description(
+      "يتحقق من ظهور عمودي الكود واسم المنطقة وإجراءات التعديل والحذف للصفوف القابلة للتحرير.")
+  public void AR_001_AreaListStructureIsDisplayed() {
+    AreaPage page = openAreas();
+    Assert.assertTrue(
+        page.IsAreaListStructureDisplayed(), "AR-001: يجب ظهور أعمدة وإجراءات قائمة المناطق");
+  }
 
-    @Test(priority = 4)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.NORMAL)
-    @Epic("Web Cloud")
-    @Feature("المناطق")
-    @Story("التحقق - الاسم العربي إلزامي")
-    @Description("يتحقق هذا الاختبار من أن النظام يمنع إضافة منطقة جديدة بدون إدخال الاسم العربي، ويتحقق من ظهور رسالة خطأ تفيد بأن الاسم العربي حقل إلزامي.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void InvalidAreaTest() {
-        System.out.println("Invalid Area test started");
-        AreaPage areaPage = new AreaPage(driver);
-        areaPage.NavigationHelper(Pages.AREA);
-        areaPage.ClickNew();
-        areaPage.AddArabicName("");
-        areaPage.ClickSaveButton();
-        areaPage.IsArabicNameRequiredErrorDisplayed();
+  @Test(priority = 1)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.CRITICAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-002 فتح نموذج إضافة منطقة")
+  @Description("يتحقق من ظهور الكود والاسم العربي والإنجليزي والملاحظات وأزرار الحفظ والإغلاق.")
+  public void AR_002_AreaCreationFormControlsAreDisplayed() {
+    AreaPage page = openAreas();
+    page.ClickNew();
+    Assert.assertTrue(
+        page.GetMissingAreaFormControls().isEmpty(),
+        "AR-002: عناصر النموذج غير الظاهرة: " + page.GetMissingAreaFormControls());
+    page.ClickCloseButton();
+  }
+
+  @Test(priority = 2)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.NORMAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-014 إغلاق نموذج الإضافة دون حفظ")
+  @Description("يتحقق من أن إغلاق النموذج بعد إدخال اسم مؤقت لا ينشئ منطقة.")
+  public void AR_014_CloseCreationFormWithoutSaving() {
+    AreaPage page = openAreas();
+    String name = uniqueName("UNSAVED");
+    page.ClickNew();
+    page.AddArabicName(name);
+    page.ClickCloseButton();
+    page.SearchArea(name);
+    Assert.assertEquals(
+        page.GetExactAreaMatchCount(name), 0, "AR-014: لا يجب إنشاء سجل دون الضغط على حفظ");
+  }
+
+  @Test(priority = 3)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.CRITICAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-020 تحميل بيانات المنطقة الحالية عند التعديل")
+  @Description(
+      "يقارن كود المنطقة والاسم العربي والإنجليزي والملاحظات في النموذج بقيم الصف المختار.")
+  public void AR_020_EditFormLoadsCurrentAreaValues() {
+    AreaPage page = openAreas();
+    String code = page.GetFirstAreaCellByHeader("الكود");
+    String name = page.GetFirstAreaCellByHeader("اسم المنطقة");
+    page.OpenFirstAreaForEdit();
+    Assert.assertEquals(page.GetAreaCodeInputValue(), code, "يجب تحميل الكود الحالي");
+    Assert.assertEquals(page.GetArabicNameInputValue(), name, "يجب تحميل الاسم العربي الحالي");
+    page.ClickCloseButton();
+  }
+
+  @Test(priority = 4)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.NORMAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-022 إلغاء التعديل دون حفظ")
+  @Description("يغير الاسم داخل نموذج منطقة موجودة ثم يغلقه دون حفظ ويتأكد من بقاء القيمة الأصلية.")
+  public void AR_022_CancelAreaEditWithoutSaving() {
+    AreaPage page = openAreas();
+    String original = page.GetFirstAreaCellByHeader("اسم المنطقة");
+    page.OpenFirstAreaForEdit();
+    page.AddArabicName(uniqueName("EDIT-CANCEL"));
+    page.ClickCloseButton();
+    page.OpenFirstAreaForEdit();
+    Assert.assertEquals(page.GetArabicNameInputValue(), original, "يجب تجاهل التعديل غير المحفوظ");
+    page.ClickCloseButton();
+  }
+
+  @Test(priority = 5)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.NORMAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-004 الاسم العربي إلزامي")
+  @Description("يتحقق من منع حفظ المنطقة دون اسم عربي وظهور رسالة الإلزامية وعدم إضافة صف جديد.")
+  public void AR_004_ArabicNameIsRequired() {
+    AreaPage page = openAreas();
+    int before = page.GetVisibleAreaRowCount();
+    page.ClickNew();
+    page.ClickSaveButton();
+    Assert.assertTrue(
+        page.IsAreaArabicNameRequiredDisplayed(), "يجب إظهار رسالة الاسم العربي مطلوب");
+    Assert.assertEquals(page.GetVisibleAreaRowCount(), before, "لا يجب إنشاء سجل دون اسم عربي");
+    page.ClickCloseButton();
+  }
+
+  @Test(priority = 6)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.NORMAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-005 رفض الاسم العربي المكوّن من مسافات")
+  @Description("يتحقق من أن المسافات فقط لا تعتبر اسمًا صالحًا للمنطقة.")
+  public void AR_005_WhitespaceNameIsRejected() {
+    AreaPage page = openAreas();
+    int before = page.GetVisibleAreaRowCount();
+    page.ClickNew();
+    page.AddArabicName("   ");
+    page.ClickSaveButton();
+    Assert.assertTrue(page.IsAreaArabicNameRequiredDisplayed(), "يجب رفض الاسم المكوّن من مسافات");
+    Assert.assertEquals(page.GetVisibleAreaRowCount(), before, "لا يجب إنشاء صف للمسافات فقط");
+    page.ClickCloseButton();
+  }
+
+  @Test(priority = 7)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.CRITICAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-013 تصحيح الاسم بعد ظهور رسالة الإلزامية")
+  @Description(
+      "يتحقق من إمكانية استكمال الاسم بعد رسالة الخطأ ثم حفظ المنطقة والتحقق من استمرارها بعد"
+          + " التحديث.")
+  public void AR_013_CorrectArabicNameAfterValidationError() {
+    AreaPage page = openAreas();
+    String name = uniqueName("CORRECT");
+    try {
+      page.ClickNew();
+      page.ClickSaveButton();
+      Assert.assertTrue(page.IsAreaArabicNameRequiredDisplayed(), "يجب إظهار الخطأ قبل التصحيح");
+      page.AddArabicName(name);
+      page.AddEnglishName("Corrected area");
+      page.ClickSaveButton();
+      page.SearchArea(name);
+      Assert.assertEquals(page.GetExactAreaMatchCount(name), 1);
+      driver.navigate().refresh();
+      page = openAreas();
+      page.SearchArea(name);
+      Assert.assertEquals(
+          page.GetExactAreaMatchCount(name), 1, "يجب بقاء المنطقة بعد تحديث الصفحة");
+    } finally {
+      cleanupArea(page, name);
     }
+  }
+
+  @Test(priority = 8)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.CRITICAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-003 إنشاء منطقة والتحقق من بياناتها")
+  @Description(
+      "ينشئ منطقة باسم فريد ثم يعيد فتحها ويتحقق من الاسم العربي والإنجليزي والملاحظات والكود"
+          + " المُنشأ.")
+  public void AR_003_CreateValidAreaAndVerifyFields() {
+    AreaPage page = openAreas();
+    String name = uniqueName("CREATE");
+    String english = "Automation Area " + System.currentTimeMillis();
+    try {
+      createArea(page, name, english, "Created by automated Area test");
+      page.EditAreaByName(name);
+      Assert.assertEquals(page.GetArabicNameInputValue(), name);
+      Assert.assertEquals(page.GetEnglishNameInputValue(), english);
+      Assert.assertEquals(page.GetAreaNotesValue(), "Created by automated Area test");
+      Assert.assertFalse(page.GetAreaCodeInputValue().isBlank(), "يجب تعيين كود للمنطقة المحفوظة");
+      page.ClickCloseButton();
+    } finally {
+      cleanupArea(page, name);
+    }
+  }
+
+  @Test(priority = 9)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.NORMAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-007 الحقول الاختيارية عند حفظ المنطقة")
+  @Description(
+      "يتحقق من قبول المنطقة دون اسم إنجليزي أو ملاحظات مدخلة، ومن تعيين الاسم الإنجليزي تلقائيًا"
+          + " إلى الاسم العربي.")
+  public void AR_007_OptionalFieldsCanBeEmpty() {
+    AreaPage page = openAreas();
+    String name = uniqueName("OPTIONAL");
+    try {
+      createArea(page, name, null, null);
+      page.EditAreaByName(name);
+      Assert.assertEquals(page.GetArabicNameInputValue(), name);
+      Assert.assertEquals(
+          page.GetEnglishNameInputValue(),
+          name,
+          "عند ترك الاسم الإنجليزي فارغًا، الواجهة تحفظه مساويًا للاسم العربي");
+      Assert.assertTrue(page.GetAreaNotesValue().isEmpty(), "الملاحظات يجب أن تبقى اختيارية");
+      page.ClickCloseButton();
+    } finally {
+      cleanupArea(page, name);
+    }
+  }
+
+  @Test(
+      priority = 10,
+      enabled = false,
+      description =
+          "Deferred: search behavior is unstable in the current Demo UI and will be revisited"
+              + " separately")
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.NORMAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-015/016/018/019 البحث في قائمة المناطق")
+  @Description("يتحقق من البحث بالكود والاسم، والنتيجة الفارغة، ثم استعادة القائمة بعد مسح البحث.")
+  public void AR_015_SearchAreasByCodeAndName() {
+    AreaPage page = openAreas();
+    String code = page.GetFirstAreaCellByHeader("الكود");
+    String name = page.GetFirstAreaCellByHeader("اسم المنطقة");
+    page.SearchArea(code);
+    Assert.assertTrue(page.IsAreaDisplayed(name), "يجب إظهار المنطقة بالبحث بالكود");
+    page.SearchArea(name);
+    Assert.assertEquals(page.GetExactAreaMatchCount(name), 1, "يجب إظهار المنطقة بالاسم");
+    page.SearchArea("QA-AREA-NOT-FOUND");
+    Assert.assertEquals(page.GetVisibleAreaRowCount(), 0, "يجب ألا تظهر نتائج غير مطابقة");
+    page.SearchArea("");
+    Assert.assertTrue(page.GetVisibleAreaRowCount() > 0, "يجب استعادة القائمة بعد مسح البحث");
+  }
+
+  @Test(
+      priority = 11,
+      enabled = false,
+      description =
+          "Deferred: search behavior is unstable in the current Demo UI and will be revisited"
+              + " separately")
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.NORMAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-017 البحث يطابق أعمدة القائمة المعروضة فقط")
+  @Description(
+      "يتحقق من أن البحث لا يجد الاسم الإنجليزي غير المعروض في الجدول، لكنه يجد الاسم العربي"
+          + " الظاهر.")
+  public void AR_017_SearchUsesOnlyDisplayedAreaFields() {
+    AreaPage page = openAreas();
+    String name = uniqueName("ENGLISH");
+    String english = "Area English " + System.currentTimeMillis();
+    try {
+      createArea(page, name, english, null);
+      page.SearchArea(english);
+      Assert.assertEquals(
+          page.GetVisibleAreaRowCount(),
+          0,
+          "البحث يعتمد على الكود والاسم العربي المعروضين في الجدول، ولا يبحث بالاسم الإنجليزي"
+              + " المخفي");
+      page.SearchArea(name);
+      Assert.assertEquals(
+          page.GetExactAreaMatchCount(name), 1, "يجب العثور على المنطقة عبر الاسم العربي المعروض");
+    } finally {
+      cleanupArea(page, name);
+    }
+  }
+
+  @Test(priority = 12)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.MINOR)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-028 ترتيب قائمة المناطق حسب الكود")
+  @Description("يتحقق من ترتيب قيم الكود تصاعديًا ثم تنازليًا عند النقر على عنوان العمود.")
+  public void AR_028_AreaListCanBeSortedByCode() {
+    AreaPage page = openAreas();
+    List<String> original = page.GetAreaColumnValues("الكود");
+    if (original.size() < 2) {
+      Assert.assertTrue(original.size() < 2);
+      return;
+    }
+    page.ClickAreaColumnHeader("الكود");
+    List<String> ascending = page.GetAreaColumnValues("الكود");
+    page.ClickAreaColumnHeader("الكود");
+    List<String> descending = page.GetAreaColumnValues("الكود");
+    Assert.assertEquals(ascending, page.SortAreaCodes(ascending, true), "يجب فرز الكود تصاعديًا");
+    Assert.assertEquals(
+        descending, page.SortAreaCodes(descending, false), "يجب فرز الكود تنازليًا");
+  }
+
+  @Test(priority = 13)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.MINOR)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-029 تغيير عدد الصفوف المعروضة")
+  @Description("يتحقق من أن حجم الصفحة المختار يحدّث عدد صفوف جدول المناطق المعروضة.")
+  public void AR_029_ChangingPageSizeUpdatesVisibleRows() {
+    AreaPage page = openAreas();
+    int oldSize = page.GetAreaPageSize();
+    int before = page.GetVisibleAreaRowCount();
+    int newSize = page.GetAlternativeAreaPageSize(oldSize);
+    page.SelectAreaPageSize(newSize);
+    Assert.assertEquals(page.GetVisibleAreaRowCount(), Math.min(before, newSize));
+  }
+
+  @Test(priority = 14)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.NORMAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-030 التنقل بين صفحات المناطق")
+  @Description(
+      "يتحقق من الانتقال إلى الصفحة التالية والعودة إلى الصفحة السابقة عند توفر صفحات أخرى.")
+  public void AR_030_NavigateAreaPagesWhenAvailable() {
+    AreaPage page = openAreas();
+    if (!page.IsNextAreaPageEnabled()) {
+      Assert.assertFalse(page.IsNextAreaPageEnabled());
+      return;
+    }
+    String first = page.GetFirstAreaCellByHeader("الكود");
+    page.GoToNextAreaPage();
+    Assert.assertNotEquals(page.GetFirstAreaCellByHeader("الكود"), first);
+    page.GoToPreviousAreaPage();
+    Assert.assertEquals(page.GetFirstAreaCellByHeader("الكود"), first);
+  }
+
+  @Test(priority = 15)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.CRITICAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-012 منع إنشاء سجل مكرر عند الحفظ مرتين")
+  @Description("يتحقق من أن الضغط مرتين بسرعة على الحفظ لا ينشئ إلا منطقة واحدة.")
+  public void AR_012_RapidDoubleSaveCreatesSingleArea() {
+    AreaPage page = openAreas();
+    String name = uniqueName("DOUBLE-SAVE");
+    try {
+      page.ClickNew();
+      page.AddArabicName(name);
+      page.AddEnglishName("Double Save Area");
+      page.ClickSaveTwiceRapidly();
+      page.SearchArea(name);
+      Assert.assertEquals(page.GetExactAreaMatchCount(name), 1);
+    } finally {
+      cleanupArea(page, name);
+    }
+  }
+
+  @Test(priority = 16)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.CRITICAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-021 تعديل منطقة الاختبار وحفظ التغيير")
+  @Description("يعدل الاسم العربي لسجل اختبار مملوك ويتحقق من تحديث القيمة ثم يحذف السجل بأمان.")
+  public void AR_021_EditOwnedAreaAndSave() {
+    AreaPage page = openAreas();
+    String name = uniqueName("EDIT");
+    String updated = name + "-UPDATED";
+    try {
+      createArea(page, name, "Edit Area", "");
+      page.EditAreaByName(name);
+      page.AddArabicName(updated);
+      page.ClickSaveButton();
+      page.SearchArea(updated);
+      Assert.assertEquals(page.GetExactAreaMatchCount(updated), 1);
+    } finally {
+      cleanupArea(page, updated, name);
+    }
+  }
+
+  @Test(priority = 17)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.CRITICAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-023 حذف منطقة الاختبار المحددة")
+  @Description(
+      "يحذف سجل المنطقة الذي أنشأه الاختبار فقط ويتحقق من اختفائه بعد إعادة تحميل القائمة.")
+  public void AR_023_DeleteOnlyOwnedArea() {
+    AreaPage page = openAreas();
+    String name = uniqueName("DELETE");
+    try {
+      createArea(page, name, "Delete Area", "");
+      page.RequestDeleteAreaByName(name);
+      Assert.assertTrue(page.IsAreaDeleteConfirmationDisplayed(), "يجب عرض تأكيد الحذف");
+      page.ConfirmAreaDelete();
+      driver.navigate().refresh();
+      page = openAreas();
+      page.SearchArea(name);
+      Assert.assertEquals(page.GetExactAreaMatchCount(name), 0);
+    } finally {
+      cleanupArea(page, name);
+    }
+  }
+
+  @Test(priority = 18)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.NORMAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-024 إلغاء حذف منطقة الاختبار")
+  @Description("يتحقق من أن إلغاء نافذة التأكيد يحافظ على منطقة الاختبار ثم ينظفها بأمان.")
+  public void AR_024_CancelDeleteOfOwnedArea() {
+    AreaPage page = openAreas();
+    String name = uniqueName("CANCEL-DELETE");
+    try {
+      createArea(page, name, "Cancel Delete Area", "");
+      page.RequestDeleteAreaByName(name);
+      Assert.assertTrue(page.IsAreaDeleteConfirmationDisplayed());
+      page.CancelAreaDelete();
+      Assert.assertEquals(
+          page.GetExactAreaMatchCount(name), 1, "يجب أن يبقى السجل بعد إلغاء الحذف");
+    } finally {
+      cleanupArea(page, name);
+    }
+  }
+
+  @Test(priority = 19)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.CRITICAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-032 استمرار المنطقة بعد تحديث المتصفح")
+  @Description("ينشئ منطقة اختبار ويتحقق من استمرارها بعد تحديث المتصفح.")
+  public void AR_032_AreaPersistsAfterBrowserRefresh() {
+    AreaPage page = openAreas();
+    String name = uniqueName("REFRESH");
+    try {
+      createArea(page, name, "Refresh Area", "");
+      driver.navigate().refresh();
+      page = openAreas();
+      page.SearchArea(name);
+      Assert.assertEquals(page.GetExactAreaMatchCount(name), 1);
+    } finally {
+      cleanupArea(page, name);
+    }
+  }
+
+  @Test(priority = 20)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.NORMAL)
+  @Epic("Web Cloud")
+  @Feature("المناطق")
+  @Story("AR-035 عدم تكرار المنطقة بعد إعادة فتح القائمة")
+  @Description("ينشئ سجلًا واحدًا ثم يعيد فتح القائمة ويتحقق من عدم تكراره.")
+  public void AR_035_ReopeningAreaListDoesNotDuplicateRecord() {
+    AreaPage page = openAreas();
+    String name = uniqueName("REOPEN");
+    try {
+      createArea(page, name, "Reopen Area", "");
+      driver.navigate().refresh();
+      page = openAreas();
+      page.SearchArea(name);
+      Assert.assertEquals(page.GetExactAreaMatchCount(name), 1);
+    } finally {
+      cleanupArea(page, name);
+    }
+  }
 }

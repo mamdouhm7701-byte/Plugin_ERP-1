@@ -64,11 +64,6 @@ public abstract class Abstract {
     //ميثودات الإضافة
     @Step("إضافة الاسم العربي: {ArabicName}")
     public void AddArabicName(String ArabicName) {
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         utilites.waits().waitForOverlayToDisappear();
         utilites.TaypeTextB(AddArabicName, ArabicName);
     }

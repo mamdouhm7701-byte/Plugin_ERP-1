@@ -7,6 +7,9 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 import static Plugin_ERP.Utiel.PropertyReader.getProperty;
 
@@ -29,6 +32,13 @@ public class AllureEnvironment {
             // Config
             putSafe(props, "URL", getProperty("url"));
             putSafe(props, "Execution Type", getProperty("ExecutionType"));
+            putSafe(props, "Run ID", System.getProperty("allure.run.id", "local-" + Instant.now().toEpochMilli()));
+            putSafe(props, "Run Started", DateTimeFormatter.ISO_OFFSET_DATE_TIME
+                    .withZone(ZoneId.systemDefault()).format(Instant.now()));
+            putSafe(props, "OS Version", System.getProperty("os.version"));
+            putSafe(props, "OS Architecture", System.getProperty("os.arch"));
+            putSafe(props, "User", System.getProperty("user.name"));
+            putSafe(props, "Project", System.getProperty("project.name", "Plugin_ERP"));
 
             // Browser (prefer real from capabilities; fallback to properties)
             String bName = (browserName != null && !browserName.isBlank()) ? browserName : getProperty("browserType");
@@ -55,12 +65,34 @@ public class AllureEnvironment {
 
     /** أول كتابة “أساسية” (قبل ما Capabilities تبقى جاهزة) */
     public static void writeBaseEnvironmentOnce() {
-        if (!writtenOnce) {
-            writeEnvironment(null, null);
+        writtenOnce = false;
+        writeEnvironment(null, null);
+    }
+
+    public static synchronized void updateBrowser(String browserName, String browserVersion) {
+        Properties props = new Properties();
+        Path envPath = ALLURE_RESULTS_DIR.resolve("environment.properties");
+        try {
+            if (Files.isRegularFile(envPath)) {
+                try (var input = Files.newInputStream(envPath)) {
+                    props.load(input);
+                }
+            }
+            props.setProperty("Browser", safe(browserName));
+            props.setProperty("Browser Version", safe(browserVersion));
+            try (OutputStream output = Files.newOutputStream(envPath)) {
+                props.store(output, "Allure Environment Properties");
+            }
+        } catch (Exception e) {
+            LogUtils.error("Failed to update Allure browser environment: " + e.getMessage());
         }
     }
 
     private static void putSafe(Properties props, String key, String value) {
-        props.setProperty(key, (value == null || value.isBlank()) ? "N/A" : value);
+        props.setProperty(key, safe(value));
+    }
+
+    private static String safe(String value) {
+        return (value == null || value.isBlank() || value.equalsIgnoreCase("null")) ? "N/A" : value;
     }
 }

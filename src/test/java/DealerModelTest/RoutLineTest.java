@@ -4,6 +4,13 @@ import Plugin_ERP.System_Modules.Login.BasicData.RoutLine;
 import Plugin_ERP.System_Modules.Login.DealerModel.RoutLineForDealer;
 import Plugin_ERP.Tests.LoginTest.BaseTest;
 import io.qameta.allure.Allure;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
+import io.qameta.allure.Description;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -17,6 +24,12 @@ public class RoutLineTest extends BaseTest {
 
 
     @Test
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("ERP Web")
+    @Feature("خطوط سير المندوبين")
+    @Story("إضافة خط سير وربط المندوب بالأحداث اليومية")
+    @Description("ينشئ خط سير جديدًا، يربطه بالمندوب والعملاء، ثم يتحقق من ظهور الأحداث اليومية المرتبطة بالمندوب.")
     public void AddRoutLine() {
         RoutLineForDealer routLineForDealer = new RoutLineForDealer(driver);
         routLineForDealer.OpenRoutLine();

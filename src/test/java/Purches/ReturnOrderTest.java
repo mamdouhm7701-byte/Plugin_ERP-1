@@ -7,6 +7,13 @@ import Plugin_ERP.System_Modules.Login.purches.ReturnOrderPage;
 import Plugin_ERP.Tests.LoginTest.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
+import io.qameta.allure.Description;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
 
 import java.util.Map;
 
@@ -14,6 +21,12 @@ public class ReturnOrderTest extends BaseTest {
 
 
     @Test(priority = 1)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("ERP Web")
+    @Feature("مرتجعات المشتريات")
+    @Story("إنشاء مرتجع مشتريات والتحقق من الإيصال")
+    @Description("ينشئ مرتجع مشتريات بأصناف مختارة بالاسم ثم يتحقق من ظهور الإيصال في قائمة فواتير المشتريات.")
 public void AddReturnOrderTest()
 {
     ReturnOrderPage returnOrderPage = new ReturnOrderPage(driver);
@@ -40,6 +53,12 @@ public void AddReturnOrderTest()
 
 
     @Test(priority = 2)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("ERP Web")
+    @Feature("مرتجعات المشتريات")
+    @Story("إنشاء مرتجع مشتريات مع خصم")
+    @Description("ينشئ مرتجعًا مع خصم ويتحقق من تسجيل الإيصال في قائمة فواتير المشتريات.")
     public void AddReturnOrderTestWithDiscount() {
 
         ReturnOrderPage returnOrderPage = new ReturnOrderPage(driver);
@@ -68,6 +87,12 @@ public void AddReturnOrderTest()
     }
 
     @Test(priority = 3)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("ERP Web")
+    @Feature("مرتجعات المشتريات")
+    @Story("إضافة صنف مرتجع المشتريات بالباركود")
+    @Description("يضيف صنف المرتجع بالباركود، ويطبق خصمًا، ثم يطابق الإجماليات وبيانات التقرير.")
 
     public void AddPurchesBillsByBarcodTest() {
 
@@ -106,6 +131,12 @@ public void AddReturnOrderTest()
     }
 
     @Test(priority = 4)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("ERP Web")
+    @Feature("مرتجعات المشتريات")
+    @Story("إضافة أصناف مرتجع المشتريات بالاسم")
+    @Description("يضيف الأصناف بالاسم ويتحقق من إجماليات مرتجع المشتريات قبل الحفظ.")
     public void AddPurchesBillsByNameTest() {
 
         ReturnOrderPage returnOrderPage = new ReturnOrderPage(driver);
@@ -129,6 +160,12 @@ public void AddReturnOrderTest()
         returnOrderPage.AssertReceiptAdded("محمد ممدوح");
     }
     @Test(priority = 5)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("ERP Web")
+    @Feature("مرتجعات المشتريات")
+    @Story("حفظ مرتجع المشتريات بزر الحفظ")
+    @Description("ينشئ مرتجعًا بأصناف مختارة بالاسم ويتحقق من الإجماليات ثم يحفظه.")
     public void AddPurchesBillsWithSaveBuutonTest() {
         ReturnOrderPage returnOrderPage = new ReturnOrderPage(driver);
 
@@ -160,6 +197,12 @@ public void AddReturnOrderTest()
     }
 
 @Test(priority = 6)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("ERP Web")
+    @Feature("مرتجعات المشتريات")
+    @Story("حذف مرتجع المشتريات")
+    @Description("ينفذ مسار حذف مرتجع المشتريات للتحقق من إمكانية إزالة السجل.")
 public void DeleteReturnOrderTest()
 {ReturnOrderPage returnOrderPage = new ReturnOrderPage(driver);
     returnOrderPage.NavigationHelper(Pages.PURCHESINVOICELIST);
@@ -168,6 +211,12 @@ public void DeleteReturnOrderTest()
 
 
     @Test(priority = 7)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("ERP Web")
+    @Feature("مرتجعات المشتريات")
+    @Story("التحقق من إلزامية المورد في المرتجع")
+    @Description("يتحقق من سلوك نموذج مرتجع المشتريات عند عدم تحديد المورد.")
     public void AddWithOutSupplier() {
 
         ReturnOrderPage returnOrderPage = new ReturnOrderPage(driver);
@@ -179,6 +228,12 @@ public void DeleteReturnOrderTest()
     }
 
     @Test(priority = 8)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("ERP Web")
+    @Feature("مرتجعات المشتريات")
+    @Story("منع إنشاء مرتجع بدون أصناف")
+    @Description("يتحقق من أن النظام يمنع حفظ مرتجع مشتريات لا يحتوي على أصناف.")
     public void AddWithOutProduct() {
 
         ReturnOrderPage returnOrderPage = new ReturnOrderPage(driver);

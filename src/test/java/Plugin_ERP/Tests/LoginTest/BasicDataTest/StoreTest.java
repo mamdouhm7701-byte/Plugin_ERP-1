@@ -1,89 +1,203 @@
 package Plugin_ERP.Tests.LoginTest.BasicDataTest;
 
-import Plugin_ERP.Drivers.WebDriverFactory;
 import Plugin_ERP.Enums.Pages;
-import Plugin_ERP.Listners.TestNGListeners;
 import Plugin_ERP.System_Modules.Login.BasicData.StorePage;
-import Plugin_ERP.System_Modules.Login.Login.LoginPage;
 import Plugin_ERP.Tests.LoginTest.BaseTest;
-import Plugin_ERP.Utiel.PropertyReader;
 import io.qameta.allure.*;
-import io.qameta.allure.testng.AllureTestNg;
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Listeners;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class StoreTest extends BaseTest {
+  private String unique(String suffix) {
+    return "QA-STORE-" + suffix + "-" + System.currentTimeMillis();
+  }
 
-    @Test(priority = 1)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("المخازن")
-    @Story("إضافة مخزن ببيانات صحيحة")
-    @Description("يتحقق هذا الاختبار من إضافة مخزن جديد ببيانات صحيحة، ويشمل إدخال الاسم العربي والإنجليزي والملاحظات واختيار رقم الحساب، وحفظ البيانات والتحقق من إضافة السجل بنجاح.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void ValidStoreTest() {
-        System.out.println("Store test started");
-        StorePage storePage = new StorePage(driver);
-        storePage.OpenStorePage();
-        storePage.ClickNew();
-        storePage.AddArabicName("مخزن جديد");
-        storePage.AddEnglishName("New Store");
-        storePage.AddNoteForDealer("This is a new store");
-        storePage.SelectFromDropDawn("تسويق جوجل","رقم الحساب");
-        storePage.ClickSaveButton();
-        storePage.AssertReceiptAdded("مخزن جديد");
-    }
+  private StorePage open() {
+    StorePage p = new StorePage(driver);
+    p.NavigationHelper(Pages.WAREHOUSES);
+    return p;
+  }
 
-    @Test(priority = 2)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("المخازن")
-    @Story("تعديل مخزن ببيانات صحيحة")
-    @Description("يتحقق هذا الاختبار من تعديل مخزن موجود ببيانات صحيحة، ويشمل تعديل الاسم العربي والإنجليزي والملاحظات وتغيير رقم الحساب، وحفظ التعديلات والتحقق من تحديث السجل بنجاح.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void EditStore() {
-        StorePage storePage = new StorePage(driver);
-        storePage.NavigationHelper(Pages.WAREHOUSES);
-        storePage.Edit();
-        storePage.AddArabicName("مخزن معدل");
-        storePage.AddEnglishName("Edited Store");
-        storePage.AddNoteForDealer("This is an edited store");
-        storePage.SelectFromDropDawn("تسويق جوجل","رقم الحساب");
-        storePage.ClickSaveButton();
-        storePage.AssertReceiptAdded("مخزن معدل");
-    }
+  private void create(StorePage p, String name, String english, String account) {
+    p.ClickNew();
+    p.AddArabicName(name);
+    if (english != null) p.AddEnglishName(english);
+    if (account != null) p.SelectFromDropDawn(account, "رقم الحساب");
+    p.ClickSaveButton();
+    Assert.assertEquals(p.GetExactMatchCount(name), 1, "يجب ظهور سجل الاختبار مرة واحدة: " + name);
+  }
 
-    @Test(priority = 3)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("المخازن")
-    @Story("حذف مخزن")
-    @Description("يتحقق هذا الاختبار من أن المستخدم يستطيع حذف مخزن موجود بنجاح.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void DeleteStore() {
-        StorePage storePage = new StorePage(driver);
-        storePage.NavigationHelper(Pages.WAREHOUSES);
-        storePage.DeleteStore();
-    }
+  private void cleanup(StorePage p, String... names) {
+    for (String n : names)
+      try {
+        p.CloseFormIfOpen();
+        if (n != null && p.GetExactMatchCount(n) > 0) {
+          p.RequestDeleteByName(n);
+          p.ConfirmDelete(n);
+        }
+      } catch (Exception e) {
+        System.err.println("Could not clean owned Store row '" + n + "': " + e.getMessage());
+      }
+  }
 
-    @Test(priority = 4)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.NORMAL)
-    @Epic("Web Cloud")
-    @Feature("المخازن")
-    @Story("التحقق - الاسم العربي إلزامي")
-    @Description("يتحقق هذا الاختبار من أن النظام يمنع إضافة مخزن بدون إدخال الاسم العربي، ويتحقق من ظهور رسالة خطأ تفيد بأن الاسم العربي حقل إلزامي.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void ValidateRequiredFieldsTest() {
-        StorePage storePage = new StorePage(driver);
-        storePage.NavigationHelper(Pages.WAREHOUSES);
-        storePage.ClickNew();
-        storePage.IsArabicNameRequiredErrorDisplayed();
+  @Test(priority = 0)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.CRITICAL)
+  @Epic("Web Cloud")
+  @Feature("المخازن")
+  @Story("ST-001 بنية القائمة")
+  @Description("يتحقق من أعمدة قائمة المخازن.")
+  public void STORE_001_ListStructure() {
+    Assert.assertTrue(open().IsListStructureDisplayed());
+  }
+
+  @Test(priority = 1)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.CRITICAL)
+  @Epic("Web Cloud")
+  @Feature("المخازن")
+  @Story("ST-002 عناصر النموذج")
+  @Description("يتحقق من ظهور حقول المخزن وأزرار الحفظ والإغلاق.")
+  public void STORE_002_FormControls() {
+    StorePage p = open();
+    p.ClickNew();
+    Assert.assertEquals(p.GetMissingControls(), "");
+    p.ClickCloseButton();
+  }
+
+  @Test(priority = 2)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.NORMAL)
+  @Epic("Web Cloud")
+  @Feature("المخازن")
+  @Story("ST-003 إغلاق دون حفظ")
+  @Description("يتحقق من عدم إنشاء سجل عند إغلاق النموذج قبل الحفظ.")
+  public void STORE_003_CloseWithoutSave() {
+    StorePage p = open();
+    String n = unique("UNSAVED");
+    p.ClickNew();
+    p.AddArabicName(n);
+    p.ClickCloseButton();
+    Assert.assertEquals(p.GetExactMatchCount(n), 0);
+  }
+
+  @Test(priority = 3)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.NORMAL)
+  @Epic("Web Cloud")
+  @Feature("المخازن")
+  @Story("ST-004 الاسم العربي مطلوب")
+  @Description("يتحقق من رفض حفظ نموذج دون الاسم العربي.")
+  public void STORE_004_ArabicNameRequired() {
+    StorePage p = open();
+    p.ClickNew();
+    p.ClickSaveButton();
+    Assert.assertTrue(p.IsArabicNameRequiredDisplayed());
+    p.ClickCloseButton();
+  }
+
+  @Test(priority = 4)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.CRITICAL)
+  @Epic("Web Cloud")
+  @Feature("المخازن")
+  @Story("ST-005 إنشاء والتحقق من بيانات المخزن")
+  @Description("ينشئ مخزنًا فريدًا ويقارن الاسم والكود والحساب بعد إعادة فتحه.")
+  public void STORE_005_CreateAndVerify() {
+    StorePage p = open();
+    String n = unique("CREATE"), en = "Store " + System.currentTimeMillis();
+    try {
+      create(p, n, en, "تسويق جوجل");
+      p.OpenForEditByName(n);
+      Assert.assertEquals(p.GetArabicNameValue(), n);
+      Assert.assertEquals(p.GetEnglishNameValue(), en);
+      Assert.assertEquals(p.GetSelectedAccountValue(), "تسويق جوجل");
+      Assert.assertFalse(p.GetCodeValue().isBlank());
+      p.ClickCloseButton();
+    } finally {
+      cleanup(p, n);
     }
+  }
+
+  @Test(priority = 5)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.CRITICAL)
+  @Epic("Web Cloud")
+  @Feature("المخازن")
+  @Story("ST-006 تعديل سجل اختبار")
+  @Description("يعدل الاسم العربي لسجل أنشأه الاختبار ويتأكد من التغيير.")
+  public void STORE_006_EditOwned() {
+    StorePage p = open();
+    String n = unique("EDIT"), u = n + "-UPDATED";
+    try {
+      create(p, n, null, "تسويق جوجل");
+      p.OpenForEditByName(n);
+      p.AddArabicName(u);
+      p.ClickSaveButton();
+      Assert.assertEquals(p.GetExactMatchCount(u), 1);
+    } finally {
+      cleanup(p, u, n);
+    }
+  }
+
+  @Test(priority = 6)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.CRITICAL)
+  @Epic("Web Cloud")
+  @Feature("المخازن")
+  @Story("ST-007 حذف سجل اختبار")
+  @Description("يحذف سجلًا أنشأه الاختبار بعد تأكيد نافذة الحذف.")
+  public void STORE_007_DeleteOwned() {
+    StorePage p = open();
+    String n = unique("DELETE");
+    try {
+      create(p, n, null, "تسويق جوجل");
+      p.RequestDeleteByName(n);
+      Assert.assertTrue(p.IsDeleteConfirmationDisplayed());
+      p.ConfirmDelete(n);
+      Assert.assertEquals(p.GetExactMatchCount(n), 0);
+    } finally {
+      cleanup(p, n);
+    }
+  }
+
+  @Test(priority = 7)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.NORMAL)
+  @Epic("Web Cloud")
+  @Feature("المخازن")
+  @Story("ST-008 إلغاء الحذف")
+  @Description("يتحقق من بقاء سجل الاختبار عند إلغاء الحذف.")
+  public void STORE_008_CancelDelete() {
+    StorePage p = open();
+    String n = unique("CANCEL-DELETE");
+    try {
+      create(p, n, null, "تسويق جوجل");
+      p.RequestDeleteByName(n);
+      p.CancelDelete();
+      Assert.assertEquals(p.GetExactMatchCount(n), 1);
+    } finally {
+      cleanup(p, n);
+    }
+  }
+
+  @Test(priority = 8)
+  @Owner("MAMDOUH")
+  @Severity(SeverityLevel.CRITICAL)
+  @Epic("Web Cloud")
+  @Feature("المخازن")
+  @Story("ST-009 استمرار بعد التحديث")
+  @Description("يتحقق من استمرار مخزن الاختبار بعد تحديث الصفحة.")
+  public void STORE_009_PersistAfterRefresh() {
+    StorePage p = open();
+    String n = unique("REFRESH");
+    try {
+      create(p, n, "Refresh store", "تسويق جوجل");
+      driver.navigate().refresh();
+      p = open();
+      Assert.assertEquals(p.GetExactMatchCount(n), 1);
+    } finally {
+      cleanup(p, n);
+    }
+  }
 }

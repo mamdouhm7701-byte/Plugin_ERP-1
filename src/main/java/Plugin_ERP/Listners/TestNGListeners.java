@@ -13,15 +13,16 @@ import org.testng.IExecutionListener;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
+import java.time.Instant;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TestNGListeners implements IExecutionListener, ITestListener {
 
     private static final ThreadLocal<Long> testStartTime = new ThreadLocal<>();
-    private static final AtomicBoolean envUpdatedWithRealBrowser = new AtomicBoolean(false);
 
     // ================= Execution =================
 
@@ -31,15 +32,49 @@ public class TestNGListeners implements IExecutionListener, ITestListener {
 
         // 1) تحميل properties
         PropertyReader.loadProperties();
+        System.setProperty("allure.run.id", "local-" + Instant.now().toEpochMilli());
 
-        // 2) history: من report القديم -> results (قبل أي delete)
-        AllureBinaryManger.copyHistoryFromReportToResults();
+        // Preserve trend history while clearing only raw files from the previous run.
+        AllureBinaryManger.prepareResultsForRun();
 
-        // 3) clean results فقط (سيب التقرير القديم كـ fallback)
-        AllureBinaryManger.cleanAllure(true, false);
-
-        // 4) اكتب environment “base” (قبل ما Capabilities تبقى جاهزة)
+        // Add run metadata before tests start.
         AllureEnvironment.writeBaseEnvironmentOnce();
+        writeExecutorMetadata();
+    }
+
+    private void writeExecutorMetadata() {
+        Path executorPath = Path.of(System.getProperty("user.dir"), "allure-results", "executor.json");
+        try {
+            Files.createDirectories(executorPath.getParent());
+            long buildOrder = nextBuildOrder();
+            System.setProperty("allure.build.order", Long.toString(buildOrder));
+            String json = "{\n" +
+                    "  \"name\": \"Local IntelliJ / Maven\",\n" +
+                    "  \"type\": \"local\",\n" +
+                    "  \"buildName\": \"Plugin_ERP " + Instant.now().toString() + "\",\n" +
+                    "  \"buildOrder\": " + buildOrder + ",\n" +
+                    "  \"buildUrl\": \"\",\n" +
+                    "  \"reportUrl\": \"\"\n" +
+                    "}\n";
+            Files.writeString(executorPath, json);
+        } catch (Exception e) {
+            LogUtils.error("Failed to write Allure executor metadata: " + e.getMessage());
+        }
+    }
+
+    private long nextBuildOrder() {
+        Path historyTrend = Path.of(System.getProperty("user.dir"), "allure-results", "history", "history-trend.json");
+        long previous = 0;
+        try {
+            if (Files.isRegularFile(historyTrend)) {
+                Matcher matcher = Pattern.compile("\\\"buildOrder\\\"\\s*:\\s*(\\d+)")
+                        .matcher(Files.readString(historyTrend));
+                while (matcher.find()) previous = Math.max(previous, Long.parseLong(matcher.group(1)));
+            }
+        } catch (Exception e) {
+            LogUtils.error("Could not read previous Allure build order: " + e.getMessage());
+        }
+        return previous + 1;
     }
 
     @Override
@@ -84,19 +119,17 @@ public class TestNGListeners implements IExecutionListener, ITestListener {
     public void onTestStart(ITestResult result) {
         testStartTime.set(System.currentTimeMillis());
 
-        // ✅ أول مرة بس: هات browserName/version الحقيقي من Capabilities واكتبهم في environment.properties
-        if (envUpdatedWithRealBrowser.compareAndSet(false, true)) {
-            try {
-                WebDriver driver = WebDriverFactory.getDriver();
-                if (driver instanceof RemoteWebDriver rwd) {
-                    Capabilities caps = rwd.getCapabilities();
-                    String bName = String.valueOf(caps.getBrowserName());
-                    String bVer  = String.valueOf(caps.getBrowserVersion());
-                    AllureEnvironment.writeEnvironment(bName, bVer);
-                }
-            } catch (Exception e) {
-                LogUtils.error("Failed to update Allure env with real browser info: " + e.getMessage());
+        // Update browser values without dropping the other run metadata.
+        try {
+            WebDriver driver = WebDriverFactory.getDriver();
+            if (driver instanceof RemoteWebDriver rwd) {
+                Capabilities caps = rwd.getCapabilities();
+                AllureEnvironment.updateBrowser(
+                        String.valueOf(caps.getBrowserName()),
+                        String.valueOf(caps.getBrowserVersion()));
             }
+        } catch (Exception e) {
+            LogUtils.error("Failed to update Allure environment with browser capabilities: " + e.getMessage());
         }
     }
 

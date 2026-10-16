@@ -7,12 +7,25 @@ import Plugin_ERP.System_Modules.Login.purches.purchOrderPage;
 import Plugin_ERP.Tests.LoginTest.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
+import io.qameta.allure.Description;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
 
 import java.util.Map;
 
 public class purchOrderTest extends BaseTest {
 
     @Test
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("ERP Web")
+    @Feature("أوامر الشراء")
+    @Story("إنشاء أمر شراء نقدي والتحقق من الإيصال")
+    @Description("ينشئ أمر شراء نقديًا، ويتحقق من إجمالياته وتفاصيل الإيصال بعد الحفظ والطباعة.")
     public void purchOrderTest(){
 
 
@@ -52,6 +65,12 @@ public class purchOrderTest extends BaseTest {
 
 
     @Test(priority = 2)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("ERP Web")
+    @Feature("أوامر الشراء")
+    @Story("إضافة أصناف أمر الشراء بالباركود")
+    @Description("يضيف صنفًا إلى أمر الشراء بالباركود، ويدخل الكمية والسعر، ثم يتحقق من الإيصال.")
     public void AddPurchesOrderByBarcodTest() {
 
         purchOrderPage purchOrderpage = new purchOrderPage(driver);
@@ -89,6 +108,12 @@ public class purchOrderTest extends BaseTest {
         purchOrderpage.AssertReceiptAdded("نقدي");
     }
     @Test(priority = 3)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("ERP Web")
+    @Feature("أوامر الشراء")
+    @Story("إضافة أصناف أمر الشراء بالاسم")
+    @Description("يضيف أصناف أمر الشراء بالاسم ويتحقق من عملية الحفظ وبيانات الإيصال.")
     public void AddPurchesOrderByNameTest() {
 
         purchOrderPage purchOrderpage = new purchOrderPage(driver);

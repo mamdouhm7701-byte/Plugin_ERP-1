@@ -10,6 +10,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.*;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
@@ -26,6 +29,49 @@ public class AllureBinaryManger {
         if (cleanReport) deleteDirIfExists(AllureConstants.ALLURE_REPORT_DIR);
     }
 
+    /** Clears the previous raw results while retaining Allure's trend history. */
+    public static void prepareResultsForRun() {
+        Map<String, byte[]> historyFiles = new HashMap<>();
+        Path reportHistory = AllureConstants.REPORT_HISTORY_DIR;
+        if (Files.isDirectory(reportHistory)) {
+            try (var paths = Files.walk(reportHistory)) {
+                for (Path source : paths.filter(Files::isRegularFile).toList()) {
+                    historyFiles.put(reportHistory.relativize(source).toString(), Files.readAllBytes(source));
+                }
+            } catch (Exception e) {
+                LogUtils.error("Failed to read previous Allure history: " + e.getMessage());
+            }
+        }
+
+        cleanAllure(true, false);
+        try {
+            Files.createDirectories(AllureConstants.ALLURE_RESULTS_DIR);
+            long nextBuildOrder = 1;
+            byte[] trend = historyFiles.get("history-trend.json");
+            if (trend != null) {
+                String trendJson = new String(trend, StandardCharsets.UTF_8);
+                var matcher = java.util.regex.Pattern.compile("\\\"buildOrder\\\"\\s*:\\s*(\\d+)").matcher(trendJson);
+                while (matcher.find()) nextBuildOrder = Math.max(nextBuildOrder, Long.parseLong(matcher.group(1)) + 1);
+            }
+
+            for (Map.Entry<String, byte[]> entry : historyFiles.entrySet()) {
+                byte[] contents = entry.getValue();
+                if (entry.getKey().equals("history.json")) {
+                    String historyJson = new String(contents, StandardCharsets.UTF_8);
+                    historyJson = historyJson.replaceAll("\\\"reportUrl\\\":\\\"\\\",", "\"reportUrl\":\"/#history\",");
+                    contents = historyJson.getBytes(StandardCharsets.UTF_8);
+                }
+                Path destination = AllureConstants.RESULTS_HISTORY_DIR.resolve(entry.getKey());
+                Files.createDirectories(destination.getParent());
+                Files.write(destination, contents);
+            }
+            System.setProperty("allure.previous.build.order", Long.toString(nextBuildOrder - 1));
+            LogUtils.info("Prepared Allure results with " + historyFiles.size() + " history file(s).");
+        } catch (Exception e) {
+            LogUtils.error("Failed to prepare Allure history for this run: " + e.getMessage());
+        }
+    }
+
     public static void copyHistoryFromReportToResults() {
         try {
             Path srcHistory = AllureConstants.ALLURE_REPORT_DIR.resolve("history");
@@ -36,19 +82,15 @@ public class AllureBinaryManger {
                 return;
             }
 
-            Files.createDirectories(destHistory);
-
-            Files.walk(srcHistory).forEach(src -> {
-                try {
+            Files.createDirectories(destHistory.getParent());
+            try (var paths = Files.walk(srcHistory)) {
+                for (Path src : paths.toList()) {
                     Path rel = srcHistory.relativize(src);
                     Path dest = destHistory.resolve(rel);
-
                     if (Files.isDirectory(src)) Files.createDirectories(dest);
                     else Files.copy(src, dest, StandardCopyOption.REPLACE_EXISTING);
-
-                } catch (Exception ignored) {
                 }
-            });
+            }
 
             LogUtils.info("Allure history copied to results: " + destHistory);
 

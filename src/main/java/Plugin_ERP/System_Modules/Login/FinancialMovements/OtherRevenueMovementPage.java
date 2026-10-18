@@ -15,7 +15,7 @@ import org.testng.Assert;
 import javax.swing.*;
 import java.time.Duration;
 
-public class OtherRevenueMovementPage extends Abstract {
+public class OtherRevenueMovementPage extends FinancialMovementPage {
 
 
 

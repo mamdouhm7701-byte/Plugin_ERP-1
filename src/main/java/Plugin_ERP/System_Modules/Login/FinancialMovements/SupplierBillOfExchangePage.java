@@ -18,7 +18,7 @@ import org.testng.Assert;
 import javax.swing.*;
 import java.time.Duration;
 
-public class SupplierBillOfExchangePage extends Abstract {
+public class SupplierBillOfExchangePage extends FinancialMovementPage {
 
 
     //Constructors

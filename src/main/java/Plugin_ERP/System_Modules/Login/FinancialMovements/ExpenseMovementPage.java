@@ -18,7 +18,7 @@ import org.testng.Assert;
 import java.math.BigDecimal;
 import java.time.Duration;
 
-public class ExpenseMovementPage extends Abstract {
+public class ExpenseMovementPage extends FinancialMovementPage {
 
 
 

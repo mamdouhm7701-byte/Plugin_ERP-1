@@ -16,7 +16,7 @@ import org.testng.Assert;
 
 import java.time.Duration;
 
-public class CustomerReceiptPage extends Abstract {
+public class CustomerReceiptPage extends FinancialMovementPage {
     //Constructors
        public CustomerReceiptPage(WebDriver driver) {
         super(driver);

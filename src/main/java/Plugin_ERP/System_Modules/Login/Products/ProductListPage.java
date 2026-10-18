@@ -12,7 +12,13 @@ import org.testng.Assert;
 
 import java.util.Map;
 
-public class ProductListPage extends Abstract {
+public class ProductListPage extends ProductsModulePage {
+    public void prAddItem(String name,String price){
+        prButton("اضافة اصناف");prPickItem(name);prClosePicker();prItemPrice(name,price);
+    }
+    public void prItemPrice(String name,String price){
+        prType(By.xpath("//form//tr[.//td[contains(normalize-space(),'"+name+"')]]//input[@type='number'][1]"),price);
+    }
 
 
     //Constructors

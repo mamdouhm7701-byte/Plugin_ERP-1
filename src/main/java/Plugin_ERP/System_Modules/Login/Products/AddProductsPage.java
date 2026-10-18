@@ -11,7 +11,21 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class AddProductsPage extends Abstract {
+public class AddProductsPage extends ProductsModulePage {
+    public void prStock(String store,String opening,String minimum,String cost){
+        prChoose("مخازن",store);prTitledField("مكان الصنف","QA");
+        prTitledField("الرصيد الإفتتاحي",opening);prTitledField("الحد الأدني",minimum);prTitledField("سعر التكلفة",cost);
+        prButton("اضافة مخزن");
+    }
+    public void prSubunit(String unit,String barcode,String rate){
+        prTab("وحدات الصنف");prChoose("الوحدة",unit);prTitledField("معامل التحويل",rate);
+        prType(By.cssSelector("[data-title='الباركود'] input:not([name='mainUnitBarcode'])"),barcode);
+        prButton("اضافة وحدة");
+    }
+    public void prComponent(String store,String item,String quantity){
+        prTab("المكونات");prChoose("المخزن",store);prButton("اضافة مكونات");prPickItem(item);prClosePicker();
+        prType(By.xpath("//form//tr[.//td[contains(normalize-space(),'"+item+"')]]//input[@type='number'][1]"),quantity);
+    }
 
     //Constructors
     public AddProductsPage(WebDriver driver) {

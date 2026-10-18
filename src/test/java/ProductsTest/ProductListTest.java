@@ -1,109 +1,46 @@
 package ProductsTest;
 
-import Plugin_ERP.Enums.Pages;
-import Plugin_ERP.System_Modules.Login.Products.ProductListPage;
-import Plugin_ERP.Tests.LoginTest.BaseTest;
+import Plugin_ERP.System_Modules.Login.Products.*;
 import io.qameta.allure.*;
-import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.Assert;
+import java.util.*;
 
-public class ProductListTest extends BaseTest {
-
-
-
-
-    @Test(priority = 1)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("قائمة الأسعار")
-    @Story("إنشاء قائمة أسعار")
-    @Description("يتحقق هذا الاختبار من إنشاء قائمة أسعار جديدة والتأكد من إضافتها إلى النظام.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void AddNewProductList() {
-        ProductListPage productListPage = new ProductListPage(driver);
-        productListPage.NavigationHelper(Pages.PRICELIST);
-        productListPage.ClickNew();
-        productListPage.AddArabicName("قائمة أسعار جديدة");
-        productListPage.AddEnglishName("New Price List");
-        productListPage.ClickAddProduct();
-        productListPage.SelectProductByCode(1,2,3,4,5);
-        productListPage.ClickCloseButton();
-        productListPage.AddNewProductList(100,200,300,400,500);
-        productListPage.ClickSaveAndPrintButton_1();
-        productListPage.AssertPriceListReport();
-        productListPage.AssertTextInReport("قائمة أسعار جديدة");
-        productListPage.AssertTextInReport("New Price List");
-        productListPage.CloserReport();
-        productListPage.AssertReceiptAdded("قائمة أسعار جديدة");
-
-
-    }
-
-
-    @Test(priority = 2)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("قائمة الأسعار")
-    @Story("تعديل قائمة أسعار")
-    @Description("يتحقق هذا الاختبار من تعديل قائمة أسعار موجودة بالفعل والتأكد من حفظ التعديلات في النظام.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void EditPriceList(){
-        ProductListPage productListPage = new ProductListPage(driver);
-        productListPage.NavigationHelper(Pages.PRICELIST);
-        productListPage.EditPriceList();
-        productListPage.AddArabicName("قائمة أسعار معدلة");
-        productListPage.AddEnglishName("Modified Price List");
-        productListPage.AddNewProductList(1000,2000,3000,4000,5000);
-        productListPage.ClickSaveAndPrintButton_1();
-        productListPage.AssertPriceListReport();
-        productListPage.AssertTextInReport("قائمة أسعار معدلة");
-        productListPage.AssertTextInReport("Modified Price List");
-        productListPage.CloserReport();
-        productListPage.AssertReceiptAdded("قائمة أسعار معدلة");
-
-
-
-    }
-
-    @Test(priority = 3)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("قائمة الأسعار")
-    @Story("حذف قائمة أسعار")
-    @Description("يتحقق هذا الاختبار من حذف قائمة أسعار موجودة بالفعل والتأكد من إزالتها من النظام.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void DeletePriceList() {
-        ProductListPage productListPage = new ProductListPage(driver);
-        productListPage.NavigationHelper(Pages.PRICELIST);
-        productListPage.DeletePriceList();
-
-
-    }
-
-    @Test(priority = 4)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("قائمة الأسعار")
-    @Story("التحقق - رسالة الخطأ عند عدم إدخال الاسم العربي")
-    @Description("يتحقق هذا الاختبار من ظهور رسالة الخطأ عند" +
-            " محاولة إنشاء قائمة أسعار بدون إدخال اسم عربي.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void AssertErorrMsg(){
-
-        ProductListPage productListPage = new ProductListPage(driver);
-        productListPage.NavigationHelper(Pages.PRICELIST);
-        productListPage.ClickNew();
-        productListPage.AddArabicName("");
-        productListPage.AddEnglishName("New Price List");
-        Assert.assertTrue(productListPage.AssertErorrMsg(),
-                "Error message for required Arabic name is not displayed.");
-
-
-    }
-
-
+@Epic("Web Cloud") @Feature("قوائم الأسعار")
+public class ProductListTest extends ProductScenarioTest {
+  @Test(groups="products") @Story("رفض تكرار نفس الصنف والوحدة في قائمة الأسعار")
+  public void PR_DuplicatePriceListItem(){
+    openNew();fill(null);page.prButton("اضافة اصناف");page.prPickItem(data.item(1).name());Assert.assertFalse(page.prValidation().isBlank());
+    page.prDismiss();page.prClosePicker();Assert.assertEquals(page.prFormRowsContaining(data.item(1).name()),1);Assert.assertTrue(page.prSaves().isEmpty());
+  }
+  @Override protected Kind kind(){return Kind.PRICE;}
+  @Override protected ProductsModulePage modulePage(){return new ProductListPage(driver);}
+  @Test(groups="products") @Story("إضافة قائمة بأسعار أصناف الاختبار والطباعة")
+  public void AddNewProductList(){openNew();fill(null);var r=save(true);assertDetails(data.read(r));}
+  @Test(groups="products") @Story("تعديل وطباعة قائمة الاختبار")
+  public void EditPriceList(){edit(true);}
+  @Test(groups="products") @Story("حذف قائمة الاختبار")
+  public void DeletePriceList(){deleteOwn();}
+  @Test(groups="products") @Story("اسم القائمة العربي مطلوب")
+  public void AssertErorrMsg(){required("name","عربي");}
+  @Test(groups="products") @Story("حفظ قائمة الأسعار دون طباعة")
+  public void PR_SaveWithoutPrint(){create();}
+  @Test(groups="products") @Story("الاحتفاظ بكسور السعر")
+  public void PR_DecimalPrice(){openNew();fill(null);((ProductListPage)page).prItemPrice(data.item(1).name(),"125.75");var r=save(false);var row=(Map<?,?>)((List<?>)data.read(r).get("items")).get(0);assertNumber(row.get("salesPrice"),"125.75");}
+  @Test(groups="products") @Story("إغلاق دون حفظ")
+  public void PR_CancelNew(){commonCancelNew();}
+  @Test(groups="products") @Story("إلغاء التعديل دون حفظ")
+  public void PR_CancelEdit(){commonCancelEdit();}
+  @Test(groups="products") @Story("إلغاء حذف سجل الاختبار")
+  public void PR_CancelDelete(){commonCancelDelete();}
+  @Test(groups="products") @Story("البحث وعدم وجود نتائج وإعادة البحث")
+  public void PR_SearchAndReset(){commonSearch();}
+  @Test(groups="products") @Story("أعمدة القائمة وسجل الاختبار")
+  public void PR_ListStructure(){commonList();}
+  @Test(groups="products") @Story("تصدير PDF صالح")
+  public void PR_ExportPdf(){commonExport("pdf");}
+  @Test(groups="products") @Story("تصدير Excel صالح")
+  public void PR_ExportExcel(){commonExport("excel");}
+  @Test(groups="products") @Story("حفظ دون الاسم الإنجليزي الاختياري")
+  public void PR_OptionalEnglish(){optionalEnglish();}
 }

@@ -1,86 +1,37 @@
 package ProductsTest;
-import Plugin_ERP.Enums.Pages;
-import Plugin_ERP.System_Modules.Login.Products.UnitePage;
-import Plugin_ERP.Tests.LoginTest.BaseTest;
+
+import Plugin_ERP.System_Modules.Login.Products.*;
 import io.qameta.allure.*;
-import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.Assert;
+import java.util.*;
 
-public class UnitTest  extends BaseTest {
-
-
-
-    @Test(priority = 1)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("شاشة الوحدات")
-    @Story("إنشاء وحدة بنجاح")
-    @Description("يتحقق هذا الاختبار من أن المستخدم يستطيع إنشاء وحدة بنجاح.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void AddNewUnite() {
-        UnitePage unitePage = new UnitePage(driver);
-
-        unitePage.NavigationHelper(Pages.UNITS);
-        unitePage.ClickNew();
-        unitePage.AddArabicName("وحدة اختبار");
-        unitePage.AddEnglishName("Test Unit");
-        unitePage.ClickSaveButton();
-        unitePage.AssertReceiptAdded("وحدة اختبار");
-    }
-
-    @Test(priority = 2)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("شاشة الوحدات")
-    @Story("تعديل وحدة بنجاح")
-    @Description("يتحقق هذا الاختبار من أن المستخدم يستطيع تعديل وحدة بنجاح.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void EditUnite(){
-        UnitePage unitePage = new UnitePage(driver);
-        unitePage.NavigationHelper(Pages.UNITS);
-        unitePage.Edit();
-        unitePage.AddArabicName("وحدة اختبار معدلة");
-        unitePage.AddEnglishName("Test Unit Modified");
-        unitePage.ClickSaveButton();
-        unitePage.AssertReceiptAdded("وحدة اختبار معدلة");
-    }
-
-    @Test(priority = 3)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("شاشة الوحدات")
-    @Story("حذف وحدة بنجاح")
-    @Description("يتحقق هذا الاختبار من أن المستخدم يستطيع حذف وحدة بنجاح.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void DeleteUnite(){
-        UnitePage unitePage = new UnitePage(driver);
-        unitePage.NavigationHelper(Pages.UNITS);
-
-        unitePage.Delete();
-    }
-
-
-    @Test(priority = 4)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("شاشة الوحدات")
-    @Story("التحقق - إضافة وحدة بدون اسم عربي")
-    @Description("يتحقق هذا الاختبار من أن المستخدم لا يستطيع إنشاء وحدة بدون إدخال اسم عربي.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void AddUniteWithoutArabicName()  {
-        UnitePage unitePage = new UnitePage(driver);
-        unitePage.NavigationHelper(Pages.UNITS);
-
-        unitePage.ClickNew();
-        unitePage.AddEnglishName("Test Unit Without Arabic Name");
-        unitePage.ClickSaveButton();
-        Assert.assertTrue(unitePage.AssertUniteNameRequired());
-    }
-
-
-
+@Epic("Web Cloud") @Feature("الوحدات")
+public class UnitTest extends ProductScenarioTest {
+  @Override protected Kind kind(){return Kind.UNIT;}
+  @Override protected ProductsModulePage modulePage(){return new UnitePage(driver);}
+  @Test(groups="products") @Story("إضافة وحدة مستقلة")
+  public void AddNewUnite(){create();}
+  @Test(groups="products") @Story("تعديل وحدة الاختبار")
+  public void EditUnite(){edit(false);}
+  @Test(groups="products") @Story("حذف وحدة الاختبار فقط")
+  public void DeleteUnite(){deleteOwn();}
+  @Test(groups="products") @Story("الاسم العربي مطلوب")
+  public void AddUniteWithoutArabicName(){required("name","الاسم العربي");}
+  @Test(groups="products") @Story("إغلاق دون حفظ")
+  public void PR_CancelNew(){commonCancelNew();}
+  @Test(groups="products") @Story("إلغاء التعديل دون حفظ")
+  public void PR_CancelEdit(){commonCancelEdit();}
+  @Test(groups="products") @Story("إلغاء حذف سجل الاختبار")
+  public void PR_CancelDelete(){commonCancelDelete();}
+  @Test(groups="products") @Story("البحث وعدم وجود نتائج وإعادة البحث")
+  public void PR_SearchAndReset(){commonSearch();}
+  @Test(groups="products") @Story("أعمدة القائمة وسجل الاختبار")
+  public void PR_ListStructure(){commonList();}
+  @Test(groups="products") @Story("تصدير PDF صالح")
+  public void PR_ExportPdf(){commonExport("pdf");}
+  @Test(groups="products") @Story("تصدير Excel صالح")
+  public void PR_ExportExcel(){commonExport("excel");}
+  @Test(groups="products") @Story("حفظ دون الاسم الإنجليزي الاختياري")
+  public void PR_OptionalEnglish(){optionalEnglish();}
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Products" verbose="1" configfailurepolicy="continue" parallel="none">
+ <test name="ProductsTest" preserve-order="true"><classes>
+  <class name="ProductsTest.UnitTest"/>
+  <class name="ProductsTest.ProductCategoriesTest"/>
+  <class name="ProductsTest.AddProductsTest"/>
+  <class name="ProductsTest.ProductListTest"/>
+  <class name="ProductsTest.ProductsCleanupTest"/>
+ </classes></test>
+</suite>

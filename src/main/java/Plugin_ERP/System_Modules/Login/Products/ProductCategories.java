@@ -9,7 +9,7 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class ProductCategories extends Abstract {
+public class ProductCategories extends ProductsModulePage {
 
 
     //Constructors

@@ -1,130 +1,41 @@
 package ProductsTest;
 
-import Plugin_ERP.Enums.Pages;
-import Plugin_ERP.System_Modules.Login.Products.ProductCategories;
-import Plugin_ERP.Tests.LoginTest.BaseTest;
+import Plugin_ERP.System_Modules.Login.Products.*;
 import io.qameta.allure.*;
-import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.Assert;
+import java.util.*;
 
-public class ProductCategoriesTest extends BaseTest {
-
-
-
-
-    @Test(priority = 1)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("شاشة الفئات")
-    @Story("إنشاء فئة منتج رئيسية بنجاح")
-    @Description("يتحقق هذا الاختبار من أن المستخدم يستطيع إنشاء فئة منتج رئيسية بنجاح عن طريق إدخال اسم عربي واسم إنجليزي صحيحين مع الملاحظات. " +
-            "ويتأكد الاختبار من إضافة الفئة الجديدة إلى النظام وإمكانية عرضها في قائمة فئات المنتجات.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void AddProductCategory() {
-        ProductCategories productCategoriesPage = new ProductCategories(driver);
-        productCategoriesPage.NavigationHelper(Pages.CATEGORIES);
-        productCategoriesPage.ClickNew();
-        productCategoriesPage.AddArabicName("فئة اختبار رئيسية");
-        productCategoriesPage.AddEnglishName("Test Category");
-        productCategoriesPage.AddNoteForProductCategory("فئة منتجات للاختبار");
-        productCategoriesPage.SelectCheckboxByText("رئيسية", true);
-        productCategoriesPage.ClickSaveButton();
-        productCategoriesPage.AssertReceiptAdded("فئة اختبار رئيسية");
-
-    }
-
-
-
-    @Test(priority = 2)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("شاشة الفئات")
-    @Story("إنشاء فئة منتج فرعية بنجاح تحت الفئة الرئيسية")
-    @Description("يتحقق هذا الاختبار من أن المستخدم يستطيع إنشاء فئة منتج فرعية بنجاح" +
-            " تحت فئة رئيسية موجودة بالفعل." +
-            " ويتأكد الاختبار من إضافة الفئة الفرعية الجديدة إلى النظام و" +
-            "إمكانية عرضها في قائمة فئات المنتجات تحت الفئة الرئيسية الصحيحة.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void AddBranchProduct(){
-        ProductCategories productCategoriesPage = new ProductCategories(driver);
-
-        productCategoriesPage.NavigationHelper(Pages.CATEGORIES);
-        productCategoriesPage.OpenProductCategoriesPage();
-        productCategoriesPage.ClickNew();
-        productCategoriesPage.AddArabicName("فئة اختبار فرعية");
-        productCategoriesPage.AddEnglishName("Test Category Branch");
-        productCategoriesPage.AddNoteForProductCategory("فئة منتجات فرعية للاختبار");
-        productCategoriesPage.SetCheckboxValue("فئة نقاط بيع", true);
-        productCategoriesPage.SelectFromDropDawn("فئة اختبار رئيسية", "الفئه الكبري");
-        productCategoriesPage.ClickSaveButton();
-        productCategoriesPage.AssertReceiptAdded("فئة اختبار فرعية");
-
-    }
-
-    @Test(priority = 3)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.NORMAL)
-    @Epic("Web Cloud")
-    @Feature("شاشة الفئات")
-    @Story("تعديل فئة منتج فرعية بنجاح تحت الفئة الرئيسية")
-    @Description("يتحقق هذا الاختبار من أن المستخدم يستطيع تعديل فئة منتج فرعية بنجاح تحت فئة رئيسية موجودة بالفعل." +
-            " ويتأكد الاختبار من تحديث بيانات الفئة الفرعية في النظام و" +
-            "إمكانية عرضها في قائمة فئات المنتجات بالتفاصيل الجديدة تحت الفئة الرئيسية الصحيحة.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void EditBranchProduct(){
-        ProductCategories productCategoriesPage = new ProductCategories(driver);
-        productCategoriesPage.NavigationHelper(Pages.CATEGORIES);
-        productCategoriesPage.Edit();
-        productCategoriesPage.AddArabicName("فئة اختبار فرعية معدلة");
-        productCategoriesPage.AddEnglishName("Test Category Branch Modified");
-        productCategoriesPage.AddNoteForProductCategory("فئة منتجات فرعية للاختبار");
-        productCategoriesPage.SetCheckboxValue("فئة مطعم", true);
-        productCategoriesPage.SetCheckboxValue("فئة نقاط بيع", false);
-        productCategoriesPage.ClickSaveButton();
-        productCategoriesPage.AssertReceiptAdded("فئة اختبار فرعية معدلة");
-    }
-
-    @Test(priority = 4)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.NORMAL)
-    @Epic("Web Cloud")
-    @Feature("شاشة الفئات")
-    @Story("حذف فئة منتج رئيسية بنجاح")
-    @Description("يتحقق هذا الاختبار من أن المستخدم يستطيع حذف فئة منتج رئيسية بنجاح من النظام. " +
-            "ويتأكد الاختبار من إزالة الفئة الرئيسية من قائمة فئات المنتجات وعدم إمكانية الوصول إليها مرة أخرى.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void DeleteBranchProduct(){
-        ProductCategories productCategoriesPage = new ProductCategories(driver);
-        productCategoriesPage.NavigationHelper(Pages.CATEGORIES);
-        productCategoriesPage.Delete();
-        productCategoriesPage.Delete();
-    }
-
-
-    @Test(priority = 5)
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("Web Cloud")
-    @Feature("شاشة الفئات")
-    @Story("التحقق - إنشاء فئة منتج بدون اسم عربي والتحقق من رسالة الخطأ")
-    @Description("يتحقق هذا الاختبار من أن النظام يتعامل بشكل صحيح مع محاولة إنشاء فئة منتج بدون إدخال اسم عربي، ويتحقق من ظهور رسالة الخطأ المناسبة التي تفيد بأن الاسم العربي مطلوب.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
-    public void AddProductCategoryWithoutArabicName() {
-        ProductCategories productCategoriesPage = new ProductCategories(driver);
-        productCategoriesPage.NavigationHelper(Pages.CATEGORIES);
-        productCategoriesPage.ClickNew();
-        productCategoriesPage.AddArabicName("");
-        productCategoriesPage.AddEnglishName("Test Category");
-        Assert.assertTrue(productCategoriesPage.AssertErrorMessageForRequiredField(),
-                "Error message for required Arabic name is not displayed.");
-
-
-
-    }
-
-
-
-
+@Epic("Web Cloud") @Feature("فئات الأصناف")
+public class ProductCategoriesTest extends ProductScenarioTest {
+  @Override protected Kind kind(){return Kind.CATEGORY;}
+  @Override protected ProductsModulePage modulePage(){return new ProductCategories(driver);}
+  @Test(groups="products") @Story("إضافة فئة رئيسية")
+  public void AddProductCategory(){create();}
+  @Test(groups="products") @Story("إضافة فئة فرعية بربط مستقل")
+  public void AddBranchProduct(){openNew();fill(null);page.prCheck("رئيسية",false);page.prChoose("الفئه الكبري",data.mainCategory().name());page.prCheck("فئة نقاط بيع",true);var r=save(false);var stored=data.read(r);Assert.assertEquals(stored.get("parentCategoryId"),data.mainCategory().id());Assert.assertEquals(stored.get("isForPOS"),true);}
+  @Test(groups="products") @Story("تعديل فئة فرعية مستقلة")
+  public void EditBranchProduct(){var parent=data.mainCategory();var r=data.fixture(marker,kind().endpoint,ProductsTestData.fields("isMain",false,"parentCategoryId",parent.id()));locate(r);page.prEdit(r.name());page.prArabic(marker+" EDIT");page.prCheck("فئة مطعم",true);save(false);}
+  @Test(groups="products") @Story("حذف فئة الاختبار فقط")
+  public void DeleteBranchProduct(){deleteOwn();}
+  @Test(groups="products") @Story("اسم الفئة العربي مطلوب")
+  public void AddProductCategoryWithoutArabicName(){required("name","الاسم العربي");}
+  @Test(groups="products") @Story("حفظ خصائص فئة المطعم ونقاط البيع")
+  public void PR_CategoryFlags(){openNew();fill(null);page.prCheck("فئة مطعم",true);page.prCheck("فئة نقاط بيع",true);var r=save(false);var s=data.read(r);Assert.assertEquals(s.get("isForResturants"),true);Assert.assertEquals(s.get("isForPOS"),true);}
+  @Test(groups="products") @Story("إغلاق دون حفظ")
+  public void PR_CancelNew(){commonCancelNew();}
+  @Test(groups="products") @Story("إلغاء التعديل دون حفظ")
+  public void PR_CancelEdit(){commonCancelEdit();}
+  @Test(groups="products") @Story("إلغاء حذف سجل الاختبار")
+  public void PR_CancelDelete(){commonCancelDelete();}
+  @Test(groups="products") @Story("البحث وعدم وجود نتائج وإعادة البحث")
+  public void PR_SearchAndReset(){commonSearch();}
+  @Test(groups="products") @Story("أعمدة القائمة وسجل الاختبار")
+  public void PR_ListStructure(){commonList();}
+  @Test(groups="products") @Story("تصدير PDF صالح")
+  public void PR_ExportPdf(){commonExport("pdf");}
+  @Test(groups="products") @Story("تصدير Excel صالح")
+  public void PR_ExportExcel(){commonExport("excel");}
+  @Test(groups="products") @Story("حفظ دون الاسم الإنجليزي الاختياري")
+  public void PR_OptionalEnglish(){optionalEnglish();}
 }

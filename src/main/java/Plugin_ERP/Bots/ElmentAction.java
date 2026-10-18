@@ -328,10 +328,8 @@ public GridActions grid() {
     }
 
     public void clickOnEmptyArea() {
-        WebElement body = driver.findElement(By.tagName("body"));
-
         new Actions(driver)
-                .moveToElement(body, 5, 5)
+                .moveToLocation(5, 5)
                 .click()
                 .perform();
     }

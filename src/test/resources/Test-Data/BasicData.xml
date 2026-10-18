@@ -7,7 +7,7 @@
             <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest"/>
             <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest"/>
             <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.PaymentTest"/>
-
+            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.StoreTest"/>
             <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.RoutLineTest"/>
             <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest"/>
             <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest"/>

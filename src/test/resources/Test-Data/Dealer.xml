@@ -6,6 +6,7 @@
         <classes>
             <class name="DealerModelTest.CustomersTest"/>
             <class name="DealerModelTest.SupplierTest"/>
+            <class name="DealerModelTest.AgentTest"/>
             <class name="DealerModelTest.MainDealerTest"/>
             <class name="DealerModelTest.CustomerClassificationTest"/>
 

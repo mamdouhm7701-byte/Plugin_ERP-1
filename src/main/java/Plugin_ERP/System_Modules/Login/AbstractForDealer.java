@@ -6,11 +6,21 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
 
 public class AbstractForDealer extends Abstract {
+    private static final By DEALER_TABLE_HEADERS = By.cssSelector("table thead th");
+    private static final By DEALER_TABLE_ROWS = By.cssSelector("table tbody tr[role='row']");
+    private static final By DEALER_SAVE_BUTTON = By.cssSelector("button[data-action-type='save']");
+    private static final By DEALER_DELETE_CONFIRM = By.cssSelector(
+            ".swal2-container.swal2-backdrop-show .swal2-confirm");
+    private static final By DEALER_DELETE_CANCEL = By.cssSelector(
+            ".swal2-container.swal2-backdrop-show .swal2-cancel");
+    private String dealerListUrlBeforeForm;
     public AbstractForDealer(WebDriver driver) {
         super(driver);
     }
@@ -24,7 +34,10 @@ public class AbstractForDealer extends Abstract {
     private By DiscountValue = By.cssSelector("input[placeholder='قيمة الخصم']");
     private By ValueLimit = By.cssSelector("input[name='value']");
     private By AddNote = By.xpath("//textarea[contains(@class,'form-control') and @label='Notes']");
-    private By ContactDataTab = By.cssSelector("a.nav-link[aria-posinset='2']");
+    private By ContactDataTab = By.xpath(
+            "//a[@role='tab' and contains(normalize-space(),'بيانات الاتصال')]");
+    private By BasicDataTab = By.xpath(
+            "//a[@role='tab' and normalize-space()='البيانات الأساسية']");
     private By ContactPersonName = By.cssSelector("input[name='contactPerson']");
     private By LandLine = By.cssSelector("div[data-title='التليفون الأرضي'] input");
     private By Email = By.cssSelector("input[name='email']");
@@ -41,8 +54,10 @@ public class AbstractForDealer extends Abstract {
     private By BuildingNumber = By.cssSelector("input[name='buildingNumber']");
     private By PostalCode = By.cssSelector("input[name='postalCode']");
     private By StreetName = By.cssSelector("input[name='streetName']");
-    private By customerControlTab = By.cssSelector("a.nav-link[aria-posinset='5']");
-    private By SupplerControlTab = By.cssSelector("a.nav-link[aria-posinset='4']");
+    private By customerControlTab = By.xpath(
+            "//a[@role='tab' and contains(normalize-space(),'التحكم في العملاء')]");
+    private By SupplerControlTab = By.xpath(
+            "//a[@role='tab' and contains(normalize-space(),'التحكم في المورد')]");
     private By AssertTaxNumber  = By.xpath("//small[contains(text(),'الحقل رقم المبني يجب ان يحتوي على 4 حروف على الأقل')]");
     private By AssertPostNumber  = By.xpath("//small[contains(text(),'الحقل الرمز البريدي يجب ان يحتوي على 5 حروف على الأقل')]");
 
@@ -60,12 +75,49 @@ public class AbstractForDealer extends Abstract {
 //ميثودات الضغط
     @Step("الضغط على زر جديد")
     public void ClickNewButtonForDealer() {
-        utilites.ClickElement(NewButton);
+        dealerListUrlBeforeForm = driver.getCurrentUrl();
+        WebElement button = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(d -> d.findElements(NewButton).stream()
+                        .filter(this::isElementDisplayed)
+                        .filter(WebElement::isEnabled)
+                        .findFirst().orElse(null));
+        ((org.openqa.selenium.JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView({block:'center'});arguments[0].click();", button);
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(d -> isVisible(DEALER_SAVE_BUTTON)
+                        && isVisible(By.cssSelector("input[name='arabicName']")));
+        showDealerBasicDataIfPresent();
+    }
+
+    private void showDealerBasicDataIfPresent() {
+        if (driver.findElements(BasicDataTab).stream().anyMatch(this::isElementDisplayed)) {
+            ClickBasicDataTab();
+        }
+    }
+
+    @Step("اختيار {option} من قائمة {fieldTitle} في شاشة المتعامل")
+    public void SelectDealerOption(String fieldTitle, String option) {
+        utilites.dropdown().selectVueOptionByDataTitle(fieldTitle, option);
     }
 
     @Step("الضغط على تاب بيانات التواصل")
     public void ClickContactDataTab() {
         utilites.ClickElement(ContactDataTab);
+    }
+
+    @Step("الضغط على تبويب البيانات الأساسية للمتعامل")
+    public void ClickBasicDataTab() {
+        new WebDriverWait(driver, Duration.ofSeconds(20))
+                .ignoring(org.openqa.selenium.StaleElementReferenceException.class)
+                .ignoring(org.openqa.selenium.ElementClickInterceptedException.class)
+                .until(d -> {
+                    WebElement tab = d.findElement(BasicDataTab);
+                    if (!tab.isDisplayed() || !tab.isEnabled()) return false;
+                    tab.click();
+                    return true;
+                });
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(d -> d.findElement(BasicDataTab).getAttribute("class").contains("active"));
     }
 
     @Step("الضغط على تاب التحكم في العميل")
@@ -260,6 +312,295 @@ public int getRowCount()
     LogUtils.info("عدد الصفوف في الجدول: " + count);
     return count;
 }
+
+    @Step("التحقق من ظهور قائمة المتعاملين وأعمدتها")
+    public boolean isDealerListStructureDisplayed() {
+        boolean hasHeaders = driver.findElements(DEALER_TABLE_HEADERS).stream()
+                .anyMatch(this::isElementDisplayed);
+        boolean hasRowActions = driver.findElements(DEALER_TABLE_ROWS).stream()
+                .filter(this::isElementDisplayed)
+                .anyMatch(row -> row.findElements(By.cssSelector(
+                        "button[data-action-type='edit'],button[data-action-type='delete']")).stream()
+                        .anyMatch(this::isElementDisplayed));
+        return hasHeaders && hasRowActions;
+    }
+
+    @Step("عدد صفوف قائمة المتعاملين الظاهرة")
+    public int getVisibleDealerRowCount() {
+        return (int) driver.findElements(DEALER_TABLE_ROWS).stream()
+                .filter(this::isElementDisplayed)
+                .count();
+    }
+
+    @Step("التحقق من ظهور نموذج إنشاء المتعامل")
+    public boolean isDealerCreationFormDisplayed() {
+        return isVisible(DEALER_SAVE_BUTTON)
+                && isVisible(By.cssSelector("input[name='arabicName']"));
+    }
+
+    @Step("الحقول والأزرار المشتركة الناقصة من نموذج المتعامل")
+    public String getMissingDealerCommonFormControls() {
+        List<String> missing = new java.util.ArrayList<>();
+        addMissingControl(missing, "الاسم العربي", By.cssSelector("input[name='arabicName']"));
+        addMissingControl(missing, "الاسم الإنجليزي", By.cssSelector("input[name='englishName']"));
+        addMissingControl(missing, "الملاحظات", By.cssSelector("textarea"));
+        addMissingControl(missing, "حفظ", DEALER_SAVE_BUTTON);
+        return String.join("، ", missing);
+    }
+
+    @Step("إغلاق نموذج المتعامل دون حفظ")
+    public void closeDealerFormWithoutSaving() {
+        // A dismissed confirmation can remain visible during its closing animation.
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".swal2-container")));
+        WebElement closeButton = findDealerCloseButton();
+        if (closeButton != null) {
+            ((org.openqa.selenium.JavascriptExecutor) driver)
+                    .executeScript("arguments[0].click();", closeButton);
+        } else {
+            // Some Dealer forms are full-page states without a close button; return to the list route.
+            if (dealerListUrlBeforeForm != null) {
+                driver.navigate().to(dealerListUrlBeforeForm);
+            } else {
+                driver.navigate().back();
+            }
+        }
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.invisibilityOfElementLocated(DEALER_SAVE_BUTTON));
+    }
+
+    private WebElement findDealerCloseButton() {
+        List<By> candidates = List.of(
+                By.cssSelector("button[data-action-type='close']"),
+                By.cssSelector("button[data-action-type='cancel']"),
+                By.xpath("//button[normalize-space()='إغلاق' or normalize-space()='اغلاق']"),
+                By.xpath("//button[normalize-space()='إلغاء' or normalize-space()='الغاء']"),
+                By.cssSelector("button[aria-label='Close'],button[aria-label='Cancel']"));
+        for (By candidate : candidates) {
+            for (WebElement button : driver.findElements(candidate)) {
+                if (isElementDisplayed(button)
+                        && button.findElements(By.xpath("ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' swal2-container ')]")).isEmpty()) {
+                    return button;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void addMissingControl(List<String> missing, String label, By locator) {
+        if (!isVisible(locator)) {
+            missing.add(label);
+        }
+    }
+
+    @Step("فتح أول متعامل للتعديل دون حفظ")
+    public void openFirstDealerForEdit() {
+        dealerListUrlBeforeForm = driver.getCurrentUrl();
+        WebElement row = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(d -> d.findElements(DEALER_TABLE_ROWS).stream()
+                        .filter(this::isElementDisplayed)
+                        .filter(candidate -> candidate.findElements(
+                                By.cssSelector("button[data-action-type='edit']")).stream()
+                                .anyMatch(this::isElementDisplayed))
+                        .findFirst().orElse(null));
+        clickDealerRowAction(row, "edit");
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(DEALER_SAVE_BUTTON));
+        waitForDealerEditData();
+    }
+
+    private void waitForDealerEditData() {
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .ignoring(org.openqa.selenium.StaleElementReferenceException.class)
+                .until(d -> !getDealerArabicNameValue().isBlank());
+        showDealerBasicDataIfPresent();
+    }
+
+    @Step("قراءة الاسم العربي لأول سجل في القائمة")
+    public String getFirstDealerArabicName() {
+        List<WebElement> headers = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .ignoring(org.openqa.selenium.StaleElementReferenceException.class)
+                .until(d -> {
+                    List<WebElement> loadedHeaders = d.findElements(DEALER_TABLE_HEADERS);
+                    return loadedHeaders.stream().anyMatch(header ->
+                            isElementDisplayed(header) && header.getText().contains("اسم"))
+                            ? loadedHeaders : null;
+                });
+        int nameColumn = -1;
+        for (int index = 0; index < headers.size(); index++) {
+            String header = headers.get(index).getText().trim();
+            if (header.contains("اسم")) {
+                nameColumn = index;
+                break;
+            }
+        }
+        if (nameColumn < 0) {
+            throw new AssertionError("لم يتم العثور على عمود الاسم العربي في قائمة المتعاملين");
+        }
+        WebElement firstRow = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(d -> d.findElements(DEALER_TABLE_ROWS).stream()
+                        .filter(this::isElementDisplayed)
+                        .filter(row -> row.findElements(By.cssSelector(
+                                "button[data-action-type='edit']")).stream()
+                                .anyMatch(this::isElementDisplayed))
+                        .findFirst().orElse(null));
+        List<WebElement> cells = firstRow.findElements(By.cssSelector("td"));
+        if (nameColumn >= cells.size()) {
+            throw new AssertionError("عمود الاسم العربي خارج نطاق خلايا الصف الأول");
+        }
+        return cells.get(nameColumn).getText().trim();
+    }
+
+    @Step("قراءة الاسم العربي الحالي من نموذج المتعامل")
+    public String getDealerArabicNameValue() {
+        return driver.findElement(By.cssSelector("input[name='arabicName']"))
+                .getAttribute("value").trim();
+    }
+
+    @Step("طلب حذف أول سجل دون تأكيد")
+    public void requestDeleteFirstDealer() {
+        WebElement row = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(d -> d.findElements(DEALER_TABLE_ROWS).stream()
+                        .filter(this::isElementDisplayed)
+                        .filter(candidate -> candidate.findElements(
+                                By.cssSelector("button[data-action-type='delete']")).stream()
+                                .anyMatch(this::isElementDisplayed))
+                        .findFirst().orElse(null));
+        clickDealerRowAction(row, "delete");
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(DEALER_DELETE_CANCEL));
+    }
+
+    @Step("إلغاء تأكيد حذف السجل")
+    public void cancelDealerDelete() {
+        WebElement cancel = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(DEALER_DELETE_CANCEL));
+        ((org.openqa.selenium.JavascriptExecutor) driver)
+                .executeScript("arguments[0].click();", cancel);
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.invisibilityOfElementLocated(DEALER_DELETE_CANCEL));
+    }
+
+    @Step("التحقق من ظهور نافذة تأكيد الحذف")
+    public boolean isDealerDeleteConfirmationDisplayed() {
+        return isVisible(DEALER_DELETE_CONFIRM) && isVisible(DEALER_DELETE_CANCEL);
+    }
+
+    @Step("إغلاق إشعار نجاح حفظ سجل المتعامل عند ظهوره")
+    public void dismissDealerSaveSuccessIfPresent() {
+        By successPopup = By.cssSelector(".swal2-container.swal2-backdrop-show");
+        try {
+            WebElement confirm = new WebDriverWait(driver, Duration.ofSeconds(2))
+                    .until(d -> d.findElements(By.cssSelector(
+                                    ".swal2-container.swal2-backdrop-show .swal2-confirm"))
+                            .stream().filter(this::isElementDisplayed).findFirst().orElse(null));
+            confirm.click();
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                    .until(ExpectedConditions.invisibilityOfElementLocated(successPopup));
+        } catch (org.openqa.selenium.TimeoutException ignored) {
+            // Successful saves may use a toast or close the dialog automatically.
+        }
+    }
+
+    @Step("التحقق من عدم وجود سجل بالاسم الدقيق: {arabicName}")
+    public boolean isDealerNameVisibleInList(String arabicName) {
+        return getExactDealerNameMatchCount(arabicName) > 0;
+    }
+
+    @Step("عدد السجلات المطابقة للاسم العربي بدقة: {arabicName}")
+    public int getExactDealerNameMatchCount(String arabicName) {
+        int matches = 0;
+        for (WebElement row : driver.findElements(DEALER_TABLE_ROWS)) {
+            try {
+                if (isElementDisplayed(row)
+                        && row.findElements(By.cssSelector("td")).stream()
+                                .anyMatch(cell -> cell.getText().trim().equals(arabicName))) {
+                    matches++;
+                }
+            } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
+                // The list can rerender while a create/edit/delete request is completing.
+            }
+        }
+        return matches;
+    }
+
+    @Step("فتح سجل المتعامل المطابق للاسم للتعديل: {arabicName}")
+    public void openDealerForEditByName(String arabicName) {
+        dealerListUrlBeforeForm = driver.getCurrentUrl();
+        WebElement row = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(d -> d.findElements(DEALER_TABLE_ROWS).stream()
+                        .filter(this::isElementDisplayed)
+                        .filter(candidate -> candidate.findElements(By.cssSelector("td")).stream()
+                                .anyMatch(cell -> cell.getText().trim().equals(arabicName)))
+                        .findFirst().orElse(null));
+        clickDealerRowAction(row, "edit");
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(DEALER_SAVE_BUTTON));
+        waitForDealerEditData();
+    }
+
+    @Step("طلب حذف سجل الاختبار المطابق للاسم: {arabicName}")
+    public void requestDealerDeleteByName(String arabicName) {
+        WebElement row = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(d -> d.findElements(DEALER_TABLE_ROWS).stream()
+                        .filter(this::isElementDisplayed)
+                        .filter(candidate -> candidate.findElements(By.cssSelector("td")).stream()
+                                .anyMatch(cell -> cell.getText().trim().equals(arabicName)))
+                        .findFirst().orElse(null));
+        clickDealerRowAction(row, "delete");
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(DEALER_DELETE_CONFIRM));
+    }
+
+    @Step("تأكيد حذف سجل الاختبار المطابق للاسم: {arabicName}")
+    public void confirmDealerDeleteByName(String arabicName) {
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(DEALER_DELETE_CONFIRM)).click();
+        new WebDriverWait(driver, Duration.ofSeconds(15))
+                .until(d -> getExactDealerNameMatchCount(arabicName) == 0);
+        By successPopup = By.xpath(
+                "//div[contains(@class,'swal2-popup') and contains(normalize-space(.),'تم الحذف')]");
+        try {
+            WebElement successButton = new WebDriverWait(driver, Duration.ofSeconds(3))
+                    .until(d -> d.findElements(By.cssSelector(
+                                    ".swal2-container.swal2-backdrop-show .swal2-confirm"))
+                            .stream().filter(this::isElementDisplayed)
+                            .filter(button -> driver.findElements(successPopup).stream()
+                                    .anyMatch(this::isElementDisplayed))
+                            .findFirst().orElse(null));
+            successButton.click();
+        } catch (org.openqa.selenium.TimeoutException ignored) {
+            // Some deployments close the confirmation without a separate success dialog.
+        }
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(d -> d.findElements(By.cssSelector(".swal2-container.swal2-backdrop-show"))
+                        .stream().noneMatch(this::isElementDisplayed));
+    }
+
+    private boolean isVisible(By locator) {
+        return driver.findElements(locator).stream().anyMatch(this::isElementDisplayed);
+    }
+
+    private void clickDealerRowAction(WebElement row, String action) {
+        WebElement button = row.findElement(By.cssSelector(
+                "button[data-action-type='" + action + "']"));
+        ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block:'center'});", button);
+        try {
+            button.click();
+        } catch (org.openqa.selenium.ElementNotInteractableException exception) {
+            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                    "arguments[0].click();", button);
+        }
+    }
+
+    private boolean isElementDisplayed(WebElement element) {
+        try {
+            return element.isDisplayed();
+        } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
+            return false;
+        }
+    }
 
 
 

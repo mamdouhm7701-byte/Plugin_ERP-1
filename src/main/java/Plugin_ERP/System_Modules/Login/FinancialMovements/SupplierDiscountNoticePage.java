@@ -16,7 +16,7 @@ import org.testng.Assert;
 import java.math.BigDecimal;
 import java.time.Duration;
 
-public class SupplierDiscountNoticePage extends Abstract {
+public class SupplierDiscountNoticePage extends FinancialMovementPage {
 
     //Constructors
     public SupplierDiscountNoticePage(WebDriver driver) {

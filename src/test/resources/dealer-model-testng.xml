@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Dealer Model" configfailurepolicy="continue">
+  <test name="All Dealer scenarios" preserve-order="true">
+    <classes>
+      <class name="DealerModelTest.AgentTest"/>
+      <class name="DealerModelTest.CustomerClassificationTest"/>
+      <class name="DealerModelTest.CustomersTest"/>
+      <class name="DealerModelTest.MainDealerTest"/>
+      <class name="DealerModelTest.SupplierTest"/>
+    </classes>
+  </test>
+</suite>

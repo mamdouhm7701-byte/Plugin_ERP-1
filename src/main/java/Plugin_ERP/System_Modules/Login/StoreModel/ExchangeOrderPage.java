@@ -14,7 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ExchangeOrderPage extends AbstractForStore {
+public class ExchangeOrderPage extends StoreModulePage {
     public ExchangeOrderPage(WebDriver driver) {
         super(driver);
     }

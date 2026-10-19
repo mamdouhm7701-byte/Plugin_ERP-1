@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Plugin_ERP_Suite" verbose="1">
-
-    <test name="StoreTest" preserve-order="true">
-        <classes>
-            <class name="StoreTest.ExchangeOrderTest"/>
-            <class name="StoreTest.AdditionOrderTest"/>
-            <class name="StoreTest.ManufacturingTest"/>
-            <class name="StoreTest.TransBetweenStoreTest"/>
-            <class name="StoreTest.DamageAdjustmentTest"/>
-
-
-        </classes>
-    </test>
-
+<suite name="Stores" verbose="1" configfailurepolicy="continue" parallel="none">
+  <test name="StoreTest" preserve-order="true"><classes>
+    <class name="StoreTest.ExchangeOrderTest"/>
+    <class name="StoreTest.AdditionOrderTest"/>
+    <class name="StoreTest.ManufacturingTest"/>
+    <class name="StoreTest.DamageAdjustmentTest"/>
+    <class name="StoreTest.TransBetweenStoreTest"/>
+    <class name="StoreTest.StoreCleanupTest"/>
+  </classes></test>
 </suite>

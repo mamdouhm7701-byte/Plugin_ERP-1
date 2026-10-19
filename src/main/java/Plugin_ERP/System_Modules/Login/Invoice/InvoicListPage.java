@@ -11,20 +11,18 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class InvoicListPage extends AbstractForSales {
+public class InvoicListPage extends SalesModulePage {
     private static final Duration PAGE_TIMEOUT = Duration.ofSeconds(20);
     private static final By GRID_ROWS = By.cssSelector("tbody tr");
     private static final By GRID_HEADERS = By.cssSelector("table thead th");
     private static final By PAGINATION_ITEMS = By.cssSelector(".pagination .page-item");
     private static final String EXPORT_SEARCHABLE_TEXT =
             "translate(concat(@class,' ',@src,' ',@alt,' ',@title,' ',@aria-label,' ',normalize-space(.)),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')";
-    private final Map<String, Boolean> requestedSortOrders = new HashMap<>();
     private String pendingFilterGridBaseline;
 
     public InvoicListPage(WebDriver driver) {
@@ -73,6 +71,7 @@ public class InvoicListPage extends AbstractForSales {
 
     @Step("البحث في فلتر قائمة الفواتير: {label}")
     public void setInvoiceTextFilter(String label, String value) {
+        slAwaitListReady();
         captureFilterGridBaseline();
         WebElement input = findFilterControl(label);
         if ("hidden".equalsIgnoreCase(input.getAttribute("type"))) {
@@ -96,7 +95,8 @@ public class InvoicListPage extends AbstractForSales {
 
     @Step("تطبيق فلاتر قائمة الفواتير")
     public void applyInvoiceFilters() {
-        // The invoice screen applies filters reactively; it has no Search/Apply button.
+        // Text filters use the screen's Enter handler to refresh the provider.
+        slApplyListFilters();
         String baseline = pendingFilterGridBaseline;
         pendingFilterGridBaseline = null;
         waitForGridRefresh(baseline);
@@ -108,7 +108,7 @@ public class InvoicListPage extends AbstractForSales {
         waitForInvoiceList();
         new WebDriverWait(driver, PAGE_TIMEOUT).until(d -> {
             try {
-                return isInvoiceTableDisplayed() && !getVisibleInvoiceRows().isEmpty();
+                return isInvoiceTableDisplayed();
             } catch (org.openqa.selenium.StaleElementReferenceException
                      | IllegalStateException ignored) {
                 // The page can briefly render without a table while Vue restores the data.
@@ -132,11 +132,11 @@ public class InvoicListPage extends AbstractForSales {
             return;
         }
         if (normalizedLabel.contains("مندوب") || normalizedLabel.contains("agent")) {
-            selectVueOption("vs3__combobox", value);
+            slChoose("مندوب", value);
             return;
         }
         if (normalizedLabel.contains("عميل") || normalizedLabel.contains("customer")) {
-            selectVueOption("vs2__combobox", value);
+            slChoose("العميل", value);
             return;
         }
         List<WebElement> matchingChoice = driver.findElements(By.xpath(
@@ -160,7 +160,9 @@ public class InvoicListPage extends AbstractForSales {
     }
 
     @Step("إرجاع خيارات فلتر قائمة الفواتير: {label}")
-    public List<String> getInvoiceFilterOptions(String label) {
+    public List<String> getInvoiceFilterOptions(String label) { return getInvoiceFilterOptions(label, ""); }
+
+    public List<String> getInvoiceFilterOptions(String label, String query) {
         ensureInvoiceFiltersVisible();
         String normalizedLabel = label.toLowerCase(Locale.ROOT);
         if (normalizedLabel.contains("السداد") || normalizedLabel.contains("payment status")) return getRadioOptions(1);
@@ -179,14 +181,12 @@ public class InvoicListPage extends AbstractForSales {
         }
         WebElement search = control.findElement(By.cssSelector("input.vs__search"));
         clickVueDropdown(control);
-        String query = normalizedLabel.contains("عميل") || normalizedLabel.contains("customer")
-                ? "عميل عام" : "مندوب تست";
         String listboxId = control.getAttribute("aria-owns");
         By optionsLocator = listboxId == null || listboxId.isBlank()
                 ? By.cssSelector(".vs__dropdown-option, [role='option']")
                 : By.cssSelector("#" + listboxId + " .vs__dropdown-option, #" + listboxId + " [role='option']");
         boolean hasOptions = driver.findElements(optionsLocator).stream().anyMatch(InvoicListPage::isDisplayed);
-        if (!hasOptions && search.isDisplayed() && search.isEnabled()
+        if (!hasOptions && !query.isBlank() && search.isDisplayed() && search.isEnabled()
                 && !"true".equalsIgnoreCase(search.getAttribute("readonly"))) {
             try {
                 search.sendKeys(query);
@@ -219,8 +219,8 @@ public class InvoicListPage extends AbstractForSales {
         String normalizedLabel = label.toLowerCase(Locale.ROOT);
         if (normalizedLabel.contains("السداد") || normalizedLabel.contains("payment status")) return getSelectedRadioValue(1);
         if (normalizedLabel.contains("نوع الحركة") || normalizedLabel.contains("movement type")) return getSelectedRadioValue(0);
-        if (normalizedLabel.contains("مندوب") || normalizedLabel.contains("agent")) return getVueSelectedValue("vs3__combobox");
-        if (normalizedLabel.contains("عميل") || normalizedLabel.contains("customer")) return getVueSelectedValue("vs2__combobox");
+        if (normalizedLabel.contains("مندوب") || normalizedLabel.contains("agent")) return selectedVueFilter("مندوب");
+        if (normalizedLabel.contains("عميل") || normalizedLabel.contains("customer")) return selectedVueFilter("العميل");
         WebElement control = findFilterControl(label);
         if ("select".equalsIgnoreCase(control.getTagName())) {
             return new Select(control).getFirstSelectedOption().getText().trim();
@@ -278,16 +278,17 @@ public class InvoicListPage extends AbstractForSales {
 
     @Step("فرز قائمة الفواتير حسب العمود: {columnName}")
     public void sortInvoiceColumn(String columnName, boolean ascending) {
-        Boolean previousRequest = requestedSortOrders.get(columnName);
-        if (previousRequest != null && previousRequest == ascending) return;
-        int clicks = previousRequest == null && !ascending ? 2 : 1;
-        for (int attempt = 0; attempt < clicks; attempt++) {
-            String before = gridSnapshot();
+        String expected = ascending ? "ascending" : "descending";
+        for (int attempt = 0; attempt < 3; attempt++) {
             WebElement header = findColumnHeader(columnName);
+            if (expected.equals(header.getDomAttribute("aria-sort"))) return;
+            String before = gridSnapshot();
             header.click();
             waitForGridRefresh(before);
         }
-        requestedSortOrders.put(columnName, ascending);
+        if (!expected.equals(findColumnHeader(columnName).getDomAttribute("aria-sort")))
+            throw new AssertionError("Sales column did not reach requested sort order: " + columnName);
+
     }
 
     @Step("التحقق من ترتيب عمود قائمة الفواتير")
@@ -310,10 +311,12 @@ public class InvoicListPage extends AbstractForSales {
 
     @Step("تغيير حجم صفحة قائمة الفواتير إلى {pageSize}")
     public void setInvoicePageSize(int pageSize) {
+        slAwaitListReady();
         String before = gridSnapshot();
         WebElement select = findPageSizeSelect();
         new Select(select).selectByVisibleText(String.valueOf(pageSize));
         waitForGridRefresh(before);
+        slAwaitListReady();
     }
 
     @Step("قراءة حجم الصفحة المحدد لقائمة الفواتير")
@@ -423,11 +426,18 @@ public class InvoicListPage extends AbstractForSales {
         waitForInvoiceList();
     }
 
+    private WebElement vueFilter(String label) {
+        return driver.findElement(By.xpath("//*[self::label or self::legend][normalize-space()='" + label + "']/following::div[@role='combobox'][1]"));
+    }
+    private String selectedVueFilter(String label) {
+        return vueFilter(label).findElements(By.cssSelector(".vs__selected")).stream().map(WebElement::getText).map(String::trim).findFirst().orElse("");
+    }
+
     private WebElement findFilterControl(String label) {
         ensureInvoiceFiltersVisible();
         String key = label == null ? "" : label.toLowerCase(Locale.ROOT);
-        if (key.contains("مندوب") || key.contains("agent")) return driver.findElement(By.id("vs3__combobox"));
-        if (key.equals("العميل") || key.equals("customer")) return driver.findElement(By.id("vs2__combobox"));
+        if (key.contains("مندوب") || key.contains("agent")) return vueFilter("مندوب");
+        if (key.equals("العميل") || key.equals("customer")) return vueFilter("العميل");
         String selector = switch (key) {
             case "رقم الجوال", "الجوال", "جوال", "الهاتف", "phone", "mobile" -> "input[name='phone']";
             case "اسم العميل", "customer name" -> "input[name='onTheFlyDealerName']";
@@ -442,7 +452,7 @@ public class InvoicListPage extends AbstractForSales {
             List<WebElement> exact = driver.findElements(By.cssSelector(selector));
             if (!exact.isEmpty()) return exact.get(0);
         }
-        if (key.contains("عميل") || key.contains("customer")) return driver.findElement(By.id("vs2__combobox"));
+        if (key.contains("عميل") || key.contains("customer")) return vueFilter("العميل");
         String needle = escapeXPath(label.toLowerCase(Locale.ROOT));
         List<WebElement> labelled = driver.findElements(By.xpath(
                 "//label[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'), '" + needle + "')]/following::input[1] | "
@@ -760,7 +770,7 @@ public class InvoicListPage extends AbstractForSales {
                     ((org.openqa.selenium.JavascriptExecutor) d).executeScript("arguments[0].click()", show);
                     return true;
                 }
-                return d.findElements(By.cssSelector("#vs2__combobox, input[name='filteredCode'], input[name='fromDate']"))
+                return d.findElements(By.cssSelector("input[name='filteredCode'], input[name='fromDate']"))
                         .stream().anyMatch(InvoicListPage::isDisplayed);
             } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
                 return false;

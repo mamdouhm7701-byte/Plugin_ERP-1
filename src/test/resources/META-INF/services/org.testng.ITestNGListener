@@ -2,3 +2,4 @@ DealerModelTest.DealerSuitePolicy
 FinancialMovementsTest.FinancialSuitePolicy
 ProductsTest.ProductsSuitePolicy
 StoreTest.StoreSuitePolicy
+Invoice.SalesSuitePolicy

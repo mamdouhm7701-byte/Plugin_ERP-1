@@ -15,6 +15,9 @@ public class ProductsCleanupTest {
   private static final class Api {
     final Map<String, Map<String, Object>> records = new LinkedHashMap<>();
     final List<String> deletes = new ArrayList<>();
+    int crashAtDelete;
+    boolean failAfterUnitInsert,failPendingLookup;
+    String activeBranch="branch-test";
     boolean timeOutStore;
     boolean commitBeforeTimeout;
     boolean rejectStore;
@@ -37,7 +40,7 @@ public class ProductsCleanupTest {
           new Class<?>[] {WebDriver.Options.class}, (proxy, method, args) -> timeouts);
       return (WebDriver) Proxy.newProxyInstance(getClass().getClassLoader(),
           new Class<?>[] {WebDriver.class, JavascriptExecutor.class}, (proxy, method, args) -> {
-            if (method.getName().equals("executeScript")) return ((String)args[0]).startsWith("return document.querySelector")?"branch-test":true;
+            if (method.getName().equals("executeScript")) {String code=(String)args[0];if(code.equals("return location.origin"))return "offline";return code.startsWith("return document.querySelector")?activeBranch:true;}
             if (method.getName().equals("manage")) return options;
             if (method.getName().equals("executeAsyncScript")) return request((Object[]) args[1]);
             if (method.getName().equals("toString")) return "Fixture cleanup regression driver";
@@ -63,10 +66,16 @@ public class ProductsCleanupTest {
         Map<String, Object> saved = new LinkedHashMap<>(values);
         saved.put("id", id);
         records.put(id, saved);
+        if(endpoint.equals("Units")&&failAfterUnitInsert)return Map.of("error","Lost unit create response","status",500);
         if(endpoint.equals("Items")&&failAfterItemInsert)return Map.of("error","Failed after insert","status",500);
         return Map.of("id", id);
       }
       if(action.equals("get")&&endpoint.startsWith("Items/Summary"))return Map.of("entity",new ArrayList<>(records.values()));
+      if(action.equals("get")&&endpoint.startsWith("Units?")){
+        if(failPendingLookup)return Map.of("error","Recovery lookup unavailable","status",503);
+        var rows=records.values().stream().filter(r->r.get("id").toString().startsWith("Units-")).toList();
+        return Map.of("entity",Map.of("pageData",rows,"totalRecords",rows.size()));
+      }
       String id = values.get("id").toString();
       if (action.equals("get")) {
         return records.containsKey(id) ? Map.of("entity", records.get(id))
@@ -75,7 +84,7 @@ public class ProductsCleanupTest {
             : emptyDeletedResponse ? Map.of("entity", "")
             : Map.of("error", "Missing owned record", "status", 404);
       }
-      deletes.add(id);
+      deletes.add(id);if(crashAtDelete>0&&deletes.size()==crashAtDelete)throw new Error("Simulated process interruption");
       if(missingDeleteForExisting||(missingDelete400&&!records.containsKey(id)))return Map.of("error","Common.ObjectNotFound","status",400);
       if (endpoint.equals("Stores")) {
         if (rejectStore) return Map.of("error", "Record is in use", "status", 400);
@@ -220,5 +229,53 @@ public class ProductsCleanupTest {
     Assert.assertEquals(api.deletes.get(0),movement.id());
     Assert.assertTrue(api.deletes.indexOf(movement.id())<api.deletes.indexOf(replacement.id()));
     Assert.assertTrue(api.records.isEmpty());
+  }
+
+  @Test @io.qameta.allure.Story("مشاركة المراجع الثابتة بالصفحة وعزل بيانات كل حالة دون حذف بينها")
+  public void pageScopeSharesOnlyStableReferences(){
+    Api api=new Api();var data=new ProductsTestData(api.driver());Assert.expectThrows(AssertionError.class,()->data.track("Items","business-item","Business record",Map.of()));data.beginScenario();var stable=data.unit(1);var first=data.item(1);var firstStore=data.store(1);
+    data.beginScenario();var second=data.item(1);Assert.assertNotEquals(first.id(),second.id());Assert.assertNotEquals(first.values().get("mainUnitBarcode"),second.values().get("mainUnitBarcode"));Assert.assertEquals(data.unit(1).id(),stable.id());Assert.assertEquals(data.store(1).id(),firstStore.id());var marker="QA-PR-explicit-"+java.util.UUID.randomUUID();Assert.assertEquals(data.fixture(marker,"Units",ProductsTestData.fields()).name(),marker);
+    Assert.assertTrue(api.records.containsKey(first.id()));Assert.assertTrue(api.deletes.isEmpty());data.close();Assert.assertTrue(api.records.isEmpty());
+  }
+  @Test @io.qameta.allure.Story("استكمال الحذف بعد انقطاع التشغيل من السجلات المتبقية فقط")
+  public void interruptedPageCleanupResumesOnlyRemainingOwnedRecords()throws Exception{
+    Api api=new Api();var data=new ProductsTestData(api.driver());var first=data.unit(1);var last=data.unit(2);api.crashAtDelete=2;
+    Assert.expectThrows(Error.class,data::close);String suffix=last.name().substring(last.name().length()-12);
+    var rows=new org.json.JSONArray(java.nio.file.Files.readString(java.nio.file.Path.of("target","products-fixtures",suffix+".json")));
+    Assert.assertTrue(rows.toList().stream().noneMatch(v->last.id().equals(((Map<?,?>)v).get("id"))));
+    api.crashAtDelete=0;ProductsTestData.resume(api.driver(),suffix).close();Assert.assertTrue(api.records.isEmpty());Assert.assertEquals(java.util.Collections.frequency(api.deletes,last.id()),1);
+  }
+
+  @Test @io.qameta.allure.Story("الاحتفاظ بمحاولة الإنشاء عند فقد الاستجابة واستعادتها بعد إعادة التشغيل دون حذف المتطلبات مبكراً")
+  public void resumesUncertainCreateBeforeDeletingItsDependencies()throws Exception{
+    Api api=new Api();var data=new ProductsTestData(api.driver());var account=data.account("retained");api.failAfterUnitInsert=true;
+    Assert.expectThrows(AssertionError.class,()->data.unit(1));api.failPendingLookup=true;
+    Assert.expectThrows(AssertionError.class,data::close);Assert.assertTrue(api.deletes.isEmpty());Assert.assertTrue(api.records.containsKey(account.id()));
+    api.failPendingLookup=false;api.failAfterUnitInsert=false;ProductsTestData.resume(api.driver(),data.journalSuffix()).close();Assert.assertTrue(api.records.isEmpty());
+  }
+  @Test @io.qameta.allure.Story("رفض استرجاع أو حذف سجلات المجموعة من فرع آخر")
+  public void refusesRecoveryInAnotherBranch()throws Exception{
+    Api api=new Api();var data=new ProductsTestData(api.driver());data.unit(1);api.activeBranch="another-branch";
+    Assert.expectThrows(AssertionError.class,()->ProductsTestData.resume(api.driver(),data.journalSuffix()));Assert.expectThrows(AssertionError.class,data::close);Assert.assertTrue(api.deletes.isEmpty());
+    api.activeBranch="branch-test";data.close();Assert.assertTrue(api.records.isEmpty());
+  }
+
+  @Test @io.qameta.allure.Story("دورة الصفحة الفعلية تحتفظ ببيانات الحالات وتغلق النوافذ وتنظف المجموعة مع فشل الخطوة الأخيرة")
+  public void actualCallbacksKeepCasesUntilPageEndEvenAfterFailure()throws Exception{
+
+    Api api=new Api();try(var browser=new TestSupport.FixtureBrowser(api.driver())){
+      var marker=new java.util.concurrent.atomic.AtomicReference<String>();var broken=new java.util.concurrent.atomic.AtomicBoolean();
+      var fixturePage=new Plugin_ERP.System_Modules.Login.Products.ProductsModulePage(browser.driver){
+        @Override public String prCaptureMarker(){return marker.get();}
+        @Override public List<Map<String,Object>> prSaves(){return List.of();}
+        @Override public List<Map<String,Object>> prAttempts(){return List.of();}
+        @Override public void prSettled(){if(broken.get())throw new org.openqa.selenium.WebDriverException("Lost browser at page end");}
+      };
+      var harness=new ProductScenarioTest(){protected Kind kind(){return Kind.ITEM;}protected Plugin_ERP.System_Modules.Login.Products.ProductsModulePage modulePage(){return fixturePage;}};
+      harness.newProductScenario();marker.set(harness.marker);var data=harness.data;var first=data.item(1);browser.addAuxiliaryWindow();harness.cleanProductScenario();
+      harness.newProductScenario();marker.set(harness.marker);Assert.assertSame(harness.data,data);var second=data.item(1);browser.addAuxiliaryWindow();harness.cleanProductScenario();
+      Assert.assertTrue(api.records.containsKey(first.id()));Assert.assertTrue(api.records.containsKey(second.id()));Assert.assertTrue(api.deletes.isEmpty());Assert.assertEquals(browser.closed,2);
+      broken.set(true);Assert.expectThrows(AssertionError.class,harness::retryProductCleanup);Assert.assertTrue(api.records.isEmpty());Assert.assertNull(harness.data);
+    }
   }
 }

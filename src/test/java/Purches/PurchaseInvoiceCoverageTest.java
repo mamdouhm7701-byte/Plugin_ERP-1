@@ -5,9 +5,9 @@ import org.testng.annotations.Test;
 public final class PurchaseInvoiceCoverageTest extends PurchaseFormTest {
  protected PurchaseDocumentKind kind(){return PurchaseDocumentKind.INVOICE;}
  @Test @Story("إعادة حساب المستند بعد خصم عشرة بالمائة")
- @Description("إعادة حساب المستند بعد خصم عشرة بالمائة، باستخدام بيانات يولدها الاختبار في الفرع الحالي، مع التحقق من النتيجة الفعلية وحذف بيانات الصفحة المملوكة للاختبار بعد انتهائها.")
+ @Description("تطبيق خصم عشرة بالمائة والتحقق من صافي الشاشة؛ التحقق من الحفظ الصحيح أو الرفض الصريح لصلاحية الخصم دون أثر على المخزون أو المورد، ومطابقة حد المستخدم إذا كان معروضاً.")
  public void percentageDiscountRecalculates(){discount(true);}
  @Test @Story("إعادة حساب المستند بعد خصم بالقيمة")
- @Description("إعادة حساب المستند بعد خصم بالقيمة، باستخدام بيانات يولدها الاختبار في الفرع الحالي، مع التحقق من النتيجة الفعلية وحذف بيانات الصفحة المملوكة للاختبار بعد انتهائها.")
+ @Description("تطبيق خصم بقيمة خمسة عشر على إجمالي ثلاثمائة والتحقق من الصافي؛ التحقق من الحفظ الصحيح أو الرفض الصريح لصلاحية الخصم دون أثر على المخزون أو المورد، ومطابقة حد المستخدم إذا كان معروضاً.")
  public void fixedDiscountRecalculates(){discount(false);}
 }

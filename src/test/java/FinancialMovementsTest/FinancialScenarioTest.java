@@ -25,12 +25,12 @@ public abstract class FinancialScenarioTest extends BaseTest {
 
   @BeforeMethod(alwaysRun=true) public void newFinancialScenario(){
     marker="QA-FM-"+UUID.randomUUID().toString().substring(0,12);
-    data=null;page=movementPage();mainWindow=driver.getWindowHandle();party=null;
+    if(data==null){data=new FinancialTestData(driver);pending.add(data);}data.beginScenario();
+    page=movementPage();mainWindow=driver.getWindowHandle();party=null;
     fromType="Safe";toType="Bank";allocationInvoice=null;
   }
   private void prepare(boolean accountMode){
     directAccountMode=accountMode;
-    data=new FinancialTestData(driver);pending.add(data);
     switch(kind()){
       case RECEIPT,CUSTOMER_DISCOUNT -> {party=data.customer(1);data.agent(false);}
       case PAYMENT,SUPPLIER_DISCOUNT -> {party=data.supplier(1);data.agent(true);}
@@ -64,6 +64,8 @@ public abstract class FinancialScenarioTest extends BaseTest {
   }
   @SuppressWarnings("unchecked") private List<FinancialTestData.Record> capture(){
     List<FinancialTestData.Record> out=new ArrayList<>();
+    if(page==null||!marker.equals(page.captureMarker()))return out;
+    data.rememberAttempts(page.capturedAttempts(),marker);
     for(Map<String,Object> saved:page.capturedSaves()){
       Map<String,Object> values=(Map<String,Object>)saved.get("values");
       String endpoint=(String)saved.get("endpoint");
@@ -77,7 +79,7 @@ public abstract class FinancialScenarioTest extends BaseTest {
   }
   private FinancialTestData.Record persist(boolean print,String amount){
     if(!page.hasSaveStarted()){if(print)page.saveAndPrintMovement();else page.saveMovement();}
-    try{new WebDriverWait(driver,Duration.ofSeconds(30)).until(d->!page.capturedSaves().isEmpty());}
+    try{new WebDriverWait(driver,Duration.ofSeconds(30)).until(d->{data.rememberAttempts(page.capturedAttempts(),marker);return !page.capturedSaves().isEmpty();});}
     catch(TimeoutException e){throw new AssertionError("Movement save did not complete. Validation: "+page.validationMessages(),e);}
     List<FinancialTestData.Record> saves=capture();
     FinancialTestData.Record record=saves.get(saves.size()-1);
@@ -220,12 +222,12 @@ public abstract class FinancialScenarioTest extends BaseTest {
     if(driver==null)return;
     for(String handle:new ArrayList<>(driver.getWindowHandles()))if(!handle.equals(mainWindow)){driver.switchTo().window(handle);driver.close();}
     driver.switchTo().window(mainWindow);
-    if(data!=null)capture();
-    List<String> errors=new ArrayList<>();
-    for(FinancialTestData context:new ArrayList<>(pending)){
-      try{context.close();pending.remove(context);}catch(AssertionError|RuntimeException e){errors.add(e.getMessage());}
-    }
+    if(data!=null){if(page!=null&&marker.equals(page.captureMarker())){data.rememberAttempts(page.capturedAttempts(),marker);page.awaitSavesSettled();}capture();if(page!=null&&marker.equals(page.captureMarker()))io.qameta.allure.Allure.addAttachment("Financial case requests","application/json",new org.json.JSONArray(page.capturedAttempts()).toString(),".json");}
+
+  }
+  @AfterClass(alwaysRun=true) public void retryFinancialCleanup(){
+    List<String> errors=new ArrayList<>();try{cleanFinancialScenario();}catch(AssertionError|RuntimeException e){errors.add(e.toString());}
+    for(var context:new ArrayList<>(pending))try{context.close();pending.remove(context);if(data==context)data=null;}catch(AssertionError|RuntimeException e){errors.add(e.toString());}
     if(!errors.isEmpty())throw new AssertionError(String.join("; ",errors));
   }
-  @AfterClass(alwaysRun=true) public void retryFinancialCleanup(){if(!pending.isEmpty())cleanFinancialScenario();}
 }

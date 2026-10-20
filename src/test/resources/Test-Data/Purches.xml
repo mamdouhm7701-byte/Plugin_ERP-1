@@ -7,9 +7,13 @@
 
         <classes>
 
-            <class name="Purches.PurchesBillsTest"/>
-            <class name="Purches.purchOrderTest"/>
-            <class name="Purches.ReturnOrderTest"/>
+            <class name="Purches.PurchaseInvoiceCoverageTest"/>
+            <class name="Purches.PurchaseOrderCoverageTest"/>
+            <class name="Purches.PurchaseReturnCoverageTest"/>
+            <class name="Purches.PurchaseLinkedCoverageTest"/>
+            <class name="Purches.PurchaseListCoverageTest"/>
+            <class name="Purches.PurchaseCalculationTest"/>
+            <class name="Purches.PurchaseCleanupTest"/>
 
         </classes>
 

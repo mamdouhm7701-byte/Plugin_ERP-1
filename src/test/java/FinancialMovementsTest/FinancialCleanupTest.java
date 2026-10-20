@@ -15,6 +15,10 @@ public class FinancialCleanupTest {
   private static final class Api {
     final Map<String, Map<String, Object>> records = new LinkedHashMap<>();
     final List<String> deletes = new ArrayList<>();
+    int crashAtDelete;
+    boolean failAfterUnitInsert,failPendingLookup;
+    String activeBranch="branch-test";
+    int branchUnavailableReads;
     boolean timeOutBank;
     boolean commitBeforeTimeout;
     boolean rejectBank;
@@ -32,7 +36,7 @@ public class FinancialCleanupTest {
           new Class<?>[] {WebDriver.Options.class}, (proxy, method, args) -> timeouts);
       return (WebDriver) Proxy.newProxyInstance(getClass().getClassLoader(),
           new Class<?>[] {WebDriver.class, JavascriptExecutor.class}, (proxy, method, args) -> {
-            if (method.getName().equals("executeScript")) return true;
+            if (method.getName().equals("executeScript")) {String code=(String)args[0];if(code.equals("return location.origin"))return "offline";if(code.startsWith("return document.querySelector")){if(branchUnavailableReads>0){branchUnavailableReads--;return null;}return activeBranch;}return true;}
             if (method.getName().equals("manage")) return options;
             if (method.getName().equals("executeAsyncScript")) return request((Object[]) args[1]);
             if (method.getName().equals("toString")) return "Fixture cleanup regression driver";
@@ -49,6 +53,7 @@ public class FinancialCleanupTest {
         Map<String, Object> saved = new LinkedHashMap<>(values);
         saved.put("id", id);
         records.put(id, saved);
+        if(endpoint.equals("Units")&&failAfterUnitInsert)return Map.of("error","Lost unit create response","status",500);
         if(endpoint.equals("Items")&&failAfterItemInsert)return Map.of("error","Failed after insert","status",500);
         return Map.of("id", id);
       }
@@ -56,6 +61,11 @@ public class FinancialCleanupTest {
       if(action.equals("get")&&endpoint.startsWith("Customers?")){
         List<Map<String,Object>> rows=records.entrySet().stream().filter(e->e.getKey().startsWith("Customers-"))
             .map(Map.Entry::getValue).toList();
+        return Map.of("entity",Map.of("pageData",rows,"totalRecords",rows.size()));
+      }
+      if(action.equals("get")&&endpoint.startsWith("Units?")){
+        if(failPendingLookup)return Map.of("error","Recovery lookup unavailable","status",503);
+        var rows=records.values().stream().filter(r->r.get("id").toString().startsWith("Units-")).toList();
         return Map.of("entity",Map.of("pageData",rows,"totalRecords",rows.size()));
       }
       String id = values.get("id").toString();
@@ -67,7 +77,7 @@ public class FinancialCleanupTest {
             : emptyDeletedResponse ? Map.of("entity", "")
             : Map.of("error", "Missing owned record", "status", 404);
       }
-      deletes.add(id);
+      deletes.add(id);if(crashAtDelete>0&&deletes.size()==crashAtDelete)throw new Error("Simulated process interruption");
       if(missingDelete400&&!records.containsKey(id))return Map.of("error","Common.ObjectNotFound","status",400);
       if (endpoint.equals("Banks")) {
         if (rejectBank) return Map.of("error", "Record is in use", "status", 400);
@@ -175,5 +185,60 @@ public class FinancialCleanupTest {
     Assert.expectThrows(AssertionError.class,()->data.read(customer));
     data.close();
     Assert.assertTrue(api.records.isEmpty());Assert.assertEquals(api.deletes.get(0),customer.id());
+  }
+
+  @Test @io.qameta.allure.Story("مشاركة المراجع الثابتة بالصفحة وعزل بيانات كل حالة دون حذف بينها")
+  public void pageScopeSharesOnlyStableReferences(){
+    Api api=new Api();var data=new FinancialTestData(api.driver());Assert.expectThrows(AssertionError.class,()->data.track("Collections","business-collection","Business record",Map.of()));data.beginScenario();var stable=data.fixture("invoice-unit","Units",FinancialTestData.fields());var first=data.customer(1);var bank=data.bank(1);var safe=data.safe(1);var payment=data.payment();
+    data.beginScenario();var second=data.customer(1);Assert.assertNotEquals(first.id(),second.id());Assert.assertNotEquals(first.values().get("accountId"),second.values().get("accountId"));Assert.assertNotEquals(bank.id(),data.bank(1).id());Assert.assertNotEquals(safe.id(),data.safe(1).id());Assert.assertNotEquals(payment.id(),data.payment().id());Assert.assertEquals(data.fixture("invoice-unit","Units",FinancialTestData.fields()).id(),stable.id());
+    Assert.assertTrue(api.records.containsKey(first.id()));Assert.assertTrue(api.deletes.isEmpty());data.close();Assert.assertTrue(api.records.isEmpty());
+  }
+  @Test @io.qameta.allure.Story("استكمال الحذف بعد انقطاع التشغيل من السجلات المتبقية فقط")
+  public void interruptedPageCleanupResumesOnlyRemainingOwnedRecords()throws Exception{
+    Api api=new Api();var data=new FinancialTestData(api.driver());var first=data.bank(1);var last=data.safe(2);api.crashAtDelete=2;
+    Assert.expectThrows(Error.class,data::close);String suffix=last.name().substring(last.name().length()-12);
+    var rows=new org.json.JSONArray(java.nio.file.Files.readString(java.nio.file.Path.of("target","financial-fixtures",suffix+".json")));
+    Assert.assertTrue(rows.toList().stream().noneMatch(v->last.id().equals(((Map<?,?>)v).get("id"))));
+    api.crashAtDelete=0;FinancialTestData.resume(api.driver(),suffix).close();Assert.assertTrue(api.records.isEmpty());Assert.assertEquals(java.util.Collections.frequency(api.deletes,last.id()),1);
+  }
+
+  @Test @io.qameta.allure.Story("الاحتفاظ بمحاولة الإنشاء عند فقد الاستجابة واستعادتها بعد إعادة التشغيل دون حذف المتطلبات مبكراً")
+  public void resumesUncertainCreateBeforeDeletingItsDependencies()throws Exception{
+    Api api=new Api();var data=new FinancialTestData(api.driver());var account=data.account("retained");api.failAfterUnitInsert=true;
+    Assert.expectThrows(AssertionError.class,()->data.fixture("invoice-unit","Units",FinancialTestData.fields()));api.failPendingLookup=true;
+    Assert.expectThrows(AssertionError.class,data::close);Assert.assertTrue(api.deletes.isEmpty());Assert.assertTrue(api.records.containsKey(account.id()));
+    api.failPendingLookup=false;api.failAfterUnitInsert=false;FinancialTestData.resume(api.driver(),data.journalSuffix()).close();Assert.assertTrue(api.records.isEmpty());
+  }
+  @Test @io.qameta.allure.Story("رفض استرجاع أو حذف سجلات المجموعة من فرع آخر")
+  public void refusesRecoveryInAnotherBranch()throws Exception{
+    Api api=new Api();var data=new FinancialTestData(api.driver());data.fixture("invoice-unit","Units",FinancialTestData.fields());api.activeBranch="another-branch";
+    Assert.expectThrows(AssertionError.class,()->FinancialTestData.resume(api.driver(),data.journalSuffix()));Assert.expectThrows(AssertionError.class,data::close);Assert.assertTrue(api.deletes.isEmpty());
+    api.activeBranch="branch-test";data.close();Assert.assertTrue(api.records.isEmpty());
+  }
+
+  @Test @io.qameta.allure.Story("دورة الصفحة الفعلية تحتفظ ببيانات الحالات وتغلق النوافذ وتنظف المجموعة مع فشل الخطوة الأخيرة")
+  public void actualCallbacksKeepCasesUntilPageEndEvenAfterFailure()throws Exception{
+
+    Api api=new Api();try(var browser=new TestSupport.FixtureBrowser(api.driver())){
+      var marker=new java.util.concurrent.atomic.AtomicReference<String>();var broken=new java.util.concurrent.atomic.AtomicBoolean();
+      var fixturePage=new Plugin_ERP.System_Modules.Login.FinancialMovements.FinancialMovementPage(browser.driver){
+        @Override public String captureMarker(){if(broken.get())throw new org.openqa.selenium.WebDriverException("Lost browser at page end");return marker.get();}
+        @Override public List<Map<String,Object>> capturedSaves(){return List.of();}
+        @Override public List<Map<String,Object>> capturedAttempts(){return List.of();}
+        @Override public void awaitSavesSettled(){}
+      };
+      var harness=new FinancialScenarioTest(){protected Plugin_ERP.System_Modules.Login.FinancialMovements.FinancialMovementKind kind(){return Plugin_ERP.System_Modules.Login.FinancialMovements.FinancialMovementKind.RECEIPT;}protected Plugin_ERP.System_Modules.Login.FinancialMovements.FinancialMovementPage movementPage(){return fixturePage;}};
+      harness.newFinancialScenario();marker.set(harness.marker);var data=harness.data;var first=data.customer(1);browser.addAuxiliaryWindow();harness.cleanFinancialScenario();
+      harness.newFinancialScenario();marker.set(harness.marker);Assert.assertSame(harness.data,data);var second=data.customer(1);browser.addAuxiliaryWindow();harness.cleanFinancialScenario();
+      Assert.assertTrue(api.records.containsKey(first.id()));Assert.assertTrue(api.records.containsKey(second.id()));Assert.assertTrue(api.deletes.isEmpty());Assert.assertEquals(browser.closed,2);
+      broken.set(true);Assert.expectThrows(AssertionError.class,harness::retryFinancialCleanup);Assert.assertTrue(api.records.isEmpty());Assert.assertNull(harness.data);
+    }
+  }
+
+  @Test @io.qameta.allure.Story("انتظار عودة نفس الفرع بعد إعادة تحميل الشاشة مع استمرار رفض الفرع المختلف")
+  public void waitsForBranchHydrationAfterClosingTheForm(){
+    Api api=new Api();var data=new FinancialTestData(api.driver());var bank=data.bank(1);api.branchUnavailableReads=2;
+    Assert.assertEquals(data.read(bank).get("id"),bank.id());Assert.assertTrue(api.deletes.isEmpty());
+    api.activeBranch="another-branch";Assert.expectThrows(AssertionError.class,()->data.read(bank));Assert.assertTrue(api.deletes.isEmpty());api.activeBranch="branch-test";data.close();Assert.assertTrue(api.records.isEmpty());
   }
 }

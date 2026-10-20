@@ -60,6 +60,12 @@ final class StoreTestData implements AutoCloseable {
     return data;
   }
 
+  private int scenarioSequence;
+  private String scenarioScope="";
+  /** Stable references belong to this page; mutable/searchable records belong to the case. */
+  void beginScenario(){recoverUncertainDocuments();scenarioScope="case-"+(++scenarioSequence)+"-";}
+  private String fixtureKey(String key){return key.startsWith("unit-")||key.equals("category-main")||key.startsWith("store-")||key.startsWith("account-main-store-")||key.startsWith("account-sub-store-")?key:scenarioScope+key;}
+
   static Map<String, Object> fields(Object... pairs) {
     Map<String, Object> values = new LinkedHashMap<>();
     for (int i = 0; i < pairs.length; i += 2) values.put((String) pairs[i], pairs[i + 1]);
@@ -228,6 +234,7 @@ final class StoreTestData implements AutoCloseable {
 
   @io.qameta.allure.Step("إنشاء بيانات مساعدة مستقلة: {key}")
   Record fixture(String key, String endpoint, Map<String, Object> values) {
+    key=fixtureKey(key);
     if (fixtures.containsKey(key)) return fixtures.get(key);
     String name = key.startsWith("QA-ST-") ? key : "QA-ST-" + key + "-" + suffix;
     values.put("arabicName", name);
@@ -299,11 +306,7 @@ final class StoreTestData implements AutoCloseable {
   }
   private void journal(){
     List<Map<String,Object>> rows=created.stream().map(r->fields("origin",origin,"branchId",sessionBranchId,"endpoint",r.endpoint(),"id",r.id(),"name",r.name(),"values",r.values())).toList();
-    try{
-      java.nio.file.Path directory=java.nio.file.Path.of("target","store-fixtures");
-      java.nio.file.Files.createDirectories(directory);
-      java.nio.file.Files.writeString(directory.resolve(suffix+".json"),new org.json.JSONArray(rows).toString(2));
-    }catch(java.io.IOException e){throw new AssertionError("Cannot record owned store fixture IDs",e);}
+    TestSupport.FixtureJournals.write(java.nio.file.Path.of("target","store-fixtures",suffix+".json"),rows);
   }
 
   private static boolean retryable(ApiFailure failure) {
@@ -333,8 +336,7 @@ final class StoreTestData implements AutoCloseable {
     }journalAttempts();
   }
   private void journalAttempts(){String json=new org.json.JSONArray(uncertainDocuments).toString(2);if(json.equals(lastAttemptJournal))return;
-    try{var directory=java.nio.file.Path.of("target","store-attempts");java.nio.file.Files.createDirectories(directory);java.nio.file.Files.writeString(directory.resolve(suffix+".json"),json);lastAttemptJournal=json;}
-    catch(java.io.IOException e){throw new AssertionError("Cannot journal uncertain warehouse request",e);}
+    TestSupport.FixtureJournals.write(java.nio.file.Path.of("target","store-attempts",suffix+".json"),uncertainDocuments);lastAttemptJournal=json;
   }
   Map<String,Object> rememberFixtureAttempt(String endpoint,String name,Map<String,Object> values){
     if(!MASTERS.contains(endpoint)||!name.startsWith("QA-ST-"))throw new AssertionError("Refuse unrelated fixture recovery");
@@ -476,7 +478,7 @@ final class StoreTestData implements AutoCloseable {
             + "]: waiting for dependent fixture cleanup");
         continue;
       }
-      try { deleteRecord(record); }
+      try { deleteRecord(record); created.remove(record); fixtures.entrySet().removeIf(entry->entry.getValue().equals(record)); journal(); }
       catch (RuntimeException | AssertionError failure) {
         pending.add(record);
         failures.add(record.name() + " [" + record.endpoint() + "/" + record.id() + "]: "

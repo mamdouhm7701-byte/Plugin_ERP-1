@@ -25,7 +25,7 @@ public abstract class StoreScenarioTest extends BaseTest {
   @BeforeSuite(alwaysRun=true) public void awaitStoreSession(){movementPage().smAwaitSession();}
   @BeforeMethod(alwaysRun=true) public void beginStoreScenario(){
     marker="QA-ST-"+UUID.randomUUID().toString().substring(0,12);page=movementPage();mainWindow=driver.getWindowHandle();
-    data=new StoreTestData(driver);pending.add(data);item=null;initialBalances.clear();selectedParty=null;
+    if(data==null){data=new StoreTestData(driver);pending.add(data);}data.beginScenario();item=null;initialBalances.clear();selectedParty=null;
   }
   // Keep feature scenarios independent of the separately tested name/barcode lookup defects.
   protected String baselineMode(){return kind()==StoreMovementKind.EXCHANGE?"picker":"barcode";}
@@ -52,6 +52,7 @@ public abstract class StoreScenarioTest extends BaseTest {
   protected void fill(String mode){add(item,mode);page.smQuantity(item.name(),"3");}
   private void add(StoreTestData.Record record,String mode){switch(mode){case "barcode"->page.smAddBarcode(record.values().get("mainUnitBarcode").toString(),record.name());case "picker"->page.smAddPicker(record.name());default->page.smAddName(record.name());}}
   @SuppressWarnings("unchecked") protected List<StoreTestData.Record> capture(){List<StoreTestData.Record> records=new ArrayList<>();
+    if(!marker.equals(page.smCaptureMarker()))return records;
     data.rememberAttempts(page.smAttempts(),page.smSaves(),marker);
     for(var saved:page.smSaves()){
       Assert.assertEquals(saved.get("endpoint"),kind().endpoint);Map<String,Object> values=(Map<String,Object>)saved.get("values");
@@ -154,9 +155,12 @@ public abstract class StoreScenarioTest extends BaseTest {
   @AfterMethod(alwaysRun=true) public void cleanStoreScenario(org.testng.ITestResult result){if(driver==null||page==null||data==null||pending.isEmpty())return;
     if(result!=null&&!result.isSuccess()){Allure.addAttachment("Warehouse failure DOM","text/html",page.smDiagnosticMarkup(),".html");Allure.addAttachment("Warehouse lookup diagnostics","application/json",page.smDiagnostics(),".json");}
     for(String window:new ArrayList<>(driver.getWindowHandles()))if(!window.equals(mainWindow)){driver.switchTo().window(window);driver.close();}driver.switchTo().window(mainWindow);
-    List<String> failures=new ArrayList<>();if(pending.contains(data))try{page.smSettled();capture();}catch(AssertionError|RuntimeException e){failures.add(e.getMessage());}
-    for(var context:new ArrayList<>(pending))try{context.close();pending.remove(context);}catch(AssertionError|RuntimeException e){failures.add(e.getMessage());}
+    List<String> failures=new ArrayList<>();if(pending.contains(data))try{if(marker.equals(page.smCaptureMarker()))data.rememberAttempts(page.smAttempts(),page.smSaves(),marker);page.smSettled();capture();}catch(AssertionError|RuntimeException e){failures.add(e.getMessage());}
     if(!failures.isEmpty())throw new AssertionError(String.join("; ",failures));
   }
-  @AfterClass(alwaysRun=true) public void retryStoreCleanup(){cleanStoreScenario(null);}
+  @AfterClass(alwaysRun=true) public void retryStoreCleanup(){
+    List<String> failures=new ArrayList<>();try{cleanStoreScenario(null);}catch(AssertionError|RuntimeException e){failures.add(e.toString());}
+    for(var context:new ArrayList<>(pending))try{context.close();pending.remove(context);if(data==context)data=null;}catch(AssertionError|RuntimeException e){failures.add(e.toString());}
+    if(!failures.isEmpty())throw new AssertionError(String.join("; ",failures));
+  }
 }

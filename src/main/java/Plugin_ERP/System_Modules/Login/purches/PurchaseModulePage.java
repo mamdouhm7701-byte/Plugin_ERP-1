@@ -8,7 +8,7 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Sales UI interactions; scenarios and persisted inventory assertions live in tests. */
+/** Purchase UI interactions; scenarios and persisted inventory assertions live in tests. */
 public class PurchaseModulePage extends AbstractForPurchases {
   protected final WebDriverWait ready;
   public PurchaseModulePage(WebDriver driver){super(driver);ready=new WebDriverWait(driver,Duration.ofSeconds(35));
@@ -33,6 +33,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
         .stream().filter(WebElement::isDisplayed).filter(e->{String text=e.getText().trim().replaceAll("\\s+"," ");return text.equals(name)||Arrays.asList(text.split(" - ")).contains(name);}).toList();
       if(options.isEmpty())return false;if(options.size()!=1)throw new AssertionError("Ambiguous owned option: "+name);options.get(0).click();return true;}return false;});}
   public void puClearChoice(String label){ready.until(d->{for(WebElement dropdown:d.findElements(By.xpath("//*[self::label or self::legend][(normalize-space()='"+label+"' or normalize-space(text())='"+label+"')]/following::div[contains(concat(' ',normalize-space(@class),' '),' v-select ')][1]"))){
+    js("arguments[0].scrollIntoView({block:'center',inline:'center'})",dropdown);
     if(dropdown.findElements(By.cssSelector(".vs__selected")).isEmpty())return true;
     for(WebElement button:dropdown.findElements(By.cssSelector("button.vs__clear")))if(button.isDisplayed()&&button.isEnabled()){button.click();return true;}
   }return false;});ready.until(d->puChoiceEmpty(label));}
@@ -54,7 +55,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
   public void puDismiss(){ready.until(d->{if(d.findElements(By.cssSelector(".swal2-container")).stream().noneMatch(WebElement::isDisplayed))return true;
     for(WebElement e:d.findElements(By.cssSelector("button.swal2-confirm")))if(e.isDisplayed())e.click();return false;});}
   @Step("التحقق من رسالة الخطأ") public String puValidation(){return ready.until(d->{List<String> out=new ArrayList<>();
-    for(WebElement e:d.findElements(By.cssSelector("small.text-danger,.invalid-feedback,.swal2-title,.swal2-html-container,.b-toast-danger .toast-body,.v-toast__item--error .v-toast__text"))){
+    for(WebElement e:d.findElements(By.cssSelector(".text-danger,.invalid-feedback,.swal2-title,.swal2-html-container,.b-toast-danger .toast-body,.v-toast__item--error .v-toast__text"))){
       if(e.getDomProperty("textContent").isBlank())continue;js("arguments[0].scrollIntoView({block:'center',inline:'center'})",e);
       if(e.isDisplayed()&&!e.getText().isBlank())out.add(e.getText());}
     return out.isEmpty()?null:String.join(" | ",new LinkedHashSet<>(out));});}
@@ -110,19 +111,21 @@ public class PurchaseModulePage extends AbstractForPurchases {
       return dispatch(action,payload,...rest).then(result=>{if(lookup){const data=result?.data||result;cap.lookups.push({url:payload.url,total:data?.totalRecords,items:data?.pageData?.map(i=>({id:i.id,arabicName:i.arabicName}))});}
         if(owned){cap.pending--;const entity=result?.data||result;
         cap.saves.push({endpoint:payload.url,id:sent.id||entity?.id||(typeof entity==='string'||typeof entity==='number'?entity:null),values:sent});}return result;})
-        .catch(error=>{if(lookup)cap.lookups.push({url:payload.url,error:String(error),status:error?.response?.status});if(owned){cap.pending--;cap.errors.push(String(error));}throw error;});};
+        .catch(error=>{if(lookup)cap.lookups.push({url:payload.url,error:String(error),status:error?.response?.status});if(owned){cap.pending--;cap.errors.push(JSON.stringify(error?.response?.data||error?.data||{message:String(error),status:error?.status}));}throw error;});};
     """,marker,storeId,itemId,endpoint);}
   @SuppressWarnings("unchecked") public List<Map<String,Object>> puSaves(){return (List<Map<String,Object>>)js("return window.__purchaseQA?.saves||[]");}
   @SuppressWarnings("unchecked") public List<Map<String,Object>> puAttempts(){return (List<Map<String,Object>>)js("return window.__purchaseQA?.attempts||[]");}
   public void puSettled(){ready.until(d->!Boolean.TRUE.equals(js("return (window.__purchaseQA?.pending||0)>0")));}
   public String puSaveErrors(){return String.valueOf(js("return window.__purchaseQA?.errors||[]"));}
-  public String puDiagnostics(){return String.valueOf(js("return JSON.stringify({lookups:window.__purchaseQA?.lookups||[],errors:window.__purchaseQA?.uiErrors||[]})"));}
+  public String puDiagnostics(){return String.valueOf(js("return JSON.stringify({lookups:window.__purchaseQA?.lookups||[],errors:window.__purchaseQA?.uiErrors||[],saveErrors:window.__purchaseQA?.errors||[],pending:window.__purchaseQA?.pending,attempts:window.__purchaseQA?.attempts,saves:window.__purchaseQA?.saves})"));}
+  public void puWaitSaveOutcome(){ready.until(d->!puSaves().isEmpty()||Boolean.TRUE.equals(js("return (window.__purchaseQA?.errors||[]).length>0"))||!d.findElements(By.cssSelector("form [aria-invalid='true'],form input:invalid,form select:invalid,form textarea:invalid")).isEmpty()||d.findElements(By.cssSelector(".text-danger,.invalid-feedback,.swal2-html-container,.swal2-title")).stream().anyMatch(e->e.isDisplayed()&&!e.getText().isBlank()));}
   public String puCaptureMarker(){return (String)js("return window.__purchaseQA?.marker||null");}
   @Step("فتح سند الاختبار للتعديل") public void puEdit(String route,Object id,String marker,String itemName){puOpen(route+"/edit/"+id);
     ready.until(d->d.findElements(By.cssSelector("form textarea[label-text='Notes']")).stream().anyMatch(e->marker.equals(e.getDomProperty("value")))&&puLineCount(itemName)>0);}
 
   @SuppressWarnings("unchecked") public Map<String,Object> puDocument(){return (Map<String,Object>)js("const q=[document.querySelector('#app').__vue__];while(q.length){const v=q.shift();q.push(...(v.$children||[]));if(v.$data?.selectedItem?.lines&&v.$options.methods?.save)return JSON.parse(JSON.stringify(v.$data.selectedItem));}return null");}
   public void puFormReady(){ready.until(d->{var doc=puDocument();return doc!=null&&doc.get("transactionDate") instanceof String date&&!date.isBlank();});}
+  public void puAwaitOwnedLookups(Object store,Object supplier,Object agent){new WebDriverWait(driver,Duration.ofSeconds(45)).until(d->Boolean.TRUE.equals(js("const q=[document.querySelector('#app').__vue__];while(q.length){const v=q.shift();q.push(...(v.$children||[]));if(v.$data?.selectedItem?.lines&&v.$options.methods?.save){const l=v.lookups;return Boolean(l?.stores?.some(x=>x.id===arguments[0])&&l?.suppliers?.some(x=>x.id===arguments[1])&&l?.agents?.some(x=>x.id===arguments[2]));}}return false",store,supplier,agent)));}
   public String puDocumentDate(){puFormReady();return puDocument().get("transactionDate").toString().substring(0,10);}
   public void puSetLine(String name,String column,String value){
     ready.until(d->{WebElement row=d.findElements(line(name)).stream().filter(WebElement::isDisplayed).findFirst().orElse(null);if(row==null)return false;
@@ -135,6 +138,10 @@ public class PurchaseModulePage extends AbstractForPurchases {
     return result;}
   public void puWaitNet(String value){ready.until(d->{String actual=puTotals().get("الصافي");return actual!=null&&new java.math.BigDecimal(actual.replace(",","")).compareTo(new java.math.BigDecimal(value))==0;});}
   public void puDiscount(String value,boolean percentage){puType(By.cssSelector(percentage?"fieldset[name='discountPercentage'] input":"fieldset[name='discountValue'] input"),value);}
+  public java.math.BigDecimal puUserDiscountLimit(){
+    Object value=js("const q=[document.querySelector('#app').__vue__];while(q.length){const v=q.shift();q.push(...(v.$children||[]));const user=v.lookups?.CurrentUser||v.lookups?.currentUser;if(user?.maxAllowedDiscount!=null)return user.maxAllowedDiscount;}return null");
+    return value==null?null:new java.math.BigDecimal(value.toString());
+  }
   public void puAddOtherPayment(String method,String amount){radio("PaymentMethods");puChoose("طريقة الدفع",method);puType(By.cssSelector("form input[name='value']:not([disabled])"),amount);
     puClick(By.xpath("//form//*[self::legend or self::label][normalize-space()='طريقة الدفع']/ancestor::div[contains(@class,'row')][1]//button[.//*[local-name()='svg' and contains(@class,'feather-plus')]]"));}
   public void puNew(){puClick(By.xpath("//button[normalize-space()='جديد']"));puDismiss();ready.until(d->((List<?>)puDocument().get("lines")).isEmpty());}
@@ -144,22 +151,31 @@ public class PurchaseModulePage extends AbstractForPurchases {
   public void puConvertOwned(String supplier,String code,boolean toInvoice,String itemName){
     puListScope(supplier);puListText("filteredCode",code);
     ready.until(d->puListRows().size()==1&&code.equals(String.valueOf(puListRows().get(0).get("code"))));
-    String icon=toInvoice?"repeat":"fileText-icon";
-    puClick(By.xpath("//table//tbody/tr[.//td[normalize-space()='"+code+"']]//button[.//*[contains(@class,'"+icon+"') or contains(@id,'"+icon+"')]]"));
-    puFormReady();ready.until(d->puLineCount(itemName)>0);
+    Object sourceId=puListRows().get(0).get("id");String icon=toInvoice?"repeat":"refresh-cw";
+    puClick(By.xpath("//table//tbody/tr[.//td[normalize-space()='"+code+"']]//button[.//*[contains(@class,'"+icon+"')]]"));
+    ready.until(d->d.getCurrentUrl().contains(toInvoice?"purch-invoice":"return-purch"));puFormReady();
+    ready.until(d->sourceId.equals(puDocument().get("sourceTransactionId"))&&puLineCount(itemName)>0);
+    ready.until(d->d.findElements(By.cssSelector("#loading-bg,div.b-overlay")).stream().noneMatch(WebElement::isDisplayed));utilites.waits().waitForOverlayToDisappear();
+  }
+  @Step("حذف مستند الاختبار من القائمة: {code}")
+  public void puDeleteOwned(String supplier,String code){
+    puListScope(supplier);puListText("filteredCode",code);
+    ready.until(d->puListRows().size()==1&&code.equals(String.valueOf(puListRows().get(0).get("code"))));
+    puClick(By.xpath("//table//tbody/tr[.//td[normalize-space()='"+code+"']]//button[@data-action-type='delete']"));
+    puClick(By.cssSelector("button.swal2-confirm"));puDismiss();puWaitListIds(Set.of());
   }
   public void puListScope(String customer){puOpen("purch-invoice-list");puAwaitListReady();puButton("عرض التصفية");puChoose("المورد",customer);puApplyListFilters();}
   public void puAwaitListReady(){ready.until(d->puListReady());}
   private boolean puListReady(){return Boolean.TRUE.equals(js("const q=[document.querySelector('#app').__vue__];let table,owner;while(q.length){const v=q.shift();q.push(...(v.$children||[]));if(v.$options.methods?.invoiceProvider)owner=v;if(v.$options.name==='BTable'&&v.$el?.getClientRects().length&&v.$el.closest('.ps-list-page'))table=v;}return Boolean(table&&owner&&!table.computedBusy&&!owner.isTableBusy&&performance.getEntriesByType('resource').some(r=>{try{return /\\/PurchaseLists$/i.test(new URL(r.name).pathname)}catch(e){return false}}))"));}
-  public void puApplyListFilters(){puAwaitListReady();ready.until(d->{for(WebElement input:d.findElements(By.cssSelector("input[name='filteredCode']")))if(input.isDisplayed()&&input.isEnabled()){input.sendKeys(Keys.ENTER);return true;}return false;});puAwaitListReady();}
-  public String puListFixtureDate(){puOpen("purch-invoice-list");puButton("عرض التصفية");
+  public void puApplyListFilters(){puAwaitListReady();ready.until(d->{for(WebElement input:d.findElements(By.cssSelector("input[name='codeFilter']")))if(input.isDisplayed()&&input.isEnabled()){input.sendKeys(Keys.ENTER);return true;}return false;});puAwaitListReady();}
+  public String puListFixtureDate(){puOpen("purch-invoice-list");puAwaitListReady();puButton("عرض التصفية");ready.until(d->!d.findElements(By.cssSelector("input[name='fromDate']")).isEmpty()&&!d.findElements(By.cssSelector("input[name='toDate']")).isEmpty());
     var from=java.time.LocalDate.parse(driver.findElement(By.cssSelector("input[name='fromDate']")).getDomProperty("value").substring(0,10));
     var to=java.time.LocalDate.parse(driver.findElement(By.cssSelector("input[name='toDate']")).getDomProperty("value").substring(0,10));
-    if(to.isBefore(from))throw new AssertionError("Default sales list date range is invalid");
+    if(to.isBefore(from))throw new AssertionError("Default purchase list date range is invalid");
     var today=java.time.LocalDate.now();return (today.isBefore(from)?from:today.isAfter(to)?to:today).toString();}
   @SuppressWarnings("unchecked") public List<Map<String,Object>> puListRows(){return (List<Map<String,Object>>)js("const q=[document.querySelector('#app').__vue__];while(q.length){const v=q.shift();q.push(...(v.$children||[]));if(v.$options.name==='BTable'&&v.$el?.getClientRects().length&&v.$el.closest('.ps-list-page')&&Array.isArray(v.$data.localItems))return JSON.parse(JSON.stringify(v.$data.localItems));}return []");}
   public void puWaitListIds(Set<Object> expected){ready.until(d->{if(!puListReady())return false;var actual=new HashSet<Object>();for(var row:puListRows())actual.add(row.get("id"));return actual.equals(expected);});}
-  public void puListText(String name,String text){puAwaitListReady();puType(By.cssSelector("input[name='"+name+"']"),text,false);puApplyListFilters();}
+  public void puListText(String name,String text){puAwaitListReady();if(name.equals("fromDate")||name.equals("toDate")){puDateFilter(name,text);return;}puType(By.cssSelector("input[name='"+(name.equals("filteredCode")?"codeFilter":name)+"']"),text,false);puApplyListFilters();}
   public void puListRadio(String group,String value){String anchor=group.equals("status")?"2":"sales";
     puClick(By.xpath("//div[@role='radiogroup' and .//input[@value='"+anchor+"']]//input[@value='"+value+"']/ancestor::label[1]"));}
   public List<String> puHeaders(){return driver.findElements(By.cssSelector("table thead th")).stream().filter(WebElement::isDisplayed).map(WebElement::getText).toList();}
@@ -177,4 +193,107 @@ public class PurchaseModulePage extends AbstractForPurchases {
     driver.switchTo().window(driver.getWindowHandles().stream().filter(w->!w.equals(main)).findFirst().orElseThrow());
     try{utilitesReportReady();AssertTextInReport(item);}finally{driver.close();driver.switchTo().window(main);puDismiss();}
   }
+
+  @Step("اختيار تاريخ فلتر المشتريات من التقويم: {value}")
+  public void puDateFilter(String name,String value){
+    puAwaitListReady();WebElement hidden=driver.findElement(By.cssSelector("input[name='"+name+"']"));
+    if(value.equals(hidden.getDomProperty("value")))return;
+    setDateFilter(hidden,value);
+    ready.until(d->value.equals(d.findElement(By.cssSelector("input[name='"+name+"']")).getDomProperty("value")));
+    puAwaitListReady();
+  }
+    private void setDateFilter(WebElement hiddenInput, String value) {
+        String pickerId = "fromDate".equals(hiddenInput.getAttribute("name")) ? "example-datepicker" : "example-datepicker2";
+        WebElement picker = driver.findElement(By.id(pickerId));
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.elementToBeClickable(By.id(pickerId)));
+        picker = driver.findElement(By.id(pickerId));
+        picker.click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(8));
+        String[] parts = value.split("-");
+        if (parts.length != 3) throw new IllegalArgumentException("Date must use yyyy-MM-dd");
+        int year = Integer.parseInt(parts[0]);
+        int month = Integer.parseInt(parts[1]);
+        int day = Integer.parseInt(parts[2]);
+        wait.until(d -> calendarIsVisible(pickerId));
+        String shown = calendarCaption(pickerId);
+        java.time.YearMonth target = java.time.YearMonth.of(year, month);
+        for (int i = 0; i < 240; i++) {
+            java.util.regex.Matcher yearMatcher = java.util.regex.Pattern.compile("(\\d{4})").matcher(shown);
+            if (!yearMatcher.find()) throw new IllegalStateException("Calendar year not found: " + shown);
+            int shownYear = Integer.parseInt(yearMatcher.group(1));
+            int shownMonth = parseMonth(shown);
+            java.time.YearMonth current = java.time.YearMonth.of(shownYear, shownMonth);
+            if (current.equals(target)) break;
+            String direction = target.isBefore(current) ? "previous" : "next";
+            String previousCaption = shown;
+            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                    "const direction=arguments[0],picker=document.getElementById(arguments[1]);"
+                            + "const calendars=[...document.querySelectorAll('.b-calendar')];"
+                            + "const calendar=calendars.find(c=>c.getClientRects().length&&picker&&c.closest('.b-form-datepicker')===picker.closest('.b-form-datepicker'))"
+                            + "||calendars.find(c=>c.getClientRects().length);"
+                            + "const buttons=calendar?[...calendar.querySelectorAll('.b-calendar-nav button')]:[];"
+                            + "const button=buttons.find(b=>((b.getAttribute('aria-label')||'')+' '+(b.title||'')).toLowerCase().includes(direction))"
+                            + "||(buttons.length?buttons[direction==='previous'?0:buttons.length-1]:null);"
+                            + "if(button){button.click();return true;}return false;", direction, pickerId);
+            shown = new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> {
+                try {
+                    String currentCaption = calendarCaption(pickerId);
+                    return currentCaption.equals(previousCaption) ? null : currentCaption;
+                } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
+                    return null;
+                }
+            });
+        }
+        String dayText = String.valueOf(day);
+        By dayButtons = By.cssSelector(".b-calendar button, .b-calendar [role='button'], .b-calendar .btn");
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(8)).until(d -> {
+                try {
+                    List<WebElement> candidates = d.findElements(dayButtons).stream()
+                            .filter(WebElement::isDisplayed)
+                            .filter(button -> button.getText().trim().replaceAll("\\D", "").equals(dayText))
+                            .filter(button -> !button.getAttribute("class").contains("text-muted"))
+                            .filter(WebElement::isEnabled)
+                            .toList();
+                    WebElement targetDay = candidates.stream()
+                            .filter(button -> String.valueOf(button.getAttribute("aria-label")).contains(String.valueOf(year)))
+                            .findFirst().orElse(candidates.stream().findFirst().orElse(null));
+                    if (targetDay == null) return false;
+                    targetDay.click();
+                    return true;
+                } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
+                    return false;
+                }
+            });
+        } catch (org.openqa.selenium.TimeoutException e) {
+            throw new IllegalStateException("Calendar day not found: " + value, e);
+        }
+    }
+
+    private boolean calendarIsVisible(String pickerId) {
+        return Boolean.TRUE.equals(((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "const picker=document.getElementById(arguments[0]),calendars=[...document.querySelectorAll('.b-calendar')];"
+                        + "return calendars.some(c=>c.getClientRects().length&&picker&&c.closest('.b-form-datepicker')===picker.closest('.b-form-datepicker'))"
+                        + "||calendars.some(c=>c.getClientRects().length);", pickerId));
+    }
+
+    private String calendarCaption(String pickerId) {
+        Object value = ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "const picker=document.getElementById(arguments[0]),calendars=[...document.querySelectorAll('.b-calendar')];"
+                        + "const calendar=calendars.find(c=>c.getClientRects().length&&picker&&c.closest('.b-form-datepicker')===picker.closest('.b-form-datepicker'))"
+                        + "||calendars.find(c=>c.getClientRects().length);"
+                        + "const caption=calendar&&calendar.querySelector('.b-calendar-grid-caption');"
+                        + "return caption?(caption.innerText||caption.textContent||'').trim():'';");
+        return value == null ? "" : value.toString();
+    }
+
+    private int parseMonth(String text) {
+        java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("(\\d{1,2})[/-]").matcher(text);
+        if (matcher.find()) return Integer.parseInt(matcher.group(1));
+        String normalized = text.replaceAll("\\d", "").trim();
+        String[] arabicMonths = {"يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"};
+        for (int i = 0; i < arabicMonths.length; i++) if (normalized.contains(arabicMonths[i])) return i + 1;
+        return java.time.Month.valueOf(normalized.toUpperCase(Locale.ROOT).substring(0, 3)).getValue();
+    }
+
 }

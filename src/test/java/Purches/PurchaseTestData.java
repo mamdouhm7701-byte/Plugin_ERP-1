@@ -43,10 +43,8 @@ final class PurchaseTestData implements AutoCloseable {
   }
   private String fixtureKey(String key){
     boolean shared=key.startsWith("store-")||key.startsWith("unit-")||key.equals("category-main")
-      ||key.startsWith("agent-")||key.equals("bank")||key.equals("payment")||key.equals("safe")
-      ||key.startsWith("account-main-store-")||key.startsWith("account-sub-store-")
-      ||key.equals("account-main-bank")||key.equals("account-sub-bank")
-      ||key.equals("account-main-safe")||key.equals("account-sub-safe");
+      ||key.startsWith("agent-")
+      ||key.startsWith("account-main-store-")||key.startsWith("account-sub-store-");
     return shared?key:scenarioScope+key;
   }
 
@@ -188,11 +186,24 @@ final class PurchaseTestData implements AutoCloseable {
       "price",100,"total",total,"net",total,"costPrice",qty.multiply(new java.math.BigDecimal("80")),"discountPercentage",0,"discountValue",0,"additions",List.of(),"attributes",List.of(),"attachmentDetails",List.of(),"roundedAdditions",0,"roundedNet",total);
     List<?> payments=amount.signum()==0?List.of():List.of(fields("paymentMethod","Other","otherPaymentMethodId",payment().id(),"bankId",bank().id(),"value",amount,"cashPaid",0));
     return fixture("seed-"+index,type,fields("transactionType",switch(type){case "Purchases"->"Purch";case "PurchaseOrders"->"PurchOrder";case "ReturnPurchases"->"ReturnPurch";default->throw new AssertionError(type);},"transactionChannel","Normal","transactionSource","Web","transactionDate",date,"transactionTime","12:00:00",
-      "dueDate",date,"paymentType",amount.signum()==0?"Credit":"Cash","dealerId",customer.id(),"agentId",salesAgent.id(),"storeId",store(1).id(),"isOffline",false,"isPosted",false,"isComplete",false,
+      "dueDate",date,"referenceNumber","REF-"+scenarioScope+index+"-"+suffix,"paymentType",amount.signum()==0?"Credit":"Cash","dealerId",customer.id(),"agentId",salesAgent.id(),"storeId",store(1).id(),"isOffline",false,"isPosted",false,"isComplete",false,
       "paid",amount,"total",total,"netBeforeTaxes",total,"net",total,"totalTaxes",0,"discountValue",0,"discountPercentage",0,"totalAdditionalTaxes",0,
       "lines",List.of(line),"taxes",List.of(),"payments",payments,"expenses",List.of(),"costCenters",List.of(),"extraProperties",List.of()));
   }
   void deleteOwned(Record record){deleteRecord(record);}
+  @SuppressWarnings("unchecked") List<Map<String,Object>> ownedSupplierReceipts(Object supplierId){
+    if(created.stream().noneMatch(r->r.endpoint().equals("Suppliers")&&r.id().equals(supplierId)))throw new AssertionError("Supplier is not owned by this page");
+    var found=new ArrayList<Map<String,Object>>();var seen=new java.util.HashSet<Object>();
+    for(int page=1;;page++){
+      Object entity=call("get","Collections?pageNumber="+page+"&pageSize=500&dealerId="+supplierId,fields()).get("entity");
+      if(!(entity instanceof Map<?,?> dto)||!(dto.get("pageData") instanceof List<?> rows)||!(dto.get("totalRecords") instanceof Number total))throw new AssertionError("Cannot inspect supplier receipts");
+      int added=0;for(Object value:rows){if(!(value instanceof Map<?,?> row)||row.get("id")==null)throw new AssertionError("Receipt list has no identity");if(!seen.add(row.get("id")))continue;added++;
+        Map<String,Object> receipt=row.containsKey("dealerId")?(Map<String,Object>)row:read(new Record("Collections",row.get("id"),"QA-PU-read-only-receipt",fields()));
+        if(receipt!=null&&supplierId.equals(receipt.get("dealerId")))found.add(receipt);
+      }
+      if(seen.size()>=total.longValue())return found;if(added==0)throw new AssertionError("Receipt pagination did not advance");
+    }
+  }
   java.util.Set<String> documentIdentities(){return created.stream().filter(r->MOVEMENTS.contains(r.endpoint())).map(r->r.endpoint()+"/"+r.id()).collect(java.util.stream.Collectors.toSet());}
   void verifyNoNewDocuments(java.util.Set<String> before){recoverUncertainDocuments();var added=new java.util.HashSet<>(documentIdentities());added.removeAll(before);
     if(!added.isEmpty())throw new AssertionError("Invalid sales document committed: "+added);}
@@ -278,7 +289,7 @@ final class PurchaseTestData implements AutoCloseable {
     values.put("notes",MOVEMENTS.contains(endpoint)?name:"Owned Sales test fixture");
     Map<String,Object> attempt=MASTERS.contains(endpoint)?rememberFixtureAttempt(endpoint,name,values):MOVEMENTS.contains(endpoint)?rememberSeedAttempt(endpoint,name,values):null;
     Map<String, Object> response;
-    try {response = call("create", endpoint, values);}
+    try {response = createFixture(endpoint, values);}
     catch(ApiFailure|org.openqa.selenium.TimeoutException failure){
       // Retain a partial commit for cleanup; the original creation still fails.
       if(endpoint.equals("Items"))try{recoverAttemptedItems(List.of(fields("endpoint",endpoint,"values",values)));}
@@ -293,6 +304,15 @@ final class PurchaseTestData implements AutoCloseable {
     if(attempt!=null){uncertainDocuments.remove(attempt);journalAttempts();}
     fixtures.put(key, record);
     return record;
+  }
+
+  private Map<String,Object> createFixture(String endpoint,Map<String,Object> values){
+    for(int attempt=1;;attempt++)try{return call("create",endpoint,values);}
+    catch(ApiFailure failure){
+      String message=failure.getMessage().toLowerCase(java.util.Locale.ROOT);
+      // A SQL deadlock victim is explicitly rolled back; other failures may have committed.
+      if(attempt>=3||failure.status!=500||!message.contains("deadlocked")||!message.contains("victim"))throw failure;
+    }
   }
 
   @SuppressWarnings("unchecked")
@@ -426,14 +446,13 @@ final class PurchaseTestData implements AutoCloseable {
         String list="PurchaseLists";
         String type=switch(endpoint){case "Purchases"->"Purch";case "PurchaseOrders"->"PurchOrder";case "ReturnPurchases"->"ReturnPurch";default->throw new AssertionError("Unknown purchase endpoint");};
         java.util.Set<Object> seen=new java.util.HashSet<>();
-        for(int page=1;;page++){Object entity=call("get",list+"?pageNumber="+page+"&pageSize=500",fields()).get("entity");
+        for(int page=1;;page++){Object entity=call("get",list+"?pageNumber="+page+"&pageSize=500&transactionType="+type+"&dealerId="+values.get("dealerId"),fields()).get("entity");
           if(!(entity instanceof Map<?,?> result)||!(result.get("pageData") instanceof List<?> rows)||!(result.get("totalRecords") instanceof Number total))throw new AssertionError("Cannot verify uncertain sales create through its list");
           int added=0;for(Object value:rows){if(!(value instanceof Map<?,?> row)||row.get("id")==null)throw new AssertionError("Sales list has no record identity");if(!seen.add(row.get("id")))continue;added++;
-            if(!row.containsKey("notes")&&!row.containsKey("storeId"))throw new AssertionError("Sales list omits fields needed to verify an uncertain create");
             if(created.stream().anyMatch(r->r.endpoint().equals(endpoint)&&java.util.Objects.equals(r.id(),row.get("id"))))continue;
-            if(name.equals(row.get("notes"))||(java.util.Objects.equals(values.get("storeId"),row.get("storeId"))&&type.equalsIgnoreCase(String.valueOf(row.get("transactionType"))))){
+            if((!row.containsKey("notes")&&!row.containsKey("storeId"))||name.equals(row.get("notes"))||(java.util.Objects.equals(values.get("storeId"),row.get("storeId"))&&type.equalsIgnoreCase(String.valueOf(row.get("transactionType"))))){
               Record candidate=new Record(endpoint,row.get("id"),name,values);Map<String,Object> stored=read(candidate);
-              if(stored!=null){if(!owns(candidate,stored))throw new AssertionError("Cannot verify uncertain sales candidate ownership");matches.add(candidate);}
+              if(stored!=null&&owns(candidate,stored))matches.add(candidate);
             }
           }
           if(seen.size()>=total.longValue())break;if(added==0)throw new AssertionError("Uncertain sales lookup pagination did not advance");
@@ -522,7 +541,7 @@ final class PurchaseTestData implements AutoCloseable {
             + "]: waiting for dependent fixture cleanup");
         continue;
       }
-      try { deleteRecord(record); }
+      try {deleteRecord(record);created.remove(index);fixtures.entrySet().removeIf(entry->entry.getValue().equals(record));journal();}
       catch (RuntimeException | AssertionError failure) {
         pending.add(record);
         failures.add(record.name() + " [" + record.endpoint() + "/" + record.id() + "]: "

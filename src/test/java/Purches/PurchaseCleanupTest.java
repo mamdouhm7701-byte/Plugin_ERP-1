@@ -13,6 +13,60 @@ import org.testng.annotations.Test;
 import io.qameta.allure.Story;
 
 public class PurchaseCleanupTest {
+  @Test @Story("دورة الصفحة تحتفظ ببيانات الحالتين الناجحة والفاشلة وتغلق النوافذ ثم تنظف المجموعة مرة واحدة")
+  public void actualPageLifecycleDefersCleanupUntilGroupEndEvenAfterFailure(){
+    Api api=new Api();var data=new PurchaseTestData(api.driver());var closes=new java.util.concurrent.atomic.AtomicInteger();var brokenBrowser=new java.util.concurrent.atomic.AtomicBoolean();
+    var harness=new PurchaseScenarioTest(){protected PurchaseDocumentKind kind(){return PurchaseDocumentKind.INVOICE;}};
+    harness.data=data;harness.marker="QA-PU-lifecycle";harness.mainWindow="main";
+    harness.page=new Plugin_ERP.System_Modules.Login.purches.PurchaseModulePage(api.driver()){
+      @Override public void puCloseAuxiliaryWindows(String main){closes.incrementAndGet();}
+      @Override public void puSettled(){if(brokenBrowser.get())throw new org.openqa.selenium.WebDriverException("Browser unavailable at group end");}
+      @Override public String puCaptureMarker(){return null;}
+      @Override public String puDiagnosticMarkup(){return "<fixture-failure/>";}
+      @Override public String puDiagnostics(){return "{}";}
+    };
+    data.beginScenario();var first=data.item(1);var store=data.store(1);harness.finishPurchaseCase(null);
+    Assert.assertTrue(api.records.containsKey(first.id()));Assert.assertTrue(api.deletes.isEmpty());
+    data.beginScenario();var second=data.item(1);
+    var failed=(org.testng.ITestResult)Proxy.newProxyInstance(getClass().getClassLoader(),new Class<?>[]{org.testng.ITestResult.class},(proxy,method,args)->method.getName().equals("isSuccess")?false:null);
+    harness.finishPurchaseCase(failed);Assert.assertTrue(api.records.containsKey(first.id()));Assert.assertTrue(api.records.containsKey(second.id()));Assert.assertEquals(data.store(1).id(),store.id());Assert.assertTrue(api.deletes.isEmpty());
+    brokenBrowser.set(true);Assert.expectThrows(AssertionError.class,harness::cleanPurchasePage);Assert.assertTrue(api.records.isEmpty());Assert.assertNull(harness.data);Assert.assertEquals(closes.get(),3);
+    int deletes=api.deletes.size();harness.cleanPurchasePage();Assert.assertEquals(api.deletes.size(),deletes);
+  }
+  @Test @Story("تحديث سجل الاسترجاع بعد كل حذف ناجح حتى لا يعيد الانقطاع سجلات تم تنظيفها")
+  public void interruptedCleanupJournalsOnlyRemainingOwnedRecords()throws Exception{
+    Api api=new Api();var data=new PurchaseTestData(api.driver());var first=data.unit(1);var second=data.unit(2);api.crashAtDelete=2;
+    Assert.expectThrows(Error.class,data::close);String suffix=first.name().substring("QA-PU-unit-1-".length());
+    var rows=new org.json.JSONArray(java.nio.file.Files.readString(java.nio.file.Path.of("target","purchase-fixtures",suffix+".json")));
+    Assert.assertEquals(rows.length(),1);Assert.assertEquals(rows.getJSONObject(0).getString("id"),first.id());
+    api.crashAtDelete=0;PurchaseTestData.resume(api.driver(),suffix).close();Assert.assertTrue(api.records.isEmpty());Assert.assertEquals(java.util.Collections.frequency(api.deletes,second.id()),1);
+  }
+  @Test @Story("استعادة مستند المشتريات من قائمة مختصرة لا تعرض الملاحظات أو المخزن مع حماية المستندات الأخرى")
+  public void recoversSparsePurchaseListThroughVerifiedDetails(){
+    Api api=new Api();api.sparseMovementList=true;var data=new PurchaseTestData(api.driver());var item=data.item(1);var supplier=data.supplier();String marker="QA-PU-sparse-lost";
+    var values=PurchaseTestData.fields("notes",marker,"storeId",data.store(1).id(),"dealerId",supplier.id(),"transactionType","Purch","lines",List.of(PurchaseTestData.fields("itemId",item.id(),"unitId",data.unit(1).id())));
+    var stored=new LinkedHashMap<>(values);stored.put("id","owned-lost-purchase");api.records.put("owned-lost-purchase",stored);
+    api.records.put("existing-purchase",new LinkedHashMap<>(Map.of("id","existing-purchase","notes","Existing purchase","storeId","existing-store","lines",List.of(Map.of("itemId","existing-item")))));
+    data.rememberAttempts(List.of(PurchaseTestData.fields("endpoint","Purchases","values",values)),List.of(),marker);data.close();
+    Assert.assertEquals(api.records.keySet(),java.util.Set.of("existing-purchase"));Assert.assertTrue(api.deletes.contains("owned-lost-purchase"));Assert.assertFalse(api.deletes.contains("existing-purchase"));
+  }
+  @Test @Story("التحقق من مورد سند القبض عبر تفاصيله عندما تخفي القائمة هوية المتعامل دون تعديل أي سند")
+  public void receiptLookupUsesDetailsAndPreservesUnrelatedReceipts(){
+    Api api=new Api();var data=new PurchaseTestData(api.driver());var supplier=data.supplier();
+    api.records.put("own-receipt",new LinkedHashMap<>(Map.of("id","own-receipt","dealerId",supplier.id(),"value",300,"receipt",true)));
+    api.records.put("existing-receipt",new LinkedHashMap<>(Map.of("id","existing-receipt","dealerId","existing-supplier","value",600,"receipt",true)));
+    var found=data.ownedSupplierReceipts(supplier.id());Assert.assertEquals(found.size(),1);Assert.assertEquals(found.get(0).get("id"),"own-receipt");Assert.assertTrue(api.deletes.isEmpty());
+    data.close();Assert.assertEquals(api.records.keySet(),java.util.Set.of("own-receipt","existing-receipt"));
+  }
+  @Test @Story("إعادة محاولة إنشاء بيانات الاختبار بعد إلغاء المعاملة بسبب تعارض أقفال دون تكرار السجل")
+  public void retriesRolledBackDeadlockWithoutDuplicateFixture(){
+    Api api=new Api();api.deadlockCreates=1;var data=new PurchaseTestData(api.driver());var unit=data.unit(1);
+    Assert.assertEquals(api.createCalls,2);Assert.assertEquals(api.records.size(),1);Assert.assertTrue(api.records.containsKey(unit.id()));data.close();Assert.assertTrue(api.records.isEmpty());
+  }
+  @Test @Story("تحديد إعادة محاولة تعارض الأقفال بثلاث محاولات مع إبقاء بيانات الاستعادة")
+  public void boundsRolledBackDeadlockRetries(){
+    Api api=new Api();api.deadlockCreates=4;var data=new PurchaseTestData(api.driver());Assert.expectThrows(AssertionError.class,()->data.unit(1));Assert.assertEquals(api.createCalls,3);Assert.assertTrue(api.records.isEmpty());data.close();
+  }
   @Test @Story("فشل قراءة المورد لا يبرر حذف عميل موجود أو حساباته") public void customerLookupErrorCannotDeleteAnExistingCustomerOrItsAccounts(){
     Api api=new Api();var data=new PurchaseTestData(api.driver());var customer=data.supplier();
     api.records.put("existing-customer",new LinkedHashMap<>(Map.of("id","existing-customer","arabicName","Unrelated customer")));
@@ -33,10 +87,11 @@ public class PurchaseCleanupTest {
   }
   @Test @Story("مشاركة بيانات الصفحة الثابتة مع عزل الأصناف والموردين والأرصدة بين الحالات") public void pageFixturesAreSharedButCaseBalancesStayIsolated(){
     Api api=new Api();var data=new PurchaseTestData(api.driver());data.beginScenario();
-    var first=data.seedPurchase(1,"Purchases","2026-01-01","3","0");var firstItem=data.item(1);var firstCustomer=data.supplier();var sharedStore=data.store(1);var sharedUnit=data.unit(1);
+    var first=data.seedPurchase(1,"Purchases","2026-01-01","3","0");var firstItem=data.item(1);var firstCustomer=data.supplier();var sharedStore=data.store(1);var sharedUnit=data.unit(1);var firstBank=data.bank();var firstPayment=data.payment();var firstSafe=data.safe();
     data.beginScenario();var second=data.seedPurchase(1,"Purchases","2026-01-01","1","0");var secondItem=data.item(1);var secondCustomer=data.supplier();
     Assert.assertNotEquals(first.id(),second.id());Assert.assertNotEquals(firstItem.id(),secondItem.id());Assert.assertNotEquals(firstCustomer.id(),secondCustomer.id());
     Assert.assertNotEquals(firstCustomer.values().get("accountId"),secondCustomer.values().get("accountId"));
+    Assert.assertNotEquals(data.bank().id(),firstBank.id());Assert.assertNotEquals(data.bank().values().get("accountId"),firstBank.values().get("accountId"));Assert.assertNotEquals(data.payment().id(),firstPayment.id());Assert.assertNotEquals(data.safe().id(),firstSafe.id());Assert.assertNotEquals(data.safe().values().get("accountId"),firstSafe.values().get("accountId"));
     Assert.assertEquals(data.store(1).id(),sharedStore.id());Assert.assertEquals(data.unit(1).id(),sharedUnit.id());
     Assert.assertTrue(api.deletes.isEmpty(),"No cleanup is allowed between cases on the page");Assert.assertTrue(api.records.containsKey(first.id()));
     data.close();Assert.assertTrue(api.deletes.indexOf(first.id())<api.deletes.indexOf(sharedStore.id()));Assert.assertTrue(api.deletes.indexOf(second.id())<api.deletes.indexOf(sharedStore.id()));Assert.assertTrue(api.records.isEmpty());
@@ -97,6 +152,9 @@ public class PurchaseCleanupTest {
     String origin="offline",activeBranch="branch-test";
     int branchUnavailableReads;
     boolean usedAccountTree;
+    boolean sparseMovementList;
+    int deadlockCreates,createCalls;
+    int crashAtDelete;
     boolean customerGetAlways500,customerGet500WhenMissing;
     final Map<String, Map<String, Object>> records = new LinkedHashMap<>();
     final List<String> deletes = new ArrayList<>();
@@ -152,6 +210,7 @@ public class PurchaseCleanupTest {
         return Map.of("id","branch-test");
       }
       if (action.equals("create")) {
+        createCalls++;if(deadlockCreates>0){deadlockCreates--;return Map.of("error","Transaction was deadlocked and chosen as the deadlock victim","status",500);}
         String id = endpoint + "-" + (records.size() + 1);
         Map<String, Object> saved = new LinkedHashMap<>(values);
         saved.put("id", id);
@@ -165,7 +224,10 @@ public class PurchaseCleanupTest {
       if(action.equals("get")&&endpoint.startsWith("Aggregates/AccountTreeViewModel?")){usedAccountTree=true;return Map.of("entity",Map.of("Accounts",new ArrayList<>(records.values()),"AccountsTree",new ArrayList<>(records.values())));}
       if(action.equals("get")&&endpoint.startsWith("PurchaseLists?")){
         if(failMovementLookup)return Map.of("error","Lookup unavailable","status",503);
-        var rows=records.values().stream().filter(r->r.containsKey("lines")).toList();return Map.of("entity",Map.of("pageData",rows,"totalRecords",rows.size()));
+        var rows=records.values().stream().filter(r->r.containsKey("lines")).map(r->sparseMovementList?Map.of("id",r.get("id")):r).toList();return Map.of("entity",Map.of("pageData",rows,"totalRecords",rows.size()));
+      }
+      if(action.equals("get")&&endpoint.startsWith("Collections?")){
+        var rows=records.values().stream().filter(r->Boolean.TRUE.equals(r.get("receipt"))).map(r->Map.of("id",r.get("id"))).toList();return Map.of("entity",Map.of("pageData",rows,"totalRecords",rows.size()));
       }
       if(action.equals("get")&&endpoint.contains("?")){
         if(failFixtureLookup)return Map.of("error","Fixture lookup unavailable","status",503);
@@ -183,6 +245,7 @@ public class PurchaseCleanupTest {
             : Map.of("error", "Missing owned record", "status", 404);
       }
       deletes.add(id);
+      if(crashAtDelete>0&&deletes.size()==crashAtDelete)throw new Error("Simulated interruption during cleanup");
       if(endpoint.equals("Purchases")&&rejectMovement)return Map.of("error","Movement is linked","status",400);
       if(missingDeleteForExisting||(missingDelete400&&!records.containsKey(id)))return Map.of("error","Common.ObjectNotFound","status",400);
       if (endpoint.equals("Stores")) {

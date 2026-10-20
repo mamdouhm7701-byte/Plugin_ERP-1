@@ -32,13 +32,18 @@ public abstract class PurchaseScenarioTest extends BaseTest {
     this.paymentType=paymentType;item=ownItem(1);supplier=data.supplier();agent=data.agent();
     if(paymentType.equals("Cash"))payment=data.payment();
     page.puOpen(documentKind().route+"/new");page.puFormReady();
+    try{page.puAwaitOwnedLookups(data.store(1).id(),supplier.id(),agent.id());}
+    catch(org.openqa.selenium.TimeoutException initialLoad){
+      Allure.addAttachment("Purchase lookup initialization retry",initialLoad.getMessage());
+      page.puOpen(documentKind().route+"/new");page.puFormReady();page.puAwaitOwnedLookups(data.store(1).id(),supplier.id(),agent.id());
+    }
     for(int i=1;i<=2;i++)initialBalances.put(i,number(data.balance(item,i)));
     page.puCapture(marker,data.store(1).id(),item.id(),documentKind().endpoint);
     page.puChoose("المخزن",data.store(1).name());page.puChoose("نوع السداد",paymentType.equals("Cash")?"نقدي":"آجل");
     page.puChoose("المورد",supplier.name());page.puChoose("مندوب",agent.name());page.puNotes(marker);
   }
   protected void add(PurchaseTestData.Record record,String mode){switch(mode){case "name"->page.puAddName(record.name());case "barcode"->page.puAddBarcode(record.values().get("mainUnitBarcode").toString(),record.name());default->page.puAddPicker(record.name());}}
-  protected void fill(String mode){add(item,mode);page.puQuantity(item.name(),"3");page.puSetLine(item.name(),kind()==PurchaseDocumentKind.INVOICE?"سعر الشراء":"السعر","100");page.puWaitNet("300");}
+  protected void fill(String mode){add(item,mode);page.puQuantity(item.name(),"3");page.puSetLine(item.name(),documentKind()==PurchaseDocumentKind.INVOICE?"سعر الشراء":"السعر","100");page.puWaitNet("300");}
   @SuppressWarnings("unchecked") protected List<PurchaseTestData.Record> capture(){
     if(!marker.equals(page.puCaptureMarker()))return List.of();data.rememberAttempts(page.puAttempts(),page.puSaves(),marker);var records=new ArrayList<PurchaseTestData.Record>();
     for(var saved:page.puSaves()){
@@ -50,25 +55,34 @@ public abstract class PurchaseScenarioTest extends BaseTest {
   @SuppressWarnings("unchecked") protected PurchaseTestData.Record save(boolean print){
     var doc=page.puDocument();if(paymentType.equals("Cash")&&((List<?>)doc.get("payments")).isEmpty())page.puAddOtherPayment(payment.name(),page.puTotals().get("الصافي"));
     int count=page.puSaves().size();page.puSave(print);
-    new WebDriverWait(driver,Duration.ofSeconds(45)).until(d->{data.rememberAttempts(page.puAttempts(),page.puSaves(),marker);return page.puSaves().size()>count;});
+    try{new WebDriverWait(driver,Duration.ofSeconds(45)).until(d->{data.rememberAttempts(page.puAttempts(),page.puSaves(),marker);return page.puSaves().size()>count;});}
+    catch(org.openqa.selenium.TimeoutException failure){throw new AssertionError("Purchase document was not saved: "+page.puSaveErrors(),failure);}
     page.puSettled();var records=capture();var record=records.get(records.size()-1);var stored=data.read(record);
     Allure.addAttachment("Saved purchase document","application/json",new org.json.JSONObject(PurchaseTestData.fields("sent",record.values(),"stored",stored)).toString(),".json");
     Assert.assertNotNull(stored);Assert.assertEquals(stored.get("notes"),record.name());Assert.assertEquals(stored.get("storeId"),data.store(1).id());Assert.assertEquals(stored.get("dealerId"),supplier.id());Assert.assertEquals(stored.get("agentId"),agent.id());
+    Assert.assertTrue(documentKind().type.equalsIgnoreCase(String.valueOf(stored.get("transactionType"))),"Persisted purchase document has the wrong transaction type");
     var lines=(List<Map<String,Object>>)stored.get("lines");Assert.assertFalse(lines.isEmpty());Assert.assertTrue(lines.stream().allMatch(l->allowedItems.contains(l.get("itemId"))),"Unexpected item in purchase document");
-    if(paymentType.equals("Cash")){var payments=(List<Map<String,Object>>)stored.get("payments");Assert.assertFalse(payments.isEmpty());Assert.assertTrue(payments.stream().allMatch(p->payment.id().equals(p.get("otherPaymentMethodId"))));sameNumber(stored.get("paid"),stored.get("net").toString());}
+    if(paymentType.equals("Cash")){var payments=(List<Map<String,Object>>)stored.get("payments");Assert.assertFalse(payments.isEmpty());Assert.assertTrue(payments.stream().allMatch(p->payment.id().equals(p.get("otherPaymentMethodId"))));var paid=payments.stream().map(p->number(p.get("value"))).reduce(BigDecimal.ZERO,BigDecimal::add);sameNumber(paid,stored.get("net").toString());Assert.assertEquals(stored.get("paymentType"),"Cash");}
     if(print)page.puVerifyPrintedReport(mainWindow,item.name());else page.puDismiss();return record;
   }
-  protected PurchaseTestData.Record create(String mode,String pay,boolean print){prepare(pay);var before=data.read(supplier);fill(mode);var saved=save(print);assertStock("3");if(!pay.equals("Cash"))assertSupplierDelta(before,kind()==PurchaseDocumentKind.INVOICE?"-300":kind()==PurchaseDocumentKind.RETURN?"300":"0");return saved;}
+  protected PurchaseTestData.Record create(String mode,String pay,boolean print){prepare(pay);var before=data.read(supplier);fill(mode);var saved=save(print);assertStock("3");if(!pay.equals("Cash"))assertSupplierDelta(before,documentKind()==PurchaseDocumentKind.INVOICE?"-300":documentKind()==PurchaseDocumentKind.RETURN?"300":"0");else if(documentKind()!=PurchaseDocumentKind.ORDER)assertSupplierDelta(before,"0");return saved;}
   protected static BigDecimal number(Object value){Assert.assertNotNull(value);return new BigDecimal(value.toString().replace(",",""));}
   protected static void sameNumber(Object actual,String expected){Assert.assertEquals(number(actual).compareTo(new BigDecimal(expected)),0,"Expected "+expected+", actual "+actual);}
   protected static BigDecimal signedBalance(Map<String,Object> value){return number(value.get("currentDebit")).add(number(value.get("prevDebit"))).subtract(number(value.get("currentCredit"))).subtract(number(value.get("prevCredit")));}
   protected void assertSupplierDelta(Map<String,Object> before,String delta){var expected=signedBalance(before).add(number(delta));new WebDriverWait(driver,Duration.ofSeconds(30)).until(d->signedBalance(data.read(supplier)).compareTo(expected)==0);}
-  protected void assertStock(String quantity){var expected=initialBalances.get(1);if(kind()==PurchaseDocumentKind.INVOICE)expected=expected.add(number(quantity));else if(kind()==PurchaseDocumentKind.RETURN)expected=expected.subtract(number(quantity));final var target=expected;new WebDriverWait(driver,Duration.ofSeconds(30)).until(d->number(data.balance(item,1)).compareTo(target)==0);sameNumber(data.balance(item,2),initialBalances.get(2).toPlainString());}
-  protected void rejectSave(){var before=data.documentIdentities();if(!page.puSaveDisabled()){page.puSave(false);Assert.assertFalse(page.puValidation().isBlank());page.puSettled();capture();Assert.assertTrue(page.puSaves().isEmpty(),"Invalid purchase was saved");}data.verifyNoNewDocuments(before);assertStock("0");}
+  protected void assertStock(String quantity){var expected=initialBalances.get(1);if(documentKind()==PurchaseDocumentKind.INVOICE)expected=expected.add(number(quantity));else if(documentKind()==PurchaseDocumentKind.RETURN)expected=expected.subtract(number(quantity));final var target=expected;new WebDriverWait(driver,Duration.ofSeconds(30)).until(d->number(data.balance(item,1)).compareTo(target)==0);sameNumber(data.balance(item,2),initialBalances.get(2).toPlainString());}
+  protected void rejectSave(){var before=data.documentIdentities();if(!page.puSaveDisabled()){page.puSave(false);page.puWaitSaveOutcome();page.puSettled();var captured=capture();
+    for(var record:captured)Allure.addAttachment("Unexpected saved purchase","application/json",new org.json.JSONObject(PurchaseTestData.fields("sent",record.values(),"stored",data.read(record))).toString(),".json");
+    Assert.assertTrue(page.puSaves().isEmpty(),"Invalid purchase was saved");}data.verifyNoNewDocuments(before);assertStock("0");}
   @AfterMethod(alwaysRun=true) public void finishPurchaseCase(ITestResult result){
     if(data==null||page==null)return;
     if(result!=null&&!result.isSuccess())try{Allure.addAttachment("Purchase failure DOM","text/html",page.puDiagnosticMarkup(),".html");Allure.addAttachment("Purchase diagnostics","application/json",page.puDiagnostics(),".json");}catch(RuntimeException ignored){}
     page.puCloseAuxiliaryWindows(mainWindow);page.puSettled();capture();
   }
-  @AfterClass(alwaysRun=true) public void cleanPurchasePage(){if(data!=null){finishPurchaseCase(null);data.close();data=null;}}
+  @AfterClass(alwaysRun=true) public void cleanPurchasePage(){
+    if(data==null)return;List<String> failures=new ArrayList<>();
+    try{finishPurchaseCase(null);}catch(RuntimeException|AssertionError failure){failures.add(failure.toString());}
+    try{data.close();data=null;}catch(RuntimeException|AssertionError failure){failures.add(failure.toString());}
+    if(!failures.isEmpty())throw new AssertionError(String.join("; ",failures));
+  }
 }

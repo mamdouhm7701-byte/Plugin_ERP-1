@@ -43,10 +43,7 @@ final class SalesTestData implements AutoCloseable {
   }
   private String fixtureKey(String key){
     boolean shared=key.startsWith("store-")||key.startsWith("unit-")||key.equals("category-main")
-      ||key.startsWith("agent-")||key.equals("bank")||key.equals("payment")||key.equals("safe")
-      ||key.startsWith("account-main-store-")||key.startsWith("account-sub-store-")
-      ||key.equals("account-main-bank")||key.equals("account-sub-bank")
-      ||key.equals("account-main-safe")||key.equals("account-sub-safe");
+      ||key.startsWith("account-main-store-")||key.startsWith("account-sub-store-");
     return shared?key:scenarioScope+key;
   }
 
@@ -343,11 +340,7 @@ final class SalesTestData implements AutoCloseable {
   }
   private void journal(){
     List<Map<String,Object>> rows=created.stream().map(r->fields("origin",origin,"branchId",sessionBranchId,"endpoint",r.endpoint(),"id",r.id(),"name",r.name(),"values",r.values())).toList();
-    try{
-      java.nio.file.Path directory=java.nio.file.Path.of("target","sales-fixtures");
-      java.nio.file.Files.createDirectories(directory);
-      java.nio.file.Files.writeString(directory.resolve(suffix+".json"),new org.json.JSONArray(rows).toString(2));
-    }catch(java.io.IOException e){throw new AssertionError("Cannot record owned store fixture IDs",e);}
+    TestSupport.FixtureJournals.write(java.nio.file.Path.of("target","sales-fixtures",suffix+".json"),rows);
   }
 
   private static boolean retryable(ApiFailure failure) {
@@ -377,8 +370,7 @@ final class SalesTestData implements AutoCloseable {
     }journalAttempts();
   }
   private void journalAttempts(){String json=new org.json.JSONArray(uncertainDocuments).toString(2);if(json.equals(lastAttemptJournal))return;
-    try{var directory=java.nio.file.Path.of("target","sales-attempts");java.nio.file.Files.createDirectories(directory);java.nio.file.Files.writeString(directory.resolve(suffix+".json"),json);lastAttemptJournal=json;}
-    catch(java.io.IOException e){throw new AssertionError("Cannot journal uncertain sales request",e);}
+    TestSupport.FixtureJournals.write(java.nio.file.Path.of("target","sales-attempts",suffix+".json"),uncertainDocuments);lastAttemptJournal=json;
   }
   Map<String,Object> rememberFixtureAttempt(String endpoint,String name,Map<String,Object> values){
     if(!MASTERS.contains(endpoint)||!name.startsWith("QA-SL-"))throw new AssertionError("Refuse unrelated fixture recovery");
@@ -522,7 +514,7 @@ final class SalesTestData implements AutoCloseable {
             + "]: waiting for dependent fixture cleanup");
         continue;
       }
-      try { deleteRecord(record); }
+      try { deleteRecord(record); created.remove(record); fixtures.entrySet().removeIf(entry->entry.getValue().equals(record)); journal(); }
       catch (RuntimeException | AssertionError failure) {
         pending.add(record);
         failures.add(record.name() + " [" + record.endpoint() + "/" + record.id() + "]: "

@@ -152,6 +152,7 @@ public class ProductsModulePage extends Abstract {
         }).catch(error=>{if(owned){cap.pending--;cap.errors.push(String(error));}throw error;});};
       """,marker);
   }
+  public String prCaptureMarker(){return (String)((JavascriptExecutor)driver).executeScript("return window.__productsQA?.marker||null");}
   @SuppressWarnings("unchecked") public List<Map<String,Object>> prSaves(){return (List<Map<String,Object>>)((JavascriptExecutor)driver).executeScript("return window.__productsQA?.saves||[]");}
   @SuppressWarnings("unchecked") public List<Map<String,Object>> prAttempts(){return (List<Map<String,Object>>)((JavascriptExecutor)driver).executeScript("return window.__productsQA?.attempts||[]");}
   public void prSettled(){ready.until(d->!Boolean.TRUE.equals(((JavascriptExecutor)d).executeScript("return (window.__productsQA?.pending||0)>0")));}

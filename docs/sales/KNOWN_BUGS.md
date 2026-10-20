@@ -13,6 +13,8 @@ Confirmed by `SalesOrderTest.cashOrderRecordsCustomerAdvanceWithoutStockMovement
 
 The assertion remains enabled. Before/after customer DTOs and the persisted order are attached to Allure in `target/sales-verification-results` and reproduced in `target/sales-final-contracts-results`. The order DTO reports `isAdvancePayment: false`; the application team should check whether the cash-order UI/API should post the payment or set the appropriate advance-payment flag. This repository contains automation code, not the ERP implementation, so the application behavior has not been patched here.
 
+The page-fixture lifecycle verification reproduced the same cash-order balance failure with a per-case customer, bank, payment method and accounts: `SalesOrderTest.cashDocumentUsesOwnedPayment` in `target/lifecycle-ui-results`. The credit-order case passed and final group cleanup succeeded. See [Lifecycle validation](../testing/LIFECYCLE_VALIDATION.md); this targeted check does not replace the earlier full sales validation.
+
 ## Harness issues corrected
 
 These are not application defects: customer fixture flags must use `salesReturn` and enable `quotation`; dropdown options can decorate the customer's name; totals/save controls are outside the form; horizontally scrolled quantity headers require their actual text content. Failures from earlier runs must be replaced by reruns after these fixes, not counted as product bugs.

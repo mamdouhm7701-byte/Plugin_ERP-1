@@ -26,9 +26,9 @@ public abstract class ProductScenarioTest extends BaseTest {
   @BeforeSuite(alwaysRun=true) public void awaitProductsSession(){modulePage().prAwaitSession();}
   @BeforeMethod(alwaysRun=true) public void newProductScenario(){
     marker="QA-PR-"+UUID.randomUUID().toString().substring(0,12);mainWindow=driver.getWindowHandle();
-    data=null;page=modulePage();
+    page=modulePage();
     Assert.assertFalse(driver.getCurrentUrl().contains("/login"),"ERP session did not complete login");
-    data=new ProductsTestData(driver);pending.add(data);
+    if(data==null){data=new ProductsTestData(driver);pending.add(data);}data.beginScenario();
   }
   protected void prerequisites(){switch(kind()){
     case ITEM -> {data.category();data.unit(1);data.unit(2);data.store(1);}
@@ -55,6 +55,8 @@ public abstract class ProductScenarioTest extends BaseTest {
     }
   }
   @SuppressWarnings("unchecked") protected List<ProductsTestData.Record> capture(){
+    if(!marker.equals(page.prCaptureMarker()))return List.of();
+    data.rememberAttempts(page.prAttempts(),marker);
     List<ProductsTestData.Record> records=new ArrayList<>();
     for(Map<String,Object> saved:page.prSaves()){
       Map<String,Object> values=(Map<String,Object>)saved.get("values");String endpoint=(String)saved.get("endpoint");
@@ -66,7 +68,7 @@ public abstract class ProductScenarioTest extends BaseTest {
   }
   protected ProductsTestData.Record save(boolean print){
     int before=page.prSaves().size();if(print)page.prSavePrint();else page.prSave();
-    try{new WebDriverWait(driver,Duration.ofSeconds(35)).until(d->page.prSaves().size()>before);}
+    try{new WebDriverWait(driver,Duration.ofSeconds(35)).until(d->{data.rememberAttempts(page.prAttempts(),marker);return page.prSaves().size()>before;});}
     catch(TimeoutException e){throw new AssertionError("Product save failed: "+page.prSaveErrors(),e);}
     page.prSettled();List<ProductsTestData.Record> records=capture();ProductsTestData.Record record=records.get(records.size()-1);
     Map<String,Object> stored=data.read(record);
@@ -125,9 +127,12 @@ public abstract class ProductScenarioTest extends BaseTest {
   protected void optionalEnglish(){openNew();fill(null);page.prEnglish("");ProductsTestData.Record record=save(false);assertOptionalEnglish(data.read(record));}
   @AfterMethod(alwaysRun=true) public void cleanProductScenario(){
     if(driver==null)return;for(String handle:new ArrayList<>(driver.getWindowHandles()))if(!handle.equals(mainWindow)){driver.switchTo().window(handle);driver.close();}driver.switchTo().window(mainWindow);
-    if(page!=null&&data!=null){page.prSettled();capture();data.recoverAttemptedItems(page.prAttempts());}
-    List<String> errors=new ArrayList<>();for(ProductsTestData context:new ArrayList<>(pending))try{context.close();pending.remove(context);}catch(AssertionError|RuntimeException e){errors.add(e.getMessage());}
+    if(page!=null&&data!=null&&marker.equals(page.prCaptureMarker())){data.rememberAttempts(page.prAttempts(),marker);page.prSettled();capture();data.recoverAttemptedItems(page.prAttempts());io.qameta.allure.Allure.addAttachment("Product case requests","application/json",new org.json.JSONArray(page.prAttempts()).toString(),".json");}
+
+  }
+  @AfterClass(alwaysRun=true) public void retryProductCleanup(){
+    List<String> errors=new ArrayList<>();try{cleanProductScenario();}catch(AssertionError|RuntimeException e){errors.add(e.toString());}
+    for(var context:new ArrayList<>(pending))try{context.close();pending.remove(context);if(data==context)data=null;}catch(AssertionError|RuntimeException e){errors.add(e.toString());}
     if(!errors.isEmpty())throw new AssertionError(String.join("; ",errors));
   }
-  @AfterClass(alwaysRun=true) public void retryProductCleanup(){cleanProductScenario();}
 }

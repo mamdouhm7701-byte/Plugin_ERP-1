@@ -6,9 +6,9 @@ Run the five warehouse screens and cleanup regression tests:
 mvn '-Dsurefire.suiteXmlFiles=src/test/resources/store-testng.xml' test
 ```
 
-Use the project's configured application URL and login. No tenant, branch, customer, supplier, item or warehouse ID is embedded in these scenarios. Every case creates its own accounts, units, categories, stores, items and required party, then uses the returned IDs. Manufacturing also creates its own component and checks its consumption. Browser interactions are in `StoreModulePage`; scenarios and API fixture assertions are in `StoreTest`.
+Use the project's configured application URL and login. No tenant, branch, customer, supplier, item or warehouse ID is embedded in these scenarios. Each page group shares its units, main category, stores and store accounts. Cases isolate items/components, parties, party accounts and documents, then use their returned IDs. Manufacturing also creates its own component and checks its consumption. Browser interactions are in `StoreModulePage`; scenarios and API fixture assertions are in `StoreTest`. Routine cleanup is at `@AfterClass(alwaysRun=true)`; per-case request/evidence capture and window closure remain enabled. See [Page fixture lifecycle](../../../../docs/testing/PAGE_FIXTURE_LIFECYCLE.md).
 
-The [coverage catalog](Store_Coverage.md) lists 160 cases: 131 UI cases and 29 cleanup regression cases. The original 45 method names remain available. A listed case is not a claim that it passed.
+The suite contains 163 cases: 131 UI cases and 32 cleanup regression cases, including the three new lifecycle checks documented above. The original 45 method names remain available. A listed case is not a claim that it passed.
 
 Cleanup deletes only verified owned records in reverse dependency order. A failed child deletion retains its parents. Temporary branch-store membership updates preserve unrelated store IDs and the existing default. Origin and branch guards reject cleanup if the browser changes context. `target/store-fixtures` records created dependencies; `target/store-attempts` records unresolved save requests. Preserve these files when a run is interrupted or cleanup fails. An unresolved request is checked before deleting its dependencies; ambiguous ownership stops cleanup.
 

@@ -102,6 +102,7 @@ public class StoreModulePage extends AbstractForStore {
         cap.saves.push({endpoint:payload.url,id:sent.id||entity?.id||(typeof entity==='string'||typeof entity==='number'?entity:null),values:sent});}return result;})
         .catch(error=>{if(lookup)cap.lookups.push({url:payload.url,error:String(error),status:error?.response?.status});if(owned){cap.pending--;cap.errors.push(String(error));}throw error;});};
     """,marker,storeId,itemId);}
+  public String smCaptureMarker(){return (String)js("return window.__storeQA?.marker||null");}
   @SuppressWarnings("unchecked") public List<Map<String,Object>> smSaves(){return (List<Map<String,Object>>)js("return window.__storeQA?.saves||[]");}
   @SuppressWarnings("unchecked") public List<Map<String,Object>> smAttempts(){return (List<Map<String,Object>>)js("return window.__storeQA?.attempts||[]");}
   public void smSettled(){ready.until(d->!Boolean.TRUE.equals(js("return (window.__storeQA?.pending||0)>0")));}

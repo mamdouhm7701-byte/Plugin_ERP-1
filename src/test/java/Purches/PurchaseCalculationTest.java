@@ -10,7 +10,7 @@ import io.qameta.allure.Story;
 
 /** Known arithmetic examples; independent of tenant settings and browser totals. */
 public final class PurchaseCalculationTest {
-  private static List<InvoiceRow> row(String quantity,String price){return List.of(new InvoiceRow("QA-SL-item",new BigDecimal(quantity),new BigDecimal(price)));}
+  private static List<InvoiceRow> row(String quantity,String price){return List.of(new InvoiceRow("QA-PU-item",new BigDecimal(quantity),new BigDecimal(price)));}
   private static void check(List<InvoiceRow> rows,String discount,DiscountType discountType,String rate,TaxMode mode,int precision,String total,String discountValue,String beforeTax,String tax,String net){
     var result=InvoiceCalculator.calculate(rows,new BigDecimal(discount),discountType,new BigDecimal(rate),mode,precision);
     BigDecimal[] actual={result.getTotal(),result.getDiscount(),result.getBeforeTax(),result.getTax(),result.getNet()};

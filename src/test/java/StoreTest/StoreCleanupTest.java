@@ -15,6 +15,7 @@ public class StoreCleanupTest {
   private static final class Api {
     final Map<String, Map<String, Object>> records = new LinkedHashMap<>();
     final List<String> deletes = new ArrayList<>();
+    int crashAtDelete;
     boolean timeOutStore;
     boolean commitBeforeTimeout;
     boolean rejectStore;
@@ -89,7 +90,7 @@ public class StoreCleanupTest {
             : emptyDeletedResponse ? Map.of("entity", "")
             : Map.of("error", "Missing owned record", "status", 404);
       }
-      deletes.add(id);
+      deletes.add(id);if(crashAtDelete>0&&deletes.size()==crashAtDelete)throw new Error("Simulated process interruption");
       if(endpoint.equals("ItemTransactions-ExchangeOrder")&&rejectMovement)return Map.of("error","Movement is linked","status",400);
       if(missingDeleteForExisting||(missingDelete400&&!records.containsKey(id)))return Map.of("error","Common.ObjectNotFound","status",400);
       if (endpoint.equals("Stores")) {
@@ -321,5 +322,41 @@ public class StoreCleanupTest {
     Assert.assertEquals(api.deletes.get(0),movement.id());
     Assert.assertTrue(api.deletes.indexOf(movement.id())<api.deletes.indexOf(replacement.id()));
     Assert.assertTrue(api.records.isEmpty());
+  }
+
+  @Test @io.qameta.allure.Story("مشاركة المراجع الثابتة بالصفحة وعزل بيانات كل حالة دون حذف بينها")
+  public void pageScopeSharesOnlyStableReferences(){
+    Api api=new Api();var data=new StoreTestData(api.driver());data.beginScenario();var stable=data.unit(1);var first=data.item(1);var firstStore=data.store(1);
+    data.beginScenario();var second=data.item(1);Assert.assertNotEquals(first.id(),second.id());Assert.assertNotEquals(first.values().get("mainUnitBarcode"),second.values().get("mainUnitBarcode"));Assert.assertEquals(data.unit(1).id(),stable.id());Assert.assertEquals(data.store(1).id(),firstStore.id());
+    Assert.assertTrue(api.records.containsKey(first.id()));Assert.assertTrue(api.deletes.isEmpty());data.close();Assert.assertTrue(api.records.isEmpty());
+  }
+  @Test @io.qameta.allure.Story("استكمال الحذف بعد انقطاع التشغيل من السجلات المتبقية فقط")
+  public void interruptedPageCleanupResumesOnlyRemainingOwnedRecords()throws Exception{
+    Api api=new Api();var data=new StoreTestData(api.driver());var first=data.unit(1);var last=data.unit(2);api.crashAtDelete=2;
+    Assert.expectThrows(Error.class,data::close);String suffix=last.name().substring(last.name().length()-12);
+    var rows=new org.json.JSONArray(java.nio.file.Files.readString(java.nio.file.Path.of("target","store-fixtures",suffix+".json")));
+    Assert.assertTrue(rows.toList().stream().noneMatch(v->last.id().equals(((Map<?,?>)v).get("id"))));
+    api.crashAtDelete=0;StoreTestData.resume(api.driver(),suffix).close();Assert.assertTrue(api.records.isEmpty());Assert.assertEquals(java.util.Collections.frequency(api.deletes,last.id()),1);
+  }
+
+  @Test @io.qameta.allure.Story("دورة الصفحة الفعلية تحتفظ ببيانات الحالات وتغلق النوافذ وتنظف المجموعة مع فشل الخطوة الأخيرة")
+  public void actualCallbacksKeepCasesUntilPageEndEvenAfterFailure()throws Exception{
+
+    Api api=new Api();try(var browser=new TestSupport.FixtureBrowser(api.driver())){
+      var marker=new java.util.concurrent.atomic.AtomicReference<String>();var broken=new java.util.concurrent.atomic.AtomicBoolean();
+      var fixturePage=new Plugin_ERP.System_Modules.Login.StoreModel.StoreModulePage(browser.driver){
+        @Override public String smCaptureMarker(){return marker.get();}
+        @Override public List<Map<String,Object>> smSaves(){return List.of();}
+        @Override public List<Map<String,Object>> smAttempts(){return List.of();}
+        @Override public void smSettled(){if(broken.get())throw new org.openqa.selenium.WebDriverException("Lost browser at page end");}
+        @Override public String smDiagnosticMarkup(){return "<case-failed/>";}
+        @Override public String smDiagnostics(){return "{}";}
+      };
+      var harness=new StoreScenarioTest(){protected StoreMovementKind kind(){return StoreMovementKind.TRANSFER;}protected Plugin_ERP.System_Modules.Login.StoreModel.StoreModulePage movementPage(){return fixturePage;}};
+      harness.beginStoreScenario();marker.set(harness.marker);var data=harness.data;var first=data.item(1);browser.addAuxiliaryWindow();harness.cleanStoreScenario(null);
+      harness.beginStoreScenario();marker.set(harness.marker);Assert.assertSame(harness.data,data);var second=data.item(1);browser.addAuxiliaryWindow();var failed=(org.testng.ITestResult)Proxy.newProxyInstance(getClass().getClassLoader(),new Class<?>[]{org.testng.ITestResult.class},(p,m,a)->m.getName().equals("isSuccess")?false:null);harness.cleanStoreScenario(failed);
+      Assert.assertTrue(api.records.containsKey(first.id()));Assert.assertTrue(api.records.containsKey(second.id()));Assert.assertTrue(api.deletes.isEmpty());Assert.assertEquals(browser.closed,2);
+      broken.set(true);Assert.expectThrows(AssertionError.class,harness::retryStoreCleanup);Assert.assertTrue(api.records.isEmpty());Assert.assertNull(harness.data);
+    }
   }
 }

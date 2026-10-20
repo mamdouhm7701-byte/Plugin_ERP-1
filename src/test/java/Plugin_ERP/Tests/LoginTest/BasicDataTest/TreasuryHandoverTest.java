@@ -23,7 +23,10 @@ public class TreasuryHandoverTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("تسليم الخزينة")
     @Story("إضافة تسليم خزينة ببيانات صحيحة")
-    @Description("يتحقق هذا الاختبار من إضافة تسليم خزينة جديد ببيانات صحيحة، ويشمل اختيار المستخدم والخزينة وإدخال الرصيد الافتتاحي، وحفظ البيانات والتحقق من إضافة السجل بنجاح.")
+    @Description(
+            "يتحقق هذا الاختبار من إضافة تسليم خزينة جديد ببيانات صحيحة، ويشمل اختيار"
+                    + " المستخدم والخزينة وإدخال الرصيد الافتتاحي، وحفظ البيانات والتحقق من إضافة السجل"
+                    + " بنجاح.")
     @Link(name = "Test Link", url = "https://binfares.plugin-erp.com/#/login")
     public void ValidTreasuryHandoverTest() {
         System.out.println("TreasuryHandover test started");
@@ -34,7 +37,7 @@ public class TreasuryHandoverTest extends BaseTest {
         treasuryHandoverPage.selectTreasuryHandoverDropdown("خزينة", "الخزنة الرئيسية");
         treasuryHandoverPage.AddOpenBalance(1000);
         treasuryHandoverPage.ClickSaveButton();
-       // treasuryHandoverPage.AssertReceiptAdded("الخزنة الرئيسية");
+        // treasuryHandoverPage.AssertReceiptAdded("الخزنة الرئيسية");
     }
 
     @Test(priority = 2)
@@ -43,7 +46,9 @@ public class TreasuryHandoverTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("تسليم الخزينة")
     @Story("التحقق - خطأ عند تكرار تسليم خزينة لنفس المستخدم")
-    @Description("يتحقق هذا الاختبار من أن النظام يمنع إنشاء تسليم خزينة لنفس المستخدم المفتوح مسبقاً، ويتحقق من ظهور رسالة خطأ تفيد بعدم إمكانية تكرار التسليم لنفس المستخدم.")
+    @Description(
+            "يتحقق هذا الاختبار من أن النظام يمنع إنشاء تسليم خزينة لنفس المستخدم المفتوح"
+                    + " مسبقاً، ويتحقق من ظهور رسالة خطأ تفيد بعدم إمكانية تكرار التسليم لنفس المستخدم.")
     @Link(name = "Test Link", url = "https://binfares.plugin-erp.com/#/login")
     public void InvalidTreasuryHandoverTest() {
         System.out.println("Invalid TreasuryHandover test started");
@@ -63,7 +68,10 @@ public class TreasuryHandoverTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("تسليم الخزينة")
     @Story("فتح تسليم الخزينة للمراجعة والتحقق من الرصيد في التقرير")
-    @Description("يتحقق هذا الاختبار من فتح تسليم الخزينة للمراجعة، والحصول على إجمالي الرصيد عند الإغلاق، وحفظ وطباعة التقرير، والتحقق من تطابق إجمالي الرصيد في التقرير مع البيانات المدخلة.")
+    @Description(
+            "يتحقق هذا الاختبار من فتح تسليم الخزينة للمراجعة، والحصول على إجمالي الرصيد عند"
+                    + " الإغلاق، وحفظ وطباعة التقرير، والتحقق من تطابق إجمالي الرصيد في التقرير مع"
+                    + " البيانات المدخلة.")
     @Link(name = "Test Link", url = "https://binfares.plugin-erp.com/#/login")
     public void OpenTreasuryHandover() {
         TreasuryHandoverPage treasuryHandoverPage = new TreasuryHandoverPage(driver);

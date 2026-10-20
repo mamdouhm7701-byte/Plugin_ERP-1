@@ -1,0 +1,119 @@
+package Plugin_ERP.System_Modules.Login.SpecialSales;
+
+import org.openqa.selenium.*;
+
+/** Restaurant orders are a separate page/workflow, never a normal-invoice subclass. */
+public final class RestaurantInvoicePage extends SpecialSalesPage {
+    public RestaurantInvoicePage(WebDriver driver) {
+        super(driver);
+    }
+
+    public String route() {
+        return "restaurant-menu";
+    }
+
+    public String endpoint() {
+        return "ItemTransactions-RestaurantSales";
+    }
+
+    public String channel() {
+        return "Resturant";
+    }
+
+    @Override
+    public void open() {
+        super.open();
+        closeModal();
+        type("خارجية");
+    }
+
+    public void type(String label) {
+        click(
+                By.xpath(
+                        "//section[@id='options']//h6[normalize-space()='"
+                                + label
+                                + "']/ancestor::div[contains(@class,'order-type-card')][1]"));
+    }
+
+    public void addItem(String name, String barcode, String category) {
+        ready.until(
+                d ->
+                        Boolean.TRUE.equals(
+                                js(
+                                        """
+                                        const queue=[document.querySelector('#app')?.__vue__];
+                                        while(queue.length){const vm=queue.shift();if(!vm)continue;queue.push(...(vm.$children||[]));
+                                          if(Array.isArray(vm.$data?.allItems))return !vm.isLoadingItems&&vm.allItems.some(item=>item.arabicName===arguments[0]||item.englishName===arguments[0]);
+                                        }return false;
+                                        """,
+                                        name)));
+        click(
+                By.xpath(
+                        "//div[contains(@class,'catalog-tile')]//*[normalize-space(text())='"
+                                + category
+                                + "']"));
+        click(
+                By.xpath(
+                        "//div[contains(@class,'catalog-tile')]//*[normalize-space(text())='"
+                                + name
+                                + "']"));
+        ready.until(
+                d ->
+                        ((java.util.List<?>) document().get("lines"))
+                                .stream()
+                                        .anyMatch(
+                                                v ->
+                                                        ((java.util.Map<?, ?>) v)
+                                                                .containsValue(name)));
+        awaitTotals();
+    }
+
+    public void openPayment() {
+        button("دفع");
+    }
+
+    public void save() {
+        click(
+                By.xpath(
+                        "//div[@id='sidebar-invoice-add-payment']//button[normalize-space()='حفظ']"));
+    }
+
+    public void invoices() {
+        closePayment();
+        button("الفواتير");
+    }
+
+    public void payAndClose() {
+        int count = saves().size();
+        save();
+        ready.until(
+                d ->
+                        saves().size() > count
+                                || driver
+                                        .findElements(
+                                                By.cssSelector(".swal2-container .swal2-confirm"))
+                                        .stream()
+                                        .anyMatch(WebElement::isDisplayed));
+        if (saves().size() == count) confirm(true);
+        ready.until(d -> saves().size() > count);
+        settled();
+    }
+
+    public void awaitInvoice(Object id) {
+        ready.until(d -> id.equals(document().get("id")));
+        awaitTotals();
+    }
+
+    public void hold() {
+        button("تعليق");
+    }
+
+    public void selectTable(String code) {
+        click(
+                By.xpath(
+                        "//div[contains(@class,'modal') and"
+                                + " contains(@class,'show')]//h6[normalize-space()='"
+                                + code
+                                + "']"));
+    }
+}

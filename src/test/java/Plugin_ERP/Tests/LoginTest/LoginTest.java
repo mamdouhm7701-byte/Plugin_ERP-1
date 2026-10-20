@@ -23,10 +23,7 @@ public class LoginTest extends BaseTest {
     @Test
     public void LoginTest() throws InterruptedException {
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.Login(
-                PropertyReader.getValidUsername(),
-                PropertyReader.getValidPassword()
-        );
+        loginPage.Login(PropertyReader.getValidUsername(), PropertyReader.getValidPassword());
         loginPage.AssertLoginPageTitle();
         Thread.sleep(1500);
     }
@@ -38,14 +35,12 @@ public class LoginTest extends BaseTest {
     @Story("INVALID LOGIN STORY")
     @Description("This test verifies that a user cant log in with valid credentials.")
     @Link(name = "Login Test Case", url = "https://binfares.plugin-erp.com/#/login")
-
     @Test
     public void InvalidLoginTest() {
         LoginPage loginPage = new LoginPage(driver);
         loginPage.Login(
                 PropertyReader.getProperty("InvalidUsername"),
-                PropertyReader.getProperty("InvalidPassword")
-        );
+                PropertyReader.getProperty("InvalidPassword"));
         // You can add assertions here to verify that the login failed
         loginPage.AssertLoginPageTitle();
     }

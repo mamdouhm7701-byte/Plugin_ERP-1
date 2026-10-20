@@ -18,15 +18,39 @@ final class FinancialTestData implements AutoCloseable {
   }
   record Record(String endpoint, Object id, String name, Map<String, Object> values) {}
   private final WebDriver driver;
-  private final String suffix = UUID.randomUUID().toString().substring(0, 12);
+  private final String suffix;
+  private final TestSupport.FixtureSession session;
+  private final TestSupport.PendingFixtureWrites pendingWrites;
   private final List<Record> created = new ArrayList<>();
   private final Map<String, Record> fixtures = new LinkedHashMap<>();
 
-  FinancialTestData(WebDriver driver) {
+  FinancialTestData(WebDriver driver) {this(driver,UUID.randomUUID().toString().substring(0,12));}
+  private FinancialTestData(WebDriver driver,String suffix) {
+    this.suffix=suffix;
     this.driver = driver;
+    this.session=new TestSupport.FixtureSession(driver);
+    this.pendingWrites=new TestSupport.PendingFixtureWrites(session,"financial",suffix);
     new WebDriverWait(driver, Duration.ofSeconds(30)).until(d ->
         ((JavascriptExecutor) d).executeScript("return Boolean(document.querySelector('#app')"
             + "?.__vue__?.$store?.getters['app/currentBranch']?.id)"));
+  }
+
+  private int scenarioSequence;
+  private String scenarioScope="";
+  /** Stable references belong to this page; mutable/searchable records belong to the case. */
+  void beginScenario(){session.verify();recoverPendingFixtures();scenarioScope="case-"+(++scenarioSequence)+"-";}
+  private String fixtureKey(String key){return key.startsWith("QA-FM-")||key.equals("invoice-unit")||key.equals("invoice-category-main")||key.equals("invoice-store")||key.equals("account-main-store")||key.equals("account-sub-store")?key:scenarioScope+key;}
+
+
+  @SuppressWarnings("unchecked") static FinancialTestData resume(WebDriver driver,String suffix)throws java.io.IOException{
+    if(!suffix.matches("[a-f0-9]{8}-[a-f0-9]{3}"))throw new IllegalArgumentException("Invalid fixture journal ID");
+    var data=new FinancialTestData(driver,suffix);var path=java.nio.file.Path.of("target","financial-fixtures",suffix+".json");
+    if(java.nio.file.Files.exists(path))for(Object value:new org.json.JSONArray(java.nio.file.Files.readString(path)).toList()){
+      var row=(Map<String,Object>)value;data.session.verify(row);
+      String endpoint=(String)row.get("endpoint"),name=(String)row.get("name");
+      if(name==null||!name.startsWith("QA-FM-")||!java.util.Set.of("Accounts","Customers","Suppliers","Banks","Safes","PaymentMethods","Expenses","Incomes","DiscountTypes","Agents","Stores","Units","ItemCategories","Items","Purchases","ItemTransactions-Sales","Collections","Payments","IncomeTransactions","ExpenseTransactions","CustomerDiscountTransactions","SupplierDiscountTransactions","TransfersAndSettlements").contains(endpoint)||row.get("id")==null||!(row.get("values") instanceof Map<?,?>))throw new AssertionError("Invalid owned fixture journal record");
+      data.created.add(new Record(endpoint,row.get("id"),name,(Map<String,Object>)row.get("values")));
+    }data.pendingWrites.resume(java.util.Set.of("Accounts","Customers","Suppliers","Banks","Safes","PaymentMethods","Expenses","Incomes","DiscountTypes","Agents","Stores","Units","ItemCategories","Items","Purchases","ItemTransactions-Sales","Collections","Payments","IncomeTransactions","ExpenseTransactions","CustomerDiscountTransactions","SupplierDiscountTransactions","TransfersAndSettlements"),"QA-FM-");return data;
   }
 
   static Map<String, Object> fields(Object... pairs) {
@@ -151,12 +175,14 @@ final class FinancialTestData implements AutoCloseable {
 
   @io.qameta.allure.Step("إنشاء بيانات مساعدة مستقلة: {key}")
   Record fixture(String key, String endpoint, Map<String, Object> values) {
+    key=fixtureKey(key);
     if (fixtures.containsKey(key)) return fixtures.get(key);
     String name = "QA-FM-" + key + "-" + suffix;
     values.put("arabicName", name);
     values.put("englishName", name);
     values.put("notes", endpoint.equals("Purchases")||endpoint.equals("ItemTransactions-Sales")
         ?name:"Owned Financial test fixture");
+    pendingWrites.start(endpoint,name,values);
     Map<String, Object> response;
     try {response = call("create", endpoint, values);}
     catch(ApiFailure|org.openqa.selenium.TimeoutException failure){
@@ -187,12 +213,13 @@ final class FinancialTestData implements AutoCloseable {
     Record record = new Record(endpoint, id, name, values);
     created.add(record);
     journal();
-    fixtures.put(key, record);
+    fixtures.put(key, record);pendingWrites.committed(endpoint,name);
     return record;
   }
 
   @SuppressWarnings("unchecked")
   private Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
+    session.verify();
     driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(action.equals("delete") ? 60 : 30));
     Object result = ((JavascriptExecutor) driver).executeAsyncScript("""
         const [action, endpoint, values, done] = arguments;
@@ -228,20 +255,28 @@ final class FinancialTestData implements AutoCloseable {
   }
 
   void track(String endpoint, Object id, String note, Map<String,Object> values) {
+    if(note==null||!note.startsWith("QA-FM-"))throw new AssertionError("Refusing to track an unowned financial record");
     if (id == null) throw new AssertionError("Saved movement did not return an ID");
     for(int i=0;i<created.size();i++)if(created.get(i).endpoint().equals(endpoint)&&created.get(i).id().equals(id)){
-      created.remove(i);created.add(new Record(endpoint,id,note,new LinkedHashMap<>(values)));journal();return;
+      created.remove(i);created.add(new Record(endpoint,id,note,new LinkedHashMap<>(values)));journal();pendingWrites.committed(endpoint,note);return;
     }
     created.add(new Record(endpoint,id,note,new LinkedHashMap<>(values)));
-    journal();
+    journal();pendingWrites.committed(endpoint,note);
   }
+  @SuppressWarnings("unchecked") void rememberAttempts(List<Map<String,Object>> attempts,String marker){
+    for(var attempt:attempts){
+      var values=(Map<String,Object>)attempt.get("values");
+      String name=java.util.stream.Stream.of("arabicName","englishName","notes").map(values::get).filter(String.class::isInstance).map(String.class::cast).filter(v->v.startsWith(marker)).findFirst().orElse(null);
+      if(name==null)throw new AssertionError("Unowned captured request");
+      pendingWrites.start((String)attempt.get("endpoint"),name,values);
+    }
+  }
+
+  private void recoverPendingFixtures(){pendingWrites.recover((endpoint,values)->call("get",endpoint,values),(endpoint,id,name,values)->{track(endpoint,id,name,values);});}
+  String journalSuffix(){return suffix;}
   private void journal(){
-    List<Map<String,Object>> rows=created.stream().map(r->fields("endpoint",r.endpoint(),"id",r.id(),"name",r.name(),"values",r.values())).toList();
-    try{
-      java.nio.file.Path directory=java.nio.file.Path.of("target","financial-fixtures");
-      java.nio.file.Files.createDirectories(directory);
-      java.nio.file.Files.writeString(directory.resolve(suffix+".json"),new org.json.JSONArray(rows).toString(2));
-    }catch(java.io.IOException e){throw new AssertionError("Cannot record owned financial fixture IDs",e);}
+    var rows=created.stream().map(r->fields("origin",session.origin,"branchId",session.branchId,"endpoint",r.endpoint(),"id",r.id(),"name",r.name(),"values",r.values())).toList();
+    TestSupport.FixtureJournals.write(java.nio.file.Path.of("target","financial-fixtures",suffix+".json"),rows);
   }
 
   private static boolean retryable(ApiFailure failure) {
@@ -252,6 +287,9 @@ final class FinancialTestData implements AutoCloseable {
     AssertionError lastFailure = null;
     for (int attempt = 1; attempt <= 3; attempt++) {
       try {
+        Map<String,Object> owned=cleanupIdentity(record);
+        if(owned==null)return;
+        if(!record.name().equals(owned.get("arabicName"))&&!record.name().equals(owned.get("englishName"))&&!record.name().equals(owned.get("notes")))throw new AssertionError("Refusing cleanup: fixture ownership changed for "+record.id());
         call("delete", record.endpoint(), fields("id", record.id()));
         if(read(record)==null)return;
         lastFailure=new AssertionError("Delete did not remove owned record: "+record.endpoint()+"/"+record.id());
@@ -286,6 +324,24 @@ final class FinancialTestData implements AutoCloseable {
     throw lastFailure;
   }
 
+  @SuppressWarnings("unchecked") private Map<String,Object> cleanupIdentity(Record record){
+    try{return read(record);}catch(ApiFailure failure){
+      if(failure.status!=500||!record.endpoint().equals("Customers"))throw failure;
+      java.util.Set<Object> seen=new java.util.HashSet<>();
+      for(int page=1;;page++){
+        Object entity=call("get","Customers?pageNumber="+page+"&pageSize=500",fields()).get("entity");
+        if(!(entity instanceof Map<?,?> result)||!(result.get("pageData") instanceof List<?> rows)||!(result.get("totalRecords") instanceof Number total))throw failure;
+        int added=0;for(Object value:rows){
+          if(!(value instanceof Map<?,?> row)||row.get("id")==null)throw failure;
+          if(record.id().equals(row.get("id")))return (Map<String,Object>)row;
+          if(seen.add(row.get("id")))added++;
+        }
+        if(seen.size()>=total.longValue())return null;
+        if(added==0)throw failure;
+      }
+    }
+  }
+
   private static boolean references(Object value, Object id) {
     if (value instanceof Map<?, ?> map) return map.values().stream().anyMatch(child -> references(child, id));
     if (value instanceof Iterable<?> list) {
@@ -303,6 +359,7 @@ final class FinancialTestData implements AutoCloseable {
 
   @io.qameta.allure.Step("تنظيف سجلات الاختبار بترتيب العلاقات")
   @Override public void close() {
+    recoverPendingFixtures();
     List<String> failures = new ArrayList<>();
     List<Record> pending = new ArrayList<>();
     for (int index = created.size() - 1; index >= 0; index--) {
@@ -313,7 +370,7 @@ final class FinancialTestData implements AutoCloseable {
             + "]: waiting for dependent fixture cleanup");
         continue;
       }
-      try { deleteRecord(record); }
+      try { deleteRecord(record); created.remove(record); fixtures.entrySet().removeIf(entry->entry.getValue().equals(record)); journal(); }
       catch (RuntimeException | AssertionError failure) {
         pending.add(record);
         failures.add(record.name() + " [" + record.endpoint() + "/" + record.id() + "]: "

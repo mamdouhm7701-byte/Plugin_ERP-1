@@ -18,41 +18,39 @@ import java.time.Duration;
 
 public class SupplierDiscountNoticePage extends FinancialMovementPage {
 
-    //Constructors
+    // Constructors
     public SupplierDiscountNoticePage(WebDriver driver) {
         super(driver);
-
     }
 
-    //Locators
+    // Locators
     private By OpenFinancialMovements = By.xpath("//span[normalize-space()='الحركات المالية']");
     private By SupplierNotice = By.xpath("//span[normalize-space()='اشعار خصم مورد']");
     private By Value = By.cssSelector("input[label-text='value']");
     private By CanselCustomReceipt = By.cssSelector(".btn-danger");
     private By SupplierRequiredError = By.xpath("//small[contains(text(),'المورد مطلوب')]");
-    private By AmountRequiredError = By.xpath("//small[contains(text(),'قيمة الحقل القيمة يجب ان تكون اكبر من 1 او تساويها')]");
+    private By AmountRequiredError =
+            By.xpath(
+                    "//small[contains(text(),'قيمة الحقل القيمة يجب ان تكون اكبر من 1 او تساويها')]");
     private By NetBeforeTax = By.cssSelector("fieldset[label-text='netBeforeTax'] input");
     private By Tax = By.cssSelector("input[name='tax']");
-    private By SaveAndAllocateButton =
-            By.xpath("//button[normalize-space()='حفظ وتخصيص']");
+    private By SaveAndAllocateButton = By.xpath("//button[normalize-space()='حفظ وتخصيص']");
 
-    //Methods
-    //To Get the Allocation Input Field for a specific row in the allocation table
+    // Methods
+    // To Get the Allocation Input Field for a specific row in the allocation table
     public By getAllocationInput(int rowIndex) {
         return By.xpath("(//td[@aria-colindex='8']//input[@type='number'])[" + rowIndex + "]");
     }
-
-
 
     @Step("Is Supplier Required Error Displayed")
     public boolean IsSupplierRequiredErrorDisplayed() {
         return utilites.isDisplayed(SupplierRequiredError);
     }
+
     @Step("Is Amount Required Error Displayed")
     public boolean IsAmountRequiredErrorDisplayed() {
         return utilites.isDisplayed(AmountRequiredError);
     }
-
 
     @Step("Open Supplier Discount Notice")
     public void OpenSupplierDiscountNotice() {
@@ -61,14 +59,16 @@ public class SupplierDiscountNoticePage extends FinancialMovementPage {
         utilites.ClickElement(OpenFinancialMovements);
     }
 
-public void SaveCustomButton() {
-    utilites.ClickElement(SaveAndAllocateButton);
-}
+    public void SaveCustomButton() {
+        utilites.ClickElement(SaveAndAllocateButton);
+    }
+
     @Step("Cancel Supplier Receipt")
     public void CanselCustomReceipt() {
         utilites.ClickElement(CanselCustomReceipt);
     }
-    //Handel Custom Receipt
+
+    // Handel Custom Receipt
     @Step("Handel Custom Receipt for Row Index: {rowIndex} with Number: {Number}")
     public void HandelCustomReceipt(int rowIndex, String Number) {
         utilites.ClickElement(getAllocationInput(rowIndex));
@@ -77,21 +77,15 @@ public void SaveCustomButton() {
 
     public BigDecimal[] getFinancialValues() {
 
-        BigDecimal netBeforeTax =
-                utilites.Utility().getNormalizedAmount(NetBeforeTax);
+        BigDecimal netBeforeTax = utilites.Utility().getNormalizedAmount(NetBeforeTax);
 
-        BigDecimal tax =
-                utilites.Utility().getNormalizedAmount(Tax);
+        BigDecimal tax = utilites.Utility().getNormalizedAmount(Tax);
 
-        BigDecimal total =
-                utilites.Utility().getNormalizedAmount(Value);
+        BigDecimal total = utilites.Utility().getNormalizedAmount(Value);
 
-        return new BigDecimal[]{
-                netBeforeTax,
-                tax,
-                total
-        };
+        return new BigDecimal[] {netBeforeTax, tax, total};
     }
+
     public double getNetBeforeTax() {
         double value = utilites.Utility().getNumber(NetBeforeTax);
 
@@ -107,6 +101,7 @@ public void SaveCustomButton() {
 
         return value;
     }
+
     public double getTotal() {
         double value = utilites.Utility().getNumber(Value);
 
@@ -114,41 +109,30 @@ public void SaveCustomButton() {
 
         return value;
     }
+
     @Step("Calculate Expected Tax (15%)")
     public double getExpectedTax() {
 
-        double netBeforeTax =
-                utilites.Utility().getNumber(NetBeforeTax);
+        double netBeforeTax = utilites.Utility().getNumber(NetBeforeTax);
 
-        double expectedTax =
-                netBeforeTax * 0.15;
+        double expectedTax = netBeforeTax * 0.15;
 
         Allure.step("Expected Tax (15%) = " + expectedTax);
 
         return expectedTax;
     }
+
     @Step("Calculate Expected Total")
     public double getExpectedTotal() {
 
-        double netBeforeTax =
-                utilites.Utility().getNumber(NetBeforeTax);
+        double netBeforeTax = utilites.Utility().getNumber(NetBeforeTax);
 
-        double expectedTax =
-                netBeforeTax * 0.15;
+        double expectedTax = netBeforeTax * 0.15;
 
-        double expectedTotal =
-                netBeforeTax + expectedTax;
+        double expectedTotal = netBeforeTax + expectedTax;
 
         Allure.step("Expected Total = " + expectedTotal);
 
         return expectedTotal;
     }
-
-
-
-    }
-
-
-
-
-
+}

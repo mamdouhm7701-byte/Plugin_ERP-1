@@ -16,7 +16,7 @@ public class RoutLineForDealer extends AbstractForDealer {
         super(driver);
     }
 
-    //Locators
+    // Locators
     private By OpenDealerModel = By.xpath("//span[text()='المتعاملين']");
     private By OpenRoutLine = By.xpath("//span[text()='خط السير']");
 
@@ -32,13 +32,15 @@ public class RoutLineForDealer extends AbstractForDealer {
 
     private By AddAllBtn = By.xpath("//button[contains(normalize-space(text()), 'إضافة الجميع')]");
     private By DeleteAll = By.xpath("//button[contains(normalize-space(text()), 'إزالة الجميع')]");
-    private By GatherVisitsTab = By.xpath("//a[@role='tab' and contains(text(), 'تجميع الزيارات')]");
+    private By GatherVisitsTab =
+            By.xpath("//a[@role='tab' and contains(text(), 'تجميع الزيارات')]");
     private By CalendarTab = By.xpath("//a[@role='tab' and contains(text(), 'التقويم')]");
     private By DeleteBtn = By.cssSelector("#sidebar-add-new-event svg.feather-trash");
 
     private By LastRowDeleteBtn = By.cssSelector("tr:last-child button[data-action-type='delete']");
     private By LastRowInfoIcon = By.cssSelector("tr:last-child svg.feather-info");
-    private By LastRowEyeIcon = By.xpath("(//*[name()='svg' and contains(@class,'feather-eye')])[last()]");
+    private By LastRowEyeIcon =
+            By.xpath("(//*[name()='svg' and contains(@class,'feather-eye')])[last()]");
 
     private By getDayCell(String date) {
         return By.cssSelector("td[data-date='" + date + "']");
@@ -52,7 +54,7 @@ public class RoutLineForDealer extends AbstractForDealer {
         return By.cssSelector("td[data-date='" + date + "'] div.fc-event-title");
     }
 
-    //Methods
+    // Methods
 
     @Step("فتح قائمه خط السير")
     public void OpenRoutLine() {
@@ -174,12 +176,11 @@ public class RoutLineForDealer extends AbstractForDealer {
         return titles;
     }
 
-
-
     public void waitForEventCountToIncrease(String date, int countBefore) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         wait.until(d -> getEventsCountForDay(date) > countBefore);
     }
+
     public int getTodayEventsCount() {
         String todayDate = utilites.Utility().TypeTodayDate("yyyy-MM-dd");
         return getEventsCountForDay(todayDate);

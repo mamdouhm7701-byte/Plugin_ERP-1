@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
-<suite name="Plugin_ERP_Suite" verbose="1">
+<suite name="Plugin_ERP_Suite" verbose="1" configfailurepolicy="continue" parallel="none">
 
     <test name="purches" preserve-order="true">
 
         <classes>
 
-            <class name="Purches.PurchesBillsTest"/>
-            <class name="Purches.purchOrderTest"/>
-            <class name="Purches.ReturnOrderTest"/>
+            <class name="Purches.PurchaseInvoiceCoverageTest"/>
+            <class name="Purches.PurchaseOrderCoverageTest"/>
+            <class name="Purches.PurchaseReturnCoverageTest"/>
+            <class name="Purches.PurchaseLinkedCoverageTest"/>
+            <class name="Purches.PurchaseListCoverageTest"/>
+            <class name="Purches.PurchaseCalculationTest"/>
+            <class name="Purches.PurchaseCleanupTest"/>
 
         </classes>
 

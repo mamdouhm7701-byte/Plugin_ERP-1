@@ -11,33 +11,21 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class PurchesBillsPage extends AbstractForPurchases {
-    public PurchesBillsPage(WebDriver driver) {super(driver);}
+    public PurchesBillsPage(WebDriver driver) {
+        super(driver);
+    }
 
-private By ClickToTransToReturnOrder=By.xpath("//button[.//*[contains(@id,'fileText-icon')]]");
+    private By ClickToTransToReturnOrder =
+            By.xpath("//button[.//*[contains(@id,'fileText-icon')]]");
 
-
-
-    public void  ClickToTransToReturnOrder() {
+    public void ClickToTransToReturnOrder() {
         utilites.waits().waitForOverlayToDisappear();
         utilites.ClickElement(ClickToTransToReturnOrder);
         utilites.waits().waitForOverlayToDisappear();
         new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("//th[@role='columnheader'][.//div[normalize-space()='الاسم']]")
-                ));
-
+                .until(
+                        ExpectedConditions.presenceOfElementLocated(
+                                By.xpath(
+                                        "//th[@role='columnheader'][.//div[normalize-space()='الاسم']]")));
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-

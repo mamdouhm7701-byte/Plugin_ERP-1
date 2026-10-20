@@ -13,41 +13,51 @@ import java.sql.Driver;
 import java.time.Duration;
 
 public class TypesofdiscountsPage extends AbstractForDealer {
-    //Variables
+    // Variables
 
-    //Constructors
+    // Constructors
     public TypesofdiscountsPage(WebDriver driver) {
         super(driver);
-
     }
 
-     //locators
-        private By OpenBasicData = By.xpath("//span[contains(@class,\"menu-title\") and contains(text(),\"البيانات الأساسية\")]");
-        private By OpenTypesofdiscounts = By.xpath("//span[normalize-space()='انوع الخصومات']");
-        private By AddTypesofdiscounts = By.xpath("//button[contains(text(),'جديد')]");
-        private By AddArabicTypesofdiscounts = By.xpath("//input[@id='arabicName']");
-        private By AddEnglishTypesofdiscounts = By.xpath("//input[@name='englishName']");
-        private By AddNotesTypesofdiscounts = By.xpath("//textarea[contains(@class,'form-control') and @label='Notes']\n");
-        private By SaveButton = By.xpath("//button[@data-action-type='save' and normalize-space(text())='حفظ']\n");
-        private By Clickyestodelet= By.xpath("//button[contains(@class, \"swal2-confirm\") and contains(text(), \"نعم\")]");
-        private By TypesofdiscountsNameRequiredMsg = By.xpath("//input[@id='arabicName']/following::small[contains(@class,'text-danger')]");
-        private By Percentage = By.xpath("//input[@name='discountPercentage']");
-        private By SecrtCode = By.xpath("//input[@id='secretCode']");
-        private By AddUser = By.xpath("//button[normalize-space()='إضافة مستخدمين']");
-        private By CloseButton = By.xpath("//button[normalize-space()='إغلاق']");
-        private By AssertRequiredarabicMsg = By.xpath("//small[contains(@class,'text-danger') and normalize-space()='الاسم العربي مطلوب']");
-        private By AssertRequiredPercentageMsg = By.xpath("//small[contains(@class,'text-danger') and normalize-space()='نسبة الخصم مطلوب']");
-        private By AssertRequiredSecretCodeMsg = By.xpath("//small[contains(@class,'text-danger') and normalize-space()='الكود السري مطلوب']");
+    // locators
+    private By OpenBasicData =
+            By.xpath(
+                    "//span[contains(@class,\"menu-title\") and contains(text(),\"البيانات الأساسية\")]");
+    private By OpenTypesofdiscounts = By.xpath("//span[normalize-space()='انوع الخصومات']");
+    private By AddTypesofdiscounts = By.xpath("//button[contains(text(),'جديد')]");
+    private By AddArabicTypesofdiscounts = By.xpath("//input[@id='arabicName']");
+    private By AddEnglishTypesofdiscounts = By.xpath("//input[@name='englishName']");
+    private By AddNotesTypesofdiscounts =
+            By.xpath("//textarea[contains(@class,'form-control') and @label='Notes']\n");
+    private By SaveButton =
+            By.xpath("//button[@data-action-type='save' and normalize-space(text())='حفظ']\n");
+    private By Clickyestodelet =
+            By.xpath("//button[contains(@class, \"swal2-confirm\") and contains(text(), \"نعم\")]");
+    private By TypesofdiscountsNameRequiredMsg =
+            By.xpath("//input[@id='arabicName']/following::small[contains(@class,'text-danger')]");
+    private By Percentage = By.xpath("//input[@name='discountPercentage']");
+    private By SecrtCode = By.xpath("//input[@id='secretCode']");
+    private By AddUser = By.xpath("//button[normalize-space()='إضافة مستخدمين']");
+    private By CloseButton = By.xpath("//button[normalize-space()='إغلاق']");
+    private By AssertRequiredarabicMsg =
+            By.xpath(
+                    "//small[contains(@class,'text-danger') and normalize-space()='الاسم العربي مطلوب']");
+    private By AssertRequiredPercentageMsg =
+            By.xpath(
+                    "//small[contains(@class,'text-danger') and normalize-space()='نسبة الخصم مطلوب']");
+    private By AssertRequiredSecretCodeMsg =
+            By.xpath(
+                    "//small[contains(@class,'text-danger') and normalize-space()='الكود السري مطلوب']");
 
+    // Methods
+    @Step("فتح قائمة الخصومات")
+    public void OpenTypesofdiscountsPage() {
+        utilites.ClickElement(OpenBasicData);
+        utilites.ClickElement(OpenTypesofdiscounts);
+        utilites.ClickElement(OpenBasicData);
+    }
 
-        //Methods
-        @Step("فتح قائمة الخصومات")
-        public void OpenTypesofdiscountsPage() {
-            utilites.ClickElement(OpenBasicData);
-            utilites.ClickElement(OpenTypesofdiscounts);
-            utilites.ClickElement(OpenBasicData);
-
-        }
     @Step("التأكد من أن نسبة الخصم مطلوب")
     public boolean IsPercentageRequiredErrorDisplayed() {
         return utilites.isDisplayed(AssertRequiredPercentageMsg);
@@ -58,113 +68,117 @@ public class TypesofdiscountsPage extends AbstractForDealer {
         return utilites.isDisplayed(AssertRequiredSecretCodeMsg);
     }
 
-
     @Step("اضافه قيمه الخصم المطلوب:{discountValue}")
-        public void AddDiscount(int discountValue) {
-            utilites.TaypeTextB(Percentage, String.valueOf(discountValue));
-        }
-        @Step("اضافه الرقم السرى: {secretCode}")
-        public void AddSecretCode(String secretCode) {
-            utilites.TaypeTextB(SecrtCode, secretCode);
-        }
-
-        @Step("الضغط على اختيار المستخدمين")
-        public void ClickToAddUsers() {
-            utilites.ClickElement(AddUser);
-        }
-
-        @Step("اختيار المستخدمين:{codes}")
-        public void ClickSelectUsers(int... codes) {
-            utilites.dropdown().selectUsersByCode(codes);
-        }
-
-        private String targetPk;
-        @Step("Add New Type Of Discount With ArabicName: {ArabicName},EnglishName: {EnglishName}," +
-                "percentage: {percentage},secretCode: {secretCode}")
-        public void AddNewTypesofdiscounts(String ArabicName, String EnglishName, int percentage, int secretCode) {
-            utilites.ClickElement(AddTypesofdiscounts);
-            utilites.TaypeText(AddArabicTypesofdiscounts, ArabicName);
-            utilites.TaypeText(AddEnglishTypesofdiscounts, EnglishName);
-            utilites.TaypeText(Percentage, String.valueOf(percentage));
-            utilites.TaypeText(SecrtCode, String.valueOf(secretCode));
-
-            utilites.ClickElement(AddUser);
-            utilites.dropdown().selectUsersByCode(1, 2);
-            utilites.ClickElement(CloseButton);
-            utilites.ClickElement(SaveButton);
-            targetPk = utilites.grid().getPkByText(ArabicName);
-
-        }
-    @Step("Edit New Type Of Discount With ArabicName: {ArabicName},EnglishName: {EnglishName}," +
-            "percentage: {percentage},secretCode: {secretCode}")
-
-    public void EditTypesofdiscounts(String ArabicName, String EnglishName, int percentage, int secretCode) {
-                utilites.ClickElement(utilites.grid().getLastEditButton());
-                utilites.TaypeText(AddArabicTypesofdiscounts, ArabicName);
-                utilites.TaypeText(AddEnglishTypesofdiscounts, EnglishName);
-                utilites.TaypeText(Percentage, String.valueOf(percentage));
-                utilites.TaypeText(SecrtCode, String.valueOf(secretCode));
-                utilites.checkbox().stableFastSetCheckboxByTextCloude("فعال", false);
-                utilites.ClickElement(AddUser);
-                utilites.dropdown().selectUsersByCode(1, 2);
-                utilites.ClickElement(CloseButton);
-                utilites.checkbox().stableFastSetCheckboxByText("التأثير في الفواتير المعلقة", true);
-                utilites.ClickElement(SaveButton);
-            }
-
-            @Step("Add Invalid Type Of Discount : ArabicName: {ArabicName},EnglishName: {EnglishName}")
-            public void InvalidAddNewTypesofdiscounts(String ArabicName, String EnglishName) {
-                utilites.ClickElement(AddTypesofdiscounts);
-                utilites.TaypeText(AddArabicTypesofdiscounts, ArabicName);
-                utilites.TaypeText(AddEnglishTypesofdiscounts, EnglishName);
-
-                utilites.ClickElement(SaveButton);
-            }
-            @Step("Assert Required Fields Messages Displayed")
-            public void AssertRequiredFieldsMessages() {
-                utilites.validation().assertRequiredMsg(AssertRequiredarabicMsg,"الاسم العربي مطلوب");
-                utilites.validation().assertRequiredMsg(AssertRequiredPercentageMsg,"نسبة الخصم مطلوب");
-                utilites.validation().assertRequiredMsg(AssertRequiredSecretCodeMsg,"الكود السري مطلوب");
-            }
-            @Step("Delete Types of discounts")
-            public void DeleteTypesofdiscounts() {
-                String deletedPk = utilites.grid().getLastRowPk();
-
-                By deletedRow = By.xpath("//tr[@data-pk='" + deletedPk + "']");
-
-                System.out.println("🗑️ Start deleting row with pk: " + deletedPk);
-
-                utilites.ClickElement(utilites.grid().getLastDeleteButton());
-                utilites.ClickElement(Clickyestodelet);
-
-                long startTime = System.currentTimeMillis();
-
-                WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-
-                wait.until(
-                        org.openqa.selenium.support.ui.ExpectedConditions
-                                .numberOfElementsToBe(deletedRow, 0)
-                );
-
-                long endTime = System.currentTimeMillis();
-
-                System.out.println("✅ Row deleted successfully");
-                System.out.println("⏱️ Delete wait time: "
-                        + ((endTime - startTime) / 1000.0) + " seconds");
-
-                Assert.assertTrue(
-                        driver.findElements(deletedRow).isEmpty(),
-                        "❌ الصف لم يُحذف! data-pk: " + deletedPk
-                );
-            }
-            @Step("Assert Types of discounts Exists: {ArabicName}")
-            public void AssertTypesofdiscountsExists(String ArabicName) {
-        String actualPk = utilites.grid().getPkByText(ArabicName);
-        if (actualPk == null) {
-            throw new AssertionError("Expected Expenses with Arabic name '" + ArabicName + "' to exist, but it was not found.");
-        }
-            }
-
-
+    public void AddDiscount(int discountValue) {
+        utilites.TaypeTextB(Percentage, String.valueOf(discountValue));
     }
 
+    @Step("اضافه الرقم السرى: {secretCode}")
+    public void AddSecretCode(String secretCode) {
+        utilites.TaypeTextB(SecrtCode, secretCode);
+    }
+
+    @Step("الضغط على اختيار المستخدمين")
+    public void ClickToAddUsers() {
+        utilites.ClickElement(AddUser);
+    }
+
+    @Step("اختيار المستخدمين:{codes}")
+    public void ClickSelectUsers(int... codes) {
+        utilites.dropdown().selectUsersByCode(codes);
+    }
+
+    private String targetPk;
+
+    @Step(
+            "Add New Type Of Discount With ArabicName: {ArabicName},EnglishName: {EnglishName},"
+                    + "percentage: {percentage},secretCode: {secretCode}")
+    public void AddNewTypesofdiscounts(
+            String ArabicName, String EnglishName, int percentage, int secretCode) {
+        utilites.ClickElement(AddTypesofdiscounts);
+        utilites.TaypeText(AddArabicTypesofdiscounts, ArabicName);
+        utilites.TaypeText(AddEnglishTypesofdiscounts, EnglishName);
+        utilites.TaypeText(Percentage, String.valueOf(percentage));
+        utilites.TaypeText(SecrtCode, String.valueOf(secretCode));
+
+        utilites.ClickElement(AddUser);
+        utilites.dropdown().selectUsersByCode(1, 2);
+        utilites.ClickElement(CloseButton);
+        utilites.ClickElement(SaveButton);
+        targetPk = utilites.grid().getPkByText(ArabicName);
+    }
+
+    @Step(
+            "Edit New Type Of Discount With ArabicName: {ArabicName},EnglishName: {EnglishName},"
+                    + "percentage: {percentage},secretCode: {secretCode}")
+    public void EditTypesofdiscounts(
+            String ArabicName, String EnglishName, int percentage, int secretCode) {
+        utilites.ClickElement(utilites.grid().getLastEditButton());
+        utilites.TaypeText(AddArabicTypesofdiscounts, ArabicName);
+        utilites.TaypeText(AddEnglishTypesofdiscounts, EnglishName);
+        utilites.TaypeText(Percentage, String.valueOf(percentage));
+        utilites.TaypeText(SecrtCode, String.valueOf(secretCode));
+        utilites.checkbox().stableFastSetCheckboxByTextCloude("فعال", false);
+        utilites.ClickElement(AddUser);
+        utilites.dropdown().selectUsersByCode(1, 2);
+        utilites.ClickElement(CloseButton);
+        utilites.checkbox().stableFastSetCheckboxByText("التأثير في الفواتير المعلقة", true);
+        utilites.ClickElement(SaveButton);
+    }
+
+    @Step("Add Invalid Type Of Discount : ArabicName: {ArabicName},EnglishName: {EnglishName}")
+    public void InvalidAddNewTypesofdiscounts(String ArabicName, String EnglishName) {
+        utilites.ClickElement(AddTypesofdiscounts);
+        utilites.TaypeText(AddArabicTypesofdiscounts, ArabicName);
+        utilites.TaypeText(AddEnglishTypesofdiscounts, EnglishName);
+
+        utilites.ClickElement(SaveButton);
+    }
+
+    @Step("Assert Required Fields Messages Displayed")
+    public void AssertRequiredFieldsMessages() {
+        utilites.validation().assertRequiredMsg(AssertRequiredarabicMsg, "الاسم العربي مطلوب");
+        utilites.validation().assertRequiredMsg(AssertRequiredPercentageMsg, "نسبة الخصم مطلوب");
+        utilites.validation().assertRequiredMsg(AssertRequiredSecretCodeMsg, "الكود السري مطلوب");
+    }
+
+    @Step("Delete Types of discounts")
+    public void DeleteTypesofdiscounts() {
+        String deletedPk = utilites.grid().getLastRowPk();
+
+        By deletedRow = By.xpath("//tr[@data-pk='" + deletedPk + "']");
+
+        System.out.println("🗑️ Start deleting row with pk: " + deletedPk);
+
+        utilites.ClickElement(utilites.grid().getLastDeleteButton());
+        utilites.ClickElement(Clickyestodelet);
+
+        long startTime = System.currentTimeMillis();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+
+        wait.until(
+                org.openqa.selenium.support.ui.ExpectedConditions.numberOfElementsToBe(
+                        deletedRow, 0));
+
+        long endTime = System.currentTimeMillis();
+
+        System.out.println("✅ Row deleted successfully");
+        System.out.println("⏱️ Delete wait time: " + ((endTime - startTime) / 1000.0) + " seconds");
+
+        Assert.assertTrue(
+                driver.findElements(deletedRow).isEmpty(),
+                "❌ الصف لم يُحذف! data-pk: " + deletedPk);
+    }
+
+    @Step("Assert Types of discounts Exists: {ArabicName}")
+    public void AssertTypesofdiscountsExists(String ArabicName) {
+        String actualPk = utilites.grid().getPkByText(ArabicName);
+        if (actualPk == null) {
+            throw new AssertionError(
+                    "Expected Expenses with Arabic name '"
+                            + ArabicName
+                            + "' to exist, but it was not found.");
+        }
+    }
+}

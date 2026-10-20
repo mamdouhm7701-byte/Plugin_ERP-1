@@ -10,11 +10,7 @@ public abstract class BaseAction {
     protected WebDriverWait wait;
     protected WaitMangment waitMangment;
 
-    public BaseAction(
-            WebDriver driver,
-            WebDriverWait wait,
-            WaitMangment waitMangment
-    ) {
+    public BaseAction(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment) {
         this.driver = driver;
         this.wait = wait;
         this.waitMangment = waitMangment;
@@ -22,23 +18,16 @@ public abstract class BaseAction {
 
     protected void scrollIntoView(WebElement element) {
 
-        ((JavascriptExecutor) driver).executeScript(
-                "arguments[0].scrollIntoView({block:'center'});",
-                element
-        );
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView({block:'center'});", element);
     }
 
     protected void jsClick(WebElement element) {
 
-        ((JavascriptExecutor) driver).executeScript(
-                "arguments[0].click();",
-                element
-        );
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
     }
+
     public void clickOnEmptyArea() {
-        new Actions(driver)
-                .moveToLocation(5, 5)
-                .click()
-                .perform();
+        new Actions(driver).moveToLocation(5, 5).click().perform();
     }
 }

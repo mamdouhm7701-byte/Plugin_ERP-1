@@ -10,22 +10,22 @@ import java.util.List;
 
 public class DropdownActions extends BaseAction {
 
-    public DropdownActions(
-            WebDriver driver,
-            WebDriverWait wait,
-            WaitMangment waitMangment
-    ) {
+    public DropdownActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment) {
         super(driver, wait, waitMangment);
     }
 
     public void selectUsersByCode(int... codes) {
         for (int code : codes) {
-            WebElement addButton = driver.findElement(By.xpath(
-                    "//td[normalize-space()='" + code + "']/following-sibling::td//button[@data-action-type='save']"
-            ));
+            WebElement addButton =
+                    driver.findElement(
+                            By.xpath(
+                                    "//td[normalize-space()='"
+                                            + code
+                                            + "']/following-sibling::td//button[@data-action-type='save']"));
             addButton.click();
         }
     }
+
     public void typeAndVerify(WebElement input, String expectedText) {
 
         String cleanExpected = expectedText.trim().replaceAll("\\s+", " ");
@@ -55,29 +55,35 @@ public class DropdownActions extends BaseAction {
                 return; // القيمة مطابقة، اتأكدنا
             }
 
-            System.out.println("Verify Failed (try " + i + "/3) - Expected: [" + cleanExpected
-                    + "] Actual: [" + actualValue + "]");
+            System.out.println(
+                    "Verify Failed (try "
+                            + i
+                            + "/3) - Expected: ["
+                            + cleanExpected
+                            + "] Actual: ["
+                            + actualValue
+                            + "]");
         }
 
         throw new RuntimeException(
-                "Typed value does not match expected text after verification retries: [" + cleanExpected + "]"
-        );
+                "Typed value does not match expected text after verification retries: ["
+                        + cleanExpected
+                        + "]");
     }
 
     public void selectVueOptionboth(String labelText, String optionText) {
 
         String cleanOptionText = optionText.trim().replaceAll("\\s+", " ");
 
-        String base =
-                "//*[self::legend or self::label][normalize-space()='" + labelText + "']";
+        String base = "//*[self::legend or self::label][normalize-space()='" + labelText + "']";
 
-        By searchInputBy = By.xpath(
-                base + "/following::input[contains(@class,'vs__search')][1]"
-        );
+        By searchInputBy = By.xpath(base + "/following::input[contains(@class,'vs__search')][1]");
 
-        By optionBy = By.xpath(
-                "//ul[contains(@id,'__listbox')]//li[normalize-space()='" + cleanOptionText + "']"
-        );
+        By optionBy =
+                By.xpath(
+                        "//ul[contains(@id,'__listbox')]//li[normalize-space()='"
+                                + cleanOptionText
+                                + "']");
 
         Exception lastException = null;
 
@@ -89,11 +95,12 @@ public class DropdownActions extends BaseAction {
 
                 clickOnEmptyArea();
 
-                WebElement searchInput = wait.until(
-                        ExpectedConditions.elementToBeClickable(searchInputBy));
+                WebElement searchInput =
+                        wait.until(ExpectedConditions.elementToBeClickable(searchInputBy));
 
                 ((JavascriptExecutor) driver)
-                        .executeScript("arguments[0].scrollIntoView({block:'center'});", searchInput);
+                        .executeScript(
+                                "arguments[0].scrollIntoView({block:'center'});", searchInput);
 
                 searchInput.click();
 
@@ -101,14 +108,13 @@ public class DropdownActions extends BaseAction {
 
                 WebDriverWait retryWait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-                WebElement option = retryWait.until(
-                        ExpectedConditions.elementToBeClickable(optionBy));
+                WebElement option =
+                        retryWait.until(ExpectedConditions.elementToBeClickable(optionBy));
 
                 try {
                     option.click();
                 } catch (ElementClickInterceptedException ex) {
-                    ((JavascriptExecutor) driver)
-                            .executeScript("arguments[0].click();", option);
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", option);
                 }
 
                 System.out.println("Selected Successfully : " + cleanOptionText);
@@ -119,8 +125,13 @@ public class DropdownActions extends BaseAction {
 
                 lastException = e;
 
-                System.out.println("Attempt " + attempt + " Failed : "
-                        + e.getClass().getSimpleName() + " - " + e.getMessage());
+                System.out.println(
+                        "Attempt "
+                                + attempt
+                                + " Failed : "
+                                + e.getClass().getSimpleName()
+                                + " - "
+                                + e.getMessage());
 
                 try {
                     clickOnEmptyArea();
@@ -142,21 +153,24 @@ public class DropdownActions extends BaseAction {
 
         throw new RuntimeException(
                 "Couldn't select option [" + cleanOptionText + "] after 5 attempts.",
-                lastException
-        );
+                lastException);
     }
 
     public void selectVueOptionByDataTitle(String title, String optionText) {
 
         String cleanOptionText = optionText.trim().replaceAll("\\s+", " ");
 
-        By inputBy = By.xpath(
-                "//div[@data-title='" + title + "']//input[contains(@class,'vs__search') and not(@disabled)]"
-        );
+        By inputBy =
+                By.xpath(
+                        "//div[@data-title='"
+                                + title
+                                + "']//input[contains(@class,'vs__search') and not(@disabled)]");
 
-        By optionBy = By.xpath(
-                "//ul[contains(@id,'__listbox')]//li[normalize-space()='" + cleanOptionText + "']"
-        );
+        By optionBy =
+                By.xpath(
+                        "//ul[contains(@id,'__listbox')]//li[normalize-space()='"
+                                + cleanOptionText
+                                + "']");
 
         Exception lastException = null;
 
@@ -168,8 +182,7 @@ public class DropdownActions extends BaseAction {
 
                 clickOnEmptyArea();
 
-                WebElement input = wait.until(
-                        ExpectedConditions.elementToBeClickable(inputBy));
+                WebElement input = wait.until(ExpectedConditions.elementToBeClickable(inputBy));
 
                 ((JavascriptExecutor) driver)
                         .executeScript("arguments[0].scrollIntoView({block:'center'});", input);
@@ -180,14 +193,13 @@ public class DropdownActions extends BaseAction {
 
                 WebDriverWait retryWait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-                WebElement option = retryWait.until(
-                        ExpectedConditions.elementToBeClickable(optionBy));
+                WebElement option =
+                        retryWait.until(ExpectedConditions.elementToBeClickable(optionBy));
 
                 try {
                     option.click();
                 } catch (ElementClickInterceptedException ex) {
-                    ((JavascriptExecutor) driver)
-                            .executeScript("arguments[0].click();", option);
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", option);
                 }
 
                 System.out.println("Selected Successfully : " + cleanOptionText);
@@ -198,8 +210,13 @@ public class DropdownActions extends BaseAction {
 
                 lastException = e;
 
-                System.out.println("Attempt " + attempt + " Failed : "
-                        + e.getClass().getSimpleName() + " - " + e.getMessage());
+                System.out.println(
+                        "Attempt "
+                                + attempt
+                                + " Failed : "
+                                + e.getClass().getSimpleName()
+                                + " - "
+                                + e.getMessage());
 
                 try {
                     clickOnEmptyArea();
@@ -221,57 +238,58 @@ public class DropdownActions extends BaseAction {
 
         throw new RuntimeException(
                 "Couldn't select option [" + cleanOptionText + "] after 5 attempts.",
-                lastException
-        );
+                lastException);
     }
 
     public void selectVueMultiOption(String label, String[] values) {
 
-        By toggleLocator = By.xpath(
-                "//label[normalize-space()='" + label + "']" +
-                        "/following::div[contains(@class,'vs__dropdown-toggle')][1]"
-        );
+        By toggleLocator =
+                By.xpath(
+                        "//label[normalize-space()='"
+                                + label
+                                + "']"
+                                + "/following::div[contains(@class,'vs__dropdown-toggle')][1]");
 
         clickOnEmptyArea();
 
-        WebElement toggle = wait.until(
-                ExpectedConditions.elementToBeClickable(toggleLocator)
-        );
+        WebElement toggle = wait.until(ExpectedConditions.elementToBeClickable(toggleLocator));
         toggle.click();
 
-        By inputLocator = By.xpath(
-                "//label[normalize-space()='" + label + "']" +
-                        "/following::input[contains(@class,'vs__search')][1]"
-        );
+        By inputLocator =
+                By.xpath(
+                        "//label[normalize-space()='"
+                                + label
+                                + "']"
+                                + "/following::input[contains(@class,'vs__search')][1]");
 
         for (String rawValue : values) {
 
             String optionValue = rawValue.trim().replaceAll("\\s+", " ");
 
-            WebElement input = wait.until(
-                    ExpectedConditions.elementToBeClickable(inputLocator)
-            );
+            WebElement input = wait.until(ExpectedConditions.elementToBeClickable(inputLocator));
 
             typeAndVerify(input, optionValue);
 
-            By optionLocator = By.xpath(
-                    "//li[contains(@class,'vs__dropdown-option')][normalize-space()='" + optionValue + "']"
-            );
+            By optionLocator =
+                    By.xpath(
+                            "//li[contains(@class,'vs__dropdown-option')][normalize-space()='"
+                                    + optionValue
+                                    + "']");
 
-            WebElement option = wait.until(
-                    ExpectedConditions.elementToBeClickable(optionLocator)
-            );
+            WebElement option = wait.until(ExpectedConditions.elementToBeClickable(optionLocator));
             option.click();
 
-            By selectedValueLocator = By.xpath(
-                    "//label[normalize-space()='" + label + "']" +
-                            "/following::div[contains(@class,'vs__selected')]" +
-                            "//*[normalize-space()='" + optionValue + "']"
-            );
+            By selectedValueLocator =
+                    By.xpath(
+                            "//label[normalize-space()='"
+                                    + label
+                                    + "']"
+                                    + "/following::div[contains(@class,'vs__selected')]"
+                                    + "//*[normalize-space()='"
+                                    + optionValue
+                                    + "']");
 
-            wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(selectedValueLocator)
-            );
+            wait.until(ExpectedConditions.visibilityOfElementLocated(selectedValueLocator));
         }
     }
 
@@ -287,14 +305,10 @@ public class DropdownActions extends BaseAction {
 
             clickOnEmptyArea();
 
-            String dropdownXpath =
-                    "(//div[@data-title='" + label + "'])[last()]";
+            String dropdownXpath = "(//div[@data-title='" + label + "'])[last()]";
 
-            WebElement dropdown = wait.until(
-                    ExpectedConditions.elementToBeClickable(
-                            By.xpath(dropdownXpath)
-                    )
-            );
+            WebElement dropdown =
+                    wait.until(ExpectedConditions.elementToBeClickable(By.xpath(dropdownXpath)));
 
             ((JavascriptExecutor) driver)
                     .executeScript("arguments[0].scrollIntoView(true);", dropdown);
@@ -305,17 +319,18 @@ public class DropdownActions extends BaseAction {
                 dropdown.click();
             } catch (Exception e) {
 
-                ((JavascriptExecutor) driver)
-                        .executeScript("arguments[0].click();", dropdown);
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", dropdown);
             }
 
             LogUtils.info("Dropdown Opened Successfully");
 
-            WebElement input = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(
-                            By.xpath("(//div[@data-title='" + label + "']//input)[last()]")
-                    )
-            );
+            WebElement input =
+                    wait.until(
+                            ExpectedConditions.visibilityOfElementLocated(
+                                    By.xpath(
+                                            "(//div[@data-title='"
+                                                    + label
+                                                    + "']//input)[last()]")));
 
             typeAndVerify(input, cleanValue);
 
@@ -332,26 +347,25 @@ public class DropdownActions extends BaseAction {
             LogUtils.error("========== DROPDOWN FAILED ==========");
             LogUtils.error("Failure Reason : " + e.getMessage());
 
-            throw new RuntimeException(
-                    "Unable to select value from dropdown: " + label
-            );
+            throw new RuntimeException("Unable to select value from dropdown: " + label);
         }
     }
+
     public void selectVueOptionLeft(String labelText, String optionText) {
 
         String cleanOptionText = optionText.trim().replaceAll("\\s+", " ");
 
-        By radioLabelBy = By.xpath(
-                "(//div[@role='radiogroup'])[2]//span[normalize-space()='" + labelText + "']"
-        );
+        By radioLabelBy =
+                By.xpath(
+                        "(//div[@role='radiogroup'])[2]//span[normalize-space()='"
+                                + labelText
+                                + "']");
 
-        By searchInputBy = By.xpath(
-                "(//div[@role='radiogroup'])[2]/following::input[contains(@class,'vs__search')][1]"
-        );
+        By searchInputBy =
+                By.xpath(
+                        "(//div[@role='radiogroup'])[2]/following::input[contains(@class,'vs__search')][1]");
 
-        By optionBy = By.xpath(
-                "//li[normalize-space()='" + cleanOptionText + "']"
-        );
+        By optionBy = By.xpath("//li[normalize-space()='" + cleanOptionText + "']");
 
         Exception lastException = null;
 
@@ -363,16 +377,17 @@ public class DropdownActions extends BaseAction {
 
                 clickOnEmptyArea();
 
-                WebElement radioLabel = wait.until(
-                        ExpectedConditions.elementToBeClickable(radioLabelBy));
+                WebElement radioLabel =
+                        wait.until(ExpectedConditions.elementToBeClickable(radioLabelBy));
 
                 ((JavascriptExecutor) driver)
-                        .executeScript("arguments[0].scrollIntoView({block:'center'});", radioLabel);
+                        .executeScript(
+                                "arguments[0].scrollIntoView({block:'center'});", radioLabel);
 
                 radioLabel.click();
 
-                WebElement searchInput = wait.until(
-                        ExpectedConditions.elementToBeClickable(searchInputBy));
+                WebElement searchInput =
+                        wait.until(ExpectedConditions.elementToBeClickable(searchInputBy));
 
                 searchInput.click();
 
@@ -380,14 +395,13 @@ public class DropdownActions extends BaseAction {
 
                 WebDriverWait retryWait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-                WebElement option = retryWait.until(
-                        ExpectedConditions.elementToBeClickable(optionBy));
+                WebElement option =
+                        retryWait.until(ExpectedConditions.elementToBeClickable(optionBy));
 
                 try {
                     option.click();
                 } catch (ElementClickInterceptedException ex) {
-                    ((JavascriptExecutor) driver)
-                            .executeScript("arguments[0].click();", option);
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", option);
                 }
 
                 System.out.println("Selected Successfully : " + cleanOptionText);
@@ -398,8 +412,13 @@ public class DropdownActions extends BaseAction {
 
                 lastException = e;
 
-                System.out.println("Attempt " + attempt + " Failed : "
-                        + e.getClass().getSimpleName() + " - " + e.getMessage());
+                System.out.println(
+                        "Attempt "
+                                + attempt
+                                + " Failed : "
+                                + e.getClass().getSimpleName()
+                                + " - "
+                                + e.getMessage());
 
                 try {
                     clickOnEmptyArea();
@@ -421,20 +440,24 @@ public class DropdownActions extends BaseAction {
 
         throw new RuntimeException(
                 "Couldn't select option [" + cleanOptionText + "] after 5 attempts.",
-                lastException
-        );
+                lastException);
     }
+
     public void selectProductByName(String productName) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(
-                By.cssSelector("div.position-absolute.bg-light.rounded-lg")
-        ));
+        wait.until(
+                ExpectedConditions.invisibilityOfElementLocated(
+                        By.cssSelector("div.position-absolute.bg-light.rounded-lg")));
 
-        WebElement plusButton = new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.elementToBeClickable(
-                        By.xpath("//tr[.//td[normalize-space()='" + productName + "']]//button[contains(@class,'btn-outline-primary')]")
-                ));
+        WebElement plusButton =
+                new WebDriverWait(driver, Duration.ofSeconds(10))
+                        .until(
+                                ExpectedConditions.elementToBeClickable(
+                                        By.xpath(
+                                                "//tr[.//td[normalize-space()='"
+                                                        + productName
+                                                        + "']]//button[contains(@class,'btn-outline-primary')]")));
 
         plusButton.click();
     }
@@ -445,19 +468,15 @@ public class DropdownActions extends BaseAction {
 
         for (int i = startRow; i < startRow + count; i++) {
 
-            By addButton = By.xpath(
-                    "(//tbody/tr)[" + i + "]//button[contains(@class,'btn-outline-primary')]"
-            );
+            By addButton =
+                    By.xpath(
+                            "(//tbody/tr)["
+                                    + i
+                                    + "]//button[contains(@class,'btn-outline-primary')]");
 
-            WebElement button = wait.until(
-                    ExpectedConditions.elementToBeClickable(addButton)
-            );
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(addButton));
 
             button.click();
         }
     }
-
-
-
-
 }

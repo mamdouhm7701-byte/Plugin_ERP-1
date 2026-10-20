@@ -9,16 +9,20 @@ public class VideoConverterUtils {
             String mp4Path = aviFile.getAbsolutePath().replace(".avi", ".mp4");
             File mp4File = new File(mp4Path);
 
-            ProcessBuilder pb = new ProcessBuilder(
-                    "ffmpeg",
-                    "-y",
-                    "-i", aviFile.getAbsolutePath(),
-                    "-c:v", "libx264",
-                    "-preset", "ultrafast",
-                    "-crf", "28",
-                    "-an",
-                    mp4File.getAbsolutePath()
-            );
+            ProcessBuilder pb =
+                    new ProcessBuilder(
+                            "ffmpeg",
+                            "-y",
+                            "-i",
+                            aviFile.getAbsolutePath(),
+                            "-c:v",
+                            "libx264",
+                            "-preset",
+                            "ultrafast",
+                            "-crf",
+                            "28",
+                            "-an",
+                            mp4File.getAbsolutePath());
 
             pb.redirectErrorStream(true);
             Process p = pb.start();

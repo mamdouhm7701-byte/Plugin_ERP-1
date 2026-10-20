@@ -42,7 +42,8 @@ public class AllureUtils {
     }
 
     /** Generic file attachment to Allure (logs, html, json, etc.) */
-    public static void attachFileToAllure(String attachmentName, String filePath, String mimeType, String extension) {
+    public static void attachFileToAllure(
+            String attachmentName, String filePath, String mimeType, String extension) {
         Path path = Path.of(filePath);
 
         if (!Files.exists(path)) {

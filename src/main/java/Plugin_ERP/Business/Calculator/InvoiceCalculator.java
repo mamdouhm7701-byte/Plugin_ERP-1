@@ -18,24 +18,11 @@ public class InvoiceCalculator {
             int precision) {
 
         switch (taxMode) {
-
             case EXCLUSIVE:
-                return calculateExclusive(
-                        rows,
-                        discount,
-                        discountType,
-                        taxPercentage,
-                        precision
-                );
+                return calculateExclusive(rows, discount, discountType, taxPercentage, precision);
 
             case INCLUSIVE:
-                return calculateInclusive(
-                        rows,
-                        discount,
-                        discountType,
-                        taxPercentage,
-                        precision
-                );
+                return calculateInclusive(rows, discount, discountType, taxPercentage, precision);
 
             default:
                 throw new IllegalArgumentException("Unsupported TaxMode");
@@ -69,9 +56,9 @@ public class InvoiceCalculator {
         if (discountType == DiscountType.VALUE) {
             discountValue = discount;
         } else {
-            discountValue = total
-                    .multiply(discount)
-                    .divide(BigDecimal.valueOf(100), precision + 4, RoundingMode.HALF_UP);
+            discountValue =
+                    total.multiply(discount)
+                            .divide(BigDecimal.valueOf(100), precision + 4, RoundingMode.HALF_UP);
         }
 
         discountValue = round(discountValue, precision);
@@ -80,9 +67,10 @@ public class InvoiceCalculator {
         BigDecimal beforeTax = round(total.subtract(discountValue), precision);
         totals.setBeforeTax(beforeTax);
 
-        BigDecimal tax = beforeTax
-                .multiply(taxPercentage)
-                .divide(BigDecimal.valueOf(100), precision + 4, RoundingMode.HALF_UP);
+        BigDecimal tax =
+                beforeTax
+                        .multiply(taxPercentage)
+                        .divide(BigDecimal.valueOf(100), precision + 4, RoundingMode.HALF_UP);
 
         tax = round(tax, precision);
         totals.setTax(tax);
@@ -116,9 +104,9 @@ public class InvoiceCalculator {
         if (discountType == DiscountType.VALUE) {
             discountValue = discount;
         } else {
-            discountValue = total
-                    .multiply(discount)
-                    .divide(BigDecimal.valueOf(100), precision + 4, RoundingMode.HALF_UP);
+            discountValue =
+                    total.multiply(discount)
+                            .divide(BigDecimal.valueOf(100), precision + 4, RoundingMode.HALF_UP);
         }
 
         discountValue = round(discountValue, precision);
@@ -127,19 +115,12 @@ public class InvoiceCalculator {
         BigDecimal net = round(total.subtract(discountValue), precision);
         totals.setNet(net);
 
-        BigDecimal divisor = BigDecimal.ONE.add(
-                taxPercentage.divide(
-                        BigDecimal.valueOf(100),
-                        precision + 4,
-                        RoundingMode.HALF_UP
-                )
-        );
+        BigDecimal divisor =
+                BigDecimal.ONE.add(
+                        taxPercentage.divide(
+                                BigDecimal.valueOf(100), precision + 4, RoundingMode.HALF_UP));
 
-        BigDecimal beforeTax = net.divide(
-                divisor,
-                precision,
-                RoundingMode.HALF_UP
-        );
+        BigDecimal beforeTax = net.divide(divisor, precision, RoundingMode.HALF_UP);
 
         beforeTax = round(beforeTax, precision);
         totals.setBeforeTax(beforeTax);
@@ -163,13 +144,10 @@ public class InvoiceCalculator {
                 discountType,
                 taxPercentage,
                 PropertyReader.PolicyManager.getTaxMode(),
-                precision
-        );
+                precision);
     }
 
-    public static InvoiceTotals calculate(
-            List<InvoiceRow> rows,
-            BigDecimal discount) {
+    public static InvoiceTotals calculate(List<InvoiceRow> rows, BigDecimal discount) {
 
         return calculate(
                 rows,
@@ -177,7 +155,6 @@ public class InvoiceCalculator {
                 PropertyReader.PolicyManager.getDiscountType(),
                 PropertyReader.PolicyManager.getTaxPercentage(),
                 PropertyReader.PolicyManager.getTaxMode(),
-                PropertyReader.PolicyManager.getPrecision()
-        );
+                PropertyReader.PolicyManager.getPrecision());
     }
 }

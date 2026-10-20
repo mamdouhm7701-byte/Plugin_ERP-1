@@ -15,13 +15,19 @@ import java.util.List;
 public class VouchersPage extends Abstract {
 
     private static final By SAVE_BUTTON = By.cssSelector("form button[data-action-type='save']");
-    private static final By SAVE_AND_PRINT_BUTTON = By.cssSelector("form button[data-action-type='saveAndPrint']");
-    private static final By ADD_ACCOUNT_BUTTON = By.xpath("//form//button[normalize-space()='اضافة حساب']");
+    private static final By SAVE_AND_PRINT_BUTTON =
+            By.cssSelector("form button[data-action-type='saveAndPrint']");
+    private static final By ADD_ACCOUNT_BUTTON =
+            By.xpath("//form//button[normalize-space()='اضافة حساب']");
     private static final By ACCOUNT_DIALOG = By.cssSelector("div[role='dialog']");
-    private static final By ACCOUNT_DIALOG_SEARCH = By.cssSelector("div[role='dialog'] input[placeholder='بحث ....']");
-    private static final By ACCOUNT_DIALOG_CLOSE = By.cssSelector("div[role='dialog'] button[aria-label='Close']");
+    private static final By ACCOUNT_DIALOG_SEARCH =
+            By.cssSelector("div[role='dialog'] input[placeholder='بحث ....']");
+    private static final By ACCOUNT_DIALOG_CLOSE =
+            By.cssSelector("div[role='dialog'] button[aria-label='Close']");
     private static final By VALIDATION_MESSAGES = By.cssSelector("form small.text-danger");
-    private static final By ROW_ACCOUNT_SELECTS = By.xpath("//form//table[.//th[normalize-space()='مدين']]//tbody/tr/td[@aria-colindex='2']//input[@type='search']");
+    private static final By ROW_ACCOUNT_SELECTS =
+            By.xpath(
+                    "//form//table[.//th[normalize-space()='مدين']]//tbody/tr/td[@aria-colindex='2']//input[@type='search']");
 
     public VouchersPage(WebDriver driver) {
         super(driver);
@@ -29,7 +35,10 @@ public class VouchersPage extends Abstract {
 
     @Step("عدد بنود القيد التي تم اختيار حساباتها")
     public int getSelectedLineCount() {
-        return driver.findElements(By.xpath("//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!='']")).size();
+        return driver.findElements(
+                        By.xpath(
+                                "//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!='']"))
+                .size();
     }
 
     @Step("فتح نافذة اختيار الحساب")
@@ -45,7 +54,10 @@ public class VouchersPage extends Abstract {
 
     @Step("عدد نتائج بحث الحسابات")
     public int getAccountSearchResultCount() {
-        return driver.findElements(By.xpath("//div[@role='dialog']//table/tbody/tr[not(contains(@class,'b-table-empty-row'))]")).size();
+        return driver.findElements(
+                        By.xpath(
+                                "//div[@role='dialog']//table/tbody/tr[not(contains(@class,'b-table-empty-row'))]"))
+                .size();
     }
 
     @Step("هل يظهر الحساب في صفوف البحث: {text}")
@@ -62,7 +74,11 @@ public class VouchersPage extends Abstract {
     @Step("اختيار الحساب ذي الكود: {accountCode}")
     public void selectAccountByCode(String accountCode) {
         openAccountPicker();
-        By accountRowAddButton = By.xpath("//div[@role='dialog']//table/tbody/tr[td[1][normalize-space()='" + accountCode + "']]//button");
+        By accountRowAddButton =
+                By.xpath(
+                        "//div[@role='dialog']//table/tbody/tr[td[1][normalize-space()='"
+                                + accountCode
+                                + "']]//button");
         utilites.ClickElement(accountRowAddButton);
         // The picker stays open after adding an account; close it before interacting with the form.
         waitMangment.fluentWait().until(d -> !d.findElements(accountRowAddButton).isEmpty());
@@ -73,7 +89,10 @@ public class VouchersPage extends Abstract {
         openAccountPicker();
         searchAccount(query);
         waitMangment.fluentWait().until(d -> getAccountSearchResultCount() > 0);
-        WebElement row = driver.findElement(By.xpath("//div[@role='dialog']//table/tbody/tr[not(contains(@class,'b-table-empty-row'))][1]"));
+        WebElement row =
+                driver.findElement(
+                        By.xpath(
+                                "//div[@role='dialog']//table/tbody/tr[not(contains(@class,'b-table-empty-row'))][1]"));
         String summary = row.getText();
         row.findElement(By.cssSelector("button")).click();
         closeAccountPicker();
@@ -88,23 +107,38 @@ public class VouchersPage extends Abstract {
 
     private By lineAmountInput(int lineIndex, int columnIndex) {
         if (lineIndex < 1) throw new IllegalArgumentException("lineIndex must be 1 or greater");
-        if (columnIndex != 3 && columnIndex != 4) throw new IllegalArgumentException("Amount column must be debit (3) or credit (4)");
-        return By.xpath("(//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!=''])[" + lineIndex + "]//td[@aria-colindex='" + columnIndex + "']//input[@type='number']");
+        if (columnIndex != 3 && columnIndex != 4)
+            throw new IllegalArgumentException("Amount column must be debit (3) or credit (4)");
+        return By.xpath(
+                "(//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!=''])["
+                        + lineIndex
+                        + "]//td[@aria-colindex='"
+                        + columnIndex
+                        + "']//input[@type='number']");
     }
 
     private By selectedLine(int lineIndex) {
         if (lineIndex < 1) throw new IllegalArgumentException("lineIndex must be 1 or greater");
-        return By.xpath("(//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!=''])[" + lineIndex + "]");
+        return By.xpath(
+                "(//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!=''])["
+                        + lineIndex
+                        + "]");
     }
 
     private By lineElement(int lineIndex, String selector) {
         if (lineIndex < 1) throw new IllegalArgumentException("lineIndex must be 1 or greater");
-        return By.xpath("(//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!=''])[" + lineIndex + "]//" + selector);
+        return By.xpath(
+                "(//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!=''])["
+                        + lineIndex
+                        + "]//"
+                        + selector);
     }
 
     @Step("عدد علامات التسوية الظاهرة في بنود القيد")
     public int getSettlementCheckboxCount() {
-        return driver.findElements(By.cssSelector("form input[type='checkbox'], form [role='checkbox']")).size();
+        return driver.findElements(
+                        By.cssSelector("form input[type='checkbox'], form [role='checkbox']"))
+                .size();
     }
 
     @Step("تحديد علامة التسوية في البند {lineIndex}: {checked}")
@@ -113,9 +147,10 @@ public class VouchersPage extends Abstract {
         WebElement checkbox = driver.findElement(locator);
         if (checkbox.isSelected() != checked) {
             String id = checkbox.getAttribute("id");
-            List<WebElement> labels = id == null || id.isBlank()
-                    ? List.of()
-                    : driver.findElements(By.cssSelector("form label[for='" + id + "']"));
+            List<WebElement> labels =
+                    id == null || id.isBlank()
+                            ? List.of()
+                            : driver.findElements(By.cssSelector("form label[for='" + id + "']"));
             if (!labels.isEmpty()) {
                 WebElement label = labels.get(0);
                 ((JavascriptExecutor) driver).executeScript("arguments[0].click()", label);
@@ -141,24 +176,32 @@ public class VouchersPage extends Abstract {
     public void selectAccountTaxableByCode(String accountCode) {
         selectAccountByCode(accountCode);
         if (getSettlementCheckboxCount() == 0) {
-            throw new AssertionError("Account " + accountCode + " did not expose the 15% VAT settlement checkbox.");
+            throw new AssertionError(
+                    "Account " + accountCode + " did not expose the 15% VAT settlement checkbox.");
         }
     }
 
     @Step("هل يوجد إجراء توزيع ضريبة في البند {lineIndex}")
     public boolean hasTaxDistributionAction(int lineIndex) {
-        return !driver.findElements(lineElement(lineIndex, "button[@data-action-type='shareToTaxAccount']")).isEmpty();
+        return !driver.findElements(
+                        lineElement(lineIndex, "button[@data-action-type='shareToTaxAccount']"))
+                .isEmpty();
     }
 
     @Step("فتح توزيع الضريبة في البند {lineIndex}")
     public void openTaxDistribution(int lineIndex) {
-        driver.findElement(lineElement(lineIndex, "button[@data-action-type='shareToTaxAccount']")).click();
+        driver.findElement(lineElement(lineIndex, "button[@data-action-type='shareToTaxAccount']"))
+                .click();
     }
 
     @Step("قراءة مبلغ الضريبة في البند {lineIndex}")
     public BigDecimal getTaxAmountValue(int lineIndex) {
-        String text = driver.findElement(lineElement(lineIndex, "input[@data-tax-amount or contains(@name,'tax') or contains(@aria-label,'ضريبة')]"))
-                .getDomProperty("value");
+        String text =
+                driver.findElement(
+                                lineElement(
+                                        lineIndex,
+                                        "input[@data-tax-amount or contains(@name,'tax') or contains(@aria-label,'ضريبة')]"))
+                        .getDomProperty("value");
         return new BigDecimal(text);
     }
 
@@ -190,24 +233,42 @@ public class VouchersPage extends Abstract {
     @Step("اختيار حساب من القائمة المنسدلة في البند {lineIndex}: {accountText}")
     public void selectAccountFromLineDropdown(int lineIndex, String accountText) {
         if (lineIndex < 1) throw new IllegalArgumentException("lineIndex must be 1 or greater");
-        List<WebElement> searches = driver.findElements(By.xpath("//form//table[.//th[normalize-space()='مدين']]//tbody/tr/td[@aria-colindex='2']//input[@type='search']"));
+        List<WebElement> searches =
+                driver.findElements(
+                        By.xpath(
+                                "//form//table[.//th[normalize-space()='مدين']]//tbody/tr/td[@aria-colindex='2']//input[@type='search']"));
         WebElement input = searches.get(lineIndex - 1);
         input.click();
         input.sendKeys(accountText);
-        By option = By.xpath("(//li[contains(@class,'vs__dropdown-option') and contains(normalize-space(),\"" + accountText + "\")])[1]");
+        By option =
+                By.xpath(
+                        "(//li[contains(@class,'vs__dropdown-option') and contains(normalize-space(),\""
+                                + accountText
+                                + "\")])[1]");
         waitMangment.fluentWait().until(d -> d.findElement(option).isDisplayed());
         utilites.ClickElement(option);
     }
 
     public String getVoucherReportText() {
-        return driver.findElements(By.cssSelector("div.e-reportviewer-paragrap div[style*='white-space: pre-wrap']"))
-                .stream().map(WebElement::getText).reduce("", (a, b) -> a + "\n" + b);
+        return driver
+                .findElements(
+                        By.cssSelector(
+                                "div.e-reportviewer-paragrap div[style*='white-space: pre-wrap']"))
+                .stream()
+                .map(WebElement::getText)
+                .reduce("", (a, b) -> a + "\n" + b);
     }
 
     @Step("التحقق من اختيار حساب للبند {lineIndex}")
     public boolean isLineAccountSelected(int lineIndex) {
-        return !driver.findElement(By.xpath("(//form//table[.//th[normalize-space()='مدين']]//tbody/tr)[" + lineIndex + "]//td[@aria-colindex='2']//span[contains(@class,'vs__selected')]"))
-                .getText().trim().isEmpty();
+        return !driver.findElement(
+                        By.xpath(
+                                "(//form//table[.//th[normalize-space()='مدين']]//tbody/tr)["
+                                        + lineIndex
+                                        + "]//td[@aria-colindex='2']//span[contains(@class,'vs__selected')]"))
+                .getText()
+                .trim()
+                .isEmpty();
     }
 
     @Step("إدخال ملاحظة للبند {lineIndex}")
@@ -222,30 +283,40 @@ public class VouchersPage extends Abstract {
 
     private By lineNoteInput(int lineIndex) {
         if (lineIndex < 1) throw new IllegalArgumentException("lineIndex must be 1 or greater");
-        return By.xpath("(//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!=''])[" + lineIndex + "]//td[@aria-colindex='6']//input");
+        return By.xpath(
+                "(//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!=''])["
+                        + lineIndex
+                        + "]//td[@aria-colindex='6']//input");
     }
 
     private void setInputValue(By locator, String value) {
         WebElement input = driver.findElement(locator);
-        ((JavascriptExecutor) driver).executeScript(
-                "const el=arguments[0]; const setter=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; setter.call(el,arguments[1]); el.dispatchEvent(new Event('input',{bubbles:true})); el.dispatchEvent(new Event('change',{bubbles:true}));",
-                input, value);
-        waitMangment.fluentWait().until(d -> {
-            WebElement current = d.findElement(locator);
-            String actual = current.getDomProperty("value");
-            if ("number".equals(current.getAttribute("type"))) {
-                try {
-                    return new BigDecimal(value).compareTo(new BigDecimal(actual)) == 0;
-                } catch (Exception ignored) {
-                    return false;
-                }
-            }
-            return value.equals(actual);
-        });
+        ((JavascriptExecutor) driver)
+                .executeScript(
+                        "const el=arguments[0]; const setter=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; setter.call(el,arguments[1]); el.dispatchEvent(new Event('input',{bubbles:true})); el.dispatchEvent(new Event('change',{bubbles:true}));",
+                        input,
+                        value);
+        waitMangment
+                .fluentWait()
+                .until(
+                        d -> {
+                            WebElement current = d.findElement(locator);
+                            String actual = current.getDomProperty("value");
+                            if ("number".equals(current.getAttribute("type"))) {
+                                try {
+                                    return new BigDecimal(value).compareTo(new BigDecimal(actual))
+                                            == 0;
+                                } catch (Exception ignored) {
+                                    return false;
+                                }
+                            }
+                            return value.equals(actual);
+                        });
     }
 
     public boolean isVoucherFormDisplayed() {
-        return driver.findElements(By.cssSelector("form #textarea")).stream().anyMatch(WebElement::isDisplayed);
+        return driver.findElements(By.cssSelector("form #textarea")).stream()
+                .anyMatch(WebElement::isDisplayed);
     }
 
     public void waitForFormReady() {
@@ -255,21 +326,29 @@ public class VouchersPage extends Abstract {
 
     @Step("هل البحث داخل بنود الحسابات متاح")
     public boolean isAccountDropdownSearchPresent() {
-        return !driver.findElements(By.xpath("//form//table[.//th[normalize-space()='مدين']]//tbody/tr/td[@aria-colindex='2']//input[@type='search']")).isEmpty();
+        return !driver.findElements(
+                        By.xpath(
+                                "//form//table[.//th[normalize-space()='مدين']]//tbody/tr/td[@aria-colindex='2']//input[@type='search']"))
+                .isEmpty();
     }
 
     public void searchVoucherLines(String query) {
-        By lineSearch = By.xpath("//input[contains(@placeholder,'بحث') and not(ancestor::div[@role='dialog'])]");
+        By lineSearch =
+                By.xpath(
+                        "//input[contains(@placeholder,'بحث') and not(ancestor::div[@role='dialog'])]");
         WebElement input = driver.findElement(lineSearch);
         input.click();
         input.clear();
         input.sendKeys(query);
-        waitMangment.fluentWait().until(d -> query.equals(d.findElement(lineSearch).getDomProperty("value")));
+        waitMangment
+                .fluentWait()
+                .until(d -> query.equals(d.findElement(lineSearch).getDomProperty("value")));
     }
 
     @Step("هل توجد رسالة خطأ منبثقة")
     public boolean isErrorPopupDisplayed() {
-        return driver.findElements(By.cssSelector(".swal2-container.swal2-backdrop-show")).stream().anyMatch(WebElement::isDisplayed);
+        return driver.findElements(By.cssSelector(".swal2-container.swal2-backdrop-show")).stream()
+                .anyMatch(WebElement::isDisplayed);
     }
 
     @Step("هل التاريخ بصيغة ISO")
@@ -279,16 +358,22 @@ public class VouchersPage extends Abstract {
 
     @Step("هل التاريخ صالح وفق المتصفح")
     public boolean isVoucherDateValid() {
-        WebElement date = driver.findElement(By.cssSelector("form fieldset[label-text='date'] input"));
-        Object valid = ((org.openqa.selenium.JavascriptExecutor) driver)
-                .executeScript("return arguments[0].validity.valid", date);
+        WebElement date =
+                driver.findElement(By.cssSelector("form fieldset[label-text='date'] input"));
+        Object valid =
+                ((org.openqa.selenium.JavascriptExecutor) driver)
+                        .executeScript("return arguments[0].validity.valid", date);
         return !date.getAttribute("value").isBlank() && Boolean.TRUE.equals(valid);
     }
 
     @Step("حذف بند القيد رقم {lineIndex} من المسودة")
     public void removeLine(int lineIndex) {
         if (lineIndex < 1) throw new IllegalArgumentException("lineIndex must be 1 or greater");
-        By removeButton = By.xpath("(//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!=''])[" + lineIndex + "]//*[name()='svg' and contains(@class,'feather-trash')]");
+        By removeButton =
+                By.xpath(
+                        "(//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!=''])["
+                                + lineIndex
+                                + "]//*[name()='svg' and contains(@class,'feather-trash')]");
         utilites.ClickElement(removeButton);
     }
 
@@ -304,7 +389,8 @@ public class VouchersPage extends Abstract {
 
     @Step("قراءة تاريخ القيد في النموذج")
     public String getVoucherDate() {
-        return driver.findElement(By.cssSelector("form fieldset[label-text='date'] input")).getAttribute("value");
+        return driver.findElement(By.cssSelector("form fieldset[label-text='date'] input"))
+                .getAttribute("value");
     }
 
     @Step("قراءة إجمالي المدين")
@@ -318,15 +404,24 @@ public class VouchersPage extends Abstract {
     }
 
     private BigDecimal readTotal(int columnIndex) {
-        String text = driver.findElement(By.xpath("//form//table[.//th[normalize-space()='مدين']]/tfoot/tr/th[@aria-colindex='" + columnIndex + "']"))
-                .getText().replaceAll("[^0-9.,-]", "").replace(",", "");
+        String text =
+                driver.findElement(
+                                By.xpath(
+                                        "//form//table[.//th[normalize-space()='مدين']]/tfoot/tr/th[@aria-colindex='"
+                                                + columnIndex
+                                                + "']"))
+                        .getText()
+                        .replaceAll("[^0-9.,-]", "")
+                        .replace(",", "");
         return text.isBlank() ? BigDecimal.ZERO : new BigDecimal(text);
     }
 
     @Step("التحقق من تحديث إجمالي المدين والدائن")
     public void assertTotals(String debit, String credit) {
-        Assert.assertEquals(getDebitTotal().compareTo(new BigDecimal(debit)), 0, "Debit total is incorrect");
-        Assert.assertEquals(getCreditTotal().compareTo(new BigDecimal(credit)), 0, "Credit total is incorrect");
+        Assert.assertEquals(
+                getDebitTotal().compareTo(new BigDecimal(debit)), 0, "Debit total is incorrect");
+        Assert.assertEquals(
+                getCreditTotal().compareTo(new BigDecimal(credit)), 0, "Credit total is incorrect");
     }
 
     @Step("التحقق من اتزان القيد")
@@ -347,7 +442,8 @@ public class VouchersPage extends Abstract {
 
     @Step("التحقق من وجود زر الحفظ والطباعة")
     public boolean isSaveAndPrintAvailable() {
-        return driver.findElements(SAVE_AND_PRINT_BUTTON).stream().anyMatch(WebElement::isDisplayed);
+        return driver.findElements(SAVE_AND_PRINT_BUTTON).stream()
+                .anyMatch(WebElement::isDisplayed);
     }
 
     @Step("التحقق من أن المرجع للقراءة فقط")
@@ -357,18 +453,27 @@ public class VouchersPage extends Abstract {
 
     @Step("التحقق من أن نوع الحركة للقراءة فقط")
     public boolean isTransactionTypeReadOnly() {
-        return driver.findElement(By.id("sourceTransactionType")).getDomAttribute("readonly") != null;
+        return driver.findElement(By.id("sourceTransactionType")).getDomAttribute("readonly")
+                != null;
     }
 
     public void openFirstAccountPicker() {
-        By firstRowSearch = By.xpath("(//form//table[.//th[normalize-space()='مدين']]//tbody/tr/td[@aria-colindex='2']//input[@type='search'])[1]");
+        By firstRowSearch =
+                By.xpath(
+                        "(//form//table[.//th[normalize-space()='مدين']]//tbody/tr/td[@aria-colindex='2']//input[@type='search'])[1]");
         WebElement input = driver.findElement(firstRowSearch);
         input.click();
-        waitMangment.fluentWait().until(d -> !d.findElements(By.cssSelector("li.vs__dropdown-option")).isEmpty());
+        waitMangment
+                .fluentWait()
+                .until(d -> !d.findElements(By.cssSelector("li.vs__dropdown-option")).isEmpty());
     }
 
     public void selectAccountFromFirstRow(String accountText) {
-        By option = By.xpath("(//li[contains(@class,'vs__dropdown-option') and contains(normalize-space(),\"" + accountText + "\")])[1]");
+        By option =
+                By.xpath(
+                        "(//li[contains(@class,'vs__dropdown-option') and contains(normalize-space(),\""
+                                + accountText
+                                + "\")])[1]");
         utilites.ClickElement(option);
     }
 
@@ -384,34 +489,64 @@ public class VouchersPage extends Abstract {
 
     public List<String> getVoucherRowsContaining(String marker) {
         return driver.findElements(By.xpath("//tr[@role='row' and @data-pk]")).stream()
-                .map(WebElement::getText).filter(text -> text.contains(marker)).toList();
+                .map(WebElement::getText)
+                .filter(text -> text.contains(marker))
+                .toList();
     }
 
     public void deleteVoucherRowsContaining(String markerPrefix) {
-        List<WebElement> matches = driver.findElements(By.xpath("//tr[@role='row' and @data-pk]"))
-                .stream().filter(row -> row.getText().contains(markerPrefix)).toList();
+        List<WebElement> matches =
+                driver.findElements(By.xpath("//tr[@role='row' and @data-pk]")).stream()
+                        .filter(row -> row.getText().contains(markerPrefix))
+                        .toList();
         for (WebElement match : matches) {
             String pk = match.getAttribute("data-pk");
-            utilites.grid().deleteRowByPk(pk,
-                    By.xpath("//tr[@data-pk='" + pk + "']//button[@data-action-type='delete']"),
-                    Clickyestodelet);
-            waitMangment.fluentWait().until(d -> d.findElements(By.xpath("//tr[@data-pk='" + pk + "']")).isEmpty());
+            utilites.grid()
+                    .deleteRowByPk(
+                            pk,
+                            By.xpath(
+                                    "//tr[@data-pk='"
+                                            + pk
+                                            + "']//button[@data-action-type='delete']"),
+                            Clickyestodelet);
+            waitMangment
+                    .fluentWait()
+                    .until(d -> d.findElements(By.xpath("//tr[@data-pk='" + pk + "']")).isEmpty());
         }
     }
 
     public void editVoucherListRowByMarker(String marker) {
-        By editButton = By.xpath("//tr[@role='row' and @aria-rowindex='1' and contains(.,'" + marker + "')]//button[@data-action-type='edit']");
+        By editButton =
+                By.xpath(
+                        "//tr[@role='row' and @aria-rowindex='1' and contains(.,'"
+                                + marker
+                                + "')]//button[@data-action-type='edit']");
         utilites.ClickElement(editButton);
-        waitMangment.fluentWait().until(d -> !d.findElements(By.cssSelector("form #textarea")).isEmpty());
-        waitMangment.fluentWait().until(d -> marker.equals(d.findElement(By.id("textarea")).getDomProperty("value")));
+        waitMangment
+                .fluentWait()
+                .until(d -> !d.findElements(By.cssSelector("form #textarea")).isEmpty());
+        waitMangment
+                .fluentWait()
+                .until(
+                        d ->
+                                marker.equals(
+                                        d.findElement(By.id("textarea")).getDomProperty("value")));
     }
 
     public void deleteVoucherListRowByMarker(String marker) {
-        By row = By.xpath("//tr[@role='row' and @aria-rowindex='1' and contains(.,'" + marker + "')]");
+        By row =
+                By.xpath(
+                        "//tr[@role='row' and @aria-rowindex='1' and contains(.,'"
+                                + marker
+                                + "')]");
         String pk = driver.findElement(row).getAttribute("data-pk");
-        utilites.grid().deleteRowByPk(pk,
-                By.xpath("//tr[@data-pk='" + pk + "']//button[@data-action-type='delete']"),
-                Clickyestodelet);
-        waitMangment.fluentWait().until(d -> d.findElements(By.xpath("//tr[@data-pk='" + pk + "']")).isEmpty());
+        utilites.grid()
+                .deleteRowByPk(
+                        pk,
+                        By.xpath("//tr[@data-pk='" + pk + "']//button[@data-action-type='delete']"),
+                        Clickyestodelet);
+        waitMangment
+                .fluentWait()
+                .until(d -> d.findElements(By.xpath("//tr[@data-pk='" + pk + "']")).isEmpty());
     }
 }

@@ -5,13 +5,13 @@ import Plugin_ERP.Bots.LogUtils;
 import java.io.File;
 
 public class FileUtils {
-    private static String userDir = PropertyReader.getProperty("user.dir")+ File.separator;
+    private static String userDir = PropertyReader.getProperty("user.dir") + File.separator;
 
-    //rename
+    // rename
     public static void renameFile(String oldPath, String newPath) {
         try {
-            File oldFile = new File(userDir  + oldPath);
-            File newFile = new File(userDir  + newPath);
+            File oldFile = new File(userDir + oldPath);
+            File newFile = new File(userDir + newPath);
             if (oldFile.exists()) {
                 boolean renamed = oldFile.renameTo(newFile);
                 if (renamed) {
@@ -23,18 +23,21 @@ public class FileUtils {
                 LogUtils.error("File not found: " + oldPath);
             }
         } catch (Exception e) {
-            //log
-            LogUtils.error("Failed to rename file from " + oldPath + " to " + newPath + " - " + e.getMessage());
+            // log
+            LogUtils.error(
+                    "Failed to rename file from "
+                            + oldPath
+                            + " to "
+                            + newPath
+                            + " - "
+                            + e.getMessage());
         }
     }
 
-
-
-
-    //create
+    // create
     public static void creatdictory(String path) {
         try {
-            File file = new File(userDir  + path);
+            File file = new File(userDir + path);
             if (!file.exists()) {
                 boolean created = file.mkdirs();
                 if (created) {
@@ -42,25 +45,22 @@ public class FileUtils {
                 } else {
                     LogUtils.error("Failed to create directory: " + path);
                 }
-
-
             }
 
-
         } catch (Exception e) {
-            //log
+            // log
             LogUtils.error("Failed to create directory: " + path + " - " + e.getMessage());
-
         }
     }
-    //claenup
+
+    // claenup
     public static void clean(File file) {
         try {
             org.apache.commons.io.FileUtils.deleteDirectory(file);
-        }catch (Exception e) {
-            //log
-            LogUtils.error("Failed to clean file: " + file.getAbsolutePath() + " - " + e.getMessage());
+        } catch (Exception e) {
+            // log
+            LogUtils.error(
+                    "Failed to clean file: " + file.getAbsolutePath() + " - " + e.getMessage());
         }
     }
-
 }

@@ -3,7 +3,6 @@ package Plugin_ERP.Enums;
 import Plugin_ERP.System_Modules.Login.BasicData.AreaPage;
 
 public enum Pages {
-
     AGENTS("/#/agents/"),
     AREA("/#/areas"),
     BANK("/#/banks"),
@@ -45,11 +44,7 @@ public enum Pages {
     RETURNPURCH("/#/return-purch/new"),
     INVOICE("/#/invoice/new"),
     INVOICELIST("/#/invoice-list"),
-
-
-
-
-;
+    ;
 
     private final String route;
 

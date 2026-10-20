@@ -24,7 +24,10 @@ public class TaypeOfDiscountTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("أنواع الخصومات")
     @Story("إضافة نوع خصم ببيانات صحيحة")
-    @Description("يتحقق هذا الاختبار من إضافة نوع خصم جديد ببيانات صحيحة، ويشمل إدخال الاسم العربي والإنجليزي والكود السري وقيمة الخصم، وإضافة المستخدمين المصرح لهم، وحفظ البيانات والتحقق من إضافة السجل بنجاح.")
+    @Description(
+            "يتحقق هذا الاختبار من إضافة نوع خصم جديد ببيانات صحيحة، ويشمل إدخال الاسم العربي"
+                    + " والإنجليزي والكود السري وقيمة الخصم، وإضافة المستخدمين المصرح لهم، وحفظ"
+                    + " البيانات والتحقق من إضافة السجل بنجاح.")
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void ValidTaypeOfDiscountTest() {
         System.out.println("TaypeOfDiscount test started");
@@ -48,7 +51,10 @@ public class TaypeOfDiscountTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("أنواع الخصومات")
     @Story("تعديل نوع خصم ببيانات صحيحة")
-    @Description("يتحقق هذا الاختبار من تعديل نوع خصم موجود ببيانات صحيحة، ويشمل تعديل الاسم العربي والإنجليزي وتفعيل خانة (فعال) وتغيير الكود السري وقيمة الخصم وإضافة مستخدمين جدد، وحفظ التعديلات والتحقق من تحديث السجل بنجاح.")
+    @Description(
+            "يتحقق هذا الاختبار من تعديل نوع خصم موجود ببيانات صحيحة، ويشمل تعديل الاسم"
+                    + " العربي والإنجليزي وتفعيل خانة (فعال) وتغيير الكود السري وقيمة الخصم وإضافة"
+                    + " مستخدمين جدد، وحفظ التعديلات والتحقق من تحديث السجل بنجاح.")
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void EditTypeOfDiscount() {
         TypesofdiscountsPage typesofdiscountsPage = new TypesofdiscountsPage(driver);
@@ -56,8 +62,8 @@ public class TaypeOfDiscountTest extends BaseTest {
         typesofdiscountsPage.Edit();
         typesofdiscountsPage.AddArabicName("خصم معدل");
         typesofdiscountsPage.AddEnglishName("Test Discount");
-        typesofdiscountsPage.SmartCheck("فعال",true);
-        typesofdiscountsPage.SmartCheck("فعال",true);
+        typesofdiscountsPage.SmartCheck("فعال", true);
+        typesofdiscountsPage.SmartCheck("فعال", true);
         typesofdiscountsPage.AddSecretCode(typesofdiscountsPage.generateRandomNumber());
         typesofdiscountsPage.AddDiscount(10);
         typesofdiscountsPage.ClickToAddUsers();
@@ -87,7 +93,9 @@ public class TaypeOfDiscountTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("أنواع الخصومات")
     @Story("التحقق - الاسم العربي إلزامي")
-    @Description("يتحقق هذا الاختبار من أن النظام يمنع إضافة نوع خصم بدون إدخال الاسم العربي، ويتحقق من ظهور رسالة خطأ تفيد بأن الاسم العربي حقل إلزامي.")
+    @Description(
+            "يتحقق هذا الاختبار من أن النظام يمنع إضافة نوع خصم بدون إدخال الاسم العربي،"
+                    + " ويتحقق من ظهور رسالة خطأ تفيد بأن الاسم العربي حقل إلزامي.")
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void AssertArabicNameRequired() {
         System.out.println("RequiredFieldsTaypeOfDiscount test started");
@@ -107,7 +115,9 @@ public class TaypeOfDiscountTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("أنواع الخصومات")
     @Story("التحقق - الكود السري إلزامي")
-    @Description("يتحقق هذا الاختبار من أن النظام يمنع إضافة نوع خصم بدون إدخال الكود السري، ويتحقق من ظهور رسالة خطأ تفيد بأن حقل الكود السري إلزامي.")
+    @Description(
+            "يتحقق هذا الاختبار من أن النظام يمنع إضافة نوع خصم بدون إدخال الكود السري،"
+                    + " ويتحقق من ظهور رسالة خطأ تفيد بأن حقل الكود السري إلزامي.")
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void AssertSecretCodeRequired() {
         System.out.println("RequiredFieldsTaypeOfDiscount test started");
@@ -126,7 +136,9 @@ public class TaypeOfDiscountTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("أنواع الخصومات")
     @Story("التحقق - نسبة الخصم إلزامية")
-    @Description("يتحقق هذا الاختبار من أن النظام يمنع إضافة نوع خصم بدون إدخال نسبة الخصم، ويتحقق من ظهور رسالة خطأ تفيد بأن حقل نسبة الخصم إلزامي.")
+    @Description(
+            "يتحقق هذا الاختبار من أن النظام يمنع إضافة نوع خصم بدون إدخال نسبة الخصم، ويتحقق"
+                    + " من ظهور رسالة خطأ تفيد بأن حقل نسبة الخصم إلزامي.")
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void AssertPercentageRequired() {
         System.out.println("RequiredFieldsTaypeOfDiscount test started");

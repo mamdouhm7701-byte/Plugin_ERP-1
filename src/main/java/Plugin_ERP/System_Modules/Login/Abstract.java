@@ -16,8 +16,7 @@ import java.time.Duration;
 
 public abstract class Abstract {
 
-
-    //Variables
+    // Variables
     protected WebDriver driver;
     protected ElmentAction utilites;
     protected AlertAction alertAction;
@@ -25,7 +24,7 @@ public abstract class Abstract {
     protected BrowserAction browserAction;
     protected Actions actions;
 
-    //Constructors
+    // Constructors
     public Abstract(WebDriver driver) {
         this.driver = driver;
         this.utilites = new ElmentAction(driver);
@@ -34,34 +33,35 @@ public abstract class Abstract {
         this.actions = new Actions(driver);
     }
 
-    //Locators
+    // Locators
     private By ClickNew = By.cssSelector("button[data-action-type='new']");
     private By Value = By.cssSelector("input[label-text='value']");
     private By Notes = By.cssSelector("textarea[label-text='Notes']");
-    private By SaveAndPrintButton =
-            By.cssSelector("button[data-action-type='saveAndPrint']");
-    private By SaveButton =
-            By.cssSelector("button[data-action-type='save']");
-    public By Clickyestodelet = By.xpath("//button[contains(@class, \"swal2-confirm\") and contains(text(), \"نعم\")]");
+    private By SaveAndPrintButton = By.cssSelector("button[data-action-type='saveAndPrint']");
+    private By SaveButton = By.cssSelector("button[data-action-type='save']");
+    public By Clickyestodelet =
+            By.xpath("//button[contains(@class, \"swal2-confirm\") and contains(text(), \"نعم\")]");
     private By AddDate = By.cssSelector("fieldset[label-text='date'] input");
     private By Reference = By.cssSelector("input[name='reference']");
     private By AddArabicName = By.cssSelector("input[name='arabicName']");
     private By AddEnglishName = By.cssSelector("input[name='englishName']");
     private By CloseButton = By.xpath("//button[normalize-space()='إغلاق']");
-    private By AssertExsistArabicName  = By.xpath("//small[contains(text(),'الاسم العربي مطلوب')]");
-    private By AssertRightEmail  = By.xpath("//small[contains(text(),'البريد الالكتروني يجب ان يكون بريدا اليكتروني صحيح')]");
-    private By AssertTaxNumber  = By.xpath("//small[contains(text(),'الرقم الضريبي مطلوب')]");
-    private By AssertBankNumber  = By.xpath("//small[contains(text(),'الحقل رقم الحساب يجب ان يكون عدداً صحيحاً')]");
+    private By AssertExsistArabicName = By.xpath("//small[contains(text(),'الاسم العربي مطلوب')]");
+    private By AssertRightEmail =
+            By.xpath(
+                    "//small[contains(text(),'البريد الالكتروني يجب ان يكون بريدا اليكتروني صحيح')]");
+    private By AssertTaxNumber = By.xpath("//small[contains(text(),'الرقم الضريبي مطلوب')]");
+    private By AssertBankNumber =
+            By.xpath("//small[contains(text(),'الحقل رقم الحساب يجب ان يكون عدداً صحيحاً')]");
     private By AddAdress = By.xpath("//input[@class='form-control' and @id='adress']\n");
     private By PhoneInput = By.cssSelector("input#phone");
 
-    private final By EditableRows = By.xpath("//tbody//tr[@role='row' and .//input[not(@type='hidden')]]");
+    private final By EditableRows =
+            By.xpath("//tbody//tr[@role='row' and .//input[not(@type='hidden')]]");
 
+    // الميثودات
 
-
-//الميثودات
-
-    //ميثودات الإضافة
+    // ميثودات الإضافة
     @Step("إضافة الاسم العربي: {ArabicName}")
     public void AddArabicName(String ArabicName) {
         utilites.waits().waitForOverlayToDisappear();
@@ -73,11 +73,13 @@ public abstract class Abstract {
         utilites.waits().waitForOverlayToDisappear();
         utilites.TaypeTextB(AddEnglishName, EnglishName);
     }
-@Step("اضافه رقم الجول :{PhoneNumber}")
-public void AddPhoneNumber(String PhoneNumber) {
+
+    @Step("اضافه رقم الجول :{PhoneNumber}")
+    public void AddPhoneNumber(String PhoneNumber) {
         utilites.waits().waitForOverlayToDisappear();
         utilites.TaypeTextB(PhoneInput, PhoneNumber);
-}
+    }
+
     @Step("إضافة القيمة: {value}")
     public void AddValue(String value) {
         utilites.TaypeTextB(Value, value);
@@ -88,11 +90,13 @@ public void AddPhoneNumber(String PhoneNumber) {
         utilites.waits().waitForOverlayToDisappear();
         utilites.TaypeTextB(Reference, reference);
     }
-@Step("اضافه العنوان: {adress}")
-public void AddAdress(String adress) {
+
+    @Step("اضافه العنوان: {adress}")
+    public void AddAdress(String adress) {
         utilites.waits().waitForOverlayToDisappear();
         utilites.TaypeTextB(AddAdress, adress);
-}
+    }
+
     @Step("إضافة ملاحظات: {notes}")
     public void AddNotes(String notes) {
         utilites.TaypeTextB(Notes, notes);
@@ -105,11 +109,12 @@ public void AddAdress(String adress) {
         utilites.TaypeTextB(AddDate, todayDate);
         utilites.waits().waitForOverlayToDisappear();
         return todayDate;
-
     }
+
     public String GetTodayDate() {
         return utilites.Utility().TypeTodayDate("dd/MM/yyyy");
     }
+
     @Step("إضافة التاريخ العام السابق: {pastYearDate}")
     public void AddPastYearDate() {
         utilites.waits().waitForOverlayToDisappear();
@@ -127,7 +132,7 @@ public void AddAdress(String adress) {
         return number.toString();
     }
 
-    //ميثودات الضغط
+    // ميثودات الضغط
     @Step("الضغط على زر جديد")
     public void ClickNew() {
         try {
@@ -138,7 +143,6 @@ public void AddAdress(String adress) {
         utilites.waits().waitForOverlayToDisappear();
         utilites.ClickElement(ClickNew);
         utilites.waits().waitForOverlayToDisappear();
-
     }
 
     @Step("الضغط على زر إغلاق")
@@ -166,31 +170,23 @@ public void AddAdress(String adress) {
         utilites.waits().waitForOverlayToDisappear();
         utilites.ClickElement(SaveButton);
         LogUtils.info("تم الضغط على زر الحفظ");
-
     }
 
-
-    //ميثودات التعديل والحذف
+    // ميثودات التعديل والحذف
     @Step("الضغط على زر التعديل لآخر سجل في الجريد")
     public void Edit() {
         utilites.waits().waitForOverlayToDisappear();
-        utilites.ClickElement(
-                utilites.getLastEditButtonForCustomerReceipt()
-        );
+        utilites.ClickElement(utilites.getLastEditButtonForCustomerReceipt());
         utilites.waits().waitForOverlayToDisappear();
-       utilites.waits(). waitForExchangeEditPage(SaveButton);
+        utilites.waits().waitForExchangeEditPage(SaveButton);
 
         LogUtils.error("تم الضغط على زر التعديل لآخر سجل في الجريد");
     }
 
-
     @Step("الضغط على زر الحذف لآخر سجل في الجريد")
     public void Delete() {
         utilites.waits().waitForOverlayToDisappear();
-        utilites.grid().deleteRow(
-                utilites.grid().getLastDeleteButton(),
-                Clickyestodelet
-        );
+        utilites.grid().deleteRow(utilites.grid().getLastDeleteButton(), Clickyestodelet);
         LogUtils.info("تم حذف آخر سجل في الجريد");
     }
 
@@ -200,8 +196,7 @@ public void AddAdress(String adress) {
         LogUtils.info("تم حذف جميع السجلات في الجريد");
     }
 
-
-    //ميثودات التحقق
+    // ميثودات التحقق
     @Step("التأكد من أن الاسم العربي مطلوب")
     public boolean IsArabicNameRequiredErrorDisplayed() {
         return utilites.isDisplayed(AssertExsistArabicName);
@@ -221,10 +216,7 @@ public void AddAdress(String adress) {
     public void AssertReceiptAdded(String ArabicName) {
         utilites.waits().waitForOverlayToDisappear();
         String pk = utilites.grid().getPkByText(ArabicName);
-        Assert.assertNotNull(
-                pk,
-                "❌ السجل غير موجود: " + ArabicName
-        );
+        Assert.assertNotNull(pk, "❌ السجل غير موجود: " + ArabicName);
         LogUtils.info("✅ السجل موجود بـ PK = " + pk);
     }
 
@@ -243,7 +235,7 @@ public void AddAdress(String adress) {
 
     @Step("التأكد من ظهور الرقم: {Number}")
     public void AssertNumberInReport(String Number) {
-        Assert.assertTrue( utilites.validation().IsPriceDisplayedForFin(Number));
+        Assert.assertTrue(utilites.validation().IsPriceDisplayedForFin(Number));
         LogUtils.info("تم التحقق من الرقم في التقرير: " + Number);
     }
 
@@ -262,12 +254,13 @@ public void AddAdress(String adress) {
     public void AssertCheckboxIsChecked(String checkboxName, boolean expectedState) {
         utilites.checkbox().assertCheckboxState(checkboxName, expectedState);
     }
-@Step("التحقق ان زرارالحفظ غير قابل للضغط")
-public boolean AssertSaveButtonIsNotChecked(){
-        return utilites.isDisplayed(SaveButton);
-}
 
-    //ميثودات الاختيار
+    @Step("التحقق ان زرارالحفظ غير قابل للضغط")
+    public boolean AssertSaveButtonIsNotChecked() {
+        return utilites.isDisplayed(SaveButton);
+    }
+
+    // ميثودات الاختيار
     @Step("الاختيار من القائمة المنسدلة: {Name} من: {Type}")
     public void SelectFromDropDawn(String Name, String Type) {
         utilites.waits().waitForOverlayToDisappear();
@@ -275,7 +268,8 @@ public boolean AssertSaveButtonIsNotChecked(){
         utilites.waits().waitForOverlayToDisappear();
         LogUtils.info("تم اختيار: " + Name);
     }
-@Step("الاختيار من القائمة المنسدلة: {Name} من: {Type} باستخدام DataTitle")
+
+    @Step("الاختيار من القائمة المنسدلة: {Name} من: {Type} باستخدام DataTitle")
     public void SelectFromDropDawnByText(String Name, String Type) {
         utilites.waits().waitForOverlayToDisappear();
         utilites.dropdown().selectVueOptionByDataTitle(Name, Type);
@@ -299,28 +293,22 @@ public boolean AssertSaveButtonIsNotChecked(){
                 .perform();
     }
 
-
     @Step("الضغط على انتر لاختيار الصنف")
-    public void ClickEnter(){
-        actions .pause(Duration.ofMillis(500))
-                .sendKeys(Keys.ENTER)
-                .perform();
+    public void ClickEnter() {
+        actions.pause(Duration.ofMillis(500)).sendKeys(Keys.ENTER).perform();
     }
 
     @Step("الضغط على شيفت للانتقال")
-    public void ClickShift(){
-        actions .pause(Duration.ofMillis(500))
-                .sendKeys(Keys.SHIFT)
-                .perform();
+    public void ClickShift() {
+        actions.pause(Duration.ofMillis(500)).sendKeys(Keys.SHIFT).perform();
     }
+
     public void clickOnEmptyArea() {
         WebElement body = driver.findElement(By.tagName("body"));
 
-        new Actions(driver)
-                .moveToElement(body, 5, 5)
-                .click()
-                .perform();
+        new Actions(driver).moveToElement(body, 5, 5).click().perform();
     }
+
     @Step("تعيين قيمة الـ Checkbox: {checkboxName} إلى {value}")
     public void SetCheckboxValue(String checkboxName, boolean value) {
         utilites.checkbox().stableFastSetCheckboxByTextCloude(checkboxName, value);
@@ -336,15 +324,14 @@ public boolean AssertSaveButtonIsNotChecked(){
         utilites.checkbox().setCheckbox(checkboxName, expectedState);
     }
 
-
-    //ميثودات الـ Popup
+    // ميثودات الـ Popup
     @Step("التحقق من ظهور نافذة الخطأ")
     public boolean isErrorPopupDisplayed() {
         try {
             new WebDriverWait(driver, Duration.ofSeconds(5))
-                    .until(ExpectedConditions.visibilityOfElementLocated(
-                            By.cssSelector(".swal2-container.swal2-backdrop-show")
-                    ));
+                    .until(
+                            ExpectedConditions.visibilityOfElementLocated(
+                                    By.cssSelector(".swal2-container.swal2-backdrop-show")));
             return true;
         } catch (Exception e) {
             return false;
@@ -374,8 +361,9 @@ public boolean AssertSaveButtonIsNotChecked(){
         browserAction.navigateWithRetry(url);
         LogUtils.info("تم الانتقال الى: " + url);
     }
+
     @Step("اضافه رابط الصفحه:{route}")
-    public void  NavigationHelper(Pages route) {
+    public void NavigationHelper(Pages route) {
         utilites.waits().waitForOverlayToDisappear();
 
         browserAction.OpenNavigationHelper(Pages.valueOf(route.name()));
@@ -388,14 +376,5 @@ public boolean AssertSaveButtonIsNotChecked(){
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-
-
     }
-
-    }
-
-
-
-
-
+}

@@ -6,27 +6,20 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class MainBage {
-    //Variables
+    // Variables
     private WebDriver driver;
     private ElmentAction utilites;
 
-
-
-    //Constructors
-    public  MainBage(WebDriver driver) {
+    // Constructors
+    public MainBage(WebDriver driver) {
         this.driver = driver;
         this.utilites = new ElmentAction(driver);
     }
-    //Locators
 
-    private By mainpage= By.xpath("//h4[contains(text(),'الصفحة الرئيسية')]");
+    // Locators
 
+    private By mainpage = By.xpath("//h4[contains(text(),'الصفحة الرئيسية')]");
 
-
-
-
-
-    //Methods
-
+    // Methods
 
 }

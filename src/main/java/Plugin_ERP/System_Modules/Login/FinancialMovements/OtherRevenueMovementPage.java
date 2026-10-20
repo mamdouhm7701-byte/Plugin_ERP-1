@@ -17,25 +17,23 @@ import java.time.Duration;
 
 public class OtherRevenueMovementPage extends FinancialMovementPage {
 
-
-
-    //Constructors
+    // Constructors
     public OtherRevenueMovementPage(WebDriver driver) {
         super(driver);
-
     }
 
-    //Locators
+    // Locators
     private By OpenFinancialMovements = By.xpath("//span[normalize-space()='الحركات المالية']");
     private By OtherRevenueMovement = By.xpath("//span[normalize-space()='حركة الايرادات']");
     private By RevenueType = By.cssSelector("input[value='Incomes']");
     private By AcountType = By.xpath("//label[.//span[contains(text(),'دليل الحسابات')]]");
-    private By AmountRequiredError = By.xpath("//small[contains(text(),'قيمة الحقل القيمة يجب ان تكون اكبر من 0.01 او تساويها')]");
+    private By AmountRequiredError =
+            By.xpath(
+                    "//small[contains(text(),'قيمة الحقل القيمة يجب ان تكون اكبر من 0.01 او تساويها')]");
     private By TypeRequiredError = By.xpath("//small[contains(text(),'أنواع الإيرادات مطلوب')]");
     private By PaymentMethod = By.xpath("//small[contains(text(),'طريقة الدفع مطلوب')]");
 
-
-    //Methods
+    // Methods
     @Step("Open Other Revenue Movement Page")
     public void OpenOtherRevenueMovementPage() {
         utilites.ClickElement(OpenFinancialMovements);
@@ -53,7 +51,7 @@ public class OtherRevenueMovementPage extends FinancialMovementPage {
         utilites.ClickElement(AcountType);
     }
 
-//Assert Error Methods
+    // Assert Error Methods
     @Step("Is Amount Required Error Displayed")
     public boolean IsAmountRequiredErrorDisplayed() {
         return utilites.isDisplayed(AmountRequiredError);
@@ -61,29 +59,11 @@ public class OtherRevenueMovementPage extends FinancialMovementPage {
 
     @Step("Is Type Required Error Displayed")
     public boolean IsTypeRequiredErrorDisplayed() {
-        return utilites.isDisplayed(TypeRequiredError);}
-
+        return utilites.isDisplayed(TypeRequiredError);
+    }
 
     @Step("Is Payment Method Required Error Displayed")
     public boolean IsPaymentMethodRequiredErrorDisplayed() {
-        return utilites.isDisplayed(PaymentMethod);}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return utilites.isDisplayed(PaymentMethod);
+    }
 }
-
-
-
-
-

@@ -12,9 +12,8 @@ import java.net.URI;
 import java.net.URL;
 
 public class Firfox extends AbstractDriver {
-    private FirefoxOptions getOptions()
+    private FirefoxOptions getOptions() { // options
 
-    {//options
         FirefoxOptions options = new FirefoxOptions();
         String executionType = PropertyReader.getProperty("ExecutionType");
         if ("LocalHeadless".equalsIgnoreCase(executionType)) {
@@ -23,9 +22,9 @@ public class Firfox extends AbstractDriver {
         options.setAcceptInsecureCerts(true);
         options.setPageLoadStrategy(PageLoadStrategy.EAGER);
 
-
         return options;
     }
+
     @Override
     public WebDriver createDriver() {
         String type = PropertyReader.getProperty("ExecutionType");
@@ -58,4 +57,3 @@ public class Firfox extends AbstractDriver {
         throw new IllegalArgumentException("Invalid Execution Type: " + type);
     }
 }
-

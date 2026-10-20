@@ -24,8 +24,11 @@ public class WebDriverFactory {
         }
         WebDriver driver = ThreadGuard.protect(getDriver(browserType.trim()));
         driverThreadLocal.set(driver);
-        LogUtils.info("Initialized WebDriver for browser: " + browserType
-                + ", execution type: " + PropertyReader.getProperty("ExecutionType"));
+        LogUtils.info(
+                "Initialized WebDriver for browser: "
+                        + browserType
+                        + ", execution type: "
+                        + PropertyReader.getProperty("ExecutionType"));
         return driverThreadLocal.get();
     }
 

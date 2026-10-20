@@ -236,7 +236,7 @@ public class FinancialMovementPage extends Abstract {
   public void captureSaves(String marker) {
     ((JavascriptExecutor)driver).executeScript("""
       const store=document.querySelector('#app').__vue__.$store;
-      window.__financialQA={marker:arguments[0],saves:[],pending:0,errors:[]};
+      window.__financialQA={marker:arguments[0],saves:[],attempts:[],pending:0,errors:[]};
       if(store.__financialCaptureInstalled)return;
       store.__financialCaptureInstalled=true;
       const dispatch=store.dispatch.bind(store);
@@ -244,7 +244,7 @@ public class FinancialMovementPage extends Abstract {
         const cap=window.__financialQA;
         const owned=(action==='app/create'||action==='app/update')&&payload?.data?.notes?.startsWith(cap?.marker);
         const sent=owned?JSON.parse(JSON.stringify(payload.data)):null;
-        if(owned)cap.pending++;
+        if(owned){cap.pending++;cap.attempts.push({endpoint:payload.url,values:sent});}
         return dispatch(action,payload,...rest).then(result=>{
           if(owned){cap.pending--;const entity=result?.data||result; cap.saves.push({endpoint:payload.url,
             id:sent.id||entity?.id||(typeof entity==='string'?entity:null),values:sent});}
@@ -255,6 +255,8 @@ public class FinancialMovementPage extends Abstract {
   }
   @SuppressWarnings("unchecked")
   public List<Map<String,Object>> capturedSaves(){return (List<Map<String,Object>>)((JavascriptExecutor)driver).executeScript("return window.__financialQA?.saves||[]");}
+  public String captureMarker(){return (String)((JavascriptExecutor)driver).executeScript("return window.__financialQA?.marker||null");}
+  @SuppressWarnings("unchecked") public List<Map<String,Object>> capturedAttempts(){return (List<Map<String,Object>>)((JavascriptExecutor)driver).executeScript("return window.__financialQA?.attempts||[]");}
   public boolean hasSaveStarted(){return Boolean.TRUE.equals(((JavascriptExecutor)driver).executeScript("return !!window.__financialQA && (window.__financialQA.pending>0 || window.__financialQA.saves.length>0)"));}
   public void awaitSavesSettled(){ready.until(d->!Boolean.TRUE.equals(((JavascriptExecutor)d).executeScript("return (window.__financialQA?.pending||0)>0")));}
 }

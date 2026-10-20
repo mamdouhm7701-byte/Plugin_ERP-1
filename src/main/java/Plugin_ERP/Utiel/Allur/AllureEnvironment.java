@@ -32,17 +32,30 @@ public class AllureEnvironment {
             // Config
             putSafe(props, "URL", getProperty("url"));
             putSafe(props, "Execution Type", getProperty("ExecutionType"));
-            putSafe(props, "Run ID", System.getProperty("allure.run.id", "local-" + Instant.now().toEpochMilli()));
-            putSafe(props, "Run Started", DateTimeFormatter.ISO_OFFSET_DATE_TIME
-                    .withZone(ZoneId.systemDefault()).format(Instant.now()));
+            putSafe(
+                    props,
+                    "Run ID",
+                    System.getProperty("allure.run.id", "local-" + Instant.now().toEpochMilli()));
+            putSafe(
+                    props,
+                    "Run Started",
+                    DateTimeFormatter.ISO_OFFSET_DATE_TIME
+                            .withZone(ZoneId.systemDefault())
+                            .format(Instant.now()));
             putSafe(props, "OS Version", System.getProperty("os.version"));
             putSafe(props, "OS Architecture", System.getProperty("os.arch"));
             putSafe(props, "User", System.getProperty("user.name"));
             putSafe(props, "Project", System.getProperty("project.name", "Plugin_ERP"));
 
             // Browser (prefer real from capabilities; fallback to properties)
-            String bName = (browserName != null && !browserName.isBlank()) ? browserName : getProperty("browserType");
-            String bVer  = (browserVersion != null && !browserVersion.isBlank()) ? browserVersion : getProperty("browserVersion");
+            String bName =
+                    (browserName != null && !browserName.isBlank())
+                            ? browserName
+                            : getProperty("browserType");
+            String bVer =
+                    (browserVersion != null && !browserVersion.isBlank())
+                            ? browserVersion
+                            : getProperty("browserVersion");
 
             putSafe(props, "Browser", bName);
             putSafe(props, "Browser Version", bVer);

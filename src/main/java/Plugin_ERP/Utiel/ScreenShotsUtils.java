@@ -17,7 +17,7 @@ public class ScreenShotsUtils {
             File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 
             // جهّز المسار
-            File dest = new File("screenshots/" + name +"-"+TimeManage.getTimestamp()+".png");
+            File dest = new File("screenshots/" + name + "-" + TimeManage.getTimestamp() + ".png");
 
             // اعمل فولدر screenshots لو مش موجود
             dest.getParentFile().mkdirs();

@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!--
+  Smoke اختبار قبول أولي بعد نشر نسخة أو تغيير البيئة.
+  الفائدة: نعرف سريعاً هل يمكن الدخول وتنفيذ العمليات الأساسية قبل تشغيل التغطية الواسعة.
+  النطاق: 9 حالات أساسية، تشمل حفظ فاتورة نقاط بيع نقدية وطلب مطعم خارجي مدفوع.
+  لا تشمل كل الحدود أو الطباعة أو المداخل القديمة؛ التغطية الكاملة موجودة في Regression.
+  الدخول ينفذه BaseTest قبل المجموعة. بيانات كل حالة مستقلة والتنظيف بعد كلاس الصفحة.
+  النجاح يسمح بالانتقال لاختبارات أوسع؛ لا يعني خلو النظام من العيوب.
+  التشغيل: mvn '-Dsurefire.suiteXmlFiles=src/test/resources/smoke-testng.xml' test
+-->
+<suite name="Smoke - Core ERP availability" parallel="none" configfailurepolicy="continue">
+    <test name="Core happy paths" preserve-order="true">
+        <classes>
+            <class name="ProductsTest.UnitTest">
+                <methods>
+                    <include name="AddNewUnite"/>
+                </methods>
+            </class>
+            <class name="ProductsTest.AddProductsTest">
+                <methods>
+                    <include name="PR_SimpleProduct"/>
+                </methods>
+            </class>
+            <class name="DealerModelTest.CustomersTest">
+                <methods>
+                    <include name="CU_001_CustomerListStructure"/>
+                </methods>
+            </class>
+            <class name="Invoice.SalesInvoiceCoverageTest">
+                <methods>
+                    <include name="savesOwnedItemFromPicker"/>
+                </methods>
+            </class>
+            <class name="Purches.PurchaseInvoiceCoverageTest">
+                <methods>
+                    <include name="savesOwnedItemFromPicker"/>
+                </methods>
+            </class>
+            <class name="StoreTest.TransBetweenStoreTest">
+                <methods>
+                    <include name="SM_DecimalQuantity"/>
+                </methods>
+            </class>
+            <class name="FinancialMovementsTest.CustomerReceiptTest">
+                <methods>
+                    <include name="AddResetWithSaveTest"/>
+                </methods>
+            </class>
+            <class name="SpecialSalesTest.PointOfSaleTest">
+                <methods>
+                    <include name="savesCashWithOwnedPayment"/>
+                </methods>
+            </class>
+            <class name="SpecialSalesTest.RestaurantInvoiceTest">
+                <methods>
+                    <include name="savesPaidExternalOrder"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

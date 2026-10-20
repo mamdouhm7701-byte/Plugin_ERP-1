@@ -12,29 +12,49 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 public class AddProductsPage extends ProductsModulePage {
-    public void prStock(String store,String opening,String minimum,String cost){
-        prChoose("مخازن",store);prTitledField("مكان الصنف","QA");
-        prTitledField("الرصيد الإفتتاحي",opening);prTitledField("الحد الأدني",minimum);prTitledField("سعر التكلفة",cost);
+    public void prStock(String store, String opening, String minimum, String cost) {
+        prChoose("مخازن", store);
+        prTitledField("مكان الصنف", "QA");
+        prTitledField("الرصيد الإفتتاحي", opening);
+        prTitledField("الحد الأدني", minimum);
+        prTitledField("سعر التكلفة", cost);
         prButton("اضافة مخزن");
     }
-    public void prSubunit(String unit,String barcode,String rate){
-        prTab("وحدات الصنف");prChoose("الوحدة",unit);prTitledField("معامل التحويل",rate);
-        prType(By.cssSelector("[data-title='الباركود'] input:not([name='mainUnitBarcode'])"),barcode);
+
+    public void prSubunit(String unit, String barcode, String rate) {
+        prTab("وحدات الصنف");
+        prChoose("الوحدة", unit);
+        prTitledField("معامل التحويل", rate);
+        prType(
+                By.cssSelector("[data-title='الباركود'] input:not([name='mainUnitBarcode'])"),
+                barcode);
         prButton("اضافة وحدة");
     }
-    public void prComponent(String store,String item,String quantity){
-        prTab("المكونات");prChoose("المخزن",store);prButton("اضافة مكونات");prPickItem(item);prClosePicker();
-        prType(By.xpath("//form//tr[.//td[contains(normalize-space(),'"+item+"')]]//input[@type='number'][1]"),quantity);
+
+    public void prComponent(String store, String item, String quantity) {
+        prTab("المكونات");
+        prChoose("المخزن", store);
+        prButton("اضافة مكونات");
+        prPickItem(item);
+        prClosePicker();
+        prType(
+                By.xpath(
+                        "//form//tr[.//td[contains(normalize-space(),'"
+                                + item
+                                + "')]]//input[@type='number'][1]"),
+                quantity);
     }
 
-    //Constructors
+    // Constructors
     public AddProductsPage(WebDriver driver) {
         super(driver);
     }
 
-    //locators
-    private By OpenProducts = By.xpath("//span[contains(@class,'menu-title') and contains(text(),'الأصناف')]");
-    private By OpenAddProduct = By.xpath("//span[@class='menu-title text-truncate' and text()='قائمة الاصناف']");
+    // locators
+    private By OpenProducts =
+            By.xpath("//span[contains(@class,'menu-title') and contains(text(),'الأصناف')]");
+    private By OpenAddProduct =
+            By.xpath("//span[@class='menu-title text-truncate' and text()='قائمة الاصناف']");
     private By AddProduct = By.xpath("//button[contains(text(),'جديد')]");
     private By ProductName = By.xpath("//div[@data-title='الاسم العربي']//input");
     private By ProductEnglishName = By.xpath("//div[@data-title='الاسم الإنجليزي']//input");
@@ -43,7 +63,8 @@ public class AddProductsPage extends ProductsModulePage {
     private By MiniSalePrice = By.xpath("//input[@name='minSalesPrice']");
     private By MaxSalePrice = By.xpath("//input[@name='maxSalesPrice']");
     private By PlaceOfProduction = By.xpath("//div[@data-title='مكان الصنف']//input[@type='text']");
-    private By OpenPlaceOfProduction = By.xpath("//div[@data-title='الرصيد الإفتتاحي']//input[@type='number']");
+    private By OpenPlaceOfProduction =
+            By.xpath("//div[@data-title='الرصيد الإفتتاحي']//input[@type='number']");
     private By CostPrice = By.xpath("//div[@data-title='سعر التكلفة']//input[@type='number']");
     private By LowestAvailableQuantity = By.xpath("//div[@data-title='الحد الأدني']//input");
     private By AddStore = By.xpath("//button[contains(.,'اضافة مخزن')]");
@@ -51,7 +72,8 @@ public class AddProductsPage extends ProductsModulePage {
     private By TransUnit = By.xpath("//div[@data-title='معامل التحويل']//input[@type='number']");
     private By AddBarcode = By.xpath("(//div[@data-title='الباركود']//input)[3]");
     private By AddSalePrice = By.xpath("//div[@data-title='سعر البيع']//input[@type='number']");
-    private By AddMiniSalePrice = By.xpath("//div[@data-title='أقل سعر بيع']//input[@type='number']");
+    private By AddMiniSalePrice =
+            By.xpath("//div[@data-title='أقل سعر بيع']//input[@type='number']");
     private By AddMaxSalePrice = By.xpath("//input[@name='maxSalesPrice']");
     private By AddUnite = By.xpath("//button[contains(.,'اضافة وحدة')]");
     private By CntrolleProduct = By.xpath("//a[contains(.,'التحكم في الأصناف')]");
@@ -60,13 +82,15 @@ public class AddProductsPage extends ProductsModulePage {
     private By AddComponent = By.xpath("//button[contains(text(),'اضافة مكونات')]");
     private By SerchComponent = By.xpath("//input[@id='arabicName']");
     private By CloseComponent = By.xpath("//button[contains(.,'إغلاق')]");
-    private By ComponentQuantity = By.xpath("//input[@type='number' and contains(@class,'form-control-sm')]");
+    private By ComponentQuantity =
+            By.xpath("//input[@type='number' and contains(@class,'form-control-sm')]");
     private By ComponetNotest = By.xpath("//input[@id='textarea']");
     private By DeletStore = By.xpath("//*[contains(@id,'delete-icon')]");
     private By SaveEditeButton = By.cssSelector("button[data-action-type='save']");
-    private By UniteNameRequiredMsg = By.xpath("//small[@class='text-danger' and text()='mainUnitBarcode مطلوب']");
+    private By UniteNameRequiredMsg =
+            By.xpath("//small[@class='text-danger' and text()='mainUnitBarcode مطلوب']");
 
-    //Methods
+    // Methods
 
     @Step("فتح صفحة إضافة الأصناف")
     public void OpenAddProductPage() {
@@ -85,7 +109,6 @@ public class AddProductsPage extends ProductsModulePage {
         }
         utilites.ClickElement(AddProduct);
         utilites.waits().waitForOverlayToDisappear();
-
     }
 
     @Step("إدخال اسم الصنف العربي: {arabicName}")

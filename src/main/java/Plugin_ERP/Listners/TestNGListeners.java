@@ -43,19 +43,25 @@ public class TestNGListeners implements IExecutionListener, ITestListener {
     }
 
     private void writeExecutorMetadata() {
-        Path executorPath = Path.of(System.getProperty("user.dir"), "allure-results", "executor.json");
+        Path executorPath =
+                Path.of(System.getProperty("user.dir"), "allure-results", "executor.json");
         try {
             Files.createDirectories(executorPath.getParent());
             long buildOrder = nextBuildOrder();
             System.setProperty("allure.build.order", Long.toString(buildOrder));
-            String json = "{\n" +
-                    "  \"name\": \"Local IntelliJ / Maven\",\n" +
-                    "  \"type\": \"local\",\n" +
-                    "  \"buildName\": \"Plugin_ERP " + Instant.now().toString() + "\",\n" +
-                    "  \"buildOrder\": " + buildOrder + ",\n" +
-                    "  \"buildUrl\": \"\",\n" +
-                    "  \"reportUrl\": \"\"\n" +
-                    "}\n";
+            String json =
+                    "{\n"
+                            + "  \"name\": \"Local IntelliJ / Maven\",\n"
+                            + "  \"type\": \"local\",\n"
+                            + "  \"buildName\": \"Plugin_ERP "
+                            + Instant.now().toString()
+                            + "\",\n"
+                            + "  \"buildOrder\": "
+                            + buildOrder
+                            + ",\n"
+                            + "  \"buildUrl\": \"\",\n"
+                            + "  \"reportUrl\": \"\"\n"
+                            + "}\n";
             Files.writeString(executorPath, json);
         } catch (Exception e) {
             LogUtils.error("Failed to write Allure executor metadata: " + e.getMessage());
@@ -63,13 +69,20 @@ public class TestNGListeners implements IExecutionListener, ITestListener {
     }
 
     private long nextBuildOrder() {
-        Path historyTrend = Path.of(System.getProperty("user.dir"), "allure-results", "history", "history-trend.json");
+        Path historyTrend =
+                Path.of(
+                        System.getProperty("user.dir"),
+                        "allure-results",
+                        "history",
+                        "history-trend.json");
         long previous = 0;
         try {
             if (Files.isRegularFile(historyTrend)) {
-                Matcher matcher = Pattern.compile("\\\"buildOrder\\\"\\s*:\\s*(\\d+)")
-                        .matcher(Files.readString(historyTrend));
-                while (matcher.find()) previous = Math.max(previous, Long.parseLong(matcher.group(1)));
+                Matcher matcher =
+                        Pattern.compile("\\\"buildOrder\\\"\\s*:\\s*(\\d+)")
+                                .matcher(Files.readString(historyTrend));
+                while (matcher.find())
+                    previous = Math.max(previous, Long.parseLong(matcher.group(1)));
             }
         } catch (Exception e) {
             LogUtils.error("Could not read previous Allure build order: " + e.getMessage());
@@ -83,14 +96,16 @@ public class TestNGListeners implements IExecutionListener, ITestListener {
 
         try {
             WebDriverFactory.quitDriver();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         // مهم: ما ترميش RuntimeException هنا
         if (hasAllureResults()) {
             try {
                 AllureBinaryManger.generateAndOpenDetached();
             } catch (Exception e) {
-                LogUtils.error("Allure report generation failed but tests finished: " + e.getMessage());
+                LogUtils.error(
+                        "Allure report generation failed but tests finished: " + e.getMessage());
             }
         } else {
             LogUtils.info("No Allure test results were produced; report generation skipped.");
@@ -102,16 +117,16 @@ public class TestNGListeners implements IExecutionListener, ITestListener {
         if (!Files.isDirectory(resultsDir)) return false;
 
         try (Stream<Path> files = Files.list(resultsDir)) {
-            return files.anyMatch(path -> {
-                String name = path.getFileName().toString();
-                return name.endsWith("-result.json") || name.endsWith("-container.json");
-            });
+            return files.anyMatch(
+                    path -> {
+                        String name = path.getFileName().toString();
+                        return name.endsWith("-result.json") || name.endsWith("-container.json");
+                    });
         } catch (Exception e) {
             LogUtils.error("Could not inspect Allure results: " + e.getMessage());
             return false;
         }
     }
-
 
     // ================= Tests =================
 
@@ -129,7 +144,9 @@ public class TestNGListeners implements IExecutionListener, ITestListener {
                         String.valueOf(caps.getBrowserVersion()));
             }
         } catch (Exception e) {
-            LogUtils.error("Failed to update Allure environment with browser capabilities: " + e.getMessage());
+            LogUtils.error(
+                    "Failed to update Allure environment with browser capabilities: "
+                            + e.getMessage());
         }
     }
 

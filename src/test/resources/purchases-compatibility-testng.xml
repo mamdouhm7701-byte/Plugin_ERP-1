@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Purchase original entry points" configfailurepolicy="continue" parallel="none"><test name="Owned legacy purchases" preserve-order="true"><classes>
+<class name="Purches.PurchesBillsTest"/><class name="Purches.purchOrderTest"/><class name="Purches.ReturnOrderTest"/>
+</classes></test></suite>

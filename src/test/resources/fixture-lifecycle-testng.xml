@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!--
+  فحص محلي لملكية البيانات والعزل والاسترجاع عبر الموديولات، بما فيها قناتا الكاشير.
+  لا يمثل تشغيل هذه الحالات دليلاً على نجاح رحلات الأعمال على ERP الحي.
+  لا يضاف هذا الملف إلى Regression لأن الموديولات نفسها تضم اختبارات تنظيفها بالفعل.
+-->
+<suite name="Local page fixture lifecycle regressions" configfailurepolicy="continue" parallel="none">
+    <test name="Owned data isolation and recovery" preserve-order="true">
+        <classes>
+            <class name="Invoice.SalesCleanupTest"/>
+            <class name="ProductsTest.ProductsCleanupTest"/>
+            <class name="StoreTest.StoreCleanupTest"/>
+            <class name="FinancialMovementsTest.FinancialCleanupTest"/>
+            <class name="DealerModelTest.DealerCleanupTest"/>
+            <class name="SpecialSalesTest.SpecialSalesCleanupTest"/>
+        </classes>
+    </test>
+</suite>

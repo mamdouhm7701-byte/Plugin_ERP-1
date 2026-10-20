@@ -22,10 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Invoice extends AbstractForSales {
+public class Invoice extends SalesModulePage {
     public Invoice(WebDriver driver) {
         super(driver);
     }
-
-
 }

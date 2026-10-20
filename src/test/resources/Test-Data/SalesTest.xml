@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-
-<suite name="Invoice_Suite" verbose="1">
-    <test name="InvoiceTests" preserve-order="true">
-        <classes>
-
-            <class name="Invoice.InvoiceListTestCases"/>
-            <class name="Invoice.SalesInvoiceTestCases"/>
-        </classes>
-    </test>
+<suite name="Sales" verbose="1" configfailurepolicy="continue" parallel="none">
+ <test name="Sales independent fixtures" preserve-order="true"><classes>
+  <class name="Invoice.SalesInvoiceCoverageTest"/>
+  <class name="Invoice.QuotationTest"/>
+  <class name="Invoice.SalesOrderTest"/>
+  <class name="Invoice.SalesReturnTest"/>
+  <class name="Invoice.LinkedSalesReturnTest"/>
+  <class name="Invoice.SalesListCoverageTest"/>
+  <class name="Invoice.SalesCalculationTest"/>
+  <class name="Invoice.SalesCleanupTest"/>
+ </classes></test>
 </suite>

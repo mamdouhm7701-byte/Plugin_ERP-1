@@ -41,11 +41,11 @@ public class ElmentAction {
         this.checkboxActions = new CheckboxActions(driver, wait, waitMangment);
         this.gridActions = new GridActions(driver, wait, waitMangment);
         this.priceListActions = new PriceListActions(driver, wait, waitMangment);
-        this.utilityActions=new UtilityActions(driver, wait, waitMangment);
+        this.utilityActions = new UtilityActions(driver, wait, waitMangment);
         this.alertAction = new AlertAction(driver, wait, waitMangment);
     }
 
-    //Getter
+    // Getter
     public DropdownActions dropdown() {
         return dropdownActions;
     }
@@ -62,7 +62,7 @@ public class ElmentAction {
         return checkboxActions;
     }
 
-public GridActions grid() {
+    public GridActions grid() {
         return gridActions;
     }
 
@@ -70,7 +70,7 @@ public GridActions grid() {
         return priceListActions;
     }
 
-    public UtilityActions Utility(){
+    public UtilityActions Utility() {
         return utilityActions;
     }
 
@@ -78,10 +78,9 @@ public GridActions grid() {
         return alertAction;
     }
 
-    //Methods
+    // Methods
 
-
-    //Get Property
+    // Get Property
 
     public String getProperty(By by, String property) {
         WebElement element = findElement(by);
@@ -90,8 +89,7 @@ public GridActions grid() {
         return propertyValue;
     }
 
-
-    //Gtet Attribute
+    // Gtet Attribute
     public String getAttribute(By by, String attribute) {
         WebElement element = findElement(by);
         String attributeValue = element.getDomAttribute(attribute);
@@ -101,18 +99,13 @@ public GridActions grid() {
 
     private void scrollIntoView(WebElement element) {
 
-        ((JavascriptExecutor) driver).executeScript(
-                "arguments[0].scrollIntoView({block:'center'});",
-                element
-        );
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView({block:'center'});", element);
     }
 
     private void jsClick(WebElement element) {
 
-        ((JavascriptExecutor) driver).executeScript(
-                "arguments[0].click();",
-                element
-        );
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
     }
 
     public void ClickElement(By locator) {
@@ -123,16 +116,15 @@ public GridActions grid() {
 
             try {
 
-                WebElement element = waitMangment
-                        .fluentWait()
-                        .until(driver -> {
+                WebElement element =
+                        waitMangment
+                                .fluentWait()
+                                .until(
+                                        driver -> {
+                                            WebElement el = driver.findElement(locator);
 
-                            WebElement el = driver.findElement(locator);
-
-                            return (el.isDisplayed() && el.isEnabled())
-                                    ? el
-                                    : null;
-                        });
+                                            return (el.isDisplayed() && el.isEnabled()) ? el : null;
+                                        });
 
                 scrollIntoView(element);
 
@@ -170,9 +162,7 @@ public GridActions grid() {
             }
         }
 
-        throw new RuntimeException(
-                "❌ Click failed after retries: " + locator
-        );
+        throw new RuntimeException("❌ Click failed after retries: " + locator);
     }
 
     public void TaypeText(By locator, String value) {
@@ -183,16 +173,15 @@ public GridActions grid() {
 
             try {
 
-                WebElement element = waitMangment
-                        .fluentWait()
-                        .until(driver -> {
+                WebElement element =
+                        waitMangment
+                                .fluentWait()
+                                .until(
+                                        driver -> {
+                                            WebElement el = driver.findElement(locator);
 
-                            WebElement el = driver.findElement(locator);
-
-                            return (el.isDisplayed() && el.isEnabled())
-                                    ? el
-                                    : null;
-                        });
+                                            return (el.isDisplayed() && el.isEnabled()) ? el : null;
+                                        });
 
                 scrollIntoView(element);
 
@@ -203,26 +192,22 @@ public GridActions grid() {
                 element.sendKeys(Keys.CONTROL + "a");
                 element.sendKeys(Keys.DELETE);
 
-                wait.until(driver -> {
+                wait.until(
+                        driver -> {
+                            try {
 
-                    try {
+                                String currentValue = element.getAttribute("value");
 
-                        String currentValue = element.getAttribute("value");
+                                return currentValue == null || currentValue.trim().isEmpty();
 
-                        return currentValue == null
-                                || currentValue.trim().isEmpty();
+                            } catch (Exception e) {
 
-                    } catch (Exception e) {
-
-                        return false;
-                    }
-
-                });
+                                return false;
+                            }
+                        });
 
                 element.sendKeys(value);
-                LogUtils.info(
-                        "Typed Value = " + element.getAttribute("value")
-                );
+                LogUtils.info("Typed Value = " + element.getAttribute("value"));
 
                 return;
 
@@ -245,21 +230,19 @@ public GridActions grid() {
                     fallback.sendKeys(Keys.CONTROL + "a");
                     fallback.sendKeys(Keys.DELETE);
 
-                    wait.until(driver -> {
+                    wait.until(
+                            driver -> {
+                                try {
 
-                        try {
+                                    String currentValue = fallback.getAttribute("value");
 
-                            String currentValue = fallback.getAttribute("value");
+                                    return currentValue == null || currentValue.trim().isEmpty();
 
-                            return currentValue == null
-                                    || currentValue.trim().isEmpty();
+                                } catch (Exception ex) {
 
-                        } catch (Exception ex) {
-
-                            return false;
-                        }
-
-                    });
+                                    return false;
+                                }
+                            });
 
                     fallback.sendKeys(value);
 
@@ -272,15 +255,12 @@ public GridActions grid() {
             }
         }
 
-        throw new RuntimeException(
-                "❌ Type failed after retries: " + locator
-        );
+        throw new RuntimeException("❌ Type failed after retries: " + locator);
     }
 
     public WebElement findElement(By locator) {
         return driver.findElement(locator);
     }
-
 
     public String getPageTitle() {
         return driver.getTitle();
@@ -288,12 +268,12 @@ public GridActions grid() {
 
     public String getText(By locator) {
         WebElement element = driver.findElement(locator);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", element);
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView({block:'center'});", element);
         wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
         wait.until(ExpectedConditions.presenceOfElementLocated(locator));
         return element.getText();
     }
-
 
     public boolean isDisplayed(By locator) {
         try {
@@ -322,16 +302,11 @@ public GridActions grid() {
             }
         }
 
-        throw new NoSuchElementException(
-                "❌ No visible element found: " + locator
-        );
+        throw new NoSuchElementException("❌ No visible element found: " + locator);
     }
 
     public void clickOnEmptyArea() {
-        new Actions(driver)
-                .moveToLocation(5, 5)
-                .click()
-                .perform();
+        new Actions(driver).moveToLocation(5, 5).click().perform();
     }
 
     public void TaypeTextB(By locator, String value) {
@@ -346,30 +321,32 @@ public GridActions grid() {
 
                 clickOnEmptyArea();
 
-                WebElement element = waitMangment
-                        .fluentWait()
-                        .until(driver -> {
+                WebElement element =
+                        waitMangment
+                                .fluentWait()
+                                .until(
+                                        driver -> {
+                                            try {
 
-                            try {
+                                                return getVisibleElement(locator);
 
-                                return getVisibleElement(locator);
+                                            } catch (Exception e) {
 
-                            } catch (Exception e) {
-
-                                return null;
-                            }
-                        });
+                                                return null;
+                                            }
+                                        });
                 LogUtils.info("Displayed = " + element.isDisplayed());
                 LogUtils.info("Enabled = " + element.isEnabled());
                 LogUtils.info("Location = " + element.getLocation());
                 LogUtils.info("Size = " + element.getSize());
                 LogUtils.info("OuterHTML = " + element.getAttribute("outerHTML"));
 
-                Object topElement = ((JavascriptExecutor) driver).executeScript(
-                        "return document.elementFromPoint(arguments[0], arguments[1]).outerHTML;",
-                        element.getRect().getX() + 5,
-                        element.getRect().getY() + 5
-                );
+                Object topElement =
+                        ((JavascriptExecutor) driver)
+                                .executeScript(
+                                        "return document.elementFromPoint(arguments[0], arguments[1]).outerHTML;",
+                                        element.getRect().getX() + 5,
+                                        element.getRect().getY() + 5);
 
                 LogUtils.info("Top Element = " + topElement);
                 scrollIntoView(element);
@@ -381,20 +358,19 @@ public GridActions grid() {
                 element.sendKeys(Keys.CONTROL + "a");
                 element.sendKeys(Keys.DELETE);
 
-                wait.until(driver -> {
+                wait.until(
+                        driver -> {
+                            try {
 
-                    try {
+                                String currentValue = element.getAttribute("value");
 
-                        String currentValue = element.getAttribute("value");
+                                return currentValue == null || currentValue.trim().isEmpty();
 
-                        return currentValue == null
-                                || currentValue.trim().isEmpty();
+                            } catch (Exception e) {
 
-                    } catch (Exception e) {
-
-                        return false;
-                    }
-                });
+                                return false;
+                            }
+                        });
 
                 element.sendKeys(cleanValue);
 
@@ -405,9 +381,11 @@ public GridActions grid() {
                 if (typedValue == null || !typedValue.trim().equals(cleanValue)) {
 
                     throw new RuntimeException(
-                            "❌ Typed value mismatch. Expected: [" + cleanValue
-                                    + "] Actual: [" + typedValue + "]"
-                    );
+                            "❌ Typed value mismatch. Expected: ["
+                                    + cleanValue
+                                    + "] Actual: ["
+                                    + typedValue
+                                    + "]");
                 }
 
                 return;
@@ -435,20 +413,19 @@ public GridActions grid() {
                     fallback.sendKeys(Keys.CONTROL + "a");
                     fallback.sendKeys(Keys.DELETE);
 
-                    wait.until(driver -> {
+                    wait.until(
+                            driver -> {
+                                try {
 
-                        try {
+                                    String currentValue = fallback.getAttribute("value");
 
-                            String currentValue = fallback.getAttribute("value");
+                                    return currentValue == null || currentValue.trim().isEmpty();
 
-                            return currentValue == null
-                                    || currentValue.trim().isEmpty();
+                                } catch (Exception ex) {
 
-                        } catch (Exception ex) {
-
-                            return false;
-                        }
-                    });
+                                    return false;
+                                }
+                            });
 
                     fallback.sendKeys(cleanValue);
 
@@ -461,9 +438,11 @@ public GridActions grid() {
                     }
 
                     LogUtils.info(
-                            "❌ Fallback typed value mismatch. Expected: [" + cleanValue
-                                    + "] Actual: [" + typedValue + "]"
-                    );
+                            "❌ Fallback typed value mismatch. Expected: ["
+                                    + cleanValue
+                                    + "] Actual: ["
+                                    + typedValue
+                                    + "]");
 
                 } catch (Exception ex) {
 
@@ -474,46 +453,43 @@ public GridActions grid() {
             }
         }
 
-        throw new RuntimeException(
-                "❌ Type failed after retries: " + locator
-        );
+        throw new RuntimeException("❌ Type failed after retries: " + locator);
     }
 
     public By getLastEditButtonForCustomerReceipt() {
 
         {
-
             return By.xpath(
-                    "(//tr[contains(@id,'mainTable__row_')]//button[@data-action-type='edit'])[1]"
-            );
+                    "(//tr[contains(@id,'mainTable__row_')]//button[@data-action-type='edit'])[1]");
         }
-
     }
 
     public By getLastEditButtonForAdjustDamage() {
 
-
         return By.xpath("(//*[@data-action-type='edit'])[1]");
     }
-
-
 
     public void ClickPlusButtonByRow(int numberOfRows, int timesPerRow) {
         // استنى لحد ما كل الصفوف المطلوبة تكون موجودة فعليًا في الجدول
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        wait.until(d -> {
-            List<WebElement> rows = d.findElements(By.xpath("//tbody//tr[@role='row' and @data-pk]"));
-            return rows.size() >= numberOfRows;
-        });
+        wait.until(
+                d -> {
+                    List<WebElement> rows =
+                            d.findElements(By.xpath("//tbody//tr[@role='row' and @data-pk]"));
+                    return rows.size() >= numberOfRows;
+                });
 
         for (int rowIndex = 1; rowIndex <= numberOfRows; rowIndex++) {
             for (int i = 0; i < timesPerRow; i++) {
-                List<WebElement> rows = driver.findElements(By.xpath("//tbody//tr[@role='row' and @data-pk]"));
+                List<WebElement> rows =
+                        driver.findElements(By.xpath("//tbody//tr[@role='row' and @data-pk]"));
                 WebElement targetRow = rows.get(rowIndex - 1);
                 List<WebElement> buttons = targetRow.findElements(By.tagName("button"));
                 WebElement plusButton = buttons.get(1); // الزرار التاني = "+"
 
-                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", plusButton);
+                ((JavascriptExecutor) driver)
+                        .executeScript(
+                                "arguments[0].scrollIntoView({block: 'center'});", plusButton);
 
                 try {
                     Thread.sleep(500);
@@ -530,19 +506,24 @@ public GridActions grid() {
     public void ClickMinusButtonByRow(int numberOfRows, int timesPerRow) {
         // استنى لحد ما كل الصفوف المطلوبة تكون موجودة فعليًا في الجدول
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        wait.until(d -> {
-            List<WebElement> rows = d.findElements(By.xpath("//tbody//tr[@role='row' and @data-pk]"));
-            return rows.size() >= numberOfRows;
-        });
+        wait.until(
+                d -> {
+                    List<WebElement> rows =
+                            d.findElements(By.xpath("//tbody//tr[@role='row' and @data-pk]"));
+                    return rows.size() >= numberOfRows;
+                });
 
         for (int rowIndex = 1; rowIndex <= numberOfRows; rowIndex++) {
             for (int i = 0; i < timesPerRow; i++) {
-                List<WebElement> rows = driver.findElements(By.xpath("//tbody//tr[@role='row' and @data-pk]"));
+                List<WebElement> rows =
+                        driver.findElements(By.xpath("//tbody//tr[@role='row' and @data-pk]"));
                 WebElement targetRow = rows.get(rowIndex - 1);
                 List<WebElement> buttons = targetRow.findElements(By.tagName("button"));
                 WebElement minusButton = buttons.get(2); // الزرار التالت = "-"
 
-                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", minusButton);
+                ((JavascriptExecutor) driver)
+                        .executeScript(
+                                "arguments[0].scrollIntoView({block: 'center'});", minusButton);
 
                 try {
                     Thread.sleep(500);
@@ -555,10 +536,4 @@ public GridActions grid() {
             }
         }
     }
-
-
-
-
-
 }
-

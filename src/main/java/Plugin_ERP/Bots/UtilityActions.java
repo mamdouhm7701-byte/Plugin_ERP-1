@@ -17,59 +17,44 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-public class
-UtilityActions extends BaseAction {
+public class UtilityActions extends BaseAction {
 
-    public UtilityActions(
-            WebDriver driver,
-            WebDriverWait wait,
-            WaitMangment waitMangment
-    ) {
+    public UtilityActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment) {
         super(driver, wait, waitMangment);
     }
 
-public Void printLocatorCount(By locator) {
-    List<WebElement> elements = driver.findElements(locator);
+    public Void printLocatorCount(By locator) {
+        List<WebElement> elements = driver.findElements(locator);
 
-    for (int i = 0; i < elements.size(); i++) {
-        System.out.println(
-                i +
-                        " displayed=" + elements.get(i).isDisplayed() +
-                        " enabled=" + elements.get(i).isEnabled());
+        for (int i = 0; i < elements.size(); i++) {
+            System.out.println(
+                    i
+                            + " displayed="
+                            + elements.get(i).isDisplayed()
+                            + " enabled="
+                            + elements.get(i).isEnabled());
+        }
+        System.out.println(driver.findElements(locator).size());
+        // لطباعه عدد الانبوتات اللي موجوده في صفحة وحدات الصنف
+        List<WebElement> inputs = driver.findElements(locator);
+
+        System.out.println(inputs.size());
+        System.out.println(driver.findElements(locator).size());
+        WebElement input = driver.findElement(locator);
+        System.out.println(input.isDisplayed());
+        System.out.println(input.isEnabled());
+        WebElement e = driver.findElement(locator);
+
+        System.out.println("Displayed = " + e.isDisplayed());
+        System.out.println("Enabled   = " + e.isEnabled());
+        System.out.println("Readonly  = " + e.getAttribute("readonly"));
+        System.out.println("Value     = " + e.getAttribute("value"));
+        return null;
     }
-    System.out.println(
-            driver.findElements(
-                    locator
-            ).size()
-    );
-    //لطباعه عدد الانبوتات اللي موجوده في صفحة وحدات الصنف
-    List<WebElement> inputs = driver.findElements(locator
-    );
-
-    System.out.println(inputs.size());
-    System.out.println(
-            driver.findElements(
-                    locator
-            ).size()
-    );
-    WebElement input = driver.findElement(
-            locator
-    );
-    System.out.println(input.isDisplayed());
-    System.out.println(input.isEnabled());
-    WebElement e = driver.findElement(locator);
-
-    System.out.println("Displayed = " + e.isDisplayed());
-    System.out.println("Enabled   = " + e.isEnabled());
-    System.out.println("Readonly  = " + e.getAttribute("readonly"));
-    System.out.println("Value     = " + e.getAttribute("value"));
-    return null;
-}
 
     public String TypeTodayDate(String pattern) {
         return new SimpleDateFormat(pattern).format(new Date());
     }
-
 
     public String TypePastYearDate(String pattern) {
         Calendar calendar = Calendar.getInstance();
@@ -88,34 +73,28 @@ public Void printLocatorCount(By locator) {
 
     public double getNumber(By locator) {
 
-        String value = new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(driver -> {
+        String value =
+                new WebDriverWait(driver, Duration.ofSeconds(10))
+                        .until(
+                                driver -> {
+                                    String text = driver.findElement(locator).getAttribute("value");
 
-                    String text = driver.findElement(locator)
-                            .getAttribute("value");
+                                    return text != null && !text.trim().isEmpty() ? text : null;
+                                });
 
-                    return text != null && !text.trim().isEmpty()
-                            ? text
-                            : null;
-                });
-
-        return Double.parseDouble(
-                value.replace(",", "").trim()
-        );
+        return Double.parseDouble(value.replace(",", "").trim());
     }
 
     public BigDecimal getNormalizedAmount(By locator) {
 
-        String value = new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(driver -> {
+        String value =
+                new WebDriverWait(driver, Duration.ofSeconds(10))
+                        .until(
+                                driver -> {
+                                    String text = driver.findElement(locator).getAttribute("value");
 
-                    String text = driver.findElement(locator)
-                            .getAttribute("value");
-
-                    return text != null && !text.trim().isEmpty()
-                            ? text
-                            : null;
-                });
+                                    return text != null && !text.trim().isEmpty() ? text : null;
+                                });
 
         value = value.replace(",", "").trim();
 
@@ -130,24 +109,22 @@ public Void printLocatorCount(By locator) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
         // انتظر حتى تتحمل القيمة (مش فارغة بس)
-        wait.until(d -> {
-            try {
-                WebElement el = d.findElement(locator);
-                String val = el.getDomProperty("value");
-                return val != null && !val.trim().isEmpty();
-            } catch (Exception e) {
-                return false;
-            }
-        });
+        wait.until(
+                d -> {
+                    try {
+                        WebElement el = d.findElement(locator);
+                        String val = el.getDomProperty("value");
+                        return val != null && !val.trim().isEmpty();
+                    } catch (Exception e) {
+                        return false;
+                    }
+                });
 
         // تحقق من القيمة
-        WebElement element = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(locator)
-        );
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 
-        ((JavascriptExecutor) driver).executeScript(
-                "arguments[0].scrollIntoView({block:'center'});", element
-        );
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView({block:'center'});", element);
 
         String actualValue = normalizeNumber(element.getDomProperty("value"));
         expectedValue = normalizeNumber(expectedValue);
@@ -157,7 +134,6 @@ public Void printLocatorCount(By locator) {
 
         Assert.assertEquals(actualValue, expectedValue);
     }
-
 
     private String normalizeNumber(String value) {
 
@@ -177,9 +153,4 @@ public Void printLocatorCount(By locator) {
 
         return value;
     }
-
-
-
-
-
 }

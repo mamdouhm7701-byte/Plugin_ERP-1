@@ -10,15 +10,20 @@ import java.util.ArrayList;
 
 public class WaitMangment {
     private WebDriver driver;
+
     public WaitMangment(WebDriver driver) {
         this.driver = driver;
     }
-    public FluentWait<WebDriver>fluentWait() {
+
+    public FluentWait<WebDriver> fluentWait() {
         return new FluentWait<>(driver)
-                .withTimeout(java.time.Duration.ofSeconds(Long.parseLong(PropertyReader.getProperty("defultwait"))))
+                .withTimeout(
+                        java.time.Duration.ofSeconds(
+                                Long.parseLong(PropertyReader.getProperty("defultwait"))))
                 .pollingEvery(Duration.ofMillis(500))
                 .ignoreAll(getExceptions());
     }
+
     private ArrayList<Class<? extends Exception>> getExceptions() {
         ArrayList<Class<? extends Exception>> exceptions = new ArrayList<>();
         exceptions.add(org.openqa.selenium.NoSuchElementException.class);

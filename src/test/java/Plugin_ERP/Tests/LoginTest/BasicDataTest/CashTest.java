@@ -36,8 +36,7 @@ public class CashTest extends BaseTest {
 
         Assert.assertTrue(
                 cashPage.isSafeListStructureDisplayed(),
-                "WH-001: يجب أن تظهر أعمدة الكود واسم الخزنة ورقم الحساب مع أزرار التعديل والحذف"
-        );
+                "WH-001: يجب أن تظهر أعمدة الكود واسم الخزنة ورقم الحساب مع أزرار التعديل والحذف");
     }
 
     @Test(priority = 0)
@@ -55,8 +54,7 @@ public class CashTest extends BaseTest {
         String missingControls = cashPage.getMissingCashCreationFormControls();
         Assert.assertTrue(
                 missingControls.isEmpty(),
-                "WH-002: لم تظهر عناصر النموذج التالية: " + missingControls
-        );
+                "WH-002: لم تظهر عناصر النموذج التالية: " + missingControls);
         cashPage.ClickCloseButton();
     }
 
@@ -66,10 +64,11 @@ public class CashTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("الخزن")
     @Story("WH-014 إغلاق نافذة الإضافة دون حفظ")
-    @Description("يتحقق من إغلاق نافذة الإضافة بعد إدخال قيمة غير محفوظة، وعدم ظهورها ضمن نتائج القائمة.")
+    @Description(
+            "يتحقق من إغلاق نافذة الإضافة بعد إدخال قيمة غير محفوظة، وعدم ظهورها ضمن نتائج"
+                    + " القائمة.")
     public void WH_014_CloseCreationFormWithoutSaving() {
         CashPage cashPage = new CashPage(driver);
-
 
         cashPage.NavigationHelper(Pages.SAFES);
         String unsavedName = "خزنة غير محفوظة " + System.currentTimeMillis();
@@ -80,8 +79,7 @@ public class CashTest extends BaseTest {
 
         Assert.assertFalse(
                 cashPage.isSafeVisibleInSearchResults(unsavedName),
-                "WH-014: لا يجب إنشاء سجل عند إغلاق نافذة الإضافة دون حفظ"
-        );
+                "WH-014: لا يجب إنشاء سجل عند إغلاق نافذة الإضافة دون حفظ");
         cashPage.searchSafes("");
     }
 
@@ -91,7 +89,9 @@ public class CashTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("الخزن")
     @Story("WH-020 فتح سجل للتعديل مع تحميل البيانات الحالية")
-    @Description("يقارن كود الخزنة واسمها العربي ورقم الحساب في الصف بالقيم المحملة في نموذج التعديل، ثم يغلق دون حفظ.")
+    @Description(
+            "يقارن كود الخزنة واسمها العربي ورقم الحساب في الصف بالقيم المحملة في نموذج"
+                    + " التعديل، ثم يغلق دون حفظ.")
     public void WH_020_EditFormLoadsCurrentSafeName() {
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);
@@ -103,18 +103,15 @@ public class CashTest extends BaseTest {
         Assert.assertEquals(
                 cashPage.getSafeCodeInputValue(),
                 codeInList,
-                "WH-020/034: يجب أن يتطابق كود النموذج مع كود الصف"
-        );
+                "WH-020/034: يجب أن يتطابق كود النموذج مع كود الصف");
         Assert.assertEquals(
                 cashPage.getArabicNameInputValue().trim(),
                 nameInList,
-                "WH-020: يجب تحميل الاسم العربي الحالي من السجل المحدد"
-        );
+                "WH-020: يجب تحميل الاسم العربي الحالي من السجل المحدد");
         Assert.assertEquals(
                 cashPage.getSafeAccountValue(),
                 accountInList,
-                "WH-034: يجب أن يتطابق رقم الحساب في النموذج مع رقم الحساب في الصف"
-        );
+                "WH-034: يجب أن يتطابق رقم الحساب في النموذج مع رقم الحساب في الصف");
         cashPage.ClickCloseButton();
     }
 
@@ -124,7 +121,9 @@ public class CashTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("الخزن")
     @Story("WH-022 إلغاء التعديل دون حفظ")
-    @Description("يغيّر الاسم داخل نموذج التعديل ثم يغلقه دون حفظ، ويتأكد من بقاء الاسم الأصلي بعد إعادة فتح السجل.")
+    @Description(
+            "يغيّر الاسم داخل نموذج التعديل ثم يغلقه دون حفظ، ويتأكد من بقاء الاسم الأصلي بعد"
+                    + " إعادة فتح السجل.")
     public void WH_022_CancelSafeEditWithoutSaving() {
         CashPage cashPage = new CashPage(driver);
         String originalName;
@@ -140,18 +139,22 @@ public class CashTest extends BaseTest {
         Assert.assertEquals(
                 cashPage.getArabicNameInputValue().trim(),
                 originalName,
-                "WH-022: يجب أن تظل القيمة الأصلية بعد إغلاق التعديل دون حفظ"
-        );
+                "WH-022: يجب أن تظل القيمة الأصلية بعد إغلاق التعديل دون حفظ");
         cashPage.ClickCloseButton();
     }
 
-    @Test(enabled = false, description = "Replaced by WH-003 using unique data and exact-name cleanup")
+    @Test(
+            enabled = false,
+            description = "Replaced by WH-003 using unique data and exact-name cleanup")
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("Web Cloud")
     @Feature("الخزن")
     @Story("إضافة خزنة ببيانات صحيحة")
-    @Description("يتحقق هذا الاختبار من إضافة خزنة جديدة ببيانات صحيحة، ويشمل إدخال الاسم العربي والإنجليزي والملاحظات، واختيار رقم الحساب وتفعيل خانة (عام)، وحفظ البيانات والتحقق من إضافة السجل بنجاح.")
+    @Description(
+            "يتحقق هذا الاختبار من إضافة خزنة جديدة ببيانات صحيحة، ويشمل إدخال الاسم العربي"
+                    + " والإنجليزي والملاحظات، واختيار رقم الحساب وتفعيل خانة (عام)، وحفظ البيانات"
+                    + " والتحقق من إضافة السجل بنجاح.")
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void ValidCashTest() {
         System.out.println("Cash test started");
@@ -161,19 +164,23 @@ public class CashTest extends BaseTest {
         cashPage.AddArabicName("55");
         cashPage.AddEnglishName("55");
         cashPage.AddNoteForDealer("تست");
-        cashPage.SelectFromDropDawn("تسويق جوجل","رقم الحساب");
-        cashPage.SelectCheckboxByText("عام",true);
+        cashPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
+        cashPage.SelectCheckboxByText("عام", true);
         cashPage.ClickSaveButton();
         cashPage.AssertReceiptAdded("55");
     }
 
-    @Test(enabled = false, description = "Unsafe legacy test edited the last existing row; replaced by WH-021")
+    @Test(
+            enabled = false,
+            description = "Unsafe legacy test edited the last existing row; replaced by WH-021")
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("Web Cloud")
     @Feature("الخزن")
     @Story("تعديل خزنة ببيانات صحيحة")
-    @Description("يتحقق هذا الاختبار من تعديل خزنة موجودة ببيانات صحيحة، ويشمل تعديل الاسم العربي وحفظ التعديلات والتحقق من تحديث السجل بنجاح.")
+    @Description(
+            "يتحقق هذا الاختبار من تعديل خزنة موجودة ببيانات صحيحة، ويشمل تعديل الاسم العربي"
+                    + " وحفظ التعديلات والتحقق من تحديث السجل بنجاح.")
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void EditCash() {
         CashPage cashPage = new CashPage(driver);
@@ -184,7 +191,9 @@ public class CashTest extends BaseTest {
         cashPage.AssertReceiptAdded("معدل");
     }
 
-    @Test(enabled = false, description = "Unsafe legacy test deleted the last existing row; replaced by WH-023")
+    @Test(
+            enabled = false,
+            description = "Unsafe legacy test deleted the last existing row; replaced by WH-023")
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("Web Cloud")
@@ -204,7 +213,9 @@ public class CashTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("الخزن")
     @Story("WH-004 التحقق من إلزامية الاسم العربي")
-    @Description("يتحقق هذا الاختبار من أن النظام يمنع إضافة خزنة بدون إدخال الاسم العربي، ويتحقق من ظهور رسالة خطأ تفيد بأن الاسم العربي حقل إلزامي.")
+    @Description(
+            "يتحقق هذا الاختبار من أن النظام يمنع إضافة خزنة بدون إدخال الاسم العربي، ويتحقق"
+                    + " من ظهور رسالة خطأ تفيد بأن الاسم العربي حقل إلزامي.")
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void InvalidCashTest() {
         CashPage cashPage = new CashPage(driver);
@@ -215,9 +226,12 @@ public class CashTest extends BaseTest {
         cashPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
         int rowCountBefore = cashPage.getSafeTotalRowCount();
         cashPage.ClickSaveButton();
-        Assert.assertTrue(cashPage.IsArabicNameRequiredErrorDisplayed(),
+        Assert.assertTrue(
+                cashPage.IsArabicNameRequiredErrorDisplayed(),
                 "WH-004: يجب إظهار رسالة تحقق الاسم العربي الفارغ");
-        Assert.assertEquals(cashPage.getSafeTotalRowCount(), rowCountBefore,
+        Assert.assertEquals(
+                cashPage.getSafeTotalRowCount(),
+                rowCountBefore,
                 "WH-004: يجب ألا ينشأ سجل عند غياب الاسم العربي");
         cashPage.ClickCloseButton();
     }
@@ -238,9 +252,10 @@ public class CashTest extends BaseTest {
 
         Assert.assertTrue(
                 cashPage.IsArabicNameRequiredErrorDisplayed(),
-                "يجب أن يظهر تحقق الاسم العربي عند حفظ نموذج فارغ"
-        );
-        Assert.assertEquals(cashPage.getSafeTotalRowCount(), rowCountBefore,
+                "يجب أن يظهر تحقق الاسم العربي عند حفظ نموذج فارغ");
+        Assert.assertEquals(
+                cashPage.getSafeTotalRowCount(),
+                rowCountBefore,
                 "WH-006: يجب ألا ينشأ سجل عند ترك النموذج فارغًا");
         cashPage.ClickCloseButton();
     }
@@ -264,9 +279,10 @@ public class CashTest extends BaseTest {
 
         Assert.assertTrue(
                 cashPage.IsArabicNameRequiredErrorDisplayed(),
-                "يجب رفض الاسم العربي المكوّن من مسافات فقط"
-        );
-        Assert.assertEquals(cashPage.getSafeTotalRowCount(), rowCountBefore,
+                "يجب رفض الاسم العربي المكوّن من مسافات فقط");
+        Assert.assertEquals(
+                cashPage.getSafeTotalRowCount(),
+                rowCountBefore,
                 "WH-005: يجب ألا ينشأ سجل للاسم المكوّن من مسافات");
         cashPage.ClickCloseButton();
     }
@@ -287,7 +303,8 @@ public class CashTest extends BaseTest {
         try {
             cashPage.ClickNew();
             cashPage.ClickSaveButton();
-            Assert.assertTrue(cashPage.IsArabicNameRequiredErrorDisplayed(),
+            Assert.assertTrue(
+                    cashPage.IsArabicNameRequiredErrorDisplayed(),
                     "WH-013: يجب إظهار تحقق الاسم العربي قبل التصحيح");
 
             cashPage.AddArabicName(arabicName);
@@ -295,13 +312,15 @@ public class CashTest extends BaseTest {
             cashPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
             cashPage.ClickSaveButton();
             cashPage.searchSafes(arabicName);
-            Assert.assertEquals(cashPage.getExactSafeMatchCount(arabicName), 1,
-                    "WH-013: يجب حفظ الاسم المصحح");
+            Assert.assertEquals(
+                    cashPage.getExactSafeMatchCount(arabicName), 1, "WH-013: يجب حفظ الاسم المصحح");
 
             driver.navigate().refresh();
             cashPage.NavigationHelper(Pages.SAFES);
             cashPage.searchSafes(arabicName);
-            Assert.assertEquals(cashPage.getExactSafeMatchCount(arabicName), 1,
+            Assert.assertEquals(
+                    cashPage.getExactSafeMatchCount(arabicName),
+                    1,
                     "WH-013: يجب استمرار السجل بعد التحديث");
         } finally {
             cleanupTestSafe(cashPage, arabicName);
@@ -314,7 +333,9 @@ public class CashTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("الخزن")
     @Story("WH-007/008/010 Optional fields and unchecked General")
-    @Description("يتحقق من قبول الاسم العربي وحده عند ترك رقم الحساب والملاحظات فارغين وخيار عام غير محدد.")
+    @Description(
+            "يتحقق من قبول الاسم العربي وحده عند ترك رقم الحساب والملاحظات فارغين وخيار عام"
+                    + " غير محدد.")
     public void OptionalCashFieldsCanBeEmpty() {
         verifyOptionalSafeScenario(null, false, "WH-007/008/010");
     }
@@ -333,8 +354,7 @@ public class CashTest extends BaseTest {
 
         Assert.assertTrue(
                 cashPage.isCashCreationFormDisplayed(),
-                "يجب أن يظهر حقل الاسم العربي في نموذج إضافة الخزنة"
-        );
+                "يجب أن يظهر حقل الاسم العربي في نموذج إضافة الخزنة");
     }
 
     @Test(priority = 10)
@@ -349,9 +369,7 @@ public class CashTest extends BaseTest {
         cashPage.NavigationHelper(Pages.SAFES);
 
         Assert.assertTrue(
-                cashPage.isDataPresentInTable(),
-                "يجب أن تعرض قائمة الخزن بيانات السجلات"
-        );
+                cashPage.isDataPresentInTable(), "يجب أن تعرض قائمة الخزن بيانات السجلات");
     }
 
     @Test(priority = 11)
@@ -360,33 +378,32 @@ public class CashTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("الخزن")
     @Story("WH-015/016/018/019 Search safe list")
-    @Description("يتحقق من البحث بالكود والاسم، ومن ظهور نتائج فارغة لقيمة غير موجودة ثم استعادة القائمة بعد مسح البحث.")
+    @Description(
+            "يتحقق من البحث بالكود والاسم، ومن ظهور نتائج فارغة لقيمة غير موجودة ثم استعادة"
+                    + " القائمة بعد مسح البحث.")
     public void SearchSafesByCodeAndName() {
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);
 
         String visibleCode = cashPage.getFirstSafeCellByHeader("الكود");
         cashPage.searchSafes(visibleCode);
-        Assert.assertTrue(cashPage.isSafeVisibleInSearchResults(visibleCode),
+        Assert.assertTrue(
+                cashPage.isSafeVisibleInSearchResults(visibleCode),
                 "يجب إظهار الخزنة عند البحث بكود موجود في القائمة");
 
         cashPage.searchSafes("الخزنة الرئيسية");
         Assert.assertTrue(
                 cashPage.isSafeVisibleInSearchResults("الخزنة الرئيسية"),
-                "يجب إظهار الخزنة المطابقة للاسم العربي"
-        );
+                "يجب إظهار الخزنة المطابقة للاسم العربي");
 
         cashPage.searchSafes("XYZ999");
         Assert.assertFalse(
                 cashPage.isSafeVisibleInSearchResults("XYZ999"),
-                "يجب ألا تظهر سجلات عند البحث عن قيمة غير موجودة"
-        );
+                "يجب ألا تظهر سجلات عند البحث عن قيمة غير موجودة");
 
         cashPage.searchSafes("");
         Assert.assertTrue(
-                cashPage.getVisibleSafeRowCount() > 0,
-                "يجب أن تعود سجلات القائمة بعد مسح البحث"
-        );
+                cashPage.getVisibleSafeRowCount() > 0, "يجب أن تعود سجلات القائمة بعد مسح البحث");
     }
 
     @Test(priority = 12)
@@ -402,10 +419,12 @@ public class CashTest extends BaseTest {
         cashPage.openFirstSafeForEdit();
         String englishName = cashPage.getEnglishNameInputValue().trim();
         cashPage.ClickCloseButton();
-        Assert.assertFalse(englishName.isBlank(), "WH-017: يجب توفر اسم إنجليزي في السجل المستخدم للبحث");
+        Assert.assertFalse(
+                englishName.isBlank(), "WH-017: يجب توفر اسم إنجليزي في السجل المستخدم للبحث");
 
         cashPage.searchSafes(englishName);
-        Assert.assertTrue(cashPage.isSafeVisibleInSearchResults(englishName),
+        Assert.assertTrue(
+                cashPage.isSafeVisibleInSearchResults(englishName),
                 "WH-017: يجب أن تظهر الخزنة عند البحث بالاسم الإنجليزي");
         cashPage.searchSafes("");
     }
@@ -416,7 +435,9 @@ public class CashTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("الخزن")
     @Story("WH-028 ترتيب قائمة الخزن")
-    @Description("يتحقق من إمكانية تغيير ترتيب القائمة بالنقر على عنوان عمود الكود وملاحظة تغير ترتيب الصفوف.")
+    @Description(
+            "يتحقق من إمكانية تغيير ترتيب القائمة بالنقر على عنوان عمود الكود وملاحظة تغير"
+                    + " ترتيب الصفوف.")
     public void WH_028_SafeListCanBeSortedByCode() {
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);
@@ -432,13 +453,11 @@ public class CashTest extends BaseTest {
         Assert.assertEquals(
                 ascendingCodes,
                 cashPage.sortCodes(ascendingCodes, true),
-                "WH-028: يجب أن تكون القيم مرتبة تصاعديًا بعد النقرة الأولى"
-        );
+                "WH-028: يجب أن تكون القيم مرتبة تصاعديًا بعد النقرة الأولى");
         Assert.assertEquals(
                 descendingCodes,
                 cashPage.sortCodes(descendingCodes, false),
-                "WH-028: يجب أن تكون القيم مرتبة تنازليًا بعد النقرة الثانية"
-        );
+                "WH-028: يجب أن تكون القيم مرتبة تنازليًا بعد النقرة الثانية");
     }
 
     @Test(priority = 14)
@@ -447,7 +466,9 @@ public class CashTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("الخزن")
     @Story("WH-029 تغيير عدد الصفوف المعروضة")
-    @Description("يتحقق من أن تغيير اختيار حجم الصفحة يغير عدد الصفوف المعروضة إلى القيمة المختارة.")
+    @Description(
+            "يتحقق من أن تغيير اختيار حجم الصفحة يغير عدد الصفوف المعروضة إلى القيمة"
+                    + " المختارة.")
     public void WH_029_ChangingPageSizeUpdatesVisibleRows() {
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);
@@ -455,14 +476,14 @@ public class CashTest extends BaseTest {
         int rowsBeforeChange = cashPage.getVisibleSafeRowCount();
         int availablePageSize = cashPage.getAlternativeSafePageSize(defaultPageSize);
 
-        Assert.assertTrue(availablePageSize > defaultPageSize,
+        Assert.assertTrue(
+                availablePageSize > defaultPageSize,
                 "WH-029: يلزم وجود خيار حجم صفحة أكبر من القيمة الحالية");
         cashPage.selectSafePageSize(availablePageSize);
         Assert.assertEquals(
                 cashPage.getVisibleSafeRowCount(),
                 Math.min(rowsBeforeChange, availablePageSize),
-                "WH-029: يجب أن يتغير عدد الصفوف حسب حجم الصفحة أو إجمالي السجلات المتاحة"
-        );
+                "WH-029: يجب أن يتغير عدد الصفوف حسب حجم الصفحة أو إجمالي السجلات المتاحة");
     }
 
     @Test(priority = 15)
@@ -476,7 +497,8 @@ public class CashTest extends BaseTest {
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);
         if (!cashPage.isSafeNextPageEnabled()) {
-            Assert.assertFalse(cashPage.isSafeNextPageEnabled(),
+            Assert.assertFalse(
+                    cashPage.isSafeNextPageEnabled(),
                     "WH-030: لا يجب تفعيل التالي عند عدم توفر صفحة أخرى");
             return;
         }
@@ -484,11 +506,13 @@ public class CashTest extends BaseTest {
         String firstPageCode = cashPage.getFirstSafeCellByHeader("الكود");
         cashPage.goToNextSafePage();
         String secondPageCode = cashPage.getFirstSafeCellByHeader("الكود");
-        Assert.assertNotEquals(secondPageCode, firstPageCode,
-                "WH-030: يجب أن تعرض الصفحة التالية سجلات مختلفة");
+        Assert.assertNotEquals(
+                secondPageCode, firstPageCode, "WH-030: يجب أن تعرض الصفحة التالية سجلات مختلفة");
 
         cashPage.goToPreviousSafePage();
-        Assert.assertEquals(cashPage.getFirstSafeCellByHeader("الكود"), firstPageCode,
+        Assert.assertEquals(
+                cashPage.getFirstSafeCellByHeader("الكود"),
+                firstPageCode,
                 "WH-030: الرجوع يجب أن يعرض سجلات الصفحة الأولى");
     }
 
@@ -505,13 +529,25 @@ public class CashTest extends BaseTest {
         String englishName = "Automation Safe " + suffix;
         cashPage.NavigationHelper(Pages.SAFES);
         try {
-            createSafe(cashPage, arabicName, englishName, "تسويق جوجل", false, "Created by automation");
+            createSafe(
+                    cashPage,
+                    arabicName,
+                    englishName,
+                    "تسويق جوجل",
+                    false,
+                    "Created by automation");
             cashPage.openSafeForEditByName(arabicName);
-            Assert.assertEquals(cashPage.getArabicNameInputValue().trim(), arabicName,
+            Assert.assertEquals(
+                    cashPage.getArabicNameInputValue().trim(),
+                    arabicName,
                     "WH-003: يجب حفظ الاسم العربي المدخل");
-            Assert.assertEquals(cashPage.getEnglishNameInputValue().trim(), englishName,
+            Assert.assertEquals(
+                    cashPage.getEnglishNameInputValue().trim(),
+                    englishName,
                     "WH-003: يجب حفظ الاسم الإنجليزي المدخل");
-            Assert.assertEquals(cashPage.isSafeGeneralChecked(), false,
+            Assert.assertEquals(
+                    cashPage.isSafeGeneralChecked(),
+                    false,
                     "WH-003: يجب أن تبقى خانة عام غير محددة");
             cashPage.ClickCloseButton();
         } finally {
@@ -559,7 +595,6 @@ public class CashTest extends BaseTest {
         verifyOptionalSafeScenario("تسويق جوجل", false, "WH-010");
     }
 
-
     @Test(priority = 22)
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
@@ -578,7 +613,9 @@ public class CashTest extends BaseTest {
             cashPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
             cashPage.clickSaveTwiceRapidly();
             cashPage.searchSafes(arabicName);
-            Assert.assertEquals(cashPage.getExactSafeMatchCount(arabicName), 1,
+            Assert.assertEquals(
+                    cashPage.getExactSafeMatchCount(arabicName),
+                    1,
                     "WH-012: يجب إنشاء سجل واحد فقط لكل حفظ ناجح");
         } finally {
             cleanupTestSafe(cashPage, arabicName);
@@ -603,7 +640,9 @@ public class CashTest extends BaseTest {
             cashPage.AddArabicName(editedName);
             cashPage.ClickSaveButton();
             cashPage.searchSafes(editedName);
-            Assert.assertEquals(cashPage.getExactSafeMatchCount(editedName), 1,
+            Assert.assertEquals(
+                    cashPage.getExactSafeMatchCount(editedName),
+                    1,
                     "WH-021: يجب تحديث الاسم العربي في السجل المملوك للاختبار");
         } finally {
             cleanupTestSafe(cashPage, editedName);
@@ -621,14 +660,22 @@ public class CashTest extends BaseTest {
         String safeName = "خزنة حذف آلية " + System.currentTimeMillis();
         cashPage.NavigationHelper(Pages.SAFES);
         try {
-            createSafe(cashPage, safeName, "Delete Safe " + System.currentTimeMillis(), "تسويق جوجل", false, "");
+            createSafe(
+                    cashPage,
+                    safeName,
+                    "Delete Safe " + System.currentTimeMillis(),
+                    "تسويق جوجل",
+                    false,
+                    "");
             cashPage.searchSafes(safeName);
             cashPage.requestDeleteSafeByName(safeName);
             cashPage.confirmSafeDelete();
             driver.navigate().refresh();
             cashPage.NavigationHelper(Pages.SAFES);
             cashPage.searchSafes(safeName);
-            Assert.assertEquals(cashPage.getExactSafeMatchCount(safeName), 0,
+            Assert.assertEquals(
+                    cashPage.getExactSafeMatchCount(safeName),
+                    0,
                     "WH-023: يجب اختفاء سجل الاختبار بعد تأكيد حذفه");
         } finally {
             cleanupTestSafe(cashPage, safeName);
@@ -646,11 +693,19 @@ public class CashTest extends BaseTest {
         String safeName = "خزنة إلغاء حذف آلية " + System.currentTimeMillis();
         cashPage.NavigationHelper(Pages.SAFES);
         try {
-            createSafe(cashPage, safeName, "Cancel Delete " + System.currentTimeMillis(), "تسويق جوجل", false, "");
+            createSafe(
+                    cashPage,
+                    safeName,
+                    "Cancel Delete " + System.currentTimeMillis(),
+                    "تسويق جوجل",
+                    false,
+                    "");
             cashPage.searchSafes(safeName);
             cashPage.requestDeleteSafeByName(safeName);
             cashPage.cancelSafeDelete();
-            Assert.assertEquals(cashPage.getExactSafeMatchCount(safeName), 1,
+            Assert.assertEquals(
+                    cashPage.getExactSafeMatchCount(safeName),
+                    1,
                     "WH-024: يجب أن يبقى سجل الاختبار بعد إلغاء الحذف");
         } finally {
             cleanupTestSafe(cashPage, safeName);
@@ -688,11 +743,19 @@ public class CashTest extends BaseTest {
         String safeName = "خزنة إعادة فتح آلية " + System.currentTimeMillis();
         cashPage.NavigationHelper(Pages.SAFES);
         try {
-            createSafe(cashPage, safeName, "Reopen Safe " + System.currentTimeMillis(), "تسويق جوجل", false, "");
+            createSafe(
+                    cashPage,
+                    safeName,
+                    "Reopen Safe " + System.currentTimeMillis(),
+                    "تسويق جوجل",
+                    false,
+                    "");
             driver.navigate().refresh();
             cashPage.NavigationHelper(Pages.SAFES);
             cashPage.searchSafes(safeName);
-            Assert.assertEquals(cashPage.getExactSafeMatchCount(safeName), 1,
+            Assert.assertEquals(
+                    cashPage.getExactSafeMatchCount(safeName),
+                    1,
                     "WH-035: يجب أن يظهر سجل الاختبار مرة واحدة بعد إعادة فتح القائمة");
         } finally {
             cleanupTestSafe(cashPage, safeName);
@@ -719,8 +782,7 @@ public class CashTest extends BaseTest {
         byte[] header = Files.readAllBytes(downloadedFile);
         Assert.assertTrue(
                 header.length > 4 && new String(header, 0, 4).equals("%PDF"),
-                "الملف الناتج ليس PDF صالحًا"
-        );
+                "الملف الناتج ليس PDF صالحًا");
     }
 
     @Test(priority = 30)
@@ -737,17 +799,20 @@ public class CashTest extends BaseTest {
         Set<String> existingFiles = listFileNames(downloadDirectory);
 
         cashPage.exportSafes("xls");
-        Path downloadedFile = waitForNewExport(downloadDirectory, existingFiles, Set.of(".xls", ".xlsx"));
+        Path downloadedFile =
+                waitForNewExport(downloadDirectory, existingFiles, Set.of(".xls", ".xlsx"));
 
         Assert.assertNotNull(downloadedFile, "لم يتم تنزيل ملف Excel للخزن");
-        Assert.assertTrue(
-                Files.size(downloadedFile) > 0,
-                "ملف Excel الناتج فارغ"
-        );
+        Assert.assertTrue(Files.size(downloadedFile) > 0, "ملف Excel الناتج فارغ");
     }
 
-    private void createSafe(CashPage cashPage, String arabicName, String englishName,
-                            String accountName, boolean general, String notes) {
+    private void createSafe(
+            CashPage cashPage,
+            String arabicName,
+            String englishName,
+            String accountName,
+            boolean general,
+            String notes) {
         cashPage.ClickNew();
         cashPage.AddArabicName(arabicName);
         cashPage.AddEnglishName(englishName);
@@ -760,7 +825,9 @@ public class CashTest extends BaseTest {
         }
         cashPage.ClickSaveButton();
         cashPage.searchSafes(arabicName);
-        Assert.assertEquals(cashPage.getExactSafeMatchCount(arabicName), 1,
+        Assert.assertEquals(
+                cashPage.getExactSafeMatchCount(arabicName),
+                1,
                 "يجب إنشاء سجل الاختبار الفريد مرة واحدة: " + arabicName);
     }
 
@@ -770,15 +837,26 @@ public class CashTest extends BaseTest {
         String safeName = "خزنة " + tcId + " " + suffix;
         cashPage.NavigationHelper(Pages.SAFES);
         try {
-            createSafe(cashPage, safeName, "Automation " + tcId + " " + suffix,
-                    accountName, general, "");
+            createSafe(
+                    cashPage,
+                    safeName,
+                    "Automation " + tcId + " " + suffix,
+                    accountName,
+                    general,
+                    "");
             cashPage.openSafeForEditByName(safeName);
-            Assert.assertEquals(cashPage.getArabicNameInputValue().trim(), safeName,
+            Assert.assertEquals(
+                    cashPage.getArabicNameInputValue().trim(),
+                    safeName,
                     tcId + ": يجب أن تظهر بيانات السجل بعد الحفظ");
-            Assert.assertEquals(cashPage.isSafeGeneralChecked(), general,
+            Assert.assertEquals(
+                    cashPage.isSafeGeneralChecked(),
+                    general,
                     tcId + ": يجب حفظ حالة خيار عام كما تم تحديدها");
             if ("WH-010".equals(tcId)) {
-                Assert.assertEquals(cashPage.getSafeAccountValue(), accountName,
+                Assert.assertEquals(
+                        cashPage.getSafeAccountValue(),
+                        accountName,
                         "WH-010: يجب أن يبقى الحساب المختار محفوظًا");
             }
             cashPage.ClickCloseButton();
@@ -793,12 +871,19 @@ public class CashTest extends BaseTest {
         String safeName = "خزنة استمرارية " + tcId + " " + suffix;
         cashPage.NavigationHelper(Pages.SAFES);
         try {
-            createSafe(cashPage, safeName, "Persistence " + tcId + " " + suffix,
-                    "تسويق جوجل", false, "");
+            createSafe(
+                    cashPage,
+                    safeName,
+                    "Persistence " + tcId + " " + suffix,
+                    "تسويق جوجل",
+                    false,
+                    "");
             driver.navigate().refresh();
             cashPage.NavigationHelper(Pages.SAFES);
             cashPage.searchSafes(safeName);
-            Assert.assertEquals(cashPage.getExactSafeMatchCount(safeName), 1,
+            Assert.assertEquals(
+                    cashPage.getExactSafeMatchCount(safeName),
+                    1,
                     tcId + ": يجب أن يبقى السجل ظاهرًا مرة واحدة بعد التحديث");
         } finally {
             cleanupTestSafe(cashPage, safeName);
@@ -822,24 +907,25 @@ public class CashTest extends BaseTest {
             return;
         }
         if (matches != 1) {
-            throw new AssertionError("Cleanup refused: expected exactly one owned test safe, found " + matches);
+            throw new AssertionError(
+                    "Cleanup refused: expected exactly one owned test safe, found " + matches);
         }
         cashPage.requestDeleteSafeByName(safeName);
         cashPage.confirmSafeDelete();
         driver.navigate().refresh();
         cashPage.NavigationHelper(Pages.SAFES);
         cashPage.searchSafes(safeName);
-        Assert.assertEquals(cashPage.getExactSafeMatchCount(safeName), 0,
+        Assert.assertEquals(
+                cashPage.getExactSafeMatchCount(safeName),
+                0,
                 "يجب تنظيف سجل الاختبار المملوك: " + safeName);
         cashPage.searchSafes("");
     }
 
     private Path prepareExportDirectory() throws IOException {
-        Path directory = Path.of(
-                System.getProperty("user.dir"),
-                "target",
-                "cash-export-downloads"
-        ).toAbsolutePath();
+        Path directory =
+                Path.of(System.getProperty("user.dir"), "target", "cash-export-downloads")
+                        .toAbsolutePath();
         Files.createDirectories(directory);
         return directory;
     }
@@ -852,21 +938,30 @@ public class CashTest extends BaseTest {
         }
     }
 
-    private Path waitForNewExport(Path directory, Set<String> existingFiles, Set<String> extensions) {
-        return new org.openqa.selenium.support.ui.WebDriverWait(driver, Duration.ofSeconds(30)).until(d -> {
-            try (var files = Files.list(directory)) {
-                return files
-                        .filter(Files::isRegularFile)
-                        .filter(file -> !existingFiles.contains(file.getFileName().toString()))
-                        .filter(file -> !file.getFileName().toString().endsWith(".crdownload"))
-                        .filter(this::isNonEmptyFile)
-                        .filter(file -> matchesExportType(file, extensions))
-                        .findFirst()
-                        .orElse(null);
-            } catch (IOException e) {
-                return null;
-            }
-        });
+    private Path waitForNewExport(
+            Path directory, Set<String> existingFiles, Set<String> extensions) {
+        return new org.openqa.selenium.support.ui.WebDriverWait(driver, Duration.ofSeconds(30))
+                .until(
+                        d -> {
+                            try (var files = Files.list(directory)) {
+                                return files.filter(Files::isRegularFile)
+                                        .filter(
+                                                file ->
+                                                        !existingFiles.contains(
+                                                                file.getFileName().toString()))
+                                        .filter(
+                                                file ->
+                                                        !file.getFileName()
+                                                                .toString()
+                                                                .endsWith(".crdownload"))
+                                        .filter(this::isNonEmptyFile)
+                                        .filter(file -> matchesExportType(file, extensions))
+                                        .findFirst()
+                                        .orElse(null);
+                            } catch (IOException e) {
+                                return null;
+                            }
+                        });
     }
 
     private boolean isNonEmptyFile(Path file) {
@@ -894,25 +989,27 @@ public class CashTest extends BaseTest {
             }
 
             if (extensions.contains(".xls") || extensions.contains(".xlsx")) {
-                boolean xlsxZip = header.length >= 4
-                        && header[0] == 'P'
-                        && header[1] == 'K'
-                        && header[2] == 3
-                        && header[3] == 4;
-                boolean legacyXls = header.length >= 8
-                        && (header[0] & 0xff) == 0xd0
-                        && (header[1] & 0xff) == 0xcf
-                        && (header[2] & 0xff) == 0x11
-                        && (header[3] & 0xff) == 0xe0
-                        && (header[4] & 0xff) == 0xa1
-                        && (header[5] & 0xff) == 0xb1
-                        && (header[6] & 0xff) == 0x1a
-                        && (header[7] & 0xff) == 0xe1;
+                boolean xlsxZip =
+                        header.length >= 4
+                                && header[0] == 'P'
+                                && header[1] == 'K'
+                                && header[2] == 3
+                                && header[3] == 4;
+                boolean legacyXls =
+                        header.length >= 8
+                                && (header[0] & 0xff) == 0xd0
+                                && (header[1] & 0xff) == 0xcf
+                                && (header[2] & 0xff) == 0x11
+                                && (header[3] & 0xff) == 0xe0
+                                && (header[4] & 0xff) == 0xa1
+                                && (header[5] & 0xff) == 0xb1
+                                && (header[6] & 0xff) == 0x1a
+                                && (header[7] & 0xff) == 0xe1;
                 return xlsxZip || legacyXls;
             }
             return false;
         } catch (IOException e) {
             return false;
         }
-}
+    }
 }

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!--
+  تشغيل مستقل لتغطية نقاط البيع كاملة: 15 حالة واجهة من الكلاس الحالي.
+  يشمل النقدي والآجل والمخزون والتعديل والحذف والطباعة؛ تعليق السلة محلي دون ترحيل.
+  للتغطية المشتركة والتنظيف المحلي استخدم special-sales-testng.xml بدلاً من جمعهما معاً.
+-->
+<suite name="Point of sale - Standalone coverage" parallel="none" configfailurepolicy="continue">
+    <test name="Point of sale - Full page coverage" preserve-order="true">
+        <classes>
+            <class name="SpecialSalesTest.PointOfSaleTest"/>
+        </classes>
+    </test>
+</suite>

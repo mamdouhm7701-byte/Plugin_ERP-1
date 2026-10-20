@@ -25,21 +25,23 @@ public class PropertyReader {
 
             Collection<File> propertiesFiles =
                     FileUtils.listFiles(
-                            new File("src/main/resources"),
-                            new String[]{"properties"},
-                            true
-                    );
+                            new File("src/main/resources"), new String[] {"properties"}, true);
 
-            propertiesFiles.forEach(file -> {
-                try {
-                    properties.load(new InputStreamReader(
-                            FileUtils.openInputStream(file),
-                            StandardCharsets.UTF_8
-                    ));
-                } catch (IOException e) {
-                    LogUtils.info("Error loading properties file: " + file.getName() + " -); " + e.getMessage());
-                }
-            });
+            propertiesFiles.forEach(
+                    file -> {
+                        try {
+                            properties.load(
+                                    new InputStreamReader(
+                                            FileUtils.openInputStream(file),
+                                            StandardCharsets.UTF_8));
+                        } catch (IOException e) {
+                            LogUtils.info(
+                                    "Error loading properties file: "
+                                            + file.getName()
+                                            + " -); "
+                                            + e.getMessage());
+                        }
+                    });
 
             properties.putAll(System.getProperties());
             System.getProperties().putAll(properties);
@@ -55,6 +57,7 @@ public class PropertyReader {
     public static String getProperty(String key) {
         return System.getProperty(key);
     }
+
     public static String getApplicationUrl() {
 
         String environment = getProperty("Environment");
@@ -67,6 +70,7 @@ public class PropertyReader {
 
         return getProperty(tenant);
     }
+
     public static String getValidUsername() {
 
         String environment = PropertyReader.getProperty("Environment");
@@ -91,38 +95,29 @@ public class PropertyReader {
         return getProperty(tenant + ".Password");
     }
 
-
-
     public class PolicyManager {
 
-        private PolicyManager(){}
+        private PolicyManager() {}
 
         public static TaxMode getTaxMode() {
-            return TaxMode.valueOf(
-                    PropertyReader.getProperty("TaxMode").trim().toUpperCase()
-            );
+            return TaxMode.valueOf(PropertyReader.getProperty("TaxMode").trim().toUpperCase());
         }
 
         public static DiscountType getDiscountType() {
             return DiscountType.valueOf(
-                    PropertyReader.getProperty("DiscountType").trim().toUpperCase()
-            );
+                    PropertyReader.getProperty("DiscountType").trim().toUpperCase());
         }
 
         public static BigDecimal getTaxPercentage() {
-            return new BigDecimal(
-                    PropertyReader.getProperty("TaxPercentage")
-            );
+            return new BigDecimal(PropertyReader.getProperty("TaxPercentage"));
         }
 
         public static int getPrecision() {
-            return Integer.parseInt(
-                    PropertyReader.getProperty("Precision")
-            );
+            return Integer.parseInt(PropertyReader.getProperty("Precision"));
         }
 
         public static boolean isExclusive() {
-            return getTaxMode()==TaxMode.EXCLUSIVE;
+            return getTaxMode() == TaxMode.EXCLUSIVE;
         }
     }
 }

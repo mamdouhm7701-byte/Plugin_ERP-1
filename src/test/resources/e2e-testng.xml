@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!--
+  E2E رحلة عمل مترابطة من البداية للنهاية بنفس السجلات بين الشاشات.
+  الفائدة: كشف أخطاء تحويل المستند وربط المصدر والطرف وأثر المخزون والحسابات.
+  إنشاء مستندات العمل وحفظها يتم عبر الواجهة؛ API لتجهيز المراجع والتحقق والتنظيف فقط.
+  36 رحلة: 29 رحلة قائمة، و3 لنقاط البيع و4 للمطعم.
+  نقاط البيع: حفظ وتعديل، حفظ وحذف، حفظ وطباعة إيصال. المطعم: تعليق واسترجاع وتعديل،
+  تعليق ودفع، تعليق ودفع وحذف، وتعليق ودفع وطباعة دون خصم المخزون مرة أخرى.
+  حالات القناة والباركود والسلة فقط لا تدخل E2E لمجرد أنها تعمل على شاشة الكاشير.
+  جدول الرحلات والأرصدة المتوقعة في docs/testing/E2E_COVERAGE_AR.md.
+  كل رحلة مستقلة داخل دالة واحدة؛ لا تعتمد على بيانات خلفتها دالة أخرى أو ترتيب تشغيلها.
+  المراجع لا يشترط إدخالها يدوياً؛ هذه ليست تغطية لكل رحلات ERP أو دفع خارجي أو إقرار ضريبي.
+  أخطاء التطبيق المعروفة مثل كمية مرتجع الشراء تبقى فشلاً ظاهراً ولا يتم استبعادها.
+  التشغيل: mvn '-Dsurefire.suiteXmlFiles=src/test/resources/e2e-testng.xml' test
+-->
+<suite name="E2E - Linked business workflows" parallel="none" configfailurepolicy="continue">
+    <test name="ERP linked business journeys" preserve-order="true">
+        <classes>
+            <class name="Invoice.SalesEndToEndTest"/>
+            <class name="Invoice.SalesSettlementEndToEndTest"/>
+            <class name="Purches.PurchaseEndToEndTest"/>
+            <class name="Purches.PurchaseSettlementEndToEndTest"/>
+            <class name="Purches.SupplyChainEndToEndTest"/>
+            <class name="Purches.PurchaseLinkedCoverageTest">
+                <methods>
+                    <include name="ownedOrderConvertsToPurchase"/>
+                    <include name="linkedReturnKeepsOriginalQuantity"/>
+                </methods>
+            </class>
+            <class name="StoreTest.ManufacturingSalesEndToEndTest">
+                <methods>
+                    <include name="manufacturingThenSellingConsumesComponentsOnlyOnce"/>
+                    <include name="manufacturingTransferAndFractionalSaleRetainUnsoldProduct"/>
+                </methods>
+            </class>
+            <class name="StoreTest.WarehouseEndToEndTest">
+                <methods>
+                    <include name="receiptThenTransferThenIssueFromDestination"/>
+                    <include name="transferThenReverseTransferRestoresBothStores"/>
+                    <include name="receiptTransferAndDamagePreserveUnrelatedStock"/>
+                    <include name="manufactureThenTransferThenIssueFinishedProduct"/>
+                    <include name="fractionalRoundTripPreservesBothStoreBalances"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="E2E - Point of sale invoice journeys" preserve-order="true">
+        <classes>
+            <class name="SpecialSalesTest.PointOfSaleTest">
+                <methods>
+                    <include name="editingSavedQuantityAppliesOnlyDifference"/>
+                    <include name="deletingSavedInvoiceRestoresStock"/>
+                    <include name="printsSavedReceiptWithoutPostingAgain"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="E2E - Restaurant held order journeys" preserve-order="true">
+        <classes>
+            <class name="SpecialSalesTest.RestaurantInvoiceTest">
+                <methods>
+                    <include name="addingToHoldDeductsOnlyIncrement"/>
+                    <include name="payingHoldDoesNotDeductAgain"/>
+                    <include name="deletingPaidOrderRestoresStock"/>
+                    <include name="printsPaidReceiptWithoutPostingAgain"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

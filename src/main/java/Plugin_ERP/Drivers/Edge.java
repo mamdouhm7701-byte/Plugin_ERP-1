@@ -10,11 +10,10 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URL;
 
-public class Edge extends AbstractDriver{
+public class Edge extends AbstractDriver {
 
-    private EdgeOptions getOptions()
+    private EdgeOptions getOptions() { // options
 
-    {//options
         EdgeOptions options = new EdgeOptions();
         options.addArguments("--start-maximized");
         options.addArguments("--remote-allow-origins=*");
@@ -33,7 +32,6 @@ public class Edge extends AbstractDriver{
         }
         options.setAcceptInsecureCerts(true);
         options.setPageLoadStrategy(PageLoadStrategy.EAGER);
-
 
         return options;
     }

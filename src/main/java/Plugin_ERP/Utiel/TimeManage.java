@@ -5,12 +5,12 @@ import java.time.Instant;
 import java.util.Date;
 
 public class TimeManage {
-//screenshot-Log_report
+    // screenshot-Log_report
     public static String getTimestamp() {
-        return new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
-                .format(new Date());
+        return new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
     }
-//unique data
+
+    // unique data
     public static String getSimpleTimestamp() {
         return Long.toString(System.currentTimeMillis());
     }

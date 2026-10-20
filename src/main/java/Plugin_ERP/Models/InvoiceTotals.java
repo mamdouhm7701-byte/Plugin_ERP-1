@@ -52,12 +52,17 @@ public class InvoiceTotals {
 
     @Override
     public String toString() {
-        return "InvoiceTotals{" +
-                "total=" + total +
-                ", discount=" + discount +
-                ", beforeTax=" + beforeTax +
-                ", tax=" + tax +
-                ", net=" + net +
-                '}';
+        return "InvoiceTotals{"
+                + "total="
+                + total
+                + ", discount="
+                + discount
+                + ", beforeTax="
+                + beforeTax
+                + ", tax="
+                + tax
+                + ", net="
+                + net
+                + '}';
     }
 }

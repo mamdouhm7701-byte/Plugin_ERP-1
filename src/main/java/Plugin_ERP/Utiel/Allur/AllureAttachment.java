@@ -1,4 +1,3 @@
 package Plugin_ERP.Utiel.Allur;
 
-public class AllureAttachment {
-}
+public class AllureAttachment {}

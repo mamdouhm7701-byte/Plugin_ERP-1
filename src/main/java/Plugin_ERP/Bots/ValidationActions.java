@@ -11,28 +11,23 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class ValidationActions extends BaseAction{
+public class ValidationActions extends BaseAction {
 
-    public ValidationActions(
-            WebDriver driver,
-            WebDriverWait wait,
-            WaitMangment waitMangment
-    ) {
+    public ValidationActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment) {
         super(driver, wait, waitMangment);
     }
 
     private String getText(By locator) {
         WebElement element = driver.findElement(locator);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", element);
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView({block:'center'});", element);
         wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
         wait.until(ExpectedConditions.presenceOfElementLocated(locator));
         return element.getText();
     }
 
-
     public String normalizePrice(String value) {
-        return value
-                .replaceAll("[\\u200E\\u200F\\u202A-\\u202E]", "") // إزالة RTL/LTR marks
+        return value.replaceAll("[\\u200E\\u200F\\u202A-\\u202E]", "") // إزالة RTL/LTR marks
                 .replace(",", "")
                 .replace(".000000", "")
                 .replace(".00000", "")
@@ -49,20 +44,18 @@ public class ValidationActions extends BaseAction{
         date = date.trim();
 
         DateTimeFormatter[] formats = {
-                DateTimeFormatter.ofPattern("yyyy-MM-dd"),
-                DateTimeFormatter.ofPattern("dd-MM-yyyy"),
-                DateTimeFormatter.ofPattern("dd/MM/yyyy"),
-                DateTimeFormatter.ofPattern("d/M/yyyy"),
-                DateTimeFormatter.ofPattern("yyyy/MM/dd")
+            DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+            DateTimeFormatter.ofPattern("dd-MM-yyyy"),
+            DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+            DateTimeFormatter.ofPattern("d/M/yyyy"),
+            DateTimeFormatter.ofPattern("yyyy/MM/dd")
         };
 
         for (DateTimeFormatter format : formats) {
             try {
                 LocalDate parsedDate = LocalDate.parse(date, format);
 
-                return parsedDate.format(
-                        DateTimeFormatter.ofPattern("yyyyMMdd")
-                );
+                return parsedDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
             } catch (Exception ignored) {
             }
@@ -73,35 +66,27 @@ public class ValidationActions extends BaseAction{
 
     private double normalizeNumericValue(String value) {
 
-        return Double.parseDouble(
-                value.replace(",", "")
-                        .trim()
-        );
+        return Double.parseDouble(value.replace(",", "").trim());
     }
-
-
 
     public void assertRequiredMsg(By locator, String expectedMsg) {
         String actualMsg = getText(locator);
         if (!actualMsg.equals(expectedMsg)) {
-            throw new AssertionError("❌ Expected: '" + expectedMsg + "' but got: '" + actualMsg + "'");
+            throw new AssertionError(
+                    "❌ Expected: '" + expectedMsg + "' but got: '" + actualMsg + "'");
         }
     }
 
-
     public void assertValue(String expected, By locator) {
 
-        WebElement element = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(locator)
-        );
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 
         String actual;
 
         // لو العنصر input أو textarea اقرأ value
         String tagName = element.getTagName();
 
-        if (tagName.equalsIgnoreCase("input") ||
-                tagName.equalsIgnoreCase("textarea")) {
+        if (tagName.equalsIgnoreCase("input") || tagName.equalsIgnoreCase("textarea")) {
 
             actual = element.getAttribute("value").trim();
 
@@ -123,8 +108,7 @@ public class ValidationActions extends BaseAction{
             if (Double.compare(actualNum, expectedNum) != 0) {
 
                 throw new AssertionError(
-                        "❌ Expected: '" + expected + "' but got: '" + actual + "'"
-                );
+                        "❌ Expected: '" + expected + "' but got: '" + actual + "'");
             }
 
         } catch (NumberFormatException e) {
@@ -132,25 +116,21 @@ public class ValidationActions extends BaseAction{
             if (!cleanActual.equals(cleanExpected)) {
 
                 throw new AssertionError(
-                        "❌ Expected: '" + expected + "' but got: '" + actual + "'"
-                );
+                        "❌ Expected: '" + expected + "' but got: '" + actual + "'");
             }
         }
 
         System.out.println(
-                "✅ ASSERT PASSED: Expected='" + expected + "' | Actual='" + actual + "'"
-        );
+                "✅ ASSERT PASSED: Expected='" + expected + "' | Actual='" + actual + "'");
     }
-
 
     public boolean IsTextDisplayed(String text) {
 
         try {
 
-            List<WebElement> elements = driver.findElements(
-                    By.xpath("//*[contains(normalize-space(),'" + text + "')]")
-            );
-
+            List<WebElement> elements =
+                    driver.findElements(
+                            By.xpath("//*[contains(normalize-space(),'" + text + "')]"));
 
             return elements.stream().anyMatch(WebElement::isDisplayed);
 
@@ -167,9 +147,7 @@ public class ValidationActions extends BaseAction{
 
             String normalizedExpected = normalizePrice(expectedPrice);
 
-            List<WebElement> elements = driver.findElements(
-                    By.xpath("//*[normalize-space()]")
-            );
+            List<WebElement> elements = driver.findElements(By.xpath("//*[normalize-space()]"));
 
             for (WebElement element : elements) {
 
@@ -181,8 +159,7 @@ public class ValidationActions extends BaseAction{
 
                 String normalizedActual = normalizePrice(actualText);
 
-                if (normalizedActual.contains(normalizedExpected)
-                        && element.isDisplayed()) {
+                if (normalizedActual.contains(normalizedExpected) && element.isDisplayed()) {
 
                     return true;
                 }
@@ -195,13 +172,11 @@ public class ValidationActions extends BaseAction{
         }
     }
 
-
     public boolean IsPriceDisplayedForFin(String expectedPrice) {
 
         String normalizedExpected = normalizePrice(expectedPrice);
 
-        List<WebElement> elements =
-                driver.findElements(By.xpath("//*[normalize-space()]"));
+        List<WebElement> elements = driver.findElements(By.xpath("//*[normalize-space()]"));
 
         for (WebElement element : elements) {
 
@@ -234,8 +209,7 @@ public class ValidationActions extends BaseAction{
 
             String normalizedExpected = normalizeDate(expectedDate);
 
-            List<WebElement> elements =
-                    driver.findElements(By.xpath("//*[normalize-space()]"));
+            List<WebElement> elements = driver.findElements(By.xpath("//*[normalize-space()]"));
 
             for (WebElement element : elements) {
 
@@ -247,8 +221,7 @@ public class ValidationActions extends BaseAction{
 
                 String normalizedActual = normalizeDate(actualText);
 
-                if (normalizedActual.equals(normalizedExpected)
-                        && element.isDisplayed()) {
+                if (normalizedActual.equals(normalizedExpected) && element.isDisplayed()) {
 
                     System.out.println("DATE FOUND = " + actualText);
                     return true;
@@ -269,8 +242,7 @@ public class ValidationActions extends BaseAction{
 
         double expectedValue = normalizeNumericValue(expectedPrice);
 
-        List<WebElement> elements =
-                driver.findElements(By.xpath("//*[normalize-space()]"));
+        List<WebElement> elements = driver.findElements(By.xpath("//*[normalize-space()]"));
 
         for (WebElement element : elements) {
 
@@ -286,8 +258,7 @@ public class ValidationActions extends BaseAction{
 
             try {
 
-                double actualValue =
-                        normalizeNumericValue(actualText);
+                double actualValue = normalizeNumericValue(actualText);
 
                 if (Math.abs(actualValue - expectedValue) <= 0.01) {
 
@@ -302,6 +273,4 @@ public class ValidationActions extends BaseAction{
         System.out.println("PRICE NOT FOUND = " + expectedPrice);
         return false;
     }
-
-
 }

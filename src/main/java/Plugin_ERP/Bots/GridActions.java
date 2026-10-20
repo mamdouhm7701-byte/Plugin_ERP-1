@@ -12,12 +12,7 @@ public class GridActions extends BaseAction {
     private ElmentAction utilites;
     private WaitActions waitActions;
 
-
-    public GridActions(
-            WebDriver driver,
-            WebDriverWait wait,
-            WaitMangment waitMangment
-    ) {
+    public GridActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment) {
         super(driver, wait, waitMangment);
         this.waitActions = new WaitActions(driver, wait, waitMangment);
     }
@@ -30,16 +25,15 @@ public class GridActions extends BaseAction {
 
             try {
 
-                WebElement element = waitMangment
-                        .fluentWait()
-                        .until(driver -> {
+                WebElement element =
+                        waitMangment
+                                .fluentWait()
+                                .until(
+                                        driver -> {
+                                            WebElement el = driver.findElement(locator);
 
-                            WebElement el = driver.findElement(locator);
-
-                            return (el.isDisplayed() && el.isEnabled())
-                                    ? el
-                                    : null;
-                        });
+                                            return (el.isDisplayed() && el.isEnabled()) ? el : null;
+                                        });
 
                 scrollIntoView(element);
 
@@ -77,23 +71,20 @@ public class GridActions extends BaseAction {
             }
         }
 
-        throw new RuntimeException(
-                "❌ Click failed after retries: " + locator
-        );
+        throw new RuntimeException("❌ Click failed after retries: " + locator);
     }
-
 
     public By getLastEditButton() {
         int attempts = 0;
         while (attempts < 3) {
             try {
-                wait.until(ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("//tr[@role='row' and @aria-rowindex='1']")
-                ));
+                wait.until(
+                        ExpectedConditions.presenceOfElementLocated(
+                                By.xpath("//tr[@role='row' and @aria-rowindex='1']")));
 
-                String pk = driver.findElement(
-                        By.xpath("//tr[@role='row' and @aria-rowindex='1']")
-                ).getAttribute("data-pk");
+                String pk =
+                        driver.findElement(By.xpath("//tr[@role='row' and @aria-rowindex='1']"))
+                                .getAttribute("data-pk");
 
                 if (pk == null || pk.isEmpty()) {
                     attempts++;
@@ -101,9 +92,7 @@ public class GridActions extends BaseAction {
                     continue;
                 }
 
-                return By.xpath(
-                        "//tr[@data-pk='" + pk + "']//button[@data-action-type='edit']"
-                );
+                return By.xpath("//tr[@data-pk='" + pk + "']//button[@data-action-type='edit']");
             } catch (Exception e) {
                 attempts++;
                 try {
@@ -119,14 +108,15 @@ public class GridActions extends BaseAction {
 
         int deletedCount = 0;
 
-        while (driver.findElements(By.xpath("//*[name()='svg' and @data-action-type='delete']")).size() > 0) {
+        while (driver.findElements(By.xpath("//*[name()='svg' and @data-action-type='delete']"))
+                        .size()
+                > 0) {
 
             waitActions.waitForOverlayToDisappear();
 
             deleteRow(
                     By.xpath("(//*[name()='svg' and @data-action-type='delete'])[1]"),
-                    confirmDeleteButton
-            );
+                    confirmDeleteButton);
 
             deletedCount++;
 
@@ -136,20 +126,17 @@ public class GridActions extends BaseAction {
         System.out.println("🏁 Done! Total rows deleted: " + deletedCount);
     }
 
-
-
-
     public By getLastDeleteButton() {
         int attempts = 0;
         while (attempts < 3) {
             try {
-                wait.until(ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("//tr[@role='row' and @aria-rowindex='1']")
-                ));
+                wait.until(
+                        ExpectedConditions.presenceOfElementLocated(
+                                By.xpath("//tr[@role='row' and @aria-rowindex='1']")));
 
-                String pk = driver.findElement(
-                        By.xpath("//tr[@role='row' and @aria-rowindex='1']")
-                ).getAttribute("data-pk");
+                String pk =
+                        driver.findElement(By.xpath("//tr[@role='row' and @aria-rowindex='1']"))
+                                .getAttribute("data-pk");
 
                 if (pk == null || pk.isEmpty()) {
                     attempts++;
@@ -157,9 +144,7 @@ public class GridActions extends BaseAction {
                     continue;
                 }
 
-                return By.xpath(
-                        "//tr[@data-pk='" + pk + "']//button[@data-action-type='delete']"
-                );
+                return By.xpath("//tr[@data-pk='" + pk + "']//button[@data-action-type='delete']");
             } catch (Exception e) {
                 attempts++;
                 try {
@@ -175,13 +160,13 @@ public class GridActions extends BaseAction {
         int attempts = 0;
         while (attempts < 3) {
             try {
-                wait.until(ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("//tr[@role='row' and @aria-rowindex='1']")
-                ));
+                wait.until(
+                        ExpectedConditions.presenceOfElementLocated(
+                                By.xpath("//tr[@role='row' and @aria-rowindex='1']")));
 
-                String pk = driver.findElement(
-                        By.xpath("//tr[@role='row' and @aria-rowindex='1']")
-                ).getAttribute("data-pk");
+                String pk =
+                        driver.findElement(By.xpath("//tr[@role='row' and @aria-rowindex='1']"))
+                                .getAttribute("data-pk");
 
                 if (pk != null && !pk.isEmpty()) return pk;
 
@@ -206,13 +191,14 @@ public class GridActions extends BaseAction {
 
             try {
 
-                By rowLocator = By.xpath(
-                        "//tr[@role='row'][.//*[contains(normalize-space(),'" + text + "')]]"
-                );
+                By rowLocator =
+                        By.xpath(
+                                "//tr[@role='row'][.//*[contains(normalize-space(),'"
+                                        + text
+                                        + "')]]");
 
-                WebElement row = wait.until(
-                        ExpectedConditions.presenceOfElementLocated(rowLocator)
-                );
+                WebElement row =
+                        wait.until(ExpectedConditions.presenceOfElementLocated(rowLocator));
 
                 System.out.println("========== ROW FOUND ==========");
                 System.out.println("ROW TEXT = " + row.getText());
@@ -255,13 +241,14 @@ public class GridActions extends BaseAction {
 
     public void clickEditByIndex(int index) {
         String xpath = "(//tr[@role='row']//button[@data-action-type='edit'])[" + index + "]";
-        WebElement editBtn = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+        WebElement editBtn =
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
 
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", editBtn);
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView({block:'center'});", editBtn);
         wait.until(ExpectedConditions.elementToBeClickable(editBtn));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", editBtn);
     }
-
 
     public void deleteRow(By deleteButton, By confirmDeleteButton) {
 
@@ -283,15 +270,12 @@ public class GridActions extends BaseAction {
         long endTime = System.currentTimeMillis();
 
         System.out.println("✅ Row deleted successfully");
-        System.out.println("⏱️ Delete wait time: "
-                + ((endTime - startTime) / 1000.0) + " seconds");
+        System.out.println("⏱️ Delete wait time: " + ((endTime - startTime) / 1000.0) + " seconds");
 
         Assert.assertTrue(
                 driver.findElements(deletedRow).isEmpty(),
-                "❌ الصف لم يُحذف! data-pk: " + deletedPk
-        );
+                "❌ الصف لم يُحذف! data-pk: " + deletedPk);
     }
-
 
     public void deleteAllRows(By confirmDeleteButton) {
         int deletedCount = 0;
@@ -300,22 +284,15 @@ public class GridActions extends BaseAction {
         waitActions.waitForOverlayToDisappear();
         System.out.println(
                 "Rows Count Before Loop = "
-                        + driver.findElements(
-                        By.xpath("//tr[@role='row' and @aria-rowindex='1']")
-                ).size()
-        );
+                        + driver.findElements(By.xpath("//tr[@role='row' and @aria-rowindex='1']"))
+                                .size());
         wait.until(
                 ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("//tr[@role='row' and @aria-rowindex='1']")
-                )
-        );
+                        By.xpath("//tr[@role='row' and @aria-rowindex='1']")));
         while (hasRows()) {
             waitActions.waitForOverlayToDisappear();
 
-            deleteRow(
-                    getLastDeleteButton(),
-                    confirmDeleteButton
-            );
+            deleteRow(getLastDeleteButton(), confirmDeleteButton);
 
             deletedCount++;
             System.out.println("🔁 Total deleted so far: " + deletedCount);
@@ -326,26 +303,23 @@ public class GridActions extends BaseAction {
 
     private boolean hasRows() {
         try {
-            List<WebElement> rows = driver.findElements(
-                    By.xpath("//tr[@role='row' and @aria-rowindex='1']")
-            );
+            List<WebElement> rows =
+                    driver.findElements(By.xpath("//tr[@role='row' and @aria-rowindex='1']"));
             return !rows.isEmpty();
         } catch (Exception e) {
             return false;
         }
     }
 
-
-
     private By tableRows = By.cssSelector("table tbody tr[role='row']");
     private By tableLocator = By.cssSelector("table.b-table");
 
-
     public void waitForTableDataToLoad(int minimumExpectedRows) {
-        wait.until(driver -> {
-            int count = driver.findElements(tableRows).size();
-            return count > minimumExpectedRows;
-        });
+        wait.until(
+                driver -> {
+                    int count = driver.findElements(tableRows).size();
+                    return count > minimumExpectedRows;
+                });
     }
 
     public List<WebElement> getTableRows() {
@@ -359,7 +333,6 @@ public class GridActions extends BaseAction {
     public boolean isTableDataDisplayed() {
         return getTableRowsCount() > 0;
     }
-
 
     public void debugPrintAllRows() {
         waitActions.waitForOverlayToDisappear();
@@ -375,19 +348,20 @@ public class GridActions extends BaseAction {
             System.out.println("Row " + (i + 1) + ": " + text);
         }
     }
+
     public void clickDeleteRows(int... rowNumbers) {
         for (int rowNumber : rowNumbers) {
 
-            ((JavascriptExecutor) driver).executeScript(
-                    "document.querySelectorAll('svg.feather-trash')[" +
-                            (rowNumber - 1) +
-                            "].dispatchEvent(" +
-                            "new MouseEvent('click', {" +
-                            "bubbles:true," +
-                            "cancelable:true," +
-                            "view:window" +
-                            "}));"
-            );
+            ((JavascriptExecutor) driver)
+                    .executeScript(
+                            "document.querySelectorAll('svg.feather-trash')["
+                                    + (rowNumber - 1)
+                                    + "].dispatchEvent("
+                                    + "new MouseEvent('click', {"
+                                    + "bubbles:true,"
+                                    + "cancelable:true,"
+                                    + "view:window"
+                                    + "}));");
         }
     }
 
@@ -409,32 +383,31 @@ public class GridActions extends BaseAction {
         long endTime = System.currentTimeMillis();
 
         System.out.println("✅ Row deleted successfully");
-        System.out.println("⏱️ Delete wait time: "
-                + ((endTime - startTime) / 1000.0) + " seconds");
+        System.out.println("⏱️ Delete wait time: " + ((endTime - startTime) / 1000.0) + " seconds");
 
         Assert.assertTrue(
-                driver.findElements(deletedRow).isEmpty(),
-                "❌ الصف لم يُحذف! data-pk: " + pk
-        );
+                driver.findElements(deletedRow).isEmpty(), "❌ الصف لم يُحذف! data-pk: " + pk);
     }
 
     public boolean hasRowsByType(String rowTypeText) {
         return !driver.findElements(
-                By.xpath(
-                        "//tr[@role='row']" +
-                                "[.//*[normalize-space(text())='" + rowTypeText + "']]"
-                )
-        ).isEmpty();
+                        By.xpath(
+                                "//tr[@role='row']"
+                                        + "[.//*[normalize-space(text())='"
+                                        + rowTypeText
+                                        + "']]"))
+                .isEmpty();
     }
 
     public String getLastRowPkByType(String rowTypeText) {
 
-        List<WebElement> rows = driver.findElements(
-                By.xpath(
-                        "//tr[@role='row']" +
-                                "[.//*[normalize-space(text())='" + rowTypeText + "']]"
-                )
-        );
+        List<WebElement> rows =
+                driver.findElements(
+                        By.xpath(
+                                "//tr[@role='row']"
+                                        + "[.//*[normalize-space(text())='"
+                                        + rowTypeText
+                                        + "']]"));
 
         WebElement lastRow = rows.get(rows.size() - 1);
 
@@ -443,20 +416,24 @@ public class GridActions extends BaseAction {
 
     public By getLastDeleteButtonByType(String rowTypeText) {
 
-        List<WebElement> rows = driver.findElements(
-                By.xpath(
-                        "//tr[@role='row']" +
-                                "[.//*[normalize-space(text())='" + rowTypeText + "']]"
-                )
-        );
+        List<WebElement> rows =
+                driver.findElements(
+                        By.xpath(
+                                "//tr[@role='row']"
+                                        + "[.//*[normalize-space(text())='"
+                                        + rowTypeText
+                                        + "']]"));
 
         int lastIndex = rows.size(); // XPath indexing 1-based
 
         return By.xpath(
-                "(//tr[@role='row']" +
-                        "[.//*[normalize-space(text())='" + rowTypeText + "']])[" + lastIndex + "]" +
-                        "//button[@data-action-type='delete']"
-        );
+                "(//tr[@role='row']"
+                        + "[.//*[normalize-space(text())='"
+                        + rowTypeText
+                        + "']])["
+                        + lastIndex
+                        + "]"
+                        + "//button[@data-action-type='delete']");
     }
 
     public void deleteAllRowsByType(String rowTypeText, By confirmDeleteButton) {
@@ -468,18 +445,16 @@ public class GridActions extends BaseAction {
         System.out.println(
                 "Rows Count Before Loop = "
                         + driver.findElements(
-                        By.xpath(
-                                "//tr[@role='row']" +
-                                        "[.//*[normalize-space(text())='" + rowTypeText + "']]"
-                        )
-                ).size()
-        );
+                                        By.xpath(
+                                                "//tr[@role='row']"
+                                                        + "[.//*[normalize-space(text())='"
+                                                        + rowTypeText
+                                                        + "']]"))
+                                .size());
 
         wait.until(
                 ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("//tr[@role='row' and @aria-rowindex='1']")
-                )
-        );
+                        By.xpath("//tr[@role='row' and @aria-rowindex='1']")));
 
         while (hasRowsByType(rowTypeText)) {
             waitActions.waitForOverlayToDisappear();

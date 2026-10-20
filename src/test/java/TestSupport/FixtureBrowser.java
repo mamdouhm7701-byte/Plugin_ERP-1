@@ -6,30 +6,65 @@ import org.openqa.selenium.*;
 
 /** Local lifecycle harness. Delegates fixture API calls and supplies disposable browser windows. */
 public final class FixtureBrowser implements AutoCloseable {
-  public final WebDriver driver;
-  private final Field field;
-  private final Object previous;
-  private String active="main";
-  private final Set<String> windows=new LinkedHashSet<>(List.of("main"));
-  public int closed;
-  public FixtureBrowser(WebDriver api)throws Exception{
-    WebDriver[] self=new WebDriver[1];
-    Object locator=java.lang.reflect.Proxy.newProxyInstance(getClass().getClassLoader(),new Class<?>[]{WebDriver.TargetLocator.class},(p,m,a)->{
-      if(m.getName().equals("window")){active=(String)a[0];return self[0];}return null;
-    });
-    driver=(WebDriver)java.lang.reflect.Proxy.newProxyInstance(getClass().getClassLoader(),new Class<?>[]{WebDriver.class,JavascriptExecutor.class},(p,m,a)->{
-      return switch(m.getName()){
-        case "getWindowHandle"->active;
-        case "getWindowHandles"->new LinkedHashSet<>(windows);
-        case "getCurrentUrl"->"https://fixture.test/#/home";
-        case "getPageSource"->"<fixture-case/>";
-        case "switchTo"->locator;
-        case "close"->{windows.remove(active);closed++;yield null;}
-        default->{try{yield m.invoke(api,a);}catch(InvocationTargetException e){throw e.getCause();}}
-      };
-    });self[0]=driver;
-    field=Plugin_ERP.Tests.LoginTest.BaseTest.class.getDeclaredField("driver");field.setAccessible(true);previous=field.get(null);field.set(null,driver);
-  }
-  public void addAuxiliaryWindow(){windows.add("report-"+closed);}
-  @Override public void close()throws IllegalAccessException{field.set(null,previous);}
+    public final WebDriver driver;
+    private final Field field;
+    private final Object previous;
+    private String active = "main";
+    private final Set<String> windows = new LinkedHashSet<>(List.of("main"));
+    public int closed;
+
+    public FixtureBrowser(WebDriver api) throws Exception {
+        WebDriver[] self = new WebDriver[1];
+        Object locator =
+                java.lang.reflect.Proxy.newProxyInstance(
+                        getClass().getClassLoader(),
+                        new Class<?>[] {WebDriver.TargetLocator.class},
+                        (p, m, a) -> {
+                            if (m.getName().equals("window")) {
+                                active = (String) a[0];
+                                return self[0];
+                            }
+                            return null;
+                        });
+        driver =
+                (WebDriver)
+                        java.lang.reflect.Proxy.newProxyInstance(
+                                getClass().getClassLoader(),
+                                new Class<?>[] {WebDriver.class, JavascriptExecutor.class},
+                                (p, m, a) -> {
+                                    return switch (m.getName()) {
+                                        case "getWindowHandle" -> active;
+                                        case "getWindowHandles" -> new LinkedHashSet<>(windows);
+                                        case "getCurrentUrl" -> "https://fixture.test/#/home";
+                                        case "getPageSource" -> "<fixture-case/>";
+                                        case "switchTo" -> locator;
+                                        case "close" -> {
+                                            windows.remove(active);
+                                            closed++;
+                                            yield null;
+                                        }
+                                        default -> {
+                                            try {
+                                                yield m.invoke(api, a);
+                                            } catch (InvocationTargetException e) {
+                                                throw e.getCause();
+                                            }
+                                        }
+                                    };
+                                });
+        self[0] = driver;
+        field = Plugin_ERP.Tests.LoginTest.BaseTest.class.getDeclaredField("driver");
+        field.setAccessible(true);
+        previous = field.get(null);
+        field.set(null, driver);
+    }
+
+    public void addAuxiliaryWindow() {
+        windows.add("report-" + closed);
+    }
+
+    @Override
+    public void close() throws IllegalAccessException {
+        field.set(null, previous);
+    }
 }

@@ -9,17 +9,10 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PriceListActions extends BaseAction{
+public class PriceListActions extends BaseAction {
 
-
-
-    public PriceListActions(
-            WebDriver driver,
-            WebDriverWait wait,
-            WaitMangment waitMangment
-    ) {
+    public PriceListActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment) {
         super(driver, wait, waitMangment);
-
     }
 
     private List<String> selectedProducts = new ArrayList<>();
@@ -44,9 +37,12 @@ public class PriceListActions extends BaseAction{
 
             enteredPrices.add(price);
 
-            WebElement priceInput = driver.findElement(
-                    By.xpath("(//td[@aria-colindex='4']//input[@type='number'])[" + rowIndex + "]")
-            );
+            WebElement priceInput =
+                    driver.findElement(
+                            By.xpath(
+                                    "(//td[@aria-colindex='4']//input[@type='number'])["
+                                            + rowIndex
+                                            + "]"));
 
             priceInput.click();
             priceInput.sendKeys(Keys.CONTROL + "a");
@@ -60,21 +56,18 @@ public class PriceListActions extends BaseAction{
 
         for (int code : codes) {
 
-            By productNameLocator = By.xpath(
-                    "//tr[@aria-rowindex='" + code + "']/td[@aria-colindex='2']"
-            );
+            By productNameLocator =
+                    By.xpath("//tr[@aria-rowindex='" + code + "']/td[@aria-colindex='2']");
 
-            WebElement productCell = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(productNameLocator)
-            );
+            WebElement productCell =
+                    wait.until(ExpectedConditions.visibilityOfElementLocated(productNameLocator));
 
             String productName = productCell.getText().trim();
 
             selectedProducts.add(productName);
 
-            By buttonLocator = By.xpath(
-                    "//tr[@aria-rowindex='" + code + "']//td[@aria-colindex='5']//button"
-            );
+            By buttonLocator =
+                    By.xpath("//tr[@aria-rowindex='" + code + "']//td[@aria-colindex='5']//button");
 
             wait.until(ExpectedConditions.elementToBeClickable(buttonLocator));
 
@@ -90,11 +83,10 @@ public class PriceListActions extends BaseAction{
 
             try {
 
-                WebElement firstRow = wait.until(
-                        ExpectedConditions.presenceOfElementLocated(
-                                By.xpath("//tr[@role='row' and @aria-rowindex='1']")
-                        )
-                );
+                WebElement firstRow =
+                        wait.until(
+                                ExpectedConditions.presenceOfElementLocated(
+                                        By.xpath("//tr[@role='row' and @aria-rowindex='1']")));
 
                 String pk = firstRow.getAttribute("data-pk");
 
@@ -126,11 +118,11 @@ public class PriceListActions extends BaseAction{
         throw new RuntimeException("❌ ما لقاش أول صف للتعديل بعد 3 محاولات");
     }
 
-
     public void deleteRowForPriceList() {
 
         int attempts = 0;
-        String deletedPk = getLastRowPk();;
+        String deletedPk = getLastRowPk();
+        ;
 
         while (attempts < 3) {
 
@@ -143,16 +135,14 @@ public class PriceListActions extends BaseAction{
                 WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
                 // ✅ انتظر الصف يكون موجود في الـ DOM
-                wait.until(ExpectedConditions.presenceOfElementLocated(
-                        By.id(deleteIconId)
-                ));
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.id(deleteIconId)));
 
                 // ✅ اضغط بـ JavaScript لأن SVG صغير مش بيتعرف عليه Selenium
                 WebElement deleteIcon = driver.findElement(By.id(deleteIconId));
-                ((JavascriptExecutor) driver).executeScript(
-                        "arguments[0].dispatchEvent(new MouseEvent('click', {bubbles: true}));",
-                        deleteIcon
-                );
+                ((JavascriptExecutor) driver)
+                        .executeScript(
+                                "arguments[0].dispatchEvent(new MouseEvent('click', {bubbles: true}));",
+                                deleteIcon);
 
                 // ✅ انتظر زرار التأكيد "نعم"
                 By confirmBtn = By.xpath("//button[contains(.,'نعم')]");
@@ -165,13 +155,12 @@ public class PriceListActions extends BaseAction{
                 long endTime = System.currentTimeMillis();
 
                 System.out.println("✅ Row deleted successfully");
-                System.out.println("⏱️ Delete wait time: "
-                        + ((endTime - startTime) / 1000.0) + " seconds");
+                System.out.println(
+                        "⏱️ Delete wait time: " + ((endTime - startTime) / 1000.0) + " seconds");
 
                 Assert.assertTrue(
                         driver.findElements(deletedRow).isEmpty(),
-                        "❌ الصف لم يُحذف! data-pk: " + deletedPk
-                );
+                        "❌ الصف لم يُحذف! data-pk: " + deletedPk);
 
                 return;
 
@@ -191,18 +180,17 @@ public class PriceListActions extends BaseAction{
         }
     }
 
-
     public String getLastRowPk() {
         int attempts = 0;
         while (attempts < 3) {
             try {
-                wait.until(ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("//tr[@role='row' and @aria-rowindex='1']")
-                ));
+                wait.until(
+                        ExpectedConditions.presenceOfElementLocated(
+                                By.xpath("//tr[@role='row' and @aria-rowindex='1']")));
 
-                String pk = driver.findElement(
-                        By.xpath("//tr[@role='row' and @aria-rowindex='1']")
-                ).getAttribute("data-pk");
+                String pk =
+                        driver.findElement(By.xpath("//tr[@role='row' and @aria-rowindex='1']"))
+                                .getAttribute("data-pk");
 
                 if (pk != null && !pk.isEmpty()) return pk;
 
@@ -227,16 +215,15 @@ public class PriceListActions extends BaseAction{
 
             try {
 
-                WebElement element = waitMangment
-                        .fluentWait()
-                        .until(driver -> {
+                WebElement element =
+                        waitMangment
+                                .fluentWait()
+                                .until(
+                                        driver -> {
+                                            WebElement el = driver.findElement(locator);
 
-                            WebElement el = driver.findElement(locator);
-
-                            return (el.isDisplayed() && el.isEnabled())
-                                    ? el
-                                    : null;
-                        });
+                                            return (el.isDisplayed() && el.isEnabled()) ? el : null;
+                                        });
 
                 scrollIntoView(element);
 
@@ -274,10 +261,6 @@ public class PriceListActions extends BaseAction{
             }
         }
 
-        throw new RuntimeException(
-                "❌ Click failed after retries: " + locator
-        );
+        throw new RuntimeException("❌ Click failed after retries: " + locator);
     }
-
-
 }

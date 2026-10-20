@@ -20,30 +20,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class AbstractForSales extends AbstractForPurchases{
-    public AbstractForSales(WebDriver driver){super(driver);}
+public class AbstractForSales extends AbstractForPurchases {
+    public AbstractForSales(WebDriver driver) {
+        super(driver);
+    }
+
     private By ArabicNameInput = By.xpath("//input[@name='arabicName']");
     private By SearchInput = By.xpath("//input[@id='barcode' and @name='barcode']");
-    private static final By INVOICE_FULLSCREEN_TOGGLE = By.xpath(
-            "//button[normalize-space()='توزيع مراكز التكلفة']/following-sibling::button[2]"
-    );
-    private static final By INVOICE_SIDE_MENU = By.xpath(
-            "//a[@aria-label='الصفحة الرئيسية'] | //a[contains(@href,'#/invoice-list')]"
-    );
-    private static final By ADD_CUSTOMER_SHORTCUT = By.xpath(
-            "//*[normalize-space()='العميل']/following::*[self::button or self::a or @role='button' or self::img][1] | " +
-                    "//input[@id='vs3__combobox']/ancestor::*[contains(@class,'vs__dropdown-toggle')][1]" +
-                    "//button | //input[@id='vs3__combobox']/ancestor::*[contains(@class,'vs__dropdown-toggle')][1]//img"
-    );
-    private static final By ADD_PRODUCT_SHORTCUT = By.xpath(
-            "//button[contains(@title,'إضافة صنف') or contains(@aria-label,'إضافة صنف') or " +
-                    "contains(@data-bs-original-title,'إضافة صنف')] | " +
-                    "//*[contains(@title,'إضافة صنف') or contains(@aria-label,'إضافة صنف') or " +
-                    "contains(@alt,'إضافة صنف')]"
-    );
+    private static final By INVOICE_FULLSCREEN_TOGGLE =
+            By.xpath(
+                    "//button[normalize-space()='توزيع مراكز التكلفة']/following-sibling::button[2]");
+    private static final By INVOICE_SIDE_MENU =
+            By.xpath("//a[@aria-label='الصفحة الرئيسية'] | //a[contains(@href,'#/invoice-list')]");
+    private static final By ADD_CUSTOMER_SHORTCUT =
+            By.xpath(
+                    "//*[normalize-space()='العميل']/following::*[self::button or self::a or @role='button' or self::img][1] | "
+                            + "//input[@id='vs3__combobox']/ancestor::*[contains(@class,'vs__dropdown-toggle')][1]"
+                            + "//button | //input[@id='vs3__combobox']/ancestor::*[contains(@class,'vs__dropdown-toggle')][1]//img");
+    private static final By ADD_PRODUCT_SHORTCUT =
+            By.xpath(
+                    "//button[contains(@title,'إضافة صنف') or contains(@aria-label,'إضافة صنف') or "
+                            + "contains(@data-bs-original-title,'إضافة صنف')] | "
+                            + "//*[contains(@title,'إضافة صنف') or contains(@aria-label,'إضافة صنف') or "
+                            + "contains(@alt,'إضافة صنف')]");
     private static final By FORM_DIALOG = By.cssSelector(".modal-content");
-
-
 
     @Step("قراءة خيارات القائمة المنسدلة: {label}")
     public List<String> getDropdownOptions(String label) {
@@ -54,7 +54,9 @@ public class AbstractForSales extends AbstractForPurchases{
 
         String listboxId = input.getAttribute("aria-controls");
         if (listboxId == null || listboxId.isBlank()) {
-            String comboboxId = input.findElement(By.xpath("ancestor::div[contains(@class,'v-select')]")).getAttribute("id");
+            String comboboxId =
+                    input.findElement(By.xpath("ancestor::div[contains(@class,'v-select')]"))
+                            .getAttribute("id");
             listboxId = comboboxId == null ? "" : comboboxId.replace("__combobox", "__listbox");
         }
         if (listboxId.isBlank()) {
@@ -63,15 +65,17 @@ public class AbstractForSales extends AbstractForPurchases{
 
         By optionsLocator = By.cssSelector("#" + listboxId + " li");
         wait.until(ExpectedConditions.visibilityOfElementLocated(optionsLocator));
-        List<WebElement> options = driver.findElements(optionsLocator).stream()
-                .filter(WebElement::isDisplayed)
-                .collect(Collectors.toList());
+        List<WebElement> options =
+                driver.findElements(optionsLocator).stream()
+                        .filter(WebElement::isDisplayed)
+                        .collect(Collectors.toList());
 
-        List<String> optionTexts = options.stream()
-                .map(WebElement::getText)
-                .map(String::trim)
-                .filter(text -> !text.isEmpty())
-                .collect(Collectors.toList());
+        List<String> optionTexts =
+                options.stream()
+                        .map(WebElement::getText)
+                        .map(String::trim)
+                        .filter(text -> !text.isEmpty())
+                        .collect(Collectors.toList());
         input.sendKeys(org.openqa.selenium.Keys.ESCAPE);
         return optionTexts;
     }
@@ -87,8 +91,11 @@ public class AbstractForSales extends AbstractForPurchases{
 
     @Step("البحث في نافذة إضافة الأصناف باستخدام {fieldLabel}: {query}")
     public void searchInAddItemsDialog(String fieldLabel, String query) {
-        By radioOption = By.cssSelector(".modal-content input[type='radio'][value='" +
-                (fieldLabel.equals("الباركود") ? "barcode" : "name") + "']");
+        By radioOption =
+                By.cssSelector(
+                        ".modal-content input[type='radio'][value='"
+                                + (fieldLabel.equals("الباركود") ? "barcode" : "name")
+                                + "']");
         By searchField = By.cssSelector(".modal-content input[placeholder='بحث ....']");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(radioOption)).click();
@@ -99,11 +106,13 @@ public class AbstractForSales extends AbstractForPurchases{
         input.sendKeys(query);
         utilites.waits().waitForOverlayToDisappear();
 
-        By updatedResult = By.xpath(
-                "//div[contains(@class,'modal-content')]//tbody//tr[" +
-                        "contains(normalize-space(.), '" + query + "') or " +
-                        "contains(normalize-space(.), 'لا يوجد بيانات')]"
-        );
+        By updatedResult =
+                By.xpath(
+                        "//div[contains(@class,'modal-content')]//tbody//tr["
+                                + "contains(normalize-space(.), '"
+                                + query
+                                + "') or "
+                                + "contains(normalize-space(.), 'لا يوجد بيانات')]");
         wait.until(ExpectedConditions.visibilityOfElementLocated(updatedResult));
     }
 
@@ -111,17 +120,19 @@ public class AbstractForSales extends AbstractForPurchases{
     public List<String> getAddItemsDialogRows() {
         By rowsLocator = By.cssSelector(".modal-content tbody tr");
         return new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(d -> {
-                    List<WebElement> rows = d.findElements(rowsLocator).stream()
-                            .filter(WebElement::isDisplayed)
-                            .collect(Collectors.toList());
-                    return rows.isEmpty() ? null : rows;
-                })
-                .stream()
-                .map(WebElement::getText)
-                .map(String::trim)
-                .filter(text -> !text.isEmpty() && !text.contains("لا يوجد بيانات"))
-                .collect(Collectors.toList());
+                        .until(
+                                d -> {
+                                    List<WebElement> rows =
+                                            d.findElements(rowsLocator).stream()
+                                                    .filter(WebElement::isDisplayed)
+                                                    .collect(Collectors.toList());
+                                    return rows.isEmpty() ? null : rows;
+                                })
+                        .stream()
+                        .map(WebElement::getText)
+                        .map(String::trim)
+                        .filter(text -> !text.isEmpty() && !text.contains("لا يوجد بيانات"))
+                        .collect(Collectors.toList());
     }
 
     @Step("تغيير خيار عرض الأصناف المختارة إلى {shouldBeChecked}")
@@ -189,15 +200,19 @@ public class AbstractForSales extends AbstractForPurchases{
         searchAndSelectInvoiceProduct(productName);
 
         try {
-            new WebDriverWait(driver, Duration.ofSeconds(8)).until(d -> {
-                List<WebElement> rows = d.findElements(By.xpath("//tbody//tr[@role='row']"));
-                return rows.stream().anyMatch(row -> row.getText().contains(productName));
-            });
+            new WebDriverWait(driver, Duration.ofSeconds(8))
+                    .until(
+                            d -> {
+                                List<WebElement> rows =
+                                        d.findElements(By.xpath("//tbody//tr[@role='row']"));
+                                return rows.stream()
+                                        .anyMatch(row -> row.getText().contains(productName));
+                            });
         } catch (TimeoutException e) {
             throw new IllegalStateException(
-                    "تم اختيار الصنف من القائمة لكن لم يظهر في جدول فاتورة المبيعات: " + productName,
-                    e
-            );
+                    "تم اختيار الصنف من القائمة لكن لم يظهر في جدول فاتورة المبيعات: "
+                            + productName,
+                    e);
         }
     }
 
@@ -210,35 +225,28 @@ public class AbstractForSales extends AbstractForPurchases{
         WebElement input;
 
         switch (label) {
-
             case "خصم":
-                input = driver.findElement(
-                        By.cssSelector("input[name='discountValue']")
-                );
+                input = driver.findElement(By.cssSelector("input[name='discountValue']"));
                 break;
 
             case "قبل الضريبة":
-                input = driver.findElement(
-                        By.xpath(
-                                "//span[normalize-space()='قبل الضريبة']" +
-                                        "/parent::div/following-sibling::div//input"
-                        )
-                );
+                input =
+                        driver.findElement(
+                                By.xpath(
+                                        "//span[normalize-space()='قبل الضريبة']"
+                                                + "/parent::div/following-sibling::div//input"));
                 break;
 
             case "الضريبة":
-                input = driver.findElement(
-                        By.xpath(
-                                "//span[normalize-space()='الضريبة']" +
-                                        "/parent::div/following-sibling::div//input"
-                        )
-                );
+                input =
+                        driver.findElement(
+                                By.xpath(
+                                        "//span[normalize-space()='الضريبة']"
+                                                + "/parent::div/following-sibling::div//input"));
                 break;
 
             case "الصافي":
-                input = driver.findElement(
-                        By.cssSelector("input[name='Net']")
-                );
+                input = driver.findElement(By.cssSelector("input[name='Net']"));
                 break;
 
             default:
@@ -247,9 +255,7 @@ public class AbstractForSales extends AbstractForPurchases{
 
         String value = input.getAttribute("value");
 
-        System.out.println(
-                "SUMMARY FROM INVOICE => " + label + " = [" + value + "]"
-        );
+        System.out.println("SUMMARY FROM INVOICE => " + label + " = [" + value + "]");
 
         if (value == null || value.trim().isEmpty()) {
             return BigDecimal.ZERO;
@@ -272,14 +278,10 @@ public class AbstractForSales extends AbstractForPurchases{
         validateReport(totals);
     }
 
-
     @Step("احتساب أرقام الفاتورة ومطابقتها بالفرونت")
     public InvoiceTotals validateBusinessTotals() {
 
-        InvoiceTotals totals = InvoiceCalculator.calculate(
-                getInvoiceRows(),
-                getDiscount()
-        );
+        InvoiceTotals totals = InvoiceCalculator.calculate(getInvoiceRows(), getDiscount());
 
         attachBusinessValidation(totals);
 
@@ -290,7 +292,6 @@ public class AbstractForSales extends AbstractForPurchases{
         return totals;
     }
 
-
     // =========================================
     // Get Invoice Rows
     // =========================================
@@ -299,80 +300,62 @@ public class AbstractForSales extends AbstractForPurchases{
 
         List<InvoiceRow> invoiceRows = new ArrayList<>();
 
-        String nameColIndex = driver.findElement(
-                By.xpath(
-                        "//th[@role='columnheader'][.//div[normalize-space()='الاسم']]"
-                )
-        ).getAttribute("aria-colindex");
+        String nameColIndex =
+                driver.findElement(
+                                By.xpath(
+                                        "//th[@role='columnheader'][.//div[normalize-space()='الاسم']]"))
+                        .getAttribute("aria-colindex");
 
-        String quantityColIndex = driver.findElement(
-                By.xpath(
-                        "//th[@role='columnheader'][.//div[normalize-space()='الكمية']]"
-                )
-        ).getAttribute("aria-colindex");
+        String quantityColIndex =
+                driver.findElement(
+                                By.xpath(
+                                        "//th[@role='columnheader'][.//div[normalize-space()='الكمية']]"))
+                        .getAttribute("aria-colindex");
 
-        String priceColIndex = driver.findElement(
-                By.xpath(
-                        "//th[@role='columnheader'][.//div[normalize-space()='السعر']]"
-                )
-        ).getAttribute("aria-colindex");
+        String priceColIndex =
+                driver.findElement(
+                                By.xpath(
+                                        "//th[@role='columnheader'][.//div[normalize-space()='السعر']]"))
+                        .getAttribute("aria-colindex");
 
-
-        List<WebElement> rows = driver.findElements(
-                By.xpath("//tbody//tr[@role='row']")
-        ).stream().filter(WebElement::isDisplayed).collect(Collectors.toList());
-
+        List<WebElement> rows =
+                driver.findElements(By.xpath("//tbody//tr[@role='row']")).stream()
+                        .filter(WebElement::isDisplayed)
+                        .collect(Collectors.toList());
 
         for (WebElement row : rows) {
 
-            List<WebElement> nameCells = row.findElements(
-                    By.xpath(
-                            ".//td[@aria-colindex='" +
-                                    nameColIndex +
-                                    "']"
-                    )
-            );
+            List<WebElement> nameCells =
+                    row.findElements(By.xpath(".//td[@aria-colindex='" + nameColIndex + "']"));
 
             if (nameCells.isEmpty()) {
                 continue;
             }
 
-            List<WebElement> quantityInputs = row.findElements(By.xpath(
-                    ".//td[@aria-colindex='" + quantityColIndex + "']//input[not(@type='hidden')]"
-            ));
-            List<WebElement> priceInputs = row.findElements(By.xpath(
-                    ".//td[@aria-colindex='" + priceColIndex + "']//input[not(@type='hidden')]"
-            ));
+            List<WebElement> quantityInputs =
+                    row.findElements(
+                            By.xpath(
+                                    ".//td[@aria-colindex='"
+                                            + quantityColIndex
+                                            + "']//input[not(@type='hidden')]"));
+            List<WebElement> priceInputs =
+                    row.findElements(
+                            By.xpath(
+                                    ".//td[@aria-colindex='"
+                                            + priceColIndex
+                                            + "']//input[not(@type='hidden')]"));
             if (quantityInputs.isEmpty() || priceInputs.isEmpty()) {
                 continue;
             }
 
-            String name = nameCells.get(0)
-                    .getText()
-                    .trim();
+            String name = nameCells.get(0).getText().trim();
 
+            BigDecimal quantity =
+                    new BigDecimal(quantityInputs.get(0).getAttribute("value").trim());
 
-            BigDecimal quantity = new BigDecimal(
-                    quantityInputs.get(0)
-                            .getAttribute("value")
-                            .trim()
-            );
+            BigDecimal price = new BigDecimal(priceInputs.get(0).getAttribute("value").trim());
 
-
-            BigDecimal price = new BigDecimal(
-                    priceInputs.get(0)
-                            .getAttribute("value")
-                            .trim()
-            );
-
-
-            invoiceRows.add(
-                    new InvoiceRow(
-                            name,
-                            quantity,
-                            price
-                    )
-            );
+            invoiceRows.add(new InvoiceRow(name, quantity, price));
         }
 
         return invoiceRows;
@@ -381,27 +364,31 @@ public class AbstractForSales extends AbstractForPurchases{
     private By dropdownInput(String label) {
         return switch (label) {
             case "المخزن" -> By.cssSelector(".v-select[name='StoreId'] input.vs__search");
-            case "العميل", "العملاء" -> By.cssSelector("fieldset[label='arabicName'] input.vs__search");
+            case "العميل", "العملاء" ->
+                    By.cssSelector("fieldset[label='arabicName'] input.vs__search");
             case "مندوب" -> By.cssSelector(".v-select[name='agent'] input.vs__search");
             case "قوائم الأسعار" -> By.cssSelector(".v-select[name='priceLists'] input.vs__search");
-            default -> By.xpath(
-                    "//*[self::legend or self::label][normalize-space()='" + label + "']" +
-                            "/following::input[contains(@class,'vs__search')][1]"
-            );
+            default ->
+                    By.xpath(
+                            "//*[self::legend or self::label][normalize-space()='"
+                                    + label
+                                    + "']"
+                                    + "/following::input[contains(@class,'vs__search')][1]");
         };
     }
 
     private By selectedDropdownOption(String label) {
         if (label.equals("العميل") || label.equals("العملاء")) {
-            return By.xpath("//input[@id='vs3__combobox']/ancestor::div[contains(@class,'vs__dropdown-toggle')][1]" +
-                    "//*[contains(concat(' ', normalize-space(@class), ' '), ' vs__selected ')]");
+            return By.xpath(
+                    "//input[@id='vs3__combobox']/ancestor::div[contains(@class,'vs__dropdown-toggle')][1]"
+                            + "//*[contains(concat(' ', normalize-space(@class), ' '), ' vs__selected ')]");
         }
         return By.xpath(
-                "//*[self::legend or self::label][normalize-space()='" + label + "']" +
-                        "/following::*[contains(concat(' ', normalize-space(@class), ' '), ' vs__selected ')][1]"
-        );
+                "//*[self::legend or self::label][normalize-space()='"
+                        + label
+                        + "']"
+                        + "/following::*[contains(concat(' ', normalize-space(@class), ' '), ' vs__selected ')][1]");
     }
-
 
     // =========================================
     // Save + Report
@@ -410,105 +397,73 @@ public class AbstractForSales extends AbstractForPurchases{
     @Step("الاحتفاظ بأرقام الفواتير لمراجعتها مع التقرير")
     public void saveAndPrintForReport() {
 
-        Map<String, String> dataBeforeSave =
-                getNamesQuantitiesAndPrices();
+        Map<String, String> dataBeforeSave = getNamesQuantitiesAndPrices();
 
         ClickSaveAndPrintButton();
 
-        CompareNamesQuantitiesAndPricesWithReport(
-                dataBeforeSave
-        );
+        CompareNamesQuantitiesAndPricesWithReport(dataBeforeSave);
     }
-
 
     public Map<String, String> getNamesQuantitiesAndPrices() {
 
-        Map<String, String> data =
-                new LinkedHashMap<>();
+        Map<String, String> data = new LinkedHashMap<>();
 
-        String nameColIndex = driver.findElement(
-                By.xpath(
-                        "//th[@role='columnheader'][.//div[normalize-space()='الاسم']]"
-                )
-        ).getAttribute("aria-colindex");
+        String nameColIndex =
+                driver.findElement(
+                                By.xpath(
+                                        "//th[@role='columnheader'][.//div[normalize-space()='الاسم']]"))
+                        .getAttribute("aria-colindex");
 
+        String quantityColIndex =
+                driver.findElement(
+                                By.xpath(
+                                        "//th[@role='columnheader'][.//div[normalize-space()='الكمية']]"))
+                        .getAttribute("aria-colindex");
 
-        String quantityColIndex = driver.findElement(
-                By.xpath(
-                        "//th[@role='columnheader'][.//div[normalize-space()='الكمية']]"
-                )
-        ).getAttribute("aria-colindex");
+        String priceColIndex =
+                driver.findElement(
+                                By.xpath(
+                                        "//th[@role='columnheader'][.//div[normalize-space()='السعر']]"))
+                        .getAttribute("aria-colindex");
 
-
-        String priceColIndex = driver.findElement(
-                By.xpath(
-                        "//th[@role='columnheader'][.//div[normalize-space()='السعر']]"
-                )
-        ).getAttribute("aria-colindex");
-
-
-        List<WebElement> rows = driver.findElements(
-                By.xpath("//tbody//tr[@role='row']")
-        );
-
+        List<WebElement> rows = driver.findElements(By.xpath("//tbody//tr[@role='row']"));
 
         for (WebElement row : rows) {
 
-            List<WebElement> nameCells = row.findElements(
-                    By.xpath(
-                            ".//td[@aria-colindex='" +
-                                    nameColIndex +
-                                    "']"
-                    )
-            );
+            List<WebElement> nameCells =
+                    row.findElements(By.xpath(".//td[@aria-colindex='" + nameColIndex + "']"));
 
             if (nameCells.isEmpty()) {
                 continue;
             }
 
+            String name = nameCells.get(0).getText().trim();
 
-            String name = nameCells.get(0)
-                    .getText()
-                    .trim();
+            String quantity =
+                    row.findElement(
+                                    By.xpath(
+                                            ".//td[@aria-colindex='"
+                                                    + quantityColIndex
+                                                    + "']//input[not(@type='hidden')]"))
+                            .getAttribute("value")
+                            .trim();
 
+            String price =
+                    row.findElement(
+                                    By.xpath(
+                                            ".//td[@aria-colindex='"
+                                                    + priceColIndex
+                                                    + "']//input[not(@type='hidden')]"))
+                            .getAttribute("value")
+                            .trim();
 
-            String quantity = row.findElement(
-                            By.xpath(
-                                    ".//td[@aria-colindex='" +
-                                            quantityColIndex +
-                                            "']//input[not(@type='hidden')]"
-                            )
-                    ).getAttribute("value")
-                    .trim();
+            System.out.printf("Item=%s , Quantity=%s , Price=%s%n", name, quantity, price);
 
-
-            String price = row.findElement(
-                            By.xpath(
-                                    ".//td[@aria-colindex='" +
-                                            priceColIndex +
-                                            "']//input[not(@type='hidden')]"
-                            )
-                    ).getAttribute("value")
-                    .trim();
-
-
-            System.out.printf(
-                    "Item=%s , Quantity=%s , Price=%s%n",
-                    name,
-                    quantity,
-                    price
-            );
-
-
-            data.put(
-                    name,
-                    quantity + "|" + price
-            );
+            data.put(name, quantity + "|" + price);
         }
 
         return data;
     }
-
 
     // =========================================
     // Wait Summary
@@ -516,56 +471,44 @@ public class AbstractForSales extends AbstractForPurchases{
 
     public void waitUntilSummaryValuesLoaded() {
 
-        WebDriverWait wait =
-                new WebDriverWait(
-                        driver,
-                        Duration.ofSeconds(10)
-                );
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
+        wait.until(
+                driver -> {
+                    try {
 
-        wait.until(driver -> {
+                        String beforeTax =
+                                driver.findElement(
+                                                By.xpath(
+                                                        "//label[normalize-space()='قبل الضريبة']"
+                                                                + "/parent::div/following-sibling::div//input"))
+                                        .getAttribute("value");
 
-            try {
+                        String tax =
+                                driver.findElement(
+                                                By.xpath(
+                                                        "//label[normalize-space()='الضريبة']"
+                                                                + "/parent::div/following-sibling::div//input"))
+                                        .getAttribute("value");
 
-                String beforeTax =
-                        driver.findElement(
-                                By.xpath(
-                                        "//label[normalize-space()='قبل الضريبة']" +
-                                                "/parent::div/following-sibling::div//input"
-                                )
-                        ).getAttribute("value");
+                        String net =
+                                driver.findElement(By.cssSelector("input[name='Net']"))
+                                        .getAttribute("value");
 
+                        return beforeTax != null
+                                && !beforeTax.trim().isEmpty()
+                                && tax != null
+                                && !tax.trim().isEmpty()
+                                && net != null
+                                && !net.trim().isEmpty();
 
-                String tax =
-                        driver.findElement(
-                                By.xpath(
-                                        "//label[normalize-space()='الضريبة']" +
-                                                "/parent::div/following-sibling::div//input"
-                                )
-                        ).getAttribute("value");
+                    } catch (Exception e) {
 
-
-                String net =
-                        driver.findElement(
-                                By.cssSelector(
-                                        "input[name='Net']"
-                                )
-                        ).getAttribute("value");
-
-
-                return beforeTax != null
-                        && !beforeTax.trim().isEmpty()
-                        && tax != null
-                        && !tax.trim().isEmpty()
-                        && net != null
-                        && !net.trim().isEmpty();
-
-            } catch (Exception e) {
-
-                return false;
-            }
-        });
+                        return false;
+                    }
+                });
     }
+
     @Override
     public ReportTotals getReportTotals() {
 
@@ -575,9 +518,7 @@ public class AbstractForSales extends AbstractForPurchases{
 
         totals.setDiscount(getInvoiceReportTotal("اجمالي الخصومات"));
 
-        totals.setBeforeTax(
-                getInvoiceReportTotal("الاجمالي الخاضع للضريبة (غير شامل الضريبة )")
-        );
+        totals.setBeforeTax(getInvoiceReportTotal("الاجمالي الخاضع للضريبة (غير شامل الضريبة )"));
 
         totals.setTax(getInvoiceReportTotal("ضريبة القيمة المضافة %15"));
 
@@ -587,84 +528,88 @@ public class AbstractForSales extends AbstractForPurchases{
     }
 
     private BigDecimal getInvoiceReportTotal(String label) {
-        String xpath = String.format(
-                "//tr[.//*[normalize-space()='%s']]//td[1]//div[last()]",
-                label
-        );
+        String xpath =
+                String.format("//tr[.//*[normalize-space()='%s']]//td[1]//div[last()]", label);
         String displayedValue = driver.findElement(By.xpath(xpath)).getText().trim();
-        String normalizedValue = displayedValue
-                .replace(",", "")
-                .replace("٬", "")
-                .replace("٫", ".")
-                .replaceAll("\\s+", "");
+        String normalizedValue =
+                displayedValue
+                        .replace(",", "")
+                        .replace("٬", "")
+                        .replace("٫", ".")
+                        .replaceAll("\\s+", "");
         return new BigDecimal(normalizedValue);
     }
-
 
     public Map<String, String> GetNamesQuantitiesAndPricesForInv() {
 
         Map<String, String> data = new LinkedHashMap<>();
 
-        String nameColIndex = driver.findElement(
-                By.xpath("//th[@role='columnheader'][.//div[normalize-space()='الاسم']]")
-        ).getAttribute("aria-colindex");
+        String nameColIndex =
+                driver.findElement(
+                                By.xpath(
+                                        "//th[@role='columnheader'][.//div[normalize-space()='الاسم']]"))
+                        .getAttribute("aria-colindex");
 
-        String quantityColIndex = driver.findElement(
-                By.xpath("//th[@role='columnheader'][.//div[normalize-space()='الكمية']]")
-        ).getAttribute("aria-colindex");
+        String quantityColIndex =
+                driver.findElement(
+                                By.xpath(
+                                        "//th[@role='columnheader'][.//div[normalize-space()='الكمية']]"))
+                        .getAttribute("aria-colindex");
 
-        String priceColIndex = driver.findElement(
-                By.xpath("//th[@role='columnheader'][.//div[normalize-space()='السعر']]")
-        ).getAttribute("aria-colindex");
+        String priceColIndex =
+                driver.findElement(
+                                By.xpath(
+                                        "//th[@role='columnheader'][.//div[normalize-space()='السعر']]"))
+                        .getAttribute("aria-colindex");
 
-        List<WebElement> rows = driver.findElements(
-                By.xpath("//tbody//tr[@role='row']")
-        );
+        List<WebElement> rows = driver.findElements(By.xpath("//tbody//tr[@role='row']"));
 
         for (WebElement row : rows) {
 
-            List<WebElement> nameCells = row.findElements(
-                    By.xpath(".//td[@aria-colindex='" + nameColIndex + "']")
-            );
+            List<WebElement> nameCells =
+                    row.findElements(By.xpath(".//td[@aria-colindex='" + nameColIndex + "']"));
 
-            if (nameCells.isEmpty())
-                continue;
+            if (nameCells.isEmpty()) continue;
 
             String name = nameCells.get(0).getText().trim();
 
-            String quantity = row.findElement(
-                    By.xpath(".//td[@aria-colindex='" + quantityColIndex + "']//input[not(@type='hidden')]")
-            ).getAttribute("value").trim();
+            String quantity =
+                    row.findElement(
+                                    By.xpath(
+                                            ".//td[@aria-colindex='"
+                                                    + quantityColIndex
+                                                    + "']//input[not(@type='hidden')]"))
+                            .getAttribute("value")
+                            .trim();
 
-            String price = row.findElement(
-                    By.xpath(".//td[@aria-colindex='" + priceColIndex + "']//input[not(@type='hidden')]")
-            ).getAttribute("value").trim();
+            String price =
+                    row.findElement(
+                                    By.xpath(
+                                            ".//td[@aria-colindex='"
+                                                    + priceColIndex
+                                                    + "']//input[not(@type='hidden')]"))
+                            .getAttribute("value")
+                            .trim();
 
-            System.out.printf(
-                    "Item=%s , Quantity=%s , Price=%s%n",
-                    name,
-                    quantity,
-                    price
-            );
+            System.out.printf("Item=%s , Quantity=%s , Price=%s%n", name, quantity, price);
 
             data.put(name, quantity + "|" + price);
         }
 
         return data;
     }
+
     @Step("البحث عن : {searchText}")
     public void SearchBarcodForInv(String searchText) {
         utilites.waits().waitForOverlayToDisappear();
-        utilites.TaypeTextB(SearchInput,searchText);
+        utilites.TaypeTextB(SearchInput, searchText);
     }
 
     @Step("الضغط على ايقونه الاسم وارسال الاسم {searchText}")
     public void ClickOnNameRadioBtnForInv(String searchText) {
         utilites.waits().waitForOverlayToDisappear();
-        utilites.ClickElement(ArabicNameInput );
+        utilites.ClickElement(ArabicNameInput);
         utilites.waits().waitForOverlayToDisappear();
         utilites.TaypeTextB(ArabicNameInput, searchText);
     }
-
-
 }

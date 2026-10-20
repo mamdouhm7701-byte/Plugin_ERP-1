@@ -14,9 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Chrome extends AbstractDriver {
-    private ChromeOptions getOptions()
+    private ChromeOptions getOptions() { // options
 
-    {//options
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
         options.addArguments("--force-device-scale-factor=0.9");
@@ -34,8 +33,8 @@ public class Chrome extends AbstractDriver {
         downloadPreferences.put(
                 "download.default_directory",
                 Path.of(System.getProperty("user.dir"), "target", "cash-export-downloads")
-                        .toAbsolutePath().toString()
-        );
+                        .toAbsolutePath()
+                        .toString());
         downloadPreferences.put("download.prompt_for_download", false);
         downloadPreferences.put("download.directory_upgrade", true);
         options.setExperimentalOption("prefs", downloadPreferences);
@@ -46,7 +45,6 @@ public class Chrome extends AbstractDriver {
         }
         options.setAcceptInsecureCerts(true);
         options.setPageLoadStrategy(PageLoadStrategy.NORMAL);
-
 
         return options;
     }
@@ -83,4 +81,3 @@ public class Chrome extends AbstractDriver {
         throw new IllegalArgumentException("Invalid Execution Type: " + type);
     }
 }
-

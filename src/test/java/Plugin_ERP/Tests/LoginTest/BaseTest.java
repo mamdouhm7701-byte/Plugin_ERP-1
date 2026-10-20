@@ -13,10 +13,7 @@ import org.testng.annotations.*;
 
 import java.time.Duration;
 
-@Listeners({
-        AllureTestNg.class,
-        TestNGListeners.class
-})
+@Listeners({AllureTestNg.class, TestNGListeners.class})
 public class BaseTest {
 
     protected static WebDriver driver;
@@ -37,35 +34,28 @@ public class BaseTest {
 
         System.out.println("Current URL = " + driver.getCurrentUrl());
         System.out.println("Title = " + driver.getTitle());
-        System.out.println("ReadyState = " + ((JavascriptExecutor) driver)
-                .executeScript("return document.readyState"));
+        System.out.println(
+                "ReadyState = "
+                        + ((JavascriptExecutor) driver)
+                                .executeScript("return document.readyState"));
 
-        System.out.println("login-email exists = "
-                + driver.getPageSource().contains("login-email"));
-
+        System.out.println(
+                "login-email exists = " + driver.getPageSource().contains("login-email"));
 
         login();
-
     }
 
-
     @Step("Login with username: {user} and password: {pass}")
-
     private void login() {
 
         LoginPage loginPage = new LoginPage(driver);
 
-        loginPage.Login(
-                PropertyReader.getValidUsername(),
-                PropertyReader.getValidPassword()
-        );
+        loginPage.Login(PropertyReader.getValidUsername(), PropertyReader.getValidPassword());
     }
 
     // ================= BEFORE TEST =================
 
-
     // ================= AFTER TEST =================
-
 
     // ================= TEARDOWN =================
     @AfterSuite(alwaysRun = true)
@@ -78,7 +68,7 @@ public class BaseTest {
                 driver = null;
             }
 
-        } catch (Exception ignored) {}
-
+        } catch (Exception ignored) {
+        }
     }
 }

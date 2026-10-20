@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!--
+  المدخل الشامل لقناتي الكاشير: 15 حالة نقاط بيع و15 مطعم و7 اختبارات محلية للتنظيف.
+  Regression يضم هذا الملف مرة واحدة. لا تضمه مع point-of-sale-testng.xml أو restaurant-testng.xml.
+  السيناريوهات مستقلة ببياناتها؛ إعدادات الفرع المؤقتة تستعاد بعد كل حالة والتنظيف بعد كل كلاس.
+  النتائج الموثقة سابقاً ليست نتيجة جديدة؛ أخطاء التطبيق المعروفة تبقى ضمن التغطية.
+-->
+<suite name="Special sales - Point of sale and restaurant" parallel="none" configfailurepolicy="continue">
+    <test name="Point of sale - Full page coverage" preserve-order="true">
+        <classes>
+            <class name="SpecialSalesTest.PointOfSaleTest"/>
+        </classes>
+    </test>
+    <test name="Restaurant - Full page coverage" preserve-order="true">
+        <classes>
+            <class name="SpecialSalesTest.RestaurantInvoiceTest"/>
+        </classes>
+    </test>
+    <test name="Special sales - Local ownership and recovery contracts" preserve-order="true">
+        <classes>
+            <class name="SpecialSalesTest.SpecialSalesCleanupTest"/>
+        </classes>
+    </test>
+</suite>

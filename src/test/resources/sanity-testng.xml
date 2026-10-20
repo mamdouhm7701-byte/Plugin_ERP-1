@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!--
+  Sanity تحقق مركز بعد تعديل صغير أو إصلاح، قبل إعادة Regression كاملة.
+  الفائدة: التأكد من المسار المتأثر ومن قواعد قريبة منه مثل الحفظ والرفض والإلغاء.
+  كل test أدناه يمثل نطاق تغيير. من IDE شغّل النطاق المقصود، أو احتفظ بعنصر test الخاص
+  به وحده في نسخة محلية من الملف. تشغيل الملف كاملاً ينفذ كل النطاقات أدناه.
+  ليست بديلاً عن إعادة حالة العيب نفسها: أضف اسم حالة العيب للنطاق المناسب عند الحاجة.
+  النطاق: 24 حالة، 3 حالات لكل موديول من الثمانية بما فيها نقاط البيع والمطعم.
+  تعليق المطعم يخصم المخزون، بينما تعليق سلة نقاط البيع محلي؛ لا نساوي السلوكين.
+  التشغيل: mvn '-Dsurefire.suiteXmlFiles=src/test/resources/sanity-testng.xml' test
+-->
+<suite name="Sanity - Focused checks by changed module" parallel="none" configfailurepolicy="continue">
+    <test name="Sanity Products" preserve-order="true">
+        <classes>
+            <class name="ProductsTest.AddProductsTest">
+                <methods>
+                    <include name="PR_SimpleProduct"/>
+                    <include name="AddProductWithOutUnit"/>
+                    <include name="PR_CancelEdit"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Sanity Dealers" preserve-order="true">
+        <classes>
+            <class name="DealerModelTest.CustomersTest">
+                <methods>
+                    <include name="CU_001_CustomerListStructure"/>
+                    <include name="CU_003_CancelCustomerEditWithoutSaving"/>
+                    <include name="CU_005_OwnedCustomerCreateEditDelete"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Sanity Sales" preserve-order="true">
+        <classes>
+            <class name="Invoice.SalesInvoiceCoverageTest">
+                <methods>
+                    <include name="savesOwnedItemFromPicker"/>
+                    <include name="emptyDocumentCannotSave"/>
+                    <include name="savedDocumentEditPolicy"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Sanity Purchases" preserve-order="true">
+        <classes>
+            <class name="Purches.PurchaseInvoiceCoverageTest">
+                <methods>
+                    <include name="savesOwnedItemFromPicker"/>
+                    <include name="negativeQuantityCannotSave"/>
+                    <include name="savedDocumentCanBeEdited"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Sanity Stores" preserve-order="true">
+        <classes>
+            <class name="StoreTest.TransBetweenStoreTest">
+                <methods>
+                    <include name="SM_DecimalQuantity"/>
+                    <include name="CantChosenSameStore"/>
+                    <include name="SM_CancelEdit"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Sanity Financial movements" preserve-order="true">
+        <classes>
+            <class name="FinancialMovementsTest.CustomerReceiptTest">
+                <methods>
+                    <include name="AddResetWithSaveTest"/>
+                    <include name="FM_RejectNegativeAmount"/>
+                    <include name="FM_CancelEditWithoutSaving"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Sanity Point of sale" preserve-order="true">
+        <classes>
+            <class name="SpecialSalesTest.PointOfSaleTest">
+                <methods>
+                    <include name="savesCashWithOwnedPayment"/>
+                    <include name="savesCreditAndDeductsStock"/>
+                    <include name="cancellingDeleteKeepsInvoice"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Sanity Restaurant" preserve-order="true">
+        <classes>
+            <class name="SpecialSalesTest.RestaurantInvoiceTest">
+                <methods>
+                    <include name="savesPaidExternalOrder"/>
+                    <include name="addingToHoldDeductsOnlyIncrement"/>
+                    <include name="payingHoldDoesNotDeductAgain"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

@@ -8,5 +8,4 @@ public class AdditionOrderPage extends StoreModulePage {
     public AdditionOrderPage(WebDriver driver) {
         super(driver);
     }
-
 }

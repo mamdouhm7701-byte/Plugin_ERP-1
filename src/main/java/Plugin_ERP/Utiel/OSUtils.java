@@ -7,6 +7,7 @@ public class OSUtils {
         LINUX,
         OTHER
     }
+
     public static OS getOperatingSystem() {
         String osName = PropertyReader.getProperty("os.name").toLowerCase();
         if (osName.contains("win")) {

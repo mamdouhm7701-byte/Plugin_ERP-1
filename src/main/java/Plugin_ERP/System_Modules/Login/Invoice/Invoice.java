@@ -26,6 +26,4 @@ public class Invoice extends SalesModulePage {
     public Invoice(WebDriver driver) {
         super(driver);
     }
-
-
 }

@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!--
+  جزء Regression للبيانات الأساسية والقيود اليومية واختبار تعريف ملفات التشغيل محلياً.
+  نستبعد أنواع الخصم القديمة وتسليم الخزينة وخط سير المندوب القديم لأنهم يستخدمون أسماء
+  مستخدمين وخزائن وعملاء ثابتة، ولم يهاجرا لإعداد بيانات مستقلة. السويتات القديمة محفوظة.
+  LoginTest القديم ليس بوابة مصادقة موثوقة؛ الدخول الفعلي يحدث في BaseTest لكل سويت واجهة.
+  الاختبارات المعطلة أصلاً تظل معطلة، ونجاح اختبار يرصد عيباً موثقاً لا يصحح سلوك التطبيق.
+-->
+<suite name="Regression - Basic data and general journal" parallel="none" configfailurepolicy="continue">
+    <test name="Owned basic data and journal coverage" preserve-order="true">
+        <classes>
+            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest"/>
+            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest"/>
+            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest"/>
+            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.DisEntTest"/>
+            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.ExpensesTest"/>
+            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.PaymentTest"/>
+            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest"/>
+            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.RoutLineTest"/>
+            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.StoreTest"/>
+            <class name="GenralAccountantTest.VouchersTest"/>
+            <class name="SuiteSupport.SuiteDefinitionsTest"/>
+            <class name="SuiteSupport.WorkflowCleanupOrderTest"/>
+        </classes>
+    </test>
+</suite>

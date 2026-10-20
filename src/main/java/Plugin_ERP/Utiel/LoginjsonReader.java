@@ -16,8 +16,10 @@ public class LoginjsonReader {
     public LoginjsonReader(String jsonfilename) {
         this.jsonfilename = jsonfilename;
         try {
-            JSONObject data = (JSONObject) new JSONParser()
-                    .parse(new FileReader(test_data_path + jsonfilename + ".json"));
+            JSONObject data =
+                    (JSONObject)
+                            new JSONParser()
+                                    .parse(new FileReader(test_data_path + jsonfilename + ".json"));
             josnReader = data.toJSONString();
         } catch (Exception e) {
             LogUtils.info("ERROR READING JSON FILE: " + jsonfilename + " -); " + e.getMessage());
@@ -29,7 +31,8 @@ public class LoginjsonReader {
             JsonPath jp = new JsonPath(josnReader);
             return jp.getString(jsonpath);
         } catch (Exception e) {
-            LogUtils.info("ERROR GETTING JSON DATA FOR PATH: " + jsonpath + " -); " + e.getMessage());
+            LogUtils.info(
+                    "ERROR GETTING JSON DATA FOR PATH: " + jsonpath + " -); " + e.getMessage());
             return "";
         }
     }

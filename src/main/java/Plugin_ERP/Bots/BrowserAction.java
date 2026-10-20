@@ -18,25 +18,23 @@ public class BrowserAction {
         this.driver = driver;
     }
 
-
-    //maximize browser window
+    // maximize browser window
     public void maximizeWindow() {
         driver.manage().window().maximize();
     }
 
-    //refresh browser
+    // refresh browser
     public void refreshPage() {
         driver.navigate().refresh();
         LogUtils.info("PageRefresh");
     }
 
-    //Get current URL
+    // Get current URL
     public String getCurrentUrl() {
         String url = driver.getCurrentUrl();
         LogUtils.info("Current URL: " + url);
         return url;
     }
-
 
     public void switchToMainTab() {
 
@@ -45,22 +43,21 @@ public class BrowserAction {
         driver.switchTo().window(mainWindow);
     }
 
-    //navigate to URL
+    // navigate to URL
     public void navigateToUrl(String url) {
         driver.navigate().to(url);
         LogUtils.info("Navigated to URL: " + url);
     }
 
-    //closr current tab
+    // closr current tab
     public void closeCurrentTab() {
         driver.close();
     }
 
-    //open New tab
+    // open New tab
     public void openNewTab() {
         driver.switchTo().newWindow(org.openqa.selenium.WindowType.TAB);
     }
-
 
     public void navigateTo(String navigateAction) {
         switch (navigateAction) {
@@ -81,32 +78,26 @@ public class BrowserAction {
 
     public void clearBrowserCache() {
         try {
-            ((JavascriptExecutor) driver).executeScript(
-                    "window.localStorage.clear();" +
-                            "window.sessionStorage.clear();"
-            );
+            ((JavascriptExecutor) driver)
+                    .executeScript(
+                            "window.localStorage.clear();" + "window.sessionStorage.clear();");
 
             // Clear cookies
             driver.manage().deleteAllCookies();
 
             // Hard reload (Ctrl+Shift+R equivalent)
-            ((JavascriptExecutor) driver).executeScript(
-                    "location.reload(true);"
-            );
+            ((JavascriptExecutor) driver).executeScript("location.reload(true);");
 
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            wait.until(ExpectedConditions.jsReturnsValue(
-                    "return document.readyState === 'complete'"
-            ));
+            wait.until(
+                    ExpectedConditions.jsReturnsValue("return document.readyState === 'complete'"));
 
             System.out.println("✅ Cache cleared and page reloaded");
 
         } catch (Exception e) {
             System.out.println("⚠️ Cache clear failed: " + e.getMessage());
         }
-
     }
-
 
     public void navigateWithRetry(String url) {
 
@@ -119,10 +110,11 @@ public class BrowserAction {
                 driver.navigate().to(url);
 
                 new WebDriverWait(driver, Duration.ofSeconds(20))
-                        .until(webDriver ->
-                                ((JavascriptExecutor) webDriver)
-                                        .executeScript("return document.readyState")
-                                        .equals("complete"));
+                        .until(
+                                webDriver ->
+                                        ((JavascriptExecutor) webDriver)
+                                                .executeScript("return document.readyState")
+                                                .equals("complete"));
 
                 new WebDriverWait(driver, Duration.ofSeconds(20))
                         .until(ExpectedConditions.urlToBe(url));
@@ -131,12 +123,10 @@ public class BrowserAction {
 
             } catch (Exception e) {
 
-                LogUtils.info("Navigation failed. Attempt "
-                        + attempt + "/" + maxAttempts);
+                LogUtils.info("Navigation failed. Attempt " + attempt + "/" + maxAttempts);
 
                 if (attempt == maxAttempts) {
-                    throw new RuntimeException(
-                            "Failed to navigate to: " + url, e);
+                    throw new RuntimeException("Failed to navigate to: " + url, e);
                 }
 
                 try {
@@ -164,13 +154,16 @@ public class BrowserAction {
                 boolean overlayVisible;
                 try {
                     List<WebElement> overlays = driver.findElements(overlay);
-                    overlayVisible = overlays.stream().anyMatch(el -> {
-                        try {
-                            return el.isDisplayed();
-                        } catch (StaleElementReferenceException e) {
-                            return false;
-                        }
-                    });
+                    overlayVisible =
+                            overlays.stream()
+                                    .anyMatch(
+                                            el -> {
+                                                try {
+                                                    return el.isDisplayed();
+                                                } catch (StaleElementReferenceException e) {
+                                                    return false;
+                                                }
+                                            });
                 } catch (StaleElementReferenceException e) {
                     overlayVisible = false;
                 }
@@ -190,9 +183,12 @@ public class BrowserAction {
             }
 
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-            wait.until(d ->
-                    "complete".equals(
-                            ((JavascriptExecutor) d).executeScript("return document.readyState")));
+            wait.until(
+                    d ->
+                            "complete"
+                                    .equals(
+                                            ((JavascriptExecutor) d)
+                                                    .executeScript("return document.readyState")));
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -203,7 +199,6 @@ public class BrowserAction {
             throw new RuntimeException("Overlay did not stabilize within timeout.", e);
         }
     }
-
 
     public void OpenNavigationHelper(Pages page) {
         waitForOverlayToDisappear();
@@ -218,10 +213,11 @@ public class BrowserAction {
                 WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
                 // انتظار اكتمال تحميل الصفحة الأساسي
-                wait.until(webDriver ->
-                        ((JavascriptExecutor) webDriver)
-                                .executeScript("return document.readyState")
-                                .equals("complete"));
+                wait.until(
+                        webDriver ->
+                                ((JavascriptExecutor) webDriver)
+                                        .executeScript("return document.readyState")
+                                        .equals("complete"));
 
                 // التأكد من الوصول للرابط المطلوب
                 wait.until(ExpectedConditions.urlToBe(url));
@@ -230,20 +226,24 @@ public class BrowserAction {
                 waitForOverlayToDisappear();
 
                 // تأكيد نهائي إننا لسه في نفس الصفحة المطلوبة بعد كل الانتظارات
-                Assert.assertEquals(driver.getCurrentUrl(), url,
+                Assert.assertEquals(
+                        driver.getCurrentUrl(),
+                        url,
                         "لم يتم الوصول إلى الصفحة المطلوبة: " + page.name());
 
                 LogUtils.info("Successfully opened page: " + page.name());
                 return;
 
             } catch (Exception e) {
-                LogUtils.info("Failed to open page: "
-                        + page.name()
-                        + " | Attempt "
-                        + attempt + "/" + maxAttempts);
+                LogUtils.info(
+                        "Failed to open page: "
+                                + page.name()
+                                + " | Attempt "
+                                + attempt
+                                + "/"
+                                + maxAttempts);
                 if (attempt == maxAttempts) {
-                    throw new RuntimeException(
-                            "Failed to open page: " + page.name(), e);
+                    throw new RuntimeException("Failed to open page: " + page.name(), e);
                 }
 
                 // انتظار بسيط قبل إعادة المحاولة
@@ -255,6 +255,4 @@ public class BrowserAction {
             }
         }
     }
-
-    }
-
+}

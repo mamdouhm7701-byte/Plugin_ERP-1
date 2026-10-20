@@ -1,10 +1,16 @@
 package FinancialMovementsTest;
 
 public final class FinancialFixtureRecovery extends Plugin_ERP.Tests.LoginTest.BaseTest {
-  public static void main(String[] args)throws Exception{
-    if(args.length!=1||!args[0].matches("[a-f0-9]{8}-[a-f0-9]{3}"))throw new IllegalArgumentException("Pass one exact financial fixture journal suffix");
-    var runner=new FinancialFixtureRecovery();
-    try{runner.setup();new TestSupport.FixtureSession(driver);FinancialTestData.resume(driver,args[0]).close();}
-    finally{runner.tearDown();}
-  }
+    public static void main(String[] args) throws Exception {
+        if (args.length != 1 || !args[0].matches("[a-f0-9]{8}-[a-f0-9]{3}"))
+            throw new IllegalArgumentException("Pass one exact financial fixture journal suffix");
+        var runner = new FinancialFixtureRecovery();
+        try {
+            runner.setup();
+            new TestSupport.FixtureSession(driver);
+            FinancialTestData.resume(driver, args[0]).close();
+        } finally {
+            runner.tearDown();
+        }
+    }
 }

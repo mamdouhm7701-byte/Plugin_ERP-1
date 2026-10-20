@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!--
+  رحلات E2E الإضافية داخل Regression.
+  رحلتا المشتريات موجودتان بالفعل في purchases-testng.xml ولا نكررهما هنا.
+  لا تستخدم e2e-testng.xml كاملاً داخل Regression حتى لا تكرر نفس رحلات المشتريات.
+  رحلات نقاط البيع والمطعم تأتي بالفعل من special-sales-testng.xml ولا تضاف هنا ثانية.
+-->
+<suite name="Regression - Cross module workflows" parallel="none" configfailurepolicy="continue">
+    <test name="Additional end to end journeys" preserve-order="true">
+        <classes>
+            <class name="Invoice.SalesEndToEndTest"/>
+            <class name="Invoice.SalesSettlementEndToEndTest"/>
+            <class name="Purches.PurchaseEndToEndTest"/>
+            <class name="Purches.PurchaseSettlementEndToEndTest"/>
+            <class name="Purches.SupplyChainEndToEndTest"/>
+            <class name="StoreTest.WarehouseEndToEndTest">
+                <methods>
+                    <include name="receiptThenTransferThenIssueFromDestination"/>
+                    <include name="transferThenReverseTransferRestoresBothStores"/>
+                    <include name="receiptTransferAndDamagePreserveUnrelatedStock"/>
+                    <include name="manufactureThenTransferThenIssueFinishedProduct"/>
+                    <include name="fractionalRoundTripPreservesBothStoreBalances"/>
+                </methods>
+            </class>
+            <class name="StoreTest.ManufacturingSalesEndToEndTest">
+                <methods>
+                    <include name="manufacturingThenSellingConsumesComponentsOnlyOnce"/>
+                    <include name="manufacturingTransferAndFractionalSaleRetainUnsoldProduct"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

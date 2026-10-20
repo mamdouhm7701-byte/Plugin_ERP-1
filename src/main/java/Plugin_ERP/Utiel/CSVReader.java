@@ -1,4 +1,3 @@
 package Plugin_ERP.Utiel;
 
-public class CSVReader {
-}
+public class CSVReader {}

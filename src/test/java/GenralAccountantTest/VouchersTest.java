@@ -43,7 +43,8 @@ public class VouchersTest extends BaseTest {
     public void OpenVouchersPageTest() {
         new VouchersPage(driver).NavigationHelper(Pages.VOUCHERS);
 
-        Assert.assertTrue(driver.getCurrentUrl().contains("/vouchers/"),
+        Assert.assertTrue(
+                driver.getCurrentUrl().contains("/vouchers/"),
                 "The vouchers page URL should contain /vouchers/.");
     }
 
@@ -53,12 +54,14 @@ public class VouchersTest extends BaseTest {
     @Epic("ERP Web")
     @Feature("الحسابات العامة - قيود يومية")
     @Story("إظهار تاريخ القيد")
-    @Description("يتحقق من أن نموذج القيد الجديد يعرض تاريخًا ابتدائيًا؛ لا يختبر حفظ التاريخ أو إعادة فتحه.")
+    @Description(
+            "يتحقق من أن نموذج القيد الجديد يعرض تاريخًا ابتدائيًا؛ لا يختبر حفظ التاريخ أو"
+                    + " إعادة فتحه.")
     public void VoucherDateIsPrepopulatedTest() {
         VouchersPage page = openNewVoucher();
 
-        Assert.assertFalse(page.getVoucherDate().isBlank(),
-                "A default voucher date should be displayed.");
+        Assert.assertFalse(
+                page.getVoucherDate().isBlank(), "A default voucher date should be displayed.");
     }
 
     @Test(priority = 3)
@@ -72,8 +75,8 @@ public class VouchersTest extends BaseTest {
         VouchersPage page = openNewVoucher();
 
         Assert.assertTrue(page.isSaveAvailable(), "The Save action should be available.");
-        Assert.assertTrue(page.isSaveAndPrintAvailable(),
-                "The Save and Print action should be available.");
+        Assert.assertTrue(
+                page.isSaveAndPrintAvailable(), "The Save and Print action should be available.");
     }
 
     @Test(priority = 4)
@@ -82,12 +85,15 @@ public class VouchersTest extends BaseTest {
     @Epic("ERP Web")
     @Feature("الحسابات العامة - قيود يومية")
     @Story("منع حفظ قيد فارغ")
-    @Description("يحاول حفظ النموذج الفارغ ويتأكد من بقائه مفتوحًا وغير محفوظ؛ واجهة الديمو لا تعرض رسالة تحقق مرئية.")
+    @Description(
+            "يحاول حفظ النموذج الفارغ ويتأكد من بقائه مفتوحًا وغير محفوظ؛ واجهة الديمو لا"
+                    + " تعرض رسالة تحقق مرئية.")
     public void RejectEmptyVoucherTest() {
         VouchersPage page = openNewVoucher();
         page.ClickSaveButton();
 
-        Assert.assertTrue(page.isVoucherFormDisplayed(),
+        Assert.assertTrue(
+                page.isVoucherFormDisplayed(),
                 "The empty voucher must remain unsaved in the entry form.");
     }
 
@@ -120,7 +126,8 @@ public class VouchersTest extends BaseTest {
 
         Assert.assertTrue(
                 driver.findElement(By.cssSelector("div[role='dialog'] table tbody"))
-                        .getText().contains("3110000"),
+                        .getText()
+                        .contains("3110000"),
                 "The account search should show the matching code.");
 
         page.closeAccountPicker();
@@ -140,7 +147,8 @@ public class VouchersTest extends BaseTest {
 
         Assert.assertTrue(
                 driver.findElement(By.cssSelector("div[role='dialog'] table tbody"))
-                        .getText().contains("رواتب واجور"),
+                        .getText()
+                        .contains("رواتب واجور"),
                 "The account search should show the matching name.");
 
         page.closeAccountPicker();
@@ -158,7 +166,9 @@ public class VouchersTest extends BaseTest {
         page.openAccountPicker();
         page.searchAccount("__NO_ACCOUNT_MATCH__");
 
-        Assert.assertEquals(page.getAccountSearchResultCount(), 0,
+        Assert.assertEquals(
+                page.getAccountSearchResultCount(),
+                0,
                 "An unmatched search should not return account rows.");
 
         page.closeAccountPicker();
@@ -184,14 +194,18 @@ public class VouchersTest extends BaseTest {
     @Epic("ERP Web")
     @Feature("الحسابات العامة - قيود يومية")
     @Story("اختيار حساب وإغلاق نافذة الاختيار")
-    @Description("يضيف حسابًا إلى مسودة القيد، ثم يفتح نافذة الحسابات ويغلقها دون اختيار آخر ويتحقق من بقاء البند.")
+    @Description(
+            "يضيف حسابًا إلى مسودة القيد، ثم يفتح نافذة الحسابات ويغلقها دون اختيار آخر"
+                    + " ويتحقق من بقاء البند.")
     public void CloseAccountPickerKeepsSelectedLineTest() {
         VouchersPage page = openNewVoucher();
         page.selectAccountByCode("1111000");
         page.openAccountPicker();
         page.closeAccountPicker();
 
-        Assert.assertEquals(page.getSelectedLineCount(), 1,
+        Assert.assertEquals(
+                page.getSelectedLineCount(),
+                1,
                 "Closing the account picker should preserve the selected draft line.");
     }
 
@@ -201,7 +215,9 @@ public class VouchersTest extends BaseTest {
     @Epic("ERP Web")
     @Feature("الحسابات العامة - قيود يومية")
     @Story("إجماليات المبالغ الصفرية")
-    @Description("يتحقق من أن إجماليات المسودة تظل صفرًا عند ترك المبالغ دون إدخال؛ لا يستنتج قاعدة السماح بالحفظ.")
+    @Description(
+            "يتحقق من أن إجماليات المسودة تظل صفرًا عند ترك المبالغ دون إدخال؛ لا يستنتج"
+                    + " قاعدة السماح بالحفظ.")
     public void ZeroAmountsKeepZeroDraftTotalsTest() {
         VouchersPage page = openNewVoucher();
         page.selectAccountByCode("1111000");
@@ -232,7 +248,9 @@ public class VouchersTest extends BaseTest {
     @Epic("ERP Web")
     @Feature("الحسابات العامة - قيود يومية")
     @Story("التحقق من توازن مسودة القيد")
-    @Description("يضيف حسابين إلى المسودة ويدخل 1000 مدينًا و1000 دائنًا ويتحقق من الإجماليات دون إنشاء سجل محفوظ.")
+    @Description(
+            "يضيف حسابين إلى المسودة ويدخل 1000 مدينًا و1000 دائنًا ويتحقق من الإجماليات دون"
+                    + " إنشاء سجل محفوظ.")
     public void BalancedEntryTotalsTest() {
         VouchersPage page = openNewVoucher();
         page.selectAccountByCode("1111000");
@@ -241,8 +259,7 @@ public class VouchersTest extends BaseTest {
         page.setCredit(2, "1000");
 
         page.assertTotals("1000", "1000");
-        Assert.assertTrue(page.isBalanced(),
-                "Equal debit and credit totals should be balanced.");
+        Assert.assertTrue(page.isBalanced(), "Equal debit and credit totals should be balanced.");
     }
 
     @Test(priority = 14)
@@ -251,7 +268,9 @@ public class VouchersTest extends BaseTest {
     @Epic("ERP Web")
     @Feature("الحسابات العامة - قيود يومية")
     @Story("التحقق من عدم اتزان المسودة")
-    @Description("يتحقق من اختلاف إجمالي المدين عن الدائن عندما تكون المسودة 1000 مقابل 900، دون الضغط على الحفظ.")
+    @Description(
+            "يتحقق من اختلاف إجمالي المدين عن الدائن عندما تكون المسودة 1000 مقابل 900، دون"
+                    + " الضغط على الحفظ.")
     public void UnbalancedEntryTotalsTest() {
         VouchersPage page = openNewVoucher();
         page.selectAccountByCode("1111000");
@@ -260,8 +279,8 @@ public class VouchersTest extends BaseTest {
         page.setCredit(2, "900");
 
         page.assertTotals("1000", "900");
-        Assert.assertFalse(page.isBalanced(),
-                "An entry with unequal totals must be reported as unbalanced.");
+        Assert.assertFalse(
+                page.isBalanced(), "An entry with unequal totals must be reported as unbalanced.");
     }
 
     @Test(priority = 15)
@@ -330,12 +349,18 @@ public class VouchersTest extends BaseTest {
     @Epic("ERP Web")
     @Feature("الحسابات العامة - قيود يومية")
     @Story("JV-007 حقل المبلغ الرقمي")
-    @Description("يفحص أن حقلي المدين والدائن يستخدمان مدخلات رقمية؛ لا يثبت وحده قاعدة منع المبلغ السالب.")
+    @Description(
+            "يفحص أن حقلي المدين والدائن يستخدمان مدخلات رقمية؛ لا يثبت وحده قاعدة منع المبلغ"
+                    + " السالب.")
     public void AmountFieldsAreNumericTest() {
         VouchersPage page = openNewVoucher();
         page.selectAccountByCode("1111000");
-        By debit = By.xpath("(//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!=''])[1]//td[@aria-colindex='3']//input");
-        By credit = By.xpath("(//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!=''])[1]//td[@aria-colindex='4']//input");
+        By debit =
+                By.xpath(
+                        "(//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!=''])[1]//td[@aria-colindex='3']//input");
+        By credit =
+                By.xpath(
+                        "(//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!=''])[1]//td[@aria-colindex='4']//input");
 
         Assert.assertTrue(page.isNumericAmountInput(debit));
         Assert.assertTrue(page.isNumericAmountInput(credit));
@@ -403,13 +428,19 @@ public class VouchersTest extends BaseTest {
         Assert.assertEquals(page.getLineNotes(1), "بند Test 123");
     }
 
-    @Test(priority = 23, enabled = false, description = "Blocked: the visible search field accepts text but does not filter the voucher-line rows in the inspected UI.")
+    @Test(
+            priority = 23,
+            enabled = false,
+            description =
+                    "Blocked: the visible search field accepts text but does not filter the voucher-line rows in the inspected UI.")
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.NORMAL)
     @Epic("ERP Web")
     @Feature("الحسابات العامة - قيود يومية")
     @Story("JV-040 البحث في جدول البنود")
-    @Description("يختار حسابين ثم يبحث بكود حساب ويتأكد من تصفية الجدول إلى البند المطابق دون تعديل القيد.")
+    @Description(
+            "يختار حسابين ثم يبحث بكود حساب ويتأكد من تصفية الجدول إلى البند المطابق دون"
+                    + " تعديل القيد.")
     public void AccountSearchAvailableInLinesTest() {
         VouchersPage page = openNewVoucher();
         page.selectAccountByCode("1111000");
@@ -417,7 +448,9 @@ public class VouchersTest extends BaseTest {
         Assert.assertTrue(page.isAccountDropdownSearchPresent());
         page.selectAccountByCode("2111000");
         page.searchVoucherLines("1111000");
-        Assert.assertEquals(page.getSelectedLineCount(), 1,
+        Assert.assertEquals(
+                page.getSelectedLineCount(),
+                1,
                 "The table search should filter the account lines to the matching account.");
     }
 
@@ -427,11 +460,14 @@ public class VouchersTest extends BaseTest {
     @Epic("ERP Web")
     @Feature("الحسابات العامة - قيود يومية")
     @Story("JV-020 اختبار علامة تسوية الضريبة")
-    @Description("يتحقق من إمكانية تحديد وإلغاء علامة تسوية الضريبة فقط دون حفظ القيد أو فحص أثرها اللاحق.")
+    @Description(
+            "يتحقق من إمكانية تحديد وإلغاء علامة تسوية الضريبة فقط دون حفظ القيد أو فحص أثرها"
+                    + " اللاحق.")
     public void TaxSettlementTest() {
         VouchersPage page = openNewVoucher();
         page.selectAccountByCode("2221000");
-        Assert.assertTrue(page.getSettlementCheckboxCount() > 0,
+        Assert.assertTrue(
+                page.getSettlementCheckboxCount() > 0,
                 "The voucher UI should expose the tax-settlement checkbox.");
         page.setSettlementChecked(true);
         Assert.assertTrue(page.isSettlementChecked(1));
@@ -439,15 +475,22 @@ public class VouchersTest extends BaseTest {
         Assert.assertFalse(page.isSettlementChecked(1));
     }
 
-    @Test(priority = 25, description = "Submits a uniquely marked unbalanced test voucher, confirms it was not saved, and cleans it up if the application accepts it.")
+    @Test(
+            priority = 25,
+            description =
+                    "Submits a uniquely marked unbalanced test voucher, confirms it was not saved, and cleans it up if the application accepts it.")
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("ERP Web")
     @Feature("الحسابات العامة - قيود يومية")
     @Story("JV-002 رفض حفظ القيد غير المتزن")
-    @Description("يرسل مدينًا 1000 ودائنًا 900 على قيد اختبار بعلامة فريدة؛ يتحقق من رفض الحفظ أو يحذف القيد فورًا إن قبله النظام.")
+    @Description(
+            "يرسل مدينًا 1000 ودائنًا 900 على قيد اختبار بعلامة فريدة؛ يتحقق من رفض الحفظ أو"
+                    + " يحذف القيد فورًا إن قبله النظام.")
     public void RejectUnbalancedVoucherOnSaveTest() {
-        String marker = "AUTO-JV-UNBALANCED-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        String marker =
+                "AUTO-JV-UNBALANCED-"
+                        + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         VouchersPage page = openNewVoucher();
         boolean markerExists = false;
         try {
@@ -463,7 +506,8 @@ public class VouchersTest extends BaseTest {
                 page.deleteVoucherListRowByMarker(marker);
                 markerExists = false;
             }
-            Assert.assertFalse(markerExists,
+            Assert.assertFalse(
+                    markerExists,
                     "An unbalanced voucher must not persist; any accepted test record is deleted immediately.");
         } finally {
             if (markerExists) {
@@ -473,37 +517,57 @@ public class VouchersTest extends BaseTest {
         }
     }
 
-    @Test(priority = 26, description = "Submits a zero-value marked voucher and deletes it immediately if accepted.")
+    @Test(
+            priority = 26,
+            description =
+                    "Submits a zero-value marked voucher and deletes it immediately if accepted.")
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("ERP Web")
     @Feature("الحسابات العامة - قيود يومية")
     @Story("JV-006 منع القيد ذي المبالغ الصفرية")
-    @Description("يحاول حفظ قيد صفري بعلامة فريدة، ويتأكد أنه لم يظهر بالقائمة ويحذفه فورًا إن قبله النظام.")
+    @Description(
+            "يحاول حفظ قيد صفري بعلامة فريدة، ويتأكد أنه لم يظهر بالقائمة ويحذفه فورًا إن"
+                    + " قبله النظام.")
     public void RejectZeroValueVoucherOnSaveTest() {
-        assertMarkedVoucherRejected("ZERO", page -> {
-            page.selectAccountByCode("1111000");
-        });
+        assertMarkedVoucherRejected(
+                "ZERO",
+                page -> {
+                    page.selectAccountByCode("1111000");
+                });
     }
 
-    @Test(priority = 27, description = "Submits a balanced signed-value marked voucher and deletes it immediately if accepted.")
+    @Test(
+            priority = 27,
+            description =
+                    "Submits a balanced signed-value marked voucher and deletes it immediately if accepted.")
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.NORMAL)
     @Epic("ERP Web")
     @Feature("الحسابات العامة - قيود يومية")
     @Story("JV-007 رفض المبلغ السالب عند التحقق")
-    @Description("يحاول حفظ مدين -100 ودائن -100 بقيد اختبار مميز، ويتأكد من رفضه أو يحذفه فورًا إن قبله النظام.")
+    @Description(
+            "يحاول حفظ مدين -100 ودائن -100 بقيد اختبار مميز، ويتأكد من رفضه أو يحذفه فورًا"
+                    + " إن قبله النظام.")
     public void RejectNegativeJournalAmountTest() {
-        assertMarkedVoucherRejected("NEGATIVE", page -> {
-            page.selectAccountByCode("1111000");
-            page.selectAccountByCode("2111000");
-            page.setDebit(1, "-100");
-            page.setCredit(2, "-100");
-        });
+        assertMarkedVoucherRejected(
+                "NEGATIVE",
+                page -> {
+                    page.selectAccountByCode("1111000");
+                    page.selectAccountByCode("2111000");
+                    page.setDebit(1, "-100");
+                    page.setCredit(2, "-100");
+                });
     }
 
-    private void assertMarkedVoucherRejected(String scenario, java.util.function.Consumer<VouchersPage> setup) {
-        String marker = "AUTO-JV-" + scenario + "-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"));
+    private void assertMarkedVoucherRejected(
+            String scenario, java.util.function.Consumer<VouchersPage> setup) {
+        String marker =
+                "AUTO-JV-"
+                        + scenario
+                        + "-"
+                        + LocalDateTime.now()
+                                .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"));
         VouchersPage page = openNewVoucher();
         boolean wasPersisted = false;
         try {
@@ -516,8 +580,11 @@ public class VouchersTest extends BaseTest {
                 page.deleteVoucherListRowByMarker(marker);
                 wasPersisted = false;
             }
-            Assert.assertFalse(wasPersisted,
-                    "A " + scenario + " voucher must be rejected; any accepted test record is deleted immediately.");
+            Assert.assertFalse(
+                    wasPersisted,
+                    "A "
+                            + scenario
+                            + " voucher must be rejected; any accepted test record is deleted immediately.");
         } finally {
             if (wasPersisted) {
                 page.NavigationHelper(Pages.VOUCHERS);
@@ -537,7 +604,9 @@ public class VouchersTest extends BaseTest {
         VouchersPage page = new VouchersPage(driver);
         page.NavigationHelper(Pages.VOUCHERS);
         if (page.hasVoucherMarkerPrefixInList("AUTO-JV-")) {
-            System.err.println("Found test rows before cleanup check: " + page.getVoucherRowsContaining("AUTO-JV-"));
+            System.err.println(
+                    "Found test rows before cleanup check: "
+                            + page.getVoucherRowsContaining("AUTO-JV-"));
             page.deleteVoucherRowsContaining("AUTO-JV-");
             page.NavigationHelper(Pages.VOUCHERS);
         }
@@ -548,15 +617,22 @@ public class VouchersTest extends BaseTest {
         Assert.assertFalse(page.hasVoucherMarkerPrefixInList("AUTO-JV-"));
     }
 
-    @Test(priority = 29, description = "Creates one uniquely marked test voucher, checks save/list/report/edit, then deletes that exact voucher.")
+    @Test(
+            priority = 29,
+            description =
+                    "Creates one uniquely marked test voucher, checks save/list/report/edit, then deletes that exact voucher.")
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("ERP Web")
     @Feature("الحسابات العامة - قيود يومية")
     @Story("دورة حفظ وطباعة وتعديل وحذف قيد اختباري")
-    @Description("ينشئ قيدًا متزنًا على الحسابات الموجودة، ويتحقق من الأرقام في الشاشة والتقرير وإعادة الفتح ثم يحذف قيد الاختبار المحدد بالعلامة الفريدة.")
+    @Description(
+            "ينشئ قيدًا متزنًا على الحسابات الموجودة، ويتحقق من الأرقام في الشاشة والتقرير"
+                    + " وإعادة الفتح ثم يحذف قيد الاختبار المحدد بالعلامة الفريدة.")
     public void SavePrintEditAndDeleteTestVoucher() {
-        String marker = "AUTO-JV-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        String marker =
+                "AUTO-JV-"
+                        + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         VouchersPage page = new VouchersPage(driver);
         boolean saved = false;
         try {
@@ -576,19 +652,26 @@ public class VouchersTest extends BaseTest {
             saved = true;
 
             page.NavigationHelper(Pages.VOUCHERS);
-            Assert.assertTrue(page.hasVoucherMarkerInList(marker), "Saved voucher should appear in the list.");
+            Assert.assertTrue(
+                    page.hasVoucherMarkerInList(marker),
+                    "Saved voucher should appear in the list.");
             page.editVoucherListRowByMarker(marker);
-            Assert.assertEquals(page.getVoucherDate(), originalDate,
+            Assert.assertEquals(
+                    page.getVoucherDate(),
+                    originalDate,
                     "The default voucher date should persist when the saved entry is reopened.");
             Assert.assertEquals(page.getNotes(), marker);
-            Assert.assertEquals(new BigDecimal(page.getDebitValue(1)).compareTo(new BigDecimal("125.50")), 0);
-            Assert.assertEquals(new BigDecimal(page.getCreditValue(2)).compareTo(new BigDecimal("125.50")), 0);
+            Assert.assertEquals(
+                    new BigDecimal(page.getDebitValue(1)).compareTo(new BigDecimal("125.50")), 0);
+            Assert.assertEquals(
+                    new BigDecimal(page.getCreditValue(2)).compareTo(new BigDecimal("125.50")), 0);
 
             page.setDebit(1, "150.75");
             page.setCredit(2, "150.75");
             page.ClickSaveAndPrintButton();
             String report = page.getVoucherReportText();
-            Assert.assertTrue(report.contains("150.75"), "Print report should reflect edited amount.");
+            Assert.assertTrue(
+                    report.contains("150.75"), "Print report should reflect edited amount.");
             driver.close();
             driver.switchTo().window(driver.getWindowHandles().iterator().next());
 
@@ -608,24 +691,32 @@ public class VouchersTest extends BaseTest {
                         page.deleteVoucherListRowByMarker(marker);
                     }
                 } catch (Exception cleanupFailure) {
-                    throw new AssertionError("Could not clean up the test voucher marked " + marker, cleanupFailure);
+                    throw new AssertionError(
+                            "Could not clean up the test voucher marked " + marker, cleanupFailure);
                 }
             }
         }
     }
 
-    @Test(priority = 30, description = "Submits a balanced voucher with both values on one line and deletes it if accepted.")
+    @Test(
+            priority = 30,
+            description =
+                    "Submits a balanced voucher with both values on one line and deletes it if accepted.")
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.NORMAL)
     @Epic("ERP Web")
     @Feature("الحسابات العامة - قيود يومية")
     @Story("JV-009 قاعدة المدين والدائن في البند نفسه")
-    @Description("يحاول حفظ بند مدين 100 ودائن 100 بعلامة فريدة، ويتأكد من رفضه أو يحذفه فورًا إن قبله النظام.")
+    @Description(
+            "يحاول حفظ بند مدين 100 ودائن 100 بعلامة فريدة، ويتأكد من رفضه أو يحذفه فورًا إن"
+                    + " قبله النظام.")
     public void RejectDebitAndCreditOnSameLineTest() {
-        assertMarkedVoucherRejected("SAME-LINE", page -> {
-            page.selectAccountByCode("1111000");
-            page.setDebit(1, "100");
-            page.setCredit(1, "100");
-        });
+        assertMarkedVoucherRejected(
+                "SAME-LINE",
+                page -> {
+                    page.selectAccountByCode("1111000");
+                    page.setDebit(1, "100");
+                    page.setCredit(1, "100");
+                });
     }
 }

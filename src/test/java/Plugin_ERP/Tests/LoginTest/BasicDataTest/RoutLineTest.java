@@ -8,246 +8,247 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class RoutLineTest extends BaseTest {
-  private String unique(String s) {
-    return "QA-ROUTE-" + s + "-" + System.currentTimeMillis();
-  }
+    private String unique(String s) {
+        return "QA-ROUTE-" + s + "-" + System.currentTimeMillis();
+    }
 
-  private RoutLine open() {
-    RoutLine p = new RoutLine(driver);
-    p.NavigationHelper(Pages.ROUTELINESTATUES);
-    return p;
-  }
+    private RoutLine open() {
+        RoutLine p = new RoutLine(driver);
+        p.NavigationHelper(Pages.ROUTELINESTATUES);
+        return p;
+    }
 
-  private void create(RoutLine p, String n, String en, String type, boolean location) {
-    p.ClickNew();
-    p.AddArabicName(n);
-    if (en != null) p.AddEnglishName(en);
-    p.SelectRadiBouton(type);
-    p.AddNoteForDealer("QA route test");
-    p.SetRouteLocation(location);
-    p.ClickSaveButton();
-    Assert.assertEquals(p.GetExactMatchCount(n), 1, "يجب ظهور حالة خط السير مرة واحدة: " + n);
-  }
+    private void create(RoutLine p, String n, String en, String type, boolean location) {
+        p.ClickNew();
+        p.AddArabicName(n);
+        if (en != null) p.AddEnglishName(en);
+        p.SelectRadiBouton(type);
+        p.AddNoteForDealer("QA route test");
+        p.SetRouteLocation(location);
+        p.ClickSaveButton();
+        Assert.assertEquals(p.GetExactMatchCount(n), 1, "يجب ظهور حالة خط السير مرة واحدة: " + n);
+    }
 
-  private void cleanup(RoutLine p, String... ns) {
-    for (String n : ns)
-      if (n != null && !n.isBlank())
+    private void cleanup(RoutLine p, String... ns) {
+        for (String n : ns)
+            if (n != null && !n.isBlank())
+                try {
+                    p.CloseFormIfOpen();
+                    p.DismissAlertIfPresent();
+                    if (p.GetExactMatchCount(n) > 0) {
+                        p.RequestDeleteByName(n);
+                        p.ConfirmDelete();
+                    }
+                } catch (Exception e) {
+                    System.err.println(
+                            "Could not clean owned route '" + n + "': " + e.getMessage());
+                }
+    }
+
+    @Test(priority = 0)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("Web Cloud")
+    @Feature("حالة خط السير")
+    @Story("RL-001 بنية القائمة")
+    @Description("يتحقق من أعمدة حالة خط السير ونوع المستند.")
+    public void RL_001_ListStructure() {
+        Assert.assertTrue(open().IsListStructureDisplayed());
+    }
+
+    @Test(priority = 1)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("Web Cloud")
+    @Feature("حالة خط السير")
+    @Story("RL-002 عناصر النموذج")
+    @Description("يتحقق من عناصر نموذج حالة خط السير.")
+    public void RL_002_FormControls() {
+        RoutLine p = open();
+        p.ClickNew();
+        Assert.assertTrue(p.GetMissingControls().isEmpty(), p.GetMissingControls());
+        p.ClickCloseButton();
+    }
+
+    @Test(priority = 2)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("Web Cloud")
+    @Feature("حالة خط السير")
+    @Story("RL-014 إغلاق دون حفظ")
+    @Description("يتحقق من عدم إنشاء حالة عند إغلاق النموذج دون حفظ.")
+    public void RL_014_CloseWithoutSave() {
+        RoutLine p = open();
+        String n = unique("UNSAVED");
+        p.ClickNew();
+        p.AddArabicName(n);
+        p.ClickCloseButton();
+        Assert.assertEquals(p.GetExactMatchCount(n), 0);
+    }
+
+    @Test(priority = 3)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("Web Cloud")
+    @Feature("حالة خط السير")
+    @Story("RL-004 الاسم مطلوب")
+    @Description("يتحقق من رفض الحفظ دون الاسم العربي.")
+    public void RL_004_ArabicNameRequired() {
+        RoutLine p = open();
+        p.ClickNew();
+        p.ClickSaveButton();
+        Assert.assertTrue(p.IsArabicNameRequiredDisplayed());
+        p.ClickCloseButton();
+    }
+
+    @Test(priority = 4, enabled = false)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("Web Cloud")
+    @Feature("حالة خط السير")
+    @Story("RL-003 إنشاء والتحقق")
+    @Description("مؤجل: الواجهة تحفظ نوع المستند طلبية رغم اختيار فاتورة؛ يلزم إصلاح سلوك المنتج.")
+    public void RL_003_CreateAndVerify() {
+        RoutLine p = open();
+        String n = unique("CREATE"), en = "Route " + System.currentTimeMillis();
         try {
-          p.CloseFormIfOpen();
-          p.DismissAlertIfPresent();
-          if (p.GetExactMatchCount(n) > 0) {
-            p.RequestDeleteByName(n);
-            p.ConfirmDelete();
-          }
-        } catch (Exception e) {
-          System.err.println("Could not clean owned route '" + n + "': " + e.getMessage());
+            create(p, n, en, "فاتورة", true);
+            p.OpenForEditByName(n);
+            Assert.assertEquals(p.GetArabicNameValue(), n);
+            Assert.assertEquals(p.GetEnglishNameValue(), en);
+            Assert.assertEquals(p.GetDocumentTypeValue(), "فاتورة");
+            Assert.assertTrue(p.IsRouteLocationChecked());
+            Assert.assertFalse(p.GetCodeValue().isBlank());
+            p.ClickCloseButton();
+        } finally {
+            cleanup(p, n);
         }
-  }
-
-  @Test(priority = 0)
-  @Owner("MAMDOUH")
-  @Severity(SeverityLevel.CRITICAL)
-  @Epic("Web Cloud")
-  @Feature("حالة خط السير")
-  @Story("RL-001 بنية القائمة")
-  @Description("يتحقق من أعمدة حالة خط السير ونوع المستند.")
-  public void RL_001_ListStructure() {
-    Assert.assertTrue(open().IsListStructureDisplayed());
-  }
-
-  @Test(priority = 1)
-  @Owner("MAMDOUH")
-  @Severity(SeverityLevel.CRITICAL)
-  @Epic("Web Cloud")
-  @Feature("حالة خط السير")
-  @Story("RL-002 عناصر النموذج")
-  @Description("يتحقق من عناصر نموذج حالة خط السير.")
-  public void RL_002_FormControls() {
-    RoutLine p = open();
-    p.ClickNew();
-    Assert.assertTrue(p.GetMissingControls().isEmpty(), p.GetMissingControls());
-    p.ClickCloseButton();
-  }
-
-  @Test(priority = 2)
-  @Owner("MAMDOUH")
-  @Severity(SeverityLevel.NORMAL)
-  @Epic("Web Cloud")
-  @Feature("حالة خط السير")
-  @Story("RL-014 إغلاق دون حفظ")
-  @Description("يتحقق من عدم إنشاء حالة عند إغلاق النموذج دون حفظ.")
-  public void RL_014_CloseWithoutSave() {
-    RoutLine p = open();
-    String n = unique("UNSAVED");
-    p.ClickNew();
-    p.AddArabicName(n);
-    p.ClickCloseButton();
-    Assert.assertEquals(p.GetExactMatchCount(n), 0);
-  }
-
-  @Test(priority = 3)
-  @Owner("MAMDOUH")
-  @Severity(SeverityLevel.CRITICAL)
-  @Epic("Web Cloud")
-  @Feature("حالة خط السير")
-  @Story("RL-004 الاسم مطلوب")
-  @Description("يتحقق من رفض الحفظ دون الاسم العربي.")
-  public void RL_004_ArabicNameRequired() {
-    RoutLine p = open();
-    p.ClickNew();
-    p.ClickSaveButton();
-    Assert.assertTrue(p.IsArabicNameRequiredDisplayed());
-    p.ClickCloseButton();
-  }
-
-  @Test(priority = 4, enabled = false)
-  @Owner("MAMDOUH")
-  @Severity(SeverityLevel.CRITICAL)
-  @Epic("Web Cloud")
-  @Feature("حالة خط السير")
-  @Story("RL-003 إنشاء والتحقق")
-  @Description("مؤجل: الواجهة تحفظ نوع المستند طلبية رغم اختيار فاتورة؛ يلزم إصلاح سلوك المنتج.")
-  public void RL_003_CreateAndVerify() {
-    RoutLine p = open();
-    String n = unique("CREATE"), en = "Route " + System.currentTimeMillis();
-    try {
-      create(p, n, en, "فاتورة", true);
-      p.OpenForEditByName(n);
-      Assert.assertEquals(p.GetArabicNameValue(), n);
-      Assert.assertEquals(p.GetEnglishNameValue(), en);
-      Assert.assertEquals(p.GetDocumentTypeValue(), "فاتورة");
-      Assert.assertTrue(p.IsRouteLocationChecked());
-      Assert.assertFalse(p.GetCodeValue().isBlank());
-      p.ClickCloseButton();
-    } finally {
-      cleanup(p, n);
     }
-  }
 
-  @Test(priority = 5, enabled = false)
-  @Owner("MAMDOUH")
-  @Severity(SeverityLevel.NORMAL)
-  @Epic("Web Cloud")
-  @Feature("حالة خط السير")
-  @Story("RL-007 نوع التحصيل وخيار الموقع")
-  @Description("مؤجل لنفس خلل حفظ نوع المستند المثبت في RL-003.")
-  public void RL_007_CollectionTypeAndLocationOff() {
-    RoutLine p = open();
-    String n = unique("COLLECTION");
-    try {
-      create(p, n, null, "تحصيل", false);
-      p.OpenForEditByName(n);
-      Assert.assertEquals(p.GetDocumentTypeValue(), "تحصيل");
-      Assert.assertFalse(p.IsRouteLocationChecked());
-      p.ClickCloseButton();
-    } finally {
-      cleanup(p, n);
+    @Test(priority = 5, enabled = false)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("Web Cloud")
+    @Feature("حالة خط السير")
+    @Story("RL-007 نوع التحصيل وخيار الموقع")
+    @Description("مؤجل لنفس خلل حفظ نوع المستند المثبت في RL-003.")
+    public void RL_007_CollectionTypeAndLocationOff() {
+        RoutLine p = open();
+        String n = unique("COLLECTION");
+        try {
+            create(p, n, null, "تحصيل", false);
+            p.OpenForEditByName(n);
+            Assert.assertEquals(p.GetDocumentTypeValue(), "تحصيل");
+            Assert.assertFalse(p.IsRouteLocationChecked());
+            p.ClickCloseButton();
+        } finally {
+            cleanup(p, n);
+        }
     }
-  }
 
-  @Test(priority = 6)
-  @Owner("MAMDOUH")
-  @Severity(SeverityLevel.CRITICAL)
-  @Epic("Web Cloud")
-  @Feature("حالة خط السير")
-  @Story("RL-021 تعديل سجل الاختبار")
-  @Description("يعدل الاسم ونوع المستند في السجل المملوك للاختبار.")
-  public void RL_021_EditOwned() {
-    RoutLine p = open();
-    String n = unique("EDIT"), u = n + "-UPDATED";
-    try {
-      create(p, n, "Route edit", "فاتورة", false);
-      p.OpenForEditByName(n);
-      p.AddArabicName(u);
-      p.SelectRadiBouton("تحصيل");
-      p.ClickSaveButton();
-      Assert.assertEquals(p.GetExactMatchCount(u), 1);
-    } finally {
-      cleanup(p, u, n);
+    @Test(priority = 6)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("Web Cloud")
+    @Feature("حالة خط السير")
+    @Story("RL-021 تعديل سجل الاختبار")
+    @Description("يعدل الاسم ونوع المستند في السجل المملوك للاختبار.")
+    public void RL_021_EditOwned() {
+        RoutLine p = open();
+        String n = unique("EDIT"), u = n + "-UPDATED";
+        try {
+            create(p, n, "Route edit", "فاتورة", false);
+            p.OpenForEditByName(n);
+            p.AddArabicName(u);
+            p.SelectRadiBouton("تحصيل");
+            p.ClickSaveButton();
+            Assert.assertEquals(p.GetExactMatchCount(u), 1);
+        } finally {
+            cleanup(p, u, n);
+        }
     }
-  }
 
-  @Test(priority = 7)
-  @Owner("MAMDOUH")
-  @Severity(SeverityLevel.NORMAL)
-  @Epic("Web Cloud")
-  @Feature("حالة خط السير")
-  @Story("RL-022 إلغاء تعديل")
-  @Description("يتحقق من إلغاء التغيير عند إغلاق النموذج.")
-  public void RL_022_CancelEdit() {
-    RoutLine p = open();
-    String n = unique("CANCEL-EDIT");
-    try {
-      create(p, n, null, "فاتورة", false);
-      p.OpenForEditByName(n);
-      p.AddArabicName(n + "-TEMP");
-      p.ClickCloseButton();
-      p.OpenForEditByName(n);
-      Assert.assertEquals(p.GetArabicNameValue(), n);
-      p.ClickCloseButton();
-    } finally {
-      cleanup(p, n);
+    @Test(priority = 7)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("Web Cloud")
+    @Feature("حالة خط السير")
+    @Story("RL-022 إلغاء تعديل")
+    @Description("يتحقق من إلغاء التغيير عند إغلاق النموذج.")
+    public void RL_022_CancelEdit() {
+        RoutLine p = open();
+        String n = unique("CANCEL-EDIT");
+        try {
+            create(p, n, null, "فاتورة", false);
+            p.OpenForEditByName(n);
+            p.AddArabicName(n + "-TEMP");
+            p.ClickCloseButton();
+            p.OpenForEditByName(n);
+            Assert.assertEquals(p.GetArabicNameValue(), n);
+            p.ClickCloseButton();
+        } finally {
+            cleanup(p, n);
+        }
     }
-  }
 
-  @Test(priority = 8)
-  @Owner("MAMDOUH")
-  @Severity(SeverityLevel.CRITICAL)
-  @Epic("Web Cloud")
-  @Feature("حالة خط السير")
-  @Story("RL-023 حذف سجل الاختبار")
-  @Description("يحذف السجل المطابق الذي أنشأه الاختبار فقط.")
-  public void RL_023_DeleteOwned() {
-    RoutLine p = open();
-    String n = unique("DELETE");
-    try {
-      create(p, n, null, "فاتورة", false);
-      p.RequestDeleteByName(n);
-      Assert.assertTrue(p.IsDeleteConfirmationDisplayed());
-      p.ConfirmDelete();
-      Assert.assertEquals(p.GetExactMatchCount(n), 0);
-    } finally {
-      cleanup(p, n);
+    @Test(priority = 8)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("Web Cloud")
+    @Feature("حالة خط السير")
+    @Story("RL-023 حذف سجل الاختبار")
+    @Description("يحذف السجل المطابق الذي أنشأه الاختبار فقط.")
+    public void RL_023_DeleteOwned() {
+        RoutLine p = open();
+        String n = unique("DELETE");
+        try {
+            create(p, n, null, "فاتورة", false);
+            p.RequestDeleteByName(n);
+            Assert.assertTrue(p.IsDeleteConfirmationDisplayed());
+            p.ConfirmDelete();
+            Assert.assertEquals(p.GetExactMatchCount(n), 0);
+        } finally {
+            cleanup(p, n);
+        }
     }
-  }
 
-  @Test(priority = 9)
-  @Owner("MAMDOUH")
-  @Severity(SeverityLevel.NORMAL)
-  @Epic("Web Cloud")
-  @Feature("حالة خط السير")
-  @Story("RL-024 إلغاء الحذف")
-  @Description("يتحقق من بقاء السجل عند إلغاء تأكيد الحذف.")
-  public void RL_024_CancelDelete() {
-    RoutLine p = open();
-    String n = unique("CANCEL-DELETE");
-    try {
-      create(p, n, null, "فاتورة", false);
-      p.RequestDeleteByName(n);
-      p.CancelDelete();
-      Assert.assertEquals(p.GetExactMatchCount(n), 1);
-    } finally {
-      cleanup(p, n);
+    @Test(priority = 9)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.NORMAL)
+    @Epic("Web Cloud")
+    @Feature("حالة خط السير")
+    @Story("RL-024 إلغاء الحذف")
+    @Description("يتحقق من بقاء السجل عند إلغاء تأكيد الحذف.")
+    public void RL_024_CancelDelete() {
+        RoutLine p = open();
+        String n = unique("CANCEL-DELETE");
+        try {
+            create(p, n, null, "فاتورة", false);
+            p.RequestDeleteByName(n);
+            p.CancelDelete();
+            Assert.assertEquals(p.GetExactMatchCount(n), 1);
+        } finally {
+            cleanup(p, n);
+        }
     }
-  }
 
-  @Test(priority = 10)
-  @Owner("MAMDOUH")
-  @Severity(SeverityLevel.CRITICAL)
-  @Epic("Web Cloud")
-  @Feature("حالة خط السير")
-  @Story("RL-032 الاستمرار بعد تحديث الصفحة")
-  @Description("يتحقق من استمرار السجل بعد تحديث الشاشة.")
-  public void RL_032_PersistAfterRefresh() {
-    RoutLine p = open();
-    String n = unique("REFRESH");
-    try {
-      create(p, n, "Route refresh", "فاتورة", true);
-      driver.navigate().refresh();
-      p = open();
-      Assert.assertEquals(p.GetExactMatchCount(n), 1);
-    } finally {
-      cleanup(p, n);
+    @Test(priority = 10)
+    @Owner("MAMDOUH")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("Web Cloud")
+    @Feature("حالة خط السير")
+    @Story("RL-032 الاستمرار بعد تحديث الصفحة")
+    @Description("يتحقق من استمرار السجل بعد تحديث الشاشة.")
+    public void RL_032_PersistAfterRefresh() {
+        RoutLine p = open();
+        String n = unique("REFRESH");
+        try {
+            create(p, n, "Route refresh", "فاتورة", true);
+            driver.navigate().refresh();
+            p = open();
+            Assert.assertEquals(p.GetExactMatchCount(n), 1);
+        } finally {
+            cleanup(p, n);
+        }
     }
-  }
 }

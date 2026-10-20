@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!--
+  تشغيل مستقل لتغطية المطعم كاملة: 15 حالة واجهة من الكلاس الحالي.
+  التعليق يحفظ ويخصم فوراً؛ الزيادة تخصم الفرق فقط؛ الدفع لا يكرر الخصم.
+  يشمل الطاولات والمدفوعات والحذف والطباعة؛ لا يعامل المطعم كفاتورة بيع عادية.
+  للتغطية المشتركة والتنظيف المحلي استخدم special-sales-testng.xml بدلاً من جمعهما معاً.
+-->
+<suite name="Restaurant - Standalone coverage" parallel="none" configfailurepolicy="continue">
+    <test name="Restaurant - Full page coverage" preserve-order="true">
+        <classes>
+            <class name="SpecialSalesTest.RestaurantInvoiceTest"/>
+        </classes>
+    </test>
+</suite>

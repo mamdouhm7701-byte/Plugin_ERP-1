@@ -18,11 +18,4 @@ public class ExchangeOrderPage extends StoreModulePage {
     public ExchangeOrderPage(WebDriver driver) {
         super(driver);
     }
-
-
-
-
-
-
-
 }

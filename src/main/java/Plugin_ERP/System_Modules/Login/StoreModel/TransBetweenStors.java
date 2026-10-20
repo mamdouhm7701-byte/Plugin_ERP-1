@@ -11,28 +11,10 @@ public class TransBetweenStors extends StoreModulePage {
         super(driver);
     }
 
-
-
-    private By AssertToStore    = By.xpath("//small[contains(text(),'الي مخزن مطلوب')]");
-
-
-
-
-
-
-
+    private By AssertToStore = By.xpath("//small[contains(text(),'الي مخزن مطلوب')]");
 
     @Step("التأكيد على ان الى مخزن مطلوب")
-    public Boolean AssertToStore(){
+    public Boolean AssertToStore() {
         return utilites.isDisplayed(AssertToStore);
     }
-
-
-
-
-
-
-
-
-
 }

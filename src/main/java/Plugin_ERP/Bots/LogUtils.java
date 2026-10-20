@@ -9,9 +9,7 @@ public class LogUtils {
     }
 
     private static Logger getLogger() {
-        String className = Thread.currentThread()
-                .getStackTrace()[3]
-                .getClassName();
+        String className = Thread.currentThread().getStackTrace()[3].getClassName();
 
         return Logger.getLogger(className);
     }

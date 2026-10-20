@@ -22,6 +22,4 @@ public enum Browser {
     };
 
     public abstract AbstractDriver getDriverFactory();
-
-
-    }
+}

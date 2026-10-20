@@ -172,7 +172,7 @@ public class StoreModulePage extends AbstractForStore {
     }
 
     public java.time.LocalDate smCurrentDate() {
-        return java.time.LocalDate.parse(
+        return Plugin_ERP.Utiel.DocumentDates.parse(
                 driver.findElement(By.cssSelector("form input[placeholder='YYYY-MM-DD']"))
                         .getDomProperty("value")
                         .replace('/', '-'));
@@ -397,11 +397,12 @@ public class StoreModulePage extends AbstractForStore {
                     for (WebElement e : inputs) {
                         js("arguments[0].scrollIntoView({block:'center',inline:'center'})", e);
                         if (!e.isDisplayed() || !e.isEnabled()) continue;
+                        e.click();
                         e.sendKeys(Keys.CONTROL + "a");
-                        e.sendKeys(Keys.DELETE);
                         e.sendKeys(quantity);
                         e.sendKeys(Keys.TAB);
-                        return true;
+                        return new java.math.BigDecimal(e.getDomProperty("value"))
+                                .compareTo(new java.math.BigDecimal(quantity)) == 0;
                     }
                     return false;
                 });
@@ -432,10 +433,12 @@ public class StoreModulePage extends AbstractForStore {
         ((typeof payload?.data?.notes==='string'&&payload.data.notes.startsWith(cap.marker))||
         (payload?.url==='ManufacturingOrders'&&payload.data?.storeId===cap.storeId&&payload.data.lines?.length>0&&payload.data.lines.every(l=>l.itemId===cap.itemId)));
       const sent=owned?JSON.parse(JSON.stringify(payload.data)):null;if(owned){cap.pending++;cap.attempts.push({endpoint:payload.url,values:sent});}
-      return dispatch(action,payload,...rest).then(result=>{if(lookup){const data=result?.data||result;cap.lookups.push({url:payload.url,total:data?.totalRecords,items:data?.pageData?.map(i=>({id:i.id,arabicName:i.arabicName}))});}
+      return dispatch(action,payload,...rest).then(result=>{if(lookup){const data=result?.data||result;cap.lookups.push({url:payload.url,total:data?.totalRecords,items:data?.pageData?.map(i=>({id:i.id,arabicName:i.arabicName,currentBalance:i.currentBalance,costPrice:i.costPrice,stores:i.stores?.map(s=>({storeId:s.storeId,currentBalance:s.currentBalance,costPrice:s.costPrice}))}))});}
         if(owned){cap.pending--;const entity=result?.data||result;
         cap.saves.push({endpoint:payload.url,id:sent.id||entity?.id||(typeof entity==='string'||typeof entity==='number'?entity:null),values:sent});}return result;})
-        .catch(error=>{if(lookup)cap.lookups.push({url:payload.url,error:String(error),status:error?.response?.status});if(owned){cap.pending--;cap.errors.push(String(error));}throw error;});};
+        .catch(error=>{const detail=error?.response?.data??error?.data??{message:error?.message,errors:error?.errors,error:error?.error,title:error?.title,detail:error?.detail,code:error?.code};
+          const diagnostic=JSON.stringify({status:error?.response?.status??error?.status,detail});
+          if(lookup)cap.lookups.push({url:payload.url,error:diagnostic,status:error?.response?.status});if(owned){cap.pending--;cap.errors.push(diagnostic);}throw error;});};
     """,
                 marker,
                 storeId,
@@ -467,7 +470,7 @@ public class StoreModulePage extends AbstractForStore {
     public String smDiagnostics() {
         return String.valueOf(
                 js(
-                        "return JSON.stringify({lookups:window.__storeQA?.lookups||[],errors:window.__storeQA?.uiErrors||[]})"));
+                        "return JSON.stringify({lookups:window.__storeQA?.lookups||[],errors:window.__storeQA?.uiErrors||[],saveErrors:window.__storeQA?.errors||[],attempts:window.__storeQA?.attempts||[],saves:window.__storeQA?.saves||[]})"));
     }
 
     @Step("فتح سند الاختبار للتعديل")

@@ -55,7 +55,7 @@ public class FinancialMovementPage extends Abstract {
     chooseInput(input,name);
   }
   private void chooseInput(By locator,String name) {
-    ready.until(d->{
+    try { ready.until(d->{
       WebElement input=d.findElements(locator).stream().filter(WebElement::isDisplayed).findFirst().orElse(null);
       if(input==null||!input.isEnabled())return false;
       ((JavascriptExecutor)d).executeScript("arguments[0].scrollIntoView({block:'center'})",input);
@@ -71,7 +71,20 @@ public class FinancialMovementPage extends Abstract {
       if(candidates.isEmpty())return false;
       if(candidates.size()!=1)throw new AssertionError("Ambiguous owned dropdown option: "+name);
       candidates.get(0).click();return true;
-    });
+    }); } catch(TimeoutException failure) {
+      Object snapshot=((JavascriptExecutor)driver).executeScript("""
+          const queue=[document.querySelector('#app')?.__vue__], result=[];
+          while(queue.length){const vm=queue.shift();if(!vm)continue;
+            if(Array.isArray(vm.defaultCustomers))result.push({
+              branchId:vm.currentBranch?.id, customerCount:vm.defaultCustomers.length,
+              matches:vm.defaultCustomers.filter(c=>[c.arabicName,c.englishName].includes(arguments[0])),
+              paymentCount:vm.paymentMethods?.length, agentCount:vm.Agents?.length});
+            queue.push(...(vm.$children||[]));}
+          return JSON.stringify(result);
+          """,name);
+      io.qameta.allure.Allure.addAttachment("Financial dropdown lookup evidence",String.valueOf(snapshot));
+      throw failure;
+    }
   }
   @Step("اختيار طريقة الدفع المسجلة للاختبار")
   public void payment(String methodName) {
@@ -169,7 +182,13 @@ public class FinancialMovementPage extends Abstract {
         .filter(r->r.findElements(By.cssSelector("td")).stream().anyMatch(c->c.getText().trim().equals(invoiceCode)))
         .findFirst().orElse(null));
     WebElement value=row.findElement(By.cssSelector("input[type='number']"));
-    value.sendKeys(Keys.CONTROL+"a");value.sendKeys(amount);value.sendKeys(Keys.TAB);
+    ready.until(d->{
+      value.click();value.sendKeys(Keys.CONTROL+"a");value.sendKeys(amount);
+      value.sendKeys(Keys.END);value.sendKeys(Keys.TAB);
+      try{return new java.math.BigDecimal(value.getDomProperty("value"))
+          .compareTo(new java.math.BigDecimal(amount))==0;}
+      catch(NumberFormatException invalid){return false;}
+    });
     // Allocation is committed by the modal's own Save button.
     click(By.xpath("//div[contains(@class,'modal') and contains(@class,'show')]//button[normalize-space()='حفظ']"));
   }
@@ -211,6 +230,23 @@ public class FinancialMovementPage extends Abstract {
   public void waitForRow(String note){row(note);}
   @Step("تعديل الحركة المحددة بملاحظاتها: {note}")
   public void editOwned(String note){clickOwnedAction(note,"edit");ready.until(d->isFormVisible());ready.until(d->notesValue().equals(note));}
+  @Step("إلغاء التخصيص السابق للسند المملوك قبل تعديل قيمته وإعادة تخصيصه")
+  public void clearAllocationForEdit(){
+    By amount=By.cssSelector("input[name='value']");
+    if(driver.findElement(amount).isEnabled()&&driver.findElement(amount).getDomAttribute("readonly")==null)return;
+    WebElement previousDocument=driver.findElement(By.tagName("html"));
+    String previousNote=notesValue();
+    click(By.xpath("//button[normalize-space()='إلغاء التخصيص']"));
+    // التطبيق يحفظ إلغاء التخصيص ثم يعيد تحميل الصفحة، فلا نعدل النموذج القديم.
+    new WebDriverWait(driver,Duration.ofSeconds(60)).until(ExpectedConditions.stalenessOf(previousDocument));
+    ready.until(d->isFormVisible());
+    ready.until(d->previousNote.equals(notesValue()));
+    ready.until(d->{
+      for(WebElement button:d.findElements(By.cssSelector(".swal2-popup button.swal2-confirm")))
+        if(button.isDisplayed()){button.click();return false;}
+      return d.findElement(amount).isEnabled()&&d.findElement(amount).getDomAttribute("readonly")==null;
+    });
+  }
   @Step("طلب حذف الحركة المحددة فقط: {note}")
   public void requestDeleteOwned(String note){clickOwnedAction(note,"delete");ready.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".swal2-popup")));}
   private void clickOwnedAction(String note,String action){ready.until(d->{
@@ -227,9 +263,22 @@ public class FinancialMovementPage extends Abstract {
     click(By.cssSelector("button:has(img[src*='"+(format.equals("pdf")?"pdf.":"xls.")+"'])"));
   }
   public void type(By locator,String value){
-    WebElement e=ready.until(ExpectedConditions.elementToBeClickable(locator));
-    ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'})",e);
-    e.sendKeys(Keys.CONTROL+"a");e.sendKeys(Keys.DELETE);e.sendKeys(value);e.sendKeys(Keys.TAB);
+    ready.until(d->{
+      WebElement e=d.findElements(locator).stream().filter(WebElement::isDisplayed)
+          .filter(WebElement::isEnabled).filter(v->v.getDomAttribute("readonly")==null)
+          .findFirst().orElse(null);
+      if(e==null)return false;
+      ((JavascriptExecutor)d).executeScript("arguments[0].scrollIntoView({block:'center'})",e);
+      e.click();e.sendKeys(Keys.CONTROL+"a");
+      if(value.isEmpty())e.sendKeys(Keys.DELETE);else e.sendKeys(value);
+      e.sendKeys(Keys.TAB);
+      String actual=e.getDomProperty("value");
+      if(value.equals(actual))return true;
+      if("number".equals(e.getDomAttribute("type"))||"value".equals(e.getDomAttribute("name")))try{
+        return new BigDecimal(value).compareTo(new BigDecimal(actual))==0;
+      }catch(NumberFormatException ignored){return false;}
+      return false;
+    });
   }
   private void click(By by){ready.until(d->{WebElement e=d.findElements(by).stream().filter(WebElement::isDisplayed).findFirst().orElse(null);if(e==null||!e.isEnabled())return false;((JavascriptExecutor)d).executeScript("arguments[0].scrollIntoView({block:'center'})",e);e.click();return true;});}
   @Step("تسجيل نتيجة الحفظ من طلب الواجهة الفعلي")

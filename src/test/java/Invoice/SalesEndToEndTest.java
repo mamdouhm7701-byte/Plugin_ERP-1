@@ -53,14 +53,14 @@ public final class SalesEndToEndTest extends SalesScenarioTest {
         Assert.assertEquals(page.slDocument().get("dealerId"), customer.id());
         Assert.assertEquals(page.slDocument().get("agentId"), agent.id());
         page.slQuantity(item.name(), "3");
-        page.slWaitNet("300");
+        page.slWaitNet(salesNet("300"));
 
         var returned = save(false);
         var storedReturn = data.read(returned);
         Assert.assertEquals(storedReturn.get("sourceTransactionId"), invoice.id());
         Assert.assertEquals(firstLine(storedReturn).get("itemId"), item.id());
         sameNumber(firstLine(storedReturn).get("quantity"), "3");
-        sameNumber(storedReturn.get("net"), "300");
+        sameNumber(storedReturn.get("net"), salesNet("300"));
         assertStock("3");
         awaitOwnedStock(stockBeforeSale, "Full linked return restores the pre-sale stock");
         assertCustomerDelta(customerBeforeSale, "0");
@@ -75,7 +75,7 @@ public final class SalesEndToEndTest extends SalesScenarioTest {
         page.slNotes(marker + "-RETURN-" + java.util.UUID.randomUUID().toString().substring(0, 6));
         Assert.assertEquals(page.slDocument().get("sourceTransactionId"), invoice.id());
         page.slQuantity(item.name(), quantity);
-        page.slWaitNet(net);
+        page.slWaitNet(salesNet(net));
         var returned = save(false);
         Assert.assertEquals(data.read(returned).get("sourceTransactionId"), invoice.id());
         sameNumber(firstLine(data.read(returned)).get("quantity"), quantity);
@@ -107,7 +107,7 @@ public final class SalesEndToEndTest extends SalesScenarioTest {
     @Test @Story("E2E بيع بكمية كسرية ثم مرتجع كامل يحافظ على الكسور والأرصدة")
     public void fractionalSaleThenReturnRestoresExactBalances() {
         prepare("Credit"); var before = data.read(customer); var stock = initialBalances.get(1);
-        add(item, "picker"); page.slQuantity(item.name(), "1.25"); page.slWaitNet("125");
+        add(item, "picker"); page.slQuantity(item.name(), "1.25"); page.slWaitNet(salesNet("125"));
         var invoice = save(false); assertStock("1.25"); assertCustomerDelta(before, "125");
         returnPart(invoice, "1.25", "125"); assertCustomerDelta(before, "0");
         awaitOwnedStock(stock, "Fractional return must restore the exact opening balance");

@@ -76,13 +76,18 @@ public class AbstractForDealer extends Abstract {
     @Step("الضغط على زر جديد")
     public void ClickNewButtonForDealer() {
         dealerListUrlBeforeForm = driver.getCurrentUrl();
-        WebElement button = new WebDriverWait(driver, Duration.ofSeconds(10))
+        WebElement button = new WebDriverWait(driver, Duration.ofSeconds(30))
                 .until(d -> d.findElements(NewButton).stream()
                         .filter(this::isElementDisplayed)
                         .filter(WebElement::isEnabled)
+                        .filter(element -> Boolean.TRUE.equals(
+                                ((org.openqa.selenium.JavascriptExecutor) d).executeScript(
+                                        "arguments[0].scrollIntoView({block:'center'});"
+                                                + "const r=arguments[0].getBoundingClientRect();"
+                                                + "const top=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);"
+                                                + "return top===arguments[0]||arguments[0].contains(top);", element)))
                         .findFirst().orElse(null));
-        ((org.openqa.selenium.JavascriptExecutor) driver)
-                .executeScript("arguments[0].scrollIntoView({block:'center'});arguments[0].click();", button);
+        button.click();
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(d -> isVisible(DEALER_SAVE_BUTTON)
                         && isVisible(By.cssSelector("input[name='arabicName']")));

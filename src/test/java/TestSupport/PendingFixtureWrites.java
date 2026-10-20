@@ -98,12 +98,28 @@ public final class PendingFixtureWrites {
                 throw new AssertionError("Ambiguous owned fixture recovery: " + name);
             if (!unique.isEmpty()) {
                 Object id = unique.keySet().iterator().next();
+                Object intendedId = values.get("id");
+                // Some new-form DTOs use zero/empty IDs; those are creates, not updates.
+                boolean identifiedAttempt = intendedId != null
+                        && !intendedId.toString().isBlank() && !intendedId.toString().equals("0");
+                if (identifiedAttempt && !Objects.equals(intendedId, id))
+                    throw new AssertionError("Recovered fixture document identity changed");
                 Object raw = api.apply(endpoint, Map.of("id", id)).get("entity");
                 if (!(raw instanceof Map<?, ?> stored) || !matchesName(stored, name))
                     throw new AssertionError("Cannot verify recovered fixture ownership");
+                // Financial edit DTOs omit branchId. Only a previously identified update
+                // may use the verified session branch; creates still require full evidence.
+                boolean identifiedFinancialUpdate =
+                        Set.of("Collections", "Payments").contains(endpoint)
+                                && Objects.equals(values.get("id"), id)
+                                && Objects.equals(stored.get("id"), id)
+                                && Objects.equals(values.get("branchId"), session.branchId);
                 for (var field : values.entrySet())
                     if (field.getKey().endsWith("Id")
                             && field.getValue() != null
+                            && !(field.getKey().equals("branchId")
+                                    && stored.get("branchId") == null
+                                    && identifiedFinancialUpdate)
                             && !Objects.equals(field.getValue(), stored.get(field.getKey())))
                         throw new AssertionError(
                                 "Recovered fixture dependency changed: " + field.getKey());

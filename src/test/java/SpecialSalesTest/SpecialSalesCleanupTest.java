@@ -14,6 +14,25 @@ import java.util.Map;
 
 @io.qameta.allure.Story("عزل البيانات والتنظيف الآمن")
 public class SpecialSalesCleanupTest {
+    @Test
+    @io.qameta.allure.Description("العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
+    public void normalCustomerIsTaxableAndKeepsItsOwnAccount() {
+        Api api = new Api();
+        try (var data = new SpecialSalesTestData(api.driver())) {
+            var customer = data.customer();
+            var stored = data.read(customer);
+            Assert.assertEquals(stored.get("isTaxable"), Boolean.TRUE);
+            Assert.assertEquals(stored.get("isOnTheFly"), Boolean.FALSE);
+            Assert.assertEquals(stored.get("creditSales"), Boolean.TRUE);
+            Assert.assertEquals(stored.get("creditNote"), Boolean.TRUE);
+            Assert.assertNotNull(stored.get("accountId"));
+            var registered = data.registeredCustomer();
+            Assert.assertEquals(data.read(registered).get("isTaxable"), Boolean.TRUE);
+            Assert.assertEquals(data.read(registered).get("isOnTheFly"), Boolean.FALSE);
+        }
+        Assert.assertTrue(api.records.isEmpty());
+    }
+
     private static final class Api {
         final Map<String, Map<String, Object>> records = new LinkedHashMap<>();
         final List<String> deletes = new ArrayList<>();

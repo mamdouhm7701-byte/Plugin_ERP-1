@@ -34,7 +34,7 @@ public final class ManufacturingSalesEndToEndTest extends StoreScenarioTest {
   }
 
   private void debt(StoreTestData.Record customer, BigDecimal before, String amount) {
-    var expected = before.add(number(amount));
+    var expected = before.add(number(sales.get(sales.size()-1).net(amount)));
     new WebDriverWait(driver, Duration.ofSeconds(30)).until(d -> signed(data.read(customer)).compareTo(expected) == 0);
   }
 

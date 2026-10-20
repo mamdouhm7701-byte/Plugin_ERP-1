@@ -12,6 +12,64 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class StoreCleanupTest {
+    @Test
+    public void uncertainCreateStillRejectsUntrackedMovementInOwnedStore() {
+        Api api = new Api();
+        StoreTestData data = new StoreTestData(api.driver());
+        var store = data.store(1);
+        var item = data.item(1);
+        var unit = data.unit(1);
+        api.records.put("untracked", new LinkedHashMap<>(Map.of("id", "untracked",
+                "storeId", store.id(), "transactionType", "Manufacturing", "notes", "",
+                "lines", List.of(Map.of("itemId", "foreign-item", "unitId", unit.id())))));
+        data.rememberAttempts(List.of(StoreTestData.fields("endpoint", "ManufacturingOrders",
+                "values", StoreTestData.fields("storeId", store.id(), "notes", "",
+                        "lines", List.of(Map.of("itemId", item.id(), "unitId", unit.id()))))),
+                List.of(), "QA-ST-unresolved-manufacturing");
+        Assert.expectThrows(AssertionError.class, data::close);
+        Assert.assertTrue(api.deletes.isEmpty());
+        api.records.remove("untracked");
+        data.close();
+        Assert.assertTrue(api.records.isEmpty());
+    }
+
+    @Test
+    public void uncertainCreateDoesNotConfuseEarlierOwnedMovementInSharedStore() {
+        Api api = new Api();
+        StoreTestData data = new StoreTestData(api.driver());
+        var store = data.store(1);
+        var first = data.item(1);
+        var second = data.item(2);
+        var unit = data.unit(1);
+        var previous = data.fixture("previous-manufacturing", "ManufacturingOrders",
+                StoreTestData.fields("storeId", store.id(), "transactionType", "Manufacturing",
+                        "lines", List.of(Map.of("itemId", first.id(), "unitId", unit.id()))));
+        var values = StoreTestData.fields("notes", "", "storeId", store.id(),
+                "transactionType", "Manufacturing", "lines",
+                List.of(Map.of("itemId", second.id(), "unitId", unit.id())));
+        data.rememberAttempts(List.of(StoreTestData.fields("endpoint", "ManufacturingOrders",
+                "values", values)), List.of(), "QA-ST-uncommitted-manufacturing");
+        data.close();
+        Assert.assertTrue(api.records.isEmpty());
+        Assert.assertEquals(java.util.Collections.frequency(api.deletes, previous.id()), 1);
+    }
+
+    @Test
+    @io.qameta.allure.Description("العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
+    public void normalCustomerIsTaxableAndKeepsItsOwnAccount() {
+        Api api = new Api();
+        try (var data = new StoreTestData(api.driver())) {
+            var customer = data.customer();
+            var stored = data.read(customer);
+            Assert.assertEquals(stored.get("isTaxable"), Boolean.TRUE);
+            Assert.assertEquals(stored.get("isOnTheFly"), Boolean.FALSE);
+            Assert.assertEquals(stored.get("creditSales"), Boolean.TRUE);
+            Assert.assertEquals(stored.get("creditNote"), Boolean.TRUE);
+            Assert.assertNotNull(stored.get("accountId"));
+        }
+        Assert.assertTrue(api.records.isEmpty());
+    }
+
     private static final class Api {
         final Map<String, Map<String, Object>> records = new LinkedHashMap<>();
         final List<String> deletes = new ArrayList<>();

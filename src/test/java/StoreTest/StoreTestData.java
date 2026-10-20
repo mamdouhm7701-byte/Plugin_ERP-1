@@ -157,7 +157,7 @@ final class StoreTestData implements AutoCloseable {
   Record agent(boolean purchase){return fixture(purchase?"agent-purchase":"agent-sales","Agents",fields("nature",purchase?"Purch":"Sales","isActive",true,"commissionSlices",List.of(),"itemCommissions",List.of()));}
   Record destination(){return fixture("destination","ExchangeDestinations",fields("accountId",account("destination").id()));}
   Record supplier(){return fixture("supplier","Suppliers",fields("isActive",true,"cashPurchase",true,"creditPurchase",true,"isTaxable",false,"isClosed",false,"purchaseReturn",true,"purchaseOrder",true,"dealerType","Supplier","isSameBranch",true,"allowanceDays",0,"accountId",account("supplier").id()));}
-  Record customer(){return fixture("customer","Customers",fields("isActive",true,"cashSales",true,"creditSales",true,"returnSales",true,"isTaxable",false,"isClosed",false,"salesOrder",true,"dealerType","Customer","isSameBranch",true,"allowanceDays",0,"accountId",account("customer").id()));}
+  Record customer(){return fixture("customer","Customers",fields("isActive",true,"cashSales",true,"creditNote", true, "salesDiscount", true, "creditSales",true,"salesReturn",true,"quotation",true,"isTaxable",true,"isOnTheFly", false, "isClosed",false,"salesOrder",true,"dealerType","Customer","isSameBranch",true,"allowanceDays",0,"accountId",account("customer").id()));}
   Object balance(Record item,int index){Map<String,Object> dto=read(item);for(Object value:(List<?>)dto.get("stores")){Map<?,?> row=(Map<?,?>)value;if(store(index).id().equals(row.get("storeId")))return row.get("currentBalance");}throw new AssertionError("Owned store balance missing");}
 
   @SuppressWarnings("unchecked") Map<String,Object> lookup(String endpoint){return (Map<String,Object>)call("get",endpoint,fields()).get("entity");}
@@ -389,7 +389,17 @@ final class StoreTestData implements AutoCloseable {
             if(!row.containsKey("notes")&&!row.containsKey("storeId"))throw new AssertionError("Warehouse list omits fields needed to verify an uncertain create");
             if(name.equals(row.get("notes"))||(java.util.Objects.equals(values.get("storeId"),row.get("storeId"))&&type.equalsIgnoreCase(String.valueOf(row.get("transactionType"))))){
               Record candidate=new Record(endpoint,row.get("id"),name,values);Map<String,Object> stored=read(candidate);
-              if(stored!=null){if(!owns(candidate,stored))throw new AssertionError("Cannot verify uncertain warehouse candidate ownership");matches.add(candidate);}
+              if(stored!=null){
+                if(!owns(candidate,stored)){
+                  // Shared page stores also contain earlier, already journaled cases.
+                  // They remain tracked for cleanup but are not this uncertain create.
+                  boolean trackedElsewhere=created.stream().anyMatch(r->r.endpoint().equals(endpoint)
+                      && r.id().equals(candidate.id()) && owns(r,stored));
+                  if(trackedElsewhere)continue;
+                  throw new AssertionError("Cannot verify uncertain warehouse candidate ownership");
+                }
+                matches.add(candidate);
+              }
             }
           }
           if(seen.size()>=total.longValue())break;if(added==0)throw new AssertionError("Uncertain warehouse lookup pagination did not advance");

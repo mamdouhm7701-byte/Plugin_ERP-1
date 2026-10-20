@@ -23,11 +23,14 @@ public final class SalesWorkflow implements AutoCloseable {
   private final WebDriverWait wait;
   private final WorkflowEntity item, store, customer, agent;
   private String marker;
+  private final WebDriver driver;
+  private TestSupport.SalesTaxProfile salesTax;
+  public String net(String beforeTax) { return salesTax.net(beforeTax); }
   private SalesDocumentKind kind = SalesDocumentKind.INVOICE;
 
   public SalesWorkflow(WebDriver driver, WorkflowEntity item, WorkflowEntity store,
       WorkflowEntity customer, WorkflowEntity agent) {
-    this.item = item; this.store = store; this.customer = customer; this.agent = agent;
+    this.driver = driver; this.item = item; this.store = store; this.customer = customer; this.agent = agent;
     data = new SalesTestData(driver); data.beginScenario();
     page = new SalesModulePage(driver); wait = new WebDriverWait(driver, Duration.ofSeconds(45));
   }
@@ -38,9 +41,10 @@ public final class SalesWorkflow implements AutoCloseable {
     page.slChoose("المخزن", store.name()); page.slChoose("نوع السداد", "آجل");
     page.slChoose("العميل", customer.name()); page.slChoose("مندوب", agent.name());
     if (page.slHasChoice("قوائم الأسعار") && !page.slChoiceEmpty("قوائم الأسعار")) page.slClearChoice("قوائم الأسعار");
+    salesTax = TestSupport.SalesTaxProfile.capture(driver);
     page.slNotes(marker); page.slAddPicker(item.name()); page.slQuantity(item.name(), quantity);
     page.slSetLine(item.name(), "السعر", "100");
-    page.slWaitNet(new BigDecimal(quantity).multiply(new BigDecimal("100")).toPlainString());
+    page.slWaitNet(net(new BigDecimal(quantity).multiply(new BigDecimal("100")).toPlainString()));
     return save(quantity, null);
   }
 
@@ -49,7 +53,7 @@ public final class SalesWorkflow implements AutoCloseable {
     page.slLinkedReturn(source.id(), item.name()); beginCapture(); page.slNotes(marker);
     Assert.assertEquals(page.slDocument().get("sourceTransactionId"), source.id());
     page.slQuantity(item.name(), quantity);
-    page.slWaitNet(new BigDecimal(quantity).multiply(new BigDecimal("100")).toPlainString());
+    page.slWaitNet(net(new BigDecimal(quantity).multiply(new BigDecimal("100")).toPlainString()));
     return save(quantity, source.id());
   }
 
@@ -73,7 +77,7 @@ public final class SalesWorkflow implements AutoCloseable {
     var lines = (List<Map<String, Object>>) stored.get("lines"); Assert.assertEquals(lines.size(), 1);
     Assert.assertEquals(lines.get(0).get("itemId"), item.id());
     same(lines.get(0).get("quantity"), new BigDecimal(quantity));
-    same(stored.get("net"), new BigDecimal(quantity).multiply(new BigDecimal("100")));
+    same(stored.get("net"), new BigDecimal(net(new BigDecimal(quantity).multiply(new BigDecimal("100")).toPlainString())));
     if (sourceId != null) Assert.assertEquals(stored.get("sourceTransactionId"), sourceId);
     Allure.addAttachment("Supply chain sales document", "application/json", new org.json.JSONObject(stored).toString(), ".json");
     page.slDismiss();

@@ -122,13 +122,13 @@ public class CustomersTest extends DealerScenarioTest {
         customers.AddValueLimit("1000");
         customers.AddNoteForDealer("هذا العميل مهم جدا");
         customers.AssertCheckboxIsChecked("فعال", true);
-        customers.SmartCheck("عام", true);
-        customers.SmartCheck("عميل نقدي", true);
-        customers.AssertCheckboxIsChecked("عام", true);
-        customers.AssertCheckboxIsChecked("عميل نقدي", true);
+        customers.SmartCheck("عام", false);
+        customers.SmartCheck("عميل نقدي", false);
+        customers.AssertCheckboxIsChecked("عام", false);
+        customers.AssertCheckboxIsChecked("عميل نقدي", false);
         customers.AssertCheckboxIsChecked("خاضع للضريبة", true);
-        customers.SmartCheck("خاضع للضريبة", false);
-        customers.AssertCheckboxIsChecked("خاضع للضريبة", false);
+        customers.SmartCheck("خاضع للضريبة", true);
+        customers.AssertCheckboxIsChecked("خاضع للضريبة", true);
         customers.ClickSaveButton();
         waitForRecord(customers, recordName);
     }
@@ -298,8 +298,8 @@ public class CustomersTest extends DealerScenarioTest {
         customers.AssertCheckboxIsChecked("عام", false);
         customers.AssertCheckboxIsChecked("عميل نقدي", false);
         customers.AssertCheckboxIsChecked("خاضع للضريبة", true);
-        customers.SmartCheck("خاضع للضريبة", false);
-        customers.AssertCheckboxIsChecked("خاضع للضريبة", false);
+        customers.SmartCheck("خاضع للضريبة", true);
+        customers.AssertCheckboxIsChecked("خاضع للضريبة", true);
         customers.ClickContactDataTab();
         customers.AddContactPersonName("معدل");
         customers.AddAddress("معدل");

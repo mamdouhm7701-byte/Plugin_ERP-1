@@ -21,6 +21,9 @@ public final class WarehouseEndToEndTest extends StoreScenarioTest {
 
   @SuppressWarnings("unchecked")
   private StoreTestData.Record stage(StoreMovementKind movement, int from, int to, String quantity) {
+    // تُحمّل القوائم عند فتح الصفحة، لذلك أنشئ الطرف قبل تحميلها.
+    var party = movement.party()
+        ? (movement == StoreMovementKind.ADDITION ? data.supplier() : data.customer()) : null;
     current = movement; page = movementPage();
     page.smOpen(current.route + "/new");
     page.smCapture(marker, data.store(from).id(), item.id());
@@ -28,16 +31,18 @@ public final class WarehouseEndToEndTest extends StoreScenarioTest {
     if (current == StoreMovementKind.TRANSFER) page.smChoose("الي مخزن", data.store(to).name());
     Object partyId = null;
     if (current.party()) {
-      var party = current == StoreMovementKind.ADDITION ? data.supplier() : data.customer();
       String label = current == StoreMovementKind.ADDITION ? "الموردين" : "العملاء";
       page.smChoose("نوع البند", label); page.smChoose(label, party.name()); partyId = party.id();
     }
     if (current != StoreMovementKind.MANUFACTURING) page.smNotes(marker + "-STEP-" + (++stageNumber) + "-" + current);
     page.smAddPicker(item.name()); page.smQuantity(item.name(), quantity); page.smSave(false);
-    new WebDriverWait(driver, Duration.ofSeconds(45)).until(d -> {
+    try { new WebDriverWait(driver, Duration.ofSeconds(45)).until(d -> {
       data.rememberAttempts(page.smAttempts(), page.smSaves(), marker);
       return !page.smSaves().isEmpty();
-    });
+    }); } catch (org.openqa.selenium.TimeoutException failure) {
+      Allure.addAttachment("Warehouse E2E save diagnostics", "application/json", page.smDiagnostics(), ".json");
+      throw new AssertionError("Warehouse E2E stage was not saved: " + page.smSaveErrors(), failure);
+    }
     page.smSettled();
     var saved = page.smSaves().get(page.smSaves().size() - 1);
     Assert.assertEquals(saved.get("endpoint"), current.endpoint);

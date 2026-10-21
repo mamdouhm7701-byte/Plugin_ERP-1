@@ -1,12 +1,9 @@
 package Invoice;
 
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -16,7 +13,7 @@ public class SalesCleanupTest {
     @Test
     @io.qameta.allure.Description("العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
     public void normalCustomerIsTaxableAndKeepsItsOwnAccount() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         try (var data = new SalesTestData(api.driver())) {
             var customer = data.customer();
             var stored = data.read(customer);
@@ -32,7 +29,7 @@ public class SalesCleanupTest {
     @Test
     @Story("فشل قراءة العميل لا يبرر حذف عميل موجود أو حساباته")
     public void customerLookupErrorCannotDeleteAnExistingCustomerOrItsAccounts() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         var data = new SalesTestData(api.driver());
         var customer = data.customer();
         api.records.put(
@@ -53,7 +50,7 @@ public class SalesCleanupTest {
     @Test
     @Story("استعادة حساب ضاعت استجابته من شجرة الحسابات دون حذف حسابات أخرى")
     public void recoversLostAccountFromItsTreeWithoutDeletingExistingAccounts() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         var data = new SalesTestData(api.driver());
         String name = "QA-SL-lost-account";
         var values =
@@ -87,7 +84,7 @@ public class SalesCleanupTest {
     @Test
     @Story("انتظار تحميل الفرع الأصلي قبل الوصول إلى بيانات الاختبار")
     public void waitsForOriginalBranchHydrationBeforeFixtureAccess() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         var data = new SalesTestData(api.driver());
         api.branchUnavailableReads = 2;
         var unit = data.unit(1);
@@ -100,7 +97,7 @@ public class SalesCleanupTest {
     @Test
     @Story("مشاركة بيانات الصفحة الثابتة مع عزل الأصناف والعملاء والأرصدة بين الحالات")
     public void pageFixturesAreSharedButCaseBalancesStayIsolated() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         var data = new SalesTestData(api.driver());
         data.beginScenario();
         var first = data.seedInvoice(1, "Sales", "2026-01-01", "3", "0");
@@ -130,7 +127,7 @@ public class SalesCleanupTest {
     @Test
     @Story("الانتقال للحالة التالية يحتفظ بمحاولة الحفظ الفاشلة السابقة ويستعيدها")
     public void pageTransitionRetainsAndRecoversThePreviousFailedSave() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         var data = new SalesTestData(api.driver());
         data.beginScenario();
         var item = data.item(1);
@@ -168,7 +165,7 @@ public class SalesCleanupTest {
     @Test
     @Story("اكتشاف حفظ فعلي خلف استجابة فاشلة في اختبار رفض الحفظ")
     public void negativeSaveDetectsACommitBehindFailedResponse() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         var data = new SalesTestData(api.driver());
         var item = data.item(1);
         var before = data.documentIdentities();
@@ -213,7 +210,7 @@ public class SalesCleanupTest {
     @Test
     @Story("استعادة المرتجع الثاني دون الخلط بينه وبين المرتجع الأول المعروف")
     public void recoversSecondReturnWithoutConfusingKnownFirstReturn() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         var data = new SalesTestData(api.driver());
         var item = data.item(1);
         var common =
@@ -259,7 +256,7 @@ public class SalesCleanupTest {
     @Story("استعادة مستند محفوظ ضاعت استجابته لكل نوع من مستندات المبيعات")
     public void recoversLostResponseForEachSalesDocumentKind(
             String endpointType, String storedType) {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         var data = new SalesTestData(api.driver());
         var item = data.item(1);
         String marker = "QA-SL-lost-" + endpointType;
@@ -299,7 +296,7 @@ public class SalesCleanupTest {
     }
 
     private void rejectForeignContext(boolean tenant) throws Exception {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         var data = new SalesTestData(api.driver());
         var unit = data.unit(1);
         String suffix = unit.name().substring(unit.name().length() - 12);
@@ -317,7 +314,7 @@ public class SalesCleanupTest {
     @Test
     @Story("حذف المرتجع المرتبط قبل الفاتورة الأصلية")
     public void linkedReturnIsDeletedBeforeSourceInvoice() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         var data = new SalesTestData(api.driver());
         var source = data.seedInvoice(1, "Sales", "2026-01-01", "3", "0");
         var values =
@@ -340,7 +337,7 @@ public class SalesCleanupTest {
     @Test
     @Story("حذف الفاتورة المدفوعة قبل وسيلة الدفع والبنك")
     public void paidInvoiceIsDeletedBeforePaymentMethodAndBank() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         var data = new SalesTestData(api.driver());
         var source = data.seedInvoice(1, "Sales", "2026-01-01", "3", "300");
         var method = data.payment();
@@ -351,199 +348,12 @@ public class SalesCleanupTest {
         Assert.assertTrue(api.records.isEmpty());
     }
 
-    private static final class Api {
-        String origin = "offline", activeBranch = "branch-test";
-        int branchUnavailableReads;
-        boolean usedAccountTree;
-        boolean customerGetAlways500, customerGet500WhenMissing;
-        final Map<String, Map<String, Object>> records = new LinkedHashMap<>();
-        final List<String> deletes = new ArrayList<>();
-        int crashAtDelete;
-        boolean timeOutStore;
-        boolean commitBeforeTimeout;
-        boolean rejectStore;
-        boolean emptyDeletedResponse;
-        boolean failAfterItemInsert;
-        boolean failAfterStoreInsert;
-        boolean failFixtureLookup;
-        boolean defaultDeletedDto;
-        boolean defaultDeletedMasterDto;
 
-        boolean missingDelete400;
-        boolean missingDeleteForExisting;
-        boolean rejectBranchUnlink;
-        boolean timeoutBranchUnlinkAfterCommit;
-        boolean rejectMovement;
-        boolean failMovementLookup;
-        Map<String, Object> branch =
-                new LinkedHashMap<>(
-                        Map.of(
-                                "id",
-                                "branch-test",
-                                "defaultStoreId",
-                                "existing-store",
-                                "phone",
-                                "original",
-                                "stores",
-                                new ArrayList<>(List.of(Map.of("storeId", "existing-store")))));
-
-        WebDriver driver() {
-            Object timeouts =
-                    Proxy.newProxyInstance(
-                            getClass().getClassLoader(),
-                            new Class<?>[] {WebDriver.Timeouts.class},
-                            (proxy, method, args) -> proxy);
-            Object options =
-                    Proxy.newProxyInstance(
-                            getClass().getClassLoader(),
-                            new Class<?>[] {WebDriver.Options.class},
-                            (proxy, method, args) -> timeouts);
-            return (WebDriver)
-                    Proxy.newProxyInstance(
-                            getClass().getClassLoader(),
-                            new Class<?>[] {WebDriver.class, JavascriptExecutor.class},
-                            (proxy, method, args) -> {
-                                if (method.getName().equals("executeScript")) {
-                                    String script = (String) args[0];
-                                    if (script.equals("return location.origin")) return origin;
-                                    if (script.startsWith("return document.querySelector")) {
-                                        if (branchUnavailableReads > 0) {
-                                            branchUnavailableReads--;
-                                            return null;
-                                        }
-                                        return activeBranch;
-                                    }
-                                    return true;
-                                }
-                                if (method.getName().equals("manage")) return options;
-                                if (method.getName().equals("executeAsyncScript"))
-                                    return request((Object[]) args[1]);
-                                if (method.getName().equals("toString"))
-                                    return "Fixture cleanup regression driver";
-                                return null;
-                            });
-        }
-
-        @SuppressWarnings("unchecked")
-        Object request(Object[] args) {
-            String action = (String) args[0], endpoint = (String) args[1];
-            Map<String, Object> values = (Map<String, Object>) args[2];
-            if (endpoint.equals("Branches")) {
-                if (action.equals("get")) return Map.of("entity", new LinkedHashMap<>(branch));
-                if (!action.equals("update"))
-                    throw new AssertionError("Never delete an existing branch");
-                boolean unlink =
-                        ((List<?>) values.get("stores")).size()
-                                < ((List<?>) branch.get("stores")).size();
-                if (unlink && rejectBranchUnlink)
-                    return Map.of("error", "Cannot unlink owned store", "status", 400);
-                branch = new LinkedHashMap<>(values);
-                if (unlink && timeoutBranchUnlinkAfterCommit) {
-                    timeoutBranchUnlinkAfterCommit = false;
-                    throw new TimeoutException("Lost unlink response after commit");
-                }
-                return Map.of("id", "branch-test");
-            }
-            if (action.equals("create")) {
-                String id = endpoint + "-" + (records.size() + 1);
-                Map<String, Object> saved = new LinkedHashMap<>(values);
-                saved.put("id", id);
-                records.put(id, saved);
-                if (endpoint.equals("Items") && failAfterItemInsert)
-                    return Map.of("error", "Failed after insert", "status", 500);
-                if (endpoint.equals("Stores") && failAfterStoreInsert)
-                    return Map.of("error", "Lost store create response", "status", 500);
-                return Map.of("id", id);
-            }
-            if (action.equals("get") && endpoint.startsWith("Items/Summary"))
-                return Map.of("entity", new ArrayList<>(records.values()));
-            if (action.equals("get") && endpoint.startsWith("Accounts?"))
-                return Map.of("error", "Unsupported account list", "status", 405);
-            if (action.equals("get") && endpoint.startsWith("Aggregates/AccountTreeViewModel?")) {
-                usedAccountTree = true;
-                return Map.of(
-                        "entity",
-                        Map.of(
-                                "Accounts",
-                                new ArrayList<>(records.values()),
-                                "AccountsTree",
-                                new ArrayList<>(records.values())));
-            }
-            if (action.equals("get") && endpoint.startsWith("SalesTransactions?")) {
-                if (failMovementLookup) return Map.of("error", "Lookup unavailable", "status", 503);
-                var rows = records.values().stream().filter(r -> r.containsKey("lines")).toList();
-                return Map.of("entity", Map.of("pageData", rows, "totalRecords", rows.size()));
-            }
-            if (action.equals("get") && endpoint.contains("?")) {
-                if (failFixtureLookup)
-                    return Map.of("error", "Fixture lookup unavailable", "status", 503);
-                String namePart =
-                        endpoint.contains("arabicNamePart=")
-                                ? java.net.URLDecoder.decode(
-                                        endpoint.split("arabicNamePart=", 2)[1].split("&", 2)[0],
-                                        java.nio.charset.StandardCharsets.UTF_8)
-                                : null;
-                var rows =
-                        records.values().stream()
-                                .filter(
-                                        r ->
-                                                r.containsKey("id")
-                                                        && (r.containsKey("arabicName")
-                                                                || r.containsKey("englishName")))
-                                .filter(
-                                        r ->
-                                                namePart == null
-                                                        || String.valueOf(r.get("arabicName"))
-                                                                .contains(namePart))
-                                .toList();
-                return Map.of("entity", Map.of("pageData", rows, "totalRecords", rows.size()));
-            }
-            String id = values.get("id").toString();
-            if (action.equals("get")) {
-                if (endpoint.equals("Customers")
-                        && (customerGetAlways500
-                                || (customerGet500WhenMissing && !records.containsKey(id))))
-                    return Map.of("error", "Customer lookup failed", "status", 500);
-                return records.containsKey(id)
-                        ? Map.of("entity", records.get(id))
-                        : defaultDeletedMasterDto
-                                ? Map.of(
-                                        "entity",
-                                        Map.of("subUnits", List.of(), "type", "RawMaterial"))
-                                : defaultDeletedDto
-                                        ? Map.of("entity", Map.of("conversionRates", List.of()))
-                                        : emptyDeletedResponse
-                                                ? Map.of("entity", "")
-                                                : Map.of(
-                                                        "error",
-                                                        "Missing owned record",
-                                                        "status",
-                                                        404);
-            }
-            deletes.add(id);
-            if (crashAtDelete > 0 && deletes.size() == crashAtDelete)
-                throw new Error("Simulated process interruption");
-            if (endpoint.equals("ItemTransactions-Sales") && rejectMovement)
-                return Map.of("error", "Movement is linked", "status", 400);
-            if (missingDeleteForExisting || (missingDelete400 && !records.containsKey(id)))
-                return Map.of("error", "Common.ObjectNotFound", "status", 400);
-            if (endpoint.equals("Stores")) {
-                if (rejectStore) return Map.of("error", "Record is in use", "status", 400);
-                if (timeOutStore) {
-                    timeOutStore = false;
-                    if (commitBeforeTimeout) records.remove(id);
-                    throw new TimeoutException("Simulated lost DELETE response");
-                }
-            }
-            records.remove(id);
-            return Map.of("ok", true);
-        }
-    }
 
     @Test
     @Story("حذف الحركة المملوكة للاختبار قبل أصنافها ومخازنها")
     public void deletesOwnedMovementBeforeItsItemsAndStores() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         var item = data.item(1);
         var store = data.store(1);
@@ -568,7 +378,7 @@ public class SalesCleanupTest {
     @Test
     @Story("استعادة مخزن حُفظ قبل فقد استجابة الإنشاء")
     public void recoversStoreCommittedBeforeLostCreateResponse() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         api.failAfterStoreInsert = true;
         SalesTestData data = new SalesTestData(api.driver());
         Assert.expectThrows(AssertionError.class, () -> data.store(1));
@@ -586,7 +396,7 @@ public class SalesCleanupTest {
     @Test
     @Story("فشل التأكد من المخزن يحتفظ بحساباته")
     public void uncertainStoreLookupFailurePreservesItsAccounts() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         api.failAfterStoreInsert = true;
         SalesTestData data = new SalesTestData(api.driver());
         Assert.expectThrows(AssertionError.class, () -> data.store(1));
@@ -602,7 +412,7 @@ public class SalesCleanupTest {
     @Test
     @Story("التحقق من استمرار ارتباط المخزن غير المؤكد بحسابه المملوك للاختبار")
     public void uncertainStoreMustStillReferenceItsOwnedAccount() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         api.failAfterStoreInsert = true;
         SalesTestData data = new SalesTestData(api.driver());
         Assert.expectThrows(AssertionError.class, () -> data.store(1));
@@ -622,7 +432,7 @@ public class SalesCleanupTest {
     @Test
     @Story("استئناف إنشاء مخزن معلق من سجل التنظيف المحفوظ")
     public void resumesPendingStoreCreationFromDurableJournal() throws Exception {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         api.failAfterStoreInsert = true;
         WebDriver driver = api.driver();
         SalesTestData data = new SalesTestData(driver);
@@ -640,7 +450,7 @@ public class SalesCleanupTest {
     @Test
     @Story("الاحتفاظ بتبعيات المخزون عند فشل حذف الحركة")
     public void retainsStockDependenciesWhenMovementDeletionFails() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         var item = data.item(1);
         var store = data.store(1);
@@ -661,7 +471,7 @@ public class SalesCleanupTest {
     @Test
     @Story("رفض تسجيل سجل غير مملوك للاختبار ضمن بيانات التنظيف")
     public void refusesTrackingUnownedRecord() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         Assert.expectThrows(
                 AssertionError.class,
@@ -673,7 +483,7 @@ public class SalesCleanupTest {
     @Test
     @Story("التحقق من هوية البيانات قبل أول عملية حذف")
     public void checksIdentityBeforeFirstDeletion() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         var unit = data.unit(1);
         api.records.put(
@@ -692,7 +502,7 @@ public class SalesCleanupTest {
     @Test
     @Story("تنظيف مستند بلا ملاحظات بعد التحقق من ملكية مخزنه وأصنافه")
     public void cleansSalesDocumentWithoutNotesUsingOwnedStoreAndItems() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         var item = data.item(1);
         var store = data.store(1);
@@ -726,7 +536,7 @@ public class SalesCleanupTest {
     }
 
     private void salesDocumentIdentityMismatch(boolean storeChanged) {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         var item = data.item(1);
         var store = data.store(1);
@@ -759,7 +569,7 @@ public class SalesCleanupTest {
     @Test
     @Story("استعادة إذن مخزني حُفظ قبل فقد استجابة الإنشاء")
     public void recoversWarehouseCreateCommittedBeforeLostResponse() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         var item = data.item(1);
         var store = data.store(1);
@@ -791,7 +601,7 @@ public class SalesCleanupTest {
     @Test
     @Story("فشل البحث عن إذن مخزني يحتفظ بجميع تبعياته")
     public void uncertainWarehouseLookupFailureRetainsAllParents() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         var item = data.item(1);
         var store = data.store(1);
@@ -821,7 +631,7 @@ public class SalesCleanupTest {
     @Test
     @Story("استعادة الملاحظات المعدلة بعد فقد استجابة التعديل")
     public void recoversUpdatedNoteAfterLostUpdateResponse() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         var item = data.item(1);
         var store = data.store(1);
@@ -855,7 +665,7 @@ public class SalesCleanupTest {
     @Test
     @Story("قبول استجابة عدم وجود السجل عند الحذف بعد تأكيد غيابه بالقراءة")
     public void acceptsMissingDeleteOnlyAfterReadConfirmsAbsence() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         api.missingDelete400 = true;
         SalesTestData data = new SalesTestData(api.driver());
         SalesTestData.Record store = data.store(1);
@@ -867,7 +677,7 @@ public class SalesCleanupTest {
     @Test
     @Story("رفض اعتبار السجل محذوفاً عندما تؤكد القراءة وجوده")
     public void rejectsMissingDeleteWhenOwnedRecordStillExists() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         SalesTestData.Record unit = data.unit(1);
         api.missingDeleteForExisting = true;
@@ -881,7 +691,7 @@ public class SalesCleanupTest {
     @Test
     @Story("استعادة صنف أُنشئ من الواجهة رغم فشل الاستجابة")
     public void recoversUiItemCommittedBeforeFailedResponse() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         SalesTestData.Record unit = data.unit(1), category = data.category();
         String name = "QA-SL-recover-" + java.util.UUID.randomUUID();
@@ -903,7 +713,7 @@ public class SalesCleanupTest {
     @Test
     @Story("استعادة صنف غير صالح بعلامة الاختبار الإنجليزية الفريدة")
     public void recoversInvalidItemByUniqueEnglishMarker() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         var unit = data.unit(1);
         var category = data.category();
@@ -940,7 +750,7 @@ public class SalesCleanupTest {
     @Test
     @Story("إزالة ارتباط الفرع الخاص بالاختبار فقط مع حفظ التغييرات المتزامنة")
     public void removesOnlyOwnedBranchMembershipAndPreservesConcurrentChanges() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         var store = data.store(1);
         Assert.assertTrue(
@@ -965,7 +775,7 @@ public class SalesCleanupTest {
     @Test
     @Story("الاحتفاظ بالمخزن وحساباته عند تعذر إزالة ارتباطه المملوك للاختبار")
     public void retainsStoreAndAccountsWhenOwnedMembershipCannotBeRemoved() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         var store = data.store(1);
         api.rejectBranchUnlink = true;
@@ -980,7 +790,7 @@ public class SalesCleanupTest {
     @Test
     @Story("تأكيد فك ارتباط الفرع المنفذ بعد فقد الاستجابة")
     public void verifiesCommittedBranchUnlinkAfterLostResponse() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         data.store(1);
         api.timeoutBranchUnlinkAfterCommit = true;
@@ -992,7 +802,7 @@ public class SalesCleanupTest {
     @Test
     @Story("إعادة محاولة الحذف غير المنفذ قبل حذف الحسابات التابعة")
     public void retriesUncommittedDeleteBeforeParentAccounts() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         api.timeOutStore = true;
         SalesTestData data = new SalesTestData(api.driver());
         SalesTestData.Record store = data.store(1);
@@ -1006,7 +816,7 @@ public class SalesCleanupTest {
     @Test
     @Story("عدم تكرار الحذف عندما نُفذ الطلب الذي انتهت مهلته")
     public void doesNotDeleteAgainWhenTimedOutRequestAlreadyCommitted() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         api.timeOutStore = true;
         api.commitBeforeTimeout = true;
         SalesTestData data = new SalesTestData(api.driver());
@@ -1019,7 +829,7 @@ public class SalesCleanupTest {
     @Test
     @Story("قبول قراءة نص فارغ بعد تأكيد تنفيذ الحذف المنتهية مهلته")
     public void acceptsEmptyStringReadAfterCommittedDeleteTimeout() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         api.timeOutStore = true;
         api.commitBeforeTimeout = true;
         api.emptyDeletedResponse = true;
@@ -1033,7 +843,7 @@ public class SalesCleanupTest {
     @Test
     @Story("الاحتفاظ بالتبعيات المعطلة وإعادة محاولة تنظيف سجلات الاختبار فقط")
     public void retainsBlockedParentsAndRetriesOnlyItsOwnRecords() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         api.rejectStore = true;
         api.records.put(
                 "shared-record",
@@ -1051,7 +861,7 @@ public class SalesCleanupTest {
     @Test
     @Story("تنظيف صنف الاختبار الذي حُفظ رغم فشل طلب الإنشاء")
     public void cleansOwnedItemCommittedBeforeCreateFailure() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         api.failAfterItemInsert = true;
         api.records.put(
                 "shared-item",
@@ -1077,7 +887,7 @@ public class SalesCleanupTest {
     @Test
     @Story("قبول نموذج حركة افتراضي بعد التحقق من غياب الحركة")
     public void acceptsVerifiedMissingMovementDefaultDto() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         api.defaultDeletedDto = true;
         SalesTestData data = new SalesTestData(api.driver());
         SalesTestData.Record record =
@@ -1090,7 +900,7 @@ public class SalesCleanupTest {
     @Test
     @Story("قبول نموذج بيانات أساسية افتراضي بعد التحقق من غياب السجل")
     public void acceptsVerifiedMissingMasterDefaultDto() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         api.defaultDeletedMasterDto = true;
         SalesTestData data = new SalesTestData(api.driver());
         SalesTestData.Record record = data.fixture("item", "Items", SalesTestData.fields());
@@ -1102,7 +912,7 @@ public class SalesCleanupTest {
     @Test
     @Story("حذف السجل المعدل قبل المرجع الجديد الذي أصبح مرتبطاً به")
     public void updatedRecordDeletesBeforeItsNewReference() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         SalesTestData.Record original = data.store(1);
         SalesTestData.Record movement =
@@ -1125,7 +935,7 @@ public class SalesCleanupTest {
     @Test
     @io.qameta.allure.Story("مشاركة المراجع الثابتة بالصفحة وعزل بيانات كل حالة دون حذف بينها")
     public void pageScopeSharesOnlyStableReferences() {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         var data = new SalesTestData(api.driver());
         data.beginScenario();
         var stable = data.unit(1);
@@ -1151,7 +961,7 @@ public class SalesCleanupTest {
     @Test
     @io.qameta.allure.Story("استكمال الحذف بعد انقطاع التشغيل من السجلات المتبقية فقط")
     public void interruptedPageCleanupResumesOnlyRemainingOwnedRecords() throws Exception {
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         var data = new SalesTestData(api.driver());
         var first = data.unit(1);
         var last = data.unit(2);
@@ -1176,7 +986,7 @@ public class SalesCleanupTest {
             "دورة الصفحة الفعلية تحتفظ ببيانات الحالات وتغلق النوافذ وتنظف المجموعة مع فشل الخطوة الأخيرة")
     public void actualCallbacksKeepCasesUntilPageEndEvenAfterFailure() throws Exception {
 
-        Api api = new Api();
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
         try (var browser = new TestSupport.FixtureBrowser(api.driver())) {
             var broken = new java.util.concurrent.atomic.AtomicBoolean();
             var page =

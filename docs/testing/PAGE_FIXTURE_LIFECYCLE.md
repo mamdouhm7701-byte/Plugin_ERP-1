@@ -12,6 +12,10 @@ Headless sessions explicitly keep a 1920×1080 window instead of maximizing: the
 
 ## Group boundaries and isolation
 
+Sales fixture payloads and browser transport now live in `SalesFixtureDefinitions` and `SalesFixtureApi`. `SalesTestData` still owns case scopes, journals, recovery and cleanup ordering. Sales and purchase cleanup tests use separate in-memory API stubs. See [the first refactoring batch and validation](REFACTORING_AR.md).
+
+Purchase browser transport lives in `PurchaseFixtureApi`, with the same origin/branch guard and request timeouts. `PurchaseTestData` retains its SQL deadlock retry policy, fixture definitions, ownership, receipt pagination, recovery journals and cleanup ordering.
+
 | Module | Fixture group | Shared stable references | Independent per case |
 |---|---|---|---|
 | Products | One group for each item, category, unit or price-list screen | Units, main category, stores and store accounts | Items, subcategories, price lists and every UI target record |

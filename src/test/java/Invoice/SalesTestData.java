@@ -1,5 +1,6 @@
 package Invoice;
 
+import Invoice.SalesFixtureApi.ApiFailure;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -12,18 +13,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 /** Page-owned fixtures with isolated case namespaces, bound to the logged-in origin and branch. */
 final class SalesTestData implements AutoCloseable {
-    private static final class ApiFailure extends AssertionError {
-        private final int status;
-
-        ApiFailure(int status, String message) {
-            super(message);
-            this.status = status;
-        }
-    }
-
     record Record(String endpoint, Object id, String name, Map<String, Object> values) {}
 
     private final WebDriver driver;
+    private final SalesFixtureApi api;
+    private final SalesFixtureDefinitions definitions = new SalesFixtureDefinitions(this);
     private final String origin;
     private final Object sessionBranchId;
     private final String suffix;
@@ -116,6 +110,7 @@ final class SalesTestData implements AutoCloseable {
                 ((JavascriptExecutor) driver)
                         .executeScript(
                                 "return document.querySelector('#app').__vue__.$store.getters['app/currentBranch'].id");
+        api = new SalesFixtureApi(driver, origin, sessionBranchId, this::awaitContext);
     }
 
     /** Resume only an explicitly chosen journal, in its original tenant and branch. */
@@ -159,74 +154,19 @@ final class SalesTestData implements AutoCloseable {
     }
 
     Record account(String key) {
-        Record parent =
-                fixture(
-                        "account-main-" + key,
-                        "Accounts",
-                        fields(
-                                "type",
-                                "Main",
-                                "code",
-                                Integer.toString(
-                                        java.util.concurrent.ThreadLocalRandom.current()
-                                                .nextInt(10000000, 99999999)),
-                                "nature",
-                                "Debit",
-                                "finalAccountType",
-                                "Budget",
-                                "level",
-                                1,
-                                "isDistributable",
-                                false,
-                                "isSharedBetweenBranches",
-                                false,
-                                "prevDebit",
-                                0,
-                                "prevCredit",
-                                0,
-                                "previousBalances",
-                                List.of()));
-        return fixture(
-                "account-sub-" + key,
-                "Accounts",
-                fields(
-                        "type",
-                        "Sub",
-                        "nature",
-                        "Debit",
-                        "code",
-                        parent.values().get("code") + "01",
-                        "finalAccountType",
-                        "Budget",
-                        "parentId",
-                        parent.id(),
-                        "level",
-                        2,
-                        "isDistributable",
-                        false,
-                        "isSharedBetweenBranches",
-                        false,
-                        "prevDebit",
-                        0,
-                        "prevCredit",
-                        0,
-                        "previousBalances",
-                        List.of()));
+        return definitions.account(key);
     }
 
     Record unit(int index) {
-        return fixture("unit-" + index, "Units", fields("conversionRates", List.of()));
+        return definitions.unit(index);
     }
 
     Record mainCategory() {
-        return fixture("category-main", "ItemCategories", fields("isMain", true));
+        return definitions.mainCategory();
     }
 
     Record category() {
-        return fixture(
-                "category",
-                "ItemCategories",
-                fields("isMain", false, "parentCategoryId", mainCategory().id()));
+        return definitions.category();
     }
 
     Record store(int index) {
@@ -314,237 +254,39 @@ final class SalesTestData implements AutoCloseable {
     }
 
     Map<String, Object> itemValues() {
-        return fields(
-                "categoryId",
-                category().id(),
-                "mainUnitId",
-                unit(1).id(),
-                "mainUnitBarcode",
-                "ST" + UUID.randomUUID().toString().replace("-", ""),
-                "type",
-                "RawMaterial",
-                "isStoreItem",
-                true,
-                "isTaxable",
-                false,
-                "itemTax",
-                0,
-                "salesPrice",
-                100,
-                "minSalesPrice",
-                50,
-                "maxSalesPrice",
-                200,
-                "sales",
-                true,
-                "purch",
-                true,
-                "returnSales",
-                true,
-                "returnPurch",
-                true,
-                "quotation",
-                true,
-                "salesOrder",
-                true,
-                "purchOrder",
-                true,
-                "storageTransfer",
-                true,
-                "additionOrder",
-                true,
-                "exchangeOrder",
-                true,
-                "damageAdjustment",
-                true,
-                "isScalesItem",
-                false,
-                "subUnits",
-                List.of(),
-                "components",
-                List.of(),
-                "additions",
-                List.of(),
-                "offers",
-                List.of(),
-                "discounts",
-                List.of(),
-                "stores",
-                List.of(
-                        fields(
-                                "storeId",
-                                store(1).id(),
-                                "itemPlace",
-                                "QA",
-                                "openingBalance",
-                                0,
-                                "currentBalance",
-                                0,
-                                "minimumLimit",
-                                0,
-                                "reorderLimit",
-                                0,
-                                "costPrice",
-                                80,
-                                "isActive",
-                                true)));
+        return definitions.itemValues();
     }
 
     Record item(int index) {
-        Map<String, Object> values = itemValues();
-        values.put(
-                "stores",
-                List.of(
-                        fields(
-                                "storeId",
-                                store(1).id(),
-                                "itemPlace",
-                                "QA",
-                                "openingBalance",
-                                1000,
-                                "currentBalance",
-                                1000,
-                                "minimumLimit",
-                                0,
-                                "reorderLimit",
-                                0,
-                                "costPrice",
-                                80,
-                                "isActive",
-                                true),
-                        fields(
-                                "storeId",
-                                store(2).id(),
-                                "itemPlace",
-                                "QA",
-                                "openingBalance",
-                                0,
-                                "currentBalance",
-                                0,
-                                "minimumLimit",
-                                0,
-                                "reorderLimit",
-                                0,
-                                "costPrice",
-                                80,
-                                "isActive",
-                                true)));
-        return fixture("item-" + index, "Items", values);
+        return definitions.item(index);
     }
 
     Record agent() {
-        return agent(false);
+        return definitions.agent();
     }
 
     Record otherSalesAgent() {
-        return fixture(
-                "agent-sales-other",
-                "Agents",
-                fields(
-                        "nature",
-                        "Sales",
-                        "isActive",
-                        true,
-                        "commissionSlices",
-                        List.of(),
-                        "itemCommissions",
-                        List.of()));
+        return definitions.otherSalesAgent();
     }
 
     Record agent(boolean purchase) {
-        return fixture(
-                purchase ? "agent-purchase" : "agent-sales",
-                "Agents",
-                fields(
-                        "nature",
-                        purchase ? "Purch" : "Sales",
-                        "isActive",
-                        true,
-                        "commissionSlices",
-                        List.of(),
-                        "itemCommissions",
-                        List.of()));
+        return definitions.agent(purchase);
     }
 
     Record destination() {
-        return fixture(
-                "destination",
-                "ExchangeDestinations",
-                fields("accountId", account("destination").id()));
+        return definitions.destination();
     }
 
     Record supplier() {
-        return fixture(
-                "supplier",
-                "Suppliers",
-                fields(
-                        "isActive",
-                        true,
-                        "cashPurchase",
-                        true,
-                        "creditPurchase",
-                        true,
-                        "isTaxable",
-                        false,
-                        "isClosed",
-                        false,
-                        "purchaseReturn",
-                        true,
-                        "purchaseOrder",
-                        true,
-                        "dealerType",
-                        "Supplier",
-                        "isSameBranch",
-                        true,
-                        "allowanceDays",
-                        0,
-                        "accountId",
-                        account("supplier").id()));
+        return definitions.supplier();
     }
 
     Record customer() {
-        return customer(0);
+        return definitions.customer();
     }
 
     Record customer(int allowedDiscount) {
-        return fixture(
-                "customer",
-                "Customers",
-                fields(
-                        "discount",
-                        allowedDiscount,
-                        "applyDiscount",
-                        allowedDiscount > 0,
-                        "isActive",
-                        true,
-                        "cashSales",
-                        true,
-                        "creditNote",
-                        true,
-                        "salesDiscount",
-                        true,
-                        "creditSales",
-                        true,
-                        "salesReturn",
-                        true,
-                        "quotation",
-                        true,
-                        "isTaxable",
-                        true,
-                        "isOnTheFly",
-                        false,
-                        "isClosed",
-                        false,
-                        "salesOrder",
-                        true,
-                        "dealerType",
-                        "Customer",
-                        "isSameBranch",
-                        true,
-                        "allowanceDays",
-                        0,
-                        "accountId",
-                        account("customer").id()));
+        return definitions.customer(allowedDiscount);
     }
 
     Object balance(Record item, int index) {
@@ -578,164 +320,32 @@ final class SalesTestData implements AutoCloseable {
     }
 
     Record bank() {
-        return fixture("bank", "Banks", fields("accountId", account("bank").id()));
+        return definitions.bank();
     }
 
     Record payment() {
-        return fixture("payment", "PaymentMethods", fields("bankId", bank().id()));
+        return definitions.payment();
     }
 
     Record safe() {
-        return fixture("safe", "Safes", fields("accountId", account("safe").id()));
+        return definitions.safe();
     }
 
     Record discountType() {
-        return fixture(
-                "discount-type", "DiscountTypes", fields("accountId", account("discount").id()));
+        return definitions.discountType();
     }
 
     Record priceList() {
-        Record item = item(1);
-        return fixture(
-                "price-list",
-                "PriceLists",
-                fields(
-                        "pricelistDate",
-                        java.time.LocalDate.now().toString(),
-                        "items",
-                        List.of(
-                                fields(
-                                        "itemId",
-                                        item.id(),
-                                        "unitId",
-                                        unit(1).id(),
-                                        "salesPrice",
-                                        125,
-                                        "minSalesPrice",
-                                        100,
-                                        "maxSalesPrice",
-                                        150))));
+        return definitions.priceList();
     }
 
     Record seedInvoice(int index, String type, String date, String quantity, String paid) {
-        return seedInvoice(index, type, date, quantity, paid, agent());
+        return definitions.seedInvoice(index, type, date, quantity, paid);
     }
 
     Record seedInvoice(
             int index, String type, String date, String quantity, String paid, Record salesAgent) {
-        Record item = item(1), customer = customer();
-        java.math.BigDecimal qty = new java.math.BigDecimal(quantity),
-                total = qty.multiply(new java.math.BigDecimal("100")),
-                amount = new java.math.BigDecimal(paid);
-        Map<String, Object> line =
-                fields(
-                        "lineSerial",
-                        1,
-                        "storeId",
-                        store(1).id(),
-                        "itemId",
-                        item.id(),
-                        "unitId",
-                        unit(1).id(),
-                        "unitConversionRate",
-                        1,
-                        "quantity",
-                        qty,
-                        "price",
-                        100,
-                        "total",
-                        total,
-                        "net",
-                        total,
-                        "costPrice",
-                        qty.multiply(new java.math.BigDecimal("80")),
-                        "discountPercentage",
-                        0,
-                        "discountValue",
-                        0,
-                        "additions",
-                        List.of(),
-                        "attributes",
-                        List.of(),
-                        "attachmentDetails",
-                        List.of(),
-                        "roundedAdditions",
-                        0,
-                        "roundedNet",
-                        total);
-        List<?> payments =
-                amount.signum() == 0
-                        ? List.of()
-                        : List.of(
-                                fields(
-                                        "paymentMethod",
-                                        "Other",
-                                        "otherPaymentMethodId",
-                                        payment().id(),
-                                        "bankId",
-                                        bank().id(),
-                                        "value",
-                                        amount,
-                                        "cashPaid",
-                                        0));
-        return fixture(
-                "seed-" + index,
-                "ItemTransactions-" + type,
-                fields(
-                        "transactionType",
-                        type,
-                        "transactionChannel",
-                        "Normal",
-                        "transactionSource",
-                        "Web",
-                        "transactionDate",
-                        date,
-                        "transactionTime",
-                        "12:00:00",
-                        "dueDate",
-                        date,
-                        "paymentType",
-                        amount.signum() == 0 ? "Credit" : "Cash",
-                        "dealerId",
-                        customer.id(),
-                        "agentId",
-                        salesAgent.id(),
-                        "storeId",
-                        store(1).id(),
-                        "isOffline",
-                        false,
-                        "isPosted",
-                        false,
-                        "isComplete",
-                        false,
-                        "paid",
-                        amount,
-                        "total",
-                        total,
-                        "netBeforeTaxes",
-                        total,
-                        "net",
-                        total,
-                        "totalTaxes",
-                        0,
-                        "discountValue",
-                        0,
-                        "discountPercentage",
-                        0,
-                        "totalAdditionalTaxes",
-                        0,
-                        "lines",
-                        List.of(line),
-                        "taxes",
-                        List.of(),
-                        "payments",
-                        payments,
-                        "expenses",
-                        List.of(),
-                        "costCenters",
-                        List.of(),
-                        "extraProperties",
-                        List.of()));
+        return definitions.seedInvoice(index, type, date, quantity, paid, salesAgent);
     }
 
     void deleteOwned(Record record) {
@@ -944,52 +554,8 @@ final class SalesTestData implements AutoCloseable {
         return record;
     }
 
-    @SuppressWarnings("unchecked")
     private Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
-        awaitContext();
-        driver.manage()
-                .timeouts()
-                .scriptTimeout(Duration.ofSeconds(action.equals("delete") ? 60 : 30));
-        Object result =
-                ((JavascriptExecutor) driver)
-                        .executeAsyncScript(
-                                """
-        const [action, endpoint, values, expectedOrigin, expectedBranch, done] = arguments;
-        const root = document.querySelector('#app')?.__vue__;
-        if (!root?.$store) { done({error:'Authenticated ERP session is not ready'}); return; }
-        if(location.origin!==expectedOrigin||root.$store.getters['app/currentBranch']?.id!==expectedBranch){done({error:'ERP origin or branch changed; refusing fixture access'});return;}
-        const queue = [root]; let branchId = null;
-        while (queue.length) {
-          const vm = queue.shift();
-          if (vm.currentBranch?.id) { branchId = vm.currentBranch.id; break; }
-          queue.push(...(vm.$children || []));
-        }
-        const args = {url:endpoint};
-        if (action === 'create') {
-          if (!branchId) { done({error:'No current branch selected'}); return; }
-          args.data = {...values, branchId};
-        } else if(action === 'update') {args.data=values;} else { args.id = values.id; }
-        root.$store.dispatch('app/' + action, args).then(result => {
-          if (action === 'delete') { done({ok:true}); return; }
-          const entity = result?.data || result;
-          done({id: entity?.id || (typeof entity === 'string' || typeof entity === 'number' ? entity : null),
-            code: entity?.code || null,
-            entity: action === 'get' ? JSON.parse(JSON.stringify(entity)) : null});
-        }).catch(error => done({status: error?.response?.status || error?.status || error?.data?.status || 0,
-          error: JSON.stringify(error?.response?.data || error?.data || {status:error?.status, message:String(error)})}));
-        """,
-                                action,
-                                endpoint,
-                                values,
-                                origin,
-                                sessionBranchId);
-        Map<String, Object> response = (Map<String, Object>) result;
-        if (response.get("error") != null) {
-            int status = response.get("status") instanceof Number number ? number.intValue() : 0;
-            throw new ApiFailure(
-                    status, "Fixture " + action + " " + endpoint + ": " + response.get("error"));
-        }
-        return response;
+        return api.call(action, endpoint, values);
     }
 
     void track(String endpoint, Object id, String note, Map<String, Object> values) {

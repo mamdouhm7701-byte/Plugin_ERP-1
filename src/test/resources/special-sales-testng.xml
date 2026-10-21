@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <!--
   المدخل الشامل لقناتي الكاشير: 15 حالة نقاط بيع و15 مطعم و8 اختبارات محلية للتنظيف وخصائص العميل.
-  Regression يضم هذا الملف مرة واحدة. لا تضمه مع point-of-sale-testng.xml أو restaurant-testng.xml.
+  Regression يضم هذا الملف مرة واحدة. لا تضمه مع additional/standalone/point-of-sale-testng.xml أو additional/standalone/restaurant-testng.xml.
   السيناريوهات مستقلة ببياناتها؛ إعدادات الفرع المؤقتة تستعاد بعد كل حالة والتنظيف بعد كل كلاس.
   النتائج الموثقة سابقاً ليست نتيجة جديدة؛ أخطاء التطبيق المعروفة تبقى ضمن التغطية.
 -->

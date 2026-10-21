@@ -7,7 +7,7 @@
   مداخل compatibility لا تضاف لأنها تكرر عقوداً موجودة. E2E مضمنة أيضاً في هذا التشغيل.
   special-sales-testng.xml هو مدخل نقاط البيع والمطعم مع اختبارات تنظيفهما المحلية.
   لا نضيف المدخلين المنفصلين للشاشتين معه حتى لا تتكرر الحالات.
-  البيانات الأساسية والقيود اليومية الإضافية موضحة في regression-additional-testng.xml.
+  البيانات الأساسية والقيود اليومية الإضافية موضحة في additional/internal/regression-additional-testng.xml.
   التشغيل تسلسلي: BaseTest يشارك WebDriver، لذلك لا تشغل مجموعات كتابة متزامنة لنفس الفرع.
   النتائج القديمة ليست ضمان نجاح؛ العيوب المعروفة تظل ظاهرة في هذا التشغيل.
   التشغيل: mvn '-Dsurefire.suiteXmlFiles=src/test/resources/regression-testng.xml' test
@@ -21,7 +21,7 @@
         <suite-file path="sales-testng.xml"/>
         <suite-file path="purchases-testng.xml"/>
         <suite-file path="special-sales-testng.xml"/>
-        <suite-file path="regression-additional-testng.xml"/>
-        <suite-file path="regression-workflows-testng.xml"/>
+        <suite-file path="additional/internal/regression-additional-testng.xml"/>
+        <suite-file path="additional/internal/regression-workflows-testng.xml"/>
     </suite-files>
 </suite>

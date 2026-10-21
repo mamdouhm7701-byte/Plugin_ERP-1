@@ -23,8 +23,8 @@ public final class SuiteDefinitionsTest {
   public Object[][] testLevels() {
     return new Object[][] {
         {"smoke"}, {"sanity"}, {"regression"}, {"e2e"},
-        {"point-of-sale"}, {"restaurant"}, {"special-sales"},
-        {"fixture-lifecycle"}, {"regression-additional"}, {"regression-workflows"}
+        {"additional/standalone/point-of-sale"}, {"additional/standalone/restaurant"}, {"special-sales"},
+        {"additional/standalone/fixture-lifecycle"}, {"additional/internal/regression-additional"}, {"additional/internal/regression-workflows"}
     };
   }
 
@@ -77,7 +77,7 @@ public final class SuiteDefinitionsTest {
     Assert.assertEquals(special.stream().filter(c -> c.startsWith(restaurant)).count(), 15L);
     Assert.assertEquals(special.stream().filter(c -> c.startsWith(cleanup)).count(), 8L);
     Assert.assertTrue(regression.containsAll(special), "Regression must retain both complete screens and recovery contracts");
-    Assert.assertTrue(selectedCases("fixture-lifecycle").containsAll(
+    Assert.assertTrue(selectedCases("additional/standalone/fixture-lifecycle").containsAll(
         special.stream().filter(c -> c.startsWith(cleanup)).toList()));
     Set<String> cashierJourneys = Set.of(
         pos + "editingSavedQuantityAppliesOnlyDifference",

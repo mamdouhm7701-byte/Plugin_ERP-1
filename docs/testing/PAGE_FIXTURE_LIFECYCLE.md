@@ -42,6 +42,6 @@ Pass an exact journal suffix, using the same application and branch. Dealer page
 
 ## Verification
 
-Run local regressions with `mvn -Dsurefire.suiteXmlFiles=src/test/resources/fixture-lifecycle-testng.xml test`. These use mock APIs and disposable browser harnesses. They verify actual before/after callbacks as well as shared references, case isolation, recovery after lost responses, blocked-parent retention, branch guards and interruption progress. They do not establish live screen coverage.
+Run local regressions with `mvn -Dsurefire.suiteXmlFiles=src/test/resources/additional/standalone/fixture-lifecycle-testng.xml test`. These use mock APIs and disposable browser harnesses. They verify actual before/after callbacks as well as shared references, case isolation, recovery after lost responses, blocked-parent retention, branch guards and interruption progress. They do not establish live screen coverage.
 
 The latest local run passed all **125** invocations, including 24 added regression cases. A separate targeted UI run exercises two cases per selected module group; its final results and journal checks are recorded in [LIFECYCLE_VALIDATION.md](LIFECYCLE_VALIDATION.md).

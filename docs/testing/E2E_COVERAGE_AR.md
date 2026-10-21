@@ -137,7 +137,7 @@
 mvn '-DExecutionType=LocalHeadless' '-Dsurefire.suiteXmlFiles=src/test/resources/e2e-testng.xml' test
 ```
 
-Regression يضم الرحلات الإضافية عبر `regression-workflows-testng.xml`، ويأخذ رحلتي المشتريات الأصليتين من سويت المشتريات، ورحلات الكاشير السبع من `special-sales-testng.xml` الذي يضم تغطية الشاشتين كاملة واختبارات تنظيفهما المحلية. لا نضيف رحلات الكاشير مرة أخرى إلى ملف regression-workflows حتى لا تتكرر.
+Regression يضم الرحلات الإضافية عبر `additional/internal/regression-workflows-testng.xml`، ويأخذ رحلتي المشتريات الأصليتين من سويت المشتريات، ورحلات الكاشير السبع من `special-sales-testng.xml` الذي يضم تغطية الشاشتين كاملة واختبارات تنظيفهما المحلية. لا نضيف رحلات الكاشير مرة أخرى إلى ملف regression-workflows حتى لا تتكرر.
 
 ```powershell
 mvn '-Dtest=SuiteSupport.SuiteDefinitionsTest,SuiteSupport.WorkflowCleanupOrderTest' test

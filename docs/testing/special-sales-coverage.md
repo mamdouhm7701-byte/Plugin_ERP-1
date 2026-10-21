@@ -52,8 +52,8 @@
 
 شغّل TestNG باستخدام أحد الملفات:
 
-- `src/test/resources/point-of-sale-testng.xml`
-- `src/test/resources/restaurant-testng.xml`
+- `src/test/resources/additional/standalone/point-of-sale-testng.xml`
+- `src/test/resources/additional/standalone/restaurant-testng.xml`
 - `src/test/resources/special-sales-testng.xml` للشاشتين بالتتابع.
 
 اختبارات دورة البيانات المحلية: `SpecialSalesTest.SpecialSalesCleanupTest`، وعددها 8؛ تتحقق من المشاركة والعزل وترتيب الحذف ورفض تغير الملكية واسترجاع التشغيل المنقطع وملكية الطاولات، ومن إنشاء العميل الافتراضي والعميل المسجل خاضعين للضريبة وغير نقديين ولهما حساب مستقل.

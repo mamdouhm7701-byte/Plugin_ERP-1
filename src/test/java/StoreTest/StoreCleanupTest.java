@@ -873,6 +873,7 @@ public class StoreCleanupTest {
                             return fixturePage;
                         }
                     };
+            browser.bind(harness);
             harness.beginStoreScenario();
             marker.set(harness.marker);
             var data = harness.data;

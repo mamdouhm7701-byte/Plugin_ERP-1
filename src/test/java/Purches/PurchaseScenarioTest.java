@@ -28,7 +28,7 @@ public abstract class PurchaseScenarioTest extends BaseTest {
     protected final Map<Integer, BigDecimal> initialBalances = new LinkedHashMap<>();
     protected final Set<Object> allowedItems = new HashSet<>();
 
-    @BeforeSuite(alwaysRun = true)
+    @BeforeClass(alwaysRun = true)
     public void awaitPurchaseSession() {
         driver.manage().window().setSize(new org.openqa.selenium.Dimension(1920, 1080));
         new PurchaseModulePage(driver).puAwaitSession();

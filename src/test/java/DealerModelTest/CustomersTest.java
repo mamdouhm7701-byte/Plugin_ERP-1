@@ -147,11 +147,6 @@ public class CustomersTest extends DealerScenarioTest {
     public void AddCustomerSecondPage() {
         Customers customers = new Customers(driver);
         String recordName = ownedName(customers, Pages.CUSTOMERS, "AddCustomerSecondPage");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         customers.NavigationHelper(Pages.CUSTOMERS);
         customers.ClickNewButtonForDealer();
         customers.AddArabicName(recordName);
@@ -187,11 +182,6 @@ public class CustomersTest extends DealerScenarioTest {
     public void AddCustomerThirdPage() {
         Customers customers = new Customers(driver);
         String recordName = ownedName(customers, Pages.CUSTOMERS, "AddCustomerThirdPage");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         customers.NavigationHelper(Pages.CUSTOMERS);
         customers.ClickNewButtonForDealer();
         customers.AddArabicName(recordName);
@@ -227,11 +217,6 @@ public class CustomersTest extends DealerScenarioTest {
     public void AddCustomerFourthPage() {
         Customers customers = new Customers(driver);
         String recordName = ownedName(customers, Pages.CUSTOMERS, "AddCustomerFourthPage");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         customers.NavigationHelper(Pages.CUSTOMERS);
         customers.ClickNewButtonForDealer();
         customers.AddArabicName(recordName);
@@ -268,11 +253,6 @@ public class CustomersTest extends DealerScenarioTest {
     public void Edit() {
         prepareScenarioReferences("Edit");
         Customers customers = new Customers(driver);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         customers.NavigationHelper(Pages.CUSTOMERS);
         String originalName = seedRecord(customers, Pages.CUSTOMERS, "EDIT-ORIGINAL");
         customers.openDealerForEditByName(originalName);
@@ -368,11 +348,6 @@ public class CustomersTest extends DealerScenarioTest {
                     + " من ظهور رسالة خطأ تفيد بأن الاسم العربي حقل إلزامي.")
     public void SaveWithOutArabicName() {
         Customers customers = new Customers(driver);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         customers.NavigationHelper(Pages.CUSTOMERS);
         customers.ClickNewButtonForDealer();
         customers.AddArabicName("");
@@ -394,11 +369,6 @@ public class CustomersTest extends DealerScenarioTest {
                     + " عميل، ويتحقق من ظهور رسالة خطأ تفيد بأن صيغة البريد الإلكتروني غير صحيحة.")
     public void EnterWrongEmail() {
         Customers customers = new Customers(driver);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         customers.NavigationHelper(Pages.CUSTOMERS);
         customers.ClickNewButtonForDealer();
         customers.AddArabicName(ownedName(customers, Pages.CUSTOMERS, "VALIDATION"));
@@ -421,11 +391,6 @@ public class CustomersTest extends DealerScenarioTest {
                     + " حروف.")
     public void EnterWrongBankNumber() {
         Customers customers = new Customers(driver);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         customers.NavigationHelper(Pages.CUSTOMERS);
         customers.ClickNewButtonForDealer();
         customers.AddArabicName(ownedName(customers, Pages.CUSTOMERS, "VALIDATION"));
@@ -447,11 +412,6 @@ public class CustomersTest extends DealerScenarioTest {
                     + " حقل إلزامي عند تفعيل هذا الخيار.")
     public void AssertErrorMessagesInDataTax() {
         Customers customers = new Customers(driver);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         customers.NavigationHelper(Pages.CUSTOMERS);
         customers.ClickNewButtonForDealer();
         customers.AddArabicName(ownedName(customers, Pages.CUSTOMERS, "VALIDATION"));
@@ -472,11 +432,6 @@ public class CustomersTest extends DealerScenarioTest {
                     + " ينتهي بالرقم 3، ويتحقق من ظهور رسالة خطأ عند إدخال رقم ضريبي غير صحيح الصيغة.")
     public void AssertTaxNumberStartNumber3andEndStareNumber3() {
         Customers customers = new Customers(driver);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         customers.NavigationHelper(Pages.CUSTOMERS);
         customers.ClickNewButtonForDealer();
         customers.AddArabicName(ownedName(customers, Pages.CUSTOMERS, "VALIDATION"));
@@ -513,11 +468,6 @@ public class CustomersTest extends DealerScenarioTest {
                     + " الأقل.")
     public void AssertBuildingNumber() {
         Customers customers = new Customers(driver);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         customers.NavigationHelper(Pages.CUSTOMERS);
         customers.ClickNewButtonForDealer();
         customers.AddArabicName(ownedName(customers, Pages.CUSTOMERS, "VALIDATION"));
@@ -549,11 +499,6 @@ public class CustomersTest extends DealerScenarioTest {
                     + " أرقام.")
     public void AssertPostNumberInclode5number() {
         Customers customers = new Customers(driver);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         customers.NavigationHelper(Pages.CUSTOMERS);
         customers.ClickNewButtonForDealer();
         customers.AddArabicName(ownedName(customers, Pages.CUSTOMERS, "VALIDATION"));
@@ -584,11 +529,6 @@ public class CustomersTest extends DealerScenarioTest {
                     + " الاتصال، ويتحقق من ظهور رسالة خطأ تفيد بأن حقل العنوان إلزامي.")
     public void AssertAdress() {
         Customers customers = new Customers(driver);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         customers.NavigationHelper(Pages.CUSTOMERS);
         customers.ClickNewButtonForDealer();
         customers.AddArabicName(ownedName(customers, Pages.CUSTOMERS, "VALIDATION"));
@@ -624,11 +564,6 @@ public class CustomersTest extends DealerScenarioTest {
         Customers customers = new Customers(driver);
         String phone = seedCustomerPhone(customers);
         String recordName = ownedName(customers, Pages.CUSTOMERS, "PHONE-YES");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         customers.NavigationHelper(Pages.CUSTOMERS);
         customers.ClickNewButtonForDealer();
         customers.AddArabicName(recordName);
@@ -652,11 +587,6 @@ public class CustomersTest extends DealerScenarioTest {
         Customers customers = new Customers(driver);
         String phone = seedCustomerPhone(customers);
         String recordName = ownedName(customers, Pages.CUSTOMERS, "PHONE-CANCEL");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         customers.NavigationHelper(Pages.CUSTOMERS);
         customers.ClickNewButtonForDealer();
         customers.AddArabicName(recordName);

@@ -23,6 +23,7 @@ public final class SuiteDefinitionsTest {
   public Object[][] testLevels() {
     return new Object[][] {
         {"smoke"}, {"sanity"}, {"regression"}, {"e2e"}, {"login"},
+        {"additional/standalone/browser-isolation"},
         {"additional/standalone/point-of-sale"}, {"additional/standalone/restaurant"}, {"special-sales"},
         {"additional/standalone/fixture-lifecycle"}, {"additional/internal/regression-additional"}, {"additional/internal/regression-workflows"}
     };
@@ -108,10 +109,10 @@ public final class SuiteDefinitionsTest {
 
   private static void collect(XmlSuite suite, List<String> selected) throws Exception {
     Assert.assertEquals(suite.getParallel(), XmlSuite.ParallelMode.NONE,
-        "Shared WebDriver requires sequential suites: " + suite.getName());
+        "Page fixture lifecycles require sequential suites: " + suite.getName());
     for (XmlTest test : suite.getTests()) {
       Assert.assertEquals(test.getParallel(), XmlSuite.ParallelMode.NONE,
-          "Shared WebDriver requires sequential tests: " + test.getName());
+          "Cases within a page fixture group require sequential tests: " + test.getName());
       for (XmlClass xmlClass : test.getXmlClasses()) {
         Class<?> type = Class.forName(xmlClass.getName());
         List<Method> methods = new ArrayList<>();

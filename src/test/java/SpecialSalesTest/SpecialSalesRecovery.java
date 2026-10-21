@@ -10,7 +10,7 @@ public final class SpecialSalesRecovery extends BaseTest {
         var run = new SpecialSalesRecovery();
         try {
             run.setup();
-            try (var data = SpecialSalesTestData.resume(driver, args[0])) {}
+            try (var data = SpecialSalesTestData.resume(run.driver, args[0])) {}
         } finally {
             run.tearDown();
         }

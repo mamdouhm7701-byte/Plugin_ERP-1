@@ -539,6 +539,7 @@ public class ProductsCleanupTest {
                             return fixturePage;
                         }
                     };
+            browser.bind(harness);
             harness.newProductScenario();
             marker.set(harness.marker);
             var data = harness.data;

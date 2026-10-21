@@ -25,6 +25,7 @@
             <class name="SuiteSupport.DocumentDatesTest"/>
             <class name="SuiteSupport.WorkflowCleanupOrderTest"/>
             <class name="SuiteSupport.RuntimeCompatibilityTest"/>
+            <class name="SuiteSupport.BrowserLifecycleTest"/>
         </classes>
     </test>
 </suite>

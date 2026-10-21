@@ -36,7 +36,7 @@ public abstract class ProductScenarioTest extends BaseTest {
     protected String marker, mainWindow;
     private final List<ProductsTestData> pending = new ArrayList<>();
 
-    @BeforeSuite(alwaysRun = true)
+    @BeforeClass(alwaysRun = true)
     public void awaitProductsSession() {
         modulePage().prAwaitSession();
     }

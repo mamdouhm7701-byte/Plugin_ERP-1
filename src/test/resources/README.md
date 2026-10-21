@@ -25,6 +25,8 @@ mvn '-DExecutionType=LocalHeadless' '-Dsurefire.suiteXmlFiles=src/test/resources
 
 لتشغيل مدخل إضافي استخدم مساره الكامل، مثلاً `src/test/resources/additional/standalone/restaurant-testng.xml`.
 لا تجمع مدخل الشاشة المنفرد مع `special-sales-testng.xml` في التشغيل نفسه حتى لا تتكرر الحالات.
+
+`additional/standalone/browser-isolation-testng.xml` فحص حي من ثماني حالات عبر الوحدات والعملاء والمبيعات والمشتريات: متصفح جديد لكل كلاس مع الاحتفاظ بتنظيف بياناته قبل الإغلاق. أما `SuiteSupport.BrowserLifecycleTest` فهو فحص محلي لملكية المتصفح وإغلاقه عند فشل الدخول أو فشل الإغلاق.
 احتفظنا بتعريفات التغطية كما هي؛ النقل لتنظيم مداخل التشغيل.
 
 `Test-Data/` يحتوي بيانات الاختبارات، وليس ملفات تشغيل. `pom.xml` في جذر المشروع يخص بناء Maven.

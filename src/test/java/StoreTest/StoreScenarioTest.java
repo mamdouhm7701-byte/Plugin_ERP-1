@@ -22,7 +22,7 @@ public abstract class StoreScenarioTest extends BaseTest {
   private final List<StoreTestData> pending=new ArrayList<>();
   private final Map<String,BigDecimal> initialBalances=new LinkedHashMap<>();
   private StoreTestData.Record selectedParty;
-  @BeforeSuite(alwaysRun=true) public void awaitStoreSession(){movementPage().smAwaitSession();}
+  @BeforeClass(alwaysRun=true) public void awaitStoreSession(){movementPage().smAwaitSession();}
   @BeforeMethod(alwaysRun=true) public void beginStoreScenario(){
     marker="QA-ST-"+UUID.randomUUID().toString().substring(0,12);page=movementPage();mainWindow=driver.getWindowHandle();
     if(data==null){data=new StoreTestData(driver);pending.add(data);}data.beginScenario();item=null;initialBalances.clear();selectedParty=null;

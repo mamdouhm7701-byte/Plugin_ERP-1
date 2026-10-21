@@ -8,7 +8,7 @@ import org.openqa.selenium.*;
 public final class FixtureBrowser implements AutoCloseable {
     public final WebDriver driver;
     private final Field field;
-    private final Object previous;
+    private final Map<Object, Object> previous = new IdentityHashMap<>();
     private String active = "main";
     private final Set<String> windows = new LinkedHashSet<>(List.of("main"));
     public int closed;
@@ -55,8 +55,12 @@ public final class FixtureBrowser implements AutoCloseable {
         self[0] = driver;
         field = Plugin_ERP.Tests.LoginTest.BaseTest.class.getDeclaredField("driver");
         field.setAccessible(true);
-        previous = field.get(null);
-        field.set(null, driver);
+    }
+
+    /** Bind only the scenario instance under test; other classes keep their own browser. */
+    public void bind(Plugin_ERP.Tests.LoginTest.BaseTest scenario) throws IllegalAccessException {
+        if (!previous.containsKey(scenario)) previous.put(scenario, field.get(scenario));
+        field.set(scenario, driver);
     }
 
     public void addAuxiliaryWindow() {
@@ -65,6 +69,6 @@ public final class FixtureBrowser implements AutoCloseable {
 
     @Override
     public void close() throws IllegalAccessException {
-        field.set(null, previous);
+        for (var entry : previous.entrySet()) field.set(entry.getKey(), entry.getValue());
     }
 }

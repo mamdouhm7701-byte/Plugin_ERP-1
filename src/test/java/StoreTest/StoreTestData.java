@@ -7,17 +7,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.openqa.selenium.JavascriptExecutor;
+import StoreTest.StoreFixtureApi.ApiFailure;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 /** Per-scenario fixtures. Uses the logged-in application's API client and current branch. */
 final class StoreTestData implements AutoCloseable {
-  private static final class ApiFailure extends AssertionError {
-    private final int status;
-    ApiFailure(int status, String message) { super(message); this.status = status; }
-  }
+
   record Record(String endpoint, Object id, String name, Map<String, Object> values) {}
   private final WebDriver driver;
+  private final StoreFixtureApi api;
+  private final StoreFixtureDefinitions definitions = new StoreFixtureDefinitions(this);
   private final String origin;
   private final Object sessionBranchId;
   private final String suffix;
@@ -39,6 +39,7 @@ final class StoreTestData implements AutoCloseable {
     Object currentOrigin=((JavascriptExecutor)driver).executeScript("return location.origin");
     origin=currentOrigin instanceof String value?value:"offline";
     sessionBranchId=((JavascriptExecutor)driver).executeScript("return document.querySelector('#app').__vue__.$store.getters['app/currentBranch'].id");
+    api = new StoreFixtureApi(driver, origin, sessionBranchId);
   }
 
   /** Resume only an explicitly chosen journal, in its original tenant and branch. */
@@ -73,20 +74,17 @@ final class StoreTestData implements AutoCloseable {
   }
 
   Record account(String key) {
-    Record parent = fixture("account-main-"+key, "Accounts", fields("type", "Main",
-        "code", Integer.toString(java.util.concurrent.ThreadLocalRandom.current().nextInt(10000000, 99999999)),
-        "nature", "Debit", "finalAccountType", "Budget", "level", 1,
-        "isDistributable", false, "isSharedBetweenBranches", false,
-        "prevDebit", 0, "prevCredit", 0, "previousBalances", List.of()));
-    return fixture("account-sub-"+key, "Accounts", fields("type", "Sub", "nature", "Debit",
-        "code", parent.values().get("code") + "01", "finalAccountType", "Budget",
-        "parentId", parent.id(), "level", 2, "isDistributable", false,
-        "isSharedBetweenBranches", false, "prevDebit", 0, "prevCredit", 0,
-        "previousBalances", List.of()));
+      return definitions.account(key);
   }
-  Record unit(int index) {return fixture("unit-"+index,"Units",fields("conversionRates",List.of()));}
-  Record mainCategory(){return fixture("category-main","ItemCategories",fields("isMain",true));}
-  Record category(){return fixture("category","ItemCategories",fields("isMain",false,"parentCategoryId",mainCategory().id()));}
+  Record unit(int index) {
+      return definitions.unit(index);
+  }
+  Record mainCategory() {
+      return definitions.mainCategory();
+  }
+  Record category() {
+      return definitions.category();
+  }
   Record store(int index){
     Record store=fixture("store-"+index,"Stores",fields("accountId",account("store-"+index).id()));
     String key="branch-store-"+index;
@@ -128,36 +126,33 @@ final class StoreTestData implements AutoCloseable {
     }
     ((JavascriptExecutor)driver).executeScript("const root=document.querySelector('#app').__vue__;if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",branch);
   }
-  Map<String,Object> itemValues(){
-    return fields("categoryId",category().id(),"mainUnitId",unit(1).id(),
-        "mainUnitBarcode","ST"+UUID.randomUUID().toString().replace("-",""),"type","RawMaterial","isStoreItem",true,
-        "isTaxable",false,"itemTax",0,"salesPrice",100,"minSalesPrice",90,"maxSalesPrice",110,
-        "sales",true,"purch",true,"returnSales",true,"returnPurch",true,"quotation",true,
-        "salesOrder",true,"purchOrder",true,"storageTransfer",true,"additionOrder",true,
-        "exchangeOrder",true,"damageAdjustment",true,"isScalesItem",false,
-        "subUnits",List.of(),"components",List.of(),"additions",List.of(),"offers",List.of(),"discounts",List.of(),
-        "stores",List.of(fields("storeId",store(1).id(),"itemPlace","QA","openingBalance",0,"currentBalance",0,
-            "minimumLimit",0,"reorderLimit",0,"costPrice",80,"isActive",true)));
+  Map<String,Object> itemValues() {
+      return definitions.itemValues();
   }
-  Record item(int index){
-    Map<String,Object> values=itemValues();
-    values.put("stores",List.of(fields("storeId",store(1).id(),"itemPlace","QA","openingBalance",1000,"currentBalance",1000,"minimumLimit",0,"reorderLimit",0,"costPrice",80,"isActive",true),
-      fields("storeId",store(2).id(),"itemPlace","QA","openingBalance",0,"currentBalance",0,"minimumLimit",0,"reorderLimit",0,"costPrice",80,"isActive",true)));
-    return fixture("item-"+index,"Items",values);
+  Record item(int index) {
+      return definitions.item(index);
   }
-  Record manufactured(){return manufactured(1);}
-  Record manufactured(int index){
-    Record component=item(2);Map<String,Object> values=itemValues();values.put("isManufacturingItem",true);
-    values.put("stores",List.of(fields("storeId",store(1).id(),"itemPlace","QA","openingBalance",0,"currentBalance",0,"minimumLimit",0,"reorderLimit",0,"costPrice",80,"isActive",true),
-      fields("storeId",store(2).id(),"itemPlace","QA","openingBalance",0,"currentBalance",0,"minimumLimit",0,"reorderLimit",0,"costPrice",80,"isActive",true)));
-    values.put("componentsStoreId",store(1).id());values.put("components",List.of(fields("componentId",component.id(),"unitId",unit(1).id(),"requiredQuantity",2)));
-    return fixture("manufactured-"+index,"Items",values);
+  Record manufactured() {
+      return definitions.manufactured();
   }
-  Record agent(){return agent(false);}
-  Record agent(boolean purchase){return fixture(purchase?"agent-purchase":"agent-sales","Agents",fields("nature",purchase?"Purch":"Sales","isActive",true,"commissionSlices",List.of(),"itemCommissions",List.of()));}
-  Record destination(){return fixture("destination","ExchangeDestinations",fields("accountId",account("destination").id()));}
-  Record supplier(){return fixture("supplier","Suppliers",fields("isActive",true,"cashPurchase",true,"creditPurchase",true,"isTaxable",false,"isClosed",false,"purchaseReturn",true,"purchaseOrder",true,"dealerType","Supplier","isSameBranch",true,"allowanceDays",0,"accountId",account("supplier").id()));}
-  Record customer(){return fixture("customer","Customers",fields("isActive",true,"cashSales",true,"creditNote", true, "salesDiscount", true, "creditSales",true,"salesReturn",true,"quotation",true,"isTaxable",true,"isOnTheFly", false, "isClosed",false,"salesOrder",true,"dealerType","Customer","isSameBranch",true,"allowanceDays",0,"accountId",account("customer").id()));}
+  Record manufactured(int index) {
+      return definitions.manufactured(index);
+  }
+  Record agent() {
+      return definitions.agent();
+  }
+  Record agent(boolean purchase) {
+      return definitions.agent(purchase);
+  }
+  Record destination() {
+      return definitions.destination();
+  }
+  Record supplier() {
+      return definitions.supplier();
+  }
+  Record customer() {
+      return definitions.customer();
+  }
   Object balance(Record item,int index){Map<String,Object> dto=read(item);for(Object value:(List<?>)dto.get("stores")){Map<?,?> row=(Map<?,?>)value;if(store(index).id().equals(row.get("storeId")))return row.get("currentBalance");}throw new AssertionError("Owned store balance missing");}
 
   @SuppressWarnings("unchecked") Map<String,Object> lookup(String endpoint){return (Map<String,Object>)call("get",endpoint,fields()).get("entity");}
@@ -259,40 +254,8 @@ final class StoreTestData implements AutoCloseable {
     return record;
   }
 
-  @SuppressWarnings("unchecked")
   private Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
-    driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(action.equals("delete") ? 60 : 30));
-    Object result = ((JavascriptExecutor) driver).executeAsyncScript("""
-        const [action, endpoint, values, expectedOrigin, expectedBranch, done] = arguments;
-        const root = document.querySelector('#app')?.__vue__;
-        if (!root?.$store) { done({error:'Authenticated ERP session is not ready'}); return; }
-        if(location.origin!==expectedOrigin||root.$store.getters['app/currentBranch']?.id!==expectedBranch){done({error:'ERP origin or branch changed; refusing fixture access'});return;}
-        const queue = [root]; let branchId = null;
-        while (queue.length) {
-          const vm = queue.shift();
-          if (vm.currentBranch?.id) { branchId = vm.currentBranch.id; break; }
-          queue.push(...(vm.$children || []));
-        }
-        const args = {url:endpoint};
-        if (action === 'create') {
-          if (!branchId) { done({error:'No current branch selected'}); return; }
-          args.data = {...values, branchId};
-        } else if(action === 'update') {args.data=values;} else { args.id = values.id; }
-        root.$store.dispatch('app/' + action, args).then(result => {
-          if (action === 'delete') { done({ok:true}); return; }
-          const entity = result?.data || result;
-          done({id: entity?.id || (typeof entity === 'string' || typeof entity === 'number' ? entity : null),
-            code: entity?.code || null,
-            entity: action === 'get' ? JSON.parse(JSON.stringify(entity)) : null});
-        }).catch(error => done({status: error?.response?.status || error?.status || error?.data?.status || 0,
-          error: JSON.stringify(error?.response?.data || error?.data || {status:error?.status, message:String(error)})}));
-        """, action, endpoint, values,origin,sessionBranchId);
-    Map<String, Object> response = (Map<String, Object>) result;
-    if (response.get("error") != null) {
-      int status = response.get("status") instanceof Number number ? number.intValue() : 0;
-      throw new ApiFailure(status, "Fixture " + action + " " + endpoint + ": " + response.get("error"));
-    }
-    return response;
+      return api.call(action, endpoint, values);
   }
 
   void track(String endpoint, Object id, String note, Map<String,Object> values) {

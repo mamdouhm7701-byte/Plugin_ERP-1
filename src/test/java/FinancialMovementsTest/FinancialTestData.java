@@ -1,5 +1,6 @@
 package FinancialMovementsTest;
 
+import FinancialMovementsTest.FinancialFixtureApi.ApiFailure;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -12,12 +13,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 /** Per-scenario fixtures. Uses the logged-in application's API client and current branch. */
 final class FinancialTestData implements AutoCloseable {
-  private static final class ApiFailure extends AssertionError {
-    private final int status;
-    ApiFailure(int status, String message) { super(message); this.status = status; }
-  }
+
   record Record(String endpoint, Object id, String name, Map<String, Object> values) {}
   private final WebDriver driver;
+  private final FinancialFixtureApi api;
+  private final FinancialFixtureDefinitions definitions = new FinancialFixtureDefinitions(this);
   private final String suffix;
   private final TestSupport.FixtureSession session;
   private final TestSupport.PendingFixtureWrites pendingWrites;
@@ -30,6 +30,7 @@ final class FinancialTestData implements AutoCloseable {
     this.driver = driver;
     this.session=new TestSupport.FixtureSession(driver);
     this.pendingWrites=new TestSupport.PendingFixtureWrites(session,"financial",suffix);
+    this.api=new FinancialFixtureApi(driver,session::verify);
     new WebDriverWait(driver, Duration.ofSeconds(30)).until(d ->
         ((JavascriptExecutor) d).executeScript("return Boolean(document.querySelector('#app')"
             + "?.__vue__?.$store?.getters['app/currentBranch']?.id)"));
@@ -60,77 +61,41 @@ final class FinancialTestData implements AutoCloseable {
   }
 
   Record account(String key) {
-    Record parent = fixture("account-main-"+key, "Accounts", fields("type", "Main",
-        "code", Integer.toString(java.util.concurrent.ThreadLocalRandom.current().nextInt(10000000, 99999999)),
-        "nature", "Debit", "finalAccountType", "Budget", "level", 1,
-        "isDistributable", false, "isSharedBetweenBranches", false,
-        "prevDebit", 0, "prevCredit", 0, "previousBalances", List.of()));
-    return fixture("account-sub-"+key, "Accounts", fields("type", "Sub", "nature", "Debit",
-        "code", parent.values().get("code") + "01", "finalAccountType", "Budget",
-        "parentId", parent.id(), "level", 2, "isDistributable", false,
-        "isSharedBetweenBranches", false, "prevDebit", 0, "prevCredit", 0,
-        "previousBalances", List.of()));
+    return definitions.account(key);
   }
   Record customer(int index) {
-    return fixture("customer-"+index,"Customers", fields("isActive",true,
-        "cashSales",true,"creditSales",true,"returnSales",true,"isTaxable",true,
-        "isOnTheFly",false,"isClosed",false,"salesReturn",true,"quotation",true,
-        "salesOrder",true,"salesDiscount",true,"creditNote",true,"allowanceDays",0,
-        "dealerType","Customer","isSameBranch",true,"startDealingDate",java.time.LocalDate.now().toString(),
-        "accountId",account("customer-"+index).id()));
+    return definitions.customer(index);
   }
   Record supplier(int index) {
-    return fixture("supplier-"+index,"Suppliers", fields("isActive",true,
-        "cashPurchase",true,"creditPurchase",true,"isTaxable",true,
-        "isOnTheFly",false,"isClosed",false,"purchaseReturn",true,"purchaseDiscount",true,
-        "purchaseOrder",true,"debitNote",true,"allowanceDays",0,
-        "dealerType","Supplier","isSameBranch",true,"startDealingDate",java.time.LocalDate.now().toString(),
-        "accountId",account("supplier-"+index).id()));
+    return definitions.supplier(index);
   }
-  Record bank(int index) {return fixture("bank-"+index,"Banks",fields("accountId",account("bank-"+index).id()));}
-  Record safe(int index) {return fixture("safe-"+index,"Safes",fields("accountId",account("safe-"+index).id()));}
-  Record payment() {return fixture("payment","PaymentMethods",fields("bankId",bank(1).id()));}
-  Record expense() {return fixture("expense","Expenses",fields("accountId",account("expense").id()));}
-  Record income() {return fixture("income","Incomes",fields("accountId",account("income").id()));}
-  Record discount() {return fixture("discount","DiscountTypes",fields("accountId",account("discount").id()));}
-  Record agent(boolean purchase){return fixture(purchase?"agent-purch":"agent-sales","Agents",fields(
-      "nature",purchase?"Purch":"Sales","isActive",true,"commissionSlices",List.of(),"itemCommissions",List.of()));}
+  Record bank(int index) {
+    return definitions.bank(index);
+  }
+  Record safe(int index) {
+    return definitions.safe(index);
+  }
+  Record payment() {
+    return definitions.payment();
+  }
+  Record expense() {
+    return definitions.expense();
+  }
+  Record income() {
+    return definitions.income();
+  }
+  Record discount() {
+    return definitions.discount();
+  }
+  Record agent(boolean purchase) {
+    return definitions.agent(purchase);
+  }
   Record invoice(boolean purchase,java.math.BigDecimal allocation) {
-    Record dealer=purchase?supplier(1):customer(1);
-    Record store=fixture("invoice-store","Stores",fields("accountId",account("store").id()));
-    Record unit=fixture("invoice-unit","Units",fields("conversionRates",List.of()));
-    Record mainCategory=fixture("invoice-category-main","ItemCategories",fields("isMain",true));
-    Record category=fixture("invoice-category","ItemCategories",fields("isMain",false,"parentCategoryId",mainCategory.id()));
-    Record item=fixture("invoice-item","Items",fields("categoryId",category.id(),"mainUnitId",unit.id(),
-        "mainUnitBarcode","FM"+suffix.replace("-",""),"type","RawMaterial","isStoreItem",true,
-        "isTaxable",false,"itemTax",0,"salesPrice",100,"minSalesPrice",0,"maxSalesPrice",1000000,
-        "sales",true,"purch",true,"returnSales",true,"returnPurch",true,"quotation",true,
-        "salesOrder",true,"purchOrder",true,"storageTransfer",true,"additionOrder",true,
-        "exchangeOrder",true,"damageAdjustment",true,"creditSales",true,
-        "isScalesItem",false,"minSalesPrice",0,"subUnits",List.of(),"components",List.of(),
-        "additions",List.of(),"offers",List.of(),"discounts",List.of(),
-        "stores",List.of(fields("storeId",store.id(),"itemPlace","QA","openingBalance",0,"currentBalance",0,
-            "minimumLimit",0,"reorderLimit",0,"costPrice",80,"isActive",true))));
-    java.math.BigDecimal value=allocation.multiply(java.math.BigDecimal.valueOf(2));
-    Map<String,Object> line=fields("lineSerial",1,"storeId",store.id(),"itemId",item.id(),"unitId",unit.id(),
-        "unitConversionRate",1,"quantity",1,"price",value,"total",value,"net",value,"costPrice",0,
-        "discountPercentage",0,"discountValue",0,"additions",List.of(),"attributes",List.of(),
-        "attachmentDetails",List.of(),"roundedAdditions",0,"roundedNet",value);
-    String date=java.time.LocalDate.now().toString();
-    return fixture(purchase?"purchase-invoice":"sales-invoice",purchase?"Purchases":"ItemTransactions-Sales",fields(
-        "transactionType",purchase?"Purch":"Sales","transactionChannel","Normal","transactionSource","Web",
-        "transactionDate",date,"transactionTime","12:00:00","dueDate",date,"paymentType","Credit",
-        "dealerId",dealer.id(),"storeId",store.id(),"isOffline",false,"isPosted",false,"isComplete",false,
-        "paid",0,"total",value,"netBeforeTaxes",value,"net",value,"totalTaxes",0,
-        "discountValue",0,"discountPercentage",0,"totalAdditionalTaxes",0,
-        "lines",List.of(line),"taxes",List.of(),"payments",List.of(),"expenses",List.of(),
-        "costCenters",List.of(),"extraProperties",List.of()));
+    return definitions.invoice(purchase, allocation, suffix);
   }
-  Record party(String type,int index) {return switch(type){
-    case "Safe" -> safe(index); case "Bank" -> bank(index);
-    case "Customer" -> customer(index); case "Supplier" -> supplier(index);
-    default -> throw new IllegalArgumentException(type);
-  };}
+  Record party(String type,int index) {
+    return definitions.party(type, index);
+  }
   @SuppressWarnings("unchecked") Map<String,Object> lookup(String endpoint){return (Map<String,Object>)call("get",endpoint,fields()).get("entity");}
 
   @SuppressWarnings("unchecked")
@@ -217,41 +182,8 @@ final class FinancialTestData implements AutoCloseable {
     return record;
   }
 
-  @SuppressWarnings("unchecked")
   private Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
-    session.verify();
-    driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(action.equals("delete") ? 60 : 30));
-    Object result = ((JavascriptExecutor) driver).executeAsyncScript("""
-        const [action, endpoint, values, done] = arguments;
-        const root = document.querySelector('#app')?.__vue__;
-        if (!root?.$store) { done({error:'Authenticated ERP session is not ready'}); return; }
-        const queue = [root]; let branchId = null;
-        while (queue.length) {
-          const vm = queue.shift();
-          if (vm.currentBranch?.id) { branchId = vm.currentBranch.id; break; }
-          queue.push(...(vm.$children || []));
-        }
-        const invoiceRead = action === 'get' && ['ItemTransactions-Sales','Purchases'].includes(endpoint);
-        const args = {url: invoiceRead ? endpoint + '/' + values.id : endpoint};
-        if (action === 'create') {
-          if (!branchId) { done({error:'No current branch selected'}); return; }
-          args.data = {...values, branchId};
-        } else if (!invoiceRead) { args.id = values.id; }
-        root.$store.dispatch('app/' + action, args).then(result => {
-          if (action === 'delete') { done({ok:true}); return; }
-          const entity = result?.data || result;
-          done({id: entity?.id || (typeof entity === 'string' || typeof entity === 'number' ? entity : null),
-            code: entity?.code || null,
-            entity: action === 'get' ? JSON.parse(JSON.stringify(entity)) : null});
-        }).catch(error => done({status: error?.response?.status || error?.status || error?.data?.status || 0,
-          error: JSON.stringify(error?.response?.data || error?.data || {status:error?.status, message:String(error)})}));
-        """, action, endpoint, values);
-    Map<String, Object> response = (Map<String, Object>) result;
-    if (response.get("error") != null) {
-      int status = response.get("status") instanceof Number number ? number.intValue() : 0;
-      throw new ApiFailure(status, "Fixture " + action + " " + endpoint + ": " + response.get("error"));
-    }
-    return response;
+    return api.call(action, endpoint, values);
   }
 
   void track(String endpoint, Object id, String note, Map<String,Object> values) {

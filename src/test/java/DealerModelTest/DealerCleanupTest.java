@@ -1,136 +1,17 @@
 package DealerModelTest;
 
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class DealerCleanupTest {
-    private static final class Api {
-        final Map<String, Map<String, Object>> records = new LinkedHashMap<>();
-        final List<String> deletes = new ArrayList<>();
-        int crashAtDelete;
-        boolean failAfterUnitInsert, failPendingLookup;
-        boolean rejectDealer;
-        String activeBranch = "branch-test";
-        boolean timeOutStore;
-        boolean commitBeforeTimeout;
-        boolean rejectStore;
-        boolean emptyDeletedResponse;
 
-        WebDriver driver() {
-            Object timeouts =
-                    Proxy.newProxyInstance(
-                            getClass().getClassLoader(),
-                            new Class<?>[] {WebDriver.Timeouts.class},
-                            (proxy, method, args) -> proxy);
-            Object options =
-                    Proxy.newProxyInstance(
-                            getClass().getClassLoader(),
-                            new Class<?>[] {WebDriver.Options.class},
-                            (proxy, method, args) -> timeouts);
-            return (WebDriver)
-                    Proxy.newProxyInstance(
-                            getClass().getClassLoader(),
-                            new Class<?>[] {WebDriver.class, JavascriptExecutor.class},
-                            (proxy, method, args) -> {
-                                if (method.getName().equals("executeScript")) {
-                                    String code = (String) args[0];
-                                    if (code.equals("return location.origin")) return "offline";
-                                    return code.startsWith("return document.querySelector")
-                                            ? activeBranch
-                                            : true;
-                                }
-                                if (method.getName().equals("manage")) return options;
-                                if (method.getName().equals("executeAsyncScript"))
-                                    return request((Object[]) args[1]);
-                                if (method.getName().equals("toString"))
-                                    return "Fixture cleanup regression driver";
-                                return null;
-                            });
-        }
-
-        @SuppressWarnings("unchecked")
-        Object request(Object[] args) {
-            String action = (String) args[0], endpoint = (String) args[1];
-            Map<String, Object> values = (Map<String, Object>) args[2];
-            if (action.equals("create")) {
-                String id = endpoint + "-" + (records.size() + 1);
-                Map<String, Object> saved = new LinkedHashMap<>(values);
-                saved.put("id", id);
-                records.put(id, saved);
-                if (endpoint.equals("Units") && failAfterUnitInsert)
-                    return Map.of("error", "Lost unit create response", "status", 500);
-                return Map.of("id", id);
-            }
-            if (action.equals("get") && endpoint.startsWith("Units?")) {
-                if (failPendingLookup)
-                    return Map.of("error", "Recovery lookup unavailable", "status", 503);
-                var rows =
-                        records.values().stream()
-                                .filter(r -> r.get("id").toString().startsWith("Units-"))
-                                .toList();
-                return Map.of("entity", Map.of("pageData", rows, "totalRecords", rows.size()));
-            }
-            String listEndpoint = endpoint.split("\\?")[0];
-            if (action.equals("get")
-                    && endpoint.contains("?")
-                    && java.util.Set.of(
-                                    "Agents",
-                                    "Customers",
-                                    "Suppliers",
-                                    "MainDealers",
-                                    "DealerClassifications")
-                            .contains(listEndpoint)) {
-                var rows =
-                        records.values().stream()
-                                .filter(r -> r.get("id").toString().startsWith(listEndpoint + "-"))
-                                .toList();
-                var match = java.util.regex.Pattern.compile("pageNumber=(\\d+)").matcher(endpoint);
-                int page = match.find() ? Integer.parseInt(match.group(1)) : 1;
-                return Map.of(
-                        "entity",
-                        Map.of(
-                                "pageData",
-                                page <= rows.size() ? List.of(rows.get(page - 1)) : List.of(),
-                                "totalRecords",
-                                rows.size()));
-            }
-            String id = values.get("id").toString();
-            if (action.equals("get")) {
-                return records.containsKey(id)
-                        ? Map.of("entity", records.get(id))
-                        : emptyDeletedResponse
-                                ? Map.of("entity", "")
-                                : Map.of("error", "Missing owned record", "status", 404);
-            }
-            deletes.add(id);
-            if (crashAtDelete > 0 && deletes.size() == crashAtDelete)
-                throw new Error("Simulated process interruption");
-            if (endpoint.equals("Customers") && rejectDealer)
-                return Map.of("error", "Owned dealer still in use", "status", 400);
-            if (endpoint.equals("Stores")) {
-                if (rejectStore) return Map.of("error", "Record is in use", "status", 400);
-                if (timeOutStore) {
-                    timeOutStore = false;
-                    if (commitBeforeTimeout) records.remove(id);
-                    throw new TimeoutException("Simulated lost DELETE response");
-                }
-            }
-            records.remove(id);
-            return Map.of("ok", true);
-        }
-    }
 
     @Test
     public void retriesUncommittedDeleteBeforeParentAccounts() {
-        Api api = new Api();
+        DealerFixtureApiStub api = new DealerFixtureApiStub();
         api.timeOutStore = true;
         DealerTestData data = new DealerTestData(api.driver());
         DealerTestData.Record store = data.store();
@@ -143,7 +24,7 @@ public class DealerCleanupTest {
 
     @Test
     public void doesNotDeleteAgainWhenTimedOutRequestAlreadyCommitted() {
-        Api api = new Api();
+        DealerFixtureApiStub api = new DealerFixtureApiStub();
         api.timeOutStore = true;
         api.commitBeforeTimeout = true;
         DealerTestData data = new DealerTestData(api.driver());
@@ -155,7 +36,7 @@ public class DealerCleanupTest {
 
     @Test
     public void acceptsEmptyStringReadAfterCommittedDeleteTimeout() {
-        Api api = new Api();
+        DealerFixtureApiStub api = new DealerFixtureApiStub();
         api.timeOutStore = true;
         api.commitBeforeTimeout = true;
         api.emptyDeletedResponse = true;
@@ -168,7 +49,7 @@ public class DealerCleanupTest {
 
     @Test
     public void retainsBlockedParentsAndRetriesOnlyItsOwnRecords() {
-        Api api = new Api();
+        DealerFixtureApiStub api = new DealerFixtureApiStub();
         api.rejectStore = true;
         api.records.put(
                 "shared-record",
@@ -186,7 +67,7 @@ public class DealerCleanupTest {
     @Test
     @io.qameta.allure.Story("مشاركة المراجع الثابتة بالصفحة وعزل بيانات كل حالة دون حذف بينها")
     public void pageScopeSharesOnlyStableReferences() {
-        Api api = new Api();
+        DealerFixtureApiStub api = new DealerFixtureApiStub();
         var data = new DealerTestData(api.driver());
         data.beginScenario();
         var stable = data.area();
@@ -208,7 +89,7 @@ public class DealerCleanupTest {
     @Test
     @io.qameta.allure.Story("استكمال الحذف بعد انقطاع التشغيل من السجلات المتبقية فقط")
     public void interruptedPageCleanupResumesOnlyRemainingOwnedRecords() throws Exception {
-        Api api = new Api();
+        DealerFixtureApiStub api = new DealerFixtureApiStub();
         var data = new DealerTestData(api.driver());
         var first = data.area();
         var last = data.unit();
@@ -232,7 +113,7 @@ public class DealerCleanupTest {
     @io.qameta.allure.Story(
             "الاحتفاظ بمحاولة الإنشاء عند فقد الاستجابة واستعادتها بعد إعادة التشغيل دون حذف المتطلبات مبكراً")
     public void resumesUncertainCreateBeforeDeletingItsDependencies() throws Exception {
-        Api api = new Api();
+        DealerFixtureApiStub api = new DealerFixtureApiStub();
         var data = new DealerTestData(api.driver());
         var account = data.account();
         api.failAfterUnitInsert = true;
@@ -250,7 +131,7 @@ public class DealerCleanupTest {
     @Test
     @io.qameta.allure.Story("رفض استرجاع أو حذف سجلات المجموعة من فرع آخر")
     public void refusesRecoveryInAnotherBranch() throws Exception {
-        Api api = new Api();
+        DealerFixtureApiStub api = new DealerFixtureApiStub();
         var data = new DealerTestData(api.driver());
         data.unit();
         api.activeBranch = "another-branch";
@@ -268,7 +149,7 @@ public class DealerCleanupTest {
     @io.qameta.allure.Story(
             "دورة الصفحة الفعلية تحتفظ ببيانات الحالات وتغلق النوافذ وتنظف المجموعة مع فشل الخطوة الأخيرة")
     public void actualCallbacksKeepCasesUntilPageEndEvenAfterFailure() throws Exception {
-        Api api = new Api();
+        DealerFixtureApiStub api = new DealerFixtureApiStub();
         try (var browser = new TestSupport.FixtureBrowser(api.driver())) {
             var page = new Plugin_ERP.System_Modules.Login.AbstractForDealer(browser.driver);
             var harness = new DealerScenarioTest();
@@ -324,7 +205,7 @@ public class DealerCleanupTest {
     @Test
     @io.qameta.allure.Story("تنظيف المتعامل المملوك من الصفحات التالية مع حماية سجلات المستخدم")
     public void cleanupFindsOwnedDealerBeyondFirstListPage() {
-        Api api = new Api();
+        DealerFixtureApiStub api = new DealerFixtureApiStub();
         var data = new DealerTestData(api.driver());
         api.records.put(
                 "Customers-user-1",
@@ -345,7 +226,7 @@ public class DealerCleanupTest {
     @Test
     @io.qameta.allure.Story("رفض حذف المتعامل عند تكرار علامة الملكية بدلاً من اختيار أول صف")
     public void ambiguousDealerNameStopsCleanup() {
-        Api api = new Api();
+        DealerFixtureApiStub api = new DealerFixtureApiStub();
         var data = new DealerTestData(api.driver());
         api.records.put(
                 "Customers-owned-1",

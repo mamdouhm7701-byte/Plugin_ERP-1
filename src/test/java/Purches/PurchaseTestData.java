@@ -16,6 +16,7 @@ final class PurchaseTestData implements AutoCloseable {
   record Record(String endpoint, Object id, String name, Map<String, Object> values) {}
   private final WebDriver driver;
   private final PurchaseFixtureApi api;
+  private final PurchaseFixtureDefinitions definitions = new PurchaseFixtureDefinitions(this);
   private final String origin;
   private final Object sessionBranchId;
   private final String suffix;
@@ -84,21 +85,10 @@ final class PurchaseTestData implements AutoCloseable {
     return values;
   }
 
-  Record account(String key) {
-    Record parent = fixture("account-main-"+key, "Accounts", fields("type", "Main",
-        "code", Integer.toString(java.util.concurrent.ThreadLocalRandom.current().nextInt(10000000, 99999999)),
-        "nature", "Debit", "finalAccountType", "Budget", "level", 1,
-        "isDistributable", false, "isSharedBetweenBranches", false,
-        "prevDebit", 0, "prevCredit", 0, "previousBalances", List.of()));
-    return fixture("account-sub-"+key, "Accounts", fields("type", "Sub", "nature", "Debit",
-        "code", parent.values().get("code") + "01", "finalAccountType", "Budget",
-        "parentId", parent.id(), "level", 2, "isDistributable", false,
-        "isSharedBetweenBranches", false, "prevDebit", 0, "prevCredit", 0,
-        "previousBalances", List.of()));
-  }
-  Record unit(int index) {return fixture("unit-"+index,"Units",fields("conversionRates",List.of()));}
-  Record mainCategory(){return fixture("category-main","ItemCategories",fields("isMain",true));}
-  Record category(){return fixture("category","ItemCategories",fields("isMain",false,"parentCategoryId",mainCategory().id()));}
+  Record account(String key) {return definitions.account(key);}
+  Record unit(int index) {return definitions.unit(index);}
+  Record mainCategory() {return definitions.mainCategory();}
+  Record category() {return definitions.category();}
   Record store(int index){
     Record store=fixture("store-"+index,"Stores",fields("accountId",account("store-"+index).id()));
     String key="branch-store-"+index;
@@ -140,42 +130,26 @@ final class PurchaseTestData implements AutoCloseable {
     }
     ((JavascriptExecutor)driver).executeScript("const root=document.querySelector('#app').__vue__;if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",branch);
   }
-  Map<String,Object> itemValues(){
-    return fields("categoryId",category().id(),"mainUnitId",unit(1).id(),
-        "mainUnitBarcode","ST"+UUID.randomUUID().toString().replace("-",""),"type","RawMaterial","isStoreItem",true,
-        "isTaxable",false,"itemTax",0,"salesPrice",100,"minSalesPrice",50,"maxSalesPrice",200,
-        "sales",true,"purch",true,"returnSales",true,"returnPurch",true,"quotation",true,
-        "salesOrder",true,"purchOrder",true,"storageTransfer",true,"additionOrder",true,
-        "exchangeOrder",true,"damageAdjustment",true,"isScalesItem",false,
-        "subUnits",List.of(),"components",List.of(),"additions",List.of(),"offers",List.of(),"discounts",List.of(),
-        "stores",List.of(fields("storeId",store(1).id(),"itemPlace","QA","openingBalance",0,"currentBalance",0,
-            "minimumLimit",0,"reorderLimit",0,"costPrice",80,"isActive",true)));
-  }
-  Record item(int index){
-    Map<String,Object> values=itemValues();
-    values.put("stores",List.of(fields("storeId",store(1).id(),"itemPlace","QA","openingBalance",1000,"currentBalance",1000,"minimumLimit",0,"reorderLimit",0,"costPrice",80,"isActive",true),
-      fields("storeId",store(2).id(),"itemPlace","QA","openingBalance",0,"currentBalance",0,"minimumLimit",0,"reorderLimit",0,"costPrice",80,"isActive",true)));
-    return fixture("item-"+index,"Items",values);
-  }
-  Record agent(){return agent(true);}
-  Record otherSalesAgent(){return fixture("agent-sales-other","Agents",fields("nature","Sales","isActive",true,"commissionSlices",List.of(),"itemCommissions",List.of()));}
-  Record agent(boolean purchase){return fixture(purchase?"agent-purchase":"agent-sales","Agents",fields("nature",purchase?"Purch":"Sales","isActive",true,"commissionSlices",List.of(),"itemCommissions",List.of()));}
-  Record destination(){return fixture("destination","ExchangeDestinations",fields("accountId",account("destination").id()));}
-  Record supplier(){return fixture("supplier","Suppliers",fields("isActive",true,"cashPurchase",true,"creditPurchase",true,"debitNote",true,"purchaseDiscount",true,"isTaxable",false,"isClosed",false,"purchaseReturn",true,"purchaseOrder",true,"dealerType","Supplier","isSameBranch",true,"allowanceDays",0,"accountId",account("supplier").id()));}
-  Record customer(){return customer(0);}
-  Record customer(int allowedDiscount){return fixture("customer","Customers",fields("discount",allowedDiscount,"applyDiscount",allowedDiscount>0,"isActive",true,"cashSales",true,"creditNote", true, "salesDiscount", true, "creditSales",true,"salesReturn",true,"quotation",true,"isTaxable",true,"isOnTheFly", false, "isClosed",false,"salesOrder",true,"dealerType","Customer","isSameBranch",true,"allowanceDays",0,"accountId",account("customer").id()));}
+  Map<String,Object> itemValues() {return definitions.itemValues();}
+  Record item(int index) {return definitions.item(index);}
+  Record agent() {return definitions.agent();}
+  Record otherSalesAgent() {return definitions.otherSalesAgent();}
+  Record agent(boolean purchase) {return definitions.agent(purchase);}
+  Record destination() {return definitions.destination();}
+  Record supplier() {return definitions.supplier();}
+  Record customer() {return definitions.customer();}
+  Record customer(int allowedDiscount) {return definitions.customer(allowedDiscount);}
   Object balance(Record item,int index){Map<String,Object> dto=read(item);for(Object value:(List<?>)dto.get("stores")){Map<?,?> row=(Map<?,?>)value;if(store(index).id().equals(row.get("storeId")))return row.get("currentBalance");}throw new AssertionError("Owned store balance missing");}
 
   private Map<String,Object> rememberSeedAttempt(String endpoint,String name,Map<String,Object> values){
     Map<String,Object> attempt=fields("origin",origin,"branchId",sessionBranchId,"fixture",true,"endpoint",endpoint,"name",name,"values",new LinkedHashMap<>(values));
     uncertainDocuments.add(attempt);journalAttempts();return attempt;
   }
-  Record bank(){return fixture("bank","Banks",fields("accountId",account("bank").id()));}
-  Record payment(){return fixture("payment","PaymentMethods",fields("bankId",bank().id()));}
-  Record safe(){return fixture("safe","Safes",fields("accountId",account("safe").id()));}
-  Record discountType(){return fixture("discount-type","DiscountTypes",fields("accountId",account("discount").id()));}
-  Record priceList(){Record item=item(1);return fixture("price-list","PriceLists",fields("pricelistDate",java.time.LocalDate.now().toString(),
-    "items",List.of(fields("itemId",item.id(),"unitId",unit(1).id(),"salesPrice",125,"minSalesPrice",100,"maxSalesPrice",150))));}
+  Record bank() {return definitions.bank();}
+  Record payment() {return definitions.payment();}
+  Record safe() {return definitions.safe();}
+  Record discountType() {return definitions.discountType();}
+  Record priceList() {return definitions.priceList();}
   Record seedPurchase(int index,String type,String date,String quantity,String paid){
     return seedPurchase(index,type,date,quantity,paid,agent());
   }

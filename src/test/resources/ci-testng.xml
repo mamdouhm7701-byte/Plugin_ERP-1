@@ -10,7 +10,9 @@
         <classes>
             <class name="SuiteSupport.RuntimeCompatibilityTest"/>
             <class name="SuiteSupport.BrowserLifecycleTest"/>
+            <class name="SuiteSupport.ModuleChoiceTest"/>
             <class name="Plugin_ERP.Utiel.ConfigurationPropertiesTest"/>
+            <class name="Plugin_ERP.Utiel.FormInteractionsTest"/>
             <class name="Plugin_ERP.Utiel.Allur.AllureReportPolicyTest"/>
             <class name="SuiteSupport.CiSuiteContractTest"/>
             <class name="SuiteSupport.SuiteDefinitionsTest"/>
@@ -23,6 +25,8 @@
             <class name="Purches.PurchaseCleanupTest"/>
             <class name="ProductsTest.ProductsCleanupTest"/>
             <class name="StoreTest.StoreCleanupTest"/>
+            <class name="StoreTest.StoreChoiceTest"/>
+            <class name="Plugin_ERP.System_Modules.Login.purches.PurchaseCalendarTest"/>
             <class name="FinancialMovementsTest.FinancialCleanupTest"/>
             <class name="DealerModelTest.DealerCleanupTest"/>
             <class name="SpecialSalesTest.SpecialSalesCleanupTest"/>

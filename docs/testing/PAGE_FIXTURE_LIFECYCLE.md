@@ -14,7 +14,17 @@ Headless sessions explicitly keep a 1920×1080 window instead of maximizing: the
 
 Sales fixture payloads and browser transport now live in `SalesFixtureDefinitions` and `SalesFixtureApi`. `SalesTestData` still owns case scopes, journals, recovery and cleanup ordering. Sales and purchase cleanup tests use separate in-memory API stubs. See [the first refactoring batch and validation](REFACTORING_AR.md).
 
-Purchase browser transport lives in `PurchaseFixtureApi`, with the same origin/branch guard and request timeouts. `PurchaseTestData` retains its SQL deadlock retry policy, fixture definitions, ownership, receipt pagination, recovery journals and cleanup ordering.
+Purchase browser transport lives in `PurchaseFixtureApi`, with the same origin/branch guard and request timeouts. `PurchaseTestData` retains its SQL deadlock retry policy, ownership, receipt pagination, recovery journals and cleanup ordering.
+
+Purchase master-data payloads now live in `PurchaseFixtureDefinitions`, using the owner's existing `fixture` registration and `store` membership handling. `PurchaseTestData` retains the original calling interface and the scenario-dependent `seedPurchase` recipes, along with ownership, retries and cleanup.
+
+Warehouse and special-sales payloads and browser transport live in their own `StoreFixtureDefinitions`/`StoreFixtureApi` and `SpecialSalesFixtureDefinitions`/`SpecialSalesFixtureApi` classes. Their owners retain branch membership, special-sales default restoration, pending-write recovery and cleanup ordering. Each cleanup regression class uses its own package-local `FixtureApiStub`; test assertions and case names are preserved.
+
+The live `additional/standalone/fixture-refactor-smoke-testng.xml` suite selects eight cases across exchange orders, manufacturing, POS and restaurant invoices. It runs classes sequentially and relies on each class's existing fixture cleanup. It is separate from the offline CI suite. For commands and recorded validation, see [REFACTORING_AR.md](REFACTORING_AR.md).
+
+Products, dealers and financial movements use the same responsibility boundaries, with their own `FixtureDefinitions`, `FixtureApi` and `FixtureApiStub` classes. Session guards still come from each owner's `FixtureSession`; pending-write journals and deletion policies remain with the owner. Financial invoice recipes receive the existing run suffix explicitly, while dealer fixture registration is package-local for the definitions helper. API response differences between modules are preserved.
+
+The separate live `additional/standalone/fixture-data-refactor-smoke-testng.xml` suite selects ten cases across six classes: units, products, linked dealer fixtures, customers, financial lookup fixtures and customer receipts with invoice allocation. Both fixture smoke suites run sequentially and remain outside offline CI.
 
 | Module | Fixture group | Shared stable references | Independent per case |
 |---|---|---|---|

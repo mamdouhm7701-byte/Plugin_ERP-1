@@ -3,6 +3,7 @@ package Plugin_ERP.System_Modules.Login.Invoice;
 import Plugin_ERP.System_Modules.Login.AbstractForSales;
 import Plugin_ERP.Utiel.PropertyReader;
 import io.qameta.allure.Step;
+import Plugin_ERP.Utiel.FormInteractions;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -11,12 +12,17 @@ import org.openqa.selenium.support.ui.*;
 /** Sales UI interactions; scenarios and persisted inventory assertions live in tests. */
 public class SalesModulePage extends AbstractForSales {
     protected final WebDriverWait ready;
+    private final FormInteractions interactions;
+    private final SalesDocumentList documentList;
 
     public SalesModulePage(WebDriver driver) {
         super(driver);
         ready = new WebDriverWait(driver, Duration.ofSeconds(35));
         ready.ignoring(StaleElementReferenceException.class)
                 .ignoring(ElementClickInterceptedException.class);
+        interactions = new FormInteractions(ready,
+                element -> js("arguments[0].scrollIntoView({block:'center',inline:'center'})", element));
+        documentList = new SalesDocumentList(this, driver, ready);
     }
 
     public void slAwaitSession() {
@@ -53,35 +59,12 @@ public class SalesModulePage extends AbstractForSales {
         slType(by, value, true);
     }
 
-    private void slType(By by, String value, boolean blur) {
-        ready.until(
-                d -> {
-                    for (WebElement e : d.findElements(by)) {
-                        js("arguments[0].scrollIntoView({block:'center',inline:'center'})", e);
-                        if (!e.isDisplayed() || !e.isEnabled()) continue;
-                        e.click();
-                        e.getDomProperty("value");
-                        if (value.isEmpty()) e.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
-                        else e.sendKeys(Keys.chord(Keys.CONTROL, "a"), value);
-                        if (blur) e.sendKeys(Keys.TAB);
-                        return true;
-                    }
-                    return false;
-                });
+    void slType(By by, String value, boolean blur) {
+        interactions.type(by, value, blur, FormInteractions.InputMode.CLICK_REPLACE);
     }
 
     protected void slClick(By by) {
-        ready.until(
-                d -> {
-                    for (WebElement e : d.findElements(by)) {
-                        js("arguments[0].scrollIntoView({block:'center',inline:'center'})", e);
-                        if (e.isDisplayed() && e.isEnabled()) {
-                            e.click();
-                            return true;
-                        }
-                    }
-                    return false;
-                });
+        interactions.click(by);
     }
 
     @Step("اختيار {name} من {label}")
@@ -93,45 +76,7 @@ public class SalesModulePage extends AbstractForSales {
                                 + "' or normalize-space(text())='"
                                 + label
                                 + "')]/following::input[contains(@class,'vs__search')][1]");
-        ready.until(
-                d -> {
-                    for (WebElement input : d.findElements(by)) {
-                        js("arguments[0].scrollIntoView({block:'center',inline:'center'})", input);
-                        if (!input.isDisplayed() || !input.isEnabled()) continue;
-                        if (!name.equals(input.getDomProperty("value"))) {
-                            input.click();
-                            input.sendKeys(Keys.CONTROL + "a");
-                            input.sendKeys(name);
-                        }
-                        String id = input.getDomAttribute("aria-controls");
-                        List<WebElement> options =
-                                d
-                                        .findElements(
-                                                By.xpath(
-                                                        "//ul[@id='"
-                                                                + id
-                                                                + "']//li[not(@aria-disabled='true')]"))
-                                        .stream()
-                                        .filter(WebElement::isDisplayed)
-                                        .filter(
-                                                e -> {
-                                                    String text =
-                                                            e.getText()
-                                                                    .trim()
-                                                                    .replaceAll("\\s+", " ");
-                                                    return text.equals(name)
-                                                            || Arrays.asList(text.split(" - "))
-                                                                    .contains(name);
-                                                })
-                                        .toList();
-                        if (options.isEmpty()) return false;
-                        if (options.size() != 1)
-                            throw new AssertionError("Ambiguous owned option: " + name);
-                        options.get(0).click();
-                        return true;
-                    }
-                    return false;
-                });
+        interactions.choose(by, name, FormInteractions.OptionMatch.CODE_SEGMENT);
     }
 
     public void slClearChoice(String label) {
@@ -745,103 +690,46 @@ public class SalesModulePage extends AbstractForSales {
     }
 
     public void slListScope(String customer) {
-        slOpen("invoice-list");
-        slAwaitListReady();
-        slButton("عرض التصفية");
-        slChoose("العميل", customer);
-        slApplyListFilters();
+        documentList.slListScope(customer);
     }
 
     public void slAwaitListReady() {
-        ready.until(d -> slListReady());
+        documentList.slAwaitListReady();
     }
 
-    private boolean slListReady() {
-        return Boolean.TRUE.equals(
-                js(
-                        "const q=[document.querySelector('#app').__vue__];let table,owner;while(q.length){const v=q.shift();q.push(...(v.$children||[]));if(v.$options.methods?.invoiceProvider)owner=v;if(v.$options.name==='BTable'&&v.$el?.getClientRects().length&&v.$el.closest('.ps-list-page'))table=v;}return Boolean(table&&owner&&!table.computedBusy&&!owner.isTableBusy&&performance.getEntriesByType('resource').some(r=>{try{return /\\/SalesTransactions$/i.test(new URL(r.name).pathname)}catch(e){return false}}))"));
-    }
+
 
     public void slApplyListFilters() {
-        slAwaitListReady();
-        ready.until(
-                d -> {
-                    for (WebElement input :
-                            d.findElements(By.cssSelector("input[name='filteredCode']")))
-                        if (input.isDisplayed() && input.isEnabled()) {
-                            input.sendKeys(Keys.ENTER);
-                            return true;
-                        }
-                    return false;
-                });
-        slAwaitListReady();
+        documentList.slApplyListFilters();
     }
 
     public String slListFixtureDate() {
-        slOpen("invoice-list");
-        slButton("عرض التصفية");
-        var from =
-                java.time.LocalDate.parse(
-                        driver.findElement(By.cssSelector("input[name='fromDate']"))
-                                .getDomProperty("value")
-                                .substring(0, 10));
-        var to =
-                java.time.LocalDate.parse(
-                        driver.findElement(By.cssSelector("input[name='toDate']"))
-                                .getDomProperty("value")
-                                .substring(0, 10));
-        if (to.isBefore(from)) throw new AssertionError("Default sales list date range is invalid");
-        var today = java.time.LocalDate.now();
-        return (today.isBefore(from) ? from : today.isAfter(to) ? to : today).toString();
+        return documentList.slListFixtureDate();
     }
 
     @SuppressWarnings("unchecked")
     public List<Map<String, Object>> slListRows() {
-        return (List<Map<String, Object>>)
-                js(
-                        "const q=[document.querySelector('#app').__vue__];while(q.length){const v=q.shift();q.push(...(v.$children||[]));if(v.$options.name==='BTable'&&v.$el?.getClientRects().length&&v.$el.closest('.ps-list-page')&&Array.isArray(v.$data.localItems))return JSON.parse(JSON.stringify(v.$data.localItems));}return []");
+        return documentList.slListRows();
     }
 
     public void slWaitListIds(Set<Object> expected) {
-        ready.until(
-                d -> {
-                    if (!slListReady()) return false;
-                    var actual = new HashSet<Object>();
-                    for (var row : slListRows()) actual.add(row.get("id"));
-                    return actual.equals(expected);
-                });
+        documentList.slWaitListIds(expected);
     }
 
     public void slListText(String name, String text) {
-        slAwaitListReady();
-        slType(By.cssSelector("input[name='" + name + "']"), text, false);
-        slApplyListFilters();
+        documentList.slListText(name, text);
     }
 
     public void slListRadio(String group, String value) {
-        String anchor = group.equals("status") ? "2" : "sales";
-        slClick(
-                By.xpath(
-                        "//div[@role='radiogroup' and .//input[@value='"
-                                + anchor
-                                + "']]//input[@value='"
-                                + value
-                                + "']/ancestor::label[1]"));
+        documentList.slListRadio(group, value);
     }
 
     public List<String> slHeaders() {
-        return driver.findElements(By.cssSelector("table thead th")).stream()
-                .filter(WebElement::isDisplayed)
-                .map(WebElement::getText)
-                .toList();
+        return documentList.slHeaders();
     }
 
     public void slExport(String format) {
-        slClick(
-                By.cssSelector(
-                        "button:has(img[src*='"
-                                + (format.equals("pdf") ? "pdf." : "xls.")
-                                + "'])"));
+        documentList.slExport(format);
     }
 
     public String slWindowHandle() {

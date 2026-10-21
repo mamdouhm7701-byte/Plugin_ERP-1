@@ -3,6 +3,7 @@ package Plugin_ERP.System_Modules.Login.purches;
 import Plugin_ERP.System_Modules.Login.AbstractForPurchases;
 import Plugin_ERP.Utiel.PropertyReader;
 import io.qameta.allure.Step;
+import Plugin_ERP.Utiel.FormInteractions;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -11,12 +12,19 @@ import org.openqa.selenium.support.ui.*;
 /** Purchase UI interactions; scenarios and persisted inventory assertions live in tests. */
 public class PurchaseModulePage extends AbstractForPurchases {
     protected final WebDriverWait ready;
+    private final FormInteractions interactions;
+    private final PurchaseDocumentList documentList;
+    private final PurchaseCalendar calendar;
 
     public PurchaseModulePage(WebDriver driver) {
         super(driver);
+        calendar = new PurchaseCalendar(driver);
         ready = new WebDriverWait(driver, Duration.ofSeconds(35));
         ready.ignoring(StaleElementReferenceException.class)
                 .ignoring(ElementClickInterceptedException.class);
+        interactions = new FormInteractions(ready,
+                element -> js("arguments[0].scrollIntoView({block:'center',inline:'center'})", element));
+        documentList = new PurchaseDocumentList(this, driver, ready);
     }
 
     public void puAwaitSession() {
@@ -53,35 +61,12 @@ public class PurchaseModulePage extends AbstractForPurchases {
         puType(by, value, true);
     }
 
-    private void puType(By by, String value, boolean blur) {
-        ready.until(
-                d -> {
-                    for (WebElement e : d.findElements(by)) {
-                        js("arguments[0].scrollIntoView({block:'center',inline:'center'})", e);
-                        if (!e.isDisplayed() || !e.isEnabled()) continue;
-                        e.click();
-                        e.getDomProperty("value");
-                        if (value.isEmpty()) e.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
-                        else e.sendKeys(Keys.chord(Keys.CONTROL, "a"), value);
-                        if (blur) e.sendKeys(Keys.TAB);
-                        return true;
-                    }
-                    return false;
-                });
+    void puType(By by, String value, boolean blur) {
+        interactions.type(by, value, blur, FormInteractions.InputMode.CLICK_REPLACE);
     }
 
     protected void puClick(By by) {
-        ready.until(
-                d -> {
-                    for (WebElement e : d.findElements(by)) {
-                        js("arguments[0].scrollIntoView({block:'center',inline:'center'})", e);
-                        if (e.isDisplayed() && e.isEnabled()) {
-                            e.click();
-                            return true;
-                        }
-                    }
-                    return false;
-                });
+        interactions.click(by);
     }
 
     @Step("اختيار {name} من {label}")
@@ -93,45 +78,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
                                 + "' or normalize-space(text())='"
                                 + label
                                 + "')]/following::input[contains(@class,'vs__search')][1]");
-        ready.until(
-                d -> {
-                    for (WebElement input : d.findElements(by)) {
-                        js("arguments[0].scrollIntoView({block:'center',inline:'center'})", input);
-                        if (!input.isDisplayed() || !input.isEnabled()) continue;
-                        if (!name.equals(input.getDomProperty("value"))) {
-                            input.click();
-                            input.sendKeys(Keys.CONTROL + "a");
-                            input.sendKeys(name);
-                        }
-                        String id = input.getDomAttribute("aria-controls");
-                        List<WebElement> options =
-                                d
-                                        .findElements(
-                                                By.xpath(
-                                                        "//ul[@id='"
-                                                                + id
-                                                                + "']//li[not(@aria-disabled='true')]"))
-                                        .stream()
-                                        .filter(WebElement::isDisplayed)
-                                        .filter(
-                                                e -> {
-                                                    String text =
-                                                            e.getText()
-                                                                    .trim()
-                                                                    .replaceAll("\\s+", " ");
-                                                    return text.equals(name)
-                                                            || Arrays.asList(text.split(" - "))
-                                                                    .contains(name);
-                                                })
-                                        .toList();
-                        if (options.isEmpty()) return false;
-                        if (options.size() != 1)
-                            throw new AssertionError("Ambiguous owned option: " + name);
-                        options.get(0).click();
-                        return true;
-                    }
-                    return false;
-                });
+        interactions.choose(by, name, FormInteractions.OptionMatch.CODE_SEGMENT);
     }
 
     public void puClearChoice(String label) {
@@ -836,164 +783,62 @@ public class PurchaseModulePage extends AbstractForPurchases {
     }
 
     public void puListScope(String customer) {
-        puOpen("purch-invoice-list");
-        puAwaitListReady();
-        puButton("عرض التصفية");
-        puChoose("المورد", customer);
-        puApplyListFilters();
+        documentList.puListScope(customer);
     }
 
     public void puAwaitListReady() {
-        ready.until(d -> puListReady());
+        documentList.puAwaitListReady();
     }
 
-    private boolean puListReady() {
-        return Boolean.TRUE.equals(
-                js(
-                        "const q=[document.querySelector('#app').__vue__];let table,owner;while(q.length){const v=q.shift();q.push(...(v.$children||[]));if(v.$options.methods?.invoiceProvider)owner=v;if(v.$options.name==='BTable'&&v.$el?.getClientRects().length&&v.$el.closest('.ps-list-page'))table=v;}return Boolean(table&&owner&&!table.computedBusy&&!owner.isTableBusy&&performance.getEntriesByType('resource').some(r=>{try{return /\\/PurchaseLists$/i.test(new URL(r.name).pathname)}catch(e){return false}}))"));
-    }
+
 
     public void puApplyListFilters() {
-        puAwaitListReady();
-        ready.until(
-                d -> {
-                    for (WebElement input :
-                            d.findElements(By.cssSelector("input[name='codeFilter']")))
-                        if (input.isDisplayed() && input.isEnabled()) {
-                            input.sendKeys(Keys.ENTER);
-                            return true;
-                        }
-                    return false;
-                });
-        puAwaitListReady();
+        documentList.puApplyListFilters();
     }
 
     public String puListFixtureDate() {
-        puOpen("purch-invoice-list");
-        puAwaitListReady();
-        puButton("عرض التصفية");
-        ready.until(
-                d ->
-                        !d.findElements(By.cssSelector("input[name='fromDate']")).isEmpty()
-                                && !d.findElements(By.cssSelector("input[name='toDate']"))
-                                        .isEmpty());
-        var from =
-                java.time.LocalDate.parse(
-                        driver.findElement(By.cssSelector("input[name='fromDate']"))
-                                .getDomProperty("value")
-                                .substring(0, 10));
-        var to =
-                java.time.LocalDate.parse(
-                        driver.findElement(By.cssSelector("input[name='toDate']"))
-                                .getDomProperty("value")
-                                .substring(0, 10));
-        if (to.isBefore(from))
-            throw new AssertionError("Default purchase list date range is invalid");
-        var today = java.time.LocalDate.now();
-        return (today.isBefore(from) ? from : today.isAfter(to) ? to : today).toString();
+        return documentList.puListFixtureDate();
     }
 
     @SuppressWarnings("unchecked")
     public List<Map<String, Object>> puListRows() {
-        return (List<Map<String, Object>>)
-                js(
-                        "const q=[document.querySelector('#app').__vue__];while(q.length){const v=q.shift();q.push(...(v.$children||[]));if(v.$options.name==='BTable'&&v.$el?.getClientRects().length&&v.$el.closest('.ps-list-page')&&Array.isArray(v.$data.localItems))return JSON.parse(JSON.stringify(v.$data.localItems));}return []");
+        return documentList.puListRows();
     }
 
     public void puWaitListIds(Set<Object> expected) {
-        ready.until(
-                d -> {
-                    if (!puListReady()) return false;
-                    var actual = new HashSet<Object>();
-                    for (var row : puListRows()) actual.add(row.get("id"));
-                    return actual.equals(expected);
-                });
+        documentList.puWaitListIds(expected);
     }
 
     public void puListText(String name, String text) {
-        puAwaitListReady();
-        if (name.equals("fromDate") || name.equals("toDate")) {
-            puDateFilter(name, text);
-            return;
-        }
-        puType(
-                By.cssSelector(
-                        "input[name='"
-                                + (name.equals("filteredCode") ? "codeFilter" : name)
-                                + "']"),
-                text,
-                false);
-        puApplyListFilters();
+        documentList.puListText(name, text);
     }
 
     public void puListRadio(String group, String value) {
-        String anchor = group.equals("status") ? "2" : "sales";
-        puClick(
-                By.xpath(
-                        "//div[@role='radiogroup' and .//input[@value='"
-                                + anchor
-                                + "']]//input[@value='"
-                                + value
-                                + "']/ancestor::label[1]"));
+        documentList.puListRadio(group, value);
     }
 
     public List<String> puHeaders() {
-        return driver.findElements(By.cssSelector("table thead th")).stream()
-                .filter(WebElement::isDisplayed)
-                .map(WebElement::getText)
-                .toList();
+        return documentList.puHeaders();
     }
 
     public void puPageSize(int size) {
-        ready.until(
-                d -> {
-                    for (WebElement select : d.findElements(By.tagName("select")))
-                        if (select.isDisplayed()
-                                && new Select(select)
-                                        .getOptions().stream()
-                                                .anyMatch(
-                                                        o ->
-                                                                o.getDomProperty("value")
-                                                                        .equals(
-                                                                                Integer.toString(
-                                                                                        size)))) {
-                            new Select(select).selectByValue(Integer.toString(size));
-                            return true;
-                        }
-                    return false;
-                });
-        puAwaitListReady();
+        documentList.puPageSize(size);
     }
 
     public void puNextPage() {
-        puClick(
-                By.cssSelector(
-                        "button.page-link[aria-label='Go to next page'],a.page-link[aria-label='Go to next page']"));
+        documentList.puNextPage();
     }
 
     public void puFirstPage() {
-        puClick(
-                By.cssSelector(
-                        "button.page-link[aria-label='Go to first page'],a.page-link[aria-label='Go to first page']"));
+        documentList.puFirstPage();
     }
 
     public void puSort(String label) {
-        puClick(
-                By.xpath(
-                        "//table//th[.//*[normalize-space()='"
-                                + label
-                                + "'] or normalize-space()='"
-                                + label
-                                + "']"));
-        puAwaitListReady();
+        documentList.puSort(label);
     }
 
     public void puExport(String format) {
-        puClick(
-                By.cssSelector(
-                        "button:has(img[src*='"
-                                + (format.equals("pdf") ? "pdf." : "xls.")
-                                + "'])"));
+        documentList.puExport(format);
     }
 
     public String puWindowHandle() {
@@ -1043,150 +888,12 @@ public class PurchaseModulePage extends AbstractForPurchases {
     }
 
     private void setDateFilter(WebElement hiddenInput, String value) {
-        String pickerId =
-                "fromDate".equals(hiddenInput.getAttribute("name"))
-                        ? "example-datepicker"
-                        : "example-datepicker2";
-        WebElement picker = driver.findElement(By.id(pickerId));
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.elementToBeClickable(By.id(pickerId)));
-        picker = driver.findElement(By.id(pickerId));
-        picker.click();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(8));
-        String[] parts = value.split("-");
-        if (parts.length != 3) throw new IllegalArgumentException("Date must use yyyy-MM-dd");
-        int year = Integer.parseInt(parts[0]);
-        int month = Integer.parseInt(parts[1]);
-        int day = Integer.parseInt(parts[2]);
-        wait.until(d -> calendarIsVisible(pickerId));
-        String shown = calendarCaption(pickerId);
-        java.time.YearMonth target = java.time.YearMonth.of(year, month);
-        for (int i = 0; i < 240; i++) {
-            java.util.regex.Matcher yearMatcher =
-                    java.util.regex.Pattern.compile("(\\d{4})").matcher(shown);
-            if (!yearMatcher.find())
-                throw new IllegalStateException("Calendar year not found: " + shown);
-            int shownYear = Integer.parseInt(yearMatcher.group(1));
-            int shownMonth = parseMonth(shown);
-            java.time.YearMonth current = java.time.YearMonth.of(shownYear, shownMonth);
-            if (current.equals(target)) break;
-            String direction = target.isBefore(current) ? "previous" : "next";
-            String previousCaption = shown;
-            ((org.openqa.selenium.JavascriptExecutor) driver)
-                    .executeScript(
-                            "const direction=arguments[0],picker=document.getElementById(arguments[1]);"
-                                    + "const calendars=[...document.querySelectorAll('.b-calendar')];"
-                                    + "const calendar=calendars.find(c=>c.getClientRects().length&&picker&&c.closest('.b-form-datepicker')===picker.closest('.b-form-datepicker'))"
-                                    + "||calendars.find(c=>c.getClientRects().length);"
-                                    + "const buttons=calendar?[...calendar.querySelectorAll('.b-calendar-nav button')]:[];"
-                                    + "const button=buttons.find(b=>((b.getAttribute('aria-label')||'')+' '+(b.title||'')).toLowerCase().includes(direction))"
-                                    + "||(buttons.length?buttons[direction==='previous'?0:buttons.length-1]:null);"
-                                    + "if(button){button.click();return true;}return false;",
-                            direction,
-                            pickerId);
-            shown =
-                    new WebDriverWait(driver, Duration.ofSeconds(5))
-                            .until(
-                                    d -> {
-                                        try {
-                                            String currentCaption = calendarCaption(pickerId);
-                                            return currentCaption.equals(previousCaption)
-                                                    ? null
-                                                    : currentCaption;
-                                        } catch (
-                                                org.openqa.selenium.StaleElementReferenceException
-                                                        ignored) {
-                                            return null;
-                                        }
-                                    });
-        }
-        String dayText = String.valueOf(day);
-        By dayButtons =
-                By.cssSelector(".b-calendar button, .b-calendar [role='button'], .b-calendar .btn");
-        try {
-            new WebDriverWait(driver, Duration.ofSeconds(8))
-                    .until(
-                            d -> {
-                                try {
-                                    List<WebElement> candidates =
-                                            d.findElements(dayButtons).stream()
-                                                    .filter(WebElement::isDisplayed)
-                                                    .filter(
-                                                            button ->
-                                                                    button.getText()
-                                                                            .trim()
-                                                                            .replaceAll("\\D", "")
-                                                                            .equals(dayText))
-                                                    .filter(
-                                                            button ->
-                                                                    !button.getAttribute("class")
-                                                                            .contains("text-muted"))
-                                                    .filter(WebElement::isEnabled)
-                                                    .toList();
-                                    WebElement targetDay =
-                                            candidates.stream()
-                                                    .filter(
-                                                            button ->
-                                                                    String.valueOf(
-                                                                                    button
-                                                                                            .getAttribute(
-                                                                                                    "aria-label"))
-                                                                            .contains(
-                                                                                    String.valueOf(
-                                                                                            year)))
-                                                    .findFirst()
-                                                    .orElse(
-                                                            candidates.stream()
-                                                                    .findFirst()
-                                                                    .orElse(null));
-                                    if (targetDay == null) return false;
-                                    targetDay.click();
-                                    return true;
-                                } catch (
-                                        org.openqa.selenium.StaleElementReferenceException
-                                                ignored) {
-                                    return false;
-                                }
-                            });
-        } catch (org.openqa.selenium.TimeoutException e) {
-            throw new IllegalStateException("Calendar day not found: " + value, e);
-        }
+        calendar.selectDate(hiddenInput, value);
     }
 
-    private boolean calendarIsVisible(String pickerId) {
-        return Boolean.TRUE.equals(
-                ((org.openqa.selenium.JavascriptExecutor) driver)
-                        .executeScript(
-                                "const picker=document.getElementById(arguments[0]),calendars=[...document.querySelectorAll('.b-calendar')];"
-                                        + "return calendars.some(c=>c.getClientRects().length&&picker&&c.closest('.b-form-datepicker')===picker.closest('.b-form-datepicker'))"
-                                        + "||calendars.some(c=>c.getClientRects().length);",
-                                pickerId));
-    }
 
-    private String calendarCaption(String pickerId) {
-        Object value =
-                ((org.openqa.selenium.JavascriptExecutor) driver)
-                        .executeScript(
-                                "const picker=document.getElementById(arguments[0]),calendars=[...document.querySelectorAll('.b-calendar')];"
-                                        + "const calendar=calendars.find(c=>c.getClientRects().length&&picker&&c.closest('.b-form-datepicker')===picker.closest('.b-form-datepicker'))"
-                                        + "||calendars.find(c=>c.getClientRects().length);"
-                                        + "const caption=calendar&&calendar.querySelector('.b-calendar-grid-caption');"
-                                        + "return caption?(caption.innerText||caption.textContent||'').trim():'';");
-        return value == null ? "" : value.toString();
-    }
 
-    private int parseMonth(String text) {
-        java.util.regex.Matcher matcher =
-                java.util.regex.Pattern.compile("(\\d{1,2})[/-]").matcher(text);
-        if (matcher.find()) return Integer.parseInt(matcher.group(1));
-        String normalized = text.replaceAll("\\d", "").trim();
-        String[] arabicMonths = {
-            "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر",
-            "أكتوبر", "نوفمبر", "ديسمبر"
-        };
-        for (int i = 0; i < arabicMonths.length; i++)
-            if (normalized.contains(arabicMonths[i])) return i + 1;
-        return java.time.Month.valueOf(normalized.toUpperCase(Locale.ROOT).substring(0, 3))
-                .getValue();
-    }
+
+
+
 }

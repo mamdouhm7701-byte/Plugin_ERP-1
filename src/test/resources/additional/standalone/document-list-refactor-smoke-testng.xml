@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Owned sales and purchase list filters" parallel="none" configfailurepolicy="continue">
+    <test name="List component verification" preserve-order="true">
+        <classes>
+            <class name="Invoice.SalesListCoverageTest">
+                <methods>
+                    <include name="ownCustomerFilterReturnsOnlyOwnDocuments"/>
+                    <include name="exactCodeFilterFindsOwnedDocument"/>
+                </methods>
+            </class>
+            <class name="Purches.PurchaseListCoverageTest">
+                <methods>
+                    <include name="supplierFilterIsOwned"/>
+                    <include name="exactCodeFilter"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

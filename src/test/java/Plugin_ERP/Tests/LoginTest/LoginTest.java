@@ -1,47 +1,73 @@
 package Plugin_ERP.Tests.LoginTest;
 
-import Plugin_ERP.Drivers.WebDriverFactory;
+import Plugin_ERP.Drivers.Browser;
 import Plugin_ERP.System_Modules.Login.Login.LoginPage;
 import Plugin_ERP.Utiel.PropertyReader;
-import Plugin_ERP.Listners.TestNGListeners;
-
-import com.automation.remarks.testng.UniversalVideoListener;
+import Plugin_ERP.Utiel.ScreenShotsUtils;
 import io.qameta.allure.*;
 import io.qameta.allure.testng.AllureTestNg;
+import java.time.Duration;
+import java.util.Locale;
+import java.util.UUID;
 import org.openqa.selenium.WebDriver;
+import org.testng.ITestResult;
 import org.testng.annotations.*;
 
-public class LoginTest extends BaseTest {
+/** Authentication owns a fresh browser per method, separate from the ERP suite session. */
+@Listeners(AllureTestNg.class)
+@Epic("WEB CLOUD")
+@Feature("LOGIN FEATURE")
+@Owner("MAMDOUH")
+public class LoginTest {
+    private final ThreadLocal<WebDriver> browsers = new ThreadLocal<>();
 
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("WEB CLOUD")
-    @Feature("LOGIN FEATURE")
-    @Story("VALID LOGIN STORY")
-    @Description("This test verifies that a user can log in with valid credentials.")
-    @Link(name = "Login Test Case", url = "https://binfares.plugin-erp.com/#/login")
-    @Test
-    public void LoginTest() throws InterruptedException {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.Login(PropertyReader.getValidUsername(), PropertyReader.getValidPassword());
-        loginPage.AssertLoginPageTitle();
-        Thread.sleep(1500);
+    @BeforeMethod(alwaysRun = true)
+    public void openLogin() {
+        PropertyReader.loadProperties();
+        WebDriver driver = Browser.valueOf(PropertyReader.getProperty("BrowserType")
+                .trim().toUpperCase(Locale.ROOT)).getDriverFactory().createDriver();
+        browsers.set(driver);
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
+        driver.get(PropertyReader.getApplicationUrl().replaceAll("/+$", "") + "/#/login");
+        new LoginPage(driver).waitForLoginForm();
     }
 
-    @Owner("MAMDOUH")
-    @Severity(SeverityLevel.CRITICAL)
-    @Epic("WEB CLOUD")
-    @Feature("LOGIN FEATURE")
-    @Story("INVALID LOGIN STORY")
-    @Description("This test verifies that a user cant log in with valid credentials.")
-    @Link(name = "Login Test Case", url = "https://binfares.plugin-erp.com/#/login")
+    @AfterMethod(alwaysRun = true)
+    public void closeLogin(ITestResult result) {
+        WebDriver driver = browsers.get();
+        try {
+            if (driver != null) {
+                if (!result.isSuccess()) ScreenShotsUtils.takeScreenShot(driver, "FAIL_" + result.getName());
+                driver.quit();
+            }
+        } finally {
+            browsers.remove();
+        }
+    }
+
     @Test
+    @Severity(SeverityLevel.CRITICAL)
+    @Story("VALID LOGIN STORY")
+    @Description("Fresh unauthenticated session accepts valid credentials and reaches home.")
+    public void LoginTest() {
+        String username = PropertyReader.getValidUsername();
+        String password = PropertyReader.getValidPassword();
+        if (username == null || username.isBlank() || password == null || password.isBlank()) {
+            throw new IllegalStateException("Login credentials are missing; see config/Login.local.properties or ERP environment variables.");
+        }
+        LoginPage page = new LoginPage(browsers.get());
+        page.Login(username, password);
+        page.AssertLoginPageTitle();
+    }
+
+    @Test
+    @Severity(SeverityLevel.CRITICAL)
+    @Story("INVALID LOGIN STORY")
+    @Description("Unknown generated account is rejected with a credential error and stays on login.")
     public void InvalidLoginTest() {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.Login(
-                PropertyReader.getProperty("InvalidUsername"),
-                PropertyReader.getProperty("InvalidPassword"));
-        // You can add assertions here to verify that the login failed
-        loginPage.AssertLoginPageTitle();
+        LoginPage page = new LoginPage(browsers.get());
+        // Avoid failed-password attempts against a real account or saved invalid data.
+        page.Login("qa-login-" + UUID.randomUUID() + "@example.invalid", UUID.randomUUID().toString());
+        page.assertLoginRejected(System.getProperty("Login.UnknownUserMessage", "User.UserNotFound"));
     }
 }

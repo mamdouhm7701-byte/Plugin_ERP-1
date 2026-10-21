@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Properties;
 
@@ -29,11 +31,9 @@ public class PropertyReader {
 
             propertiesFiles.forEach(
                     file -> {
-                        try {
-                            properties.load(
-                                    new InputStreamReader(
-                                            FileUtils.openInputStream(file),
-                                            StandardCharsets.UTF_8));
+                        try (var reader = new InputStreamReader(
+                                FileUtils.openInputStream(file), StandardCharsets.UTF_8)) {
+                            properties.load(reader);
                         } catch (IOException e) {
                             LogUtils.info(
                                     "Error loading properties file: "
@@ -42,6 +42,25 @@ public class PropertyReader {
                                             + e.getMessage());
                         }
                     });
+
+            // Local credentials stay outside Maven resources and version control.
+            Path localLogin = Path.of("config", "Login.local.properties");
+            if (Files.isRegularFile(localLogin)) {
+                try (var reader = Files.newBufferedReader(localLogin, StandardCharsets.UTF_8)) {
+                    properties.load(reader);
+                }
+            }
+
+            // CI can provide credentials without creating a file.
+            for (String key : properties.stringPropertyNames()) {
+                if (key.endsWith(".Username") || key.endsWith(".Password")
+                        || key.equals("InvalidUsername") || key.equals("InvalidPassword")) {
+                    String environmentKey = "ERP_" + key.replaceAll("[^A-Za-z0-9]", "_")
+                            .toUpperCase(java.util.Locale.ROOT);
+                    String value = System.getenv(environmentKey);
+                    if (value != null && !value.isBlank()) properties.setProperty(key, value);
+                }
+            }
 
             properties.putAll(System.getProperties());
             System.getProperties().putAll(properties);

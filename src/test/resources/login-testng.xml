@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Authentication - isolated sessions" parallel="none">
+    <test name="Valid and invalid credentials">
+        <classes>
+            <class name="Plugin_ERP.Tests.LoginTest.LoginTest"/>
+        </classes>
+    </test>
+</suite>

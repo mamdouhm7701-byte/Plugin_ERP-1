@@ -339,7 +339,8 @@ public class ElmentAction {
                 LogUtils.info("Enabled = " + element.isEnabled());
                 LogUtils.info("Location = " + element.getLocation());
                 LogUtils.info("Size = " + element.getSize());
-                LogUtils.info("OuterHTML = " + element.getAttribute("outerHTML"));
+                boolean sensitive = "password".equalsIgnoreCase(element.getAttribute("type"));
+                if (!sensitive) LogUtils.info("OuterHTML = " + element.getAttribute("outerHTML"));
 
                 Object topElement =
                         ((JavascriptExecutor) driver)
@@ -348,7 +349,7 @@ public class ElmentAction {
                                         element.getRect().getX() + 5,
                                         element.getRect().getY() + 5);
 
-                LogUtils.info("Top Element = " + topElement);
+                if (!sensitive) LogUtils.info("Top Element = " + topElement);
                 scrollIntoView(element);
 
                 wait.until(ExpectedConditions.elementToBeClickable(element));
@@ -372,19 +373,20 @@ public class ElmentAction {
                             }
                         });
 
-                element.sendKeys(cleanValue);
+                String expectedValue = sensitive ? value : cleanValue;
+                element.sendKeys(expectedValue);
 
                 String typedValue = element.getAttribute("value");
 
-                LogUtils.info("Typed Value = " + typedValue);
+                LogUtils.info("Typed Value = " + (sensitive ? "[REDACTED]" : typedValue));
 
-                if (typedValue == null || !typedValue.trim().equals(cleanValue)) {
+                if (typedValue == null || !(sensitive ? typedValue : typedValue.trim()).equals(expectedValue)) {
 
                     throw new RuntimeException(
                             "❌ Typed value mismatch. Expected: ["
-                                    + cleanValue
+                                    + (sensitive ? "[REDACTED]" : expectedValue)
                                     + "] Actual: ["
-                                    + typedValue
+                                    + (sensitive ? "[REDACTED]" : typedValue)
                                     + "]");
                 }
 

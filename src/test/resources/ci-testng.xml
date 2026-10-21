@@ -13,6 +13,8 @@
             <class name="SuiteSupport.ModuleChoiceTest"/>
             <class name="Plugin_ERP.Utiel.ConfigurationPropertiesTest"/>
             <class name="Plugin_ERP.Utiel.FormInteractionsTest"/>
+            <class name="Plugin_ERP.Utiel.DropdownPolicyTest"/>
+            <class name="Plugin_ERP.Valditon.LegacyAssertionsTest"/>
             <class name="Plugin_ERP.Utiel.Allur.AllureReportPolicyTest"/>
             <class name="SuiteSupport.CiSuiteContractTest"/>
             <class name="SuiteSupport.SuiteDefinitionsTest"/>

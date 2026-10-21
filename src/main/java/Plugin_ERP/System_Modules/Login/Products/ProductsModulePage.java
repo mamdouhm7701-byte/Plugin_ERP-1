@@ -4,6 +4,7 @@ import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.System_Modules.Login.Abstract;
 import Plugin_ERP.Utiel.PropertyReader;
 import io.qameta.allure.Step;
+import Plugin_ERP.Utiel.FormInteractions;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -12,10 +13,14 @@ import org.openqa.selenium.support.ui.*;
 /** Product-module interactions shared by the four existing Page Objects. */
 public class ProductsModulePage extends Abstract {
   protected final WebDriverWait ready;
+  private final FormInteractions choices;
+  private final FormInteractions inputs;
   private String listUrl;
   public ProductsModulePage(WebDriver driver){
     super(driver);ready=new WebDriverWait(driver,Duration.ofSeconds(30));
     ready.ignoring(StaleElementReferenceException.class).ignoring(ElementClickInterceptedException.class);
+    choices=new FormInteractions(ready,e->((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'})",e));
+    inputs=new FormInteractions(ready,e->{if(e.isEnabled())((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center',inline:'center'})",e);});
   }
   public void prAwaitSession(){
     java.util.function.Function<WebDriver,Boolean> authenticated=d->!d.getCurrentUrl().contains("/login")&&Boolean.TRUE.equals(((JavascriptExecutor)d)
@@ -47,28 +52,16 @@ public class ProductsModulePage extends Abstract {
   public boolean prFormPresent(){return !prNameInputs().isEmpty();}
   private List<WebElement> prNameInputs(){return driver.findElements(By.cssSelector("form input[name='arabicName'],form [data-title='الاسم العربي'] input"));}
   protected WebElement visible(By locator){return ready.until(d->d.findElements(locator).stream().filter(WebElement::isDisplayed).findFirst().orElse(null));}
-  public void prType(By locator,String value){ready.until(d->{for(WebElement e:d.findElements(locator)){
-    if(!e.isEnabled())continue;((JavascriptExecutor)d).executeScript("arguments[0].scrollIntoView({block:'center',inline:'center'})",e);
-    if(!e.isDisplayed())continue;e.sendKeys(Keys.CONTROL+"a");e.sendKeys(Keys.DELETE);if(!value.isEmpty())e.sendKeys(value);e.sendKeys(Keys.TAB);return true;
-    }return false;});}
-  protected void prClick(By locator){ready.until(d->{for(WebElement e:d.findElements(locator)){
-    if(!e.isEnabled())continue;((JavascriptExecutor)d).executeScript("arguments[0].scrollIntoView({block:'center',inline:'center'})",e);
-    if(!e.isDisplayed())continue;e.click();return true;}return false;});}
+  public void prType(By locator,String value){inputs.type(locator,value,true,FormInteractions.InputMode.CLEAR_REPLACE);}
+  protected void prClick(By locator){inputs.click(locator);}
   @Step("إدخال الاسم العربي: {name}") public void prArabic(String name){prType(By.cssSelector("form input[name='arabicName'],form [data-title='الاسم العربي'] input"),name);}
   public void prEnglish(String name){prType(By.cssSelector("form input[name='englishName'],form [data-title='الاسم الإنجليزي'] input"),name);}
   public void prNotes(String notes){prType(By.cssSelector("form textarea"),notes);}
   public void prField(String name,String value){prType(By.cssSelector("form input[name='"+name+"']"),value);}
   public void prTitledField(String title,String value){prType(By.cssSelector("form [data-title='"+title+"'] input"),value);}
-  @Step("اختيار {name} من {label}") public void prChoose(String label,String name){
+  @Step("اختيار {name} من {label}") public void prChoose(String label,String name) {
     By locator=By.xpath("//*[self::label or self::legend][normalize-space()='"+label+"']/following::input[contains(@class,'vs__search')][1]");
-    ready.until(d->{WebElement input=d.findElements(locator).stream().filter(WebElement::isDisplayed).filter(WebElement::isEnabled).findFirst().orElse(null);
-      if(input==null)return false;((JavascriptExecutor)d).executeScript("arguments[0].scrollIntoView({block:'center'})",input);
-      if(!name.equals(input.getDomProperty("value"))){input.click();input.sendKeys(Keys.CONTROL+"a");input.sendKeys(name);}
-      String id=input.getDomAttribute("aria-controls");
-      List<WebElement> choices=d.findElements(By.xpath("//ul[@id='"+id+"']//li[not(@aria-disabled='true')]"))
-          .stream().filter(WebElement::isDisplayed).filter(e->e.getText().trim().equals(name)).toList();
-      if(choices.isEmpty())return false;if(choices.size()!=1)throw new AssertionError("Ambiguous test-owned option: "+name);
-      choices.get(0).click();return true;});
+    choices.choose(locator,name,FormInteractions.OptionMatch.EXACT,"Ambiguous test-owned option: ");
   }
   @Step("تغيير اختيار {label}: {selected}") public void prCheck(String label,boolean selected){
     By locator=By.xpath("//label[normalize-space()='"+label+"']/preceding-sibling::input[@type='checkbox'] | //label[normalize-space()='"+label+"']/following::input[@type='checkbox'][1]");

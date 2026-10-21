@@ -191,3 +191,33 @@ mvn --batch-mode --no-transfer-progress '-DExecutionType=LocalHeadless' '-Dallur
 أكدت مقارنة المصدر بقاء بقية كود الصفحات وXPath الاختيار دون تغيير، مع الحفاظ على سياسة المطابقة والكتابة والانتظار والتمرير. الأدلة: `target/form-interactions-ci.log` و`target/form-interactions-baseline/verification.json`.
 
 فحص حي محدد عبر `additional/standalone/form-interactions-smoke-testng.xml` يختار ست حالات: حفظ فاتورة مبيعات ومشتريات من قائمة الأصناف ورفض المستند الفارغ، وحفظ التصنيع وإلزامية المخزن. يستخدم دورة تجهيز وتنظيف الكلاسات الحالية، ويظل خارج CI المحلي.
+
+نجحت **الحالات الحية الست دون فشل أو تخطٍ**، مع اكتمال تجهيز وتنظيف الكلاسات الثلاثة. أصبحت سجلات البيانات والمحاولات الستة الخاصة بالتشغيل فارغة. الأدلة في `target/form-interactions-live.log` و`target/form-interactions-baseline/live-testng-results.xml` و`target/form-interactions-baseline/live-journal-check.json`. هذا تحقق محدد للتفاعلات المشتركة، وليس تشغيل Regression الحي بالكامل.
+
+لإعادة التحقق الحي:
+
+```powershell
+mvn --batch-mode --no-transfer-progress '-DExecutionType=LocalHeadless' '-Dallure.report.generate=false' '-Dallure.results.directory=target/form-interactions-live/allure-results' '-Dallure.report.directory=target/form-interactions-live/allure-report' '-Dsurefire.suiteXmlFiles=src/test/resources/additional/standalone/form-interactions-smoke-testng.xml' test
+```
+
+## الدفعة الثامنة: توسيع التفاعلات إلى الأصناف والحركات المالية
+
+أصبح الاختيار المشترك مستخدمًا في خمس وحدات. أضيفت سياسة `EXACT` للأصناف، وسياسة `EXACT_THEN_CONTAINS` للحركات المالية: تبحث الثانية عن التطابق الكامل أولًا، ثم تستخدم الاحتواء فقط إن لم توجد مطابقة كاملة. الخيارات المتشابهة لا تُفضّل على خيار مطابق، والتباس المطابقة الكاملة أو الاحتواء يوقف الاختيار. بقيت رسائل الالتباس الخاصة بالوحدتين كما كانت.
+
+تستخدم الأصناف المكوّن نفسه للكتابة والضغط مع طريقة المسح السابقة وblur. بقيت مواضع العناصر وAllure Steps ومهل الانتظار والتمرير الخاصة بكل وحدة. بقيت كتابة المبالغ المالية والتحقق الرقمي منها كما هما، وكذلك جمع أدلة قوائم الحركات المالية عند انتهاء المهلة. أضيفت إعادة اكتساب حقل الاختيار عند تحديثه للوحدتين تحت مهلة الصفحة الحالية؛ لا تشمل إعادة حفظ المستند.
+
+أضيفت تسع حالات لسياسات المطابقة وأولوية التطابق الكامل والتباس fallback، وست حالات لاستخدام المكوّن من صفحتي الأصناف والحركات المالية أثناء تحديث القائمة ورفض الاختيار الملتبس. نجحت **379 حالة محلية دون فشل أو تخطٍ**. المقارنة العكسية أكدت بقاء بقية الصفحتين دون تغيير، بما فيها تشخيص القوائم المالية وكتابة المبالغ. الأدلة: `target/extended-forms-ci-final.log` و`target/extended-forms-baseline/verification.json`.
+
+الفحص الحي `additional/standalone/products-finance-interactions-smoke-testng.xml` يختار أربع حالات: إنشاء صنف بوحدة فرعية وإلزامية الفئة، وسند قبض بتوزيع على فاتورة ورفض المبلغ الصفري. يشمل تجهيز الكلاسين وتنظيفهما، ويظل مستقلًا عن CI المحلي.
+
+نجحت **الحالات الحية الأربع دون فشل أو تخطٍ** مع اكتمال تجهيز وتنظيف الكلاسين. أصبحت سجلات البيانات والمحاولات الأربعة الخاصة بالتشغيل فارغة، وظلت السجلات التاريخية محفوظة. الأدلة: `target/extended-forms-live.log` و`target/extended-forms-baseline/live-testng-results.xml` و`target/extended-forms-baseline/live-journal-check.json`. لم يُشغّل Regression الحي بالكامل.
+
+```powershell
+mvn --batch-mode --no-transfer-progress '-DExecutionType=LocalHeadless' '-Dallure.report.generate=false' '-Dallure.results.directory=target/extended-forms-live/allure-results' '-Dallure.report.directory=target/extended-forms-live/allure-report' '-Dsurefire.suiteXmlFiles=src/test/resources/additional/standalone/products-finance-interactions-smoke-testng.xml' test
+```
+
+## إغلاق التنظيم والتحقق المجمع
+
+أُضيفت مداخل الفحص الجديدة ومدخل `acceptance-testng.xml` إلى الاختبار المحلي لصحة ملفات TestNG، وصُحح الوصف القديم لمشاركة المتصفح في Regression. يوفر `scripts/Test-Project.ps1` تشغيلًا محليًا أو محليًا ثم قبولًا أو Regression، مع حفظ الأدلة وفشل الطرفية عند فشل مرحلة، ودون تنظيف سجلات الاستعادة.
+
+نجح التحقق المجمع في **386 حالة محلية و11 حالة قبول حية** دون فشل أو تخطٍ، مع اكتمال تنظيف البيانات وخلو 18 سجلًا يخص التشغيل. الحالة الختامية وحدود النطاق والعيوب الخارجية موثقة في [FINAL_REVIEW_AR.md](FINAL_REVIEW_AR.md). لا يتطلب إغلاق التنظيم تقسيم كل كلاس كبير أو إخفاء عيوب ERP المعروفة.

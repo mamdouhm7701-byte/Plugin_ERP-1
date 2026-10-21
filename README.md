@@ -4,6 +4,20 @@
 
 ## التشغيل
 
+للفحص الموحد من PowerShell، شغّل أحد الأوامر التالية من جذر المشروع. كل تشغيل يحتفظ بسجل مستقل تحت `target/validation`، ولا يحذف سجلات الاستعادة:
+
+```powershell
+./scripts/Test-Project.ps1
+./scripts/Test-Project.ps1 -Mode Acceptance
+./scripts/Test-Project.ps1 -Mode Regression
+```
+
+الأمر الافتراضي يشغّل الفحوص المحلية فقط. `Acceptance` يشغّلها أولًا ثم اختبار الدخول وSmoke الحي. `Regression` يشغّلها أولًا ثم التغطية الحية الواسعة؛ تظل عيوب التطبيق المعروفة ظاهرة. يتوقف المسار عند فشل أي مرحلة. لا تشغّل أمرين في نسخة العمل نفسها بالتوازي لأن سجلات البيانات وSurefire مشتركة أثناء التنفيذ.
+
+راجع [المراجعة الختامية وحدود التحقق](docs/testing/FINAL_REVIEW_AR.md)، و[تفاصيل إعادة التنظيم](docs/testing/REFACTORING_AR.md).
+
+تمت مراجعة أدوات التحقق القديمة ضمن [رقم 4: إصلاح الظهور وعزل التحقق المرن](docs/testing/LEGACY_ASSERTIONS_AR.md)، مع الحفاظ على واجهاتها الحالية وإضافة اختبارات محلية لها.
+
 يلزم Maven وJDK 21. يختار Maven إصدار Java المناسب عبر Toolchains؛ راجع [إعداد Java](docs/testing/JAVA_SETUP_AR.md).
 
 إعدادات البيئة والمتصفح في `src/main/resources/WebData.properties`. بيانات الدخول محلية في `config/Login.local.properties` أو متغيرات البيئة؛ راجع [إعداد بيانات الدخول](docs/testing/CREDENTIALS_AR.md). لا تحفظ كلمات المرور في Git.

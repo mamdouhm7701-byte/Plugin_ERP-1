@@ -10,9 +10,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public final class FormInteractions {
     public enum OptionMatch {
         CODE_SEGMENT,
-        NAME_AT_EDGE;
+        NAME_AT_EDGE,
+        EXACT,
+        EXACT_THEN_CONTAINS;
 
         public boolean matches(String text, String name) {
+            if (this == EXACT || this == EXACT_THEN_CONTAINS) return text.trim().equals(name);
             String normalized = text.trim().replaceAll("\\s+", " ");
             return normalized.equals(name) || (this == CODE_SEGMENT
                     ? Arrays.asList(normalized.split(" - ")).contains(name)
@@ -66,6 +69,10 @@ public final class FormInteractions {
     }
 
     public void choose(By locator, String name, OptionMatch match) {
+        choose(locator, name, match, "Ambiguous owned option: ");
+    }
+
+    public void choose(By locator, String name, OptionMatch match, String ambiguityMessage) {
         ready.until(driver -> {
             for (WebElement input : driver.findElements(locator)) {
                 scroll.accept(input);
@@ -85,8 +92,14 @@ public final class FormInteractions {
                         "//ul[@id='" + id + "']//li[not(@aria-disabled='true')]"))
                         .stream().filter(WebElement::isDisplayed)
                         .filter(option -> match.matches(option.getText(), name)).toList();
+                if (options.isEmpty() && match == OptionMatch.EXACT_THEN_CONTAINS) {
+                    options = driver.findElements(By.xpath(
+                            "//ul[@id='" + id + "']//li[not(@aria-disabled='true')]"))
+                            .stream().filter(WebElement::isDisplayed)
+                            .filter(option -> option.getText().contains(name)).toList();
+                }
                 if (options.isEmpty()) return false;
-                if (options.size() != 1) throw new AssertionError("Ambiguous owned option: " + name);
+                if (options.size() != 1) throw new AssertionError(ambiguityMessage + name);
                 options.get(0).click();
                 return true;
             }

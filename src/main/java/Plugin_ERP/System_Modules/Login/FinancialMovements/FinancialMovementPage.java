@@ -4,6 +4,7 @@ import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.System_Modules.Login.Abstract;
 import Plugin_ERP.Utiel.PropertyReader;
 import io.qameta.allure.Step;
+import Plugin_ERP.Utiel.FormInteractions;
 import java.time.Duration;
 import java.math.BigDecimal;
 import java.util.*;
@@ -13,12 +14,14 @@ import org.openqa.selenium.support.ui.*;
 /** Shared interactions for financial forms; business expectations belong in tests. */
 public class FinancialMovementPage extends Abstract {
   private final WebDriverWait ready;
+  private final FormInteractions choices;
   private String listUrl;
   private final Map<String,String> ownedCodes=new HashMap<>();
   public FinancialMovementPage(WebDriver driver) {
     super(driver);
     ready = new WebDriverWait(driver, Duration.ofSeconds(25));
     ready.ignoring(StaleElementReferenceException.class).ignoring(ElementClickInterceptedException.class);
+    choices=new FormInteractions(ready,e->((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'})",e));
   }
   @Step("فتح قائمة الحركة المالية: {route}")
   public void openList(Pages route) {
@@ -55,23 +58,7 @@ public class FinancialMovementPage extends Abstract {
     chooseInput(input,name);
   }
   private void chooseInput(By locator,String name) {
-    try { ready.until(d->{
-      WebElement input=d.findElements(locator).stream().filter(WebElement::isDisplayed).findFirst().orElse(null);
-      if(input==null||!input.isEnabled())return false;
-      ((JavascriptExecutor)d).executeScript("arguments[0].scrollIntoView({block:'center'})",input);
-      if(!name.equals(input.getDomProperty("value"))){
-        input.click();input.sendKeys(Keys.CONTROL+"a");input.sendKeys(name);
-      }
-      String listId=input.getDomAttribute("aria-controls");
-      By options=By.xpath("//ul[@id='"+listId+"']//li[not(@aria-disabled='true')]");
-      List<WebElement> candidates=d.findElements(options).stream().filter(WebElement::isDisplayed)
-          .filter(e->e.getText().trim().equals(name)).toList();
-      if(candidates.isEmpty())candidates=d.findElements(options).stream().filter(WebElement::isDisplayed)
-          .filter(e->e.getText().contains(name)).toList();
-      if(candidates.isEmpty())return false;
-      if(candidates.size()!=1)throw new AssertionError("Ambiguous owned dropdown option: "+name);
-      candidates.get(0).click();return true;
-    }); } catch(TimeoutException failure) {
+    try { choices.choose(locator,name,FormInteractions.OptionMatch.EXACT_THEN_CONTAINS,"Ambiguous owned dropdown option: "); } catch(TimeoutException failure) {
       Object snapshot=((JavascriptExecutor)driver).executeScript("""
           const queue=[document.querySelector('#app')?.__vue__], result=[];
           while(queue.length){const vm=queue.shift();if(!vm)continue;

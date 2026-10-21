@@ -4,6 +4,8 @@
 
 ملفات التشغيل الأساسية موجودة مباشرة في هذا المجلد:
 
+التشغيل الموحد من جذر المشروع: `./scripts/Test-Project.ps1` للمحلي، و`-Mode Acceptance` للمحلي ثم الدخول وSmoke، و`-Mode Regression` للمحلي ثم Regression الحي. النتائج في `target/validation/<run-id>`، دون تنظيف سجلات الاستعادة.
+
 - الفحوص المحلية الآلية: `ci-testng.xml`، وتشغيلها المفضل `mvn -Pci verify` لعزل النتائج وتعطيل توليد وفتح Allure تلقائيًا. لا يتصل هذا المدخل بـERP ولا يحتاج بيانات دخول.
 
 - مستويات الاختبار: `smoke-testng.xml` و`sanity-testng.xml` و`regression-testng.xml` و`e2e-testng.xml`.
@@ -39,6 +41,10 @@ mvn '-DExecutionType=LocalHeadless' '-Dsurefire.suiteXmlFiles=src/test/resources
 `additional/standalone/document-list-refactor-smoke-testng.xml` فحص حي من أربع حالات لنطاق العميل/المورد والكود المطابق في قائمتي المبيعات والمشتريات، مع تجهيز بيانات كل كلاس وتنظيفها.
 
 `additional/standalone/form-interactions-smoke-testng.xml` فحص حي من ست حالات للحفظ والحقول المطلوبة في المبيعات والمشتريات والتصنيع، بعد تنظيم تفاعلات النماذج المشتركة. تفاصيل النطاق والأدلة في `docs/testing/REFACTORING_AR.md`.
+
+`additional/standalone/products-finance-interactions-smoke-testng.xml` أربع حالات حية لاختيارات الأصناف والحركات المالية: صنف بوحدة فرعية، فئة مطلوبة، سند قبض بتوزيع على فاتورة ومبلغ صفري مرفوض. يستخدم تجهيز وتنظيف الكلاسات الحاليين.
+
+`additional/standalone/acceptance-testng.xml` يجمع اختبار الدخول وSmoke الحاليين دون نسخ أسماء الحالات؛ ملف الفحص الموحد يشغّله بعد نجاح الفحوص المحلية.
 احتفظنا بتعريفات التغطية كما هي؛ النقل لتنظيم مداخل التشغيل.
 
 `Test-Data/` يحتوي بيانات الاختبارات، وليس ملفات تشغيل. `pom.xml` في جذر المشروع يخص بناء Maven.

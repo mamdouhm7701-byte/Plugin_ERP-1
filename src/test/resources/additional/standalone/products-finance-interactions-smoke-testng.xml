@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Products and financial dropdowns" parallel="none" configfailurepolicy="continue">
+    <test name="Exact choices and dependent financial pickers" preserve-order="true">
+        <classes>
+            <class name="ProductsTest.AddProductsTest">
+                <methods>
+                    <include name="addNewProductWithValidData"/>
+                    <include name="AddProductWithOutCategory"/>
+                </methods>
+            </class>
+            <class name="FinancialMovementsTest.CustomerReceiptTest">
+                <methods>
+                    <include name="AddCustomerWithSaveAndCustomerReceiptTest"/>
+                    <include name="FM_RejectZeroAmount"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

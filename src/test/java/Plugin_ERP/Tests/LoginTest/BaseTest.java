@@ -45,7 +45,7 @@ public class BaseTest {
         login();
     }
 
-    @Step("Login with username: {user} and password: {pass}")
+    @Step("تسجيل الدخول بإعدادات البيئة الحالية")
     private void login() {
 
         LoginPage loginPage = new LoginPage(driver);

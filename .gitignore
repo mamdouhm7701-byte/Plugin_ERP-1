@@ -49,6 +49,7 @@ allure-report/
 
 
 # Test artifacts
+config/*.local.properties
 screenshots/
 allure-results/
 allure-report/

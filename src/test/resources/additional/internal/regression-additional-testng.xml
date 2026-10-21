@@ -4,7 +4,7 @@
   جزء Regression للبيانات الأساسية والقيود اليومية واختبار تعريف ملفات التشغيل محلياً.
   نستبعد أنواع الخصم القديمة وتسليم الخزينة وخط سير المندوب القديم لأنهم يستخدمون أسماء
   مستخدمين وخزائن وعملاء ثابتة، ولم يهاجرا لإعداد بيانات مستقلة. السويتات القديمة محفوظة.
-  LoginTest القديم ليس بوابة مصادقة موثوقة؛ الدخول الفعلي يحدث في BaseTest لكل سويت واجهة.
+  اختبارات المصادقة ذات الجلسات المستقلة موجودة في login-testng.xml؛ الدخول هنا يحدث في BaseTest لكل سويت واجهة.
   الاختبارات المعطلة أصلاً تظل معطلة، ونجاح اختبار يرصد عيباً موثقاً لا يصحح سلوك التطبيق.
 -->
 <suite name="Regression - Basic data and general journal" parallel="none" configfailurepolicy="continue">
@@ -24,6 +24,7 @@
             <class name="SuiteSupport.SalesTaxProfileTest"/>
             <class name="SuiteSupport.DocumentDatesTest"/>
             <class name="SuiteSupport.WorkflowCleanupOrderTest"/>
+            <class name="SuiteSupport.RuntimeCompatibilityTest"/>
         </classes>
     </test>
 </suite>

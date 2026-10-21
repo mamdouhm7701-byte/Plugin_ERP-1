@@ -99,6 +99,13 @@ public class AllureBinaryManger {
         }
     }
 
+    /** Portable HTML for email, without separate script attachments. */
+    public static void generateSingleFileReport(Path destination) throws Exception {
+        runCommand(prepareAllureCLI().toString(), "generate",
+                AllureConstants.ALLURE_RESULTS_DIR.toString(), "-o", destination.toString(),
+                "--single-file", "--clean");
+    }
+
     /** Generate static report only */
     public static void generateReportOnly() {
         try {

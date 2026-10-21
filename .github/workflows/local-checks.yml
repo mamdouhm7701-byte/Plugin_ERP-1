@@ -33,6 +33,11 @@ jobs:
           java-version: '21'
           cache: maven
       - name: Build and run local contracts
+        env:
+          REPORT_MAIL_ENABLED: ${{ secrets.REPORT_MAIL_ENABLED }}
+          REPORT_MAIL_USERNAME: ${{ secrets.REPORT_MAIL_USERNAME }}
+          REPORT_MAIL_PASSWORD: ${{ secrets.REPORT_MAIL_PASSWORD }}
+          REPORT_MAIL_TO: ${{ vars.REPORT_MAIL_TO }}
         run: >-
           mvn --batch-mode --no-transfer-progress -Pci
           "-Dallure.run.id=${{ github.run_id }}-${{ github.run_attempt }}-${{ runner.os }}"

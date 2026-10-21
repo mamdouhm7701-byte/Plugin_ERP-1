@@ -16,6 +16,7 @@
             <class name="Plugin_ERP.Utiel.DropdownPolicyTest"/>
             <class name="Plugin_ERP.Valditon.LegacyAssertionsTest"/>
             <class name="Plugin_ERP.Utiel.Allur.AllureReportPolicyTest"/>
+            <class name="Plugin_ERP.Utiel.Allur.ReportMailTest"/>
             <class name="SuiteSupport.CiSuiteContractTest"/>
             <class name="SuiteSupport.SuiteDefinitionsTest"/>
             <class name="SuiteSupport.WorkflowCleanupOrderTest"/>

@@ -22,7 +22,33 @@ import java.time.Instant;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TestNGListeners implements IExecutionListener, ITestListener {
+public class TestNGListeners implements IExecutionListener, ITestListener, org.testng.IReporter {
+
+    @Override
+    public void generateReport(java.util.List<org.testng.xml.XmlSuite> xmlSuites,
+            java.util.List<org.testng.ISuite> suites, String outputDirectory) {
+        if (!Plugin_ERP.Utiel.Allur.ReportMail.enabled() || !hasAllureResults()) return;
+        try {
+            // Regenerate from this run even when CI disables automatic HTML/opening.
+            AllureBinaryManger.generateReportOnly();
+            Path mailReport = Files.createTempDirectory("plugin-erp-testng-");
+            try {
+                new org.testng.reporters.EmailableReporter2().generateReport(xmlSuites, suites, mailReport.toString());
+                Plugin_ERP.Utiel.Allur.ReportMail.send(mailReport);
+                LogUtils.info("Allure and TestNG reports sent successfully.");
+                System.setProperty("report.mail.last.status", "sent");
+            } finally {
+                try (var paths = Files.walk(mailReport)) {
+                    for (Path path : paths.sorted(java.util.Comparator.reverseOrder()).toList()) Files.deleteIfExists(path);
+                }
+            }
+        } catch (Exception failure) {
+            // Keep test outcomes intact and do not leak SMTP authentication diagnostics.
+            System.setProperty("report.mail.last.status", "failed");
+            LogUtils.error("Report email failed (" + failure.getClass().getSimpleName()
+                    + "). Check mail configuration, connectivity and attachment size; reports remain local.");
+        }
+    }
 
     private static final ThreadLocal<Long> testStartTime = new ThreadLocal<>();
 

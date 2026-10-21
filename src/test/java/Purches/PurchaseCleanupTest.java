@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -16,7 +14,7 @@ public class PurchaseCleanupTest {
     @Test
     @io.qameta.allure.Description("العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
     public void normalCustomerIsTaxableAndKeepsItsOwnAccount() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         try (var data = new PurchaseTestData(api.driver())) {
             var customer = data.customer();
             var stored = data.read(customer);
@@ -33,7 +31,7 @@ public class PurchaseCleanupTest {
     @Story(
             "دورة الصفحة تحتفظ ببيانات الحالتين الناجحة والفاشلة وتغلق النوافذ ثم تنظف المجموعة مرة واحدة")
     public void actualPageLifecycleDefersCleanupUntilGroupEndEvenAfterFailure() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         var data = new PurchaseTestData(api.driver());
         var closes = new java.util.concurrent.atomic.AtomicInteger();
         var brokenBrowser = new java.util.concurrent.atomic.AtomicBoolean();
@@ -108,7 +106,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("تحديث سجل الاسترجاع بعد كل حذف ناجح حتى لا يعيد الانقطاع سجلات تم تنظيفها")
     public void interruptedCleanupJournalsOnlyRemainingOwnedRecords() throws Exception {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         var data = new PurchaseTestData(api.driver());
         var first = data.unit(1);
         var second = data.unit(2);
@@ -132,7 +130,7 @@ public class PurchaseCleanupTest {
     @Story(
             "استعادة مستند المشتريات من قائمة مختصرة لا تعرض الملاحظات أو المخزن مع حماية المستندات الأخرى")
     public void recoversSparsePurchaseListThroughVerifiedDetails() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.sparseMovementList = true;
         var data = new PurchaseTestData(api.driver());
         var item = data.item(1);
@@ -180,7 +178,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("التحقق من مورد سند القبض عبر تفاصيله عندما تخفي القائمة هوية المتعامل دون تعديل أي سند")
     public void receiptLookupUsesDetailsAndPreservesUnrelatedReceipts() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         var data = new PurchaseTestData(api.driver());
         var supplier = data.supplier();
         api.records.put(
@@ -219,7 +217,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("إعادة محاولة إنشاء بيانات الاختبار بعد إلغاء المعاملة بسبب تعارض أقفال دون تكرار السجل")
     public void retriesRolledBackDeadlockWithoutDuplicateFixture() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.deadlockCreates = 1;
         var data = new PurchaseTestData(api.driver());
         var unit = data.unit(1);
@@ -233,7 +231,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("تحديد إعادة محاولة تعارض الأقفال بثلاث محاولات مع إبقاء بيانات الاستعادة")
     public void boundsRolledBackDeadlockRetries() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.deadlockCreates = 4;
         var data = new PurchaseTestData(api.driver());
         Assert.expectThrows(AssertionError.class, () -> data.unit(1));
@@ -245,7 +243,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("فشل قراءة المورد لا يبرر حذف عميل موجود أو حساباته")
     public void customerLookupErrorCannotDeleteAnExistingCustomerOrItsAccounts() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         var data = new PurchaseTestData(api.driver());
         var customer = data.supplier();
         api.records.put(
@@ -266,7 +264,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("استعادة حساب ضاعت استجابته من شجرة الحسابات دون حذف حسابات أخرى")
     public void recoversLostAccountFromItsTreeWithoutDeletingExistingAccounts() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         var data = new PurchaseTestData(api.driver());
         String name = "QA-PU-lost-account";
         var values =
@@ -300,7 +298,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("انتظار تحميل الفرع الأصلي قبل الوصول إلى بيانات الاختبار")
     public void waitsForOriginalBranchHydrationBeforeFixtureAccess() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         var data = new PurchaseTestData(api.driver());
         api.branchUnavailableReads = 2;
         var unit = data.unit(1);
@@ -313,7 +311,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("مشاركة بيانات الصفحة الثابتة مع عزل الأصناف والموردين والأرصدة بين الحالات")
     public void pageFixturesAreSharedButCaseBalancesStayIsolated() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         var data = new PurchaseTestData(api.driver());
         data.beginScenario();
         var first = data.seedPurchase(1, "Purchases", "2026-01-01", "3", "0");
@@ -353,7 +351,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("الانتقال للحالة التالية يحتفظ بمحاولة الحفظ الفاشلة السابقة ويستعيدها")
     public void pageTransitionRetainsAndRecoversThePreviousFailedSave() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         var data = new PurchaseTestData(api.driver());
         data.beginScenario();
         var item = data.item(1);
@@ -388,7 +386,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("اكتشاف حفظ فعلي خلف استجابة فاشلة في اختبار رفض الحفظ")
     public void negativeSaveDetectsACommitBehindFailedResponse() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         var data = new PurchaseTestData(api.driver());
         var item = data.item(1);
         var before = data.documentIdentities();
@@ -431,7 +429,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("استعادة المرتجع الثاني دون الخلط بينه وبين المرتجع الأول المعروف")
     public void recoversSecondReturnWithoutConfusingKnownFirstReturn() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         var data = new PurchaseTestData(api.driver());
         var item = data.item(1);
         var common =
@@ -473,7 +471,7 @@ public class PurchaseCleanupTest {
     @Story("استعادة مستند محفوظ ضاعت استجابته لكل نوع من مستندات المشتريات")
     public void recoversLostResponseForEachSalesDocumentKind(
             String endpointType, String storedType) {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         var data = new PurchaseTestData(api.driver());
         var item = data.item(1);
         String marker = "QA-PU-lost-" + endpointType;
@@ -511,7 +509,7 @@ public class PurchaseCleanupTest {
     }
 
     private void rejectForeignContext(boolean tenant) throws Exception {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         var data = new PurchaseTestData(api.driver());
         var unit = data.unit(1);
         String suffix = unit.name().substring(unit.name().length() - 12);
@@ -530,7 +528,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("حذف المرتجع المرتبط قبل الفاتورة الأصلية")
     public void linkedReturnIsDeletedBeforeSourceInvoice() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         var data = new PurchaseTestData(api.driver());
         var source = data.seedPurchase(1, "Purchases", "2026-01-01", "3", "0");
         var values =
@@ -553,7 +551,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("حذف الفاتورة المدفوعة قبل وسيلة الدفع والبنك")
     public void paidInvoiceIsDeletedBeforePaymentMethodAndBank() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         var data = new PurchaseTestData(api.driver());
         var source = data.seedPurchase(1, "Purchases", "2026-01-01", "3", "300");
         var method = data.payment();
@@ -564,222 +562,12 @@ public class PurchaseCleanupTest {
         Assert.assertTrue(api.records.isEmpty());
     }
 
-    private static final class Api {
-        String origin = "offline", activeBranch = "branch-test";
-        int branchUnavailableReads;
-        boolean usedAccountTree;
-        boolean sparseMovementList;
-        int deadlockCreates, createCalls;
-        int crashAtDelete;
-        boolean customerGetAlways500, customerGet500WhenMissing;
-        final Map<String, Map<String, Object>> records = new LinkedHashMap<>();
-        final List<String> deletes = new ArrayList<>();
-        boolean timeOutStore;
-        boolean commitBeforeTimeout;
-        boolean rejectStore;
-        boolean emptyDeletedResponse;
-        boolean failAfterItemInsert;
-        boolean failAfterStoreInsert;
-        boolean failFixtureLookup;
-        boolean defaultDeletedDto;
-        boolean defaultDeletedMasterDto;
 
-        boolean missingDelete400;
-        boolean missingDeleteForExisting;
-        boolean rejectBranchUnlink;
-        boolean timeoutBranchUnlinkAfterCommit;
-        boolean rejectMovement;
-        boolean failMovementLookup;
-        Map<String, Object> branch =
-                new LinkedHashMap<>(
-                        Map.of(
-                                "id",
-                                "branch-test",
-                                "defaultStoreId",
-                                "existing-store",
-                                "phone",
-                                "original",
-                                "stores",
-                                new ArrayList<>(List.of(Map.of("storeId", "existing-store")))));
-
-        WebDriver driver() {
-            Object timeouts =
-                    Proxy.newProxyInstance(
-                            getClass().getClassLoader(),
-                            new Class<?>[] {WebDriver.Timeouts.class},
-                            (proxy, method, args) -> proxy);
-            Object options =
-                    Proxy.newProxyInstance(
-                            getClass().getClassLoader(),
-                            new Class<?>[] {WebDriver.Options.class},
-                            (proxy, method, args) -> timeouts);
-            return (WebDriver)
-                    Proxy.newProxyInstance(
-                            getClass().getClassLoader(),
-                            new Class<?>[] {WebDriver.class, JavascriptExecutor.class},
-                            (proxy, method, args) -> {
-                                if (method.getName().equals("executeScript")) {
-                                    String script = (String) args[0];
-                                    if (script.equals("return location.origin")) return origin;
-                                    if (script.startsWith("return document.querySelector")) {
-                                        if (branchUnavailableReads > 0) {
-                                            branchUnavailableReads--;
-                                            return null;
-                                        }
-                                        return activeBranch;
-                                    }
-                                    return true;
-                                }
-                                if (method.getName().equals("manage")) return options;
-                                if (method.getName().equals("executeAsyncScript"))
-                                    return request((Object[]) args[1]);
-                                if (method.getName().equals("toString"))
-                                    return "Fixture cleanup regression driver";
-                                return null;
-                            });
-        }
-
-        @SuppressWarnings("unchecked")
-        Object request(Object[] args) {
-            String action = (String) args[0], endpoint = (String) args[1];
-            Map<String, Object> values = (Map<String, Object>) args[2];
-            if (endpoint.equals("Branches")) {
-                if (action.equals("get")) return Map.of("entity", new LinkedHashMap<>(branch));
-                if (!action.equals("update"))
-                    throw new AssertionError("Never delete an existing branch");
-                boolean unlink =
-                        ((List<?>) values.get("stores")).size()
-                                < ((List<?>) branch.get("stores")).size();
-                if (unlink && rejectBranchUnlink)
-                    return Map.of("error", "Cannot unlink owned store", "status", 400);
-                branch = new LinkedHashMap<>(values);
-                if (unlink && timeoutBranchUnlinkAfterCommit) {
-                    timeoutBranchUnlinkAfterCommit = false;
-                    throw new TimeoutException("Lost unlink response after commit");
-                }
-                return Map.of("id", "branch-test");
-            }
-            if (action.equals("create")) {
-                createCalls++;
-                if (deadlockCreates > 0) {
-                    deadlockCreates--;
-                    return Map.of(
-                            "error",
-                            "Transaction was deadlocked and chosen as the deadlock victim",
-                            "status",
-                            500);
-                }
-                String id = endpoint + "-" + (records.size() + 1);
-                Map<String, Object> saved = new LinkedHashMap<>(values);
-                saved.put("id", id);
-                records.put(id, saved);
-                if (endpoint.equals("Items") && failAfterItemInsert)
-                    return Map.of("error", "Failed after insert", "status", 500);
-                if (endpoint.equals("Stores") && failAfterStoreInsert)
-                    return Map.of("error", "Lost store create response", "status", 500);
-                return Map.of("id", id);
-            }
-            if (action.equals("get") && endpoint.startsWith("Items/Summary"))
-                return Map.of("entity", new ArrayList<>(records.values()));
-            if (action.equals("get") && endpoint.startsWith("Accounts?"))
-                return Map.of("error", "Unsupported account list", "status", 405);
-            if (action.equals("get") && endpoint.startsWith("Aggregates/AccountTreeViewModel?")) {
-                usedAccountTree = true;
-                return Map.of(
-                        "entity",
-                        Map.of(
-                                "Accounts",
-                                new ArrayList<>(records.values()),
-                                "AccountsTree",
-                                new ArrayList<>(records.values())));
-            }
-            if (action.equals("get") && endpoint.startsWith("PurchaseLists?")) {
-                if (failMovementLookup) return Map.of("error", "Lookup unavailable", "status", 503);
-                var rows =
-                        records.values().stream()
-                                .filter(r -> r.containsKey("lines"))
-                                .map(r -> sparseMovementList ? Map.of("id", r.get("id")) : r)
-                                .toList();
-                return Map.of("entity", Map.of("pageData", rows, "totalRecords", rows.size()));
-            }
-            if (action.equals("get") && endpoint.startsWith("Collections?")) {
-                var rows =
-                        records.values().stream()
-                                .filter(r -> Boolean.TRUE.equals(r.get("receipt")))
-                                .map(r -> Map.of("id", r.get("id")))
-                                .toList();
-                return Map.of("entity", Map.of("pageData", rows, "totalRecords", rows.size()));
-            }
-            if (action.equals("get") && endpoint.contains("?")) {
-                if (failFixtureLookup)
-                    return Map.of("error", "Fixture lookup unavailable", "status", 503);
-                String namePart =
-                        endpoint.contains("arabicNamePart=")
-                                ? java.net.URLDecoder.decode(
-                                        endpoint.split("arabicNamePart=", 2)[1].split("&", 2)[0],
-                                        java.nio.charset.StandardCharsets.UTF_8)
-                                : null;
-                var rows =
-                        records.values().stream()
-                                .filter(
-                                        r ->
-                                                r.containsKey("id")
-                                                        && (r.containsKey("arabicName")
-                                                                || r.containsKey("englishName")))
-                                .filter(
-                                        r ->
-                                                namePart == null
-                                                        || String.valueOf(r.get("arabicName"))
-                                                                .contains(namePart))
-                                .toList();
-                return Map.of("entity", Map.of("pageData", rows, "totalRecords", rows.size()));
-            }
-            String id = values.get("id").toString();
-            if (action.equals("get")) {
-                if (endpoint.equals("Suppliers")
-                        && (customerGetAlways500
-                                || (customerGet500WhenMissing && !records.containsKey(id))))
-                    return Map.of("error", "Customer lookup failed", "status", 500);
-                return records.containsKey(id)
-                        ? Map.of("entity", records.get(id))
-                        : defaultDeletedMasterDto
-                                ? Map.of(
-                                        "entity",
-                                        Map.of("subUnits", List.of(), "type", "RawMaterial"))
-                                : defaultDeletedDto
-                                        ? Map.of("entity", Map.of("conversionRates", List.of()))
-                                        : emptyDeletedResponse
-                                                ? Map.of("entity", "")
-                                                : Map.of(
-                                                        "error",
-                                                        "Missing owned record",
-                                                        "status",
-                                                        404);
-            }
-            deletes.add(id);
-            if (crashAtDelete > 0 && deletes.size() == crashAtDelete)
-                throw new Error("Simulated interruption during cleanup");
-            if (endpoint.equals("Purchases") && rejectMovement)
-                return Map.of("error", "Movement is linked", "status", 400);
-            if (missingDeleteForExisting || (missingDelete400 && !records.containsKey(id)))
-                return Map.of("error", "Common.ObjectNotFound", "status", 400);
-            if (endpoint.equals("Stores")) {
-                if (rejectStore) return Map.of("error", "Record is in use", "status", 400);
-                if (timeOutStore) {
-                    timeOutStore = false;
-                    if (commitBeforeTimeout) records.remove(id);
-                    throw new TimeoutException("Simulated lost DELETE response");
-                }
-            }
-            records.remove(id);
-            return Map.of("ok", true);
-        }
-    }
 
     @Test
     @Story("حذف الحركة المملوكة للاختبار قبل أصنافها ومخازنها")
     public void deletesOwnedMovementBeforeItsItemsAndStores() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
         var item = data.item(1);
         var store = data.store(1);
@@ -804,7 +592,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("استعادة مخزن حُفظ قبل فقد استجابة الإنشاء")
     public void recoversStoreCommittedBeforeLostCreateResponse() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.failAfterStoreInsert = true;
         PurchaseTestData data = new PurchaseTestData(api.driver());
         Assert.expectThrows(AssertionError.class, () -> data.store(1));
@@ -822,7 +610,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("فشل التأكد من المخزن يحتفظ بحساباته")
     public void uncertainStoreLookupFailurePreservesItsAccounts() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.failAfterStoreInsert = true;
         PurchaseTestData data = new PurchaseTestData(api.driver());
         Assert.expectThrows(AssertionError.class, () -> data.store(1));
@@ -838,7 +626,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("التحقق من استمرار ارتباط المخزن غير المؤكد بحسابه المملوك للاختبار")
     public void uncertainStoreMustStillReferenceItsOwnedAccount() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.failAfterStoreInsert = true;
         PurchaseTestData data = new PurchaseTestData(api.driver());
         Assert.expectThrows(AssertionError.class, () -> data.store(1));
@@ -858,7 +646,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("استئناف إنشاء مخزن معلق من سجل التنظيف المحفوظ")
     public void resumesPendingStoreCreationFromDurableJournal() throws Exception {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.failAfterStoreInsert = true;
         WebDriver driver = api.driver();
         PurchaseTestData data = new PurchaseTestData(driver);
@@ -876,7 +664,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("الاحتفاظ بتبعيات المخزون عند فشل حذف الحركة")
     public void retainsStockDependenciesWhenMovementDeletionFails() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
         var item = data.item(1);
         var store = data.store(1);
@@ -897,7 +685,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("رفض تسجيل سجل غير مملوك للاختبار ضمن بيانات التنظيف")
     public void refusesTrackingUnownedRecord() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
         Assert.expectThrows(
                 AssertionError.class,
@@ -909,7 +697,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("التحقق من هوية البيانات قبل أول عملية حذف")
     public void checksIdentityBeforeFirstDeletion() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
         var unit = data.unit(1);
         api.records.put(
@@ -928,7 +716,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("تنظيف مستند بلا ملاحظات بعد التحقق من ملكية مخزنه وأصنافه")
     public void cleansSalesDocumentWithoutNotesUsingOwnedStoreAndItems() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
         var item = data.item(1);
         var store = data.store(1);
@@ -962,7 +750,7 @@ public class PurchaseCleanupTest {
     }
 
     private void salesDocumentIdentityMismatch(boolean storeChanged) {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
         var item = data.item(1);
         var store = data.store(1);
@@ -995,7 +783,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("استعادة إذن مخزني حُفظ قبل فقد استجابة الإنشاء")
     public void recoversWarehouseCreateCommittedBeforeLostResponse() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
         var item = data.item(1);
         var store = data.store(1);
@@ -1025,7 +813,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("فشل البحث عن إذن مخزني يحتفظ بجميع تبعياته")
     public void uncertainWarehouseLookupFailureRetainsAllParents() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
         var item = data.item(1);
         var store = data.store(1);
@@ -1053,7 +841,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("استعادة الملاحظات المعدلة بعد فقد استجابة التعديل")
     public void recoversUpdatedNoteAfterLostUpdateResponse() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
         var item = data.item(1);
         var store = data.store(1);
@@ -1085,7 +873,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("قبول استجابة عدم وجود السجل عند الحذف بعد تأكيد غيابه بالقراءة")
     public void acceptsMissingDeleteOnlyAfterReadConfirmsAbsence() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.missingDelete400 = true;
         PurchaseTestData data = new PurchaseTestData(api.driver());
         PurchaseTestData.Record store = data.store(1);
@@ -1097,7 +885,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("رفض اعتبار السجل محذوفاً عندما تؤكد القراءة وجوده")
     public void rejectsMissingDeleteWhenOwnedRecordStillExists() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
         PurchaseTestData.Record unit = data.unit(1);
         api.missingDeleteForExisting = true;
@@ -1111,7 +899,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("استعادة صنف أُنشئ من الواجهة رغم فشل الاستجابة")
     public void recoversUiItemCommittedBeforeFailedResponse() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
         PurchaseTestData.Record unit = data.unit(1), category = data.category();
         String name = "QA-PU-recover-" + java.util.UUID.randomUUID();
@@ -1133,7 +921,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("استعادة صنف غير صالح بعلامة الاختبار الإنجليزية الفريدة")
     public void recoversInvalidItemByUniqueEnglishMarker() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
         var unit = data.unit(1);
         var category = data.category();
@@ -1170,7 +958,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("إزالة ارتباط الفرع الخاص بالاختبار فقط مع حفظ التغييرات المتزامنة")
     public void removesOnlyOwnedBranchMembershipAndPreservesConcurrentChanges() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
         var store = data.store(1);
         Assert.assertTrue(
@@ -1195,7 +983,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("الاحتفاظ بالمخزن وحساباته عند تعذر إزالة ارتباطه المملوك للاختبار")
     public void retainsStoreAndAccountsWhenOwnedMembershipCannotBeRemoved() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
         var store = data.store(1);
         api.rejectBranchUnlink = true;
@@ -1210,7 +998,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("تأكيد فك ارتباط الفرع المنفذ بعد فقد الاستجابة")
     public void verifiesCommittedBranchUnlinkAfterLostResponse() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
         data.store(1);
         api.timeoutBranchUnlinkAfterCommit = true;
@@ -1222,7 +1010,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("إعادة محاولة الحذف غير المنفذ قبل حذف الحسابات التابعة")
     public void retriesUncommittedDeleteBeforeParentAccounts() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.timeOutStore = true;
         PurchaseTestData data = new PurchaseTestData(api.driver());
         PurchaseTestData.Record store = data.store(1);
@@ -1236,7 +1024,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("عدم تكرار الحذف عندما نُفذ الطلب الذي انتهت مهلته")
     public void doesNotDeleteAgainWhenTimedOutRequestAlreadyCommitted() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.timeOutStore = true;
         api.commitBeforeTimeout = true;
         PurchaseTestData data = new PurchaseTestData(api.driver());
@@ -1249,7 +1037,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("قبول قراءة نص فارغ بعد تأكيد تنفيذ الحذف المنتهية مهلته")
     public void acceptsEmptyStringReadAfterCommittedDeleteTimeout() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.timeOutStore = true;
         api.commitBeforeTimeout = true;
         api.emptyDeletedResponse = true;
@@ -1263,7 +1051,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("الاحتفاظ بالتبعيات المعطلة وإعادة محاولة تنظيف سجلات الاختبار فقط")
     public void retainsBlockedParentsAndRetriesOnlyItsOwnRecords() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.rejectStore = true;
         api.records.put(
                 "shared-record",
@@ -1281,7 +1069,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("تنظيف صنف الاختبار الذي حُفظ رغم فشل طلب الإنشاء")
     public void cleansOwnedItemCommittedBeforeCreateFailure() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.failAfterItemInsert = true;
         api.records.put(
                 "shared-item",
@@ -1307,7 +1095,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("قبول نموذج حركة افتراضي بعد التحقق من غياب الحركة")
     public void acceptsVerifiedMissingMovementDefaultDto() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.defaultDeletedDto = true;
         PurchaseTestData data = new PurchaseTestData(api.driver());
         PurchaseTestData.Record record =
@@ -1320,7 +1108,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("قبول نموذج بيانات أساسية افتراضي بعد التحقق من غياب السجل")
     public void acceptsVerifiedMissingMasterDefaultDto() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.defaultDeletedMasterDto = true;
         PurchaseTestData data = new PurchaseTestData(api.driver());
         PurchaseTestData.Record record = data.fixture("item", "Items", PurchaseTestData.fields());
@@ -1332,7 +1120,7 @@ public class PurchaseCleanupTest {
     @Test
     @Story("حذف السجل المعدل قبل المرجع الجديد الذي أصبح مرتبطاً به")
     public void updatedRecordDeletesBeforeItsNewReference() {
-        Api api = new Api();
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
         PurchaseTestData.Record original = data.store(1);
         PurchaseTestData.Record movement =

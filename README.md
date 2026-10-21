@@ -8,10 +8,12 @@
 
 إعدادات البيئة والمتصفح في `src/main/resources/WebData.properties`. بيانات الدخول محلية في `config/Login.local.properties` أو متغيرات البيئة؛ راجع [إعداد بيانات الدخول](docs/testing/CREDENTIALS_AR.md). لا تحفظ كلمات المرور في Git.
 
+GitHub Actions يشغّل الفحوص المحلية على Windows وUbuntu باستخدام Java 21. لإعادة نفس الفحص دون الاتصال بـERP استخدم `mvn -Pci verify`. النتائج داخل `target/ci`؛ لا يُفتح Allure تلقائيًا. راجع [دليل CI والتقارير](docs/testing/CI_AR.md).
+
 فحص محلي سريع لا يتصل بنظام ERP:
 
 ```powershell
-mvn '-Dtest=RuntimeCompatibilityTest,BrowserLifecycleTest,SuiteDefinitionsTest,SalesCalculationTest,PurchaseCalculationTest' test
+mvn '-Dtest=RuntimeCompatibilityTest,BrowserLifecycleTest,ConfigurationPropertiesTest,SuiteDefinitionsTest,SalesCalculationTest,PurchaseCalculationTest' test
 ```
 
 اختبار الدخول الفعلي:

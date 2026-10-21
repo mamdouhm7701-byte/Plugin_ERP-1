@@ -6,12 +6,33 @@ import java.nio.file.Paths;
 public class AllureConstants {
 
     // Project root
-    public static final Path PROJECT_DIR = Paths.get(System.getProperty("user.dir"));
+    public static final Path PROJECT_DIR = Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize();
 
     // Allure output
-    public static final Path ALLURE_RESULTS_DIR = PROJECT_DIR.resolve("allure-results");
+    public static final Path ALLURE_RESULTS_DIR = outputPath(PROJECT_DIR,
+            System.getProperty("allure.results.directory", "allure-results"));
 
-    public static final Path ALLURE_REPORT_DIR = PROJECT_DIR.resolve("allure-report");
+    public static final Path ALLURE_REPORT_DIR = outputPath(PROJECT_DIR,
+            System.getProperty("allure.report.directory", "allure-report"));
+
+    static {
+        if (ALLURE_RESULTS_DIR.startsWith(ALLURE_REPORT_DIR)
+                || ALLURE_REPORT_DIR.startsWith(ALLURE_RESULTS_DIR))
+            throw new IllegalArgumentException("Allure results and report directories must be separate");
+    }
+
+    static Path outputPath(Path project, String configured) {
+        Path root = project.toAbsolutePath().normalize();
+        if (configured.isBlank()) throw new IllegalArgumentException("Allure output directory is blank");
+        Path result = root.resolve(configured).normalize();
+        if (!result.startsWith(root) || result.equals(root) || result.equals(root.resolve("target")))
+            throw new IllegalArgumentException("Allure output must be a dedicated directory inside the project");
+        String top = root.relativize(result).getName(0).toString();
+        if (java.util.Set.of("src", "docs", "config", "outputs", ".git", ".idea", ".agents", ".mvn")
+                .contains(top.toLowerCase(java.util.Locale.ROOT)))
+            throw new IllegalArgumentException("Allure output cannot use a source or configuration directory");
+        return result;
+    }
 
     // History
     public static final Path REPORT_HISTORY_DIR = ALLURE_REPORT_DIR.resolve("history");

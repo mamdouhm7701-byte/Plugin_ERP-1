@@ -2,10 +2,7 @@ package Plugin_ERP.Utiel.Allur;
 
 import Plugin_ERP.Bots.LogUtils;
 import io.qameta.allure.Allure;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,8 +16,8 @@ public class AllureUtils {
     /** Delete allure-results folder quietly */
     public static void cleanAllureResults() {
         try {
-            FileUtils.deleteDirectory(new File("allure-results"));
-        } catch (IOException ignored) {
+            AllureBinaryManger.cleanAllure(true, false);
+        } catch (RuntimeException ignored) {
             // ignore
         }
     }

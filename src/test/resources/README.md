@@ -4,6 +4,8 @@
 
 ملفات التشغيل الأساسية موجودة مباشرة في هذا المجلد:
 
+- الفحوص المحلية الآلية: `ci-testng.xml`، وتشغيلها المفضل `mvn -Pci verify` لعزل النتائج وتعطيل توليد وفتح Allure تلقائيًا. لا يتصل هذا المدخل بـERP ولا يحتاج بيانات دخول.
+
 - مستويات الاختبار: `smoke-testng.xml` و`sanity-testng.xml` و`regression-testng.xml` و`e2e-testng.xml`.
 - الموديولات: `products-testng.xml` و`dealer-model-testng.xml` و`store-testng.xml` و`financial-movements-testng.xml` و`sales-testng.xml` و`purchases-testng.xml` و`special-sales-testng.xml`.
 - المصادقة: `login-testng.xml` يختبر الدخول الصحيح ورفض حساب عشوائي غير موجود، بجلسة متصفح جديدة لكل حالة، دون وراثة جلسة `BaseTest`.

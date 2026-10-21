@@ -26,6 +26,7 @@
             <class name="SuiteSupport.WorkflowCleanupOrderTest"/>
             <class name="SuiteSupport.RuntimeCompatibilityTest"/>
             <class name="SuiteSupport.BrowserLifecycleTest"/>
+            <class name="Plugin_ERP.Utiel.ConfigurationPropertiesTest"/>
         </classes>
     </test>
 </suite>

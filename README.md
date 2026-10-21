@@ -24,6 +24,8 @@
 
 GitHub Actions يشغّل الفحوص المحلية على Windows وUbuntu باستخدام Java 21. لإعادة نفس الفحص دون الاتصال بـERP استخدم `mvn -Pci verify`. النتائج داخل `target/ci`؛ لا يُفتح Allure تلقائيًا. راجع [دليل CI والتقارير](docs/testing/CI_AR.md).
 
+تم التحقق من نجاح **396 حالة على كل نظام داخل GitHub نفسه**؛ [نتيجة التشغيل المستضاف](docs/testing/GITHUB_CI_VALIDATION_AR.md).
+
 فحص محلي سريع لا يتصل بنظام ERP:
 
 ```powershell

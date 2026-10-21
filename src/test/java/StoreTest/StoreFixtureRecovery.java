@@ -11,11 +11,11 @@ public final class StoreFixtureRecovery extends BaseTest {
         StoreFixtureRecovery recovery = new StoreFixtureRecovery();
         try {
             recovery.setup();
-            new StoreModulePage(driver).smAwaitSession();
+            new StoreModulePage(recovery.driver).smAwaitSession();
             java.util.List<String> failures = new java.util.ArrayList<>();
             for (String id : journalIds)
                 try {
-                    StoreTestData.resume(driver, id).close();
+                    StoreTestData.resume(recovery.driver, id).close();
                 } catch (AssertionError | RuntimeException e) {
                     failures.add(id + ": " + e.getMessage());
                 }

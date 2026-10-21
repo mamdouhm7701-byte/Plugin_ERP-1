@@ -1194,6 +1194,7 @@ public class SalesCleanupTest {
                         }
                     };
             var harness = new SalesScenarioTest() {};
+            browser.bind(harness);
             harness.beginSalesScenario();
             harness.page = page;
             var data = harness.data;

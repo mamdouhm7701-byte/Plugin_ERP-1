@@ -18,6 +18,9 @@ public class WebDriverFactory {
     }
 
     public static WebDriver initDriver() {
+        if (driverThreadLocal.get() != null) {
+            throw new IllegalStateException("A browser is already active on this thread; close its owning class first");
+        }
         String browserType = PropertyReader.getProperty("BrowserType");
         if (browserType == null || browserType.isBlank()) {
             throw new IllegalArgumentException("BrowserType is missing or blank");
@@ -37,9 +40,15 @@ public class WebDriverFactory {
     }
 
     public static void quitDriver() {
-        if (driverThreadLocal.get() != null) {
-            driverThreadLocal.get().quit();
-            driverThreadLocal.remove();
+        quitDriver(driverThreadLocal.get());
+    }
+
+    /** Close the caller's browser without removing another owner's thread-local session. */
+    public static void quitDriver(WebDriver ownedDriver) {
+        try {
+            if (ownedDriver != null) ownedDriver.quit();
+        } finally {
+            if (driverThreadLocal.get() == ownedDriver) driverThreadLocal.remove();
         }
     }
 }

@@ -146,11 +146,6 @@ public class SupplierTest extends DealerScenarioTest {
     public void AddSupplierSecondPage() {
         Supplier supplier = new Supplier(driver);
         String recordName = ownedName(supplier, Pages.SUPPLIERS, "AddSupplierSecondPage");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         supplier.NavigationHelper(Pages.SUPPLIERS);
         supplier.ClickNewButtonForDealer();
         supplier.AddArabicName(recordName);
@@ -191,11 +186,6 @@ public class SupplierTest extends DealerScenarioTest {
     public void AddSupplierSupplierControlTab() {
         Supplier supplier = new Supplier(driver);
         String recordName = ownedName(supplier, Pages.SUPPLIERS, "AddSupplierSupplierControlTab");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         supplier.NavigationHelper(Pages.SUPPLIERS);
         supplier.ClickNewButtonForDealer();
         supplier.AddArabicName(recordName);
@@ -228,11 +218,6 @@ public class SupplierTest extends DealerScenarioTest {
     public void Edit() {
         prepareScenarioReferences("Edit");
         Supplier supplier = new Supplier(driver);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         supplier.NavigationHelper(Pages.SUPPLIERS);
         String originalName = seedRecord(supplier, Pages.SUPPLIERS, "EDIT-ORIGINAL");
         supplier.openDealerForEditByName(originalName);
@@ -313,11 +298,6 @@ public class SupplierTest extends DealerScenarioTest {
                     + " ويتحقق من ظهور رسالة خطأ تفيد بأن الاسم العربي حقل إلزامي.")
     public void AddSupplierWithOutArabicName() {
         Supplier supplier = new Supplier(driver);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         supplier.NavigationHelper(Pages.SUPPLIERS);
         supplier.ClickNewButtonForDealer();
         supplier.ClickSaveButton();

@@ -26,7 +26,7 @@ public abstract class SalesScenarioTest extends BaseTest {
     protected final Set<Object> allowedItems = new HashSet<>();
     private final List<SalesTestData> pending = new ArrayList<>();
 
-    @BeforeSuite(alwaysRun = true)
+    @BeforeClass(alwaysRun = true)
     public void awaitSalesSession() {
         driver.manage().window().setSize(new org.openqa.selenium.Dimension(1920, 1080));
         new SalesModulePage(driver).slAwaitSession();

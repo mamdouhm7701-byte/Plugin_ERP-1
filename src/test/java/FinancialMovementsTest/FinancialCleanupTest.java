@@ -524,6 +524,7 @@ public class FinancialCleanupTest {
                             return fixturePage;
                         }
                     };
+            browser.bind(harness);
             harness.newFinancialScenario();
             marker.set(harness.marker);
             var data = harness.data;

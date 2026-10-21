@@ -2,6 +2,14 @@
 
 Routine cleanup runs in `@AfterClass(alwaysRun=true)`. Each `@AfterMethod` still captures owned requests and records, retains failure evidence, and closes report windows. A failed final browser step does not prevent the class cleanup from trying its owned fixtures.
 
+`BaseTest` owns an instance browser and wait, initialized in `@BeforeClass`. Every screen class logs in with a fresh browser; session readiness hooks for products, stores, sales and purchases also run at class scope, after base setup. Subclass `@AfterClass` hooks finish owned fixture cleanup before the inherited base teardown closes that class's browser. Failed login setup closes its browser immediately, retaining the original error and any teardown error as suppressed evidence. WebDriverFactory clears its thread-local reference even when quitting fails and rejects replacing an already active browser.
+
+Methods within a screen class intentionally keep that class's browser and stable fixture references. Mutable records and captures remain case-scoped as described below. This change does not enable parallel methods or suites. Authentication tests retain their separate fresh-browser-per-method lifecycle. Local lifecycle harnesses bind their fake browser to the particular scenario instance rather than replacing a global driver.
+
+Base login now waits for the login form and then the home page instead of sleeping five seconds. Eighteen redundant two-second sleeps before dealer navigation were removed from CustomersTest and SupplierTest; navigation and dealer form actions already wait for overlays, clickable controls and form readiness. Other polling/backoff and legacy waits remain outside this change.
+
+Headless sessions explicitly keep a 1920×1080 window instead of maximizing: the initial live validation reproduced a login-readiness failure with headless maximize, while the same case passed with a fixed desktop viewport. `BrowserLifecycleTest` covers that choice alongside independent browser ownership, login failure cleanup, duplicate initialization and reference release after quit failure.
+
 ## Group boundaries and isolation
 
 | Module | Fixture group | Shared stable references | Independent per case |

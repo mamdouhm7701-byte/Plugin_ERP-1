@@ -10,11 +10,11 @@ public final class DealerFixtureRecovery extends DealerScenarioTest {
         var runner = new DealerFixtureRecovery();
         try {
             runner.setup();
-            new TestSupport.FixtureSession(driver);
+            new TestSupport.FixtureSession(runner.driver);
             if (args[0].equals("page")) {
                 runner.resumeOwnedRecords(args[1]);
                 runner.retryRemainingScenarioCleanup();
-            } else DealerTestData.resume(driver, args[1]).close();
+            } else DealerTestData.resume(runner.driver, args[1]).close();
         } finally {
             runner.tearDown();
         }

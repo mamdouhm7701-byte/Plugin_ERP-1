@@ -272,6 +272,7 @@ public class DealerCleanupTest {
         try (var browser = new TestSupport.FixtureBrowser(api.driver())) {
             var page = new Plugin_ERP.System_Modules.Login.AbstractForDealer(browser.driver);
             var harness = new DealerScenarioTest();
+            browser.bind(harness);
             harness.beginDealerCase();
             var data = harness.data();
             var first = data.account();

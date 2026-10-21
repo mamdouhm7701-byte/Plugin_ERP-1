@@ -7,8 +7,8 @@ public final class FinancialFixtureRecovery extends Plugin_ERP.Tests.LoginTest.B
         var runner = new FinancialFixtureRecovery();
         try {
             runner.setup();
-            new TestSupport.FixtureSession(driver);
-            FinancialTestData.resume(driver, args[0]).close();
+            new TestSupport.FixtureSession(runner.driver);
+            FinancialTestData.resume(runner.driver, args[0]).close();
         } finally {
             runner.tearDown();
         }

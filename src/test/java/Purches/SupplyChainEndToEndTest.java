@@ -35,6 +35,8 @@ public final class SupplyChainEndToEndTest extends PurchaseFormActions {
   private PurchaseTestData.Record buy(String quantity) {
     prepare("Credit"); buyer = data.customer(); salesAgent = data.agent(false);
     buyerBefore = data.read(buyer); supplierBefore = data.read(supplier);
+    org.testng.Assert.assertEquals(buyerBefore.get("isTaxable"), Boolean.TRUE);
+    org.testng.Assert.assertEquals(buyerBefore.get("isOnTheFly"), Boolean.FALSE);
     sourceBefore = initialBalances.get(1); destinationBefore = initialBalances.get(2);
     fill("picker"); page.puQuantity(item.name(), quantity); page.puWaitNet(number(quantity).multiply(number("100")).toPlainString());
     var invoice = save(false); assertStock(quantity); assertSupplierDelta(supplierBefore, number(quantity).multiply(number("-100")).toPlainString());
@@ -57,7 +59,7 @@ public final class SupplyChainEndToEndTest extends PurchaseFormActions {
   }
 
   private void customerDebt(String delta) {
-    var expected = signedBalance(buyerBefore).add(number(delta));
+    var expected = signedBalance(buyerBefore).add(number(sales.get(sales.size()-1).net(delta)));
     new WebDriverWait(driver, Duration.ofSeconds(30)).until(d -> signedBalance(data.read(buyer)).compareTo(expected) == 0);
   }
 
@@ -73,7 +75,7 @@ public final class SupplyChainEndToEndTest extends PurchaseFormActions {
     var purchase = buy("3"); transfer("3"); stock(sourceBefore, destinationBefore.add(number("3")));
     var sale = selling().sell("3"); stock(sourceBefore, destinationBefore); customerDebt("300");
     var receipt = new FinancialWorkflow(driver, false, buyer.id(), buyer.name(), salesAgent.name(), sale.id(), sale.code()); finances.add(receipt);
-    receipt.pay("300"); customerDebt("0"); assertSupplierDelta(supplierBefore, "-300");
+    receipt.pay(sales.get(sales.size()-1).net("300")); customerDebt("0"); assertSupplierDelta(supplierBefore, "-300");
     var payment = new FinancialWorkflow(driver, true, supplier.id(), supplier.name(), agent.name(), purchase.id(), data.read(purchase).get("code")); finances.add(payment);
     payment.pay("300"); assertSupplierDelta(supplierBefore, "0"); customerDebt("0"); stock(sourceBefore, destinationBefore);
   }

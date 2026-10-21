@@ -276,7 +276,9 @@ public class SalesModulePage extends AbstractForSales {
     }
 
     public void slDismiss() {
-        ready.until(
+        new WebDriverWait(driver, Duration.ofSeconds(90))
+                .ignoring(StaleElementReferenceException.class)
+                .ignoring(ElementClickInterceptedException.class).until(
                 d -> {
                     if (d.findElements(By.cssSelector(".swal2-container")).stream()
                             .noneMatch(WebElement::isDisplayed)) return true;

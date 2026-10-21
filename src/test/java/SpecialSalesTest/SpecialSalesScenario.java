@@ -33,6 +33,8 @@ public abstract class SpecialSalesScenario extends BaseTest {
     public void scenario() {
         data.beginScenario();
         customer = data.customer();
+        org.testng.Assert.assertEquals(data.read(customer).get("isTaxable"), Boolean.TRUE);
+        org.testng.Assert.assertEquals(data.read(customer).get("isOnTheFly"), Boolean.FALSE);
         item = data.item(1);
         defaults = data.configureOwnedDefaults(customer);
         restartPage();

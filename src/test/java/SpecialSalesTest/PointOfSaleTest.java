@@ -124,6 +124,8 @@ public class PointOfSaleTest extends SpecialSalesScenario {
                 + " المؤكدة.")
     public void savesCreditAndDeductsStock() {
         customer = data.registeredCustomer();
+        Assert.assertEquals(data.read(customer).get("isTaxable"), Boolean.TRUE);
+        Assert.assertEquals(data.read(customer).get("isOnTheFly"), Boolean.FALSE);
         restartPage();
         add();
         var pos = (PointOfSalePage) page;
@@ -134,19 +136,24 @@ public class PointOfSaleTest extends SpecialSalesScenario {
         prepareSave();
         page.save();
         var invoice = saved();
-        Assert.assertEquals(data.read(invoice).get("dealerId"), customer.id());
-        number(data.read(invoice).get("discountPercentage"), "0");
+        var stored = data.read(invoice);
+        Assert.assertEquals(stored.get("dealerId"), customer.id());
+        Allure.addAttachment("فاتورة نقاط البيع الآجلة المحفوظة",
+                "application/json", new org.json.JSONObject(stored).toString(2), ".json");
+        Assert.assertEquals(stored.get("paymentType"), "Credit",
+                "The persisted POS invoice must remain a credit sale");
+        number(stored.get("discountPercentage"), "0");
         Assert.assertTrue(
-                new java.math.BigDecimal(data.read(invoice).get("net").toString()).signum() > 0,
+                new java.math.BigDecimal(stored.get("net").toString()).signum() > 0,
                 "Credit fixture must have an unpaid positive amount");
         Assert.assertEquals(
-                data.read(invoice)
+                stored
                         .get("transactionChannel")
                         .toString()
                         .toLowerCase(java.util.Locale.ROOT),
                 "pos");
         number(data.balance(item, 1), "999");
-        customerBalance(data.read(invoice).get("net").toString());
+        customerBalance(stored.get("net").toString());
     }
 
     @Test

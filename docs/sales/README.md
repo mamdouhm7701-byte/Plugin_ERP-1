@@ -2,7 +2,7 @@
 
 Run `mvn -DExecutionType=LocalHeadless -Dsurefire.suiteXmlFiles=src/test/resources/sales-testng.xml test`.
 
-The new suite covers invoice, quotation, sales order, free return, linked return, sales list, arithmetic and fixture cleanup. The original SalesInvoiceTestCases, InvoiceTest and InvoiceListTestCases entry points are also migrated to owned fixtures. Their names and data-provider signatures are retained. Equivalent compatibility cases stay outside the main suite to avoid duplicate runs; use sales-compatibility-testng.xml to run them separately.
+The new suite covers invoice, quotation, sales order, free return, linked return, sales list, arithmetic and fixture cleanup. The original SalesInvoiceTestCases, InvoiceTest and InvoiceListTestCases entry points are also migrated to owned fixtures. Their names and data-provider signatures are retained. Equivalent compatibility cases stay outside the main suite to avoid duplicate runs; use additional/legacy/sales-compatibility-testng.xml to run them separately.
 
 ## Business contracts
 

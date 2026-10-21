@@ -62,6 +62,10 @@ public abstract class SalesScenarioTest extends BaseTest {
         return record;
     }
 
+    protected TestSupport.SalesTaxProfile salesTax;
+
+    protected String salesNet(String beforeTax) { return salesTax.net(beforeTax); }
+
     protected void prepare(String paymentType) {
         prepare(paymentType, false, false);
     }
@@ -70,6 +74,13 @@ public abstract class SalesScenarioTest extends BaseTest {
         this.paymentType = paymentType;
         item = ownItem(1);
         customer = data.customer();
+        var customerProfile = data.read(customer);
+        Assert.assertEquals(customerProfile.get("isTaxable"), Boolean.TRUE,
+                "Normal scenario customer must be taxable");
+        Assert.assertEquals(customerProfile.get("isOnTheFly"), Boolean.FALSE,
+                "Normal scenario customer must retain its own ledger");
+        Assert.assertEquals(customerProfile.get("creditNote"), Boolean.TRUE,
+                "Normal scenario customer must allow collection receipts");
         agent = data.agent();
         String capability =
                 switch (kind()) {
@@ -79,7 +90,7 @@ public abstract class SalesScenarioTest extends BaseTest {
                     case INVOICE -> paymentType.equals("Cash") ? "cashSales" : "creditSales";
                 };
         Assert.assertEquals(
-                data.read(customer).get(capability),
+                customerProfile.get(capability),
                 true,
                 "Owned customer fixture does not permit " + kind());
         if (paymentType.equals("Cash") && kind() != SalesDocumentKind.QUOTATION)
@@ -105,6 +116,7 @@ public abstract class SalesScenarioTest extends BaseTest {
         else if (page.slHasChoice("قوائم الأسعار") && !page.slChoiceEmpty("قوائم الأسعار"))
             page.slClearChoice("قوائم الأسعار");
         page.slNotes(marker);
+        salesTax = TestSupport.SalesTaxProfile.capture(driver);
     }
 
     protected void add(SalesTestData.Record record, String mode) {
@@ -120,7 +132,7 @@ public abstract class SalesScenarioTest extends BaseTest {
     protected void fill(String mode) {
         add(item, mode);
         page.slQuantity(item.name(), "3");
-        page.slWaitNet(priceList == null ? "300" : "375");
+        page.slWaitNet(salesNet(priceList == null ? "300" : "375"));
     }
 
     @SuppressWarnings("unchecked")
@@ -239,7 +251,8 @@ public abstract class SalesScenarioTest extends BaseTest {
     }
 
     protected void assertCustomerDelta(Map<String, Object> before, String expected) {
-        var target = customerBalance(before).add(new BigDecimal(expected));
+        String expectedWithTax = salesNet(expected);
+        var target = customerBalance(before).add(new BigDecimal(expectedWithTax));
         var last = new java.util.concurrent.atomic.AtomicReference<Map<String, Object>>();
         try {
             new WebDriverWait(driver, Duration.ofSeconds(30))
@@ -251,7 +264,7 @@ public abstract class SalesScenarioTest extends BaseTest {
         } catch (TimeoutException failure) {
             var evidence =
                     SalesTestData.fields(
-                            "before", before, "after", last.get(), "expectedDelta", expected);
+                            "before", before, "after", last.get(), "expectedDelta", expectedWithTax);
             Allure.addAttachment(
                     "Owned customer balance evidence",
                     "application/json",
@@ -270,7 +283,7 @@ public abstract class SalesScenarioTest extends BaseTest {
                         ".json");
             throw new AssertionError(
                     "Expected customer balance delta "
-                            + expected
+                            + expectedWithTax
                             + ", actual "
                             + customerBalance(last.get()).subtract(customerBalance(before)),
                     failure);

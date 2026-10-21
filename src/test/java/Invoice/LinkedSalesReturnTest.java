@@ -37,7 +37,7 @@ public final class LinkedSalesReturnTest extends SalesScenarioTest {
     public void partialLinkedReturnRestoresOnlyReturnedQuantity() {
         linked();
         page.slQuantity(item.name(), "1");
-        page.slWaitNet("100");
+        page.slWaitNet(salesNet("100"));
         var saved = save(false);
         sameNumber(firstLine(data.read(saved)).get("quantity"), "1");
         assertStock("1");
@@ -56,7 +56,7 @@ public final class LinkedSalesReturnTest extends SalesScenarioTest {
     public void fullLinkedReturnRestoresSoldQuantity() {
         linked();
         page.slQuantity(item.name(), "3");
-        page.slWaitNet("300");
+        page.slWaitNet(salesNet("300"));
         save(false);
         assertStock("3");
     }
@@ -66,7 +66,7 @@ public final class LinkedSalesReturnTest extends SalesScenarioTest {
     public void cumulativeLinkedReturnsCannotExceedSoldQuantity() {
         linked();
         page.slQuantity(item.name(), "2");
-        page.slWaitNet("200");
+        page.slWaitNet(salesNet("200"));
         save(false);
         assertStock("2");
         initialBalances.put(1, number(data.balance(item, 1)));

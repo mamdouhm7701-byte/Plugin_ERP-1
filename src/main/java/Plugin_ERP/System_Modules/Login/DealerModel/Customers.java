@@ -14,6 +14,21 @@ public class Customers extends AbstractForDealer {
         super(driver);
     }
 
+    /** العميل العادي دائم وخاضع للضريبة؛ حالات النقدي أو الإعفاء تختارها صراحة بعد فتح النموذج. */
+    @Override
+    public void ClickNewButtonForDealer() {
+        super.ClickNewButtonForDealer();
+        SmartCheck("عام", false);
+        customerProfile(true, false);
+    }
+
+    public void customerProfile(boolean taxable, boolean cashCustomer) {
+        SmartCheck("خاضع للضريبة", taxable);
+        SmartCheck("عميل نقدي", cashCustomer);
+        AssertCheckboxIsChecked("خاضع للضريبة", taxable);
+        AssertCheckboxIsChecked("عميل نقدي", cashCustomer);
+    }
+
     // Locators
     private By OpenDealerModel = By.xpath("//span[text()='المتعاملين']");
     private By customers = By.xpath("//span[text()='العملاء']");

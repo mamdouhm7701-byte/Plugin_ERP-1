@@ -33,7 +33,12 @@ public final class TransferWorkflow implements AutoCloseable {
     page.smCapture(marker, from.id(), item.id());
     page.smChoose("من مخزن", from.name()); page.smChoose("الي مخزن", to.name());
     page.smNotes(marker); page.smAddPicker(item.name()); page.smQuantity(item.name(), quantity); page.smSave(false);
-    wait.until(d -> { capture(); return !page.smSaves().isEmpty(); });
+    try {
+      wait.until(d -> { capture(); return !page.smSaves().isEmpty(); });
+    } catch (org.openqa.selenium.TimeoutException failure) {
+      Allure.addAttachment("E2E transfer save diagnostics", "application/json", page.smDiagnostics(), ".json");
+      throw new AssertionError("Owned transfer was not saved: " + page.smSaveErrors(), failure);
+    }
     page.smSettled(); capture();
     var saved = page.smSaves().get(page.smSaves().size() - 1);
     var values = (Map<String, Object>) saved.get("values");

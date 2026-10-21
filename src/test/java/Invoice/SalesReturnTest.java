@@ -10,10 +10,10 @@ public final class SalesReturnTest extends SalesFormTest {
         add(item, "picker");
         page.slQuantity(item.name(), "3");
         page.slSetLine(item.name(), "السعر", "125");
-        page.slWaitNet("375");
+        page.slWaitNet(salesNet("375"));
         var saved = save(false);
         sameNumber(firstLine(data.read(saved)).get("price"), "125");
-        sameNumber(data.read(saved).get("net"), "375");
+        sameNumber(data.read(saved).get("net"), salesNet("375"));
         assertStock("3");
         assertCustomerDelta(before, "-375");
     }

@@ -14,6 +14,22 @@ import io.qameta.allure.Story;
 
 public class SalesCleanupTest {
     @Test
+    @io.qameta.allure.Description("العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
+    public void normalCustomerIsTaxableAndKeepsItsOwnAccount() {
+        Api api = new Api();
+        try (var data = new SalesTestData(api.driver())) {
+            var customer = data.customer();
+            var stored = data.read(customer);
+            Assert.assertEquals(stored.get("isTaxable"), Boolean.TRUE);
+            Assert.assertEquals(stored.get("isOnTheFly"), Boolean.FALSE);
+            Assert.assertEquals(stored.get("creditSales"), Boolean.TRUE);
+            Assert.assertEquals(stored.get("creditNote"), Boolean.TRUE);
+            Assert.assertNotNull(stored.get("accountId"));
+        }
+        Assert.assertTrue(api.records.isEmpty());
+    }
+
+    @Test
     @Story("فشل قراءة العميل لا يبرر حذف عميل موجود أو حساباته")
     public void customerLookupErrorCannotDeleteAnExistingCustomerOrItsAccounts() {
         Api api = new Api();

@@ -63,6 +63,8 @@ public final class FinancialWorkflow implements AutoCloseable {
     page.openList(kind.route);
     page.identifyMovement(original.note(), read(original).get("code"));
     page.editOwned(original.note());
+    // تخصيص السند يقفل قيمته في التطبيق؛ نفك الربط من الواجهة ثم نعيده لنفس الفاتورة.
+    page.clearAllocationForEdit();
     marker = original.note();
     page.captureSaves(marker);
     page.amount(amount);

@@ -30,7 +30,7 @@ public abstract class SalesFormActions extends SalesScenarioTest {
         prepare("Credit");
         add(item, "picker");
         page.slQuantity(item.name(), "1.25");
-        page.slWaitNet("125");
+        page.slWaitNet(salesNet("125"));
         var saved = save(false);
         sameNumber(firstLine(data.read(saved)).get("quantity"), "1.25");
         assertStock("1.25");
@@ -42,7 +42,7 @@ public abstract class SalesFormActions extends SalesScenarioTest {
         var secondBefore = number(data.balance(second, 1));
         add(item, "picker");
         add(second, "picker");
-        page.slWaitNet("200");
+        page.slWaitNet(salesNet("200"));
         var saved = save(false);
         Assert.assertEquals(((List<?>) data.read(saved).get("lines")).size(), 2);
         assertStock("1");
@@ -64,7 +64,7 @@ public abstract class SalesFormActions extends SalesScenarioTest {
         add(item, "picker");
         add(second, "picker");
         page.slRemoveLine(second.name());
-        page.slWaitNet("100");
+        page.slWaitNet(salesNet("100"));
         var saved = save(false);
         Assert.assertEquals(((List<?>) data.read(saved).get("lines")).size(), 1);
         Assert.assertEquals(firstLine(data.read(saved)).get("itemId"), item.id());
@@ -77,11 +77,11 @@ public abstract class SalesFormActions extends SalesScenarioTest {
         add(item, "picker");
         page.slQuantity(item.name(), "3");
         page.slDiscount("0", true);
-        page.slWaitNet("300");
+        page.slWaitNet(salesNet("300"));
         page.slDiscount("10", true);
-        page.slWaitNet("270");
+        page.slWaitNet(salesNet("270"));
         var saved = save(false);
-        sameNumber(data.read(saved).get("net"), "270");
+        sameNumber(data.read(saved).get("net"), salesNet("270"));
         assertStock("3");
     }
 
@@ -91,11 +91,11 @@ public abstract class SalesFormActions extends SalesScenarioTest {
         add(item, "picker");
         page.slQuantity(item.name(), "3");
         page.slDiscount("0", true);
-        page.slWaitNet("300");
+        page.slWaitNet(salesNet("300"));
         page.slDiscount("15", false);
-        page.slWaitNet("285");
+        page.slWaitNet(salesNet("285"));
         var saved = save(false);
-        sameNumber(data.read(saved).get("net"), "285");
+        sameNumber(data.read(saved).get("net"), salesNet("285"));
         assertStock("3");
     }
 
@@ -103,7 +103,7 @@ public abstract class SalesFormActions extends SalesScenarioTest {
         prepare("Credit", true, false);
         fill("picker");
         var saved = save(false);
-        sameNumber(data.read(saved).get("net"), "375");
+        sameNumber(data.read(saved).get("net"), salesNet("375"));
         assertStock("3");
     }
 
@@ -233,7 +233,7 @@ public abstract class SalesFormActions extends SalesScenarioTest {
         }
         page.slCapture(marker, data.store(1).id(), item.id(), kind().endpoint);
         page.slQuantity(item.name(), "2");
-        page.slWaitNet("200");
+        page.slWaitNet(salesNet("200"));
         var edited = save(false);
         Assert.assertEquals(edited.id(), saved.id());
         sameNumber(firstLine(data.read(edited)).get("quantity"), "2");

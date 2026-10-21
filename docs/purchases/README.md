@@ -2,7 +2,7 @@
 
 Run `mvn -DExecutionType=LocalHeadless -Dsurefire.suiteXmlFiles=src/test/resources/purchases-testng.xml test`.
 
-The main suite covers purchase invoices, purchase orders, free returns, document conversion, the purchase list, arithmetic and cleanup safety. The original 25 public test names are preserved in `purchases-compatibility-testng.xml`; they use owned data rather than fixed suppliers, stores or barcodes. Each case has an Arabic Allure story. See [COVERAGE.md](COVERAGE.md).
+The main suite covers purchase invoices, purchase orders, free returns, document conversion, the purchase list, arithmetic and cleanup safety. The original 25 public test names are preserved in `additional/legacy/purchases-compatibility-testng.xml`; they use owned data rather than fixed suppliers, stores or barcodes. Each case has an Arabic Allure story. See [COVERAGE.md](COVERAGE.md).
 
 ## Confirmed business rules
 

@@ -29,6 +29,16 @@ mvn '-DExecutionType=LocalHeadless' '-Dsurefire.suiteXmlFiles=src/test/resources
 لا تجمع مدخل الشاشة المنفرد مع `special-sales-testng.xml` في التشغيل نفسه حتى لا تتكرر الحالات.
 
 `additional/standalone/browser-isolation-testng.xml` فحص حي من ثماني حالات عبر الوحدات والعملاء والمبيعات والمشتريات: متصفح جديد لكل كلاس مع الاحتفاظ بتنظيف بياناته قبل الإغلاق. أما `SuiteSupport.BrowserLifecycleTest` فهو فحص محلي لملكية المتصفح وإغلاقه عند فشل الدخول أو فشل الإغلاق.
+
+`additional/standalone/fixture-refactor-smoke-testng.xml` فحص حي محدد من ثماني حالات عبر الصرف والتصنيع ونقطة البيع والمطعم؛ يغطي إنشاء بيانات الاختبار والحفظ والأرصدة وإعدادات الفرع وتنظيف كل كلاس. مستقل عن CI المحلي. راجع `docs/testing/REFACTORING_AR.md` لأمر التشغيل والأدلة.
+
+`additional/standalone/fixture-data-refactor-smoke-testng.xml` فحص حي من عشر حالات عبر ستة كلاسات للوحدات والأصناف والعملاء والبيانات المترابطة للمتعاملين، وبيانات الحركات المالية وسند قبض بتوزيع على فاتورة. مستقل عن CI المحلي ويستخدم تنظيف الكلاسات الحالي. تفاصيل التشغيل في `docs/testing/REFACTORING_AR.md`.
+
+`additional/standalone/purchase-calendar-smoke-testng.xml` فحص حي لملكية نطاق المورد وفلتر تاريخ قائمة المشتريات، بحالتين وتنظيف مجموعة البيانات بعدهما. أما `PurchaseCalendarTest` ضمن CI فيفحص قراءة أسماء الأشهر محليًا دون متصفح.
+
+`additional/standalone/document-list-refactor-smoke-testng.xml` فحص حي من أربع حالات لنطاق العميل/المورد والكود المطابق في قائمتي المبيعات والمشتريات، مع تجهيز بيانات كل كلاس وتنظيفها.
+
+`additional/standalone/form-interactions-smoke-testng.xml` فحص حي من ست حالات للحفظ والحقول المطلوبة في المبيعات والمشتريات والتصنيع، بعد تنظيم تفاعلات النماذج المشتركة. تفاصيل النطاق والأدلة في `docs/testing/REFACTORING_AR.md`.
 احتفظنا بتعريفات التغطية كما هي؛ النقل لتنظيم مداخل التشغيل.
 
 `Test-Data/` يحتوي بيانات الاختبارات، وليس ملفات تشغيل. `pom.xml` في جذر المشروع يخص بناء Maven.

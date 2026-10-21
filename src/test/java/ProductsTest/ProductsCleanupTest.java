@@ -1,160 +1,18 @@
 package ProductsTest;
 
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class ProductsCleanupTest {
-    private static final class Api {
-        final Map<String, Map<String, Object>> records = new LinkedHashMap<>();
-        final List<String> deletes = new ArrayList<>();
-        int crashAtDelete;
-        boolean failAfterUnitInsert, failPendingLookup;
-        String activeBranch = "branch-test";
-        boolean timeOutStore;
-        boolean commitBeforeTimeout;
-        boolean rejectStore;
-        boolean emptyDeletedResponse;
-        boolean failAfterItemInsert;
-        boolean defaultDeletedDto;
-        boolean defaultDeletedMasterDto;
 
-        boolean missingDelete400;
-        boolean missingDeleteForExisting;
-        boolean rejectBranchUnlink;
-        boolean timeoutBranchUnlinkAfterCommit;
-        Map<String, Object> branch =
-                new LinkedHashMap<>(
-                        Map.of(
-                                "id",
-                                "branch-test",
-                                "defaultStoreId",
-                                "existing-store",
-                                "phone",
-                                "original",
-                                "stores",
-                                new ArrayList<>(List.of(Map.of("storeId", "existing-store")))));
-
-        WebDriver driver() {
-            Object timeouts =
-                    Proxy.newProxyInstance(
-                            getClass().getClassLoader(),
-                            new Class<?>[] {WebDriver.Timeouts.class},
-                            (proxy, method, args) -> proxy);
-            Object options =
-                    Proxy.newProxyInstance(
-                            getClass().getClassLoader(),
-                            new Class<?>[] {WebDriver.Options.class},
-                            (proxy, method, args) -> timeouts);
-            return (WebDriver)
-                    Proxy.newProxyInstance(
-                            getClass().getClassLoader(),
-                            new Class<?>[] {WebDriver.class, JavascriptExecutor.class},
-                            (proxy, method, args) -> {
-                                if (method.getName().equals("executeScript")) {
-                                    String code = (String) args[0];
-                                    if (code.equals("return location.origin")) return "offline";
-                                    return code.startsWith("return document.querySelector")
-                                            ? activeBranch
-                                            : true;
-                                }
-                                if (method.getName().equals("manage")) return options;
-                                if (method.getName().equals("executeAsyncScript"))
-                                    return request((Object[]) args[1]);
-                                if (method.getName().equals("toString"))
-                                    return "Fixture cleanup regression driver";
-                                return null;
-                            });
-        }
-
-        @SuppressWarnings("unchecked")
-        Object request(Object[] args) {
-            String action = (String) args[0], endpoint = (String) args[1];
-            Map<String, Object> values = (Map<String, Object>) args[2];
-            if (endpoint.equals("Branches")) {
-                if (action.equals("get")) return Map.of("entity", new LinkedHashMap<>(branch));
-                if (!action.equals("update"))
-                    throw new AssertionError("Never delete an existing branch");
-                boolean unlink =
-                        ((List<?>) values.get("stores")).size()
-                                < ((List<?>) branch.get("stores")).size();
-                if (unlink && rejectBranchUnlink)
-                    return Map.of("error", "Cannot unlink owned store", "status", 400);
-                branch = new LinkedHashMap<>(values);
-                if (unlink && timeoutBranchUnlinkAfterCommit) {
-                    timeoutBranchUnlinkAfterCommit = false;
-                    throw new TimeoutException("Lost unlink response after commit");
-                }
-                return Map.of("id", "branch-test");
-            }
-            if (action.equals("create")) {
-                String id = endpoint + "-" + (records.size() + 1);
-                Map<String, Object> saved = new LinkedHashMap<>(values);
-                saved.put("id", id);
-                records.put(id, saved);
-                if (endpoint.equals("Units") && failAfterUnitInsert)
-                    return Map.of("error", "Lost unit create response", "status", 500);
-                if (endpoint.equals("Items") && failAfterItemInsert)
-                    return Map.of("error", "Failed after insert", "status", 500);
-                return Map.of("id", id);
-            }
-            if (action.equals("get") && endpoint.startsWith("Items/Summary"))
-                return Map.of("entity", new ArrayList<>(records.values()));
-            if (action.equals("get") && endpoint.startsWith("Units?")) {
-                if (failPendingLookup)
-                    return Map.of("error", "Recovery lookup unavailable", "status", 503);
-                var rows =
-                        records.values().stream()
-                                .filter(r -> r.get("id").toString().startsWith("Units-"))
-                                .toList();
-                return Map.of("entity", Map.of("pageData", rows, "totalRecords", rows.size()));
-            }
-            String id = values.get("id").toString();
-            if (action.equals("get")) {
-                return records.containsKey(id)
-                        ? Map.of("entity", records.get(id))
-                        : defaultDeletedMasterDto
-                                ? Map.of(
-                                        "entity",
-                                        Map.of("subUnits", List.of(), "type", "RawMaterial"))
-                                : defaultDeletedDto
-                                        ? Map.of("entity", Map.of("conversionRates", List.of()))
-                                        : emptyDeletedResponse
-                                                ? Map.of("entity", "")
-                                                : Map.of(
-                                                        "error",
-                                                        "Missing owned record",
-                                                        "status",
-                                                        404);
-            }
-            deletes.add(id);
-            if (crashAtDelete > 0 && deletes.size() == crashAtDelete)
-                throw new Error("Simulated process interruption");
-            if (missingDeleteForExisting || (missingDelete400 && !records.containsKey(id)))
-                return Map.of("error", "Common.ObjectNotFound", "status", 400);
-            if (endpoint.equals("Stores")) {
-                if (rejectStore) return Map.of("error", "Record is in use", "status", 400);
-                if (timeOutStore) {
-                    timeOutStore = false;
-                    if (commitBeforeTimeout) records.remove(id);
-                    throw new TimeoutException("Simulated lost DELETE response");
-                }
-            }
-            records.remove(id);
-            return Map.of("ok", true);
-        }
-    }
 
     @Test
     public void acceptsMissingDeleteOnlyAfterReadConfirmsAbsence() {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         api.missingDelete400 = true;
         ProductsTestData data = new ProductsTestData(api.driver());
         ProductsTestData.Record store = data.store(1);
@@ -165,7 +23,7 @@ public class ProductsCleanupTest {
 
     @Test
     public void rejectsMissingDeleteWhenOwnedRecordStillExists() {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         ProductsTestData data = new ProductsTestData(api.driver());
         ProductsTestData.Record unit = data.unit(1);
         api.missingDeleteForExisting = true;
@@ -178,7 +36,7 @@ public class ProductsCleanupTest {
 
     @Test
     public void recoversUiItemCommittedBeforeFailedResponse() {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         ProductsTestData data = new ProductsTestData(api.driver());
         ProductsTestData.Record unit = data.unit(1), category = data.category();
         String name = "QA-PR-recover-" + java.util.UUID.randomUUID();
@@ -199,7 +57,7 @@ public class ProductsCleanupTest {
 
     @Test
     public void recoversInvalidItemByUniqueEnglishMarker() {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         ProductsTestData data = new ProductsTestData(api.driver());
         var unit = data.unit(1);
         var category = data.category();
@@ -235,7 +93,7 @@ public class ProductsCleanupTest {
 
     @Test
     public void removesOnlyOwnedBranchMembershipAndPreservesConcurrentChanges() {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         ProductsTestData data = new ProductsTestData(api.driver());
         var store = data.store(1);
         Assert.assertTrue(
@@ -259,7 +117,7 @@ public class ProductsCleanupTest {
 
     @Test
     public void retainsStoreAndAccountsWhenOwnedMembershipCannotBeRemoved() {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         ProductsTestData data = new ProductsTestData(api.driver());
         var store = data.store(1);
         api.rejectBranchUnlink = true;
@@ -273,7 +131,7 @@ public class ProductsCleanupTest {
 
     @Test
     public void verifiesCommittedBranchUnlinkAfterLostResponse() {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         ProductsTestData data = new ProductsTestData(api.driver());
         data.store(1);
         api.timeoutBranchUnlinkAfterCommit = true;
@@ -284,7 +142,7 @@ public class ProductsCleanupTest {
 
     @Test
     public void retriesUncommittedDeleteBeforeParentAccounts() {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         api.timeOutStore = true;
         ProductsTestData data = new ProductsTestData(api.driver());
         ProductsTestData.Record store = data.store(1);
@@ -297,7 +155,7 @@ public class ProductsCleanupTest {
 
     @Test
     public void doesNotDeleteAgainWhenTimedOutRequestAlreadyCommitted() {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         api.timeOutStore = true;
         api.commitBeforeTimeout = true;
         ProductsTestData data = new ProductsTestData(api.driver());
@@ -309,7 +167,7 @@ public class ProductsCleanupTest {
 
     @Test
     public void acceptsEmptyStringReadAfterCommittedDeleteTimeout() {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         api.timeOutStore = true;
         api.commitBeforeTimeout = true;
         api.emptyDeletedResponse = true;
@@ -322,7 +180,7 @@ public class ProductsCleanupTest {
 
     @Test
     public void retainsBlockedParentsAndRetriesOnlyItsOwnRecords() {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         api.rejectStore = true;
         api.records.put(
                 "shared-record",
@@ -339,7 +197,7 @@ public class ProductsCleanupTest {
 
     @Test
     public void cleansOwnedItemCommittedBeforeCreateFailure() {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         api.failAfterItemInsert = true;
         api.records.put(
                 "shared-item",
@@ -364,7 +222,7 @@ public class ProductsCleanupTest {
 
     @Test
     public void acceptsVerifiedMissingProductDefaultDto() {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         api.defaultDeletedDto = true;
         ProductsTestData data = new ProductsTestData(api.driver());
         ProductsTestData.Record record =
@@ -376,7 +234,7 @@ public class ProductsCleanupTest {
 
     @Test
     public void acceptsVerifiedMissingMasterDefaultDto() {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         api.defaultDeletedMasterDto = true;
         ProductsTestData data = new ProductsTestData(api.driver());
         ProductsTestData.Record record = data.fixture("item", "Items", ProductsTestData.fields());
@@ -387,7 +245,7 @@ public class ProductsCleanupTest {
 
     @Test
     public void updatedRecordDeletesBeforeItsNewReference() {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         ProductsTestData data = new ProductsTestData(api.driver());
         ProductsTestData.Record original = data.store(1);
         ProductsTestData.Record movement =
@@ -410,7 +268,7 @@ public class ProductsCleanupTest {
     @Test
     @io.qameta.allure.Story("مشاركة المراجع الثابتة بالصفحة وعزل بيانات كل حالة دون حذف بينها")
     public void pageScopeSharesOnlyStableReferences() {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         var data = new ProductsTestData(api.driver());
         Assert.expectThrows(
                 AssertionError.class,
@@ -438,7 +296,7 @@ public class ProductsCleanupTest {
     @Test
     @io.qameta.allure.Story("استكمال الحذف بعد انقطاع التشغيل من السجلات المتبقية فقط")
     public void interruptedPageCleanupResumesOnlyRemainingOwnedRecords() throws Exception {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         var data = new ProductsTestData(api.driver());
         var first = data.unit(1);
         var last = data.unit(2);
@@ -462,7 +320,7 @@ public class ProductsCleanupTest {
     @io.qameta.allure.Story(
             "الاحتفاظ بمحاولة الإنشاء عند فقد الاستجابة واستعادتها بعد إعادة التشغيل دون حذف المتطلبات مبكراً")
     public void resumesUncertainCreateBeforeDeletingItsDependencies() throws Exception {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         var data = new ProductsTestData(api.driver());
         var account = data.account("retained");
         api.failAfterUnitInsert = true;
@@ -480,7 +338,7 @@ public class ProductsCleanupTest {
     @Test
     @io.qameta.allure.Story("رفض استرجاع أو حذف سجلات المجموعة من فرع آخر")
     public void refusesRecoveryInAnotherBranch() throws Exception {
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         var data = new ProductsTestData(api.driver());
         data.unit(1);
         api.activeBranch = "another-branch";
@@ -499,7 +357,7 @@ public class ProductsCleanupTest {
             "دورة الصفحة الفعلية تحتفظ ببيانات الحالات وتغلق النوافذ وتنظف المجموعة مع فشل الخطوة الأخيرة")
     public void actualCallbacksKeepCasesUntilPageEndEvenAfterFailure() throws Exception {
 
-        Api api = new Api();
+        ProductsFixtureApiStub api = new ProductsFixtureApiStub();
         try (var browser = new TestSupport.FixtureBrowser(api.driver())) {
             var marker = new java.util.concurrent.atomic.AtomicReference<String>();
             var broken = new java.util.concurrent.atomic.AtomicBoolean();

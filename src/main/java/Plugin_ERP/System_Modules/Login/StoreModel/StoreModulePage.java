@@ -3,6 +3,7 @@ package Plugin_ERP.System_Modules.Login.StoreModel;
 import Plugin_ERP.System_Modules.Login.AbstractForStore;
 import Plugin_ERP.Utiel.PropertyReader;
 import io.qameta.allure.Step;
+import Plugin_ERP.Utiel.FormInteractions;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -11,6 +12,7 @@ import org.openqa.selenium.support.ui.*;
 /** Warehouse UI interactions; scenarios and persisted inventory assertions live in tests. */
 public class StoreModulePage extends AbstractForStore {
     protected final WebDriverWait ready;
+    private final FormInteractions interactions;
     private Object ownedId;
     private String ownedMarker;
     private By listSearch;
@@ -20,6 +22,8 @@ public class StoreModulePage extends AbstractForStore {
         ready = new WebDriverWait(driver, Duration.ofSeconds(35));
         ready.ignoring(StaleElementReferenceException.class)
                 .ignoring(ElementClickInterceptedException.class);
+        interactions = new FormInteractions(ready,
+                element -> js("arguments[0].scrollIntoView({block:'center',inline:'center'})", element));
     }
 
     public void smAwaitSession() {
@@ -56,33 +60,11 @@ public class StoreModulePage extends AbstractForStore {
     }
 
     private void smType(By by, String value, boolean blur) {
-        ready.until(
-                d -> {
-                    for (WebElement e : d.findElements(by)) {
-                        js("arguments[0].scrollIntoView({block:'center',inline:'center'})", e);
-                        if (!e.isDisplayed() || !e.isEnabled()) continue;
-                        e.sendKeys(Keys.CONTROL + "a");
-                        e.sendKeys(Keys.DELETE);
-                        if (!value.isEmpty()) e.sendKeys(value);
-                        if (blur) e.sendKeys(Keys.TAB);
-                        return true;
-                    }
-                    return false;
-                });
+        interactions.type(by, value, blur, FormInteractions.InputMode.CLEAR_REPLACE);
     }
 
     protected void smClick(By by) {
-        ready.until(
-                d -> {
-                    for (WebElement e : d.findElements(by)) {
-                        js("arguments[0].scrollIntoView({block:'center',inline:'center'})", e);
-                        if (e.isDisplayed() && e.isEnabled()) {
-                            e.click();
-                            return true;
-                        }
-                    }
-                    return false;
-                });
+        interactions.click(by);
     }
 
     @Step("اختيار {name} من {label}")
@@ -92,45 +74,7 @@ public class StoreModulePage extends AbstractForStore {
                         "//*[self::label or self::legend][normalize-space()='"
                                 + label
                                 + "']/following::input[contains(@class,'vs__search')][1]");
-        ready.until(
-                d -> {
-                    for (WebElement input : d.findElements(by)) {
-                        js("arguments[0].scrollIntoView({block:'center',inline:'center'})", input);
-                        if (!input.isDisplayed() || !input.isEnabled()) continue;
-                        if (!name.equals(input.getDomProperty("value"))) {
-                            input.click();
-                            input.sendKeys(Keys.CONTROL + "a");
-                            input.sendKeys(name);
-                        }
-                        String id = input.getDomAttribute("aria-controls");
-                        List<WebElement> options =
-                                d
-                                        .findElements(
-                                                By.xpath(
-                                                        "//ul[@id='"
-                                                                + id
-                                                                + "']//li[not(@aria-disabled='true')]"))
-                                        .stream()
-                                        .filter(WebElement::isDisplayed)
-                                        .filter(
-                                                e -> {
-                                                    String text =
-                                                            e.getText()
-                                                                    .trim()
-                                                                    .replaceAll("\\s+", " ");
-                                                    return text.equals(name)
-                                                            || text.startsWith(name + " - ")
-                                                            || text.endsWith(" - " + name);
-                                                })
-                                        .toList();
-                        if (options.isEmpty()) return false;
-                        if (options.size() != 1)
-                            throw new AssertionError("Ambiguous owned option: " + name);
-                        options.get(0).click();
-                        return true;
-                    }
-                    return false;
-                });
+        interactions.choose(by, name, FormInteractions.OptionMatch.NAME_AT_EDGE);
     }
 
     public void smClearChoice(String label) {

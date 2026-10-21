@@ -1,5 +1,6 @@
 package DealerModelTest;
 
+import DealerModelTest.DealerFixtureApi.ApiFailure;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -12,12 +13,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 /** Per-scenario fixtures. Uses the logged-in application's API client and current branch. */
 final class DealerTestData implements AutoCloseable {
-  private static final class ApiFailure extends AssertionError {
-    private final int status;
-    ApiFailure(int status, String message) { super(message); this.status = status; }
-  }
+
   record Record(String endpoint, Object id, String name, Map<String, Object> values) {}
   private final WebDriver driver;
+  private final DealerFixtureApi api;
+  private final DealerFixtureDefinitions definitions = new DealerFixtureDefinitions(this);
   private final String suffix;
   private final TestSupport.FixtureSession session;
   private final TestSupport.PendingFixtureWrites pendingWrites;
@@ -30,6 +30,7 @@ final class DealerTestData implements AutoCloseable {
     this.driver = driver;
     this.session=new TestSupport.FixtureSession(driver);
     this.pendingWrites=new TestSupport.PendingFixtureWrites(session,"dealer",suffix);
+    this.api=new DealerFixtureApi(driver,session::verify);
     new WebDriverWait(driver, Duration.ofSeconds(30)).until(d ->
         ((JavascriptExecutor) d).executeScript("return Boolean(document.querySelector('#app')"
             + "?.__vue__?.$store?.getters['app/currentBranch']?.id)"));
@@ -59,62 +60,35 @@ final class DealerTestData implements AutoCloseable {
     return values;
   }
 
-  Record area() { return fixture("area", "Areas", fields()); }
+  Record area() {
+    return definitions.area();
+  }
   Record classification(String type) {
-    return fixture("class-" + type, "DealerClassifications", fields("classificationType", type));
+    return definitions.classification(type);
   }
   Record mainDealer(String type) {
-    return fixture("main-" + type, "MainDealers", fields("type", type));
+    return definitions.mainDealer(type);
   }
   Record agent(String nature) {
-    return fixture("agent-" + nature, "Agents", fields("nature", nature,
-        "commissionSlices", List.of(), "itemCommissions", List.of(),
-        "isActive", true, "areaId", area().id(),
-        "dealersClassificationId", classification("Agents").id()));
+    return definitions.agent(nature);
   }
   Record account() {
-    Record parent = fixture("account-main", "Accounts", fields("type", "Main",
-        "code", Integer.toString(java.util.concurrent.ThreadLocalRandom.current().nextInt(10000000, 99999999)),
-        "nature", "Debit", "finalAccountType", "Budget", "level", 1,
-        "isDistributable", false, "isSharedBetweenBranches", false,
-        "prevDebit", 0, "prevCredit", 0, "previousBalances", List.of()));
-    return fixture("account-sub", "Accounts", fields("type", "Sub", "nature", "Debit",
-        "code", parent.values().get("code") + "01",
-        "finalAccountType", "Budget", "parentId", parent.id(), "level", 2,
-        "isDistributable", false, "isSharedBetweenBranches", false,
-        "prevDebit", 0, "prevCredit", 0, "previousBalances", List.of()));
+    return definitions.account();
   }
   Record store() {
-    return fixture("store", "Stores", fields("accountId", account().id()));
+    return definitions.store();
   }
   Record unit() {
-    return fixture("unit", "Units", fields("conversionRates", List.of()));
+    return definitions.unit();
   }
   Record category() {
-    Record parent = fixture("category-main", "ItemCategories", fields("isMain", true));
-    return fixture("category-sub", "ItemCategories", fields("isMain", false,
-        "parentCategoryId", parent.id()));
+    return definitions.category();
   }
   Record item(int index) {
-    String barcode = "QA" + UUID.randomUUID().toString().replace("-", "");
-    return fixture("item-" + index, "Items", fields(
-        "categoryId", category().id(), "mainUnitId", unit().id(),
-        "mainUnitBarcode", barcode, "salesPrice", 100, "minSalesPrice", 90,
-        "maxSalesPrice", 110, "isScalesItem", false, "isTaxable", false,
-        "isStoreItem", true, "type", "RawMaterial", "itemTax", 0,
-        "subUnits", List.of(), "components", List.of(), "additions", List.of(),
-        "offers", List.of(), "discounts", List.of(), "sales", true, "purch", true,
-        "returnSales", true, "returnPurch", true, "quotation", true,
-        "salesOrder", true, "purchOrder", true, "storageTransfer", true,
-        "additionOrder", true, "exchangeOrder", true, "damageAdjustment", true,
-        "stores", List.of(fields("storeId", store().id(), "itemPlace", "QA",
-            "openingBalance", 0, "currentBalance", 0, "minimumLimit", 0,
-            "reorderLimit", 0, "costPrice", 80, "isActive", true))));
+    return definitions.item(index);
   }
   Record priceList() {
-    return fixture("price-list", "PriceLists", fields("items", List.of(),
-        "pricelistDate", java.time.LocalDate.now().toString(),
-        "code", Integer.toString(java.util.concurrent.ThreadLocalRandom.current().nextInt(10000000, 99999999))));
+    return definitions.priceList();
   }
 
   @SuppressWarnings("unchecked")
@@ -128,7 +102,7 @@ final class DealerTestData implements AutoCloseable {
     return (Map<String, Object>) entity;
   }
 
-  private Record fixture(String key, String endpoint, Map<String, Object> values) {
+  Record fixture(String key, String endpoint, Map<String, Object> values) {
     key=fixtureKey(key);
     if (fixtures.containsKey(key)) return fixtures.get(key);
     String name = "QA-" + key + "-" + suffix;
@@ -148,40 +122,8 @@ final class DealerTestData implements AutoCloseable {
     return record;
   }
 
-  @SuppressWarnings("unchecked")
   private Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
-    session.verify();
-    driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(action.equals("delete") ? 60 : 30));
-    Object result = ((JavascriptExecutor) driver).executeAsyncScript("""
-        const [action, endpoint, values, done] = arguments;
-        const root = document.querySelector('#app')?.__vue__;
-        if (!root?.$store) { done({error:'Authenticated ERP session is not ready'}); return; }
-        const queue = [root]; let branchId = null;
-        while (queue.length) {
-          const vm = queue.shift();
-          if (vm.currentBranch?.id) { branchId = vm.currentBranch.id; break; }
-          queue.push(...(vm.$children || []));
-        }
-        const args = {url: endpoint};
-        if (action === 'create') {
-          if (!branchId) { done({error:'No current branch selected'}); return; }
-          args.data = {...values, branchId};
-        } else { args.id = values.id; }
-        root.$store.dispatch('app/' + action, args).then(result => {
-          if (action === 'delete') { done({ok:true}); return; }
-          const entity = result?.data || result;
-          done({id: entity?.id || (typeof entity === 'string' || typeof entity === 'number' ? entity : null),
-            code: entity?.code || null,
-            entity: action === 'get' ? JSON.parse(JSON.stringify(entity)) : null});
-        }).catch(error => done({status: error?.status || 0,
-          error: JSON.stringify(error?.data || {status:error?.status, message:String(error)})}));
-        """, action, endpoint, values);
-    Map<String, Object> response = (Map<String, Object>) result;
-    if (response.get("error") != null) {
-      int status = response.get("status") instanceof Number number ? number.intValue() : 0;
-      throw new ApiFailure(status, "Fixture " + action + " " + endpoint + ": " + response.get("error"));
-    }
-    return response;
+    return api.call(action, endpoint, values);
   }
 
   private void recoverPendingFixtures(){pendingWrites.recover((endpoint,values)->call("get",endpoint,values),(endpoint,id,name,values)->{if(created.stream().noneMatch(r->r.endpoint().equals(endpoint)&&r.id().equals(id))){created.add(new Record(endpoint,id,name,new LinkedHashMap<>(values)));journal();}});}

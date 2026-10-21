@@ -2,13 +2,20 @@ package Plugin_ERP.Valditon;
 
 import Plugin_ERP.Bots.LogUtils;
 import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 // soft to spell "Validation"
 public class Validation extends BaseAssertion {
-    private static SoftAssert softAssert = new SoftAssert();
-    private static boolean used = false;
+    private static final ThreadLocal<SoftAssert> assertions = new ThreadLocal<>();
+
+    private static SoftAssert currentAssertions() {
+        SoftAssert current = assertions.get();
+        if (current == null) {
+            current = new SoftAssert();
+            assertions.set(current);
+        }
+        return current;
+    }
 
     public Validation(WebDriver driver) {
         super(driver);
@@ -16,31 +23,29 @@ public class Validation extends BaseAssertion {
 
     @Override
     protected void assertrue(boolean condition, String message) {
-        used = true;
-        softAssert.assertTrue(condition, message);
+        currentAssertions().assertTrue(condition, message);
     }
 
     @Override
     protected void asserfalse(boolean condition, String message) {
-        used = true;
-        softAssert.assertFalse(condition, message);
+        currentAssertions().assertFalse(condition, message);
     }
 
     @Override
     protected void assertequals(Object actual, Object expected, String message) {
-        used = true;
-        softAssert.assertEquals(actual, expected, message);
+        currentAssertions().assertEquals(actual, expected, message);
     }
 
     public static void AsserAll() {
-        if (!used) return;
+        SoftAssert current = assertions.get();
+        if (current == null) return;
         try {
-            softAssert.assertAll();
+            current.assertAll();
         } catch (AssertionError e) {
             LogUtils.error("Assertion failed: " + e.getMessage());
             throw e;
         } finally {
-            softAssert = new SoftAssert();
+            assertions.remove();
         }
     }
 }

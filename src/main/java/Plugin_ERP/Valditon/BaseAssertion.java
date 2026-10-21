@@ -4,6 +4,8 @@ import Plugin_ERP.Bots.ElmentAction;
 import Plugin_ERP.Bots.WaitMangment;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public abstract class BaseAssertion {
     protected final WebDriver driver;
@@ -27,18 +29,14 @@ public abstract class BaseAssertion {
     }
 
     protected void Visible(By locator) {
-        boolean flag =
-                waitMangment
-                        .fluentWait()
-                        .until(
-                                driver1 -> {
-                                    try {
-                                        driver1.findElement(locator).isDisplayed();
-                                        return true;
-                                    } catch (Exception e) {
-                                        return false;
-                                    }
-                                });
+        boolean flag;
+        try {
+            waitMangment.fluentWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
+            flag = true;
+        } catch (TimeoutException notVisible) {
+            // Keep hard/soft assertion behavior consistent when the bounded wait expires.
+            flag = false;
+        }
         assertrue(flag, "❌ العنصر المحدد غير مرئي: " + locator.toString());
     }
 

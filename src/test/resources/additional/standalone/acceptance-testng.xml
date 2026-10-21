@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Live acceptance gate, separate from offline CI; owned fixtures are cleaned per class. -->
+<suite name="Authentication and core ERP acceptance" parallel="none" configfailurepolicy="continue">
+    <suite-files>
+        <suite-file path="../../login-testng.xml"/>
+        <suite-file path="../../smoke-testng.xml"/>
+    </suite-files>
+</suite>

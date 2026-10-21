@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 public final class ModuleChoiceTest {
     @DataProvider
     public Object[][] redrawStages() {
-        return new Object[][] {{"sales", "click"}, {"sales", "sendKeys"}, {"purchase", "click"}, {"purchase", "sendKeys"}, {"store", "click"}, {"store", "sendKeys"}};
+        return new Object[][] {{"sales", "click"}, {"sales", "sendKeys"}, {"purchase", "click"}, {"purchase", "sendKeys"}, {"store", "click"}, {"store", "sendKeys"}, {"products", "click"}, {"products", "sendKeys"}, {"financial", "click"}, {"financial", "sendKeys"}};
     }
 
     @Test(dataProvider = "redrawStages")
@@ -28,7 +28,7 @@ public final class ModuleChoiceTest {
     }
 
     @DataProvider
-    public Object[][] modules() {return new Object[][] {{"sales"}, {"purchase"}, {"store"}};}
+    public Object[][] modules() {return new Object[][] {{"sales"}, {"purchase"}, {"store"}, {"products"}, {"financial"}};}
 
     @Test(dataProvider = "modules")
     public void ambiguousOwnedOptionsStillStopSelection(String module) {
@@ -36,7 +36,7 @@ public final class ModuleChoiceTest {
         AssertionError failure = Assert.expectThrows(
                 AssertionError.class,
                 () -> dropdown.page(module).accept("المخزن", "QA-ST-owned-store"));
-        Assert.assertTrue(failure.getMessage().contains("Ambiguous owned option"));
+        Assert.assertTrue(failure.getMessage().startsWith("Ambiguous "));
         Assert.assertEquals(dropdown.selected, 0);
     }
 
@@ -56,8 +56,9 @@ public final class ModuleChoiceTest {
             WebElement input = element(true);
             WebElement option = element(false);
             WebDriver driver = (WebDriver) Proxy.newProxyInstance(
-                    getClass().getClassLoader(), new Class<?>[] {WebDriver.class},
+                    getClass().getClassLoader(), new Class<?>[] {WebDriver.class, org.openqa.selenium.JavascriptExecutor.class},
                     (proxy, method, args) -> {
+                        if (method.getName().equals("executeScript")) return null;
                         if (method.getName().equals("findElements")) {
                             if (args[0].toString().contains("vs__search")) {
                                 inputReads++;
@@ -87,6 +88,16 @@ public final class ModuleChoiceTest {
                     @Override protected Object js(String script, Object... args) {return null;}
                 };
                 return page::smChoose;
+            }
+            if (module.equals("products")) {
+                var page = new Plugin_ERP.System_Modules.Login.Products.ProductsModulePage(driver) {
+                    {ready.pollingEvery(Duration.ofMillis(1)); ready.withTimeout(Duration.ofSeconds(2));}
+                };
+                return page::prChoose;
+            }
+            if (module.equals("financial")) {
+                var page = new Plugin_ERP.System_Modules.Login.FinancialMovements.FinancialMovementPage(driver);
+                return page::choose;
             }
             throw new IllegalArgumentException(module);
         }

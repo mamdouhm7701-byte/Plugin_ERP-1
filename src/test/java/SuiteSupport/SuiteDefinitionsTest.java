@@ -25,7 +25,14 @@ public final class SuiteDefinitionsTest {
         {"smoke"}, {"sanity"}, {"regression"}, {"e2e"}, {"login"}, {"ci"},
         {"additional/standalone/browser-isolation"},
         {"additional/standalone/point-of-sale"}, {"additional/standalone/restaurant"}, {"special-sales"},
-        {"additional/standalone/fixture-lifecycle"}, {"additional/internal/regression-additional"}, {"additional/internal/regression-workflows"}
+        {"additional/standalone/fixture-lifecycle"}, {"additional/internal/regression-additional"}, {"additional/internal/regression-workflows"},
+        {"additional/standalone/fixture-refactor-smoke"},
+        {"additional/standalone/fixture-data-refactor-smoke"},
+        {"additional/standalone/purchase-calendar-smoke"},
+        {"additional/standalone/document-list-refactor-smoke"},
+        {"additional/standalone/form-interactions-smoke"},
+        {"additional/standalone/products-finance-interactions-smoke"},
+        {"additional/standalone/acceptance"}
     };
   }
 

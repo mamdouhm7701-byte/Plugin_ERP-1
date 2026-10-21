@@ -4,6 +4,8 @@ import Plugin_ERP.Bots.LogUtils;
 import Plugin_ERP.Drivers.WebDriverFactory;
 import Plugin_ERP.Utiel.Allur.AllureBinaryManger;
 import Plugin_ERP.Utiel.Allur.AllureEnvironment;
+import Plugin_ERP.Utiel.Allur.AllureConstants;
+import Plugin_ERP.Utiel.Allur.AllureReportPolicy;
 import Plugin_ERP.Utiel.PropertyReader;
 import Plugin_ERP.Utiel.ScreenShotsUtils;
 import org.openqa.selenium.Capabilities;
@@ -32,7 +34,8 @@ public class TestNGListeners implements IExecutionListener, ITestListener {
 
         // 1) تحميل properties
         PropertyReader.loadProperties();
-        System.setProperty("allure.run.id", "local-" + Instant.now().toEpochMilli());
+        if (System.getProperty("allure.run.id", "").isBlank())
+            System.setProperty("allure.run.id", "run-" + java.util.UUID.randomUUID());
 
         // Preserve trend history while clearing only raw files from the previous run.
         AllureBinaryManger.prepareResultsForRun();
@@ -44,7 +47,7 @@ public class TestNGListeners implements IExecutionListener, ITestListener {
 
     private void writeExecutorMetadata() {
         Path executorPath =
-                Path.of(System.getProperty("user.dir"), "allure-results", "executor.json");
+                AllureConstants.ALLURE_RESULTS_DIR.resolve("executor.json");
         try {
             Files.createDirectories(executorPath.getParent());
             long buildOrder = nextBuildOrder();
@@ -70,11 +73,7 @@ public class TestNGListeners implements IExecutionListener, ITestListener {
 
     private long nextBuildOrder() {
         Path historyTrend =
-                Path.of(
-                        System.getProperty("user.dir"),
-                        "allure-results",
-                        "history",
-                        "history-trend.json");
+                AllureConstants.RESULTS_HISTORY_DIR.resolve("history-trend.json");
         long previous = 0;
         try {
             if (Files.isRegularFile(historyTrend)) {
@@ -100,7 +99,9 @@ public class TestNGListeners implements IExecutionListener, ITestListener {
         }
 
         // مهم: ما ترميش RuntimeException هنا
-        if (hasAllureResults()) {
+        if (!AllureReportPolicy.current().generate()) {
+            LogUtils.info("Automatic Allure HTML generation disabled; raw results retained.");
+        } else if (hasAllureResults()) {
             try {
                 AllureBinaryManger.generateAndOpenDetached();
             } catch (Exception e) {
@@ -113,7 +114,7 @@ public class TestNGListeners implements IExecutionListener, ITestListener {
     }
 
     private boolean hasAllureResults() {
-        Path resultsDir = Path.of(System.getProperty("user.dir"), "allure-results");
+        Path resultsDir = AllureConstants.ALLURE_RESULTS_DIR;
         if (!Files.isDirectory(resultsDir)) return false;
 
         try (Stream<Path> files = Files.list(resultsDir)) {

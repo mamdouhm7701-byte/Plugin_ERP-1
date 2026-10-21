@@ -22,7 +22,7 @@ public final class SuiteDefinitionsTest {
   @DataProvider(name = "testLevels")
   public Object[][] testLevels() {
     return new Object[][] {
-        {"smoke"}, {"sanity"}, {"regression"}, {"e2e"}, {"login"},
+        {"smoke"}, {"sanity"}, {"regression"}, {"e2e"}, {"login"}, {"ci"},
         {"additional/standalone/browser-isolation"},
         {"additional/standalone/point-of-sale"}, {"additional/standalone/restaurant"}, {"special-sales"},
         {"additional/standalone/fixture-lifecycle"}, {"additional/internal/regression-additional"}, {"additional/internal/regression-workflows"}

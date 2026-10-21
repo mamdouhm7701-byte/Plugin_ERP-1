@@ -128,6 +128,8 @@ public class AllureBinaryManger {
      * "Redirect invalid for reading: WRITE" -> so we DO NOT redirect input.
      */
     public static void generateAndOpenDetached() {
+        AllureReportPolicy policy = AllureReportPolicy.current();
+        if (!policy.generate()) return;
         try {
             Path exe = prepareAllureCLI();
 
@@ -140,6 +142,11 @@ public class AllureBinaryManger {
                     AllureConstants.ALLURE_REPORT_DIR.toString(),
                     "--clean"
             );
+
+            if (!policy.open()) {
+                LogUtils.info("Allure report generated; automatic opening disabled.");
+                return;
+            }
 
             // 2) open (detached)
             ProcessBuilder pb = new ProcessBuilder(
@@ -279,16 +286,26 @@ public class AllureBinaryManger {
     }
 
     private static void deleteDirIfExists(Path dir) {
+        Path target = AllureConstants.outputPath(AllureConstants.PROJECT_DIR, dir.toString());
         try {
-            if (!Files.exists(dir)) return;
-            Files.walk(dir)
-                    .sorted(Comparator.reverseOrder())
-                    .forEach(p -> {
-                        try {
-                            Files.deleteIfExists(p);
-                        } catch (Exception ignored) {
-                        }
-                    });
+            Path existing = target;
+            while (!Files.exists(existing)) existing = existing.getParent();
+            if (!existing.toRealPath().startsWith(AllureConstants.PROJECT_DIR.toRealPath()))
+                throw new IllegalArgumentException("Refusing Allure cleanup outside the project");
+        } catch (IOException failure) {
+            throw new IllegalStateException("Cannot validate Allure cleanup path", failure);
+        }
+        try {
+            if (!Files.exists(target)) return;
+            try (var paths = Files.walk(target)) {
+                paths.sorted(Comparator.reverseOrder())
+                        .forEach(p -> {
+                            try {
+                                Files.deleteIfExists(p);
+                            } catch (Exception ignored) {
+                            }
+                        });
+            }
         } catch (Exception ignored) {
         }
     }

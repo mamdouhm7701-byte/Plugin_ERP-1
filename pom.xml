@@ -12,6 +12,8 @@
     <properties>
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <allure.results.directory>${project.basedir}/allure-results</allure.results.directory>
+        <allure.report.directory>${project.basedir}/allure-report</allure.report.directory>
 
         <!-- مهم عشان IntelliJ -->
         <argLine></argLine>
@@ -168,6 +170,10 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.2</version>
                 <configuration>
+                    <systemPropertyVariables>
+                        <allure.results.directory>${allure.results.directory}</allure.results.directory>
+                        <allure.report.directory>${allure.report.directory}</allure.report.directory>
+                    </systemPropertyVariables>
                     <argLine>
                         ${argLine}
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
@@ -180,13 +186,43 @@
                 <artifactId>allure-maven</artifactId>
                 <version>3.0.2</version>
                 <configuration>
-                    <resultsDirectory>${project.basedir}/allure-results</resultsDirectory>
-                    <reportDirectory>${project.basedir}/allure-report</reportDirectory>
+                    <resultsDirectory>${allure.results.directory}</resultsDirectory>
+                    <reportDirectory>${allure.report.directory}</reportDirectory>
                     <installDirectory>${user.home}/.allure</installDirectory>
                 </configuration>
             </plugin>
 
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>ci</id>
+            <properties>
+                <allure.results.directory>${project.build.directory}/ci/allure-results</allure.results.directory>
+                <allure.report.directory>${project.build.directory}/ci/allure-report</allure.report.directory>
+                <allure.report.generate>false</allure.report.generate>
+                <allure.report.open>false</allure.report.open>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <suiteXmlFiles>
+                                <suiteXmlFile>${project.basedir}/src/test/resources/ci-testng.xml</suiteXmlFile>
+                            </suiteXmlFiles>
+                            <reportsDirectory>${project.build.directory}/ci/surefire-reports</reportsDirectory>
+                            <systemPropertyVariables>
+                                <allure.report.generate>${allure.report.generate}</allure.report.generate>
+                                <allure.report.open>${allure.report.open}</allure.report.open>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

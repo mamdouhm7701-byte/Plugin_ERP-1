@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Local checks only: no live ERP session, browser, login or credentials required. -->
+<suite name="CI - local contracts" parallel="none">
+    <listeners>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
+        <listener class-name="Plugin_ERP.Listners.TestNGListeners"/>
+    </listeners>
+    <test name="Configuration, arithmetic and owned fixture recovery" preserve-order="true">
+        <classes>
+            <class name="SuiteSupport.RuntimeCompatibilityTest"/>
+            <class name="SuiteSupport.BrowserLifecycleTest"/>
+            <class name="Plugin_ERP.Utiel.ConfigurationPropertiesTest"/>
+            <class name="Plugin_ERP.Utiel.Allur.AllureReportPolicyTest"/>
+            <class name="SuiteSupport.CiSuiteContractTest"/>
+            <class name="SuiteSupport.SuiteDefinitionsTest"/>
+            <class name="SuiteSupport.WorkflowCleanupOrderTest"/>
+            <class name="SuiteSupport.SalesTaxProfileTest"/>
+            <class name="SuiteSupport.DocumentDatesTest"/>
+            <class name="Invoice.SalesCalculationTest"/>
+            <class name="Purches.PurchaseCalculationTest"/>
+            <class name="Invoice.SalesCleanupTest"/>
+            <class name="Purches.PurchaseCleanupTest"/>
+            <class name="ProductsTest.ProductsCleanupTest"/>
+            <class name="StoreTest.StoreCleanupTest"/>
+            <class name="FinancialMovementsTest.FinancialCleanupTest"/>
+            <class name="DealerModelTest.DealerCleanupTest"/>
+            <class name="SpecialSalesTest.SpecialSalesCleanupTest"/>
+        </classes>
+    </test>
+</suite>

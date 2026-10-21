@@ -1,80 +1,29 @@
 package Plugin_ERP.Utiel;
 
-import Plugin_ERP.Bots.LogUtils;
 import Plugin_ERP.Models.DiscountType;
 import Plugin_ERP.Models.TaxMode;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
 import java.util.Properties;
 
 public class PropertyReader {
+
+    private static final ConfigurationProperties CONFIGURATION = new ConfigurationProperties(
+            Path.of("src", "main", "resources"),
+            Path.of("config", "Login.local.properties"),
+            System::getenv, System::getProperties);
 
     static {
         loadProperties();
     }
 
     public static Properties loadProperties() {
-        try {
-            Properties properties = new Properties();
-
-            Collection<File> propertiesFiles =
-                    FileUtils.listFiles(
-                            new File("src/main/resources"), new String[] {"properties"}, true);
-
-            propertiesFiles.forEach(
-                    file -> {
-                        try (var reader = new InputStreamReader(
-                                FileUtils.openInputStream(file), StandardCharsets.UTF_8)) {
-                            properties.load(reader);
-                        } catch (IOException e) {
-                            LogUtils.info(
-                                    "Error loading properties file: "
-                                            + file.getName()
-                                            + " -); "
-                                            + e.getMessage());
-                        }
-                    });
-
-            // Local credentials stay outside Maven resources and version control.
-            Path localLogin = Path.of("config", "Login.local.properties");
-            if (Files.isRegularFile(localLogin)) {
-                try (var reader = Files.newBufferedReader(localLogin, StandardCharsets.UTF_8)) {
-                    properties.load(reader);
-                }
-            }
-
-            // CI can provide credentials without creating a file.
-            for (String key : properties.stringPropertyNames()) {
-                if (key.endsWith(".Username") || key.endsWith(".Password")
-                        || key.equals("InvalidUsername") || key.equals("InvalidPassword")) {
-                    String environmentKey = "ERP_" + key.replaceAll("[^A-Za-z0-9]", "_")
-                            .toUpperCase(java.util.Locale.ROOT);
-                    String value = System.getenv(environmentKey);
-                    if (value != null && !value.isBlank()) properties.setProperty(key, value);
-                }
-            }
-
-            properties.putAll(System.getProperties());
-            System.getProperties().putAll(properties);
-
-            return properties;
-
-        } catch (Exception e) {
-            LogUtils.info("Error loading properties: " + e.getMessage());
-            return null;
-        }
+        return CONFIGURATION.reload();
     }
 
     public static String getProperty(String key) {
-        return System.getProperty(key);
+        return CONFIGURATION.get(key);
     }
 
     public static String getApplicationUrl() {

@@ -84,13 +84,18 @@ public final class ReportMail {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
             message.setRecipients(Message.RecipientType.TO, to);
-            message.setSubject("Plugin ERP reports - " + System.getProperty("allure.run.id", "local"), "UTF-8");
+            var run = ReportMailTemplate.read(AllureConstants.ALLURE_REPORT_DIR, AllureConstants.ALLURE_RESULTS_DIR);
+            message.setSubject(ReportMailTemplate.subject(run), "UTF-8");
             MimeMultipart body = new MimeMultipart();
             MimeBodyPart text = new MimeBodyPart();
-            String summary = Files.readString(AllureConstants.ALLURE_REPORT_DIR.resolve("widgets/summary.json"));
-            text.setText("Plugin ERP test run completed.\n\nAllure summary:\n" + summary
-                    + "\n\nAttached: Allure and TestNG reports. Extract each ZIP before opening."
-                    + "\nOpen index.html from the extracted Allure ZIP in your browser.\n", "UTF-8");
+            MimeMultipart alternatives = new MimeMultipart("alternative");
+            MimeBodyPart plain = new MimeBodyPart();
+            plain.setText(ReportMailTemplate.plain(run), "UTF-8");
+            alternatives.addBodyPart(plain);
+            MimeBodyPart html = new MimeBodyPart();
+            html.setContent(ReportMailTemplate.html(run), "text/html; charset=UTF-8");
+            alternatives.addBodyPart(html);
+            text.setContent(alternatives);
             body.addBodyPart(text);
             for (Path attachment : new Path[]{allure, testng}) {
                 MimeBodyPart part = new MimeBodyPart();

@@ -55,6 +55,8 @@ public final class BrowserLifecycleTest {
         Assert.assertEquals(failure.getSuppressed().length, 1);
         Assert.assertEquals(probe.quits.get(), 1);
         Assert.assertNull(probe.browser());
+        var skipped = Assert.expectThrows(org.testng.SkipException.class, probe::requireReady);
+        Assert.assertSame(skipped.getCause(), failure, "Dependent preparation must retain the original setup failure");
         probe.tearDown();
         Assert.assertEquals(probe.quits.get(), 1);
     }
@@ -80,6 +82,7 @@ public final class BrowserLifecycleTest {
     }
 
     private static final class Probe extends BaseTest {
+        void requireReady() { requirePreparedSession(); }
         final AtomicInteger quits = new AtomicInteger();
         final WebDriver fake;
         private final boolean failLogin;

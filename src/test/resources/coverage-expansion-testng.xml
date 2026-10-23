@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Previously uncovered screens - owned data" parallel="none" configfailurepolicy="continue">
+  <test name="Master screen persistence and validation" preserve-order="true">
+    <classes>
+      <class name="CoverageTest.TablesCoverageTest"/>
+      <class name="CoverageTest.AccountGroupsCoverageTest"/>
+      <class name="CoverageTest.CostCentersCoverageTest"/>
+      <class name="CoverageTest.ChartOfAccountsCoverageTest"/>
+      <class name="StoreTest.StocktakingCoverageTest"/>
+      <class name="StoreTest.ShortageAdjustmentCoverageTest"/>
+      <class name="StoreTest.OverflowAdjustmentCoverageTest"/>
+      <class name="Invoice.UnderReviewCoverageTest"/>
+      <class name="SpecialSalesTest.KitchenOrdersCoverageTest"/>
+      <class name="Invoice.PostingCoverageTest"/>
+      <class name="Invoice.ActionsCoverageTest"/>
+      <class name="CoverageTest.UsersCoverageTest"/>
+      <class name="CoverageTest.PermissionsCoverageTest"/>
+      <class name="CoverageTest.AuditLogCoverageTest"/>
+      <class name="CoverageTest.ZatcaConfigurationCoverageTest"/>
+    </classes>
+  </test>
+</suite>

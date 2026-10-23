@@ -42,9 +42,16 @@ public class SalesModulePage extends AbstractForSales {
     @Step("فتح شاشة المبيعات: {route}")
     public void slOpen(String route) {
         Plugin_ERP.Utiel.Allur.ScreenNames.opening(route);
-        driver.get(PropertyReader.getApplicationUrl() + "/#/" + route);
-        driver.navigate().refresh();
+        String destination=PropertyReader.getApplicationUrl().replaceAll("/+$","") + "/#/" + route;
+        if(driver.getCurrentUrl().equals(destination)) driver.navigate().refresh();
+        else driver.get(destination);
         slAwaitSession();
+        ready.until(d -> Boolean.TRUE.equals(js("""
+            const route=document.querySelector('#app')?.__vue__?.$router?.currentRoute;
+            if(!route||route.path.replace(/\\/+$/g,'')!=='/'+arguments[0].replace(/^\\/+|\\/+$/g,''))return false;
+            const view=route.matched[route.matched.length-1]?.instances?.default;
+            return !!(view?._isMounted&&!view._isDestroyed&&view.$el?.isConnected&&view.$el.getClientRects?.().length);
+            """,route)));
         ready.until(
                 d ->
                         d
@@ -773,6 +780,9 @@ public class SalesModulePage extends AbstractForSales {
 
     @Step("التحقق من بيانات الصنف {item} في التقرير المطبوع")
     public void slVerifyPrintedReport(String main, String item) {
+        slVerifyPrintedReport(main,item,()->{});
+    }
+    public void slVerifyPrintedReport(String main, String item, Runnable contentAssertions) {
         new WebDriverWait(driver, Duration.ofSeconds(45))
                 .until(d -> d.getWindowHandles().size() > 1);
         driver.switchTo()
@@ -784,6 +794,7 @@ public class SalesModulePage extends AbstractForSales {
         try {
             utilitesReportReady();
             AssertTextInReport(item);
+            contentAssertions.run();
         } finally {
             driver.close();
             driver.switchTo().window(main);

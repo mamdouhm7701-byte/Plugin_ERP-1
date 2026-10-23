@@ -22,18 +22,22 @@ public abstract class SalesScenarioTest extends BaseTest {
     protected SalesTestData data;
     protected SalesTestData.Record item, customer, agent, payment, priceList, discountType;
     protected String marker, mainWindow, paymentType;
+    protected java.util.function.Consumer<Map<String,Object>> printContentAssertions = stored -> {};
     protected final Map<Integer, BigDecimal> initialBalances = new LinkedHashMap<>();
     protected final Set<Object> allowedItems = new HashSet<>();
     private final List<SalesTestData> pending = new ArrayList<>();
 
     @BeforeClass(alwaysRun = true)
     public void awaitSalesSession() {
+        requirePreparedSession();
         driver.manage().window().setSize(new org.openqa.selenium.Dimension(1920, 1080));
         new SalesModulePage(driver).slAwaitSession();
     }
 
     @BeforeMethod(alwaysRun = true)
     public void beginSalesScenario() {
+        requirePreparedSession();
+        printContentAssertions = stored -> {};
         page =
                 switch (kind()) {
                     case INVOICE -> new Plugin_ERP.System_Modules.Login.Invoice.Invoice(driver);
@@ -209,7 +213,7 @@ public abstract class SalesScenarioTest extends BaseTest {
                             .compareTo(number(stored.get("net"))),
                     0, "مطابقة الصافي");
         }
-        if (print) page.slVerifyPrintedReport(mainWindow, item.name());
+        if (print) page.slVerifyPrintedReport(mainWindow, item.name(), () -> printContentAssertions.accept(stored));
         else page.slDismiss();
         return record;
     }

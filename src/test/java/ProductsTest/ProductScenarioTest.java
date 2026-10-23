@@ -38,11 +38,13 @@ public abstract class ProductScenarioTest extends BaseTest {
 
     @BeforeClass(alwaysRun = true)
     public void awaitProductsSession() {
+        requirePreparedSession();
         modulePage().prAwaitSession();
     }
 
     @BeforeMethod(alwaysRun = true)
     public void newProductScenario() {
+        requirePreparedSession();
         marker = "QA-PR-" + UUID.randomUUID().toString().substring(0, 12);
         mainWindow = driver.getWindowHandle();
         page = modulePage();

@@ -156,9 +156,10 @@ public abstract class Abstract {
     @Step("الضغط على زر الحفظ والطباعة")
     public void ClickSaveAndPrintButton() {
         utilites.waits().waitForOverlayToDisappear();
+        var originalTabs = driver.getWindowHandles();
         utilites.ClickElement(SaveAndPrintButton);
         LogUtils.info("تم الحفظ والطباعة");
-        utilites.waits().switchToNewTab();
+        utilites.waits().switchToNewTab(originalTabs);
         LogUtils.info("تم فتح التقرير");
         utilites.waits().waitForReportReady(60);
         utilites.waits().waitForOverlayToDisappear();

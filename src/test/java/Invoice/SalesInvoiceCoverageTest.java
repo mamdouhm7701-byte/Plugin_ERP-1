@@ -32,6 +32,18 @@ public final class SalesInvoiceCoverageTest extends SalesFormTest {
     @Test
     @Story("حفظ فاتورة الاختبار وفتح طباعتها")
     public void savesAndPrintsOwnedInvoice() {
-        create("picker", "Credit", true);
+        prepare("Credit");var second=ownItem(2);
+        add(item,"picker");add(second,"picker");
+        page.slQuantity(item.name(),"2");page.slQuantity(second.name(),"3");
+        page.slSetLine(second.name(),"السعر","73.25");
+        String expectedNet=salesNet("419.75");page.slWaitNet(expectedNet);
+        printContentAssertions=stored->{
+            sameNumber(stored.get("net"),expectedNet);
+            Plugin_ERP.Utiel.PrintedInvoiceAssertions.invoice(driver,stored.get("code").toString(),customer.name(),
+                    java.util.List.of(new Plugin_ERP.Utiel.PrintedInvoiceAssertions.Line(item.name(),new java.math.BigDecimal("2"),new java.math.BigDecimal("100")),
+                            new Plugin_ERP.Utiel.PrintedInvoiceAssertions.Line(second.name(),new java.math.BigDecimal("3"),new java.math.BigDecimal("73.25"))),
+                    new java.math.BigDecimal(expectedNet));
+        };
+        save(true);assertStock("2");sameNumber(data.balance(second,1),"997");
     }
 }

@@ -71,13 +71,15 @@ public final class PendingFixtureWrites {
                         endpoint.equals("Accounts")
                                 ? "Aggregates/AccountTreeViewModel?showBalance=false&type=Main&branchId="
                                         + session.branchId
-                                : (endpoint.equals("Items") ? "Items/Summary" : endpoint)
+                                : endpoint.equals("CostCenters")
+                                ? "Aggregates/CostCenterTreeViewModel?showBalance=false&type=Main&branchId=" + session.branchId
+                                : (endpoint.equals("Items") ? "Items/Summary" : endpoint.equals("UnderReviews") ? "SalesTransactions" : endpoint)
                                         + "?pageNumber="
                                         + page
-                                        + "&pageSize=500";
+                                        + "&pageSize=500" + (endpoint.equals("UnderReviews") ? "&transactionType=UnderReviewTransaction" : "");
                 Object entity = api.apply(url, Map.of()).get("entity");
                 find(entity, name, matches);
-                if (entity instanceof List<?> || endpoint.equals("Accounts")) break;
+                if (entity instanceof List<?> || Set.of("Accounts", "CostCenters").contains(endpoint)) break;
                 if (!(entity instanceof Map<?, ?> result)
                         || !(result.get("pageData") instanceof List<?> rows)
                         || !(result.get("totalRecords") instanceof Number total))

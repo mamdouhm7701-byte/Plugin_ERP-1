@@ -22,7 +22,7 @@ public final class SuiteDefinitionsTest {
   @DataProvider(name = "testLevels")
   public Object[][] testLevels() {
     return new Object[][] {
-        {"smoke"}, {"sanity"}, {"regression"}, {"e2e"}, {"login"}, {"ci"},
+        {"smoke"}, {"sanity"}, {"regression"}, {"e2e"}, {"login"}, {"ci"}, {"coverage-expansion"}, {"coverage-observations"}, {"coverage-recovery"}, {"coverage-verification"},
         {"additional/standalone/browser-isolation"},
         {"additional/standalone/point-of-sale"}, {"additional/standalone/restaurant"}, {"special-sales"}, {"basic-data"}, {"general-accounting"},
         {"additional/standalone/fixture-lifecycle"}, {"additional/internal/regression-additional"}, {"additional/internal/regression-workflows"},
@@ -52,9 +52,9 @@ public final class SuiteDefinitionsTest {
     List<String> sanity = selectedCases("sanity");
     List<String> e2e = selectedCases("e2e");
     List<String> regression = selectedCases("regression");
-    Assert.assertEquals(smoke.size(), 9, "Core ERP plus cash POS and paid restaurant smoke checks");
-    Assert.assertEquals(sanity.size(), 24, "Three focused checks in each of eight module scopes");
-    Assert.assertEquals(e2e.size(), 36, "29 ERP journeys plus 3 POS and 4 restaurant journeys");
+    Assert.assertEquals(smoke.size(), 13, "Core availability plus representative new screens and access protection");
+    Assert.assertEquals(sanity.size(), 57, "Focused original and expanded screen checks by changed scope");
+    Assert.assertEquals(e2e.size(), 41, "Existing journeys plus adjustments, kitchen, posting and treasury");
     Assert.assertTrue(regression.size() > sanity.size());
     Assert.assertTrue(regression.containsAll(smoke), "Regression omitted a smoke contract");
     Assert.assertTrue(regression.containsAll(sanity), "Regression omitted a sanity contract");
@@ -62,6 +62,37 @@ public final class SuiteDefinitionsTest {
     Assert.assertFalse(regression.stream().anyMatch(name -> name.startsWith("Invoice.InvoiceTest#")
         || name.startsWith("Invoice.SalesInvoiceTestCases#")
         || name.startsWith("Purches.PurchesBillsTest#")), "Do not duplicate compatibility aliases");
+  }
+
+  @Test public void expandedCoverageIsDistributedByTestLevel() throws Exception {
+    var smoke=selectedCases("smoke");var sanity=selectedCases("sanity");
+    var e2e=selectedCases("e2e");var regression=selectedCases("regression");
+    Assert.assertTrue(smoke.containsAll(Set.of(
+        "CoverageTest.TablesCoverageTest#createsAndReadsBackExactOwnedRecord",
+        "StoreTest.StocktakingCoverageTest#savesFractionalQuantityAndChecksStockEffect",
+        "Invoice.UnderReviewCoverageTest#savesUnderReviewWithoutPostingInventory",
+        "CoverageTest.PermissionsCoverageTest#unauthenticatedDirectRouteRequiresLogin")));
+    Assert.assertFalse(smoke.stream().anyMatch(c->c.startsWith("Invoice.PostingCoverageTest#")
+        ||c.startsWith("FinancialMovementsTest.TreasuryLedgerCoverageTest#")
+        ||c.startsWith("StoreTest.ShortageAdjustmentCoverageTest#")
+        ||c.startsWith("StoreTest.OverflowAdjustmentCoverageTest#")),"Keep longer posted-document journeys out of smoke");
+    var sanityClasses=new HashSet<String>();sanity.forEach(c->sanityClasses.add(c.substring(0,c.indexOf('#'))));
+    var expansionClasses=new HashSet<String>();selectedCases("coverage-expansion")
+        .forEach(c->expansionClasses.add(c.substring(0,c.indexOf('#'))));
+    Assert.assertTrue(sanityClasses.containsAll(expansionClasses),"Sanity omitted a newly covered screen");
+    Assert.assertTrue(sanity.containsAll(Set.of(
+        "FinancialMovementsTest.CustomerReceiptTest#FM_ExportExcel",
+        "Invoice.SalesInvoiceCoverageTest#savesAndPrintsOwnedInvoice",
+        "Purches.PurchaseInvoiceCoverageTest#savesAndPrintsOwnedDocument",
+        "ProductsTest.ProductListTest#PR_SaveWithoutPrint")));
+    Assert.assertTrue(e2e.containsAll(Set.of(
+        "StoreTest.ShortageAdjustmentCoverageTest#generatedFractionalAdjustmentMatchesOwnedItemAndStock",
+        "StoreTest.OverflowAdjustmentCoverageTest#generatedFractionalAdjustmentMatchesOwnedItemAndStock",
+        "SpecialSalesTest.KitchenOrdersCoverageTest#preparesDeliversAndClosesOnlyOwnedOrder",
+        "Invoice.PostingCoverageTest#postsAndUnpostsOnlyCapturedOwnedInvoice",
+        "FinancialMovementsTest.TreasuryLedgerCoverageTest#reconcilesIndependentCashAndOtherPaymentLedgerInScreenAndPrint")));
+    Assert.assertTrue(regression.containsAll(selectedCases("coverage-expansion")));
+    Assert.assertTrue(regression.containsAll(selectedCases("coverage-observations")),"Regression omitted an audit correction");
   }
 
   @Test

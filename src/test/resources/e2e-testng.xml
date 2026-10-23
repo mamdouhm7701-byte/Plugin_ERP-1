@@ -3,8 +3,9 @@
 <!--
   E2E رحلة عمل مترابطة من البداية للنهاية بنفس السجلات بين الشاشات.
   الفائدة: كشف أخطاء تحويل المستند وربط المصدر والطرف وأثر المخزون والحسابات.
-  إنشاء مستندات العمل وحفظها يتم عبر الواجهة؛ API لتجهيز المراجع والتحقق والتنظيف فقط.
-  36 رحلة: 29 رحلة قائمة، و3 لنقاط البيع و4 للمطعم.
+  إنشاء مستندات الرحلة وحفظها يتم عبر الواجهة؛ API لتجهيز المراجع والتحقق والتنظيف.
+  افتتاحية الخزينة المملوكة شرط تجهيز، ثم تسجل سندات الرحلة وتراجع وتقفل عبر الواجهة.
+  41 رحلة: 36 رحلة قائمة، وإغلاق جرد عجز وجرد فائض، والمطبخ، والترحيل المحدود، والخزينة.
   نقاط البيع: حفظ وتعديل، حفظ وحذف، حفظ وطباعة إيصال. المطعم: تعليق واسترجاع وتعديل،
   تعليق ودفع، تعليق ودفع وحذف، وتعليق ودفع وطباعة دون خصم المخزون مرة أخرى.
   حالات القناة والباركود والسلة فقط لا تدخل E2E لمجرد أنها تعمل على شاشة الكاشير.
@@ -68,4 +69,17 @@
             </class>
         </classes>
     </test>
+    <test name="E2E - Stocktaking to generated adjustments" preserve-order="true"><classes>
+        <class name="StoreTest.ShortageAdjustmentCoverageTest"><methods><include name="generatedFractionalAdjustmentMatchesOwnedItemAndStock"/></methods></class>
+        <class name="StoreTest.OverflowAdjustmentCoverageTest"><methods><include name="generatedFractionalAdjustmentMatchesOwnedItemAndStock"/></methods></class>
+    </classes></test>
+    <test name="E2E - Kitchen preparation delivery and close" preserve-order="true"><classes>
+        <class name="SpecialSalesTest.KitchenOrdersCoverageTest"/>
+    </classes></test>
+    <test name="E2E - Owned invoice posting and reversal" preserve-order="true"><classes>
+        <class name="Invoice.PostingCoverageTest"/>
+    </classes></test>
+    <test name="E2E - Treasury movement ledger to closing and print" preserve-order="true"><classes>
+        <class name="FinancialMovementsTest.TreasuryLedgerCoverageTest"/>
+    </classes></test>
 </suite>

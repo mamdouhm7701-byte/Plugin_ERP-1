@@ -23,6 +23,8 @@ public final class ScenarioAccess {
 
     public static void capture(WebDriver driver, String label) {
         if (driver == null || Allure.getLifecycle().getCurrentTestCase().isEmpty()) return;
+        var current = org.testng.Reporter.getCurrentTestResult();
+        if (current != null && !current.getMethod().isTest()) return;
         try {
             String url = driver.getCurrentUrl();
             Credentials credentials = SESSIONS.get(driver);

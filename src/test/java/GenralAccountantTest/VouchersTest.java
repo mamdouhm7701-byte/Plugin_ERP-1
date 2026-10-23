@@ -471,17 +471,17 @@ public class VouchersTest extends BasicDataScenarioTest {
 
     @Test(
             priority = 23,
-            enabled = false,
+            enabled = true,
             description =
-                    "Blocked: the visible search field accepts text but does not filter the voucher-line rows in the inspected UI.")
+                    "Search account choices inside a voucher line and preserve the existing lines")
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.NORMAL)
     @Epic("ERP Web")
     @Feature("الحسابات العامة - قيود يومية")
-    @Story("JV-040 البحث في جدول البنود")
+    @Story("JV-040 البحث في خيارات حساب البند")
     @Description(
-            "يختار حسابين ثم يبحث بكود حساب ويتأكد من تصفية الجدول إلى البند المطابق دون"
-                    + " تعديل القيد.")
+            "يختار حسابين ثم يبحث داخل خيارات حساب البند، ويتأكد من ظهور الحساب المطابق"
+                    + " وبقاء البندين الموجودين دون تغيير.")
     public void AccountSearchAvailableInLinesTest() {
         basicData().account("debit");
         basicData().account("credit");
@@ -491,11 +491,11 @@ public class VouchersTest extends BasicDataScenarioTest {
 
         Assert.assertTrue(page.isAccountDropdownSearchPresent());
         page.selectAccountByCode(accountCode("credit"));
-        page.searchVoucherLines(accountCode("debit"));
+        page.assertLineAccountSearch(basicData().account("debit").name(),basicData().account("credit").name());
         Assert.assertEquals(
                 page.getSelectedLineCount(),
-                1,
-                "The table search should filter the account lines to the matching account.");
+                2,
+                "Searching account choices must preserve both existing voucher lines.");
     }
 
     @Test(priority = 24)

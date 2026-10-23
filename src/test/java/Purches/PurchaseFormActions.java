@@ -22,7 +22,19 @@ public abstract class PurchaseFormActions extends PurchaseScenarioTest {
     }
 
     protected void print() {
-        create("picker", "Credit", true);
+        prepare("Credit");var second=ownItem(2);
+        add(item,"picker");add(second,"picker");
+        page.puQuantity(item.name(),"2");page.puQuantity(second.name(),"3");
+        String column=documentKind()==PurchaseDocumentKind.INVOICE?"سعر الشراء":"السعر";
+        page.puSetLine(item.name(),column,"100");page.puSetLine(second.name(),column,"73.25");page.puWaitNet("419.75");
+        printContentAssertions=stored->{
+            sameNumber(stored.get("net"),"419.75");
+            Plugin_ERP.Utiel.PrintedInvoiceAssertions.invoice(driver,stored.get("code").toString(),supplier.name(),
+                    java.util.List.of(new Plugin_ERP.Utiel.PrintedInvoiceAssertions.Line(item.name(),new java.math.BigDecimal("2"),new java.math.BigDecimal("100")),
+                            new Plugin_ERP.Utiel.PrintedInvoiceAssertions.Line(second.name(),new java.math.BigDecimal("3"),new java.math.BigDecimal("73.25"))),
+                    new java.math.BigDecimal("419.75"));
+        };
+        save(true);
     }
 
     protected void empty() {

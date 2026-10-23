@@ -25,17 +25,21 @@ public abstract class PurchaseScenarioTest extends BaseTest {
     protected PurchaseTestData data;
     protected PurchaseTestData.Record item, supplier, agent, payment;
     protected String marker, mainWindow, paymentType;
+    protected java.util.function.Consumer<Map<String,Object>> printContentAssertions = stored -> {};
     protected final Map<Integer, BigDecimal> initialBalances = new LinkedHashMap<>();
     protected final Set<Object> allowedItems = new HashSet<>();
 
     @BeforeClass(alwaysRun = true)
     public void awaitPurchaseSession() {
+        requirePreparedSession();
         driver.manage().window().setSize(new org.openqa.selenium.Dimension(1920, 1080));
         new PurchaseModulePage(driver).puAwaitSession();
     }
 
     @BeforeMethod(alwaysRun = true)
     public void beginPurchaseScenario() {
+        requirePreparedSession();
+        printContentAssertions = stored -> {};
         convertedKind = null;
         page = new PurchaseModulePage(driver);
         mainWindow = driver.getWindowHandle();
@@ -173,7 +177,7 @@ public abstract class PurchaseScenarioTest extends BaseTest {
             sameNumber(paid, stored.get("net").toString());
             Assert.assertEquals(stored.get("paymentType"), "Cash", "مطابقة نوع السداد");
         }
-        if (print) page.puVerifyPrintedReport(mainWindow, item.name());
+        if (print) page.puVerifyPrintedReport(mainWindow, item.name(), () -> printContentAssertions.accept(stored));
         else page.puDismiss();
         return record;
     }

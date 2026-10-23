@@ -155,6 +155,17 @@ final class StoreTestData implements AutoCloseable {
   }
   Object balance(Record item,int index){Map<String,Object> dto=read(item);for(Object value:(List<?>)dto.get("stores")){Map<?,?> row=(Map<?,?>)value;if(store(index).id().equals(row.get("storeId")))return row.get("currentBalance");}throw new AssertionError("Owned store balance missing");}
 
+  /** A stocktaking close may reload the application; wait only for the original session. */
+  void awaitOriginalSession() {
+    new WebDriverWait(driver,Duration.ofSeconds(30)).until(d->{
+      Object actualOrigin=((JavascriptExecutor)d).executeScript("return location.origin");
+      Object branch=((JavascriptExecutor)d).executeScript("return document.querySelector('#app')?.__vue__?.$store?.getters['app/currentBranch']?.id");
+      if(!origin.equals(actualOrigin)||(branch!=null&&!sessionBranchId.equals(branch)))
+        throw new AssertionError("Original inventory session changed after closing stocktaking");
+      return sessionBranchId.equals(branch);
+    });
+  }
+
   @SuppressWarnings("unchecked") Map<String,Object> lookup(String endpoint){return (Map<String,Object>)call("get",endpoint,fields()).get("entity");}
   @SuppressWarnings("unchecked") void recoverAttemptedItems(List<Map<String,Object>> attempts){
     for(Map<String,Object> attempt:attempts){
@@ -269,6 +280,18 @@ final class StoreTestData implements AutoCloseable {
   private void journal(){
     List<Map<String,Object>> rows=created.stream().map(r->fields("origin",origin,"branchId",sessionBranchId,"endpoint",r.endpoint(),"id",r.id(),"name",r.name(),"values",r.values())).toList();
     TestSupport.FixtureJournals.write(java.nio.file.Path.of("target","store-fixtures",suffix+".json"),rows);
+  }
+
+  /** Closed stocktaking and its generated adjustments retain their owned references for audit. */
+  void preserveInventoryAuditHistory() {
+    var current = new TestSupport.FixtureSession(driver);
+    if (!origin.equals(current.origin) || !java.util.Objects.equals(sessionBranchId,current.branchId))
+      throw new AssertionError("Inventory audit belongs to another tenant or branch");
+    recoverUncertainDocuments();
+    var rows=created.stream().map(r->fields("origin",origin,"branchId",sessionBranchId,
+        "endpoint",r.endpoint(),"id",r.id(),"name",r.name(),"values",r.values())).toList();
+    TestSupport.FixtureJournals.write(java.nio.file.Path.of("target","inventory-audit-masters",suffix+".json"),rows);
+    created.clear(); fixtures.clear(); journal();
   }
 
   private static boolean retryable(ApiFailure failure) {

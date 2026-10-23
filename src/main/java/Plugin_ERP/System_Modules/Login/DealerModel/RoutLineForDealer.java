@@ -25,22 +25,23 @@ public class RoutLineForDealer extends AbstractForDealer {
         if(!calendar)throw Error('Route calendar is unavailable');
         """;
 
-    /** Restrict Add All to the owned customer before the actual UI button is used. */
-    public void PrepareOwnedRoute(Object agentId, Object customerId, Object statusId, Object branchId) {
-        new WebDriverWait(driver, Duration.ofSeconds(25)).until(d -> Boolean.TRUE.equals(
-                ((org.openqa.selenium.JavascriptExecutor)d).executeScript(OWNED_CALENDAR + """
-                    const [agentId,customerId,statusId,branchId]=arguments;
-                    const agent=calendar.agents.find(row=>row.id===agentId);
-                    const customer=calendar.customers.find(row=>row.id===customerId);
-                    const status=calendar.statusOptions.find(row=>row.id===statusId);
-                    if(!agent||!customer||!status)return false;
-                    calendar.selectedItem.agentId=agentId;
-                    calendar.selectedItem.branchId=branchId;
-                    calendar.selectedItem.extendedProps.status=statusId;
-                    calendar.customers=[customer];
-                    calendar.selectedItem.extendedProps.customers=[customer];
-                    return true;
-                    """, agentId, customerId, statusId, branchId)));
+    /** Select references through the visible form; component state is read only. */
+    public void PrepareOwnedRoute(String agentName, String customerName, String statusName, String areaName) {
+        var ready = new WebDriverWait(driver, Duration.ofSeconds(30));
+        var form = new Plugin_ERP.Utiel.FormInteractions(ready, element ->
+                ((org.openqa.selenium.JavascriptExecutor)driver).executeScript(
+                        "arguments[0].scrollIntoView({block:'center'})", element));
+        chooseOwned(form, "مندوب", agentName);
+        chooseOwned(form, "المناطق", areaName);
+        chooseOwned(form, "العملاء", customerName);
+        // Dependent customer/area updates can reset the status; choose it last.
+        chooseOwned(form, "الحالة", statusName);
+    }
+
+    private void chooseOwned(Plugin_ERP.Utiel.FormInteractions form, String label, String name) {
+        form.choose(By.xpath("//*[@id='sidebar-add-new-event']//*[self::label or self::legend][normalize-space(.)='"
+                + label + "']/following::input[contains(@class,'vs__search') and ancestor::*[@id='sidebar-add-new-event']][1]"), name,
+                Plugin_ERP.Utiel.FormInteractions.OptionMatch.EXACT_THEN_CONTAINS);
     }
 
     @Step("التحقق من اختيار العميل {customerId} في خط السير")

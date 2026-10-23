@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Audit observation verification" parallel="none" configfailurepolicy="continue">
+  <test name="Owned route, financial ledger, invoice print and workbook content" preserve-order="true"><classes>
+    <class name="ProductsTest.ProductListTest"><methods>
+      <include name="PR_SaveWithoutPrint"/><include name="EditPriceList"/><include name="DeletePriceList"/>
+      <include name="AssertErorrMsg"/><include name="PR_SearchAndReset"/><include name="PR_CancelNew"/>
+      <include name="PR_CancelEdit"/><include name="PR_CancelDelete"/>
+    </methods></class>
+    <class name="DealerModelTest.RoutLineTest"/>
+    <class name="Invoice.SalesInvoiceCoverageTest"><methods><include name="savesAndPrintsOwnedInvoice"/></methods></class>
+    <class name="Purches.PurchaseInvoiceCoverageTest"><methods><include name="savesAndPrintsOwnedDocument"/></methods></class>
+    <class name="Purches.PurchaseOrderCoverageTest"><methods><include name="savesAndPrintsOwnedDocument"/></methods></class>
+    <class name="Purches.PurchaseReturnCoverageTest"><methods><include name="savesAndPrintsOwnedDocument"/></methods></class>
+    <class name="FinancialMovementsTest.CustomerReceiptTest"><methods><include name="FM_ExportExcel"/></methods></class>
+    <class name="FinancialMovementsTest.SupplierBillOfExchangeTest"><methods><include name="FM_ExportExcel"/></methods></class>
+    <class name="FinancialMovementsTest.OtherRevenueMovementTest"><methods><include name="FM_ExportExcel"/></methods></class>
+    <class name="FinancialMovementsTest.SupplierDiscountNoticeTest"><methods><include name="FM_ExportExcel"/></methods></class>
+    <class name="FinancialMovementsTest.CustomerDiscountNoticeTest"><methods><include name="FM_ExportExcel"/></methods></class>
+    <class name="FinancialMovementsTest.ExpenseMovementTest"><methods><include name="FM_ExportExcel"/></methods></class>
+    <class name="FinancialMovementsTest.TransfersAndSettlementsTest"><methods><include name="FM_ExportExcel"/></methods></class>
+    <class name="FinancialMovementsTest.TreasuryLedgerCoverageTest"/>
+    <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest"><methods>
+      <include name="AR_015_SearchAreasByCodeAndName"/><include name="AR_017_SearchUsesOnlyDisplayedAreaFields"/>
+    </methods></class>
+    <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.RoutLineTest"><methods>
+      <include name="RL_003_CreateAndVerify"/><include name="RL_007_CollectionTypeAndLocationOff"/>
+    </methods></class>
+    <class name="GenralAccountantTest.VouchersTest"><methods><include name="AccountSearchAvailableInLinesTest"/></methods></class>
+  </classes></test>
+</suite>

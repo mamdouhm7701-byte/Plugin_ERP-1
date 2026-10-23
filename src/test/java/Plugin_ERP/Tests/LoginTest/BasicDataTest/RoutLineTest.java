@@ -88,13 +88,13 @@ public class RoutLineTest extends BasicDataScenarioTest {
         p.ClickCloseButton();
     }
 
-    @Test(priority = 4, enabled = false)
+    @Test(priority = 4)
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("Web Cloud")
     @Feature("حالة خط السير")
     @Story("RL-003 إنشاء والتحقق")
-    @Description("مؤجل: الواجهة تحفظ نوع المستند طلبية رغم اختيار فاتورة؛ يلزم إصلاح سلوك المنتج.")
+    @Description("إعادة فحص حفظ نوع المستند فاتورة ومطابقته عند فتح السجل المملوك.")
     public void RL_003_CreateAndVerify() {
         RoutLine p = open();
         String n = unique("CREATE"), en = "Route " + System.currentTimeMillis();
@@ -108,13 +108,13 @@ public class RoutLineTest extends BasicDataScenarioTest {
         p.ClickCloseButton();
     }
 
-    @Test(priority = 5, enabled = false)
+    @Test(priority = 5)
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.NORMAL)
     @Epic("Web Cloud")
     @Feature("حالة خط السير")
     @Story("RL-007 نوع التحصيل وخيار الموقع")
-    @Description("مؤجل لنفس خلل حفظ نوع المستند المثبت في RL-003.")
+    @Description("إعادة فحص حفظ نوع المستند تحصيل وخيار الموقع في السجل المملوك.")
     public void RL_007_CollectionTypeAndLocationOff() {
         RoutLine p = open();
         String n = unique("COLLECTION");

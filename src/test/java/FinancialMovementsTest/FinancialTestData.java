@@ -210,6 +210,14 @@ final class FinancialTestData implements AutoCloseable {
     TestSupport.FixtureJournals.write(java.nio.file.Path.of("target","financial-fixtures",suffix+".json"),rows);
   }
 
+  void preserveTreasuryAuditHistory() {
+    session.verify(); recoverPendingFixtures();
+    var rows=created.stream().map(r->fields("origin",session.origin,"branchId",session.branchId,
+        "endpoint",r.endpoint(),"id",r.id(),"name",r.name(),"values",r.values())).toList();
+    TestSupport.FixtureJournals.write(java.nio.file.Path.of("target","treasury-audit-financial",suffix+".json"),rows);
+    created.clear();fixtures.clear();journal();
+  }
+
   private static boolean retryable(ApiFailure failure) {
     return failure.status == 0 || failure.status == 408 || failure.status == 429 || failure.status >= 500;
   }

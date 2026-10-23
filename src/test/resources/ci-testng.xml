@@ -20,10 +20,14 @@
             <class name="Plugin_ERP.Valditon.LegacyAssertionsTest"/>
             <class name="Plugin_ERP.Utiel.Allur.AllureReportPolicyTest"/>
             <class name="Plugin_ERP.Utiel.Allur.ScenarioJourneyReportTest"/>
+            <class name="Plugin_ERP.Utiel.Allur.ScenarioAccessTest"/>
+            <class name="Plugin_ERP.Utiel.InteractionAccuracyTest"/>
+            <class name="Plugin_ERP.Utiel.PrintedInvoiceAssertionsTest"/>
             <class name="Plugin_ERP.Utiel.Allur.ReportMailTest"/>
             <class name="Plugin_ERP.Utiel.Allur.DriveReportStoreTest"/>
             <class name="Plugin_ERP.Utiel.Allur.ReportMailTemplateTest"/>
             <class name="SuiteSupport.CiSuiteContractTest"/>
+            <class name="SuiteSupport.CoverageExpansionContractTest"/>
             <class name="SuiteSupport.SuiteDefinitionsTest"/>
             <class name="SuiteSupport.WorkflowCleanupOrderTest"/>
             <class name="SuiteSupport.SalesTaxProfileTest"/>
@@ -37,6 +41,7 @@
             <class name="StoreTest.StoreChoiceTest"/>
             <class name="Plugin_ERP.System_Modules.Login.purches.PurchaseCalendarTest"/>
             <class name="FinancialMovementsTest.FinancialCleanupTest"/>
+            <class name="FinancialMovementsTest.ExportedWorkbookAssertionsTest"/>
             <class name="DealerModelTest.DealerCleanupTest"/>
             <class name="DealerModelTest.DealerMarkerCleanupTest"/>
             <class name="SpecialSalesTest.SpecialSalesCleanupTest"/>

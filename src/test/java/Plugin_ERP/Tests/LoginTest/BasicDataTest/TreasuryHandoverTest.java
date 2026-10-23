@@ -56,7 +56,7 @@ public class TreasuryHandoverTest extends BasicDataScenarioTest {
             "يتحقق هذا الاختبار من إضافة تسليم خزينة جديد ببيانات صحيحة، ويشمل اختيار"
                     + " المستخدم والخزينة وإدخال الرصيد الافتتاحي، وحفظ البيانات والتحقق من إضافة السجل"
                     + " بنجاح.")
-    @Link(name = "Test Link", url = "https://binfares.plugin-erp.com/#/login")
+
     public void ValidTreasuryHandoverTest() {
         var user = basicData().user("handover-create");
         var safe = basicData().safe(1);
@@ -75,7 +75,7 @@ public class TreasuryHandoverTest extends BasicDataScenarioTest {
     @Description(
             "يتحقق هذا الاختبار من أن النظام يمنع إنشاء تسليم خزينة لنفس المستخدم المفتوح"
                     + " مسبقاً، ويتحقق من ظهور رسالة خطأ تفيد بعدم إمكانية تكرار التسليم لنفس المستخدم.")
-    @Link(name = "Test Link", url = "https://binfares.plugin-erp.com/#/login")
+
     public void InvalidTreasuryHandoverTest() {
         var user = basicData().user("handover-duplicate");
         var safe = basicData().safe(1);
@@ -96,7 +96,7 @@ public class TreasuryHandoverTest extends BasicDataScenarioTest {
             "يتحقق هذا الاختبار من فتح تسليم الخزينة للمراجعة، والحصول على إجمالي الرصيد عند"
                     + " الإغلاق، وحفظ وطباعة التقرير، والتحقق من تطابق إجمالي الرصيد في التقرير مع"
                     + " البيانات المدخلة.")
-    @Link(name = "Test Link", url = "https://binfares.plugin-erp.com/#/login")
+
     public void OpenTreasuryHandover() {
         var user = basicData().user("handover-report");
         var safe = basicData().safe(1);

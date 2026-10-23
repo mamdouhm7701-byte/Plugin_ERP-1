@@ -153,8 +153,7 @@ public class FinancialMovementPage extends Abstract {
     WebElement input=driver.findElement(checkbox);
     if(input.isSelected()!=value){
       utilites.waits().waitForOverlayToDisappear();
-      // Bootstrap draws this empty label with a pseudo-element; its native input is hidden.
-      ((JavascriptExecutor)driver).executeScript("arguments[0].click()",input);
+      Plugin_ERP.Utiel.NativeCheckbox.set(driver,input,value);
     }
     ready.until(d->d.findElement(checkbox).isSelected()==value);
   }

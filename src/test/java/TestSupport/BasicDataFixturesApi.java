@@ -34,8 +34,10 @@ final class BasicDataFixturesApi {
           if (vm.currentBranch?.id) { branchId = vm.currentBranch.id; break; }
           queue.push(...(vm.$children || []));
         }
-        const invoiceRead = action === 'get' && ['ItemTransactions-Sales','Purchases'].includes(endpoint);
-        const args = {url: invoiceRead ? endpoint + '/' + values.id : endpoint};
+        const invoiceRead = action === 'get' && ['ItemTransactions-Sales','Purchases','UnderReviews'].includes(endpoint);
+        const inventoryDelete = action === 'delete' &&
+            ['Stocktakings','ShortageAdjustments','OverflowAdjustments'].includes(endpoint);
+        const args = {url: inventoryDelete ? 'InventoryTransactions' : invoiceRead ? endpoint + '/' + values.id : endpoint};
         if (action === 'create') {
           if (!branchId) { done({error:'No current branch selected'}); return; }
           args.data = {...values, branchId};

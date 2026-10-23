@@ -13,6 +13,7 @@ import org.testng.Assert;
 import java.util.Map;
 
 public class ProductListPage extends ProductsModulePage {
+    @Step("إضافة الصنف {name} إلى قائمة الأسعار بسعر {price}")
     public void prAddItem(String name, String price) {
         prButton("اضافة اصناف");
         prPickItem(name);
@@ -20,6 +21,7 @@ public class ProductListPage extends ProductsModulePage {
         prItemPrice(name, price);
     }
 
+    @Step("تعديل سعر الصنف {name} إلى {price}")
     public void prItemPrice(String name, String price) {
         prType(
                 By.xpath(
@@ -95,6 +97,7 @@ public class ProductListPage extends ProductsModulePage {
         utilites.ClickElement(utilites.PriceList().getLastEditButtonForPriceList());
     }
 
+    @Step("حذف قائمة الأسعار")
     public void DeletePriceList() {
         utilites.PriceList().deleteRowForPriceList();
     }

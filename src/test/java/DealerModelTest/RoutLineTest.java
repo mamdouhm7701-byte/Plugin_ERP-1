@@ -1,74 +1,50 @@
 package DealerModelTest;
 
-import Plugin_ERP.System_Modules.Login.BasicData.RoutLine;
+import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.System_Modules.Login.DealerModel.RoutLineForDealer;
-import Plugin_ERP.Tests.LoginTest.BaseTest;
-import io.qameta.allure.Allure;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Story;
-import io.qameta.allure.Description;
-import io.qameta.allure.Owner;
-import io.qameta.allure.Severity;
-import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.*;
+import java.time.Duration;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import static DealerModelTest.DealerTestData.fields;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class RoutLineTest extends BaseTest {
-
-    private String RoutLineUrl = "https://binfares.plugin-erp.com/#/agentItinerary";
-
+/** An independently runnable calendar scenario; cleanup also recovers uncertain UI saves. */
+public class RoutLineTest extends DealerScenarioTest {
     @Test
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("ERP Web")
     @Feature("خطوط سير المندوبين")
     @Story("إضافة خط سير وربط المندوب بالأحداث اليومية")
-    @Description(
-            "ينشئ خط سير جديدًا، يربطه بالمندوب والعملاء، ثم يتحقق من ظهور الأحداث اليومية"
-                    + " المرتبطة بالمندوب.")
+    @Description("ينشئ مندوبًا وعميلًا وحالة مملوكة، ويضيف زياراتهم فقط ثم ينظف السجلات.")
     public void AddRoutLine() {
-        RoutLineForDealer routLineForDealer = new RoutLineForDealer(driver);
-        routLineForDealer.OpenRoutLine();
-        routLineForDealer.AddRoutLine();
-        routLineForDealer.AddArabicRoutLine("اختبار خط ");
-        routLineForDealer.SelectByKeys("محمد السيد");
-        routLineForDealer.SelectByKeysForDealers("بدون مستند");
-        routLineForDealer.AddVisitCount("5");
-        routLineForDealer.AddDayCount("10");
-        routLineForDealer.SelectByKeysForDealers("نيو كود");
-        routLineForDealer.SelectByKeysForDealers("الفرع الرئيسي");
-        routLineForDealer.ClickToDeletAllButton();
-        routLineForDealer.ClickAddAllButton();
-        routLineForDealer.AddNotesForRoutLine("اختبار اضافه خط السير");
-
-        List<String> titlesBefore =
-                routLineForDealer.getTodayEventsTitles(); // ⬅️ ضيف السطر ده الأول
-
-        int countBefore = titlesBefore.size();
-
-        routLineForDealer.ClickToSaveButton();
-
-        routLineForDealer.waitForTodayEventCountToIncrease(countBefore);
-
-        List<String> titlesAfter = routLineForDealer.getTodayEventsTitles();
-        int countAfter = titlesAfter.size();
-
-        Assert.assertTrue(
-                countAfter > countBefore,
-                "لم يتم إضافة أي حدث جديد. قبل: " + countBefore + " - بعد: " + countAfter);
-
-        // ✅ الأحداث الجديدة بس (اللي مكانتش موجودة قبل كده)
-        List<String> newTitles = new ArrayList<>(titlesAfter);
-        newTitles.removeAll(titlesBefore);
-
-        Allure.step("الأحداث الجديدة المضافة: " + String.join(", ", newTitles));
-
-        boolean allNewContainSalesmanName =
-                newTitles.stream().allMatch(t -> t.contains("محمد السيد"));
-        Assert.assertTrue(allNewContainSalesmanName, "فيه حدث جديد ما بيحتويش اسم المندوب المتوقع");
+        var agent = data().agent("Sales");
+        var status = data().fixture("route-status", "AgentItinerariesStatus",
+                fields("documentKind", "Invoice", "isRouteLocation", false));
+        var customer = data().fixture("route-customer", "Customers",
+                fields("agentId", agent.id(), "areaId", data().area().id(),
+                        "accountId", data().account().id(), "isActive", true,
+                        "dealersClassificationId", data().classification("Customers").id()));
+        RoutLineForDealer page = new RoutLineForDealer(driver);
+        String marker = ownedName(page, Pages.DEALERROUTELINE, "CALENDAR");
+        page.NavigationHelper(Pages.DEALERROUTELINE);
+        page.AddRoutLine();
+        page.PrepareOwnedRoute(agent.id(), customer.id(), status.id(),
+                new TestSupport.FixtureSession(driver).branchId);
+        page.AddArabicRoutLine(marker);
+        page.AddVisitCount("5");
+        page.AddDayCount("10");
+        page.ClickToDeletAllButton();
+        page.ClickAddAllButton();
+        page.AssertOnlyOwnedCustomerSelected(customer.id());
+        page.AddNotesForRoutLine(marker);
+        Assert.assertTrue(page.OwnedEventTitles(marker).isEmpty());
+        page.ClickToSaveButton();
+        new WebDriverWait(driver, Duration.ofSeconds(30))
+                .until(d -> !page.OwnedEventTitles(marker).isEmpty());
+        Assert.assertFalse(page.OwnedEventTitles(marker).isEmpty(),
+                "Owned route visits must be visible in the calendar");
+        Allure.addAttachment("Owned route calendar events", String.join("\n", page.OwnedEventTitles(marker)));
     }
 }

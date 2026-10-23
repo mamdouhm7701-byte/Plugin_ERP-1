@@ -80,50 +80,31 @@ final class DealerModelScreenAssertions {
             String editedName,
             Consumer<AbstractForDealer> fillRequiredFields,
             Runnable openList) {
-        try {
-            page.ClickNewButtonForDealer();
-            page.AddArabicName(originalName);
-            fillRequiredFields.accept(page);
-            page.ClickSaveButton();
-            waitForExactCount(driver, page, originalName, 1);
-            page.dismissDealerSaveSuccessIfPresent();
+        page.ClickNewButtonForDealer();
+        page.AddArabicName(originalName);
+        fillRequiredFields.accept(page);
+        page.ClickSaveButton();
+        waitForExactCount(driver, page, originalName, 1);
+        page.dismissDealerSaveSuccessIfPresent();
 
-            page.openDealerForEditByName(originalName);
-            Assert.assertEquals(page.getDealerArabicNameValue(), originalName);
-            page.AddArabicName(editedName);
-            page.ClickSaveButton();
-            waitForExactCount(driver, page, editedName, 1);
-            page.dismissDealerSaveSuccessIfPresent();
-            Assert.assertEquals(page.getExactDealerNameMatchCount(originalName), 0);
+        page.openDealerForEditByName(originalName);
+        Assert.assertEquals(page.getDealerArabicNameValue(), originalName);
+        page.AddArabicName(editedName);
+        page.ClickSaveButton();
+        waitForExactCount(driver, page, editedName, 1);
+        page.dismissDealerSaveSuccessIfPresent();
+        Assert.assertEquals(page.getExactDealerNameMatchCount(originalName), 0);
 
-            page.requestDealerDeleteByName(editedName);
-            page.cancelDealerDelete();
-            Assert.assertEquals(
-                    page.getExactDealerNameMatchCount(editedName),
-                    1,
-                    "إلغاء حذف سجل الاختبار يجب أن يبقي السجل المملوك للاختبار");
+        page.requestDealerDeleteByName(editedName);
+        page.cancelDealerDelete();
+        Assert.assertEquals(
+                page.getExactDealerNameMatchCount(editedName),
+                1,
+                "إلغاء حذف سجل الاختبار يجب أن يبقي السجل المملوك للاختبار");
 
-            page.requestDealerDeleteByName(editedName);
-            page.confirmDealerDeleteByName(editedName);
-            Assert.assertEquals(page.getExactDealerNameMatchCount(editedName), 0);
-        } finally {
-            try {
-                if (page.isDealerCreationFormDisplayed()) {
-                    page.closeDealerFormWithoutSaving();
-                }
-                openList.run();
-                for (String name : new String[] {editedName, originalName}) {
-                    if (page.getExactDealerNameMatchCount(name) > 0) {
-                        page.requestDealerDeleteByName(name);
-                        page.confirmDealerDeleteByName(name);
-                    }
-                }
-            } catch (RuntimeException cleanupFailure) {
-                System.err.println(
-                        "Could not clean owned Dealer Model test data: "
-                                + cleanupFailure.getMessage());
-            }
-        }
+        page.requestDealerDeleteByName(editedName);
+        page.confirmDealerDeleteByName(editedName);
+        Assert.assertEquals(page.getExactDealerNameMatchCount(editedName), 0);
     }
 
     private static void waitForExactCount(

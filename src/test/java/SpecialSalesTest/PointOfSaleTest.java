@@ -8,12 +8,13 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 @Epic("المبيعات")
-@Feature("فاتورة نقاط البيع المستقلة")
+@Feature("فاتورة نقاط البيع")
 public class PointOfSaleTest extends SpecialSalesScenario {
     protected SpecialSalesPage createPage() {
         return new PointOfSalePage(driver);
     }
 
+    @Step("إنشاء فاتورة وإضافة الصنف ثم سدادها وحفظها")
     private SpecialSalesTestData.Record paidInvoice() {
         var payment = data.payment();
         restartPage();
@@ -34,9 +35,9 @@ public class PointOfSaleTest extends SpecialSalesScenario {
     }
 
     @Test
-    @Story("استقلال الصفحة")
+    @Story("إعدادات الشاشة عند الفتح")
     @Description(
-            "التحقق من قناة نقاط البيع والمخزن والعميل المملوكين للاختبار دون الاعتماد على تننت"
+            "التحقق من قناة نقاط البيع والمخزن والعميل المحددين دون الاعتماد على تننت"
                     + " معينة.")
     public void ownedDefaultsAndChannel() {
         Assert.assertEquals(
@@ -44,9 +45,9 @@ public class PointOfSaleTest extends SpecialSalesScenario {
                         .get("transactionChannel")
                         .toString()
                         .toLowerCase(java.util.Locale.ROOT),
-                "pos");
-        Assert.assertEquals(page.document().get("dealerId"), customer.id());
-        Assert.assertEquals(page.document().get("storeId"), data.store(1).id());
+                "pos", "مطابقة قناة البيع");
+        Assert.assertEquals(page.document().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
+        Assert.assertEquals(page.document().get("storeId"), data.store(1).id(), "مطابقة المخزن");
     }
 
     @Test
@@ -54,7 +55,7 @@ public class PointOfSaleTest extends SpecialSalesScenario {
     @Description("إضافة صنف بالباركود والتحقق من الكمية والإجمالي دون حفظ أو تغيير المخزون.")
     public void barcodeAddsItem() {
         add();
-        Assert.assertEquals(lines().size(), 1);
+        Assert.assertEquals(lines().size(), 1, "مطابقة عدد بنود الفاتورة");
         number(page.document().get("total"), "100");
         number(data.balance(item, 1), "1000");
     }
@@ -92,7 +93,7 @@ public class PointOfSaleTest extends SpecialSalesScenario {
 
     @Test
     @Story("تعدد الأصناف")
-    @Description("إضافة صنفين مستقلين والتحقق من احتفاظ السلة بكليهما وجمع القيم.")
+    @Description("إضافة صنفين مختلفين والتحقق من احتفاظ السلة بكليهما وجمع القيم.")
     public void multipleItems() {
         var second = data.item(2);
         restartPage();
@@ -102,7 +103,7 @@ public class PointOfSaleTest extends SpecialSalesScenario {
                 String.valueOf(second.values().get("mainUnitBarcode")),
                 data.category().name());
         page.waitTotal("200");
-        Assert.assertEquals(lines().size(), 2);
+        Assert.assertEquals(lines().size(), 2, "مطابقة عدد بنود الفاتورة");
     }
 
     @Test
@@ -111,21 +112,21 @@ public class PointOfSaleTest extends SpecialSalesScenario {
     public void paymentTypeSwitch() {
         var pos = (PointOfSalePage) page;
         pos.credit();
-        Assert.assertEquals(page.document().get("paymentType"), "Credit");
+        Assert.assertEquals(page.document().get("paymentType"), "Credit", "مطابقة نوع السداد");
         pos.cash();
-        Assert.assertEquals(page.document().get("paymentType"), "Cash");
+        Assert.assertEquals(page.document().get("paymentType"), "Cash", "مطابقة نوع السداد");
     }
 
     @Test
     @Story("حفظ آجل")
     @Description(
-            "حفظ فاتورة نقاط بيع آجلة ببيانات مملوكة والتحقق من قراءة الفاتورة وخصم كمية الصنف من"
+            "حفظ فاتورة نقاط بيع آجلة بالبيانات المدخلة والتحقق من قراءة الفاتورة وخصم كمية الصنف من"
                 + " المخزن وزيادة مديونية العميل المسجل فور الحفظ بصافي الفاتورة طبقًا لقاعدة العمل"
                 + " المؤكدة.")
     public void savesCreditAndDeductsStock() {
         customer = data.registeredCustomer();
-        Assert.assertEquals(data.read(customer).get("isTaxable"), Boolean.TRUE);
-        Assert.assertEquals(data.read(customer).get("isOnTheFly"), Boolean.FALSE);
+        Assert.assertEquals(data.read(customer).get("isTaxable"), Boolean.TRUE, "مطابقة تطبيق الضريبة");
+        Assert.assertEquals(data.read(customer).get("isOnTheFly"), Boolean.FALSE, "مطابقة نوع العميل");
         restartPage();
         add();
         var pos = (PointOfSalePage) page;
@@ -137,7 +138,7 @@ public class PointOfSaleTest extends SpecialSalesScenario {
         page.save();
         var invoice = saved();
         var stored = data.read(invoice);
-        Assert.assertEquals(stored.get("dealerId"), customer.id());
+        Assert.assertEquals(stored.get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
         Allure.addAttachment("فاتورة نقاط البيع الآجلة المحفوظة",
                 "application/json", new org.json.JSONObject(stored).toString(2), ".json");
         Assert.assertEquals(stored.get("paymentType"), "Credit",
@@ -151,14 +152,14 @@ public class PointOfSaleTest extends SpecialSalesScenario {
                         .get("transactionChannel")
                         .toString()
                         .toLowerCase(java.util.Locale.ROOT),
-                "pos");
+                "pos", "مطابقة قناة البيع");
         number(data.balance(item, 1), "999");
         customerBalance(stored.get("net").toString());
     }
 
     @Test
     @Story("السداد النقدي")
-    @Description("حفظ فاتورة نقدية بطريقة دفع مستقلة والتحقق من حفظ مرجع الدفع وخصم المخزون.")
+    @Description("حفظ فاتورة نقدية بطريقة الدفع المحددة والتحقق من حفظ مرجع الدفع وخصم المخزون.")
     public void savesCashWithOwnedPayment() {
         var payment = data.payment();
         restartPage();
@@ -171,7 +172,7 @@ public class PointOfSaleTest extends SpecialSalesScenario {
         page.save();
         var invoice = saved();
         Assert.assertTrue(
-                data.read(invoice).get("payments").toString().contains(payment.id().toString()));
+                data.read(invoice).get("payments").toString().contains(payment.id().toString()), "التحقق من دفعات الفاتورة");
         number(data.balance(item, 1), "999");
         customerBalance("0");
     }
@@ -312,7 +313,7 @@ public class PointOfSaleTest extends SpecialSalesScenario {
                 data.read(invoice.get())
                         .get("payments")
                         .toString()
-                        .contains(payment.id().toString()));
+                        .contains(payment.id().toString()), "التحقق من دفعات الفاتورة");
         number(data.balance(item, 1), "999");
     }
 }

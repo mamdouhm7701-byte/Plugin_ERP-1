@@ -2,14 +2,14 @@ package Plugin_ERP.Tests.LoginTest.BasicDataTest;
 
 import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.System_Modules.Login.BasicData.ExpensesPage;
-import Plugin_ERP.Tests.LoginTest.BaseTest;
+import TestSupport.BasicDataScenarioTest;
 import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class ExpensesTest extends BaseTest {
+public class ExpensesTest extends BasicDataScenarioTest {
     private String unique(String suffix) {
-        return "QA-EXP-" + suffix + "-" + System.currentTimeMillis();
+        return ownedName("Expenses", suffix);
     }
 
     private ExpensesPage open() {
@@ -31,19 +31,7 @@ public class ExpensesTest extends BaseTest {
     }
 
     private void cleanup(ExpensesPage p, String... names) {
-        for (String name : names) {
-            if (name == null || name.isBlank()) continue;
-            try {
-                p.CloseFormIfOpen();
-                p.DismissAlertIfPresent();
-                if (p.GetExactMatchCount(name) == 0) continue;
-                p.RequestDeleteByName(name);
-                p.ConfirmDelete();
-            } catch (Exception e) {
-                System.err.println(
-                        "Could not clean owned Expense test row '" + name + "': " + e.getMessage());
-            }
-        }
+        // API owner cleanup runs even when UI assertions or modal handling fail.
     }
 
     @Test(priority = 0)
@@ -98,6 +86,7 @@ public class ExpensesTest extends BaseTest {
         ExpensesPage p = open();
         int before = p.GetEditableRowCount();
         p.ClickNew();
+        p.AddEnglishName(ownedName("Expenses", "required-name"));
         p.ClickSaveButton();
         Assert.assertTrue(p.IsArabicNameRequiredDisplayed());
         Assert.assertEquals(p.GetEditableRowCount(), before);
@@ -116,6 +105,7 @@ public class ExpensesTest extends BaseTest {
         int before = p.GetEditableRowCount();
         p.ClickNew();
         p.AddArabicName("   ");
+        p.AddEnglishName(ownedName("Expenses", "invalid-name"));
         p.ClickSaveButton();
         Assert.assertTrue(p.IsArabicNameRequiredDisplayed());
         Assert.assertEquals(p.GetEditableRowCount(), before);
@@ -133,11 +123,11 @@ public class ExpensesTest extends BaseTest {
         ExpensesPage p = open();
         String n = unique("CREATE"), en = "Expense " + System.currentTimeMillis();
         try {
-            create(p, n, en, "تسويق جوجل", true);
+            create(p, n, en, basicData().account("expenses").name(), true);
             p.OpenForEditByName(n);
             Assert.assertEquals(p.GetArabicNameValue(), n);
             Assert.assertEquals(p.GetEnglishNameValue(), en);
-            Assert.assertEquals(p.GetSelectedAccountValue(), "تسويق جوجل");
+            Assert.assertEquals(p.GetSelectedAccountValue(), basicData().account("expenses").name());
             Assert.assertTrue(p.IsSharedChecked());
             Assert.assertFalse(p.GetCodeValue().isBlank());
             p.ClickCloseButton();
@@ -178,9 +168,9 @@ public class ExpensesTest extends BaseTest {
     @Description("يعدل المصروف الذي أنشأه الاختبار ويتحقق من الاسم الجديد.")
     public void EX_021_EditOwned() {
         ExpensesPage p = open();
-        String n = unique("EDIT"), u = n + "-UPDATED";
+        String n = unique("EDIT"), u = unique("UPDATED");
         try {
-            create(p, n, "Edit expense", "تسويق جوجل", false);
+            create(p, n, "Edit expense", basicData().account("expenses").name(), false);
             p.OpenForEditByName(n);
             p.AddArabicName(u);
             p.ClickSaveButton();
@@ -199,8 +189,8 @@ public class ExpensesTest extends BaseTest {
     @Description("يتحقق من عدم حفظ التغيير عند إغلاق نموذج التعديل.")
     public void EX_022_CancelEdit() {
         ExpensesPage p = open();
-        if (p.GetEditableRowCount() == 0) return;
-        String n = p.GetFirstCellByHeader("اسم المصروف");
+        String n = unique("CANCEL-EDIT-ORIGINAL");
+        create(p, n, null, null, false);
         p.OpenForEditByName(n);
         p.AddArabicName(unique("CANCEL-EDIT"));
         p.ClickCloseButton();
@@ -220,7 +210,7 @@ public class ExpensesTest extends BaseTest {
         ExpensesPage p = open();
         String n = unique("DELETE");
         try {
-            create(p, n, null, "تسويق جوجل", false);
+            create(p, n, null, basicData().account("expenses").name(), false);
             p.RequestDeleteByName(n);
             Assert.assertTrue(p.IsDeleteConfirmationDisplayed());
             p.ConfirmDelete();
@@ -261,7 +251,7 @@ public class ExpensesTest extends BaseTest {
         ExpensesPage p = open();
         String n = unique("REFRESH");
         try {
-            create(p, n, "Refresh expense", "تسويق جوجل", true);
+            create(p, n, "Refresh expense", basicData().account("expenses").name(), true);
             driver.navigate().refresh();
             p = open();
             Assert.assertEquals(p.GetExactMatchCount(n), 1);

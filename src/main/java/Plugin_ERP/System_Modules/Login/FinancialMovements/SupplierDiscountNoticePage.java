@@ -59,6 +59,7 @@ public class SupplierDiscountNoticePage extends FinancialMovementPage {
         utilites.ClickElement(OpenFinancialMovements);
     }
 
+    @Step("حفظ إشعار الخصم")
     public void SaveCustomButton() {
         utilites.ClickElement(SaveAndAllocateButton);
     }

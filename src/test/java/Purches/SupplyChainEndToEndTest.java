@@ -35,8 +35,8 @@ public final class SupplyChainEndToEndTest extends PurchaseFormActions {
   private PurchaseTestData.Record buy(String quantity) {
     prepare("Credit"); buyer = data.customer(); salesAgent = data.agent(false);
     buyerBefore = data.read(buyer); supplierBefore = data.read(supplier);
-    org.testng.Assert.assertEquals(buyerBefore.get("isTaxable"), Boolean.TRUE);
-    org.testng.Assert.assertEquals(buyerBefore.get("isOnTheFly"), Boolean.FALSE);
+    org.testng.Assert.assertEquals(buyerBefore.get("isTaxable"), Boolean.TRUE, "مطابقة تطبيق الضريبة");
+    org.testng.Assert.assertEquals(buyerBefore.get("isOnTheFly"), Boolean.FALSE, "مطابقة نوع العميل");
     sourceBefore = initialBalances.get(1); destinationBefore = initialBalances.get(2);
     fill("picker"); page.puQuantity(item.name(), quantity); page.puWaitNet(number(quantity).multiply(number("100")).toPlainString());
     var invoice = save(false); assertStock(quantity); assertSupplierDelta(supplierBefore, number(quantity).multiply(number("-100")).toPlainString());

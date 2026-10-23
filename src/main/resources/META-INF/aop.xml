@@ -1,0 +1,5 @@
+<aspectj>
+    <aspects>
+        <aspect name="Plugin_ERP.Utiel.Allur.ScenarioAssertions"/>
+    </aspects>
+</aspectj>

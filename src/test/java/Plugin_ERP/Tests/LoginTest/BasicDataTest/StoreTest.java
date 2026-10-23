@@ -2,14 +2,14 @@ package Plugin_ERP.Tests.LoginTest.BasicDataTest;
 
 import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.System_Modules.Login.BasicData.StorePage;
-import Plugin_ERP.Tests.LoginTest.BaseTest;
+import TestSupport.BasicDataScenarioTest;
 import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class StoreTest extends BaseTest {
+public class StoreTest extends BasicDataScenarioTest {
     private String unique(String suffix) {
-        return "QA-STORE-" + suffix + "-" + System.currentTimeMillis();
+        return ownedName("Stores", suffix);
     }
 
     private StorePage open() {
@@ -29,17 +29,7 @@ public class StoreTest extends BaseTest {
     }
 
     private void cleanup(StorePage p, String... names) {
-        for (String n : names)
-            try {
-                p.CloseFormIfOpen();
-                if (n != null && p.GetExactMatchCount(n) > 0) {
-                    p.RequestDeleteByName(n);
-                    p.ConfirmDelete(n);
-                }
-            } catch (Exception e) {
-                System.err.println(
-                        "Could not clean owned Store row '" + n + "': " + e.getMessage());
-            }
+        // API owner cleanup runs even when UI assertions or modal handling fail.
     }
 
     @Test(priority = 0)
@@ -93,6 +83,7 @@ public class StoreTest extends BaseTest {
     public void STORE_004_ArabicNameRequired() {
         StorePage p = open();
         p.ClickNew();
+        p.AddEnglishName(ownedName("Stores", "required-name"));
         p.ClickSaveButton();
         Assert.assertTrue(p.IsArabicNameRequiredDisplayed());
         p.ClickCloseButton();
@@ -109,11 +100,11 @@ public class StoreTest extends BaseTest {
         StorePage p = open();
         String n = unique("CREATE"), en = "Store " + System.currentTimeMillis();
         try {
-            create(p, n, en, "تسويق جوجل");
+            create(p, n, en, basicData().account("stores").name());
             p.OpenForEditByName(n);
             Assert.assertEquals(p.GetArabicNameValue(), n);
             Assert.assertEquals(p.GetEnglishNameValue(), en);
-            Assert.assertEquals(p.GetSelectedAccountValue(), "تسويق جوجل");
+            Assert.assertEquals(p.GetSelectedAccountValue(), basicData().account("stores").name());
             Assert.assertFalse(p.GetCodeValue().isBlank());
             p.ClickCloseButton();
         } finally {
@@ -130,9 +121,9 @@ public class StoreTest extends BaseTest {
     @Description("يعدل الاسم العربي لسجل أنشأه الاختبار ويتأكد من التغيير.")
     public void STORE_006_EditOwned() {
         StorePage p = open();
-        String n = unique("EDIT"), u = n + "-UPDATED";
+        String n = unique("EDIT"), u = unique("UPDATED");
         try {
-            create(p, n, null, "تسويق جوجل");
+            create(p, n, null, basicData().account("stores").name());
             p.OpenForEditByName(n);
             p.AddArabicName(u);
             p.ClickSaveButton();
@@ -153,7 +144,7 @@ public class StoreTest extends BaseTest {
         StorePage p = open();
         String n = unique("DELETE");
         try {
-            create(p, n, null, "تسويق جوجل");
+            create(p, n, null, basicData().account("stores").name());
             p.RequestDeleteByName(n);
             Assert.assertTrue(p.IsDeleteConfirmationDisplayed());
             p.ConfirmDelete(n);
@@ -174,7 +165,7 @@ public class StoreTest extends BaseTest {
         StorePage p = open();
         String n = unique("CANCEL-DELETE");
         try {
-            create(p, n, null, "تسويق جوجل");
+            create(p, n, null, basicData().account("stores").name());
             p.RequestDeleteByName(n);
             p.CancelDelete();
             Assert.assertEquals(p.GetExactMatchCount(n), 1);
@@ -194,7 +185,7 @@ public class StoreTest extends BaseTest {
         StorePage p = open();
         String n = unique("REFRESH");
         try {
-            create(p, n, "Refresh store", "تسويق جوجل");
+            create(p, n, "Refresh store", basicData().account("stores").name());
             driver.navigate().refresh();
             p = open();
             Assert.assertEquals(p.GetExactMatchCount(n), 1);

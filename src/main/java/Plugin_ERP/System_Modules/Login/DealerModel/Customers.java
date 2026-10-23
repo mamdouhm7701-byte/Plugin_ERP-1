@@ -16,6 +16,7 @@ public class Customers extends AbstractForDealer {
 
     /** العميل العادي دائم وخاضع للضريبة؛ حالات النقدي أو الإعفاء تختارها صراحة بعد فتح النموذج. */
     @Override
+    @Step("فتح نموذج إضافة متعامل")
     public void ClickNewButtonForDealer() {
         super.ClickNewButtonForDealer();
         SmartCheck("عام", false);

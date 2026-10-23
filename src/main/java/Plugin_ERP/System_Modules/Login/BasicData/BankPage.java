@@ -46,11 +46,13 @@ public class BankPage extends AbstractForDealer {
     }
 
     @Override
+    @Step("إغلاق النموذج دون حفظ")
     public void ClickCloseButton() {
         if (visible(By.xpath("//button[normalize-space()='إغلاق']"))) super.ClickCloseButton();
     }
 
     @Override
+    @Step("فتح نموذج جديد")
     public void ClickNew() {
         waitRows();
         super.ClickNew();
@@ -59,6 +61,7 @@ public class BankPage extends AbstractForDealer {
     }
 
     @Override
+    @Step("حفظ البيانات المدخلة")
     public void ClickSaveButton() {
         super.ClickSaveButton();
         By success =
@@ -260,6 +263,7 @@ public class BankPage extends AbstractForDealer {
         return row.findElements(By.cssSelector("td")).get(i).getText().trim();
     }
 
+    @Step("فتح صف البنك المعروض للتعديل")
     public void OpenFirstBankForEdit() {
         WebElement row =
                 driver.findElements(rows).stream()
@@ -339,7 +343,7 @@ public class BankPage extends AbstractForDealer {
                         .anyMatch(WebElement::isDisplayed);
     }
 
-    @Step("طلب حذف البنك المملوك للاختبار بالاسم المطابق")
+    @Step("طلب حذف البنك المحدد بالاسم المطابق")
     public void RequestDeleteBankByName(String name) {
         findRow(name).findElement(By.cssSelector("button[data-action-type='delete']")).click();
         new WebDriverWait(driver, Duration.ofSeconds(10))
@@ -375,6 +379,7 @@ public class BankPage extends AbstractForDealer {
         }
     }
 
+    @Step("إلغاء حذف البنك")
     public void CancelBankDelete() {
         driver.findElement(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"))
                 .click();

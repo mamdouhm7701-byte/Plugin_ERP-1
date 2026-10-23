@@ -97,7 +97,7 @@ final class ProductsTestData implements AutoCloseable {
   private boolean containsStore(Map<String,Object> branch,Object storeId){
     return ((List<?>)branch.get("stores")).stream().anyMatch(value->value instanceof Map<?,?> row&&storeId.equals(row.get("storeId")));
   }
-  @io.qameta.allure.Step("تحديث ربط مخزن الاختبار بالفرع: {add}")
+
   private void changeBranchStore(Record link,boolean add){
     Map<String,Object> branch=branchFor(link);Object storeId=link.values().get("storeId");
     if(containsStore(branch,storeId)!=add){
@@ -179,7 +179,7 @@ final class ProductsTestData implements AutoCloseable {
         &&!dto.containsKey("error")&&!dto.containsKey("message"))return null;
     return (Map<String, Object>) entity;
   }
-  @io.qameta.allure.Step("إنشاء بيانات مساعدة مستقلة: {key}")
+
   Record fixture(String key, String endpoint, Map<String, Object> values) {
     key=fixtureKey(key);
     if (fixtures.containsKey(key)) return fixtures.get(key);
@@ -292,7 +292,6 @@ final class ProductsTestData implements AutoCloseable {
     }else if(node instanceof List<?> rows)for(Object row:rows)findOwned(row,name,matches);
   }
 
-  @io.qameta.allure.Step("تنظيف سجلات الاختبار بترتيب العلاقات")
   @Override public void close() {
     recoverPendingFixtures();
     List<String> failures = new ArrayList<>();

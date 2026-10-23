@@ -2,14 +2,14 @@ package Plugin_ERP.Tests.LoginTest.BasicDataTest;
 
 import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.System_Modules.Login.BasicData.BankPage;
-import Plugin_ERP.Tests.LoginTest.BaseTest;
+import TestSupport.BasicDataScenarioTest;
 import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class BankTest extends BaseTest {
+public class BankTest extends BasicDataScenarioTest {
     private String uniqueName(String suffix) {
-        return "QA-BANK-" + suffix + "-" + System.currentTimeMillis();
+        return ownedName("Banks", suffix);
     }
 
     private BankPage openBanks() {
@@ -33,28 +33,6 @@ public class BankTest extends BaseTest {
                 "يجب ظهور سجل البنك الفريد مرة واحدة: " + name);
     }
 
-    private void cleanup(BankPage page, String... names) {
-        for (String name : names) {
-            if (name == null || name.isBlank()) continue;
-            try {
-                page.SearchBank("");
-                if (page.GetExactBankMatchCount(name) == 0) continue;
-                page.RequestDeleteBankByName(name);
-                page.ConfirmBankDelete();
-            } catch (Exception error) {
-                System.err.println(
-                        "Could not clean up owned Bank test record '"
-                                + name
-                                + "': "
-                                + error.getMessage());
-            }
-        }
-        try {
-            page.SearchBank("");
-        } catch (Exception ignored) {
-        }
-    }
-
     @Test(priority = 0)
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
@@ -63,8 +41,10 @@ public class BankTest extends BaseTest {
     @Story("BK-001 بنية قائمة البنوك")
     @Description("يتحقق من أعمدة الكود واسم البنك ورقم الحساب ووجود إجراءات الصفوف.")
     public void BK_001_BankListStructureIsDisplayed() {
+        BankPage page = openBanks();
+        createBank(page, uniqueName("LIST"));
         Assert.assertTrue(
-                openBanks().IsBankListStructureDisplayed(),
+                page.IsBankListStructureDisplayed(),
                 "يجب ظهور أعمدة القائمة وإجراءات تعديل وحذف السجل");
     }
 
@@ -108,9 +88,10 @@ public class BankTest extends BaseTest {
     @Description("يتحقق من تحميل الاسم العربي ورقم الحساب من سجل الجدول المختار.")
     public void BK_020_EditFormLoadsValues() {
         BankPage page = openBanks();
-        String name = page.GetFirstBankCellByHeader("اسم البنك");
-        String account = page.GetFirstBankCellByHeader("رقم الحساب");
-        page.OpenFirstBankForEdit();
+        String name = uniqueName("LOAD");
+        createBank(page, name);
+        String account = "";
+        page.OpenBankForEditByName(name);
         Assert.assertEquals(page.GetArabicNameValue(), name);
         Assert.assertEquals(page.GetBankAccountValue(), account);
         page.ClickCloseButton();
@@ -125,11 +106,12 @@ public class BankTest extends BaseTest {
     @Description("يتحقق من تجاهل التغيير عند إغلاق نموذج التعديل دون حفظ.")
     public void BK_022_CancelEditDoesNotChangeBank() {
         BankPage page = openBanks();
-        String original = page.GetFirstBankCellByHeader("اسم البنك");
-        page.OpenFirstBankForEdit();
+        String original = uniqueName("CANCEL-ORIGINAL");
+        createBank(page, original);
+        page.OpenBankForEditByName(original);
         page.AddArabicName(uniqueName("EDIT-CANCEL"));
         page.ClickCloseButton();
-        page.OpenFirstBankForEdit();
+        page.OpenBankForEditByName(original);
         Assert.assertEquals(page.GetArabicNameValue(), original);
         page.ClickCloseButton();
     }
@@ -145,6 +127,7 @@ public class BankTest extends BaseTest {
         BankPage page = openBanks();
         int before = page.GetEditableBankCount();
         page.ClickNew();
+        page.AddNoteForDealer(uniqueName("INVALID-NAME"));
         page.ClickSaveButton();
         Assert.assertTrue(page.IsBankArabicNameRequiredDisplayed());
         Assert.assertEquals(page.GetEditableBankCount(), before);
@@ -163,6 +146,7 @@ public class BankTest extends BaseTest {
         int before = page.GetEditableBankCount();
         page.ClickNew();
         page.AddArabicName("   ");
+        page.AddNoteForDealer(uniqueName("WHITESPACE"));
         page.ClickSaveButton();
         Assert.assertTrue(page.IsBankArabicNameRequiredDisplayed());
         Assert.assertEquals(page.GetEditableBankCount(), before);
@@ -202,30 +186,26 @@ public class BankTest extends BaseTest {
         String english = "Automation Bank " + System.currentTimeMillis();
         String email = "qa" + System.currentTimeMillis() + "@example.com";
         String iban = "SA" + System.currentTimeMillis();
-        try {
-            page.ClickNew();
-            page.AddArabicName(name);
-            page.AddEnglishName(english);
-            page.AddEmail(email);
-            page.AddAdress("Automation test address");
-            page.AddAccountNumber("1234567890");
-            page.AddIban(iban);
-            page.AddNoteForDealer("Created by automated Bank test");
-            page.ClickSaveButton();
-            Assert.assertEquals(page.GetExactBankMatchCount(name), 1);
-            page.OpenBankForEditByName(name);
-            Assert.assertEquals(page.GetArabicNameValue(), name);
-            Assert.assertEquals(page.GetEnglishNameValue(), english);
-            Assert.assertEquals(page.GetEmailValue(), email);
-            Assert.assertEquals(page.GetAddressValue(), "Automation test address");
-            Assert.assertEquals(page.GetBankAccountValue(), "1234567890");
-            Assert.assertEquals(page.GetIbanValue(), iban);
-            Assert.assertEquals(page.GetNotesValue(), "Created by automated Bank test");
-            Assert.assertFalse(page.GetBankCodeValue().isBlank());
-            page.ClickCloseButton();
-        } finally {
-            cleanup(page, name);
-        }
+        page.ClickNew();
+        page.AddArabicName(name);
+        page.AddEnglishName(english);
+        page.AddEmail(email);
+        page.AddAdress("Automation test address");
+        page.AddAccountNumber("1234567890");
+        page.AddIban(iban);
+        page.AddNoteForDealer("Created by automated Bank test");
+        page.ClickSaveButton();
+        Assert.assertEquals(page.GetExactBankMatchCount(name), 1);
+        page.OpenBankForEditByName(name);
+        Assert.assertEquals(page.GetArabicNameValue(), name);
+        Assert.assertEquals(page.GetEnglishNameValue(), english);
+        Assert.assertEquals(page.GetEmailValue(), email);
+        Assert.assertEquals(page.GetAddressValue(), "Automation test address");
+        Assert.assertEquals(page.GetBankAccountValue(), "1234567890");
+        Assert.assertEquals(page.GetIbanValue(), iban);
+        Assert.assertEquals(page.GetNotesValue(), "Created by automated Bank test");
+        Assert.assertFalse(page.GetBankCodeValue().isBlank());
+        page.ClickCloseButton();
     }
 
     @Test(priority = 9)
@@ -238,22 +218,18 @@ public class BankTest extends BaseTest {
     public void BK_007_OptionalFieldsCanBeEmpty() {
         BankPage page = openBanks();
         String name = uniqueName("OPTIONAL");
-        try {
-            createBank(page, name);
-            page.OpenBankForEditByName(name);
-            Assert.assertEquals(page.GetArabicNameValue(), name);
-            Assert.assertEquals(
-                    page.GetEnglishNameValue(),
-                    name,
-                    "واجهة البنك تملأ الاسم الإنجليزي تلقائيًا عند تركه فارغًا");
-            Assert.assertTrue(page.GetEmailValue().isEmpty());
-            Assert.assertTrue(page.GetAddressValue().isEmpty());
-            Assert.assertTrue(page.GetBankAccountValue().isEmpty());
-            Assert.assertTrue(page.GetIbanValue().isEmpty());
-            page.ClickCloseButton();
-        } finally {
-            cleanup(page, name);
-        }
+        createBank(page, name);
+        page.OpenBankForEditByName(name);
+        Assert.assertEquals(page.GetArabicNameValue(), name);
+        Assert.assertEquals(
+                page.GetEnglishNameValue(),
+                name,
+                "واجهة البنك تملأ الاسم الإنجليزي تلقائيًا عند تركه فارغًا");
+        Assert.assertTrue(page.GetEmailValue().isEmpty());
+        Assert.assertTrue(page.GetAddressValue().isEmpty());
+        Assert.assertTrue(page.GetBankAccountValue().isEmpty());
+        Assert.assertTrue(page.GetIbanValue().isEmpty());
+        page.ClickCloseButton();
     }
 
     @Test(priority = 10)
@@ -266,16 +242,12 @@ public class BankTest extends BaseTest {
     public void BK_021_EditOwnedBank() {
         BankPage page = openBanks();
         String name = uniqueName("EDIT");
-        String updated = name + "-UPDATED";
-        try {
-            createBank(page, name);
-            page.OpenBankForEditByName(name);
-            page.AddArabicName(updated);
-            page.ClickSaveButton();
-            Assert.assertEquals(page.GetExactBankMatchCount(updated), 1);
-        } finally {
-            cleanup(page, updated, name);
-        }
+        String updated = uniqueName("UPDATED");
+        createBank(page, name);
+        page.OpenBankForEditByName(name);
+        page.AddArabicName(updated);
+        page.ClickSaveButton();
+        Assert.assertEquals(page.GetExactBankMatchCount(updated), 1);
     }
 
     @Test(priority = 11)
@@ -288,15 +260,11 @@ public class BankTest extends BaseTest {
     public void BK_023_DeleteOwnedBank() {
         BankPage page = openBanks();
         String name = uniqueName("DELETE");
-        try {
-            createBank(page, name);
-            page.RequestDeleteBankByName(name);
-            Assert.assertTrue(page.IsBankDeleteConfirmationDisplayed());
-            page.ConfirmBankDelete();
-            Assert.assertEquals(page.GetExactBankMatchCount(name), 0);
-        } finally {
-            cleanup(page, name);
-        }
+        createBank(page, name);
+        page.RequestDeleteBankByName(name);
+        Assert.assertTrue(page.IsBankDeleteConfirmationDisplayed());
+        page.ConfirmBankDelete();
+        Assert.assertEquals(page.GetExactBankMatchCount(name), 0);
     }
 
     @Test(priority = 12)
@@ -309,15 +277,11 @@ public class BankTest extends BaseTest {
     public void BK_024_CancelDeleteRetainsBank() {
         BankPage page = openBanks();
         String name = uniqueName("CANCEL-DELETE");
-        try {
-            createBank(page, name);
-            page.RequestDeleteBankByName(name);
-            Assert.assertTrue(page.IsBankDeleteConfirmationDisplayed());
-            page.CancelBankDelete();
-            Assert.assertEquals(page.GetExactBankMatchCount(name), 1);
-        } finally {
-            cleanup(page, name);
-        }
+        createBank(page, name);
+        page.RequestDeleteBankByName(name);
+        Assert.assertTrue(page.IsBankDeleteConfirmationDisplayed());
+        page.CancelBankDelete();
+        Assert.assertEquals(page.GetExactBankMatchCount(name), 1);
     }
 
     @Test(priority = 13)
@@ -330,14 +294,10 @@ public class BankTest extends BaseTest {
     public void BK_032_BankPersistsAfterRefresh() {
         BankPage page = openBanks();
         String name = uniqueName("REFRESH");
-        try {
-            createBank(page, name);
-            driver.navigate().refresh();
-            page = openBanks();
-            page.SearchBank("");
-            Assert.assertEquals(page.GetExactBankMatchCount(name), 1);
-        } finally {
-            cleanup(page, name);
-        }
+        createBank(page, name);
+        driver.navigate().refresh();
+        page = openBanks();
+        page.SearchBank("");
+        Assert.assertEquals(page.GetExactBankMatchCount(name), 1);
     }
 }

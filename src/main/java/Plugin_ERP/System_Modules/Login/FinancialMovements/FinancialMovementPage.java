@@ -25,6 +25,7 @@ public class FinancialMovementPage extends Abstract {
   }
   @Step("فتح قائمة الحركة المالية: {route}")
   public void openList(Pages route) {
+        Plugin_ERP.Utiel.Allur.ScreenNames.opening(route.getRoute());
     listUrl=PropertyReader.getApplicationUrl()+route.getRoute();
     driver.get(listUrl);
     driver.navigate().refresh();
@@ -48,7 +49,7 @@ public class FinancialMovementPage extends Abstract {
   }
   @Step("إدخال قيمة الحركة: {amount}")
   public void amount(String amount) {type(By.cssSelector("input[name='value']"),amount);}
-  @Step("إدخال ملاحظات الحركة المملوكة للاختبار: {note}")
+  @Step("إدخال ملاحظات الحركة المحددة: {note}")
   public void notes(String note) {type(By.cssSelector("textarea[label-text='Notes'],textarea"),note);}
   public String notesValue() {return driver.findElement(By.cssSelector("textarea")).getDomProperty("value");}
   @Step("اختيار {name} من {label}")
@@ -86,18 +87,21 @@ public class FinancialMovementPage extends Abstract {
     By input=By.xpath("(//div[@role='radiogroup'])["+side+"]/following::input[contains(@class,'vs__search')][1]");
     chooseInput(input,name);
   }
-  public void selectTransferType(int side,String type){
+  @Step("اختيار نوع الطرف {side}: {type}")
+    public void selectTransferType(int side,String type){
     String label=switch(type){case "Safe"->"خزينة";case "Bank"->"البنك";case "Customer"->"العميل";case "Supplier"->"المورد";default->throw new IllegalArgumentException(type);};
     By radio=By.xpath("(//div[@role='radiogroup'])["+side+"]//span[normalize-space()='"+label+"']");
     click(radio);
   }
-  public void movementType(String value){
+  @Step("اختيار نوع الحركة: {value}")
+    public void movementType(String value){
     By locator=By.cssSelector("input[type='radio'][value='"+value+"']");
     WebElement input=driver.findElement(locator);
     if(!input.isSelected())click(By.xpath("//input[@type='radio' and @value='"+value+"']/ancestor::label[1]"));
     ready.until(d->d.findElement(locator).isSelected());
   }
-  public void clearField(String label,int index){
+  @Step("مسح الحقل {label} في الموضع {index}")
+    public void clearField(String label,int index){
     By input=By.xpath("//*[self::label or self::legend][normalize-space()='"+label+"']/following::input[contains(@class,'vs__search')]["+index+"]");
     WebElement e=ready.until(ExpectedConditions.elementToBeClickable(input));
     WebElement picker=e.findElement(By.xpath("ancestor::div[contains(concat(' ',normalize-space(@class),' '),' v-select ')][1]"));
@@ -105,11 +109,13 @@ public class FinancialMovementPage extends Abstract {
     if(clear.stream().anyMatch(WebElement::isDisplayed))clear.stream().filter(WebElement::isDisplayed).findFirst().orElseThrow().click();
     else {e.click();e.sendKeys(Keys.BACK_SPACE);e.sendKeys(Keys.ESCAPE);}
   }
-  public void clearTransferDestination(){
+  @Step("مسح وجهة التحويل")
+    public void clearTransferDestination(){
     WebElement input=driver.findElement(By.xpath("(//div[@role='radiogroup'])[2]/following::input[contains(@class,'vs__search')][1]"));
     input.click();input.sendKeys(Keys.BACK_SPACE);input.sendKeys(Keys.ESCAPE);
   }
-  public void outsideFiscalYear(){
+  @Step("إدخال تاريخ خارج السنة المالية")
+    public void outsideFiscalYear(){
     String date=(String)((JavascriptExecutor)driver).executeScript("""
       const root=document.querySelector('#app').__vue__, q=[root];
       while(q.length){const vm=q.shift();q.push(...(vm.$children||[]));if(vm.currentYear?.startDate){
@@ -141,7 +147,8 @@ public class FinancialMovementPage extends Abstract {
       default -> false;
     };
   }
-  public void taxable(boolean value){
+  @Step("تحديد تطبيق الضريبة: {value}")
+    public void taxable(boolean value){
     By checkbox=By.cssSelector("input[name='isTaxApplied']");
     WebElement input=driver.findElement(checkbox);
     if(input.isSelected()!=value){
@@ -241,11 +248,13 @@ public class FinancialMovementPage extends Abstract {
     ((JavascriptExecutor)d).executeScript("arguments[0].scrollIntoView({block:'center'})",button);
     button.click();return true;
   });}
-  public void confirmDelete(boolean confirm){click(By.cssSelector(confirm?"button.swal2-confirm":"button.swal2-cancel"));ready.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".swal2-container")));}
+  @Step("تأكيد الحذف أو إلغاؤه: {confirm}")
+    public void confirmDelete(boolean confirm){click(By.cssSelector(confirm?"button.swal2-confirm":"button.swal2-cancel"));ready.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".swal2-container")));}
   public void waitForRemoval(String note){ready.until(d->!hasRow(note));}
   public boolean hasListHeaders(){return driver.findElements(By.cssSelector("thead th")).stream().anyMatch(WebElement::isDisplayed);}
   public void waitForList(){ready.until(d->!isFormPresent());dismissPopup();ready.until(d->hasListHeaders());}
-  public void export(String format){
+  @Step("تصدير القائمة بصيغة {format}")
+    public void export(String format){
     if(!List.of("pdf","excel").contains(format))throw new IllegalArgumentException(format);
     click(By.cssSelector("button:has(img[src*='"+(format.equals("pdf")?"pdf.":"xls.")+"'])"));
   }
@@ -268,7 +277,6 @@ public class FinancialMovementPage extends Abstract {
     });
   }
   private void click(By by){ready.until(d->{WebElement e=d.findElements(by).stream().filter(WebElement::isDisplayed).findFirst().orElse(null);if(e==null||!e.isEnabled())return false;((JavascriptExecutor)d).executeScript("arguments[0].scrollIntoView({block:'center'})",e);e.click();return true;});}
-  @Step("تسجيل نتيجة الحفظ من طلب الواجهة الفعلي")
   public void captureSaves(String marker) {
     ((JavascriptExecutor)driver).executeScript("""
       const store=document.querySelector('#app').__vue__.$store;

@@ -49,9 +49,9 @@ final class DealerTestData implements AutoCloseable {
     if(java.nio.file.Files.exists(path))for(Object value:new org.json.JSONArray(java.nio.file.Files.readString(path)).toList()){
       var row=(Map<String,Object>)value;data.session.verify(row);
       String endpoint=(String)row.get("endpoint"),name=(String)row.get("name");
-      if(name==null||!name.startsWith("QA-")||!java.util.Set.of("Areas","DealerClassifications","MainDealers","Agents","Accounts","Stores","Units","ItemCategories","Items","PriceLists").contains(endpoint)||row.get("id")==null||!(row.get("values") instanceof Map<?,?>))throw new AssertionError("Invalid owned fixture journal record");
+      if(name==null||!name.startsWith("QA-")||!java.util.Set.of("Areas","DealerClassifications","MainDealers","Customers","AgentItinerariesStatus","Agents","Accounts","Stores","Units","ItemCategories","Items","PriceLists").contains(endpoint)||row.get("id")==null||!(row.get("values") instanceof Map<?,?>))throw new AssertionError("Invalid owned fixture journal record");
       data.created.add(new Record(endpoint,row.get("id"),name,(Map<String,Object>)row.get("values")));
-    }data.pendingWrites.resume(java.util.Set.of("Areas","DealerClassifications","MainDealers","Agents","Accounts","Stores","Units","ItemCategories","Items","PriceLists"),"QA-");return data;
+    }data.pendingWrites.resume(java.util.Set.of("Areas","DealerClassifications","MainDealers","Customers","AgentItinerariesStatus","Agents","Accounts","Stores","Units","ItemCategories","Items","PriceLists"),"QA-");return data;
   }
 
   static Map<String, Object> fields(Object... pairs) {
@@ -143,7 +143,8 @@ final class DealerTestData implements AutoCloseable {
     for(int page=1;;page++){
       Object entity=call("get",endpoint+"?pageNumber="+page+"&pageSize=500&branchId="+session.branchId,fields()).get("entity");
       List<?> rows;long total;
-      if(entity instanceof List<?> list){rows=list;total=list.size();}
+      if(endpoint.equals("AgentItineraries") && entity instanceof Map<?,?> result && result.get("result") instanceof List<?> list){rows=list;total=list.size();}
+      else if(entity instanceof List<?> list){rows=list;total=list.size();}
       else if(entity instanceof Map<?,?> result&&result.get("pageData") instanceof List<?> list&&result.get("totalRecords") instanceof Number count){rows=list;total=count.longValue();}
       else throw new AssertionError("Cannot establish owned dealer absence through complete list");
       int added=0;for(Object value:rows){
@@ -155,21 +156,34 @@ final class DealerTestData implements AutoCloseable {
     }
   }
 
+  private static boolean ownsDealer(Map<?,?> row, String name) {
+    return java.util.stream.Stream.of("arabicName", "englishName", "notes").anyMatch(field -> name.equals(row.get(field)))
+        || row.get("visit") instanceof Map<?,?> visit && name.equals(visit.get("title"));
+  }
+
   void deleteOwnedDealer(Plugin_ERP.Enums.Pages route,String name){
     if(name==null||!name.startsWith("QA-"))throw new AssertionError("Refusing unowned dealer cleanup");
-    String endpoint=switch(route){case AGENTS->"Agents";case CUSTOMERS->"Customers";case SUPPLIERS->"Suppliers";case MAINDEALERS->"MainDealers";case CUSTOMERCLASS->"DealerClassifications";default->throw new AssertionError("Unsupported dealer cleanup route");};
-    var matches=dealerRows(endpoint).stream().filter(row->name.equals(row.get("arabicName"))).toList();
+    String endpoint=switch(route){case AGENTS->"Agents";case CUSTOMERS->"Customers";case SUPPLIERS->"Suppliers";case MAINDEALERS->"MainDealers";case CUSTOMERCLASS->"DealerClassifications";case DEALERROUTELINE->"AgentItineraries";default->throw new AssertionError("Unsupported dealer cleanup route");};
+    var matches=dealerRows(endpoint).stream().filter(row->ownsDealer(row,name)).toList();
     if(matches.isEmpty())return;
-    if(matches.size()!=1)throw new AssertionError("Ambiguous owned dealer name; retaining recovery journal");
-    Object id=matches.get(0).get("id");
+    if(matches.size()!=1 && !endpoint.equals("AgentItineraries"))throw new AssertionError("Ambiguous owned dealer name; retaining recovery journal");
+    for (Map<String,Object> row : matches) deleteExactDealer(endpoint, row.get("id"), name);
+  }
+
+  private void deleteExactDealer(String endpoint, Object id, String name) {
     for(int attempt=1;attempt<=3;attempt++){
+      Object raw = endpoint.equals("AgentItineraries")
+          ? dealerRows(endpoint).stream().filter(row -> id.equals(row.get("id"))).findFirst().orElse(null)
+          : call("get",endpoint,fields("id",id)).get("entity");
+      if (!(raw instanceof Map<?,?> current) || !id.equals(current.get("id")) || !ownsDealer(current,name))
+        throw new AssertionError("Dealer ownership changed before cleanup");
       ApiFailure rejected=null;
       try{call("delete",endpoint,fields("id",id));}
       catch(ApiFailure failure){rejected=failure;}
       catch(org.openqa.selenium.TimeoutException unknown){/* Verify whether the exact delete committed. */}
       var remaining=dealerRows(endpoint).stream().filter(row->id.equals(row.get("id"))).toList();
       if(remaining.isEmpty())return;
-      if(remaining.stream().anyMatch(row->!name.equals(row.get("arabicName"))))throw new AssertionError("Dealer ownership changed during cleanup");
+      if(remaining.stream().anyMatch(row->!ownsDealer(row,name)))throw new AssertionError("Dealer ownership changed during cleanup");
       if(rejected!=null&&!retryable(rejected))throw rejected;
     }
     throw new AssertionError("Owned dealer still exists after cleanup: "+name);

@@ -41,6 +41,7 @@ public class SalesModulePage extends AbstractForSales {
 
     @Step("فتح شاشة المبيعات: {route}")
     public void slOpen(String route) {
+        Plugin_ERP.Utiel.Allur.ScreenNames.opening(route);
         driver.get(PropertyReader.getApplicationUrl() + "/#/" + route);
         driver.navigate().refresh();
         slAwaitSession();
@@ -79,6 +80,7 @@ public class SalesModulePage extends AbstractForSales {
         interactions.choose(by, name, FormInteractions.OptionMatch.CODE_SEGMENT);
     }
 
+    @Step("مسح الاختيار من {label}")
     public void slClearChoice(String label) {
         ready.until(
                 d -> {
@@ -143,6 +145,7 @@ public class SalesModulePage extends AbstractForSales {
                 .anyMatch(WebElement::isDisplayed);
     }
 
+    @Step("إدخال ملاحظات السند: {note}")
     public void slNotes(String note) {
         slType(By.cssSelector("form textarea[label-text='Notes']"), note);
     }
@@ -155,10 +158,12 @@ public class SalesModulePage extends AbstractForSales {
         utilites.waits().waitForReportReady(60);
     }
 
+    @Step("الضغط على زر {text}")
     public void slButton(String text) {
         slClick(By.xpath("//button[normalize-space()='" + text + "']"));
     }
 
+    @Step("حفظ السند؛ طباعة التقرير: {print}")
     public void slSave(boolean print) {
         slClick(
                 print
@@ -325,7 +330,7 @@ public class SalesModulePage extends AbstractForSales {
                                         name)));
     }
 
-    @Step("إضافة صنف الاختبار بالاسم: {name}")
+    @Step("إضافة الصنف بالاسم: {name}")
     public void slAddName(String name) {
         radio("name");
         slType(By.cssSelector("form input#autosuggest__input"), name, false);
@@ -346,11 +351,12 @@ public class SalesModulePage extends AbstractForSales {
         }
     }
 
-    @Step("إضافة صنف الاختبار بالباركود: {barcode}")
+    @Step("إضافة الصنف بالباركود: {barcode}")
     public void slAddBarcode(String barcode, String name) {
         slAddBarcodeImmediately(barcode, name);
     }
 
+    @Step("إدخال الباركود {barcode} وإضافة الصنف {name}")
     public void slAddBarcodeImmediately(String barcode, String name) {
         radio("barcode");
         slType(
@@ -390,7 +396,7 @@ public class SalesModulePage extends AbstractForSales {
                 name);
     }
 
-    @Step("إضافة صنف الاختبار من قائمة الأصناف: {name}")
+    @Step("إضافة الصنف من قائمة الأصناف: {name}")
     public void slAddPicker(String name) {
         slButton("إضافة أصناف");
         slType(By.cssSelector(".modal.show input[label-text='arabicName']"), name);
@@ -409,12 +415,14 @@ public class SalesModulePage extends AbstractForSales {
                                         .noneMatch(WebElement::isDisplayed));
     }
 
+    @Step("البحث في {field} عن {value} والتحقق من الصنف {expectedName}")
     public void slPickerSearch(String field, String value, String expectedName) {
         slButton("إضافة أصناف");
         slType(By.cssSelector(".modal.show input[name='" + field + "']"), value);
         ready.until(d -> slPickerRows().stream().anyMatch(row -> row.contains(expectedName)));
     }
 
+    @Step("تصفية الأصناف بالفئة {category} والتحقق من الصنف {expectedName}")
     public void slPickerCategory(String category, String expectedName) {
         slButton("إضافة أصناف");
         slChoose("الفئة", category);
@@ -434,6 +442,7 @@ public class SalesModulePage extends AbstractForSales {
                 .toList();
     }
 
+    @Step("إغلاق نافذة اختيار الصنف")
     public void slClosePicker() {
         slClick(By.cssSelector(".modal.show button.close"));
         ready.until(
@@ -482,6 +491,7 @@ public class SalesModulePage extends AbstractForSales {
                 });
     }
 
+    @Step("حذف الصنف {name} من السند")
     public void slRemoveLine(String name) {
         slClick(
                 By.xpath(
@@ -491,7 +501,6 @@ public class SalesModulePage extends AbstractForSales {
         ready.until(d -> slLineCount(name) == 0);
     }
 
-    @Step("تسجيل طلبات حفظ سند الاختبار")
     public void slCapture(String marker, Object storeId, Object itemId, String endpoint) {
         js(
                 """
@@ -546,7 +555,7 @@ public class SalesModulePage extends AbstractForSales {
         return (String) js("return window.__salesQA?.marker||null");
     }
 
-    @Step("فتح سند الاختبار للتعديل")
+    @Step("فتح السند للتعديل")
     public void slEdit(String route, Object id, String marker, String itemName) {
         slOpen(route + "/edit/" + id);
         ready.until(
@@ -578,6 +587,7 @@ public class SalesModulePage extends AbstractForSales {
         return slDocument().get("transactionDate").toString().substring(0, 10);
     }
 
+    @Step("تغيير {column} للصنف {name} إلى {value}")
     public void slSetLine(String name, String column, String value) {
         ready.until(
                 d -> {
@@ -637,8 +647,10 @@ public class SalesModulePage extends AbstractForSales {
         return result;
     }
 
+    @Step("التحقق من صافي السند المتوقع: {value}")
     public void slWaitNet(String value) {
-        ready.until(
+        try {
+            ready.until(
                 d -> {
                     String actual = slTotals().get("الصافي");
                     return actual != null
@@ -646,8 +658,14 @@ public class SalesModulePage extends AbstractForSales {
                                             .compareTo(new java.math.BigDecimal(value))
                                     == 0;
                 });
+        } catch (org.openqa.selenium.TimeoutException failure) {
+            throw new AssertionError("صافي السند غير مطابق: المتوقع " + value
+                    + "، الفعلي " + slTotals().get("الصافي"), failure);
+        }
+
     }
 
+    @Step("إدخال خصم {value}، خصم بنسبة: {percentage}")
     public void slDiscount(String value, boolean percentage) {
         slType(
                 By.cssSelector(
@@ -657,6 +675,7 @@ public class SalesModulePage extends AbstractForSales {
                 value);
     }
 
+    @Step("إضافة طريقة الدفع {method} بمبلغ {amount}")
     public void slAddOtherPayment(String method, String amount) {
         radio("PaymentMethods");
         slChoose("طريقة الدفع", method);
@@ -666,6 +685,7 @@ public class SalesModulePage extends AbstractForSales {
                         "//form//*[self::legend or self::label][normalize-space()='طريقة الدفع']/ancestor::div[contains(@class,'row')][1]//button[.//*[local-name()='svg' and contains(@class,'feather-plus')]]"));
     }
 
+    @Step("فتح نموذج سند جديد")
     public void slNew() {
         slClick(By.xpath("//button[normalize-space()='جديد']"));
         slDismiss();
@@ -680,6 +700,7 @@ public class SalesModulePage extends AbstractForSales {
                 .getDomProperty("value");
     }
 
+    @Step("إنشاء مرتجع للفاتورة {invoiceId} والصنف {itemName}")
     public void slLinkedReturn(Object invoiceId, String itemName) {
         slOpen(
                 "return-sales/new?sourceTransactionId="
@@ -689,6 +710,7 @@ public class SalesModulePage extends AbstractForSales {
         ready.until(d -> slLineCount(itemName) > 0);
     }
 
+    @Step("تصفية القائمة بالمتعامل: {customer}")
     public void slListScope(String customer) {
         documentList.slListScope(customer);
     }
@@ -699,6 +721,7 @@ public class SalesModulePage extends AbstractForSales {
 
 
 
+    @Step("تطبيق فلاتر القائمة")
     public void slApplyListFilters() {
         documentList.slApplyListFilters();
     }
@@ -716,10 +739,12 @@ public class SalesModulePage extends AbstractForSales {
         documentList.slWaitListIds(expected);
     }
 
+    @Step("إدخال فلتر {name}: {text}")
     public void slListText(String name, String text) {
         documentList.slListText(name, text);
     }
 
+    @Step("اختيار {value} من فلتر {group}")
     public void slListRadio(String group, String value) {
         documentList.slListRadio(group, value);
     }
@@ -728,6 +753,7 @@ public class SalesModulePage extends AbstractForSales {
         return documentList.slHeaders();
     }
 
+    @Step("تصدير القائمة بصيغة {format}")
     public void slExport(String format) {
         documentList.slExport(format);
     }
@@ -745,6 +771,7 @@ public class SalesModulePage extends AbstractForSales {
         driver.switchTo().window(main);
     }
 
+    @Step("التحقق من بيانات الصنف {item} في التقرير المطبوع")
     public void slVerifyPrintedReport(String main, String item) {
         new WebDriverWait(driver, Duration.ofSeconds(45))
                 .until(d -> d.getWindowHandles().size() > 1);

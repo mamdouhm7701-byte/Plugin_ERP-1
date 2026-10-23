@@ -40,6 +40,7 @@ public class RoutLine extends AbstractForDealer {
     }
 
     @Override
+    @Step("فتح نموذج جديد")
     public void ClickNew() {
         waitLoading();
         super.ClickNew();
@@ -48,11 +49,13 @@ public class RoutLine extends AbstractForDealer {
     }
 
     @Override
+    @Step("إغلاق النموذج دون حفظ")
     public void ClickCloseButton() {
         if (visible(By.xpath("//button[normalize-space()='إغلاق']"))) super.ClickCloseButton();
     }
 
     @Override
+    @Step("حفظ البيانات المدخلة")
     public void ClickSaveButton() {
         super.ClickSaveButton();
         By success =
@@ -311,6 +314,7 @@ public class RoutLine extends AbstractForDealer {
         }
     }
 
+    @Step("إلغاء الحذف")
     public void CancelDelete() {
         driver.findElement(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"))
                 .click();

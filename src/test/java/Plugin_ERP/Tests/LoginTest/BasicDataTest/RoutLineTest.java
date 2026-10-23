@@ -2,14 +2,14 @@ package Plugin_ERP.Tests.LoginTest.BasicDataTest;
 
 import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.System_Modules.Login.BasicData.RoutLine;
-import Plugin_ERP.Tests.LoginTest.BaseTest;
+import TestSupport.BasicDataScenarioTest;
 import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class RoutLineTest extends BaseTest {
+public class RoutLineTest extends BasicDataScenarioTest {
     private String unique(String s) {
-        return "QA-ROUTE-" + s + "-" + System.currentTimeMillis();
+        return ownedName("AgentItinerariesStatus", s);
     }
 
     private RoutLine open() {
@@ -29,22 +29,6 @@ public class RoutLineTest extends BaseTest {
         Assert.assertEquals(p.GetExactMatchCount(n), 1, "يجب ظهور حالة خط السير مرة واحدة: " + n);
     }
 
-    private void cleanup(RoutLine p, String... ns) {
-        for (String n : ns)
-            if (n != null && !n.isBlank())
-                try {
-                    p.CloseFormIfOpen();
-                    p.DismissAlertIfPresent();
-                    if (p.GetExactMatchCount(n) > 0) {
-                        p.RequestDeleteByName(n);
-                        p.ConfirmDelete();
-                    }
-                } catch (Exception e) {
-                    System.err.println(
-                            "Could not clean owned route '" + n + "': " + e.getMessage());
-                }
-    }
-
     @Test(priority = 0)
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
@@ -53,7 +37,9 @@ public class RoutLineTest extends BaseTest {
     @Story("RL-001 بنية القائمة")
     @Description("يتحقق من أعمدة حالة خط السير ونوع المستند.")
     public void RL_001_ListStructure() {
-        Assert.assertTrue(open().IsListStructureDisplayed());
+        RoutLine p = open();
+        create(p, unique("LIST"), null, "فاتورة", false);
+        Assert.assertTrue(p.IsListStructureDisplayed());
     }
 
     @Test(priority = 1)
@@ -96,6 +82,7 @@ public class RoutLineTest extends BaseTest {
     public void RL_004_ArabicNameRequired() {
         RoutLine p = open();
         p.ClickNew();
+        p.AddNoteForDealer(unique("INVALID-NAME"));
         p.ClickSaveButton();
         Assert.assertTrue(p.IsArabicNameRequiredDisplayed());
         p.ClickCloseButton();
@@ -111,18 +98,14 @@ public class RoutLineTest extends BaseTest {
     public void RL_003_CreateAndVerify() {
         RoutLine p = open();
         String n = unique("CREATE"), en = "Route " + System.currentTimeMillis();
-        try {
-            create(p, n, en, "فاتورة", true);
-            p.OpenForEditByName(n);
-            Assert.assertEquals(p.GetArabicNameValue(), n);
-            Assert.assertEquals(p.GetEnglishNameValue(), en);
-            Assert.assertEquals(p.GetDocumentTypeValue(), "فاتورة");
-            Assert.assertTrue(p.IsRouteLocationChecked());
-            Assert.assertFalse(p.GetCodeValue().isBlank());
-            p.ClickCloseButton();
-        } finally {
-            cleanup(p, n);
-        }
+        create(p, n, en, "فاتورة", true);
+        p.OpenForEditByName(n);
+        Assert.assertEquals(p.GetArabicNameValue(), n);
+        Assert.assertEquals(p.GetEnglishNameValue(), en);
+        Assert.assertEquals(p.GetDocumentTypeValue(), "فاتورة");
+        Assert.assertTrue(p.IsRouteLocationChecked());
+        Assert.assertFalse(p.GetCodeValue().isBlank());
+        p.ClickCloseButton();
     }
 
     @Test(priority = 5, enabled = false)
@@ -135,15 +118,11 @@ public class RoutLineTest extends BaseTest {
     public void RL_007_CollectionTypeAndLocationOff() {
         RoutLine p = open();
         String n = unique("COLLECTION");
-        try {
-            create(p, n, null, "تحصيل", false);
-            p.OpenForEditByName(n);
-            Assert.assertEquals(p.GetDocumentTypeValue(), "تحصيل");
-            Assert.assertFalse(p.IsRouteLocationChecked());
-            p.ClickCloseButton();
-        } finally {
-            cleanup(p, n);
-        }
+        create(p, n, null, "تحصيل", false);
+        p.OpenForEditByName(n);
+        Assert.assertEquals(p.GetDocumentTypeValue(), "تحصيل");
+        Assert.assertFalse(p.IsRouteLocationChecked());
+        p.ClickCloseButton();
     }
 
     @Test(priority = 6)
@@ -152,20 +131,16 @@ public class RoutLineTest extends BaseTest {
     @Epic("Web Cloud")
     @Feature("حالة خط السير")
     @Story("RL-021 تعديل سجل الاختبار")
-    @Description("يعدل الاسم ونوع المستند في السجل المملوك للاختبار.")
+    @Description("يعدل الاسم ونوع المستند في السجل المحدد.")
     public void RL_021_EditOwned() {
         RoutLine p = open();
-        String n = unique("EDIT"), u = n + "-UPDATED";
-        try {
-            create(p, n, "Route edit", "فاتورة", false);
-            p.OpenForEditByName(n);
-            p.AddArabicName(u);
-            p.SelectRadiBouton("تحصيل");
-            p.ClickSaveButton();
-            Assert.assertEquals(p.GetExactMatchCount(u), 1);
-        } finally {
-            cleanup(p, u, n);
-        }
+        String n = unique("EDIT"), u = unique("UPDATED");
+        create(p, n, "Route edit", "فاتورة", false);
+        p.OpenForEditByName(n);
+        p.AddArabicName(u);
+        p.SelectRadiBouton("تحصيل");
+        p.ClickSaveButton();
+        Assert.assertEquals(p.GetExactMatchCount(u), 1);
     }
 
     @Test(priority = 7)
@@ -178,17 +153,13 @@ public class RoutLineTest extends BaseTest {
     public void RL_022_CancelEdit() {
         RoutLine p = open();
         String n = unique("CANCEL-EDIT");
-        try {
-            create(p, n, null, "فاتورة", false);
-            p.OpenForEditByName(n);
-            p.AddArabicName(n + "-TEMP");
-            p.ClickCloseButton();
-            p.OpenForEditByName(n);
-            Assert.assertEquals(p.GetArabicNameValue(), n);
-            p.ClickCloseButton();
-        } finally {
-            cleanup(p, n);
-        }
+        create(p, n, null, "فاتورة", false);
+        p.OpenForEditByName(n);
+        p.AddArabicName(unique("TEMP"));
+        p.ClickCloseButton();
+        p.OpenForEditByName(n);
+        Assert.assertEquals(p.GetArabicNameValue(), n);
+        p.ClickCloseButton();
     }
 
     @Test(priority = 8)
@@ -201,15 +172,11 @@ public class RoutLineTest extends BaseTest {
     public void RL_023_DeleteOwned() {
         RoutLine p = open();
         String n = unique("DELETE");
-        try {
-            create(p, n, null, "فاتورة", false);
-            p.RequestDeleteByName(n);
-            Assert.assertTrue(p.IsDeleteConfirmationDisplayed());
-            p.ConfirmDelete();
-            Assert.assertEquals(p.GetExactMatchCount(n), 0);
-        } finally {
-            cleanup(p, n);
-        }
+        create(p, n, null, "فاتورة", false);
+        p.RequestDeleteByName(n);
+        Assert.assertTrue(p.IsDeleteConfirmationDisplayed());
+        p.ConfirmDelete();
+        Assert.assertEquals(p.GetExactMatchCount(n), 0);
     }
 
     @Test(priority = 9)
@@ -222,14 +189,10 @@ public class RoutLineTest extends BaseTest {
     public void RL_024_CancelDelete() {
         RoutLine p = open();
         String n = unique("CANCEL-DELETE");
-        try {
-            create(p, n, null, "فاتورة", false);
-            p.RequestDeleteByName(n);
-            p.CancelDelete();
-            Assert.assertEquals(p.GetExactMatchCount(n), 1);
-        } finally {
-            cleanup(p, n);
-        }
+        create(p, n, null, "فاتورة", false);
+        p.RequestDeleteByName(n);
+        p.CancelDelete();
+        Assert.assertEquals(p.GetExactMatchCount(n), 1);
     }
 
     @Test(priority = 10)
@@ -242,13 +205,9 @@ public class RoutLineTest extends BaseTest {
     public void RL_032_PersistAfterRefresh() {
         RoutLine p = open();
         String n = unique("REFRESH");
-        try {
-            create(p, n, "Route refresh", "فاتورة", true);
-            driver.navigate().refresh();
-            p = open();
-            Assert.assertEquals(p.GetExactMatchCount(n), 1);
-        } finally {
-            cleanup(p, n);
-        }
+        create(p, n, "Route refresh", "فاتورة", true);
+        driver.navigate().refresh();
+        p = open();
+        Assert.assertEquals(p.GetExactMatchCount(n), 1);
     }
 }

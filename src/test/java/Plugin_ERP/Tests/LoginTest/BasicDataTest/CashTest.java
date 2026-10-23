@@ -4,7 +4,7 @@ import Plugin_ERP.Drivers.WebDriverFactory;
 import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.System_Modules.Login.BasicData.CashPage;
 import Plugin_ERP.System_Modules.Login.Login.LoginPage;
-import Plugin_ERP.Tests.LoginTest.BaseTest;
+import TestSupport.BasicDataScenarioTest;
 import Plugin_ERP.Utiel.PropertyReader;
 import Plugin_ERP.Listners.TestNGListeners;
 import io.qameta.allure.*;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CashTest extends BaseTest {
+public class CashTest extends BasicDataScenarioTest {
 
     @Test(priority = 0)
     @Owner("MAMDOUH")
@@ -31,6 +31,7 @@ public class CashTest extends BaseTest {
     @Story("WH-001 فتح شاشة الخزن وعرض القائمة")
     @Description("يتحقق من ظهور أعمدة قائمة الخزن وأزرار التعديل والحذف للصفوف الموجودة.")
     public void WH_001_SafeListStructureIsDisplayed() {
+        seedSafe("structure");
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);
 
@@ -71,7 +72,7 @@ public class CashTest extends BaseTest {
         CashPage cashPage = new CashPage(driver);
 
         cashPage.NavigationHelper(Pages.SAFES);
-        String unsavedName = "خزنة غير محفوظة " + System.currentTimeMillis();
+        String unsavedName = ownedName("Safes", "unsavedName");
         cashPage.ClickNew();
         cashPage.AddArabicName(unsavedName);
         cashPage.ClickCloseButton();
@@ -95,6 +96,7 @@ public class CashTest extends BaseTest {
     public void WH_020_EditFormLoadsCurrentSafeName() {
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);
+        cashPage.searchSafes(seedSafe("edit-form"));
         String codeInList = cashPage.getFirstSafeCellByHeader("الكود");
         String nameInList = cashPage.getFirstSafeCellByHeader("اسم الخزنة");
         String accountInList = cashPage.getFirstSafeCellByHeader("رقم الحساب");
@@ -127,10 +129,11 @@ public class CashTest extends BaseTest {
     public void WH_022_CancelSafeEditWithoutSaving() {
         CashPage cashPage = new CashPage(driver);
         String originalName;
-        String temporaryName = "تعديل غير محفوظ " + System.currentTimeMillis();
+        String temporaryName = ownedName("Safes", "temporaryName");
 
         cashPage.NavigationHelper(Pages.SAFES);
-        originalName = cashPage.getFirstSafeCellByHeader("اسم الخزنة");
+        originalName = seedSafe("cancel-edit");
+        cashPage.searchSafes(originalName);
         cashPage.openFirstSafeForEdit();
         cashPage.AddArabicName(temporaryName);
         cashPage.ClickCloseButton();
@@ -157,17 +160,7 @@ public class CashTest extends BaseTest {
                     + " والتحقق من إضافة السجل بنجاح.")
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void ValidCashTest() {
-        System.out.println("Cash test started");
-        CashPage cashPage = new CashPage(driver);
-        cashPage.NavigationHelper(Pages.SAFES);
-        cashPage.ClickNew();
-        cashPage.AddArabicName("55");
-        cashPage.AddEnglishName("55");
-        cashPage.AddNoteForDealer("تست");
-        cashPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
-        cashPage.SelectCheckboxByText("عام", true);
-        cashPage.ClickSaveButton();
-        cashPage.AssertReceiptAdded("55");
+        WH_003_CreateValidSafeAndVerifyFields();
     }
 
     @Test(
@@ -183,12 +176,7 @@ public class CashTest extends BaseTest {
                     + " وحفظ التعديلات والتحقق من تحديث السجل بنجاح.")
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void EditCash() {
-        CashPage cashPage = new CashPage(driver);
-        cashPage.NavigationHelper(Pages.SAFES);
-        cashPage.Edit();
-        cashPage.AddArabicName("معدل");
-        cashPage.ClickSaveButton();
-        cashPage.AssertReceiptAdded("معدل");
+        WH_021_EditOwnedTestSafeAndSave();
     }
 
     @Test(
@@ -202,9 +190,7 @@ public class CashTest extends BaseTest {
     @Description("يتحقق هذا الاختبار من أن المستخدم يستطيع حذف خزنة موجودة بنجاح.")
     @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
     public void DeleteCash() {
-        CashPage cashPage = new CashPage(driver);
-        cashPage.NavigationHelper(Pages.SAFES);
-        cashPage.Delete();
+        WH_023_DeleteOnlyOwnedTestSafe();
     }
 
     @Test(priority = 4)
@@ -222,8 +208,8 @@ public class CashTest extends BaseTest {
         cashPage.NavigationHelper(Pages.SAFES);
         cashPage.ClickNew();
         cashPage.AddArabicName("");
-        cashPage.AddEnglishName("Required field validation");
-        cashPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
+        cashPage.AddEnglishName(ownedName("Safes", "required-field"));
+        cashPage.SelectFromDropDawn(basicData().account("safe").name(), "رقم الحساب");
         int rowCountBefore = cashPage.getSafeTotalRowCount();
         cashPage.ClickSaveButton();
         Assert.assertTrue(
@@ -248,6 +234,7 @@ public class CashTest extends BaseTest {
         cashPage.NavigationHelper(Pages.SAFES);
         int rowCountBefore = cashPage.getSafeTotalRowCount();
         cashPage.ClickNew();
+        cashPage.AddEnglishName(ownedName("Safes", "required-name"));
         cashPage.ClickSaveButton();
 
         Assert.assertTrue(
@@ -273,8 +260,8 @@ public class CashTest extends BaseTest {
         int rowCountBefore = cashPage.getSafeTotalRowCount();
         cashPage.ClickNew();
         cashPage.AddArabicName("   ");
-        cashPage.AddEnglishName("Whitespace validation");
-        cashPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
+        cashPage.AddEnglishName(ownedName("Safes", "whitespace"));
+        cashPage.SelectFromDropDawn(basicData().account("safe").name(), "رقم الحساب");
         cashPage.ClickSaveButton();
 
         Assert.assertTrue(
@@ -297,11 +284,12 @@ public class CashTest extends BaseTest {
     public void CorrectArabicNameAfterValidationError() {
         CashPage cashPage = new CashPage(driver);
         String uniqueSuffix = String.valueOf(System.currentTimeMillis());
-        String arabicName = "خزنة تصحيح " + uniqueSuffix;
+        String arabicName = ownedName("Safes", "arabicName");
 
         cashPage.NavigationHelper(Pages.SAFES);
         try {
             cashPage.ClickNew();
+            cashPage.AddEnglishName(ownedName("Safes", "correctable-invalid"));
             cashPage.ClickSaveButton();
             Assert.assertTrue(
                     cashPage.IsArabicNameRequiredErrorDisplayed(),
@@ -309,7 +297,7 @@ public class CashTest extends BaseTest {
 
             cashPage.AddArabicName(arabicName);
             cashPage.AddEnglishName("Corrected Safe " + uniqueSuffix);
-            cashPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
+            cashPage.SelectFromDropDawn(basicData().account("safe").name(), "رقم الحساب");
             cashPage.ClickSaveButton();
             cashPage.searchSafes(arabicName);
             Assert.assertEquals(
@@ -365,6 +353,7 @@ public class CashTest extends BaseTest {
     @Story("WH-001 Display safe list")
     @Description("يتحقق من ظهور سجلات الخزن في الجدول دون فتح نموذج الإضافة.")
     public void CashListDisplaysRecords() {
+        seedSafe("list");
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);
 
@@ -385,15 +374,17 @@ public class CashTest extends BaseTest {
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);
 
+        String ownSafe = seedSafe("search");
+        cashPage.searchSafes(ownSafe);
         String visibleCode = cashPage.getFirstSafeCellByHeader("الكود");
         cashPage.searchSafes(visibleCode);
         Assert.assertTrue(
                 cashPage.isSafeVisibleInSearchResults(visibleCode),
                 "يجب إظهار الخزنة عند البحث بكود موجود في القائمة");
 
-        cashPage.searchSafes("الخزنة الرئيسية");
+        cashPage.searchSafes(ownSafe);
         Assert.assertTrue(
-                cashPage.isSafeVisibleInSearchResults("الخزنة الرئيسية"),
+                cashPage.isSafeVisibleInSearchResults(ownSafe),
                 "يجب إظهار الخزنة المطابقة للاسم العربي");
 
         cashPage.searchSafes("XYZ999");
@@ -416,6 +407,7 @@ public class CashTest extends BaseTest {
     public void WH_017_SearchSafesByEnglishName() {
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);
+        cashPage.searchSafes(seedSafe("english-search"));
         cashPage.openFirstSafeForEdit();
         String englishName = cashPage.getEnglishNameInputValue().trim();
         cashPage.ClickCloseButton();
@@ -441,15 +433,17 @@ public class CashTest extends BaseTest {
     public void WH_028_SafeListCanBeSortedByCode() {
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);
+        seedSafe("sort-a");
+        seedSafe("sort-b");
+        driver.navigate().refresh();
+        cashPage.NavigationHelper(Pages.SAFES);
         List<String> codesBeforeSort = cashPage.getSafeColumnValues("الكود");
         cashPage.clickSafeColumnHeader("الكود");
         List<String> ascendingCodes = cashPage.getSafeColumnValues("الكود");
         cashPage.clickSafeColumnHeader("الكود");
         List<String> descendingCodes = cashPage.getSafeColumnValues("الكود");
 
-        if (codesBeforeSort.size() < 2) {
-            return;
-        }
+        Assert.assertTrue(codesBeforeSort.size() >= 2, "Owned sorting fixtures must be visible");
         Assert.assertEquals(
                 ascendingCodes,
                 cashPage.sortCodes(ascendingCodes, true),
@@ -471,6 +465,9 @@ public class CashTest extends BaseTest {
                     + " المختارة.")
     public void WH_029_ChangingPageSizeUpdatesVisibleRows() {
         CashPage cashPage = new CashPage(driver);
+        cashPage.NavigationHelper(Pages.SAFES);
+        seedSafe("page-size");
+        driver.navigate().refresh();
         cashPage.NavigationHelper(Pages.SAFES);
         int defaultPageSize = cashPage.getSelectedSafePageSize();
         int rowsBeforeChange = cashPage.getVisibleSafeRowCount();
@@ -495,6 +492,10 @@ public class CashTest extends BaseTest {
     @Description("يتحقق من الانتقال للصفحة التالية والعودة للسابق فقط عندما تتوفر صفحات متعددة.")
     public void WH_030_NavigateSafeListPagesWhenAvailable() {
         CashPage cashPage = new CashPage(driver);
+        cashPage.NavigationHelper(Pages.SAFES);
+        int pageSize = cashPage.getSelectedSafePageSize();
+        for (int i = 0; i <= pageSize; i++) seedSafe("pagination-" + i);
+        driver.navigate().refresh();
         cashPage.NavigationHelper(Pages.SAFES);
         if (!cashPage.isSafeNextPageEnabled()) {
             Assert.assertFalse(
@@ -525,7 +526,7 @@ public class CashTest extends BaseTest {
     public void WH_003_CreateValidSafeAndVerifyFields() {
         CashPage cashPage = new CashPage(driver);
         String suffix = String.valueOf(System.currentTimeMillis());
-        String arabicName = "خزنة آلية " + suffix;
+        String arabicName = ownedName("Safes", "arabicName");
         String englishName = "Automation Safe " + suffix;
         cashPage.NavigationHelper(Pages.SAFES);
         try {
@@ -533,7 +534,7 @@ public class CashTest extends BaseTest {
                     cashPage,
                     arabicName,
                     englishName,
-                    "تسويق جوجل",
+                    basicData().account("safe").name(),
                     false,
                     "Created by automation");
             cashPage.openSafeForEditByName(arabicName);
@@ -572,7 +573,7 @@ public class CashTest extends BaseTest {
     @Feature("الخزن")
     @Story("WH-008 حفظ الخزنة وخيار عام غير محدد")
     public void WH_008_SaveSafeWithGeneralUnchecked() {
-        verifyOptionalSafeScenario("تسويق جوجل", false, "WH-008");
+        verifyOptionalSafeScenario(basicData().account("safe").name(), false, "WH-008");
     }
 
     @Test(priority = 19)
@@ -582,7 +583,7 @@ public class CashTest extends BaseTest {
     @Feature("الخزن")
     @Story("WH-009 حفظ الخزنة وخيار عام محدد")
     public void WH_009_SaveSafeWithGeneralChecked() {
-        verifyOptionalSafeScenario("تسويق جوجل", true, "WH-009");
+        verifyOptionalSafeScenario(basicData().account("safe").name(), true, "WH-009");
     }
 
     @Test(priority = 20)
@@ -592,7 +593,7 @@ public class CashTest extends BaseTest {
     @Feature("الخزن")
     @Story("WH-010 حفظ الملاحظات فارغة")
     public void WH_010_SaveSafeWithEmptyNotes() {
-        verifyOptionalSafeScenario("تسويق جوجل", false, "WH-010");
+        verifyOptionalSafeScenario(basicData().account("safe").name(), false, "WH-010");
     }
 
     @Test(priority = 22)
@@ -604,13 +605,13 @@ public class CashTest extends BaseTest {
     public void WH_012_RapidDoubleSaveCreatesSingleSafe() {
         CashPage cashPage = new CashPage(driver);
         String suffix = String.valueOf(System.currentTimeMillis());
-        String arabicName = "خزنة حفظ مزدوج " + suffix;
+        String arabicName = ownedName("Safes", "arabicName");
         cashPage.NavigationHelper(Pages.SAFES);
         try {
             cashPage.ClickNew();
             cashPage.AddArabicName(arabicName);
             cashPage.AddEnglishName("Double Save " + suffix);
-            cashPage.SelectFromDropDawn("تسويق جوجل", "رقم الحساب");
+            cashPage.SelectFromDropDawn(basicData().account("safe").name(), "رقم الحساب");
             cashPage.clickSaveTwiceRapidly();
             cashPage.searchSafes(arabicName);
             Assert.assertEquals(
@@ -631,11 +632,11 @@ public class CashTest extends BaseTest {
     public void WH_021_EditOwnedTestSafeAndSave() {
         CashPage cashPage = new CashPage(driver);
         String suffix = String.valueOf(System.currentTimeMillis());
-        String originalName = "خزنة تعديل آلية " + suffix;
-        String editedName = originalName + " معدلة";
+        String originalName = ownedName("Safes", "originalName");
+        String editedName = ownedName("Safes", "edited");
         cashPage.NavigationHelper(Pages.SAFES);
         try {
-            createSafe(cashPage, originalName, "Edit Safe " + suffix, "تسويق جوجل", false, "");
+            createSafe(cashPage, originalName, "Edit Safe " + suffix, basicData().account("safe").name(), false, "");
             cashPage.openSafeForEditByName(originalName);
             cashPage.AddArabicName(editedName);
             cashPage.ClickSaveButton();
@@ -657,14 +658,14 @@ public class CashTest extends BaseTest {
     @Story("WH-023 طلب حذف خزنة اختبار")
     public void WH_023_DeleteOnlyOwnedTestSafe() {
         CashPage cashPage = new CashPage(driver);
-        String safeName = "خزنة حذف آلية " + System.currentTimeMillis();
+        String safeName = ownedName("Safes", "safeName");
         cashPage.NavigationHelper(Pages.SAFES);
         try {
             createSafe(
                     cashPage,
                     safeName,
                     "Delete Safe " + System.currentTimeMillis(),
-                    "تسويق جوجل",
+                    basicData().account("safe").name(),
                     false,
                     "");
             cashPage.searchSafes(safeName);
@@ -690,14 +691,14 @@ public class CashTest extends BaseTest {
     @Story("WH-024 إلغاء حذف الخزنة")
     public void WH_024_CancelDeleteOfOwnedTestSafe() {
         CashPage cashPage = new CashPage(driver);
-        String safeName = "خزنة إلغاء حذف آلية " + System.currentTimeMillis();
+        String safeName = ownedName("Safes", "safeName");
         cashPage.NavigationHelper(Pages.SAFES);
         try {
             createSafe(
                     cashPage,
                     safeName,
                     "Cancel Delete " + System.currentTimeMillis(),
-                    "تسويق جوجل",
+                    basicData().account("safe").name(),
                     false,
                     "");
             cashPage.searchSafes(safeName);
@@ -740,14 +741,14 @@ public class CashTest extends BaseTest {
     @Story("WH-035 عدم تكرار السجل بعد إعادة فتح القائمة")
     public void WH_035_ReopeningListDoesNotDuplicateSafe() {
         CashPage cashPage = new CashPage(driver);
-        String safeName = "خزنة إعادة فتح آلية " + System.currentTimeMillis();
+        String safeName = ownedName("Safes", "safeName");
         cashPage.NavigationHelper(Pages.SAFES);
         try {
             createSafe(
                     cashPage,
                     safeName,
                     "Reopen Safe " + System.currentTimeMillis(),
-                    "تسويق جوجل",
+                    basicData().account("safe").name(),
                     false,
                     "");
             driver.navigate().refresh();
@@ -834,7 +835,7 @@ public class CashTest extends BaseTest {
     private void verifyOptionalSafeScenario(String accountName, boolean general, String tcId) {
         CashPage cashPage = new CashPage(driver);
         String suffix = String.valueOf(System.currentTimeMillis());
-        String safeName = "خزنة " + tcId + " " + suffix;
+        String safeName = ownedName("Safes", "safeName");
         cashPage.NavigationHelper(Pages.SAFES);
         try {
             createSafe(
@@ -868,14 +869,14 @@ public class CashTest extends BaseTest {
     private void verifySafePersistsAcrossRefresh(String tcId) {
         CashPage cashPage = new CashPage(driver);
         String suffix = String.valueOf(System.currentTimeMillis());
-        String safeName = "خزنة استمرارية " + tcId + " " + suffix;
+        String safeName = ownedName("Safes", "safeName");
         cashPage.NavigationHelper(Pages.SAFES);
         try {
             createSafe(
                     cashPage,
                     safeName,
                     "Persistence " + tcId + " " + suffix,
-                    "تسويق جوجل",
+                    basicData().account("safe").name(),
                     false,
                     "");
             driver.navigate().refresh();
@@ -891,35 +892,12 @@ public class CashTest extends BaseTest {
     }
 
     private void cleanupTestSafe(CashPage cashPage, String safeName) {
-        if (safeName == null || safeName.isBlank()) {
-            return;
-        }
-        if (cashPage.isCashCreationFormDisplayed()) {
-            cashPage.ClickCloseButton();
-        }
-        if (cashPage.isSafeDeleteConfirmationDisplayed()) {
-            cashPage.cancelSafeDelete();
-        }
-        cashPage.searchSafes("");
-        cashPage.searchSafes(safeName);
-        int matches = cashPage.getExactSafeMatchCount(safeName);
-        if (matches == 0) {
-            return;
-        }
-        if (matches != 1) {
-            throw new AssertionError(
-                    "Cleanup refused: expected exactly one owned test safe, found " + matches);
-        }
-        cashPage.requestDeleteSafeByName(safeName);
-        cashPage.confirmSafeDelete();
-        driver.navigate().refresh();
-        cashPage.NavigationHelper(Pages.SAFES);
-        cashPage.searchSafes(safeName);
-        Assert.assertEquals(
-                cashPage.getExactSafeMatchCount(safeName),
-                0,
-                "يجب تنظيف سجل الاختبار المملوك: " + safeName);
-        cashPage.searchSafes("");
+        // Durable owner cleanup is independent of UI/modal state and failed assertions.
+    }
+
+    private String seedSafe(String key) {
+        return basicData().fixture(key, "Safes", TestSupport.BasicDataFixtures.fields(
+                "accountId", basicData().account("safe").id())).name();
     }
 
     private Path prepareExportDirectory() throws IOException {

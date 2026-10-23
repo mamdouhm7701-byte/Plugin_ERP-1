@@ -73,9 +73,9 @@ public class AgentTest extends DealerScenarioTest {
     @Description("ينشئ مندوبًا فريدًا، يعدله، ثم يحذف السجل نفسه ويتحقق من كل انتقال.")
     public void AG_005_OwnedAgentCreateEditDelete() {
         String suffix = String.valueOf(System.currentTimeMillis());
-        String originalName = "QA-AGENT-" + suffix;
-        String editedName = originalName + "-EDITED";
         Agent page = new Agent(driver);
+        String originalName = ownedName(page, Pages.AGENTS, "LIFECYCLE-ORIGINAL");
+        String editedName = ownedName(page, Pages.AGENTS, "LIFECYCLE-EDITED");
         page.NavigationHelper(Pages.AGENTS);
 
         DealerModelScreenAssertions.assertOwnedCreateEditDelete(
@@ -313,6 +313,7 @@ public class AgentTest extends DealerScenarioTest {
         Agent agent = new Agent(driver);
         agent.NavigationHelper(Pages.AGENTS);
         agent.ClickNew();
+        agent.AddEnglishName(ownedName(agent, Pages.AGENTS, "INVALID-ARABIC-NAME"));
         agent.ClickSaveButton();
         Assert.assertTrue(
                 agent.IsArabicNameRequiredErrorDisplayed(),

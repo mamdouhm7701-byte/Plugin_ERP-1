@@ -71,9 +71,9 @@ public class SupplierTest extends DealerScenarioTest {
     @Description("ينشئ موردًا فريدًا ببياناته الأساسية، يعدله، ثم يحذف السجل نفسه.")
     public void SU_005_OwnedSupplierCreateEditDelete() {
         String suffix = String.valueOf(System.currentTimeMillis());
-        String originalName = "QA-SUPPLIER-" + suffix;
-        String editedName = originalName + "-EDITED";
         Supplier page = new Supplier(driver);
+        String originalName = ownedName(page, Pages.SUPPLIERS, "LIFECYCLE-ORIGINAL");
+        String editedName = ownedName(page, Pages.SUPPLIERS, "LIFECYCLE-EDITED");
         page.NavigationHelper(Pages.SUPPLIERS);
 
         DealerModelScreenAssertions.assertOwnedCreateEditDelete(
@@ -300,6 +300,7 @@ public class SupplierTest extends DealerScenarioTest {
         Supplier supplier = new Supplier(driver);
         supplier.NavigationHelper(Pages.SUPPLIERS);
         supplier.ClickNewButtonForDealer();
+        supplier.AddEnglishName(ownedName(supplier, Pages.SUPPLIERS, "INVALID-ARABIC-NAME"));
         supplier.ClickSaveButton();
         Assert.assertTrue(supplier.IsArabicNameRequiredErrorDisplayed(), "الاسم العربي غير مطلوب");
     }

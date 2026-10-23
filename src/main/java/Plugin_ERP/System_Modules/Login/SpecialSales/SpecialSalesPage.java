@@ -47,8 +47,9 @@ public abstract class SpecialSalesPage extends Abstract {
                                             + " Boolean(document.querySelector('#app')?.__vue__?.$store?.getters['app/currentBranch']?.id)")));
     }
 
-    @Step("فتح شاشة الكاشير المستقلة")
+    @Step("فتح شاشة الكاشير")
     public void open() {
+        Plugin_ERP.Utiel.Allur.ScreenNames.opening(route());
         driver.get(PropertyReader.getApplicationUrl() + "/#/" + route());
         driver.navigate().refresh();
         awaitSession();
@@ -106,7 +107,7 @@ public abstract class SpecialSalesPage extends Abstract {
         click(By.xpath("//button[normalize-space()='" + label + "']"));
     }
 
-    @Step("اختيار مرجع مملوك للاختبار")
+    @Step("اختيار {name} من {label}")
     public void choose(String label, String name) {
         By locator =
                 By.xpath(
@@ -171,7 +172,6 @@ public abstract class SpecialSalesPage extends Abstract {
                                 + " {document:vm?.selectedItem||{},capture:window.__specialSalesQA||{},text:document.body.innerText};");
     }
 
-    @Step("تسجيل طلبات الشاشة دون تغيير نتائجها")
     public void capture(String marker) {
         js(
                 """
@@ -216,6 +216,7 @@ public abstract class SpecialSalesPage extends Abstract {
                         + "']]");
     }
 
+    @Step("تغيير كمية الصنف {name} إلى {value}")
     public void quantity(String name, String value) {
         var card =
                 ready.until(
@@ -231,6 +232,7 @@ public abstract class SpecialSalesPage extends Abstract {
         blur();
     }
 
+    @Step("تغيير كمية الصنف {name} بزر الزيادة أو النقصان: {plus}")
     public void changeQuantity(String name, boolean plus) {
         var card = driver.findElement(line(name));
         card.findElement(
@@ -242,6 +244,7 @@ public abstract class SpecialSalesPage extends Abstract {
                 .click();
     }
 
+    @Step("حذف الصنف {name} من الفاتورة")
     public void removeLine(String name) {
         var card = driver.findElement(line(name));
         card.findElement(
@@ -251,6 +254,7 @@ public abstract class SpecialSalesPage extends Abstract {
                 .click();
     }
 
+    @Step("إدخال الخصم {value}، خصم بنسبة: {percentage}")
     public void discount(String value, boolean percentage) {
         text(
                 percentage
@@ -259,6 +263,7 @@ public abstract class SpecialSalesPage extends Abstract {
                 value);
     }
 
+    @Step("إغلاق نافذة السداد")
     public void closePayment() {
         for (var e : driver.findElements(By.cssSelector(".b-sidebar-backdrop")))
             if (e.isDisplayed()) {
@@ -267,6 +272,7 @@ public abstract class SpecialSalesPage extends Abstract {
             }
     }
 
+    @Step("حفظ الفاتورة وطباعة التقرير")
     public void saveAndPrint() {
         By sidebar =
                 By.xpath(
@@ -276,6 +282,7 @@ public abstract class SpecialSalesPage extends Abstract {
         else button("حفظ و طباعة");
     }
 
+    @Step("فتح إجراء {icon} للفاتورة رقم {code}")
     public void invoiceAction(Object id, String code, String icon) {
         for (var label :
                 driver.findElements(
@@ -305,6 +312,7 @@ public abstract class SpecialSalesPage extends Abstract {
                                 + "')]]"));
     }
 
+    @Step("إغلاق النافذة المفتوحة")
     public void closeModal() {
         for (var e : driver.findElements(By.cssSelector(".modal.show button.close")))
             if (e.isDisplayed()) {
@@ -313,6 +321,7 @@ public abstract class SpecialSalesPage extends Abstract {
             }
     }
 
+    @Step("تأكيد الإجراء أو إلغاؤه: {yes}")
     public void confirm(boolean yes) {
         click(
                 By.cssSelector(
@@ -326,6 +335,7 @@ public abstract class SpecialSalesPage extends Abstract {
                 .anyMatch(WebElement::isDisplayed);
     }
 
+    @Step("إضافة طريقة الدفع {name} بمبلغ {value}")
     public void addOtherPayment(String name, String value) {
         int count = ((List<?>) document().get("payments")).size();
         click(By.xpath("//label[normalize-space()='آخرى']"));
@@ -340,20 +350,26 @@ public abstract class SpecialSalesPage extends Abstract {
         ready.until(d -> ((List<?>) document().get("payments")).size() == count + 1);
     }
 
+    @Step("التحقق من وصول صافي الفاتورة إلى {value}")
     public void waitNet(String value) {
-        ready.until(
-                d ->
-                        new java.math.BigDecimal(document().get("net").toString())
-                                        .compareTo(new java.math.BigDecimal(value))
-                                == 0);
+        try {
+            ready.until(d -> new java.math.BigDecimal(document().get("net").toString())
+                    .compareTo(new java.math.BigDecimal(value)) == 0);
+        } catch (TimeoutException failure) {
+            throw new AssertionError("صافي الفاتورة غير مطابق: المتوقع " + value
+                    + "، الفعلي " + document().get("net"), failure);
+        }
     }
 
+    @Step("التحقق من وصول إجمالي الفاتورة إلى {value}")
     public void waitTotal(String value) {
-        ready.until(
-                d ->
-                        new java.math.BigDecimal(document().get("total").toString())
-                                        .compareTo(new java.math.BigDecimal(value))
-                                == 0);
+        try {
+            ready.until(d -> new java.math.BigDecimal(document().get("total").toString())
+                    .compareTo(new java.math.BigDecimal(value)) == 0);
+        } catch (TimeoutException failure) {
+            throw new AssertionError("إجمالي الفاتورة غير مطابق: المتوقع " + value
+                    + "، الفعلي " + document().get("total"), failure);
+        }
     }
 
     public void awaitTotals() {
@@ -378,7 +394,7 @@ public abstract class SpecialSalesPage extends Abstract {
                                                                     .toString()))
                                     .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add);
             throw new AssertionError(
-                    "Cart header total=" + value.get("total") + "; sum of line totals=" + sum,
+                    "إجمالي الفاتورة لا يطابق مجموع البنود: المتوقع " + sum + "، الفعلي " + value.get("total"),
                     failure);
         }
     }
@@ -398,6 +414,7 @@ public abstract class SpecialSalesPage extends Abstract {
         awaitTotals();
     }
 
+    @Step("إدخال الملاحظات: {value}")
     public void notes(String value) {
         text(
                 By.cssSelector(

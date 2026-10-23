@@ -43,11 +43,11 @@ public final class TransferWorkflow implements AutoCloseable {
     var saved = page.smSaves().get(page.smSaves().size() - 1);
     var values = (Map<String, Object>) saved.get("values");
     var stored = data.read(new StoreTestData.Record(ENDPOINT, saved.get("id"), marker, values));
-    Assert.assertEquals(stored.get("storeId"), from.id()); Assert.assertEquals(stored.get("destinationStoreId"), to.id());
-    Assert.assertEquals(stored.get("notes"), marker);
+    Assert.assertEquals(stored.get("storeId"), from.id(), "مطابقة المخزن"); Assert.assertEquals(stored.get("destinationStoreId"), to.id());
+    Assert.assertEquals(stored.get("notes"), marker, "مطابقة الملاحظات");
     var lines = (List<Map<String, Object>>) stored.get("lines"); Assert.assertEquals(lines.size(), 1);
-    Assert.assertEquals(lines.get(0).get("itemId"), item.id());
-    Assert.assertEquals(new BigDecimal(lines.get(0).get("quantity").toString()).compareTo(new BigDecimal(quantity)), 0);
+    Assert.assertEquals(lines.get(0).get("itemId"), item.id(), "مطابقة الصنف");
+    Assert.assertEquals(new BigDecimal(lines.get(0).get("quantity").toString()).compareTo(new BigDecimal(quantity)), 0, "مطابقة الكمية");
     Allure.addAttachment("Supply chain transfer", "application/json", new org.json.JSONObject(stored).toString(), ".json");
     page.smDismiss();
   }

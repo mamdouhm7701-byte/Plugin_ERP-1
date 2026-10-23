@@ -2,14 +2,14 @@ package Plugin_ERP.Tests.LoginTest.BasicDataTest;
 
 import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.System_Modules.Login.BasicData.RevenuesPage;
-import Plugin_ERP.Tests.LoginTest.BaseTest;
+import TestSupport.BasicDataScenarioTest;
 import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class RevenuesTest extends BaseTest {
+public class RevenuesTest extends BasicDataScenarioTest {
     private String unique(String s) {
-        return "QA-REV-" + s + "-" + System.currentTimeMillis();
+        return ownedName("Incomes", s);
     }
 
     private RevenuesPage open() {
@@ -28,20 +28,8 @@ public class RevenuesTest extends BaseTest {
         Assert.assertEquals(p.GetExactMatchCount(n), 1, "يجب ظهور الإيراد مرة واحدة: " + n);
     }
 
-    private void cleanup(RevenuesPage p, String... ns) {
-        for (String n : ns)
-            if (n != null && !n.isBlank())
-                try {
-                    p.CloseFormIfOpen();
-                    p.DismissAlertIfPresent();
-                    if (p.GetExactMatchCount(n) > 0) {
-                        p.RequestDeleteByName(n);
-                        p.ConfirmDelete();
-                    }
-                } catch (Exception e) {
-                    System.err.println(
-                            "Could not clean owned revenue '" + n + "': " + e.getMessage());
-                }
+    private void cleanup(RevenuesPage p, String... names) {
+        // API owner cleanup runs even when UI assertions or modal handling fail.
     }
 
     @Test(priority = 0)
@@ -95,6 +83,7 @@ public class RevenuesTest extends BaseTest {
     public void REV_004_ArabicNameRequired() {
         RevenuesPage p = open();
         p.ClickNew();
+        p.AddEnglishName(ownedName("Incomes", "required-name"));
         p.ClickSaveButton();
         Assert.assertTrue(p.IsArabicNameRequiredDisplayed());
         p.ClickCloseButton();
@@ -111,6 +100,7 @@ public class RevenuesTest extends BaseTest {
         RevenuesPage p = open();
         p.ClickNew();
         p.AddArabicName("   ");
+        p.AddEnglishName(ownedName("Incomes", "invalid-name"));
         p.ClickSaveButton();
         Assert.assertTrue(p.IsArabicNameRequiredDisplayed());
         p.ClickCloseButton();
@@ -127,11 +117,11 @@ public class RevenuesTest extends BaseTest {
         RevenuesPage p = open();
         String n = unique("CREATE"), en = "Revenue " + System.currentTimeMillis();
         try {
-            create(p, n, en, "تسويق جوجل", true);
+            create(p, n, en, basicData().account("revenues").name(), true);
             p.OpenForEditByName(n);
             Assert.assertEquals(p.GetArabicNameValue(), n);
             Assert.assertEquals(p.GetEnglishNameValue(), en);
-            Assert.assertEquals(p.GetSelectedAccountValue(), "تسويق جوجل");
+            Assert.assertEquals(p.GetSelectedAccountValue(), basicData().account("revenues").name());
             Assert.assertTrue(p.IsRevenueSharedChecked());
             Assert.assertFalse(p.GetCodeValue().isBlank());
             p.ClickCloseButton();
@@ -173,9 +163,9 @@ public class RevenuesTest extends BaseTest {
     @Description("يعدل السجل الذي أنشأه الاختبار فقط.")
     public void REV_021_EditOwned() {
         RevenuesPage p = open();
-        String n = unique("EDIT"), u = n + "-UPDATED";
+        String n = unique("EDIT"), u = unique("UPDATED");
         try {
-            create(p, n, "Edit revenue", "تسويق جوجل", false);
+            create(p, n, "Edit revenue", basicData().account("revenues").name(), false);
             p.OpenForEditByName(n);
             p.AddArabicName(u);
             p.ClickSaveButton();
@@ -260,7 +250,7 @@ public class RevenuesTest extends BaseTest {
         RevenuesPage p = open();
         String n = unique("REFRESH");
         try {
-            create(p, n, "Refresh revenue", "تسويق جوجل", true);
+            create(p, n, "Refresh revenue", basicData().account("revenues").name(), true);
             driver.navigate().refresh();
             p = open();
             Assert.assertEquals(p.GetExactMatchCount(n), 1);

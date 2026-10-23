@@ -19,12 +19,16 @@ public final class ReportMail {
 
     public static Properties configuration() throws Exception {
         Properties config = new Properties();
-        for (String name : new String[]{"report-mail.properties", "ReportMail.local.properties"}) {
+        for (String name : new String[]{"report-mail.properties", "ReportMail.local.properties", "Drive.local.properties"}) {
             Path file = AllureConstants.PROJECT_DIR.resolve("config").resolve(name);
             if (Files.isRegularFile(file)) try (var input = Files.newInputStream(file)) { config.load(input); }
         }
         for (String key : new String[]{"enabled", "to", "username", "password"}) {
             String value = System.getenv("REPORT_MAIL_" + key.toUpperCase(java.util.Locale.ROOT));
+            if (value != null && !value.isBlank()) config.setProperty(key, value);
+        }
+        for (String key : new String[]{"drive.client.id", "drive.client.secret", "drive.refresh.token", "drive.folder.id"}) {
+            String value = System.getenv("REPORT_" + key.toUpperCase(java.util.Locale.ROOT).replace('.', '_'));
             if (value != null && !value.isBlank()) config.setProperty(key, value);
         }
         return config;
@@ -57,20 +61,40 @@ public final class ReportMail {
     }
 
     public static void send(Path testngDirectory) throws Exception {
+        Path bundle = AllureConstants.PROJECT_DIR.resolve("target/report-mail/deliveries")
+                .resolve(java.time.Instant.now().toEpochMilli() + "-" + java.util.UUID.randomUUID());
+        Files.createDirectories(bundle);
+        var run = ReportMailTemplate.read(AllureConstants.ALLURE_REPORT_DIR, AllureConstants.ALLURE_RESULTS_DIR);
+        Files.writeString(bundle.resolve("subject.txt"), ReportMailTemplate.subject(run));
+        Files.writeString(bundle.resolve("summary.html"), ReportMailTemplate.html(run));
+        Files.writeString(bundle.resolve("summary.txt"), ReportMailTemplate.plain(run));
+        Path temporary = Files.createTempDirectory("plugin-erp-mail-");
+        try {
+            Path portable = temporary.resolve("portable-allure");
+            AllureBinaryManger.generateSingleFileReport(portable);
+            archive(portable, bundle.resolve("allure-report.zip"));
+            archive(testngDirectory, bundle.resolve("testng-report.zip"));
+        } finally {
+            try (var paths = Files.walk(temporary)) {
+                for (Path path : paths.sorted(java.util.Comparator.reverseOrder()).toList()) Files.deleteIfExists(path);
+            }
+        }
+        sendPackaged(bundle);
+    }
+
+    /** Resends a retained snapshot without touching results or running tests. */
+    public static void sendPackaged(Path bundle) throws Exception {
         Properties config = configuration();
         String user = config.getProperty("username", "").trim();
         String password = config.getProperty("password", "").replace(" ", "");
         if (user.isEmpty() || password.isEmpty())
             throw new IllegalStateException("Set REPORT_MAIL_USERNAME and REPORT_MAIL_PASSWORD or local mail settings");
         InternetAddress[] to = recipients(config.getProperty("to", ""));
-        Path temporary = Files.createTempDirectory("plugin-erp-mail-");
-        try {
-            Path portable = temporary.resolve("portable-allure");
-            AllureBinaryManger.generateSingleFileReport(portable);
-            Path allure = archive(portable, temporary.resolve("allure-report.zip"));
-            Path testng = archive(testngDirectory, temporary.resolve("testng-report.zip"));
-            if (Files.size(allure) + Files.size(testng) > 17L * 1024 * 1024)
-                throw new IllegalStateException("Reports exceed the mail attachment budget; use retained CI artifacts");
+        Path allure = bundle.resolve("allure-report.zip"), testng = bundle.resolve("testng-report.zip");
+        // Initialize Drive lazily: small reports do not require OAuth setup.
+        var delivery = ReportDelivery.plan(java.util.List.of(allure, testng), 17L * 1024 * 1024,
+                file -> new DriveReportStore(config).publish(file,
+                        java.util.Arrays.stream(to).map(InternetAddress::getAddress).toList()));
             Properties smtp = new Properties();
             smtp.setProperty("mail.smtp.host", "smtp.gmail.com");
             smtp.setProperty("mail.smtp.port", "587");
@@ -84,20 +108,19 @@ public final class ReportMail {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
             message.setRecipients(Message.RecipientType.TO, to);
-            var run = ReportMailTemplate.read(AllureConstants.ALLURE_REPORT_DIR, AllureConstants.ALLURE_RESULTS_DIR);
-            message.setSubject(ReportMailTemplate.subject(run), "UTF-8");
+            message.setSubject(Files.readString(bundle.resolve("subject.txt")).replaceAll("[\\r\\n]", " "), "UTF-8");
             MimeMultipart body = new MimeMultipart();
             MimeBodyPart text = new MimeBodyPart();
             MimeMultipart alternatives = new MimeMultipart("alternative");
             MimeBodyPart plain = new MimeBodyPart();
-            plain.setText(ReportMailTemplate.plain(run), "UTF-8");
+            plain.setText(Files.readString(bundle.resolve("summary.txt")) + delivery.plain(), "UTF-8");
             alternatives.addBodyPart(plain);
             MimeBodyPart html = new MimeBodyPart();
-            html.setContent(ReportMailTemplate.html(run), "text/html; charset=UTF-8");
+            html.setContent(Files.readString(bundle.resolve("summary.html")).replace("<!--REPORT_DELIVERY-->", delivery.html()), "text/html; charset=UTF-8");
             alternatives.addBodyPart(html);
             text.setContent(alternatives);
             body.addBodyPart(text);
-            for (Path attachment : new Path[]{allure, testng}) {
+            for (Path attachment : delivery.attachments()) {
                 MimeBodyPart part = new MimeBodyPart();
                 part.attachFile(attachment.toFile());
                 body.addBodyPart(part);
@@ -106,15 +129,14 @@ public final class ReportMail {
             try (Transport transport = session.getTransport("smtp")) {
                 transport.connect(user, password);
                 transport.sendMessage(message, message.getAllRecipients());
+                System.setProperty("report.mail.last.status", delivery.complete() ? "sent" : "partial");
+                Files.writeString(bundle.resolve("delivery-status.txt"), java.time.Instant.now() + " SMTP accepted; reports="
+                        + (delivery.complete() ? "complete" : "partial; Drive upload or sharing unavailable"));
+                if (!delivery.complete()) Plugin_ERP.Bots.LogUtils.error("Summary email accepted, but large report delivery is incomplete. Retry retained bundle after configuring Drive.");
             } catch (org.eclipse.angus.mail.smtp.SMTPSendFailedException rejected) {
                 Plugin_ERP.Bots.LogUtils.error("SMTP rejected report: " + rejected.getReturnCode()
                         + " " + rejected.getMessage().replace(password, "[redacted]"));
                 throw rejected;
             }
-        } finally {
-            try (var paths = Files.walk(temporary)) {
-                for (Path path : paths.sorted(java.util.Comparator.reverseOrder()).toList()) Files.deleteIfExists(path);
-            }
-        }
     }
 }

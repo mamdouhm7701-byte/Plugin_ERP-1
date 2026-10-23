@@ -33,8 +33,8 @@ public abstract class SpecialSalesScenario extends BaseTest {
     public void scenario() {
         data.beginScenario();
         customer = data.customer();
-        org.testng.Assert.assertEquals(data.read(customer).get("isTaxable"), Boolean.TRUE);
-        org.testng.Assert.assertEquals(data.read(customer).get("isOnTheFly"), Boolean.FALSE);
+        org.testng.Assert.assertEquals(data.read(customer).get("isTaxable"), Boolean.TRUE, "مطابقة تطبيق الضريبة");
+        org.testng.Assert.assertEquals(data.read(customer).get("isOnTheFly"), Boolean.FALSE, "مطابقة نوع العميل");
         item = data.item(1);
         defaults = data.configureOwnedDefaults(customer);
         restartPage();
@@ -67,6 +67,7 @@ public abstract class SpecialSalesScenario extends BaseTest {
     }
 
     @SuppressWarnings("unchecked")
+    @io.qameta.allure.Step("التحقق من حفظ الفاتورة وقراءة بياناتها")
     protected SpecialSalesTestData.Record saved() {
         page.awaitSave();
         String marker = page.captureMarker();
@@ -77,6 +78,7 @@ public abstract class SpecialSalesScenario extends BaseTest {
         return new SpecialSalesTestData.Record(page.endpoint(), save.get("id"), marker, values);
     }
 
+    @io.qameta.allure.Step("مطابقة القيمة: المتوقع {expected}، الفعلي {actual}")
     protected void number(Object actual, String expected) {
         org.testng.Assert.assertEquals(
                 new BigDecimal(actual.toString()).compareTo(new BigDecimal(expected)),
@@ -84,6 +86,7 @@ public abstract class SpecialSalesScenario extends BaseTest {
                 "Actual=" + actual + ", expected=" + expected);
     }
 
+    @io.qameta.allure.Step("التحقق من رصيد العميل المتوقع: {expected}")
     protected void customerBalance(String expected) {
         try {
             new org.openqa.selenium.support.ui.WebDriverWait(

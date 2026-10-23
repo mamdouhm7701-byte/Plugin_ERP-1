@@ -30,7 +30,9 @@ public class AllureEnvironment {
             putSafe(props, "Java Version", System.getProperty("java.runtime.version"));
 
             // Config
-            putSafe(props, "URL", getProperty("url"));
+            putSafe(props, "URL", Plugin_ERP.Utiel.PropertyReader.getApplicationUrl());
+            putSafe(props, "Tenant", "Test".equalsIgnoreCase(getProperty("Environment"))
+                    ? "Test" : getProperty("Tenant"));
             putSafe(props, "Execution Type", getProperty("ExecutionType"));
             putSafe(
                     props,

@@ -40,6 +40,7 @@ public class LoginPage {
 
     // Methods
     public void Login(String user, String pass) {
+        Plugin_ERP.Utiel.Allur.ScenarioAccess.login(driver, user, pass);
         io.qameta.allure.Allure.step("تسجيل الدخول", () -> {
             waitForLoginForm();
             utilites.waits().waitForOverlayToDisappear();

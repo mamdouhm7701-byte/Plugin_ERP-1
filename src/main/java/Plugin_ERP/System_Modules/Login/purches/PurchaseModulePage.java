@@ -43,6 +43,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
 
     @Step("فتح شاشة المشتريات: {route}")
     public void puOpen(String route) {
+        Plugin_ERP.Utiel.Allur.ScreenNames.opening(route);
         driver.get(PropertyReader.getApplicationUrl() + "/#/" + route);
         driver.navigate().refresh();
         puAwaitSession();
@@ -81,6 +82,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
         interactions.choose(by, name, FormInteractions.OptionMatch.CODE_SEGMENT);
     }
 
+    @Step("مسح الاختيار من {label}")
     public void puClearChoice(String label) {
         ready.until(
                 d -> {
@@ -148,6 +150,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
                 .anyMatch(WebElement::isDisplayed);
     }
 
+    @Step("إدخال ملاحظات السند: {note}")
     public void puNotes(String note) {
         puType(By.cssSelector("form textarea[label-text='Notes']"), note);
     }
@@ -160,10 +163,12 @@ public class PurchaseModulePage extends AbstractForPurchases {
         utilites.waits().waitForReportReady(60);
     }
 
+    @Step("الضغط على زر {text}")
     public void puButton(String text) {
         puClick(By.xpath("//button[normalize-space()='" + text + "']"));
     }
 
+    @Step("حفظ السند؛ طباعة التقرير: {print}")
     public void puSave(boolean print) {
         puClick(
                 print
@@ -330,7 +335,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
                                         name)));
     }
 
-    @Step("إضافة صنف الاختبار بالاسم: {name}")
+    @Step("إضافة الصنف بالاسم: {name}")
     public void puAddName(String name) {
         radio("name");
         puType(By.cssSelector("form input#autosuggest__input"), name, false);
@@ -351,11 +356,12 @@ public class PurchaseModulePage extends AbstractForPurchases {
         }
     }
 
-    @Step("إضافة صنف الاختبار بالباركود: {barcode}")
+    @Step("إضافة الصنف بالباركود: {barcode}")
     public void puAddBarcode(String barcode, String name) {
         puAddBarcodeImmediately(barcode, name);
     }
 
+    @Step("إدخال الباركود {barcode} وإضافة الصنف {name}")
     public void puAddBarcodeImmediately(String barcode, String name) {
         radio("barcode");
         puType(
@@ -395,7 +401,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
                 name);
     }
 
-    @Step("إضافة صنف الاختبار من قائمة الأصناف: {name}")
+    @Step("إضافة الصنف من قائمة الأصناف: {name}")
     public void puAddPicker(String name) {
         puButton("إضافة أصناف");
         puType(By.cssSelector(".modal.show input[label-text='arabicName']"), name);
@@ -414,12 +420,14 @@ public class PurchaseModulePage extends AbstractForPurchases {
                                         .noneMatch(WebElement::isDisplayed));
     }
 
+    @Step("البحث في {field} عن {value} والتحقق من الصنف {expectedName}")
     public void puPickerSearch(String field, String value, String expectedName) {
         puButton("إضافة أصناف");
         puType(By.cssSelector(".modal.show input[name='" + field + "']"), value);
         ready.until(d -> puPickerRows().stream().anyMatch(row -> row.contains(expectedName)));
     }
 
+    @Step("تصفية الأصناف بالفئة {category} والتحقق من الصنف {expectedName}")
     public void puPickerCategory(String category, String expectedName) {
         puButton("إضافة أصناف");
         puChoose("الفئة", category);
@@ -439,6 +447,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
                 .toList();
     }
 
+    @Step("إغلاق نافذة اختيار الصنف")
     public void puClosePicker() {
         puClick(By.cssSelector(".modal.show button.close"));
         ready.until(
@@ -487,6 +496,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
                 });
     }
 
+    @Step("حذف الصنف {name} من السند")
     public void puRemoveLine(String name) {
         puClick(
                 By.xpath(
@@ -496,7 +506,6 @@ public class PurchaseModulePage extends AbstractForPurchases {
         ready.until(d -> puLineCount(name) == 0);
     }
 
-    @Step("تسجيل طلبات حفظ سند الاختبار")
     public void puCapture(String marker, Object storeId, Object itemId, String endpoint) {
         js(
                 """
@@ -569,7 +578,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
         return (String) js("return window.__purchaseQA?.marker||null");
     }
 
-    @Step("فتح سند الاختبار للتعديل")
+    @Step("فتح السند للتعديل")
     public void puEdit(String route, Object id, String marker, String itemName) {
         puOpen(route + "/edit/" + id);
         ready.until(
@@ -613,6 +622,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
         return puDocument().get("transactionDate").toString().substring(0, 10);
     }
 
+    @Step("تغيير {column} للصنف {name} إلى {value}")
     public void puSetLine(String name, String column, String value) {
         ready.until(
                 d -> {
@@ -675,8 +685,10 @@ public class PurchaseModulePage extends AbstractForPurchases {
         return result;
     }
 
+    @Step("التحقق من صافي السند المتوقع: {value}")
     public void puWaitNet(String value) {
-        ready.until(
+        try {
+            ready.until(
                 d -> {
                     String actual = puTotals().get("الصافي");
                     return actual != null
@@ -684,8 +696,14 @@ public class PurchaseModulePage extends AbstractForPurchases {
                                             .compareTo(new java.math.BigDecimal(value))
                                     == 0;
                 });
+        } catch (org.openqa.selenium.TimeoutException failure) {
+            throw new AssertionError("صافي السند غير مطابق: المتوقع " + value
+                    + "، الفعلي " + puTotals().get("الصافي"), failure);
+        }
+
     }
 
+    @Step("إدخال خصم {value}، خصم بنسبة: {percentage}")
     public void puDiscount(String value, boolean percentage) {
         puType(
                 By.cssSelector(
@@ -702,6 +720,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
         return value == null ? null : new java.math.BigDecimal(value.toString());
     }
 
+    @Step("إضافة طريقة الدفع {method} بمبلغ {amount}")
     public void puAddOtherPayment(String method, String amount) {
         radio("PaymentMethods");
         puChoose("طريقة الدفع", method);
@@ -711,6 +730,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
                         "//form//*[self::legend or self::label][normalize-space()='طريقة الدفع']/ancestor::div[contains(@class,'row')][1]//button[.//*[local-name()='svg' and contains(@class,'feather-plus')]]"));
     }
 
+    @Step("فتح نموذج سند جديد")
     public void puNew() {
         puClick(By.xpath("//button[normalize-space()='جديد']"));
         puDismiss();
@@ -725,6 +745,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
                 .getDomProperty("value");
     }
 
+    @Step("إنشاء مرتجع للفاتورة {invoiceId} والصنف {itemName}")
     public void puLinkedReturn(Object invoiceId, String itemName) {
         puOpen(
                 "return-purch/new?sourceTransactionId="
@@ -782,6 +803,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
         puWaitListIds(Set.of());
     }
 
+    @Step("تصفية القائمة بالمتعامل: {customer}")
     public void puListScope(String customer) {
         documentList.puListScope(customer);
     }
@@ -792,6 +814,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
 
 
 
+    @Step("تطبيق فلاتر القائمة")
     public void puApplyListFilters() {
         documentList.puApplyListFilters();
     }
@@ -809,10 +832,12 @@ public class PurchaseModulePage extends AbstractForPurchases {
         documentList.puWaitListIds(expected);
     }
 
+    @Step("إدخال فلتر {name}: {text}")
     public void puListText(String name, String text) {
         documentList.puListText(name, text);
     }
 
+    @Step("اختيار {value} من فلتر {group}")
     public void puListRadio(String group, String value) {
         documentList.puListRadio(group, value);
     }
@@ -821,22 +846,27 @@ public class PurchaseModulePage extends AbstractForPurchases {
         return documentList.puHeaders();
     }
 
+    @Step("عرض {size} سجل في الصفحة")
     public void puPageSize(int size) {
         documentList.puPageSize(size);
     }
 
+    @Step("الانتقال للصفحة التالية")
     public void puNextPage() {
         documentList.puNextPage();
     }
 
+    @Step("العودة للصفحة الأولى")
     public void puFirstPage() {
         documentList.puFirstPage();
     }
 
+    @Step("ترتيب القائمة حسب {label}")
     public void puSort(String label) {
         documentList.puSort(label);
     }
 
+    @Step("تصدير القائمة بصيغة {format}")
     public void puExport(String format) {
         documentList.puExport(format);
     }
@@ -854,6 +884,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
         driver.switchTo().window(main);
     }
 
+    @Step("التحقق من بيانات الصنف {item} في التقرير المطبوع")
     public void puVerifyPrintedReport(String main, String item) {
         new WebDriverWait(driver, Duration.ofSeconds(45))
                 .until(d -> d.getWindowHandles().size() > 1);

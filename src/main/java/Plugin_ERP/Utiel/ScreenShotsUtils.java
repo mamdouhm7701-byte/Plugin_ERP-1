@@ -12,6 +12,7 @@ import java.io.File;
 public class ScreenShotsUtils {
 
     public static void takeScreenShot(WebDriver driver, String name) {
+        Plugin_ERP.Utiel.Allur.ScenarioAccess.capture(driver, "الشاشة المصورة: " + name);
         try {
             // خد Screenshot من الـ driver
             File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);

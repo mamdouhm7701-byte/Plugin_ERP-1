@@ -43,6 +43,7 @@ public class PaymentPage extends AbstractForDealer {
     }
 
     @Override
+    @Step("فتح نموذج جديد")
     public void ClickNew() {
         waitLoading();
         super.ClickNew();
@@ -51,11 +52,13 @@ public class PaymentPage extends AbstractForDealer {
     }
 
     @Override
+    @Step("إغلاق النموذج دون حفظ")
     public void ClickCloseButton() {
         if (visible(By.xpath("//button[normalize-space()='إغلاق']"))) super.ClickCloseButton();
     }
 
     @Override
+    @Step("حفظ البيانات المدخلة")
     public void ClickSaveButton() {
         super.ClickSaveButton();
         By success =
@@ -272,7 +275,7 @@ public class PaymentPage extends AbstractForDealer {
                 && visible(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"));
     }
 
-    @Step("تأكيد حذف طريقة الدفع المملوكة للاختبار")
+    @Step("تأكيد حذف طريقة الدفع المحددة")
     public void ConfirmDelete() {
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(
@@ -308,6 +311,7 @@ public class PaymentPage extends AbstractForDealer {
         }
     }
 
+    @Step("إلغاء الحذف")
     public void CancelDelete() {
         driver.findElement(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"))
                 .click();

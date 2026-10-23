@@ -42,6 +42,7 @@ public class StoreModulePage extends AbstractForStore {
 
     @Step("فتح شاشة المخازن: {route}")
     public void smOpen(String route) {
+        Plugin_ERP.Utiel.Allur.ScreenNames.opening(route);
         driver.get(PropertyReader.getApplicationUrl() + "/#/" + route);
         driver.navigate().refresh();
         ready.until(
@@ -77,6 +78,7 @@ public class StoreModulePage extends AbstractForStore {
         interactions.choose(by, name, FormInteractions.OptionMatch.NAME_AT_EDGE);
     }
 
+    @Step("مسح الاختيار من {label}")
     public void smClearChoice(String label) {
         ready.until(
                 d -> {
@@ -111,6 +113,7 @@ public class StoreModulePage extends AbstractForStore {
                 && dropdowns.get(0).findElements(By.cssSelector(".vs__selected")).isEmpty();
     }
 
+    @Step("إدخال ملاحظات السند: {note}")
     public void smNotes(String note) {
         smType(By.cssSelector("form textarea"), note);
     }
@@ -130,14 +133,17 @@ public class StoreModulePage extends AbstractForStore {
         utilites.waits().waitForReportReady(60);
     }
 
+    @Step("إدخال تاريخ السند: {date}")
     public void smDate(String date) {
         smType(By.cssSelector("form input[placeholder='YYYY-MM-DD']"), date);
     }
 
+    @Step("الضغط على زر {text}")
     public void smButton(String text) {
         smClick(By.xpath("//button[normalize-space()='" + text + "']"));
     }
 
+    @Step("حفظ السند؛ طباعة التقرير: {print}")
     public void smSave(boolean print) {
         smClick(
                 By.cssSelector(
@@ -245,7 +251,7 @@ public class StoreModulePage extends AbstractForStore {
                 });
     }
 
-    @Step("إضافة صنف الاختبار بالاسم: {name}")
+    @Step("إضافة الصنف بالاسم: {name}")
     public void smAddName(String name) {
         radio("name");
         smType(By.cssSelector("form input#autosuggest__input"), name, false);
@@ -266,7 +272,7 @@ public class StoreModulePage extends AbstractForStore {
         }
     }
 
-    @Step("إضافة صنف الاختبار بالباركود: {barcode}")
+    @Step("إضافة الصنف بالباركود: {barcode}")
     public void smAddBarcode(String barcode, String name) {
         radio("barcode");
         smType(
@@ -299,7 +305,7 @@ public class StoreModulePage extends AbstractForStore {
                 name);
     }
 
-    @Step("إضافة صنف الاختبار من قائمة الأصناف: {name}")
+    @Step("إضافة الصنف من قائمة الأصناف: {name}")
     public void smAddPicker(String name) {
         smButton("إضافة أصناف");
         smType(By.cssSelector(".modal.show input[label-text='arabicName']"), name);
@@ -352,6 +358,7 @@ public class StoreModulePage extends AbstractForStore {
                 });
     }
 
+    @Step("حذف الصنف {name} من السند")
     public void smRemoveLine(String name) {
         smClick(
                 By.xpath(
@@ -361,7 +368,6 @@ public class StoreModulePage extends AbstractForStore {
         ready.until(d -> smLineCount(name) == 0);
     }
 
-    @Step("تسجيل طلبات حفظ سند الاختبار")
     public void smCapture(String marker, Object storeId, Object itemId) {
         js(
                 """
@@ -417,7 +423,7 @@ public class StoreModulePage extends AbstractForStore {
                         "return JSON.stringify({lookups:window.__storeQA?.lookups||[],errors:window.__storeQA?.uiErrors||[],saveErrors:window.__storeQA?.errors||[],attempts:window.__storeQA?.attempts||[],saves:window.__storeQA?.saves||[]})"));
     }
 
-    @Step("فتح سند الاختبار للتعديل")
+    @Step("فتح السند للتعديل")
     public void smEdit(String route, Object id, String marker, String itemName) {
         smOpen(route + "/edit/" + id);
         ready.until(
@@ -428,7 +434,7 @@ public class StoreModulePage extends AbstractForStore {
                                         .anyMatch(e -> marker.equals(e.getDomProperty("value"))));
     }
 
-    @Step("البحث عن سند الاختبار فقط: {marker}")
+    @Step("البحث عن السند فقط: {marker}")
     public void smFind(String route, String marker, Object id, Object code) {
         if (!marker.startsWith("QA-ST-") || id == null)
             throw new AssertionError("Refuse unrelated warehouse row");
@@ -459,6 +465,7 @@ public class StoreModulePage extends AbstractForStore {
         ready.until(d -> smHasDocument(marker));
     }
 
+    @Step("البحث عن السند: {value}")
     public void smSearch(String value) {
         smType(listSearch, value);
     }
@@ -479,7 +486,7 @@ public class StoreModulePage extends AbstractForStore {
                 && driver.findElements(ownedRow()).stream().anyMatch(WebElement::isDisplayed);
     }
 
-    @Step("حذف سند الاختبار فقط: {marker}")
+    @Step("حذف السند فقط: {marker}")
     public void smDeleteOwn(String marker, boolean confirm) {
         if (!marker.startsWith("QA-ST-") || !marker.equals(ownedMarker) || ownedId == null)
             throw new AssertionError("Refuse unrelated document deletion");
@@ -511,6 +518,7 @@ public class StoreModulePage extends AbstractForStore {
                 .toList();
     }
 
+    @Step("تصدير القائمة بصيغة {format}")
     public void smExport(String format) {
         smClick(
                 By.cssSelector(

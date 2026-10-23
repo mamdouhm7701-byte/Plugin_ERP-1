@@ -34,18 +34,18 @@ public class AddProductsTest extends ProductScenarioTest {
         var rows = (List<?>) data.read(r).get("subUnits");
         Assert.assertEquals(rows.size(), 1);
         var row = (Map<?, ?>) rows.get(0);
-        Assert.assertEquals(row.get("unitId"), data.unit(2).id());
+        Assert.assertEquals(row.get("unitId"), data.unit(2).id(), "مطابقة وحدة القياس");
         assertNumber(row.get("conversionRate"), "10");
     }
 
     @Test(groups = "products")
-    @Story("تعديل صنف الاختبار")
+    @Story("تعديل الصنف")
     public void EditProduct() {
         edit(false);
     }
 
     @Test(groups = "products")
-    @Story("إضافة مكون مستقل للصنف")
+    @Story("إضافة مكون للصنف")
     public void AddComponent() {
         var component = data.item(2);
         openNew();
@@ -60,7 +60,7 @@ public class AddProductsTest extends ProductScenarioTest {
     }
 
     @Test(groups = "products")
-    @Story("حذف صنف الاختبار")
+    @Story("حذف الصنف")
     public void DeleteProduct() {
         deleteOwn();
     }
@@ -396,7 +396,7 @@ public class AddProductsTest extends ProductScenarioTest {
     }
 
     @Test(groups = "products")
-    @Story("تعديل أسعار صنف الاختبار مع الاحتفاظ بالكسور")
+    @Story("تعديل أسعار الصنف مع الاحتفاظ بالكسور")
     public void PR_UpdatePrices() {
         var initial = seed();
         locate(initial);
@@ -413,7 +413,7 @@ public class AddProductsTest extends ProductScenarioTest {
     }
 
     @Test(groups = "products")
-    @Story("ربط الصنف بمخزنين مستقلين")
+    @Story("ربط الصنف بمخزنين مختلفين")
     public void PR_AddSecondStore() {
         var initial = seed();
         var second = data.store(2);
@@ -424,17 +424,17 @@ public class AddProductsTest extends ProductScenarioTest {
         var rows = (List<?>) data.read(updated).get("stores");
         Assert.assertEquals(rows.size(), 2);
         Assert.assertTrue(
-                rows.stream().anyMatch(r -> second.id().equals(((Map<?, ?>) r).get("storeId"))));
+                rows.stream().anyMatch(r -> second.id().equals(((Map<?, ?>) r).get("storeId"))), "التحقق من المخزن");
     }
 
     @Test(groups = "products")
-    @Story("حفظ اسم عربي للصنف مع بيانات الاختبار الفريدة")
+    @Story("حفظ اسم عربي للصنف مع البيانات المدخلة الفريدة")
     public void PR_ArabicProductName() {
         openNew();
         fill(null);
         page.prArabic(marker + " صنف اختبار");
         var r = save(false);
-        Assert.assertEquals(data.read(r).get("arabicName"), marker + " صنف اختبار");
+        Assert.assertEquals(data.read(r).get("arabicName"), marker + " صنف اختبار", "مطابقة الاسم العربي");
     }
 
     private void stockInvalid(String reason) {

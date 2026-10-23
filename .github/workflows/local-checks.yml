@@ -32,12 +32,19 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
+      - name: Reject committed credentials and private reports
+        run: |
+          python scripts/test_check_secrets.py
+          python scripts/check_secrets.py
       - name: Build and run local contracts
         env:
           REPORT_MAIL_ENABLED: ${{ secrets.REPORT_MAIL_ENABLED }}
           REPORT_MAIL_USERNAME: ${{ secrets.REPORT_MAIL_USERNAME }}
           REPORT_MAIL_PASSWORD: ${{ secrets.REPORT_MAIL_PASSWORD }}
           REPORT_MAIL_TO: ${{ vars.REPORT_MAIL_TO }}
+          REPORT_DRIVE_CLIENT_ID: ${{ secrets.REPORT_DRIVE_CLIENT_ID }}
+          REPORT_DRIVE_CLIENT_SECRET: ${{ secrets.REPORT_DRIVE_CLIENT_SECRET }}
+          REPORT_DRIVE_REFRESH_TOKEN: ${{ secrets.REPORT_DRIVE_REFRESH_TOKEN }}
         run: >-
           mvn --batch-mode --no-transfer-progress -Pci
           "-Dallure.run.id=${{ github.run_id }}-${{ github.run_attempt }}-${{ runner.os }}"
@@ -47,6 +54,8 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: local-checks-${{ runner.os }}-${{ github.run_attempt }}
-          path: target/ci/
+          path: |
+            target/ci/
+            target/report-mail/
           if-no-files-found: warn
           retention-days: 7

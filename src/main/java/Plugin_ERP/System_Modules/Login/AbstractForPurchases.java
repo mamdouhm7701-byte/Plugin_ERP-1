@@ -412,6 +412,7 @@ public class AbstractForPurchases extends AbstractForStore {
         Allure.addAttachment("Report Validation", report);
     }
 
+    @Step("مطابقة إجماليات الفاتورة مع القيم المتوقعة: {totals}")
     public void assertInvoiceTotals(InvoiceTotals totals) {
 
         assertBigDecimalEquals(totals.getTotal(), getTotal());
@@ -423,6 +424,7 @@ public class AbstractForPurchases extends AbstractForStore {
     // TODO:
     // Current report parsing depends on report labels.
     // Replace with a generic report parser in the future to support customized reports.
+    @Step("مطابقة إجماليات التقرير المطبوع مع الفاتورة: {expected}")
     public void assertReportTotals(ReportTotals report, InvoiceTotals expected, TaxMode taxMode) {
 
         if (taxMode == TaxMode.INCLUSIVE) {
@@ -445,6 +447,7 @@ public class AbstractForPurchases extends AbstractForStore {
     // TODO:
     // Current report parsing depends on report labels.
     // Replace with a generic report parser in the future to support customized reports.
+    @Step("مطابقة إجماليات التقرير المطبوع مع الفاتورة: {expected}")
     public void assertReportTotals(ReportTotals report, InvoiceTotals expected) {
 
         assertReportTotals(report, expected, PropertyReader.PolicyManager.getTaxMode());

@@ -6,21 +6,21 @@ import io.qameta.allure.Story;
 /** Shared contracts inherited by the four concrete forms. */
 public abstract class SalesFormTest extends SalesFormActions {
     @Test
-    @Story("حفظ مستند بصنف الاختبار المختار من قائمة الأصناف")
+    @Story("حفظ مستند بالصنف المختار من قائمة الأصناف")
     @Override
     public void savesOwnedItemFromPicker() {
         super.savesOwnedItemFromPicker();
     }
 
     @Test
-    @Story("حفظ مستند بإضافة صنف الاختبار بالباركود")
+    @Story("حفظ مستند بإضافة الصنف بالباركود")
     @Override
     public void savesOwnedItemByBarcode() {
         super.savesOwnedItemByBarcode();
     }
 
     @Test
-    @Story("حفظ مستند بإضافة صنف الاختبار بالاسم")
+    @Story("حفظ مستند بإضافة الصنف بالاسم")
     @Override
     public void savesOwnedItemByName() {
         super.savesOwnedItemByName();
@@ -28,7 +28,7 @@ public abstract class SalesFormTest extends SalesFormActions {
 
     @Test
     @Story(
-            "التحقق من الدفع النقدي ببيانات الاختبار وأثره حسب نوع المستند وعدم تسجيل دفعات لعرض السعر")
+            "التحقق من الدفع النقدي بالبيانات المدخلة وأثره حسب نوع المستند وعدم تسجيل دفعات لعرض السعر")
     @Override
     public void cashDocumentUsesOwnedPayment() {
         super.cashDocumentUsesOwnedPayment();
@@ -42,7 +42,7 @@ public abstract class SalesFormTest extends SalesFormActions {
     }
 
     @Test
-    @Story("حفظ صنفين مستقلين والتحقق من بيانات كل بند")
+    @Story("حفظ صنفين مختلفين والتحقق من بيانات كل بند")
     @Override
     public void twoOwnedItemsPersist() {
         super.twoOwnedItemsPersist();
@@ -140,7 +140,7 @@ public abstract class SalesFormTest extends SalesFormActions {
     }
 
     @Test
-    @Story("إعادة فتح المستند المحفوظ والتحقق من بيانات الاختبار")
+    @Story("إعادة فتح المستند المحفوظ والتحقق من البيانات المدخلة")
     @Override
     public void savedDocumentReopensWithOwnedValues() {
         super.savedDocumentReopensWithOwnedValues();

@@ -258,6 +258,7 @@ public Boolean AssertSupplier(){
     }
 
 
+    @Step("حذف سند تسوية التالف")
     public void DeleteForDamage(){
         utilites.grid().deleteAllRowsSvg(Clickyestodelet);
         LogUtils.info("تم حذف جميع السجلات في الجريد");

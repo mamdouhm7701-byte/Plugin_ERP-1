@@ -71,9 +71,9 @@ public class CustomersTest extends DealerScenarioTest {
     @Description("ينشئ عميلًا فريدًا ببياناته الأساسية، يعدله، ثم يحذف السجل نفسه.")
     public void CU_005_OwnedCustomerCreateEditDelete() {
         String suffix = String.valueOf(System.currentTimeMillis());
-        String originalName = "QA-CUSTOMER-" + suffix;
-        String editedName = originalName + "-EDITED";
         Customers page = new Customers(driver);
+        String originalName = ownedName(page, Pages.CUSTOMERS, "LIFECYCLE-ORIGINAL");
+        String editedName = ownedName(page, Pages.CUSTOMERS, "LIFECYCLE-EDITED");
         page.NavigationHelper(Pages.CUSTOMERS);
 
         DealerModelScreenAssertions.assertOwnedCreateEditDelete(
@@ -352,6 +352,7 @@ public class CustomersTest extends DealerScenarioTest {
         customers.ClickNewButtonForDealer();
         customers.AddArabicName("");
         customers.AddEnglishName("New Customer");
+        customers.AddEnglishName(ownedName(customers, Pages.CUSTOMERS, "INVALID-ARABIC-NAME"));
         customers.ClickSaveButton();
         Assert.assertTrue(
                 customers.IsArabicNameRequiredErrorDisplayed(),

@@ -11,10 +11,13 @@
   التشغيل تسلسلي: لكل كلاس WebDriver مستقل، وتشارك حالاته بياناته الثابتة حتى تنظيف الكلاس.
   لا تشغل حالات الكلاس أو مجموعات كتابة لنفس الفرع بالتوازي.
   النتائج القديمة ليست ضمان نجاح؛ العيوب المعروفة تظل ظاهرة في هذا التشغيل.
+  coverage-expansion يضم جميع حالات الشاشات الجديدة. الخزينة وExcel والطباعة وخط السير
+  تأتي من مداخل موديولاتها، والرحلات الجديدة موجودة بالفعل هناك وفي expansion؛ لا نكرر E2E كاملة.
   التشغيل: mvn '-Dsurefire.suiteXmlFiles=src/test/resources/regression-testng.xml' test
 -->
 <suite name="Regression - Core modules and workflows" parallel="none" configfailurepolicy="continue">
     <suite-files>
+        <suite-file path="coverage-expansion-testng.xml"/>
         <suite-file path="products-testng.xml"/>
         <suite-file path="dealer-model-testng.xml"/>
         <suite-file path="store-testng.xml"/>

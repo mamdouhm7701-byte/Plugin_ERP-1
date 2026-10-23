@@ -17,7 +17,8 @@ public final class BasicDataFixtures implements AutoCloseable {
   public record Record(String endpoint, Object id, String name, Map<String, Object> values) {
     public Record { values=java.util.Collections.unmodifiableMap(new LinkedHashMap<>(values)); }
   }
-  public static final java.util.Set<String> ALLOWED = java.util.Set.of("Accounts","Banks","Safes","PaymentMethods","Stores","Areas","ExchangeDestinations","Incomes","Expenses","DiscountTypes","AgentItinerariesStatus","Vouchers","SafeTransactions","users");
+  public static final java.util.Set<String> ALLOWED = java.util.Set.of("Accounts","Banks","Safes","PaymentMethods","Stores","Areas","ExchangeDestinations","Incomes","Expenses","DiscountTypes","AgentItinerariesStatus","Vouchers","SafeTransactions","users",
+      "Tables","AccountGroups","CostCenters","PriceLists","Stocktakings","ShortageAdjustments","OverflowAdjustments","UnderReviews");
   private final java.util.Set<String> reservedNames = new java.util.HashSet<>();
   private final WebDriver driver;
   private final BasicDataFixturesApi api;
@@ -42,10 +43,15 @@ public final class BasicDataFixtures implements AutoCloseable {
 
   /** Closed and reviewed treasury history keeps its linked master records for audit. */
   public void preserveAuditHistory() {
+    preserveAuditHistory("treasury-audit-masters");
+  }
+  public void preserveAuditHistory(String folder) {
+    if (!java.util.Set.of("treasury-audit-masters", "inventory-audit-documents").contains(folder))
+      throw new IllegalArgumentException("Unsupported audit folder");
     session.verify(); awaitUiSettled(); collectUi(); recoverPendingFixtures();
     var rows=created.stream().map(r->fields("origin",session.origin,"branchId",session.branchId,
         "endpoint",r.endpoint(),"id",r.id(),"name",r.name(),"values",r.values())).toList();
-    TestSupport.FixtureJournals.write(java.nio.file.Path.of("target","treasury-audit-masters",suffix+".json"),rows);
+    TestSupport.FixtureJournals.write(java.nio.file.Path.of("target",folder,suffix+".json"),rows);
     created.clear(); fixtures.clear(); retainedForRecovery=null; journal();
   }
 
@@ -101,12 +107,28 @@ public final class BasicDataFixtures implements AutoCloseable {
   }
   @SuppressWarnings("unchecked") Map<String,Object> lookup(String endpoint){return (Map<String,Object>)call("get",endpoint,fields()).get("entity");}
 
+  /** Read-only access for persisted screen assertions, still bound to this origin/branch. */
+  public Object query(String endpoint) { return call("get", endpoint, fields()).get("entity"); }
+
+  public Record captured(String endpoint, String name) {
+    collectUi();
+    var matches = created.stream().filter(r -> r.endpoint().equals(endpoint) && r.name().equals(name)).toList();
+    if (matches.size() > 1) throw new AssertionError("Ambiguous owned screen save: " + name);
+    return matches.isEmpty() ? null : matches.get(0);
+  }
+
+  public Record awaitSaved(String endpoint, String name) {
+    return new WebDriverWait(driver, Duration.ofSeconds(35)).withMessage("Owned UI save was not captured: " + name)
+        .until(d -> { installCapture(); return captured(endpoint, name); });
+  }
+
   @SuppressWarnings("unchecked")
   public Map<String, Object> read(Record record) {
     Object entity;
     try {entity = call("get", record.endpoint(), fields("id", record.id())).get("entity");}
     catch(ApiFailure failure){
       if(failure.status==404||failure.status==410)return null;
+      if(failure.status==500&&record.endpoint().equals("UnderReviews")&&!underReviewExistsInList(record.id()))return null;
       throw failure;
     }
     // The ERP returns HTTP 200 with an empty string for some deleted records.
@@ -119,6 +141,23 @@ public final class BasicDataFixtures implements AutoCloseable {
         &&!dto.containsKey("pageData")&&!dto.containsKey("totalRecords")
         &&!dto.containsKey("error")&&!dto.containsKey("message"))return null;
     return (Map<String, Object>) entity;
+  }
+
+  private boolean underReviewExistsInList(Object id) {
+    java.util.Set<Object> seen=new java.util.HashSet<>();
+    for(int page=1;;page++) {
+      Object entity=call("get","SalesTransactions?transactionType=UnderReviewTransaction&pageNumber="+page+"&pageSize=500",fields()).get("entity");
+      if(!(entity instanceof Map<?,?> result)||!(result.get("pageData") instanceof List<?> rows)
+          ||!(result.get("totalRecords") instanceof Number total))throw new AssertionError("Cannot confirm missing under-review document through its list");
+      int added=0;
+      for(Object value:rows) {
+        if(!(value instanceof Map<?,?> row)||row.get("id")==null)throw new AssertionError("Missing under-review list identity");
+        if(id.equals(row.get("id")))return true;
+        if(seen.add(row.get("id")))added++;
+      }
+      if(seen.size()>=total.longValue())return false;
+      if(added==0)throw new AssertionError("Under-review pagination did not advance");
+    }
   }
 
   public Record fixture(String key, String endpoint, Map<String, Object> values) {

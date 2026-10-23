@@ -35,10 +35,10 @@ public class VouchersPage extends Abstract {
 
     @Step("عدد بنود القيد التي تم اختيار حساباتها")
     public int getSelectedLineCount() {
-        return driver.findElements(
+        return (int) driver.findElements(
                         By.xpath(
                                 "//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!='']"))
-                .size();
+                .stream().filter(WebElement::isDisplayed).count();
     }
 
     @Step("فتح نافذة اختيار الحساب")
@@ -339,6 +339,19 @@ public class VouchersPage extends Abstract {
                         By.xpath(
                                 "//form//table[.//th[normalize-space()='مدين']]//tbody/tr/td[@aria-colindex='2']//input[@type='search']"))
                 .isEmpty();
+    }
+
+    @Step("التحقق من بحث خيارات الحساب داخل البند دون حذف البنود")
+    public void assertLineAccountSearch(String matchingCode,String otherCode) {
+        By search=By.xpath("(//form//table[.//th[normalize-space()='مدين']]//tbody/tr/td[@aria-colindex='2']//input[@type='search'])[1]");
+        WebElement input=waitMangment.fluentWait().until(org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(search));
+        input.click();input.sendKeys(org.openqa.selenium.Keys.chord(org.openqa.selenium.Keys.CONTROL,"a"));input.sendKeys(matchingCode);
+        waitMangment.fluentWait().until(d->{
+            var options=d.findElements(By.cssSelector("li.vs__dropdown-option")).stream().filter(WebElement::isDisplayed).map(WebElement::getText).toList();
+            return !options.isEmpty()&&options.stream().allMatch(text->text.contains(matchingCode))
+                    &&options.stream().noneMatch(text->text.contains(otherCode));
+        });
+        input.sendKeys(org.openqa.selenium.Keys.ESCAPE);
     }
 
     @Step("البحث في بنود القيد عن: {query}")

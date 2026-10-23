@@ -886,6 +886,9 @@ public class PurchaseModulePage extends AbstractForPurchases {
 
     @Step("التحقق من بيانات الصنف {item} في التقرير المطبوع")
     public void puVerifyPrintedReport(String main, String item) {
+        puVerifyPrintedReport(main,item,()->{});
+    }
+    public void puVerifyPrintedReport(String main, String item, Runnable contentAssertions) {
         new WebDriverWait(driver, Duration.ofSeconds(45))
                 .until(d -> d.getWindowHandles().size() > 1);
         driver.switchTo()
@@ -897,6 +900,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
         try {
             utilitesReportReady();
             AssertTextInReport(item);
+            contentAssertions.run();
         } finally {
             driver.close();
             driver.switchTo().window(main);

@@ -5,6 +5,7 @@
     <test name="FinancialMovementsTest" preserve-order="true">
         <classes>
             <class name="FinancialMovementsTest.CustomerReceiptTest"/>
+            <class name="FinancialMovementsTest.TreasuryLedgerCoverageTest"/>
             <class name="FinancialMovementsTest.SupplierBillOfExchangeTest"/>
             <class name="FinancialMovementsTest.OtherRevenueMovementTest"/>
             <class name="FinancialMovementsTest.SupplierDiscountNoticeTest"/>

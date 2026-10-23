@@ -27,6 +27,7 @@ public abstract class FinancialScenarioTest extends BaseTest {
 
     @BeforeMethod(alwaysRun = true)
     public void newFinancialScenario() {
+        requirePreparedSession();
         marker = "QA-FM-" + UUID.randomUUID().toString().substring(0, 12);
         if (data == null) {
             data = new FinancialTestData(driver);
@@ -414,9 +415,10 @@ public abstract class FinancialScenarioTest extends BaseTest {
     private void export(String format) {
         prepare(false);
         fill("100", false, false);
-        persist(false, "100");
+        var saved = persist(false, "100");
         page.waitForRow(marker);
-        FinancialExportAssertions.assertExportDownloaded(driver, () -> page.export(format), format);
+        FinancialExportAssertions.assertExportDownloaded(driver, () -> page.export(format), format,
+                data.read(saved).get("code").toString(), party == null ? data.party(fromType,1).name() : party.name(), new BigDecimal("100"));
     }
 
     @AfterMethod(alwaysRun = true)

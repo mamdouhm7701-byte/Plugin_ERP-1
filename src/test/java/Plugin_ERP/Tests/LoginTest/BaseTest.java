@@ -17,14 +17,21 @@ public class BaseTest {
 
     protected WebDriver driver;
     protected WebDriverWait wait;
+    private Throwable setupFailure;
+
+    protected final void requirePreparedSession() {
+        if (setupFailure != null) throw new org.testng.SkipException(
+                "Scenario preparation skipped because base login/setup failed; see the setup result", setupFailure);
+        if (driver == null) throw new IllegalStateException("Scenario preparation requires a successfully created browser");
+    }
 
     // ================= SETUP =================
     @BeforeClass(alwaysRun = true)
     public void setup() throws Exception {
-
-        PropertyReader.loadProperties();
-        driver = createDriver();
+        setupFailure = null;
         try {
+            PropertyReader.loadProperties();
+            driver = createDriver();
             if ("LocalHeadless".equalsIgnoreCase(PropertyReader.getProperty("ExecutionType"))) {
                 driver.manage().window().setSize(new Dimension(1920, 1080));
             } else {
@@ -35,6 +42,7 @@ public class BaseTest {
             driver.get(PropertyReader.getApplicationUrl().replaceAll("/+$", "") + "/#/login");
             login();
         } catch (Exception | AssertionError failure) {
+            setupFailure = failure;
             if (driver instanceof TakesScreenshot) {
                 Plugin_ERP.Utiel.ScreenShotsUtils.takeScreenShot(driver, "SETUP_" + getClass().getSimpleName());
             }

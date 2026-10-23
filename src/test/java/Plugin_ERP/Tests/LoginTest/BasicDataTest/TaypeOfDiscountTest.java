@@ -28,7 +28,7 @@ public class TaypeOfDiscountTest extends BasicDataScenarioTest {
             "يتحقق هذا الاختبار من إضافة نوع خصم جديد ببيانات صحيحة، ويشمل إدخال الاسم العربي"
                     + " والإنجليزي والكود السري وقيمة الخصم، وإضافة المستخدمين المصرح لهم، وحفظ"
                     + " البيانات والتحقق من إضافة السجل بنجاح.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+
     public void ValidTaypeOfDiscountTest() {
         System.out.println("TaypeOfDiscount test started");
         TypesofdiscountsPage typesofdiscountsPage = new TypesofdiscountsPage(driver);
@@ -56,7 +56,7 @@ public class TaypeOfDiscountTest extends BasicDataScenarioTest {
             "يتحقق هذا الاختبار من تعديل نوع خصم موجود ببيانات صحيحة، ويشمل تعديل الاسم"
                     + " العربي والإنجليزي وتفعيل خانة (فعال) وتغيير الكود السري وقيمة الخصم وإضافة"
                     + " مستخدمين جدد، وحفظ التعديلات والتحقق من تحديث السجل بنجاح.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+
     public void EditTypeOfDiscount() {
         TypesofdiscountsPage typesofdiscountsPage = new TypesofdiscountsPage(driver);
         typesofdiscountsPage.NavigationHelper(Pages.DISCONTTAYPES);
@@ -85,7 +85,7 @@ public class TaypeOfDiscountTest extends BasicDataScenarioTest {
     @Feature("أنواع الخصومات")
     @Story("حذف نوع خصم")
     @Description("يتحقق هذا الاختبار من أن المستخدم يستطيع حذف نوع خصم موجود بنجاح.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+
     public void DeleteTypeOfDiscount() {
         TypesofdiscountsPage typesofdiscountsPage = new TypesofdiscountsPage(driver);
         typesofdiscountsPage.NavigationHelper(Pages.DISCONTTAYPES);
@@ -104,7 +104,7 @@ public class TaypeOfDiscountTest extends BasicDataScenarioTest {
     @Description(
             "يتحقق هذا الاختبار من أن النظام يمنع إضافة نوع خصم بدون إدخال الاسم العربي،"
                     + " ويتحقق من ظهور رسالة خطأ تفيد بأن الاسم العربي حقل إلزامي.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+
     public void AssertArabicNameRequired() {
         System.out.println("RequiredFieldsTaypeOfDiscount test started");
         TypesofdiscountsPage typesofdiscountsPage = new TypesofdiscountsPage(driver);
@@ -127,7 +127,7 @@ public class TaypeOfDiscountTest extends BasicDataScenarioTest {
     @Description(
             "يتحقق هذا الاختبار من أن النظام يمنع إضافة نوع خصم بدون إدخال الكود السري،"
                     + " ويتحقق من ظهور رسالة خطأ تفيد بأن حقل الكود السري إلزامي.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+
     public void AssertSecretCodeRequired() {
         System.out.println("RequiredFieldsTaypeOfDiscount test started");
         TypesofdiscountsPage typesofdiscountsPage = new TypesofdiscountsPage(driver);
@@ -148,7 +148,7 @@ public class TaypeOfDiscountTest extends BasicDataScenarioTest {
     @Description(
             "يتحقق هذا الاختبار من أن النظام يمنع إضافة نوع خصم بدون إدخال نسبة الخصم، ويتحقق"
                     + " من ظهور رسالة خطأ تفيد بأن حقل نسبة الخصم إلزامي.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+
     public void AssertPercentageRequired() {
         System.out.println("RequiredFieldsTaypeOfDiscount test started");
         TypesofdiscountsPage typesofdiscountsPage = new TypesofdiscountsPage(driver);

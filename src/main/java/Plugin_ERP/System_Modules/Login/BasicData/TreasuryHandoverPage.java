@@ -80,8 +80,9 @@ public class TreasuryHandoverPage extends AbstractForDealer {
 
     @Step("حفظ وطباعة التقرير")
     public void SaveAndPrint() {
+        var originalTabs = driver.getWindowHandles();
         utilites.ClickElement(SaveAndPrintButton);
-        utilites.waits().switchToNewTab();
+        utilites.waits().switchToNewTab(originalTabs);
         utilites.waits().waitForReportReady(60);
     }
 

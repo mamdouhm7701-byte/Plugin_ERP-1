@@ -3,7 +3,8 @@
 <!--
   Smoke اختبار قبول أولي بعد نشر نسخة أو تغيير البيئة.
   الفائدة: نعرف سريعاً هل يمكن الدخول وتنفيذ العمليات الأساسية قبل تشغيل التغطية الواسعة.
-  النطاق: 9 حالات أساسية، تشمل حفظ فاتورة نقاط بيع نقدية وطلب مطعم خارجي مدفوع.
+  النطاق: 13 حالة؛ تشمل حفظ فاتورة نقاط بيع وطلب مطعم، وطاولة، وفاتورة تحت الإجراء،
+  ومسودة جرد دون ترحيل المخزون، وحماية الوصول المباشر دون تسجيل الدخول.
   لا تشمل كل الحدود أو الطباعة أو المداخل القديمة؛ التغطية الكاملة موجودة في Regression.
   الدخول ينفذه BaseTest قبل المجموعة. بيانات كل حالة مستقلة والتنظيف بعد كلاس الصفحة.
   النجاح يسمح بالانتقال لاختبارات أوسع؛ لا يعني خلو النظام من العيوب.
@@ -12,6 +13,18 @@
 <suite name="Smoke - Core ERP availability" parallel="none" configfailurepolicy="continue">
     <test name="Core happy paths" preserve-order="true">
         <classes>
+            <class name="CoverageTest.TablesCoverageTest"><methods>
+                <include name="createsAndReadsBackExactOwnedRecord"/>
+            </methods></class>
+            <class name="Invoice.UnderReviewCoverageTest"><methods>
+                <include name="savesUnderReviewWithoutPostingInventory"/>
+            </methods></class>
+            <class name="StoreTest.StocktakingCoverageTest"><methods>
+                <include name="savesFractionalQuantityAndChecksStockEffect"/>
+            </methods></class>
+            <class name="CoverageTest.PermissionsCoverageTest"><methods>
+                <include name="unauthenticatedDirectRouteRequiresLogin"/>
+            </methods></class>
             <class name="ProductsTest.UnitTest">
                 <methods>
                     <include name="AddNewUnite"/>

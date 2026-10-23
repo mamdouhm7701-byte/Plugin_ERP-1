@@ -84,20 +84,22 @@ public class WaitActions extends BaseAction {
     }
 
     public void switchToNewTab() {
-        String originalTab = driver.getWindowHandle();
-        Set<String> originalTabs = driver.getWindowHandles();
+        switchToNewTab(Set.of(driver.getWindowHandle()));
+    }
+
+    public void switchToNewTab(Set<String> originalTabs) {
+        Set<String> baseline = Set.copyOf(originalTabs);
 
         // استنى لحد ما يظهر tab جديد — زودنا الوقت لـ 30 ثانية
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        wait.until(driver -> driver.getWindowHandles().size() > originalTabs.size());
+        String created = wait.until(d -> {
+            var candidates = d.getWindowHandles().stream().filter(h -> !baseline.contains(h)).toList();
+            if (candidates.size() > 1) throw new IllegalStateException("Ambiguous new report tabs: " + candidates);
+            return candidates.size() == 1 ? candidates.get(0) : null;
+        });
 
         // انتقل للـ tab الجديد
-        for (String handle : driver.getWindowHandles()) {
-            if (!originalTabs.contains(handle)) {
-                driver.switchTo().window(handle);
-                break;
-            }
-        }
+        driver.switchTo().window(created);
 
         // استنى الـ URL يحتوي على ReportViewer
         wait.until(ExpectedConditions.urlContains("ReportViewer"));

@@ -20,6 +20,7 @@ public abstract class BasicDataScenarioTest extends BaseTest {
     }
     @BeforeMethod(alwaysRun = true)
     public void beginBasicDataScenario() {
+        requirePreparedSession();
         fixtureWindow = driver.getWindowHandle();
         basicData().beginScenario();
         basicData().installCapture();

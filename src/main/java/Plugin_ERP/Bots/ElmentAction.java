@@ -109,60 +109,13 @@ public class ElmentAction {
     }
 
     public void ClickElement(By locator) {
-
-        int attempts = 0;
-
-        while (attempts < 3) {
-
-            try {
-
-                WebElement element =
-                        waitMangment
-                                .fluentWait()
-                                .until(
-                                        driver -> {
-                                            WebElement el = driver.findElement(locator);
-
-                                            return (el.isDisplayed() && el.isEnabled()) ? el : null;
-                                        });
-
-                scrollIntoView(element);
-
-                try {
-
-                    element.click();
-
-                } catch (Exception e) {
-
-                    jsClick(element);
-                }
-
-                return;
-
-            } catch (StaleElementReferenceException e) {
-
-                attempts++;
-
-            } catch (Exception e) {
-
-                try {
-
-                    WebElement fallback = driver.findElement(locator);
-
-                    scrollIntoView(fallback);
-
-                    jsClick(fallback);
-
-                    return;
-
-                } catch (Exception ignored) {
-                }
-
-                attempts++;
-            }
-        }
-
-        throw new RuntimeException("❌ Click failed after retries: " + locator);
+        waitMangment.fluentWait().withMessage("Native click unavailable: " + locator).until(d -> {
+            WebElement element = d.findElement(locator);
+            if (!element.isDisplayed() || !element.isEnabled()) return false;
+            scrollIntoView(element);
+            element.click();
+            return true;
+        });
     }
 
     public void TaypeText(By locator, String value) {

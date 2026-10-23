@@ -82,8 +82,9 @@ public class ProductListPage extends ProductsModulePage {
 
     @Step("Click Save And Print Button")
     public void ClickSaveAndPrintButton_1() {
+        var originalTabs = driver.getWindowHandles();
         utilites.ClickElement(SaveAndPrintButton);
-        utilites.waits().switchToNewTab();
+        utilites.waits().switchToNewTab(originalTabs);
         utilites.waits().waitForReportReady(60);
     }
 

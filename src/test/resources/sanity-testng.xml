@@ -6,7 +6,8 @@
   كل test أدناه يمثل نطاق تغيير. من IDE شغّل النطاق المقصود، أو احتفظ بعنصر test الخاص
   به وحده في نسخة محلية من الملف. تشغيل الملف كاملاً ينفذ كل النطاقات أدناه.
   ليست بديلاً عن إعادة حالة العيب نفسها: أضف اسم حالة العيب للنطاق المناسب عند الحاجة.
-  النطاق: 24 حالة، 3 حالات لكل موديول من الثمانية بما فيها نقاط البيع والمطعم.
+  النطاق: 57 حالة موزعة على نطاقات التغيير، تشمل الشاشات الجديدة والصلاحيات
+  والجرد والتسويات والخزينة والطباعة ومحتوى Excel. شغّل نطاق التغيير المقصود للتحقق المركز.
   تعليق المطعم يخصم المخزون، بينما تعليق سلة نقاط البيع محلي؛ لا نساوي السلوكين.
   التشغيل: mvn '-Dsurefire.suiteXmlFiles=src/test/resources/sanity-testng.xml' test
 -->
@@ -20,6 +21,9 @@
                     <include name="PR_CancelEdit"/>
                 </methods>
             </class>
+            <class name="ProductsTest.ProductListTest"><methods>
+                <include name="PR_SaveWithoutPrint"/><include name="AssertErorrMsg"/>
+            </methods></class>
         </classes>
     </test>
     <test name="Sanity Dealers" preserve-order="true">
@@ -40,6 +44,7 @@
                     <include name="savesOwnedItemFromPicker"/>
                     <include name="emptyDocumentCannotSave"/>
                     <include name="savedDocumentEditPolicy"/>
+                    <include name="savesAndPrintsOwnedInvoice"/>
                 </methods>
             </class>
         </classes>
@@ -51,6 +56,7 @@
                     <include name="savesOwnedItemFromPicker"/>
                     <include name="negativeQuantityCannotSave"/>
                     <include name="savedDocumentCanBeEdited"/>
+                    <include name="savesAndPrintsOwnedDocument"/>
                 </methods>
             </class>
         </classes>
@@ -73,6 +79,7 @@
                     <include name="AddResetWithSaveTest"/>
                     <include name="FM_RejectNegativeAmount"/>
                     <include name="FM_CancelEditWithoutSaving"/>
+                    <include name="FM_ExportExcel"/>
                 </methods>
             </class>
         </classes>
@@ -99,4 +106,46 @@
             </class>
         </classes>
     </test>
+    <test name="Sanity New basic data and account masters" preserve-order="true"><classes>
+        <class name="CoverageTest.TablesCoverageTest"><methods>
+            <include name="createsAndReadsBackExactOwnedRecord"/><include name="missingRequiredFieldCannotPersist"/><include name="abandoningFormDoesNotSave"/>
+        </methods></class>
+        <class name="CoverageTest.AccountGroupsCoverageTest"><methods>
+            <include name="createsAndReadsBackExactOwnedRecord"/><include name="missingRequiredFieldCannotPersist"/><include name="abandoningFormDoesNotSave"/>
+        </methods></class>
+        <class name="CoverageTest.CostCentersCoverageTest"><methods>
+            <include name="createsAndReadsBackExactOwnedRecord"/><include name="missingRequiredFieldCannotPersist"/><include name="abandoningFormDoesNotSave"/>
+        </methods></class>
+        <class name="CoverageTest.ChartOfAccountsCoverageTest"><methods>
+            <include name="createsAndReadsBackExactOwnedRecord"/><include name="missingRequiredFieldCannotPersist"/><include name="abandoningFormDoesNotSave"/>
+        </methods></class>
+    </classes></test>
+    <test name="Sanity Inventory reconciliation" preserve-order="true"><classes>
+        <class name="StoreTest.StocktakingCoverageTest"><methods>
+            <include name="savesFractionalQuantityAndChecksStockEffect"/><include name="cancelCreationPreservesStock"/>
+        </methods></class>
+        <class name="StoreTest.ShortageAdjustmentCoverageTest"><methods><include name="generatedFractionalAdjustmentMatchesOwnedItemAndStock"/></methods></class>
+        <class name="StoreTest.OverflowAdjustmentCoverageTest"><methods><include name="generatedFractionalAdjustmentMatchesOwnedItemAndStock"/></methods></class>
+    </classes></test>
+    <test name="Sanity Under review and invoice actions" preserve-order="true"><classes>
+        <class name="Invoice.UnderReviewCoverageTest"><methods>
+            <include name="savesUnderReviewWithoutPostingInventory"/><include name="zeroQuantityCannotPersist"/>
+        </methods></class>
+        <class name="Invoice.PostingCoverageTest"/>
+        <class name="Invoice.ActionsCoverageTest"/>
+    </classes></test>
+    <test name="Sanity Kitchen fulfilment" preserve-order="true"><classes>
+        <class name="SpecialSalesTest.KitchenOrdersCoverageTest"/>
+    </classes></test>
+    <test name="Sanity Users and direct access" preserve-order="true"><classes>
+        <class name="CoverageTest.UsersCoverageTest"><methods>
+            <include name="createsLimitedUserAndReadsBack"/><include name="mismatchedPasswordsCannotSave"/>
+        </methods></class>
+        <class name="CoverageTest.PermissionsCoverageTest"/>
+        <class name="CoverageTest.AuditLogCoverageTest"/>
+        <class name="CoverageTest.ZatcaConfigurationCoverageTest"/>
+    </classes></test>
+    <test name="Sanity Treasury cash ledger and closing" preserve-order="true"><classes>
+        <class name="FinancialMovementsTest.TreasuryLedgerCoverageTest"/>
+    </classes></test>
 </suite>

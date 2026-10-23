@@ -44,5 +44,7 @@ public final class CiSuiteContractTest {
                 "SuiteSupport.RuntimeCompatibilityTest", "SuiteSupport.BrowserLifecycleTest",
                 "Plugin_ERP.Utiel.ConfigurationPropertiesTest",
                 "Plugin_ERP.Utiel.Allur.AllureReportPolicyTest")));
+        Assert.assertTrue(classes.containsAll(Set.of("Plugin_ERP.Utiel.Allur.ScenarioAccessTest",
+                "Plugin_ERP.Utiel.InteractionAccuracyTest")), "CI must retain access metadata and assertion accuracy checks");
     }
 }

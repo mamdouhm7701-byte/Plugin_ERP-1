@@ -28,6 +28,7 @@ public class DealerScenarioTest extends BaseTest {
 
     @BeforeMethod(alwaysRun = true)
     public void beginDealerCase() {
+        requirePreparedSession();
         mainWindow = driver.getWindowHandle();
         if (uiSession == null) uiSession = new TestSupport.FixtureSession(driver);
         uiSession.verify();

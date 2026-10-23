@@ -23,6 +23,7 @@ public abstract class SpecialSalesScenario extends BaseTest {
 
     @BeforeClass(alwaysRun = true)
     public void fixtures() {
+        requirePreparedSession();
         page = createPage();
         page.awaitSession();
         data = new SpecialSalesTestData(driver);
@@ -31,6 +32,7 @@ public abstract class SpecialSalesScenario extends BaseTest {
 
     @BeforeMethod(alwaysRun = true)
     public void scenario() {
+        requirePreparedSession();
         data.beginScenario();
         customer = data.customer();
         org.testng.Assert.assertEquals(data.read(customer).get("isTaxable"), Boolean.TRUE, "مطابقة تطبيق الضريبة");

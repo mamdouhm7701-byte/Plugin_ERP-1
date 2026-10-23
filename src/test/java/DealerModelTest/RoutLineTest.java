@@ -21,7 +21,7 @@ public class RoutLineTest extends DealerScenarioTest {
     public void AddRoutLine() {
         var agent = data().agent("Sales");
         var status = data().fixture("route-status", "AgentItinerariesStatus",
-                fields("documentKind", "Invoice", "isRouteLocation", false));
+                fields("documentKind", null, "isRouteLocation", false));
         var customer = data().fixture("route-customer", "Customers",
                 fields("agentId", agent.id(), "areaId", data().area().id(),
                         "accountId", data().account().id(), "isActive", true,
@@ -30,13 +30,10 @@ public class RoutLineTest extends DealerScenarioTest {
         String marker = ownedName(page, Pages.DEALERROUTELINE, "CALENDAR");
         page.NavigationHelper(Pages.DEALERROUTELINE);
         page.AddRoutLine();
-        page.PrepareOwnedRoute(agent.id(), customer.id(), status.id(),
-                new TestSupport.FixtureSession(driver).branchId);
+        page.PrepareOwnedRoute(agent.name(), customer.name(), status.name(), data().area().name());
         page.AddArabicRoutLine(marker);
         page.AddVisitCount("5");
         page.AddDayCount("10");
-        page.ClickToDeletAllButton();
-        page.ClickAddAllButton();
         page.AssertOnlyOwnedCustomerSelected(customer.id());
         page.AddNotesForRoutLine(marker);
         Assert.assertTrue(page.OwnedEventTitles(marker).isEmpty());

@@ -27,16 +27,15 @@ public class ValidationActions extends BaseAction {
     }
 
     public String normalizePrice(String value) {
-        return value.replaceAll("[\\u200E\\u200F\\u202A-\\u202E]", "") // إزالة RTL/LTR marks
-                .replace(",", "")
-                .replace(".000000", "")
-                .replace(".00000", "")
-                .replace(".0000", "")
-                .replace(".000", "")
-                .replace(".00", "")
-                .replace(".0", "")
-                .replaceAll("\\s+", "")
-                .trim();
+        String clean = value.replaceAll("[\\u200E\\u200F\\u202A-\\u202E\\u2066-\\u2069]", "")
+                .replace(",", "").replace("\u066c", "").replace('\u066b', '.')
+                .replaceAll("[\\s\\u00a0\\u202f]+", "");
+        StringBuilder digits = new StringBuilder();
+        for (char ch : clean.toCharArray()) {
+            int digit = Character.digit(ch, 10);
+            digits.append(digit >= 0 ? (char) ('0' + digit) : ch);
+        }
+        return new java.math.BigDecimal(digits.toString()).stripTrailingZeros().toPlainString();
     }
 
     private String normalizeDate(String date) {
@@ -102,10 +101,10 @@ public class ValidationActions extends BaseAction {
 
         try {
 
-            double actualNum = Double.parseDouble(cleanActual);
-            double expectedNum = Double.parseDouble(cleanExpected);
+            java.math.BigDecimal actualNum = new java.math.BigDecimal(normalizePrice(cleanActual));
+            java.math.BigDecimal expectedNum = new java.math.BigDecimal(normalizePrice(cleanExpected));
 
-            if (Double.compare(actualNum, expectedNum) != 0) {
+            if (actualNum.compareTo(expectedNum) != 0) {
 
                 throw new AssertionError(
                         "❌ Expected: '" + expected + "' but got: '" + actual + "'");
@@ -132,7 +131,8 @@ public class ValidationActions extends BaseAction {
                     driver.findElements(
                             By.xpath("//*[contains(normalize-space(),'" + text + "')]"));
 
-            return elements.stream().anyMatch(WebElement::isDisplayed);
+            return elements.stream().anyMatch(element -> element.isDisplayed()
+                    && element.getText().contains(text));
 
         } catch (Exception e) {
 
@@ -142,34 +142,7 @@ public class ValidationActions extends BaseAction {
     }
 
     public boolean IsPriceDisplayed(String expectedPrice) {
-
-        try {
-
-            String normalizedExpected = normalizePrice(expectedPrice);
-
-            List<WebElement> elements = driver.findElements(By.xpath("//*[normalize-space()]"));
-
-            for (WebElement element : elements) {
-
-                String actualText = element.getText().trim();
-
-                if (actualText.isEmpty()) {
-                    continue;
-                }
-
-                String normalizedActual = normalizePrice(actualText);
-
-                if (normalizedActual.contains(normalizedExpected) && element.isDisplayed()) {
-
-                    return true;
-                }
-            }
-
-            return false;
-
-        } catch (Exception e) {
-            return false;
-        }
+        return IsPriceDisplayedForFin(expectedPrice);
     }
 
     public boolean IsPriceDisplayedForFin(String expectedPrice) {
@@ -190,12 +163,14 @@ public class ValidationActions extends BaseAction {
                 continue;
             }
 
-            String normalizedActual = normalizePrice(actualText);
-
-            if (normalizedActual.equals(normalizedExpected)) {
+            try {
+            if (normalizePrice(actualText).equals(normalizedExpected)) {
 
                 System.out.println("PRICE FOUND = " + actualText);
                 return true;
+            }
+            } catch (NumberFormatException nonNumericLabel) {
+                // A report also contains headings; never match a number inside their text.
             }
         }
 
@@ -239,38 +214,6 @@ public class ValidationActions extends BaseAction {
     }
 
     public boolean IsNumericPriceDisplayed(String expectedPrice) {
-
-        double expectedValue = normalizeNumericValue(expectedPrice);
-
-        List<WebElement> elements = driver.findElements(By.xpath("//*[normalize-space()]"));
-
-        for (WebElement element : elements) {
-
-            if (!element.isDisplayed()) {
-                continue;
-            }
-
-            String actualText = element.getText().trim();
-
-            if (actualText.isEmpty()) {
-                continue;
-            }
-
-            try {
-
-                double actualValue = normalizeNumericValue(actualText);
-
-                if (Math.abs(actualValue - expectedValue) <= 0.01) {
-
-                    System.out.println("PRICE FOUND = " + actualText);
-                    return true;
-                }
-
-            } catch (Exception ignored) {
-            }
-        }
-
-        System.out.println("PRICE NOT FOUND = " + expectedPrice);
-        return false;
+        return IsPriceDisplayedForFin(expectedPrice);
     }
 }

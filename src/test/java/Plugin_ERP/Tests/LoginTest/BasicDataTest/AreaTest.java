@@ -248,10 +248,9 @@ public class AreaTest extends BasicDataScenarioTest {
 
     @Test(
             priority = 10,
-            enabled = false,
+            enabled = true,
             description =
-                    "Deferred: search behavior is unstable in the current Demo UI and will be revisited"
-                            + " separately")
+                    "Recheck area search by code/name and clear filters on owned records")
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.NORMAL)
     @Epic("Web Cloud")
@@ -270,17 +269,22 @@ public class AreaTest extends BasicDataScenarioTest {
         page.SearchArea(name);
         Assert.assertEquals(page.GetExactAreaMatchCount(name), 1, "يجب إظهار المنطقة بالاسم");
         page.SearchArea("QA-AREA-NOT-FOUND");
+        new org.openqa.selenium.support.ui.WebDriverWait(driver,java.time.Duration.ofSeconds(15))
+                .withMessage("Area search retained rows for a nonmatching query")
+                .until(d->page.GetVisibleAreaRowCount()==0);
         Assert.assertEquals(page.GetVisibleAreaRowCount(), 0, "يجب ألا تظهر نتائج غير مطابقة");
         page.SearchArea("");
+        new org.openqa.selenium.support.ui.WebDriverWait(driver,java.time.Duration.ofSeconds(15))
+                .withMessage("Area list did not return after clearing search")
+                .until(d->page.GetVisibleAreaRowCount()>0);
         Assert.assertTrue(page.GetVisibleAreaRowCount() > 0, "يجب استعادة القائمة بعد مسح البحث");
     }
 
     @Test(
             priority = 11,
-            enabled = false,
+            enabled = true,
             description =
-                    "Deferred: search behavior is unstable in the current Demo UI and will be revisited"
-                            + " separately")
+                    "Recheck which displayed area fields participate in search")
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.NORMAL)
     @Epic("Web Cloud")
@@ -295,12 +299,18 @@ public class AreaTest extends BasicDataScenarioTest {
         String english = "Area English " + System.currentTimeMillis();
         createArea(page, name, english, null);
         page.SearchArea(english);
+        new org.openqa.selenium.support.ui.WebDriverWait(driver,java.time.Duration.ofSeconds(15))
+                .withMessage("Area search returned a row for its hidden English name")
+                .until(d->page.GetVisibleAreaRowCount()==0);
         Assert.assertEquals(
                 page.GetVisibleAreaRowCount(),
                 0,
                 "البحث يعتمد على الكود والاسم العربي المعروضين في الجدول، ولا يبحث بالاسم الإنجليزي"
                         + " المخفي");
         page.SearchArea(name);
+        new org.openqa.selenium.support.ui.WebDriverWait(driver,java.time.Duration.ofSeconds(15))
+                .withMessage("Area Arabic-name search did not display the owned row")
+                .until(d->page.GetExactAreaMatchCount(name)==1);
         Assert.assertEquals(
                 page.GetExactAreaMatchCount(name),
                 1,

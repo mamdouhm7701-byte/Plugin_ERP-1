@@ -158,7 +158,7 @@ public class CashTest extends BasicDataScenarioTest {
             "يتحقق هذا الاختبار من إضافة خزنة جديدة ببيانات صحيحة، ويشمل إدخال الاسم العربي"
                     + " والإنجليزي والملاحظات، واختيار رقم الحساب وتفعيل خانة (عام)، وحفظ البيانات"
                     + " والتحقق من إضافة السجل بنجاح.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+
     public void ValidCashTest() {
         WH_003_CreateValidSafeAndVerifyFields();
     }
@@ -174,7 +174,7 @@ public class CashTest extends BasicDataScenarioTest {
     @Description(
             "يتحقق هذا الاختبار من تعديل خزنة موجودة ببيانات صحيحة، ويشمل تعديل الاسم العربي"
                     + " وحفظ التعديلات والتحقق من تحديث السجل بنجاح.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+
     public void EditCash() {
         WH_021_EditOwnedTestSafeAndSave();
     }
@@ -188,7 +188,7 @@ public class CashTest extends BasicDataScenarioTest {
     @Feature("الخزن")
     @Story("حذف خزنة")
     @Description("يتحقق هذا الاختبار من أن المستخدم يستطيع حذف خزنة موجودة بنجاح.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+
     public void DeleteCash() {
         WH_023_DeleteOnlyOwnedTestSafe();
     }
@@ -202,7 +202,7 @@ public class CashTest extends BasicDataScenarioTest {
     @Description(
             "يتحقق هذا الاختبار من أن النظام يمنع إضافة خزنة بدون إدخال الاسم العربي، ويتحقق"
                     + " من ظهور رسالة خطأ تفيد بأن الاسم العربي حقل إلزامي.")
-    @Link(name = "Link", url = "https://binfares.plugin-erp.com/#/login")
+
     public void InvalidCashTest() {
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);

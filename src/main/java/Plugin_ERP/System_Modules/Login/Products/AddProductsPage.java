@@ -12,6 +12,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 public class AddProductsPage extends ProductsModulePage {
+    @Step("ربط الصنف بالمخزن {store}: رصيد {opening}، حد أدنى {minimum}، تكلفة {cost}")
     public void prStock(String store, String opening, String minimum, String cost) {
         prChoose("مخازن", store);
         prTitledField("مكان الصنف", "QA");
@@ -21,6 +22,7 @@ public class AddProductsPage extends ProductsModulePage {
         prButton("اضافة مخزن");
     }
 
+    @Step("إضافة الوحدة الفرعية {unit}: باركود {barcode}، معامل تحويل {rate}")
     public void prSubunit(String unit, String barcode, String rate) {
         prTab("وحدات الصنف");
         prChoose("الوحدة", unit);
@@ -31,6 +33,7 @@ public class AddProductsPage extends ProductsModulePage {
         prButton("اضافة وحدة");
     }
 
+    @Step("إضافة المكون {item} من المخزن {store} بكمية {quantity}")
     public void prComponent(String store, String item, String quantity) {
         prTab("المكونات");
         prChoose("المخزن", store);

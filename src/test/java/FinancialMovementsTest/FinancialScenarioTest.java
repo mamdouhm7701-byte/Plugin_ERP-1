@@ -137,7 +137,7 @@ public abstract class FinancialScenarioTest extends BaseTest {
         Map<String, Object> stored = data.read(record);
         Assert.assertNotNull(stored, "Movement was not persisted");
         page.identifyMovement(marker, stored.get("code"));
-        Assert.assertEquals(stored.get("notes"), marker);
+        Assert.assertEquals(stored.get("notes"), marker, "مطابقة الملاحظات");
         Assert.assertEquals(
                 new BigDecimal(stored.get("value").toString()).compareTo(new BigDecimal(amount)),
                 0,
@@ -222,11 +222,11 @@ public abstract class FinancialScenarioTest extends BaseTest {
                     data.agent(
                                     kind() == FinancialMovementKind.PAYMENT
                                             || kind() == FinancialMovementKind.SUPPLIER_DISCOUNT)
-                            .id());
+                            .id(), "مطابقة المندوب");
         }
         if (!kind().discount() && kind() != FinancialMovementKind.TRANSFER) {
             Assert.assertEquals(stored.get("paymentMethodId"), data.payment().id());
-            Assert.assertEquals(stored.get("bankId"), data.bank(1).id());
+            Assert.assertEquals(stored.get("bankId"), data.bank(1).id(), "مطابقة البنك");
         }
     }
 
@@ -360,7 +360,7 @@ public abstract class FinancialScenarioTest extends BaseTest {
         page.notes(marker + "-UNSAVED");
         page.closeWithoutSaving();
         Map<String, Object> stored = data.read(saved);
-        Assert.assertEquals(stored.get("notes"), marker);
+        Assert.assertEquals(stored.get("notes"), marker, "مطابقة الملاحظات");
         Assert.assertEquals(
                 new BigDecimal(stored.get("value").toString()).compareTo(new BigDecimal("100")), 0);
     }

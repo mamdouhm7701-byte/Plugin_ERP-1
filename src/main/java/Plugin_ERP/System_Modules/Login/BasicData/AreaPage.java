@@ -54,6 +54,7 @@ public class AreaPage extends AbstractForDealer {
     }
 
     @Override
+    @Step("حفظ البيانات المدخلة")
     public void ClickSaveButton() {
         super.ClickSaveButton();
         waitForAreaSaveSuccessPopupToDisappear();
@@ -108,7 +109,8 @@ public class AreaPage extends AbstractForDealer {
                 .until(
                         d ->
                                 d.findElements(areaRows).stream()
-                                        .filter(row -> row.getText().contains(name))
+                                        .filter(row -> row.findElements(By.cssSelector("td")).stream()
+                                                .anyMatch(cell -> cell.getText().trim().equals(name)))
                                         .findFirst()
                                         .orElse(null));
     }
@@ -211,6 +213,11 @@ public class AreaPage extends AbstractForDealer {
                         .findFirst()
                         .orElseThrow(() -> new IllegalStateException("No Area row is displayed"));
         return row.findElements(By.cssSelector("td")).get(index).getText().trim();
+    }
+
+    public String GetAreaCellByName(String name, String headerName) {
+        return findAreaRow(name).findElements(By.cssSelector("td"))
+                .get(getColumnIndex(headerName)).getText().trim();
     }
 
     @Step("قراءة قيم عمود المناطق: {headerName}")
@@ -399,7 +406,7 @@ public class AreaPage extends AbstractForDealer {
         return sorted;
     }
 
-    @Step("طلب حذف المنطقة المملوكة للاختبار: {name}")
+    @Step("طلب حذف المنطقة المحددة: {name}")
     public void RequestDeleteAreaByName(String name) {
         findAreaRow(name).findElement(By.cssSelector("button[data-action-type='delete']")).click();
         new WebDriverWait(driver, Duration.ofSeconds(10))
@@ -424,7 +431,7 @@ public class AreaPage extends AbstractForDealer {
                         .anyMatch(b -> b.isDisplayed() && b.isEnabled());
     }
 
-    @Step("تأكيد حذف سجل المنطقة المملوك للاختبار")
+    @Step("تأكيد حذف سجل المنطقة المحدد")
     public void ConfirmAreaDelete() {
         WebElement confirm =
                 new WebDriverWait(driver, Duration.ofSeconds(10))

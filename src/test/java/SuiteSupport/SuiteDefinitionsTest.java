@@ -24,7 +24,7 @@ public final class SuiteDefinitionsTest {
     return new Object[][] {
         {"smoke"}, {"sanity"}, {"regression"}, {"e2e"}, {"login"}, {"ci"},
         {"additional/standalone/browser-isolation"},
-        {"additional/standalone/point-of-sale"}, {"additional/standalone/restaurant"}, {"special-sales"},
+        {"additional/standalone/point-of-sale"}, {"additional/standalone/restaurant"}, {"special-sales"}, {"basic-data"}, {"general-accounting"},
         {"additional/standalone/fixture-lifecycle"}, {"additional/internal/regression-additional"}, {"additional/internal/regression-workflows"},
         {"additional/standalone/fixture-refactor-smoke"},
         {"additional/standalone/fixture-data-refactor-smoke"},
@@ -32,7 +32,7 @@ public final class SuiteDefinitionsTest {
         {"additional/standalone/document-list-refactor-smoke"},
         {"additional/standalone/form-interactions-smoke"},
         {"additional/standalone/products-finance-interactions-smoke"},
-        {"additional/standalone/acceptance"}
+        {"additional/standalone/acceptance"}, {"additional/standalone/module-lifecycle-smoke"}, {"additional/standalone/allure-journey-smoke"}
     };
   }
 

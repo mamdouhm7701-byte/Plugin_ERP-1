@@ -26,7 +26,7 @@ public class ProductCategoriesTest extends ProductScenarioTest {
     }
 
     @Test(groups = "products")
-    @Story("إضافة فئة فرعية بربط مستقل")
+    @Story("إضافة فئة فرعية وربطها بالفئة الرئيسية")
     public void AddBranchProduct() {
         openNew();
         fill(null);
@@ -40,7 +40,7 @@ public class ProductCategoriesTest extends ProductScenarioTest {
     }
 
     @Test(groups = "products")
-    @Story("تعديل فئة فرعية مستقلة")
+    @Story("تعديل بيانات الفئة الفرعية")
     public void EditBranchProduct() {
         var parent = data.mainCategory();
         var r =

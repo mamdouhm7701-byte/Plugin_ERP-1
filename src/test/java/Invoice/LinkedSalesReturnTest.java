@@ -29,7 +29,7 @@ public final class LinkedSalesReturnTest extends SalesScenarioTest {
                 agent.id(),
                 "Linked return must retain the owned source agent");
         Assert.assertEquals(page.slDocument().get("sourceTransactionId"), source.id());
-        Assert.assertEquals(page.slDocument().get("dealerId"), customer.id());
+        Assert.assertEquals(page.slDocument().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
     }
 
     @Test
@@ -73,7 +73,7 @@ public final class LinkedSalesReturnTest extends SalesScenarioTest {
         page.slLinkedReturn(source.id(), item.name());
         page.slCapture(marker, data.store(1).id(), item.id(), kind().endpoint);
         page.slNotes(marker + "-second");
-        Assert.assertEquals(page.slDocument().get("agentId"), agent.id());
+        Assert.assertEquals(page.slDocument().get("agentId"), agent.id(), "مطابقة المندوب");
         page.slQuantity(item.name(), "2");
         rejectSave();
     }

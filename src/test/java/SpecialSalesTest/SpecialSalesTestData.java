@@ -282,7 +282,6 @@ final class SpecialSalesTestData implements AutoCloseable {
                                                 && storeId.equals(row.get("storeId")));
     }
 
-    @io.qameta.allure.Step("تحديث ربط مخزن الاختبار بالفرع: {add}")
     private void changeBranchStore(Record link, boolean add) {
         Map<String, Object> branch = branchFor(link);
         Object storeId = link.values().get("storeId");
@@ -477,7 +476,6 @@ final class SpecialSalesTestData implements AutoCloseable {
         return (Map<String, Object>) entity;
     }
 
-    @io.qameta.allure.Step("إنشاء بيانات مساعدة مستقلة: {key}")
     Record fixture(String key, String endpoint, Map<String, Object> values) {
         key = fixtureKey(key);
         if (fixtures.containsKey(key)) return fixtures.get(key);
@@ -717,7 +715,6 @@ final class SpecialSalesTestData implements AutoCloseable {
             for (Object row : rows) findOwned(row, name, matches);
     }
 
-    @io.qameta.allure.Step("تنظيف سجلات الاختبار بترتيب العلاقات")
     @Override
     public void close() {
         recoverPendingFixtures();

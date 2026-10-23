@@ -20,7 +20,7 @@ public class UnitTest extends ProductScenarioTest {
     }
 
     @Test(groups = "products")
-    @Story("إضافة وحدة مستقلة")
+    @Story("إضافة وحدة قياس")
     public void AddNewUnite() {
         create();
     }

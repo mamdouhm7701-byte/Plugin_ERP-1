@@ -8,6 +8,9 @@
 <suite name="Local page fixture lifecycle regressions" configfailurepolicy="continue" parallel="none">
     <test name="Owned data isolation and recovery" preserve-order="true">
         <classes>
+            <class name="TestSupport.BasicDataFixturesTest"/>
+            <class name="TestSupport.TreasuryAmountsTest"/>
+            <class name="DealerModelTest.DealerMarkerCleanupTest"/>
             <class name="Invoice.SalesCleanupTest"/>
             <class name="ProductsTest.ProductsCleanupTest"/>
             <class name="StoreTest.StoreCleanupTest"/>

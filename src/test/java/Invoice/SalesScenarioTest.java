@@ -185,11 +185,11 @@ public abstract class SalesScenarioTest extends BaseTest {
                         .toString(),
                 ".json");
         Assert.assertNotNull(stored);
-        Assert.assertEquals(stored.get("notes"), record.name());
-        Assert.assertEquals(stored.get("storeId"), data.store(1).id());
-        Assert.assertEquals(stored.get("dealerId"), customer.id());
-        Assert.assertEquals(stored.get("agentId"), agent.id());
-        Assert.assertTrue(kind().type.equalsIgnoreCase(stored.get("transactionType").toString()));
+        Assert.assertEquals(stored.get("notes"), record.name(), "مطابقة الملاحظات");
+        Assert.assertEquals(stored.get("storeId"), data.store(1).id(), "مطابقة المخزن");
+        Assert.assertEquals(stored.get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
+        Assert.assertEquals(stored.get("agentId"), agent.id(), "مطابقة المندوب");
+        Assert.assertTrue(kind().type.equalsIgnoreCase(stored.get("transactionType").toString()), "التحقق من نوع الحركة");
         List<Map<String, Object>> lines = (List<Map<String, Object>>) stored.get("lines");
         Assert.assertFalse(lines.isEmpty());
         Assert.assertTrue(
@@ -207,7 +207,7 @@ public abstract class SalesScenarioTest extends BaseTest {
                             .map(p -> number(p.get("value")))
                             .reduce(BigDecimal.ZERO, BigDecimal::add)
                             .compareTo(number(stored.get("net"))),
-                    0);
+                    0, "مطابقة الصافي");
         }
         if (print) page.slVerifyPrintedReport(mainWindow, item.name());
         else page.slDismiss();
@@ -236,6 +236,7 @@ public abstract class SalesScenarioTest extends BaseTest {
         return new BigDecimal(value.toString().replace(",", ""));
     }
 
+    @io.qameta.allure.Step("مطابقة القيمة: المتوقع {expected}، الفعلي {actual}")
     protected static void sameNumber(Object actual, String expected) {
         Assert.assertEquals(
                 number(actual).compareTo(new BigDecimal(expected)),
@@ -250,6 +251,7 @@ public abstract class SalesScenarioTest extends BaseTest {
                 .subtract(number(value.get("prevCredit")));
     }
 
+    @io.qameta.allure.Step("التحقق من تغير رصيد العميل: المتوقع {expected}")
     protected void assertCustomerDelta(Map<String, Object> before, String expected) {
         String expectedWithTax = salesNet(expected);
         var target = customerBalance(before).add(new BigDecimal(expectedWithTax));
@@ -290,6 +292,7 @@ public abstract class SalesScenarioTest extends BaseTest {
         }
     }
 
+    @io.qameta.allure.Step("التحقق من أثر الفاتورة على كمية المخزون: {quantity}")
     protected void assertStock(String quantity) {
         BigDecimal qty = new BigDecimal(quantity), expected = initialBalances.get(1);
         if (kind() == SalesDocumentKind.INVOICE) expected = expected.subtract(qty);

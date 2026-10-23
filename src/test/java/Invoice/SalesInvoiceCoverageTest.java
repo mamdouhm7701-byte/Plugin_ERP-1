@@ -24,7 +24,7 @@ public final class SalesInvoiceCoverageTest extends SalesFormTest {
                 second.values().get("mainUnitBarcode").toString(), second.name());
         page.slWaitNet("100");
         var saved = save(false);
-        org.testng.Assert.assertEquals(firstLine(data.read(saved)).get("itemId"), second.id());
+        org.testng.Assert.assertEquals(firstLine(data.read(saved)).get("itemId"), second.id(), "مطابقة الصنف");
         assertStock("0");
         sameNumber(data.balance(second, 1), "999");
     }

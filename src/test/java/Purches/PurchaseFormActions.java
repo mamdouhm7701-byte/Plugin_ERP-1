@@ -124,17 +124,17 @@ public abstract class PurchaseFormActions extends PurchaseScenarioTest {
                     new org.json.JSONObject(stored).toString(),
                     ".json");
             sameNumber(stored.get("net"), net);
-            Assert.assertEquals(stored.get("notes"), marker);
-            Assert.assertEquals(stored.get("dealerId"), supplier.id());
-            Assert.assertEquals(stored.get("storeId"), data.store(1).id());
-            Assert.assertEquals(stored.get("agentId"), agent.id());
-            Assert.assertEquals(stored.get("paymentType"), "Credit");
+            Assert.assertEquals(stored.get("notes"), marker, "مطابقة الملاحظات");
+            Assert.assertEquals(stored.get("dealerId"), supplier.id(), "مطابقة العميل أو المورد");
+            Assert.assertEquals(stored.get("storeId"), data.store(1).id(), "مطابقة المخزن");
+            Assert.assertEquals(stored.get("agentId"), agent.id(), "مطابقة المندوب");
+            Assert.assertEquals(stored.get("paymentType"), "Credit", "مطابقة نوع السداد");
             Assert.assertTrue(
                     documentKind()
                             .type
-                            .equalsIgnoreCase(String.valueOf(stored.get("transactionType"))));
-            Assert.assertEquals(((List<?>) stored.get("lines")).size(), 1);
-            Assert.assertEquals(firstLine(stored).get("itemId"), item.id());
+                            .equalsIgnoreCase(String.valueOf(stored.get("transactionType"))), "التحقق من نوع الحركة");
+            Assert.assertEquals(((List<?>) stored.get("lines")).size(), 1, "مطابقة بنود الفاتورة");
+            Assert.assertEquals(firstLine(stored).get("itemId"), item.id(), "مطابقة الصنف");
             sameNumber(firstLine(stored).get("quantity"), "3");
             assertStock("3");
             assertSupplierDelta(
@@ -150,14 +150,14 @@ public abstract class PurchaseFormActions extends PurchaseScenarioTest {
         page.puNotes(note);
         fill("picker");
         var saved = save(false);
-        Assert.assertEquals(data.read(saved).get("notes"), note);
+        Assert.assertEquals(data.read(saved).get("notes"), note, "مطابقة الملاحظات");
     }
 
     protected void fresh() {
         prepare("Credit");
         fill("picker");
         page.puNew();
-        Assert.assertTrue(((List<?>) page.puDocument().get("lines")).isEmpty());
+        Assert.assertTrue(((List<?>) page.puDocument().get("lines")).isEmpty(), "التحقق من بنود الفاتورة");
         Assert.assertTrue(page.puSaves().isEmpty());
         assertStock("0");
     }
@@ -170,8 +170,8 @@ public abstract class PurchaseFormActions extends PurchaseScenarioTest {
         page.puRemoveLine(second.name());
         page.puWaitNet("300");
         var saved = save(false);
-        Assert.assertEquals(((List<?>) data.read(saved).get("lines")).size(), 1);
-        Assert.assertEquals(firstLine(data.read(saved)).get("itemId"), item.id());
+        Assert.assertEquals(((List<?>) data.read(saved).get("lines")).size(), 1, "مطابقة بنود الفاتورة");
+        Assert.assertEquals(firstLine(data.read(saved)).get("itemId"), item.id(), "مطابقة الصنف");
         assertStock("3");
     }
 
@@ -205,9 +205,9 @@ public abstract class PurchaseFormActions extends PurchaseScenarioTest {
         var saved = create("picker", "Credit", false);
         page.puEdit(documentKind().route, saved.id(), marker, item.name());
         var loaded = page.puDocument();
-        Assert.assertEquals(loaded.get("dealerId"), supplier.id());
-        Assert.assertEquals(loaded.get("storeId"), data.store(1).id());
-        Assert.assertEquals(firstLine(loaded).get("itemId"), item.id());
+        Assert.assertEquals(loaded.get("dealerId"), supplier.id(), "مطابقة العميل أو المورد");
+        Assert.assertEquals(loaded.get("storeId"), data.store(1).id(), "مطابقة المخزن");
+        Assert.assertEquals(firstLine(loaded).get("itemId"), item.id(), "مطابقة الصنف");
         sameNumber(firstLine(loaded).get("quantity"), "3");
     }
 

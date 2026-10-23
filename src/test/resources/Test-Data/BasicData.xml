@@ -1,21 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Plugin_ERP_Suite" verbose="1">
-
-    <test name="BasicDataTests" preserve-order="true">
-        <classes>
-            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest"/>
-            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest"/>
-            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.PaymentTest"/>
-            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.StoreTest"/>
-            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.RoutLineTest"/>
-            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest"/>
-            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest"/>
-            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.ExpensesTest"/>
-            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest"/>
-            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.TreasuryHandoverTest"/>
-            <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.DisEntTest"/>
-        </classes>
-    </test>
-
+<!-- Compatibility entry: the canonical suite owns the class selections. -->
+<suite name="Basic data compatibility entry" parallel="none">
+    <suite-files>
+        <suite-file path="../basic-data-testng.xml"/>
+    </suite-files>
 </suite>

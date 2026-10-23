@@ -56,3 +56,7 @@ mvn '-DExecutionType=LocalHeadless' '-Dsurefire.suiteXmlFiles=src/test/resources
 ```
 
 بيانات الدخول الصحيح تأتي من `config/Login.local.properties` أو متغيرات البيئة، كما هو موضح في `docs/testing/CREDENTIALS_AR.md`. حساب الاختبار المرفوض يُنشأ اسمه عشوائيًا تحت `example.invalid` ولا يستخدم حسابًا حقيقيًا. رسالة الرفض الحالية للحساب غير الموجود هي `User.UserNotFound`؛ يمكن تغيير التوقع باستخدام `-DLogin.UnknownUserMessage=...` للبيئات ذات الترجمة المختلفة. هذه الحالة تثبت رفض حساب غير موجود؛ لا تغطي كلمة مرور خاطئة لحساب قائم أو سياسة قفل الحسابات.
+
+البيانات الأساسية: `basic-data-testng.xml`، والقيود اليومية: `general-accounting-testng.xml`. تجهيز البيانات والعزل والتنظيف واستثناء الإغلاق والمراجعة لتسليم الخزينة موضحة في `docs/testing/MODULE_FIXTURES_AR.md`.
+
+فحص رحلة التقرير داخل الشاشات: `additional/standalone/allure-journey-smoke-testng.xml`. طريقة عرض الإجراءات والمقارنات ونتائج التحقق موثقة في `docs/testing/ALLURE_SCREEN_JOURNEYS_AR.md`.

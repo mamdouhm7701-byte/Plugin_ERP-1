@@ -71,11 +71,11 @@ public final class SalesWorkflow implements AutoCloseable {
     var values = (Map<String, Object>) saved.get("values");
     var record = new SalesTestData.Record(kind.endpoint, saved.get("id"), marker, values);
     var stored = data.read(record);
-    Assert.assertNotNull(stored); Assert.assertEquals(stored.get("dealerId"), customer.id());
-    Assert.assertEquals(stored.get("agentId"), agent.id()); Assert.assertEquals(stored.get("storeId"), store.id());
-    Assert.assertEquals(stored.get("notes"), marker);
+    Assert.assertNotNull(stored); Assert.assertEquals(stored.get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
+    Assert.assertEquals(stored.get("agentId"), agent.id(), "مطابقة المندوب"); Assert.assertEquals(stored.get("storeId"), store.id(), "مطابقة المخزن");
+    Assert.assertEquals(stored.get("notes"), marker, "مطابقة الملاحظات");
     var lines = (List<Map<String, Object>>) stored.get("lines"); Assert.assertEquals(lines.size(), 1);
-    Assert.assertEquals(lines.get(0).get("itemId"), item.id());
+    Assert.assertEquals(lines.get(0).get("itemId"), item.id(), "مطابقة الصنف");
     same(lines.get(0).get("quantity"), new BigDecimal(quantity));
     same(stored.get("net"), new BigDecimal(net(new BigDecimal(quantity).multiply(new BigDecimal("100")).toPlainString())));
     if (sourceId != null) Assert.assertEquals(stored.get("sourceTransactionId"), sourceId);

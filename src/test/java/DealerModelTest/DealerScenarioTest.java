@@ -80,7 +80,8 @@ public class DealerScenarioTest extends BaseTest {
                                     Pages.CUSTOMERS,
                                     Pages.SUPPLIERS,
                                     Pages.MAINDEALERS,
-                                    Pages.CUSTOMERCLASS)
+                                    Pages.CUSTOMERCLASS,
+                                    Pages.DEALERROUTELINE)
                             .contains(route))
                 throw new AssertionError("Invalid owned dealer page record");
             ownedRecords.add(new OwnedRecord(new AbstractForDealer(driver), route, name));

@@ -82,7 +82,7 @@ public final class ReportMailTemplate {
                 + "\nDuration: " + duration(r) + "\nTotal: " + r.total() + " | Passed: " + r.passed()
                 + " | Failed: " + r.failed() + " | Broken: " + r.broken() + " | Skipped: " + r.skipped());
         r.failures().stream().limit(5).forEach(f -> text.append("\n").append(f.name()).append(": ").append(shortMessage(f.message())));
-        return text + "\n\nExtract allure-report.zip and open index.html. Extract testng-report.zip and open emailable-report.html.";
+        return text + "\n\nReports / التقارير:\n";
     }
     private static String shortMessage(String message) {
         String normalized = Objects.toString(message, "").replaceAll("\\s+", " ").trim();
@@ -118,7 +118,7 @@ public final class ReportMailTemplate {
                 <table role="presentation" width="100%%" cellspacing="0" cellpadding="0" style="margin-top:26px;background:#f7f9fc;border:1px solid #e5eaf1;border-radius:12px"><tr><td style="padding:18px;font-size:13px;line-height:2;color:#475569">
                 التينانت: <b dir="auto">%s</b><br>توقيت القاهرة: <span dir="ltr">%s</span><br>مدة التشغيل: <span dir="ltr">%s</span><br>معرّف التشغيل: <span dir="ltr" style="word-break:break-all">%s</span></td></tr></table>
                 """.formatted(escape(status(r)), r.total(), escape(r.suite()), color, escape(status(r)),
-                issue ? "راجع الحالات التالية لتحديد السبب، ثم افتح التقرير الكامل للتفاصيل." : "ملخص التشغيل جاهز، والتقريران التفصيليان مرفقان مع الرسالة.",
+                issue ? "راجع الحالات التالية لتحديد السبب، ثم افتح التقرير الكامل للتفاصيل." : "ملخص التشغيل جاهز. طرق تحميل التقارير موضحة أدناه.",
                 metric("ناجح", r.passed(), "#087f5b"), metric("فاشل", r.failed()+r.broken(), "#b42318"),
                 metric("متخطّي", r.skipped(), "#946200"), metric("الإجمالي", r.total(), "#172b4d"),
                 percent, percent, 100-percent, r.total(), escape(r.tenant()), escape(date(r)), duration(r), escape(r.id())));
@@ -130,10 +130,9 @@ public final class ReportMailTemplate {
             if (r.failures().size() > 5) html.append("<p style=\"color:#64748b;font-size:12px\">باقي الحالات متاحة في المرفقات.</p>");
         }
         return html.append("""
-                <h2 style="font-size:17px;margin:28px 0 12px">تقاريرك مرفقة بالرسالة</h2>
+                <h2 style="font-size:17px;margin:28px 0 12px">تحميل التقارير الكاملة</h2>
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border:1px solid #e5eaf1;border-radius:12px"><tr><td style="padding:18px;font-size:13px;line-height:1.9">
-                <b dir="ltr">Allure Report</b><br><span style="color:#64748b">فك ضغط <span dir="ltr">allure-report.zip</span> وافتح <span dir="ltr">index.html</span> في المتصفح.</span>
-                <hr style="border:0;border-top:1px solid #e5eaf1;margin:14px 0"><b dir="ltr">TestNG Report</b><br><span style="color:#64748b">فك ضغط <span dir="ltr">testng-report.zip</span> وافتح <span dir="ltr">emailable-report.html</span>.</span>
+                <!--REPORT_DELIVERY-->
                 </td></tr></table></td></tr>
                 <tr><td style="padding:20px 28px;background:#f7f9fc;border-top:1px solid #e5eaf1;color:#64748b;font-size:11px;line-height:1.8">Plugin ERP · إشعار آلي بنتائج الاختبارات<br>الأرقام تعكس نتيجة التشغيل، ولا تعني خلو النظام من العيوب.</td></tr>
                 </table></td></tr></table></body></html>

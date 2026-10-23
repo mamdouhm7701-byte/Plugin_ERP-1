@@ -16,6 +16,53 @@ public class RoutLineForDealer extends AbstractForDealer {
         super(driver);
     }
 
+    private static final String OWNED_CALENDAR = """
+        const queue=[document.querySelector('#app')?.__vue__];
+        let calendar;
+        while(queue.length){const vm=queue.shift(); if(!vm)continue;
+          if(vm.$options.methods?.getCustomersForParams && vm.$options.methods?.getEvents){calendar=vm;break;}
+          queue.push(...(vm.$children||[]));}
+        if(!calendar)throw Error('Route calendar is unavailable');
+        """;
+
+    /** Restrict Add All to the owned customer before the actual UI button is used. */
+    public void PrepareOwnedRoute(Object agentId, Object customerId, Object statusId, Object branchId) {
+        new WebDriverWait(driver, Duration.ofSeconds(25)).until(d -> Boolean.TRUE.equals(
+                ((org.openqa.selenium.JavascriptExecutor)d).executeScript(OWNED_CALENDAR + """
+                    const [agentId,customerId,statusId,branchId]=arguments;
+                    const agent=calendar.agents.find(row=>row.id===agentId);
+                    const customer=calendar.customers.find(row=>row.id===customerId);
+                    const status=calendar.statusOptions.find(row=>row.id===statusId);
+                    if(!agent||!customer||!status)return false;
+                    calendar.selectedItem.agentId=agentId;
+                    calendar.selectedItem.branchId=branchId;
+                    calendar.selectedItem.extendedProps.status=statusId;
+                    calendar.customers=[customer];
+                    calendar.selectedItem.extendedProps.customers=[customer];
+                    return true;
+                    """, agentId, customerId, statusId, branchId)));
+    }
+
+    @Step("التحقق من اختيار العميل {customerId} في خط السير")
+    public void AssertOnlyOwnedCustomerSelected(Object customerId) {
+        Object valid=((org.openqa.selenium.JavascriptExecutor)driver).executeScript(OWNED_CALENDAR + """
+            const selected=calendar.selectedItem.extendedProps.customers;
+            return selected.length===1 && selected[0].id===arguments[0];
+            """, customerId);
+        if(!Boolean.TRUE.equals(valid))throw new AssertionError("Route must only contain the owned customer");
+    }
+
+    public java.util.List<String> OwnedEventTitles(String marker) {
+        @SuppressWarnings("unchecked")
+        java.util.List<String> titles=(java.util.List<String>)((org.openqa.selenium.JavascriptExecutor)driver)
+                .executeScript(OWNED_CALENDAR + """
+                    return calendar.calendarOptions.events
+                        .filter(event=>event.extendedProps?.title===arguments[0])
+                        .map(event=>event.title);
+                    """,marker);
+        return titles;
+    }
+
     // Locators
     private By OpenDealerModel = By.xpath("//span[text()='المتعاملين']");
     private By OpenRoutLine = By.xpath("//span[text()='خط السير']");
@@ -158,6 +205,7 @@ public class RoutLineForDealer extends AbstractForDealer {
         utilites.ClickElement(getDayCell(todayDate));
     }
 
+    @Step("فتح أول زيارة في اليوم {date}")
     public void clickFirstEventForDay(String date) {
         List<WebElement> events = driver.findElements(getDayEventTitles(date));
         events.get(0).click();

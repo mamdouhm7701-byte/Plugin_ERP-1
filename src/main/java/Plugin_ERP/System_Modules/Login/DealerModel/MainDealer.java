@@ -113,7 +113,7 @@ public class MainDealer extends AbstractForDealer {
         return selected.isEmpty() ? "" : selected.get(0).getText().trim();
     }
 
-    @Step("طلب حذف المتعامل الرئيسي المملوك للاختبار")
+    @Step("طلب حذف المتعامل الرئيسي المحدد")
     public void RequestDeleteByName(String arabicName) {
         dismissSuccessAlertIfPresent();
         WebElement row = findRowByName(arabicName);
@@ -122,7 +122,7 @@ public class MainDealer extends AbstractForDealer {
                 .until(ExpectedConditions.visibilityOfElementLocated(DELETE_CONFIRM));
     }
 
-    @Step("تأكيد حذف المتعامل الرئيسي المملوك للاختبار")
+    @Step("تأكيد حذف المتعامل الرئيسي المحدد")
     public void ConfirmDeleteByName(String arabicName) {
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.elementToBeClickable(DELETE_CONFIRM))

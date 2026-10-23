@@ -196,6 +196,7 @@ public class AbstractForSales extends AbstractForPurchases {
 
     /** Sales-invoice search override: avoid retrying a successful suggestion click. */
     @Override
+    @Step("البحث عن الصنف {productName} وإضافته إلى الفاتورة")
     public void SearchAndSelectProduct(String productName) {
         searchAndSelectInvoiceProduct(productName);
 

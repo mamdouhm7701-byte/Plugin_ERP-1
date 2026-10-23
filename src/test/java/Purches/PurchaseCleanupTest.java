@@ -215,7 +215,7 @@ public class PurchaseCleanupTest {
     }
 
     @Test
-    @Story("إعادة محاولة إنشاء بيانات الاختبار بعد إلغاء المعاملة بسبب تعارض أقفال دون تكرار السجل")
+    @Story("إعادة محاولة إنشاء البيانات المدخلة بعد إلغاء المعاملة بسبب تعارض أقفال دون تكرار السجل")
     public void retriesRolledBackDeadlockWithoutDuplicateFixture() {
         PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.deadlockCreates = 1;
@@ -296,7 +296,7 @@ public class PurchaseCleanupTest {
     }
 
     @Test
-    @Story("انتظار تحميل الفرع الأصلي قبل الوصول إلى بيانات الاختبار")
+    @Story("انتظار تحميل الفرع الأصلي قبل الوصول إلى البيانات المدخلة")
     public void waitsForOriginalBranchHydrationBeforeFixtureAccess() {
         PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         var data = new PurchaseTestData(api.driver());
@@ -565,7 +565,7 @@ public class PurchaseCleanupTest {
 
 
     @Test
-    @Story("حذف الحركة المملوكة للاختبار قبل أصنافها ومخازنها")
+    @Story("حذف الحركة المحددة قبل أصنافها ومخازنها")
     public void deletesOwnedMovementBeforeItsItemsAndStores() {
         PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
@@ -624,7 +624,7 @@ public class PurchaseCleanupTest {
     }
 
     @Test
-    @Story("التحقق من استمرار ارتباط المخزن غير المؤكد بحسابه المملوك للاختبار")
+    @Story("التحقق من استمرار ارتباط المخزن غير المؤكد بحسابه المحدد")
     public void uncertainStoreMustStillReferenceItsOwnedAccount() {
         PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.failAfterStoreInsert = true;
@@ -981,7 +981,7 @@ public class PurchaseCleanupTest {
     }
 
     @Test
-    @Story("الاحتفاظ بالمخزن وحساباته عند تعذر إزالة ارتباطه المملوك للاختبار")
+    @Story("الاحتفاظ بالمخزن وحساباته عند تعذر إزالة ارتباطه المحدد")
     public void retainsStoreAndAccountsWhenOwnedMembershipCannotBeRemoved() {
         PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         PurchaseTestData data = new PurchaseTestData(api.driver());
@@ -1067,7 +1067,7 @@ public class PurchaseCleanupTest {
     }
 
     @Test
-    @Story("تنظيف صنف الاختبار الذي حُفظ رغم فشل طلب الإنشاء")
+    @Story("تنظيف الصنف الذي حُفظ رغم فشل طلب الإنشاء")
     public void cleansOwnedItemCommittedBeforeCreateFailure() {
         PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.failAfterItemInsert = true;

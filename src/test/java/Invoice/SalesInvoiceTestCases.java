@@ -14,19 +14,19 @@ public class SalesInvoiceTestCases extends SalesFormActions {
     }
 
     @Test
-    @Story("إضافة صنف الاختبار إلى الفاتورة بالباركود وحفظه")
+    @Story("إضافة الصنف إلى الفاتورة بالباركود وحفظه")
     public void TC_SI_011_AddItemByBarcode() {
         savesOwnedItemByBarcode();
     }
 
     @Test
-    @Story("إضافة صنف الاختبار بالاسم العربي وحفظه")
+    @Story("إضافة الصنف بالاسم العربي وحفظه")
     public void TC_SI_012_AddItemByArabicName() {
         savesOwnedItemByName();
     }
 
     @Test
-    @Story("إضافة صنف الاختبار من نافذة الأصناف وحفظه")
+    @Story("إضافة الصنف من نافذة الأصناف وحفظه")
     public void TC_SI_013_AddItemsFromDialog() {
         savesOwnedItemFromPicker();
     }
@@ -46,13 +46,13 @@ public class SalesInvoiceTestCases extends SalesFormActions {
     }
 
     @Test
-    @Story("البحث بباركود صنف الاختبار داخل نافذة الأصناف")
+    @Story("البحث بباركود الصنف داخل نافذة الأصناف")
     public void TC_SI_015_SearchByBarcodeInAddItemsDialog() {
         pickerSearch("barcode", true);
     }
 
     @Test
-    @Story("البحث بالاسم العربي لصنف الاختبار داخل نافذة الأصناف")
+    @Story("البحث بالاسم العربي لالصنف داخل نافذة الأصناف")
     public void TC_SI_016_SearchByArabicNameInAddItemsDialog() {
         pickerSearch("arabicName", false);
     }
@@ -79,7 +79,7 @@ public class SalesInvoiceTestCases extends SalesFormActions {
         invoice.toggleInvoiceFullscreen();
         try {
             Assert.assertEquals(invoice.isInvoiceSideMenuDisplayed(), !before);
-            Assert.assertEquals(page.slDocument().get("dealerId"), customer.id());
+            Assert.assertEquals(page.slDocument().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
         } finally {
             if (invoice.isInvoiceSideMenuDisplayed() != before) invoice.toggleInvoiceFullscreen();
         }
@@ -89,7 +89,7 @@ public class SalesInvoiceTestCases extends SalesFormActions {
     @Story("اختيار المخزن الذي أنشأه الاختبار")
     public void TC_SI_005_WarehouseOptionsAreAvailable() {
         prepare("Credit");
-        Assert.assertEquals(page.slDocument().get("storeId"), data.store(1).id());
+        Assert.assertEquals(page.slDocument().get("storeId"), data.store(1).id(), "مطابقة المخزن");
     }
 
     @Test
@@ -97,21 +97,21 @@ public class SalesInvoiceTestCases extends SalesFormActions {
     public void TC_SI_004_DefaultPaymentTypeIsCash() {
         page.slOpen("invoice/new");
         page.slFormReady();
-        Assert.assertEquals(page.slDocument().get("paymentType"), "Cash");
+        Assert.assertEquals(page.slDocument().get("paymentType"), "Cash", "مطابقة نوع السداد");
     }
 
     @Test
     @Story("اختيار العميل الذي أنشأه الاختبار")
     public void TC_SI_007_CustomerOptionsAreAvailable() {
         prepare("Credit");
-        Assert.assertEquals(page.slDocument().get("dealerId"), customer.id());
+        Assert.assertEquals(page.slDocument().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
     }
 
     @Test
     @Story("اختيار المندوب الذي أنشأه الاختبار")
     public void TC_SI_008_SalesAgentOptionsAreAvailable() {
         prepare("Credit");
-        Assert.assertEquals(page.slDocument().get("agentId"), agent.id());
+        Assert.assertEquals(page.slDocument().get("agentId"), agent.id(), "مطابقة المندوب");
     }
 
     @Test

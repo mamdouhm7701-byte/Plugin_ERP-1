@@ -2,17 +2,19 @@ package Plugin_ERP.Tests.LoginTest.BasicDataTest;
 
 import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.System_Modules.Login.BasicData.PaymentPage;
-import Plugin_ERP.Tests.LoginTest.BaseTest;
+import TestSupport.BasicDataScenarioTest;
 import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class PaymentTest extends BaseTest {
+public class PaymentTest extends BasicDataScenarioTest {
     private String unique(String suffix) {
-        return "QA-PAY-" + suffix + "-" + System.currentTimeMillis();
+        return ownedName("PaymentMethods", suffix);
     }
 
     private PaymentPage open() {
+        basicData().bank(1);
+        basicData().bank(2);
         PaymentPage p = new PaymentPage(driver);
         p.NavigationHelper(Pages.PAYMENT);
         return p;
@@ -36,22 +38,6 @@ public class PaymentTest extends BaseTest {
                 p.GetExactMatchCount(name), 1, "يجب ظهور طريقة الدفع مرة واحدة: " + name);
     }
 
-    private void cleanup(PaymentPage p, String... names) {
-        for (String n : names)
-            if (n != null && !n.isBlank())
-                try {
-                    p.CloseFormIfOpen();
-                    p.DismissAlertIfPresent();
-                    if (p.GetExactMatchCount(n) > 0) {
-                        p.RequestDeleteByName(n);
-                        p.ConfirmDelete();
-                    }
-                } catch (Exception e) {
-                    System.err.println(
-                            "Could not clean owned payment '" + n + "': " + e.getMessage());
-                }
-    }
-
     @Test(priority = 0)
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
@@ -60,7 +46,9 @@ public class PaymentTest extends BaseTest {
     @Story("PAY-001 بنية قائمة طرق الدفع")
     @Description("يتحقق من ظهور أعمدة القائمة والسجل الموجود وإجراءات الصفوف.")
     public void PAY_001_ListStructure() {
-        Assert.assertTrue(open().IsListStructureDisplayed());
+        PaymentPage p = open();
+        create(p, unique("LIST"), null, basicData().bank(1).name(), false, false);
+        Assert.assertTrue(p.IsListStructureDisplayed());
     }
 
     @Test(priority = 1)
@@ -103,6 +91,7 @@ public class PaymentTest extends BaseTest {
     public void PAY_004_ArabicNameRequired() {
         PaymentPage p = open();
         p.ClickNew();
+        p.AddNoteForDealer(unique("INVALID-NAME"));
         p.ClickSaveButton();
         Assert.assertTrue(p.IsArabicNameRequiredErrorDisplayed());
         p.ClickCloseButton();
@@ -135,7 +124,8 @@ public class PaymentTest extends BaseTest {
         PaymentPage p = open();
         p.ClickNew();
         p.AddArabicName("   ");
-        p.SelectFromDropDawn("البنك الاول", "اسم البنك");
+        p.AddNoteForDealer(unique("WHITESPACE"));
+        p.SelectFromDropDawn(basicData().bank(1).name(), "اسم البنك");
         p.ClickSaveButton();
         Assert.assertTrue(p.IsArabicNameRequiredErrorDisplayed());
         p.ClickCloseButton();
@@ -151,18 +141,14 @@ public class PaymentTest extends BaseTest {
     public void PAY_003_CreateAndVerify() {
         PaymentPage p = open();
         String n = unique("CREATE"), en = "Payment " + System.currentTimeMillis();
-        try {
-            create(p, n, en, "البنك الاول", true, true);
-            p.OpenForEditByName(n);
-            Assert.assertEquals(p.GetArabicNameValue(), n);
-            Assert.assertEquals(p.GetEnglishNameValue(), en);
-            Assert.assertEquals(p.GetSelectedBankValue(), "البنك الاول");
-            Assert.assertTrue(p.IsPaymentCheckboxChecked("عام"));
-            Assert.assertTrue(p.IsPaymentCheckboxChecked("طريقة دفع افتراضية للتكامل"));
-            p.ClickCloseButton();
-        } finally {
-            cleanup(p, n);
-        }
+        create(p, n, en, basicData().bank(1).name(), true, true);
+        p.OpenForEditByName(n);
+        Assert.assertEquals(p.GetArabicNameValue(), n);
+        Assert.assertEquals(p.GetEnglishNameValue(), en);
+        Assert.assertEquals(p.GetSelectedBankValue(), basicData().bank(1).name());
+        Assert.assertTrue(p.IsPaymentCheckboxChecked("عام"));
+        Assert.assertTrue(p.IsPaymentCheckboxChecked("طريقة دفع افتراضية للتكامل"));
+        p.ClickCloseButton();
     }
 
     @Test(priority = 7)
@@ -175,19 +161,15 @@ public class PaymentTest extends BaseTest {
     public void PAY_007_OptionalEnglishName() {
         PaymentPage p = open();
         String n = unique("OPTIONAL");
-        try {
-            create(p, n, null, "البنك الاول", false, false);
-            p.OpenForEditByName(n);
-            Assert.assertEquals(p.GetArabicNameValue(), n);
-            Assert.assertTrue(
-                    p.GetEnglishNameValue().isEmpty() || p.GetEnglishNameValue().equals(n));
-            Assert.assertEquals(p.GetSelectedBankValue(), "البنك الاول");
-            Assert.assertFalse(p.IsPaymentCheckboxChecked("عام"));
-            Assert.assertFalse(p.IsPaymentCheckboxChecked("طريقة دفع افتراضية للتكامل"));
-            p.ClickCloseButton();
-        } finally {
-            cleanup(p, n);
-        }
+        create(p, n, null, basicData().bank(1).name(), false, false);
+        p.OpenForEditByName(n);
+        Assert.assertEquals(p.GetArabicNameValue(), n);
+        Assert.assertTrue(
+                p.GetEnglishNameValue().isEmpty() || p.GetEnglishNameValue().equals(n));
+        Assert.assertEquals(p.GetSelectedBankValue(), basicData().bank(1).name());
+        Assert.assertFalse(p.IsPaymentCheckboxChecked("عام"));
+        Assert.assertFalse(p.IsPaymentCheckboxChecked("طريقة دفع افتراضية للتكامل"));
+        p.ClickCloseButton();
     }
 
     @Test(priority = 8)
@@ -199,19 +181,15 @@ public class PaymentTest extends BaseTest {
     @Description("يعدل السجل الذي أنشأه الاختبار ويتحقق من الاسم الجديد.")
     public void PAY_021_EditOwned() {
         PaymentPage p = open();
-        String n = unique("EDIT"), u = n + "-UPDATED";
-        try {
-            create(p, n, "Edit payment", "البنك الاول", true, true);
-            p.OpenForEditByName(n);
-            p.AddArabicName(u);
-            p.SelectFromDropDawn("بنك اتوميشن", "اسم البنك");
-            p.SetPaymentCheckbox("عام", false);
-            p.SetPaymentCheckbox("طريقة دفع افتراضية للتكامل", false);
-            p.ClickSaveButton();
-            Assert.assertEquals(p.GetExactMatchCount(u), 1);
-        } finally {
-            cleanup(p, u, n);
-        }
+        String n = unique("EDIT"), u = unique("UPDATED");
+        create(p, n, "Edit payment", basicData().bank(1).name(), true, true);
+        p.OpenForEditByName(n);
+        p.AddArabicName(u);
+        p.SelectFromDropDawn(basicData().bank(2).name(), "اسم البنك");
+        p.SetPaymentCheckbox("عام", false);
+        p.SetPaymentCheckbox("طريقة دفع افتراضية للتكامل", false);
+        p.ClickSaveButton();
+        Assert.assertEquals(p.GetExactMatchCount(u), 1);
     }
 
     @Test(priority = 9)
@@ -224,17 +202,13 @@ public class PaymentTest extends BaseTest {
     public void PAY_022_CancelEdit() {
         PaymentPage p = open();
         String n = unique("CANCEL-EDIT");
-        try {
-            create(p, n, null, "البنك الاول", false, false);
-            p.OpenForEditByName(n);
-            p.AddArabicName(n + "-TEMP");
-            p.ClickCloseButton();
-            p.OpenForEditByName(n);
-            Assert.assertEquals(p.GetArabicNameValue(), n);
-            p.ClickCloseButton();
-        } finally {
-            cleanup(p, n);
-        }
+        create(p, n, null, basicData().bank(1).name(), false, false);
+        p.OpenForEditByName(n);
+        p.AddArabicName(unique("TEMP"));
+        p.ClickCloseButton();
+        p.OpenForEditByName(n);
+        Assert.assertEquals(p.GetArabicNameValue(), n);
+        p.ClickCloseButton();
     }
 
     @Test(priority = 10)
@@ -247,7 +221,7 @@ public class PaymentTest extends BaseTest {
     public void PAY_023_DeleteOwned() {
         PaymentPage p = open();
         String n = unique("DELETE");
-        create(p, n, null, "البنك الاول", false, false);
+        create(p, n, null, basicData().bank(1).name(), false, false);
         p.RequestDeleteByName(n);
         Assert.assertTrue(p.IsDeleteConfirmationDisplayed());
         p.ConfirmDelete();
@@ -264,14 +238,10 @@ public class PaymentTest extends BaseTest {
     public void PAY_024_CancelDelete() {
         PaymentPage p = open();
         String n = unique("CANCEL-DELETE");
-        try {
-            create(p, n, null, "البنك الاول", false, false);
-            p.RequestDeleteByName(n);
-            p.CancelDelete();
-            Assert.assertEquals(p.GetExactMatchCount(n), 1);
-        } finally {
-            cleanup(p, n);
-        }
+        create(p, n, null, basicData().bank(1).name(), false, false);
+        p.RequestDeleteByName(n);
+        p.CancelDelete();
+        Assert.assertEquals(p.GetExactMatchCount(n), 1);
     }
 
     @Test(priority = 12)
@@ -284,13 +254,9 @@ public class PaymentTest extends BaseTest {
     public void PAY_032_PersistAfterRefresh() {
         PaymentPage p = open();
         String n = unique("REFRESH");
-        try {
-            create(p, n, "Refresh payment", "البنك الاول", false, true);
-            driver.navigate().refresh();
-            p = open();
-            Assert.assertEquals(p.GetExactMatchCount(n), 1);
-        } finally {
-            cleanup(p, n);
-        }
+        create(p, n, "Refresh payment", basicData().bank(1).name(), false, true);
+        driver.navigate().refresh();
+        p = open();
+        Assert.assertEquals(p.GetExactMatchCount(n), 1);
     }
 }

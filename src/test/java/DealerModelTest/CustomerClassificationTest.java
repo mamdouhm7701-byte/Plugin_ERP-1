@@ -72,9 +72,9 @@ public class CustomerClassificationTest extends DealerScenarioTest {
     @Description("ينشئ تصنيفًا فريدًا، يعدله، ثم يحذف السجل نفسه ويتحقق من كل انتقال.")
     public void CC_005_OwnedClassificationCreateEditDelete() {
         String suffix = String.valueOf(System.currentTimeMillis());
-        String originalName = "QA-CLASSIFICATION-" + suffix;
-        String editedName = originalName + "-EDITED";
         CustomerClassification page = new CustomerClassification(driver);
+        String originalName = ownedName(page, Pages.CUSTOMERCLASS, "LIFECYCLE-ORIGINAL");
+        String editedName = ownedName(page, Pages.CUSTOMERCLASS, "LIFECYCLE-EDITED");
         page.NavigationHelper(Pages.CUSTOMERCLASS);
 
         DealerModelScreenAssertions.assertOwnedCreateEditDelete(
@@ -219,6 +219,7 @@ public class CustomerClassificationTest extends DealerScenarioTest {
         customerClassification.NavigationHelper(Pages.CUSTOMERCLASS);
         customerClassification.ClickNew();
         customerClassification.SelectFromDropDawn("المندوبين", "نوع التصنيف");
+        customerClassification.AddEnglishName(ownedName(customerClassification, Pages.CUSTOMERCLASS, "INVALID-ARABIC-NAME"));
         customerClassification.ClickSaveButton();
         org.testng.Assert.assertTrue(
                 customerClassification.IsArabicNameRequiredErrorDisplayed(),

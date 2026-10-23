@@ -39,6 +39,7 @@ public class ProductCategories extends ProductsModulePage {
         utilites.TaypeText(AddNote, Notes);
     }
 
+    @Step("التحقق من ظهور رسالة الحقل المطلوب")
     public boolean AssertErrorMessageForRequiredField() {
         return utilites.isDisplayed(UniteNameRequiredMsg);
     }

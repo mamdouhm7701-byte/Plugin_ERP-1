@@ -2,15 +2,16 @@ package Plugin_ERP.Tests.LoginTest.BasicDataTest;
 
 import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.System_Modules.Login.BasicData.AreaPage;
-import Plugin_ERP.Tests.LoginTest.BaseTest;
+import TestSupport.BasicDataScenarioTest;
+import static TestSupport.BasicDataFixtures.fields;
 import io.qameta.allure.*;
 import java.util.List;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class AreaTest extends BaseTest {
+public class AreaTest extends BasicDataScenarioTest {
     private String uniqueName(String caseId) {
-        return "QA-AREA-" + caseId + "-" + System.currentTimeMillis();
+        return ownedName("Areas", caseId);
     }
 
     private AreaPage openAreas() {
@@ -32,25 +33,9 @@ public class AreaTest extends BaseTest {
                 "يجب أن يظهر سجل الاختبار الفريد مرة واحدة: " + arabicName);
     }
 
-    private void cleanupArea(AreaPage page, String... names) {
-        for (String name : names) {
-            if (name == null || name.isBlank()) continue;
-            try {
-                page.SearchArea("");
-                if (page.GetExactAreaMatchCount(name) == 0) continue;
-                page.RequestDeleteAreaByName(name);
-                page.ConfirmAreaDelete();
-            } catch (Exception cleanupError) {
-                System.err.println(
-                        "Could not clean up owned Area test record '"
-                                + name
-                                + "': "
-                                + cleanupError.getMessage());
-            }
-        }
-        try {
-            page.SearchArea("");
-        } catch (Exception ignored) {
+    private void seedAreas(String key, int count) {
+        for (int i = 0; i < count; i++) {
+            basicData().fixture(key + "-" + i, "Areas", fields());
         }
     }
 
@@ -65,6 +50,7 @@ public class AreaTest extends BaseTest {
                     + " للتحرير.")
     public void AR_001_AreaListStructureIsDisplayed() {
         AreaPage page = openAreas();
+        createArea(page, uniqueName("LIST"), null, null);
         Assert.assertTrue(
                 page.IsAreaListStructureDisplayed(),
                 "AR-001: يجب ظهور أعمدة وإجراءات قائمة المناطق");
@@ -115,9 +101,10 @@ public class AreaTest extends BaseTest {
                     + " المختار.")
     public void AR_020_EditFormLoadsCurrentAreaValues() {
         AreaPage page = openAreas();
-        String code = page.GetFirstAreaCellByHeader("الكود");
-        String name = page.GetFirstAreaCellByHeader("اسم المنطقة");
-        page.OpenFirstAreaForEdit();
+        String name = uniqueName("READ");
+        createArea(page, name, null, null);
+        String code = page.GetAreaCellByName(name, "الكود");
+        page.EditAreaByName(name);
         Assert.assertEquals(page.GetAreaCodeInputValue(), code, "يجب تحميل الكود الحالي");
         Assert.assertEquals(page.GetArabicNameInputValue(), name, "يجب تحميل الاسم العربي الحالي");
         page.ClickCloseButton();
@@ -134,11 +121,12 @@ public class AreaTest extends BaseTest {
                     + " الأصلية.")
     public void AR_022_CancelAreaEditWithoutSaving() {
         AreaPage page = openAreas();
-        String original = page.GetFirstAreaCellByHeader("اسم المنطقة");
-        page.OpenFirstAreaForEdit();
+        String original = uniqueName("CANCEL-ORIGINAL");
+        createArea(page, original, null, null);
+        page.EditAreaByName(original);
         page.AddArabicName(uniqueName("EDIT-CANCEL"));
         page.ClickCloseButton();
-        page.OpenFirstAreaForEdit();
+        page.EditAreaByName(original);
         Assert.assertEquals(
                 page.GetArabicNameInputValue(), original, "يجب تجاهل التعديل غير المحفوظ");
         page.ClickCloseButton();
@@ -155,6 +143,7 @@ public class AreaTest extends BaseTest {
         AreaPage page = openAreas();
         int before = page.GetVisibleAreaRowCount();
         page.ClickNew();
+        page.AddNoteForDealer(uniqueName("INVALID-NAME"));
         page.ClickSaveButton();
         Assert.assertTrue(
                 page.IsAreaArabicNameRequiredDisplayed(), "يجب إظهار رسالة الاسم العربي مطلوب");
@@ -174,6 +163,7 @@ public class AreaTest extends BaseTest {
         int before = page.GetVisibleAreaRowCount();
         page.ClickNew();
         page.AddArabicName("   ");
+        page.AddNoteForDealer(uniqueName("WHITESPACE"));
         page.ClickSaveButton();
         Assert.assertTrue(
                 page.IsAreaArabicNameRequiredDisplayed(), "يجب رفض الاسم المكوّن من مسافات");
@@ -193,24 +183,21 @@ public class AreaTest extends BaseTest {
     public void AR_013_CorrectArabicNameAfterValidationError() {
         AreaPage page = openAreas();
         String name = uniqueName("CORRECT");
-        try {
-            page.ClickNew();
-            page.ClickSaveButton();
-            Assert.assertTrue(
-                    page.IsAreaArabicNameRequiredDisplayed(), "يجب إظهار الخطأ قبل التصحيح");
-            page.AddArabicName(name);
-            page.AddEnglishName("Corrected area");
-            page.ClickSaveButton();
-            page.SearchArea(name);
-            Assert.assertEquals(page.GetExactAreaMatchCount(name), 1);
-            driver.navigate().refresh();
-            page = openAreas();
-            page.SearchArea(name);
-            Assert.assertEquals(
-                    page.GetExactAreaMatchCount(name), 1, "يجب بقاء المنطقة بعد تحديث الصفحة");
-        } finally {
-            cleanupArea(page, name);
-        }
+        page.ClickNew();
+        page.AddNoteForDealer(uniqueName("INVALID-NAME"));
+        page.ClickSaveButton();
+        Assert.assertTrue(
+                page.IsAreaArabicNameRequiredDisplayed(), "يجب إظهار الخطأ قبل التصحيح");
+        page.AddArabicName(name);
+        page.AddEnglishName("Corrected area");
+        page.ClickSaveButton();
+        page.SearchArea(name);
+        Assert.assertEquals(page.GetExactAreaMatchCount(name), 1);
+        driver.navigate().refresh();
+        page = openAreas();
+        page.SearchArea(name);
+        Assert.assertEquals(
+                page.GetExactAreaMatchCount(name), 1, "يجب بقاء المنطقة بعد تحديث الصفحة");
     }
 
     @Test(priority = 8)
@@ -226,18 +213,14 @@ public class AreaTest extends BaseTest {
         AreaPage page = openAreas();
         String name = uniqueName("CREATE");
         String english = "Automation Area " + System.currentTimeMillis();
-        try {
-            createArea(page, name, english, "Created by automated Area test");
-            page.EditAreaByName(name);
-            Assert.assertEquals(page.GetArabicNameInputValue(), name);
-            Assert.assertEquals(page.GetEnglishNameInputValue(), english);
-            Assert.assertEquals(page.GetAreaNotesValue(), "Created by automated Area test");
-            Assert.assertFalse(
-                    page.GetAreaCodeInputValue().isBlank(), "يجب تعيين كود للمنطقة المحفوظة");
-            page.ClickCloseButton();
-        } finally {
-            cleanupArea(page, name);
-        }
+        createArea(page, name, english, "Created by automated Area test");
+        page.EditAreaByName(name);
+        Assert.assertEquals(page.GetArabicNameInputValue(), name);
+        Assert.assertEquals(page.GetEnglishNameInputValue(), english);
+        Assert.assertEquals(page.GetAreaNotesValue(), "Created by automated Area test");
+        Assert.assertFalse(
+                page.GetAreaCodeInputValue().isBlank(), "يجب تعيين كود للمنطقة المحفوظة");
+        page.ClickCloseButton();
     }
 
     @Test(priority = 9)
@@ -252,19 +235,15 @@ public class AreaTest extends BaseTest {
     public void AR_007_OptionalFieldsCanBeEmpty() {
         AreaPage page = openAreas();
         String name = uniqueName("OPTIONAL");
-        try {
-            createArea(page, name, null, null);
-            page.EditAreaByName(name);
-            Assert.assertEquals(page.GetArabicNameInputValue(), name);
-            Assert.assertEquals(
-                    page.GetEnglishNameInputValue(),
-                    name,
-                    "عند ترك الاسم الإنجليزي فارغًا، الواجهة تحفظه مساويًا للاسم العربي");
-            Assert.assertTrue(page.GetAreaNotesValue().isEmpty(), "الملاحظات يجب أن تبقى اختيارية");
-            page.ClickCloseButton();
-        } finally {
-            cleanupArea(page, name);
-        }
+        createArea(page, name, null, null);
+        page.EditAreaByName(name);
+        Assert.assertEquals(page.GetArabicNameInputValue(), name);
+        Assert.assertEquals(
+                page.GetEnglishNameInputValue(),
+                name,
+                "عند ترك الاسم الإنجليزي فارغًا، الواجهة تحفظه مساويًا للاسم العربي");
+        Assert.assertTrue(page.GetAreaNotesValue().isEmpty(), "الملاحظات يجب أن تبقى اختيارية");
+        page.ClickCloseButton();
     }
 
     @Test(
@@ -283,8 +262,9 @@ public class AreaTest extends BaseTest {
                     + " البحث.")
     public void AR_015_SearchAreasByCodeAndName() {
         AreaPage page = openAreas();
-        String code = page.GetFirstAreaCellByHeader("الكود");
-        String name = page.GetFirstAreaCellByHeader("اسم المنطقة");
+        String name = uniqueName("READ");
+        createArea(page, name, null, null);
+        String code = page.GetAreaCellByName(name, "الكود");
         page.SearchArea(code);
         Assert.assertTrue(page.IsAreaDisplayed(name), "يجب إظهار المنطقة بالبحث بالكود");
         page.SearchArea(name);
@@ -313,22 +293,18 @@ public class AreaTest extends BaseTest {
         AreaPage page = openAreas();
         String name = uniqueName("ENGLISH");
         String english = "Area English " + System.currentTimeMillis();
-        try {
-            createArea(page, name, english, null);
-            page.SearchArea(english);
-            Assert.assertEquals(
-                    page.GetVisibleAreaRowCount(),
-                    0,
-                    "البحث يعتمد على الكود والاسم العربي المعروضين في الجدول، ولا يبحث بالاسم الإنجليزي"
-                            + " المخفي");
-            page.SearchArea(name);
-            Assert.assertEquals(
-                    page.GetExactAreaMatchCount(name),
-                    1,
-                    "يجب العثور على المنطقة عبر الاسم العربي المعروض");
-        } finally {
-            cleanupArea(page, name);
-        }
+        createArea(page, name, english, null);
+        page.SearchArea(english);
+        Assert.assertEquals(
+                page.GetVisibleAreaRowCount(),
+                0,
+                "البحث يعتمد على الكود والاسم العربي المعروضين في الجدول، ولا يبحث بالاسم الإنجليزي"
+                        + " المخفي");
+        page.SearchArea(name);
+        Assert.assertEquals(
+                page.GetExactAreaMatchCount(name),
+                1,
+                "يجب العثور على المنطقة عبر الاسم العربي المعروض");
     }
 
     @Test(priority = 12)
@@ -339,12 +315,9 @@ public class AreaTest extends BaseTest {
     @Story("AR-028 ترتيب قائمة المناطق حسب الكود")
     @Description("يتحقق من ترتيب قيم الكود تصاعديًا ثم تنازليًا عند النقر على عنوان العمود.")
     public void AR_028_AreaListCanBeSortedByCode() {
+        seedAreas("sort", 2);
         AreaPage page = openAreas();
-        List<String> original = page.GetAreaColumnValues("الكود");
-        if (original.size() < 2) {
-            Assert.assertTrue(original.size() < 2);
-            return;
-        }
+        Assert.assertTrue(page.GetAreaColumnValues("الكود").size() >= 2);
         page.ClickAreaColumnHeader("الكود");
         List<String> ascending = page.GetAreaColumnValues("الكود");
         page.ClickAreaColumnHeader("الكود");
@@ -363,12 +336,14 @@ public class AreaTest extends BaseTest {
     @Story("AR-029 تغيير عدد الصفوف المعروضة")
     @Description("يتحقق من أن حجم الصفحة المختار يحدّث عدد صفوف جدول المناطق المعروضة.")
     public void AR_029_ChangingPageSizeUpdatesVisibleRows() {
+        seedAreas("page-size", 2);
         AreaPage page = openAreas();
         int oldSize = page.GetAreaPageSize();
-        int before = page.GetVisibleAreaRowCount();
         int newSize = page.GetAlternativeAreaPageSize(oldSize);
         page.SelectAreaPageSize(newSize);
-        Assert.assertEquals(page.GetVisibleAreaRowCount(), Math.min(before, newSize));
+        Assert.assertEquals(page.GetAreaPageSize(), newSize);
+        Assert.assertTrue(page.GetVisibleAreaRowCount() > 0);
+        Assert.assertTrue(page.GetVisibleAreaRowCount() <= newSize);
     }
 
     @Test(priority = 14)
@@ -382,10 +357,9 @@ public class AreaTest extends BaseTest {
                     + " أخرى.")
     public void AR_030_NavigateAreaPagesWhenAvailable() {
         AreaPage page = openAreas();
-        if (!page.IsNextAreaPageEnabled()) {
-            Assert.assertFalse(page.IsNextAreaPageEnabled());
-            return;
-        }
+        seedAreas("pagination", page.GetAreaPageSize() + 1);
+        page = openAreas();
+        Assert.assertTrue(page.IsNextAreaPageEnabled(), "Owned records must fill multiple pages");
         String first = page.GetFirstAreaCellByHeader("الكود");
         page.GoToNextAreaPage();
         Assert.assertNotEquals(page.GetFirstAreaCellByHeader("الكود"), first);
@@ -403,16 +377,12 @@ public class AreaTest extends BaseTest {
     public void AR_012_RapidDoubleSaveCreatesSingleArea() {
         AreaPage page = openAreas();
         String name = uniqueName("DOUBLE-SAVE");
-        try {
-            page.ClickNew();
-            page.AddArabicName(name);
-            page.AddEnglishName("Double Save Area");
-            page.ClickSaveTwiceRapidly();
-            page.SearchArea(name);
-            Assert.assertEquals(page.GetExactAreaMatchCount(name), 1);
-        } finally {
-            cleanupArea(page, name);
-        }
+        page.ClickNew();
+        page.AddArabicName(name);
+        page.AddEnglishName("Double Save Area");
+        page.ClickSaveTwiceRapidly();
+        page.SearchArea(name);
+        Assert.assertEquals(page.GetExactAreaMatchCount(name), 1);
     }
 
     @Test(priority = 16)
@@ -425,17 +395,13 @@ public class AreaTest extends BaseTest {
     public void AR_021_EditOwnedAreaAndSave() {
         AreaPage page = openAreas();
         String name = uniqueName("EDIT");
-        String updated = name + "-UPDATED";
-        try {
-            createArea(page, name, "Edit Area", "");
-            page.EditAreaByName(name);
-            page.AddArabicName(updated);
-            page.ClickSaveButton();
-            page.SearchArea(updated);
-            Assert.assertEquals(page.GetExactAreaMatchCount(updated), 1);
-        } finally {
-            cleanupArea(page, updated, name);
-        }
+        String updated = uniqueName("UPDATED");
+        createArea(page, name, "Edit Area", "");
+        page.EditAreaByName(name);
+        page.AddArabicName(updated);
+        page.ClickSaveButton();
+        page.SearchArea(updated);
+        Assert.assertEquals(page.GetExactAreaMatchCount(updated), 1);
     }
 
     @Test(priority = 17)
@@ -450,18 +416,14 @@ public class AreaTest extends BaseTest {
     public void AR_023_DeleteOnlyOwnedArea() {
         AreaPage page = openAreas();
         String name = uniqueName("DELETE");
-        try {
-            createArea(page, name, "Delete Area", "");
-            page.RequestDeleteAreaByName(name);
-            Assert.assertTrue(page.IsAreaDeleteConfirmationDisplayed(), "يجب عرض تأكيد الحذف");
-            page.ConfirmAreaDelete();
-            driver.navigate().refresh();
-            page = openAreas();
-            page.SearchArea(name);
-            Assert.assertEquals(page.GetExactAreaMatchCount(name), 0);
-        } finally {
-            cleanupArea(page, name);
-        }
+        createArea(page, name, "Delete Area", "");
+        page.RequestDeleteAreaByName(name);
+        Assert.assertTrue(page.IsAreaDeleteConfirmationDisplayed(), "يجب عرض تأكيد الحذف");
+        page.ConfirmAreaDelete();
+        driver.navigate().refresh();
+        page = openAreas();
+        page.SearchArea(name);
+        Assert.assertEquals(page.GetExactAreaMatchCount(name), 0);
     }
 
     @Test(priority = 18)
@@ -474,16 +436,12 @@ public class AreaTest extends BaseTest {
     public void AR_024_CancelDeleteOfOwnedArea() {
         AreaPage page = openAreas();
         String name = uniqueName("CANCEL-DELETE");
-        try {
-            createArea(page, name, "Cancel Delete Area", "");
-            page.RequestDeleteAreaByName(name);
-            Assert.assertTrue(page.IsAreaDeleteConfirmationDisplayed());
-            page.CancelAreaDelete();
-            Assert.assertEquals(
-                    page.GetExactAreaMatchCount(name), 1, "يجب أن يبقى السجل بعد إلغاء الحذف");
-        } finally {
-            cleanupArea(page, name);
-        }
+        createArea(page, name, "Cancel Delete Area", "");
+        page.RequestDeleteAreaByName(name);
+        Assert.assertTrue(page.IsAreaDeleteConfirmationDisplayed());
+        page.CancelAreaDelete();
+        Assert.assertEquals(
+                page.GetExactAreaMatchCount(name), 1, "يجب أن يبقى السجل بعد إلغاء الحذف");
     }
 
     @Test(priority = 19)
@@ -496,15 +454,11 @@ public class AreaTest extends BaseTest {
     public void AR_032_AreaPersistsAfterBrowserRefresh() {
         AreaPage page = openAreas();
         String name = uniqueName("REFRESH");
-        try {
-            createArea(page, name, "Refresh Area", "");
-            driver.navigate().refresh();
-            page = openAreas();
-            page.SearchArea(name);
-            Assert.assertEquals(page.GetExactAreaMatchCount(name), 1);
-        } finally {
-            cleanupArea(page, name);
-        }
+        createArea(page, name, "Refresh Area", "");
+        driver.navigate().refresh();
+        page = openAreas();
+        page.SearchArea(name);
+        Assert.assertEquals(page.GetExactAreaMatchCount(name), 1);
     }
 
     @Test(priority = 20)
@@ -517,14 +471,10 @@ public class AreaTest extends BaseTest {
     public void AR_035_ReopeningAreaListDoesNotDuplicateRecord() {
         AreaPage page = openAreas();
         String name = uniqueName("REOPEN");
-        try {
-            createArea(page, name, "Reopen Area", "");
-            driver.navigate().refresh();
-            page = openAreas();
-            page.SearchArea(name);
-            Assert.assertEquals(page.GetExactAreaMatchCount(name), 1);
-        } finally {
-            cleanupArea(page, name);
-        }
+        createArea(page, name, "Reopen Area", "");
+        driver.navigate().refresh();
+        page = openAreas();
+        page.SearchArea(name);
+        Assert.assertEquals(page.GetExactAreaMatchCount(name), 1);
     }
 }

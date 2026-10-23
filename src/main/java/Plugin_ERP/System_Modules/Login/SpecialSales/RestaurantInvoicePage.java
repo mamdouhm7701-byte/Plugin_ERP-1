@@ -1,5 +1,6 @@
 package Plugin_ERP.System_Modules.Login.SpecialSales;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.*;
 
 /** Restaurant orders are a separate page/workflow, never a normal-invoice subclass. */
@@ -27,6 +28,7 @@ public final class RestaurantInvoicePage extends SpecialSalesPage {
         type("خارجية");
     }
 
+    @Step("اختيار نوع الطلب: {label}")
     public void type(String label) {
         click(
                 By.xpath(
@@ -35,6 +37,7 @@ public final class RestaurantInvoicePage extends SpecialSalesPage {
                                 + "']/ancestor::div[contains(@class,'order-type-card')][1]"));
     }
 
+    @Step("إضافة الصنف {name} بالباركود {barcode}")
     public void addItem(String name, String barcode, String category) {
         ready.until(
                 d ->
@@ -68,21 +71,25 @@ public final class RestaurantInvoicePage extends SpecialSalesPage {
         awaitTotals();
     }
 
+    @Step("فتح شاشة سداد الفاتورة")
     public void openPayment() {
         button("دفع");
     }
 
+    @Step("حفظ الفاتورة")
     public void save() {
         click(
                 By.xpath(
                         "//div[@id='sidebar-invoice-add-payment']//button[normalize-space()='حفظ']"));
     }
 
+    @Step("فتح قائمة الفواتير")
     public void invoices() {
         closePayment();
         button("الفواتير");
     }
 
+    @Step("سداد الفاتورة وإغلاقها")
     public void payAndClose() {
         int count = saves().size();
         save();
@@ -104,10 +111,12 @@ public final class RestaurantInvoicePage extends SpecialSalesPage {
         awaitTotals();
     }
 
+    @Step("تعليق الفاتورة الحالية")
     public void hold() {
         button("تعليق");
     }
 
+    @Step("اختيار الطاولة: {code}")
     public void selectTable(String code) {
         click(
                 By.xpath(

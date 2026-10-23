@@ -181,4 +181,32 @@ public class TypesofdiscountsPage extends AbstractForDealer {
                             + "' to exist, but it was not found.");
         }
     }
+
+    private org.openqa.selenium.WebElement ownedRow(String name) {
+        return new WebDriverWait(driver, Duration.ofSeconds(15)).until(d -> {
+            java.util.List<org.openqa.selenium.WebElement> matches = d.findElements(
+                    By.cssSelector("tr[data-pk]")).stream().filter(r -> r.isDisplayed())
+                    .filter(r -> r.findElements(By.cssSelector("td")).stream()
+                            .anyMatch(c -> c.getText().trim().equals(name))).toList();
+            if (matches.size() > 1) throw new AssertionError("Ambiguous discount name: " + name);
+            return matches.size() == 1 ? matches.get(0) : null;
+        });
+    }
+
+    @Step("فتح السجل {name} للتعديل")
+    public void OpenOwnedForEdit(String name) {
+        ownedRow(name).findElement(By.cssSelector("button[data-action-type='edit']")).click();
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(
+                org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated(SecrtCode));
+    }
+
+    @Step("حذف السجل {name}")
+    public void DeleteOwned(String name) {
+        org.openqa.selenium.WebElement row = ownedRow(name);
+        String pk = row.getAttribute("data-pk");
+        row.findElement(By.cssSelector("button[data-action-type='delete']")).click();
+        utilites.ClickElement(Clickyestodelet);
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(d -> d.findElements(
+                By.cssSelector("tr[data-pk]")).stream().noneMatch(r -> pk.equals(r.getAttribute("data-pk"))));
+    }
 }

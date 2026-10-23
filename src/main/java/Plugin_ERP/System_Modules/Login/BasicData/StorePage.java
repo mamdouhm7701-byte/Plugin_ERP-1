@@ -43,12 +43,14 @@ public class StorePage extends AbstractForDealer {
                                                 }));
     }
 
+    @Step("فتح شاشة المخازن")
     public void OpenStorePage() {
         NavigationHelper(Pages.WAREHOUSES);
         waitLoading();
     }
 
     @Override
+    @Step("فتح نموذج جديد")
     public void ClickNew() {
         waitLoading();
         super.ClickNew();
@@ -57,11 +59,13 @@ public class StorePage extends AbstractForDealer {
     }
 
     @Override
+    @Step("إغلاق النموذج دون حفظ")
     public void ClickCloseButton() {
         if (visible(By.xpath("//button[normalize-space()='إغلاق']"))) super.ClickCloseButton();
     }
 
     @Override
+    @Step("حفظ البيانات المدخلة")
     public void ClickSaveButton() {
         super.ClickSaveButton();
         By success =
@@ -206,7 +210,7 @@ public class StorePage extends AbstractForDealer {
                 || visible(By.cssSelector("input[name='arabicName'].is-invalid"));
     }
 
-    @Step("طلب حذف المخزن المملوك للاختبار")
+    @Step("طلب حذف المخزن المحدد")
     public void RequestDeleteByName(String n) {
         row(n).findElement(By.cssSelector("button[data-action-type='delete']")).click();
         new WebDriverWait(driver, Duration.ofSeconds(10))

@@ -1,0 +1,77 @@
+﻿screen,route,url,coverage,classes,enabled_methods
+الصفحة الرئيسية,#/,https://rawdadonia.plugin-erp.com/#/,لا توجد اختبارات شاشة مستقلة,,0
+إحصائيات المطاعم,#/restaurant-dashboard,https://rawdadonia.plugin-erp.com/#/restaurant-dashboard,لا توجد اختبارات شاشة مستقلة,,0
+إحصائيات الفروع,#/branches-dashboard,https://rawdadonia.plugin-erp.com/#/branches-dashboard,لا توجد اختبارات شاشة مستقلة,,0
+إحصائيات المستخدمين,#/usersAndAgents-dashboard,https://rawdadonia.plugin-erp.com/#/usersAndAgents-dashboard,لا توجد اختبارات شاشة مستقلة,,0
+إحصائيات المبيعات,#/sales-dashboard,https://rawdadonia.plugin-erp.com/#/sales-dashboard,لا توجد اختبارات شاشة مستقلة,,0
+إحصائيات المشتريات,#/purchase-dashboard,https://rawdadonia.plugin-erp.com/#/purchase-dashboard,لا توجد اختبارات شاشة مستقلة,,0
+الخزن,#/safes,https://rawdadonia.plugin-erp.com/#/safes,اختبارات موجودة — تغطية جزئية,Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest,31
+البنوك,#/banks,https://rawdadonia.plugin-erp.com/#/banks,اختبارات موجودة — تغطية جزئية,Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest,14
+طرق الدفع,#/payment-methods,https://rawdadonia.plugin-erp.com/#/payment-methods,اختبارات موجودة — تغطية جزئية,Plugin_ERP.Tests.LoginTest.BasicDataTest.PaymentTest,13
+قائمة المخازن,#/warehouses,https://rawdadonia.plugin-erp.com/#/warehouses,اختبارات موجودة — تغطية جزئية,Plugin_ERP.Tests.LoginTest.BasicDataTest.StoreTest,9
+المناطق,#/areas,https://rawdadonia.plugin-erp.com/#/areas,اختبارات موجودة — تغطية جزئية,Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest,19
+حالة خط السير new,#/agent-itineraries-status,https://rawdadonia.plugin-erp.com/#/agent-itineraries-status,اختبارات موجودة — تغطية جزئية,Plugin_ERP.Tests.LoginTest.BasicDataTest.RoutLineTest,9
+أنواع الإيرادات,#/income-type,https://rawdadonia.plugin-erp.com/#/income-type,اختبارات موجودة — تغطية جزئية,Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest,12
+أنواع المصروفات,#/expense-type,https://rawdadonia.plugin-erp.com/#/expense-type,اختبارات موجودة — تغطية جزئية,Plugin_ERP.Tests.LoginTest.BasicDataTest.ExpensesTest,12
+الطاولات,#/tables,https://rawdadonia.plugin-erp.com/#/tables,لا توجد اختبارات شاشة مستقلة,,0
+انوع الخصومات,#/discount-types,https://rawdadonia.plugin-erp.com/#/discount-types/,اختبارات موجودة — تغطية جزئية,Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest,6
+إستلام الخزينة,#/safe-transaction,https://rawdadonia.plugin-erp.com/#/safe-transaction/,اختبارات موجودة — تغطية جزئية,Plugin_ERP.Tests.LoginTest.BasicDataTest.TreasuryHandoverTest,3
+جهات الصرف,#/exchange-destinations,https://rawdadonia.plugin-erp.com/#/exchange-destinations,اختبارات موجودة — تغطية جزئية,Plugin_ERP.Tests.LoginTest.BasicDataTest.DisEntTest,12
+الوحدات,#/units,https://rawdadonia.plugin-erp.com/#/units/,اختبارات موجودة — تغطية جزئية,ProductsTest.UnitTest,12
+فئات الأصناف,#/items-category,https://rawdadonia.plugin-erp.com/#/items-category,اختبارات موجودة — تغطية جزئية,ProductsTest.ProductCategoriesTest,14
+قوائم الأسعار,#/price-list,https://rawdadonia.plugin-erp.com/#/price-list/,لا توجد اختبارات شاشة مستقلة,,0
+قائمة الاصناف,#/Items,https://rawdadonia.plugin-erp.com/#/Items/,اختبارات موجودة — تغطية جزئية,ProductsTest.AddProductsTest; ProductsTest.ProductListTest,59
+العملاء,#/customers,https://rawdadonia.plugin-erp.com/#/customers/,اختبارات موجودة — تغطية جزئية,DealerModelTest.CustomersTest,23
+الموردين,#/suppliers,https://rawdadonia.plugin-erp.com/#/suppliers/,اختبارات موجودة — تغطية جزئية,DealerModelTest.SupplierTest,13
+المناديب,#/agents,https://rawdadonia.plugin-erp.com/#/agents/,اختبارات موجودة — تغطية جزئية,DealerModelTest.AgentTest,17
+خط السير,#/agentItinerary,https://rawdadonia.plugin-erp.com/#/agentItinerary,اختبارات موجودة — تغطية جزئية,DealerModelTest.RoutLineTest,1
+تصنيف المتعاملين,#/dealersClassification,https://rawdadonia.plugin-erp.com/#/dealersClassification/,اختبارات موجودة — تغطية جزئية,DealerModelTest.CustomerClassificationTest,14
+المتعامل الرئيسي,#/mainDealer,https://rawdadonia.plugin-erp.com/#/mainDealer/,اختبارات موجودة — تغطية جزئية,DealerModelTest.MainDealerTest,13
+استعراض المبيعات,#/invoice-list,https://rawdadonia.plugin-erp.com/#/invoice-list,اختبارات موجودة — تغطية جزئية,Invoice.SalesListCoverageTest,15
+عرض سعر,#/quotation/new,https://rawdadonia.plugin-erp.com/#/quotation/new,اختبارات موجودة — تغطية جزئية,Invoice.QuotationTest,22
+امر بيع,#/sales-order/new,https://rawdadonia.plugin-erp.com/#/sales-order/new,اختبارات موجودة — تغطية جزئية,Invoice.SalesOrderTest,24
+فاتورة تحت الأجراء new,#/underReview/new,https://rawdadonia.plugin-erp.com/#/underReview/new,لا توجد اختبارات شاشة مستقلة,,0
+فاتورة مبيعات,#/invoice/new,https://rawdadonia.plugin-erp.com/#/invoice/new,اختبارات موجودة — تغطية جزئية,Invoice.SalesInvoiceCoverageTest,24
+مرتجع مبيعات,#/return-sales/new,https://rawdadonia.plugin-erp.com/#/return-sales/new,اختبارات موجودة — تغطية جزئية,Invoice.SalesReturnTest; Invoice.LinkedSalesReturnTest,26
+فاتورة نقاط بيع,#/point-of-sale,https://rawdadonia.plugin-erp.com/#/point-of-sale,اختبارات موجودة — تغطية جزئية,SpecialSalesTest.PointOfSaleTest,15
+فاتورة المطعم,#/restaurant-menu,https://rawdadonia.plugin-erp.com/#/restaurant-menu,اختبارات موجودة — تغطية جزئية,SpecialSalesTest.RestaurantInvoiceTest,15
+طلبات المطبخ,#/restaurant-orders,https://rawdadonia.plugin-erp.com/#/restaurant-orders,لا توجد اختبارات شاشة مستقلة,,0
+استعراض المشتريات,#/purch-invoice-list,https://rawdadonia.plugin-erp.com/#/purch-invoice-list,اختبارات موجودة — تغطية جزئية,Purches.PurchaseListCoverageTest,11
+امر شراء,#/purchOrder/new,https://rawdadonia.plugin-erp.com/#/purchOrder/new,اختبارات موجودة — تغطية جزئية,Purches.PurchaseOrderCoverageTest,20
+فاتورة مشتريات,#/purch-invoice/new,https://rawdadonia.plugin-erp.com/#/purch-invoice/new,اختبارات موجودة — تغطية جزئية,Purches.PurchaseInvoiceCoverageTest,21
+مرتجع مشتريات,#/return-purch/new,https://rawdadonia.plugin-erp.com/#/return-purch/new,اختبارات موجودة — تغطية جزئية,Purches.PurchaseReturnCoverageTest; Purches.PurchaseLinkedCoverageTest,23
+استعراض الأذونات,#/orders,https://rawdadonia.plugin-erp.com/#/orders/,اختبارات موجودة — تغطية جزئية,StoreTest.AdditionOrderTest; StoreTest.ExchangeOrderTest,60
+إذن صرف,#/exchange-order/new,https://rawdadonia.plugin-erp.com/#/exchange-order/new,اختبارات موجودة — تغطية جزئية,StoreTest.ExchangeOrderTest,30
+اذن استلام,#/addition-order/new,https://rawdadonia.plugin-erp.com/#/addition-order/new,اختبارات موجودة — تغطية جزئية,StoreTest.AdditionOrderTest,30
+إذن تصنيع,#/manufacturing-order/new,https://rawdadonia.plugin-erp.com/#/manufacturing-order/new,اختبارات موجودة — تغطية جزئية,StoreTest.ManufacturingTest,23
+التحويل بين المخازن,#/storage-transfer,https://rawdadonia.plugin-erp.com/#/storage-transfer/,اختبارات موجودة — تغطية جزئية,StoreTest.TransBetweenStoreTest,25
+تسوية التوالف,#/damage-adjustment,https://rawdadonia.plugin-erp.com/#/damage-adjustment/,اختبارات موجودة — تغطية جزئية,StoreTest.DamageAdjustmentTest,23
+محضر الجرد,#/inventory,https://rawdadonia.plugin-erp.com/#/inventory/,لا توجد اختبارات شاشة مستقلة,,0
+تسوية العجز,#/shortage-adjustment,https://rawdadonia.plugin-erp.com/#/shortage-adjustment/,لا توجد اختبارات شاشة مستقلة,,0
+تسوية الفائض,#/overflow-adjustment,https://rawdadonia.plugin-erp.com/#/overflow-adjustment/,لا توجد اختبارات شاشة مستقلة,,0
+سند قبض عميل,#/collection-transactions,https://rawdadonia.plugin-erp.com/#/collection-transactions/,اختبارات موجودة — تغطية جزئية,FinancialMovementsTest.CustomerReceiptTest,18
+اشعار خصم عميل,#/customer-discount,https://rawdadonia.plugin-erp.com/#/customer-discount/,اختبارات موجودة — تغطية جزئية,FinancialMovementsTest.CustomerDiscountNoticeTest,16
+سند صرف مورد,#/payment-transactions,https://rawdadonia.plugin-erp.com/#/payment-transactions/,اختبارات موجودة — تغطية جزئية,FinancialMovementsTest.SupplierBillOfExchangeTest,18
+اشعار خصم مورد,#/supplier-discount,https://rawdadonia.plugin-erp.com/#/supplier-discount/,اختبارات موجودة — تغطية جزئية,FinancialMovementsTest.SupplierDiscountNoticeTest,16
+حركة المصروفات,#/expense-transactions,https://rawdadonia.plugin-erp.com/#/expense-transactions/,اختبارات موجودة — تغطية جزئية,FinancialMovementsTest.ExpenseMovementTest,17
+حركة الايرادات,#/income-transactions,https://rawdadonia.plugin-erp.com/#/income-transactions/,اختبارات موجودة — تغطية جزئية,FinancialMovementsTest.OtherRevenueMovementTest,15
+تحويلات وتسويات,#/transfers-and-settlements,https://rawdadonia.plugin-erp.com/#/transfers-and-settlements/,اختبارات موجودة — تغطية جزئية,FinancialMovementsTest.TransfersAndSettlementsTest,30
+دليل الحسابات,#/chart-of-account,https://rawdadonia.plugin-erp.com/#/chart-of-account,لا توجد اختبارات شاشة مستقلة,,0
+مجموعات الحسابات,#/accountGroups,https://rawdadonia.plugin-erp.com/#/accountGroups,لا توجد اختبارات شاشة مستقلة,,0
+مراكز التكلفة,#/cost-center,https://rawdadonia.plugin-erp.com/#/cost-center,لا توجد اختبارات شاشة مستقلة,,0
+الترحيل الي الحسابات,#/post-vouchers,https://rawdadonia.plugin-erp.com/#/post-vouchers,لا توجد اختبارات شاشة مستقلة,,0
+الفواتير المجمعه,#/bulk-invoices,https://rawdadonia.plugin-erp.com/#/bulk-invoices,لا توجد اختبارات شاشة مستقلة,,0
+قيود اليومية,#/vouchers,https://rawdadonia.plugin-erp.com/#/vouchers/,اختبارات موجودة — تغطية جزئية,GenralAccountantTest.VouchersTest,29
+اعدادات الشركة,#/company,https://rawdadonia.plugin-erp.com/#/company,لا توجد اختبارات شاشة مستقلة,,0
+الفروع,#/branches,https://rawdadonia.plugin-erp.com/#/branches/,لا توجد اختبارات شاشة مستقلة,,0
+المستخدمين,#/users,https://rawdadonia.plugin-erp.com/#/users/,لا توجد اختبارات شاشة مستقلة,,0
+الملف التاريخي,#/logs,https://rawdadonia.plugin-erp.com/#/logs,لا توجد اختبارات شاشة مستقلة,,0
+الربط مع هيئة الزكاة,#/posConfigurations,https://rawdadonia.plugin-erp.com/#/posConfigurations,لا توجد اختبارات شاشة مستقلة,,0
+الاجراءات,#/actions,https://rawdadonia.plugin-erp.com/#/actions,لا توجد اختبارات شاشة مستقلة,,0
+ترحيل الفواتير للهيئة,#/sendInvoiceToZatca,https://rawdadonia.plugin-erp.com/#/sendInvoiceToZatca,لا توجد اختبارات شاشة مستقلة,,0
+تقارير المبيعات,#/sales-reports,https://rawdadonia.plugin-erp.com/#/sales-reports,لا توجد اختبارات شاشة مستقلة,,0
+تقارير المشتريات,#/purchase-reports,https://rawdadonia.plugin-erp.com/#/purchase-reports,لا توجد اختبارات شاشة مستقلة,,0
+تقارير الأصناف,#/items-reports,https://rawdadonia.plugin-erp.com/#/items-reports,لا توجد اختبارات شاشة مستقلة,,0
+تقارير العملاء والموردين,#/customers-and-suppliers,https://rawdadonia.plugin-erp.com/#/customers-and-suppliers,لا توجد اختبارات شاشة مستقلة,,0
+تقارير الحسابات,#/accounts-reports,https://rawdadonia.plugin-erp.com/#/accounts-reports,لا توجد اختبارات شاشة مستقلة,,0
+بيانات الإشتراك,#/subscription-data,https://rawdadonia.plugin-erp.com/#/subscription-data,لا توجد اختبارات شاشة مستقلة,,0

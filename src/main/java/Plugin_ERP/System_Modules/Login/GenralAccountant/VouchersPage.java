@@ -49,7 +49,12 @@ public class VouchersPage extends Abstract {
 
     @Step("البحث عن حساب: {query}")
     public void searchAccount(String query) {
-        utilites.TaypeTextB(ACCOUNT_DIALOG_SEARCH, query);
+        WebElement input = waitMangment.fluentWait().until(
+                org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(ACCOUNT_DIALOG_SEARCH));
+        input.click();
+        input.sendKeys(org.openqa.selenium.Keys.chord(org.openqa.selenium.Keys.CONTROL, "a"));
+        input.sendKeys(query);
+        waitMangment.fluentWait().until(d -> query.equals(input.getDomProperty("value")));
     }
 
     @Step("عدد نتائج بحث الحسابات")
@@ -74,6 +79,7 @@ public class VouchersPage extends Abstract {
     @Step("اختيار الحساب ذي الكود: {accountCode}")
     public void selectAccountByCode(String accountCode) {
         openAccountPicker();
+        searchAccount(accountCode);
         By accountRowAddButton =
                 By.xpath(
                         "//div[@role='dialog']//table/tbody/tr[td[1][normalize-space()='"
@@ -85,6 +91,7 @@ public class VouchersPage extends Abstract {
         closeAccountPicker();
     }
 
+    @Step("البحث عن الحساب واختياره: {query}")
     public void searchAccountAndSelectFirst(String query) {
         openAccountPicker();
         searchAccount(query);
@@ -169,10 +176,12 @@ public class VouchersPage extends Abstract {
         return By.cssSelector("form input[type='checkbox'], form [role='checkbox']");
     }
 
+    @Step("اختيار حساب الضريبة: {accountText}")
     public void selectTaxAccountFromLine(String accountText) {
         searchAccountAndSelectFirst(accountText);
     }
 
+    @Step("اختيار الحساب الخاضع للضريبة بكود {accountCode}")
     public void selectAccountTaxableByCode(String accountCode) {
         selectAccountByCode(accountCode);
         if (getSettlementCheckboxCount() == 0) {
@@ -332,6 +341,7 @@ public class VouchersPage extends Abstract {
                 .isEmpty();
     }
 
+    @Step("البحث في بنود القيد عن: {query}")
     public void searchVoucherLines(String query) {
         By lineSearch =
                 By.xpath(
@@ -416,12 +426,12 @@ public class VouchersPage extends Abstract {
         return text.isBlank() ? BigDecimal.ZERO : new BigDecimal(text);
     }
 
-    @Step("التحقق من تحديث إجمالي المدين والدائن")
+    @Step("مطابقة إجمالي المدين {debit} والدائن {credit}")
     public void assertTotals(String debit, String credit) {
         Assert.assertEquals(
-                getDebitTotal().compareTo(new BigDecimal(debit)), 0, "Debit total is incorrect");
+                getDebitTotal().compareTo(new BigDecimal(debit)), 0, "إجمالي المدين: المتوقع " + debit + "، الفعلي " + getDebitTotal());
         Assert.assertEquals(
-                getCreditTotal().compareTo(new BigDecimal(credit)), 0, "Credit total is incorrect");
+                getCreditTotal().compareTo(new BigDecimal(credit)), 0, "إجمالي الدائن: المتوقع " + credit + "، الفعلي " + getCreditTotal());
     }
 
     @Step("التحقق من اتزان القيد")
@@ -457,6 +467,7 @@ public class VouchersPage extends Abstract {
                 != null;
     }
 
+    @Step("فتح نافذة اختيار الحساب للبند الأول")
     public void openFirstAccountPicker() {
         By firstRowSearch =
                 By.xpath(
@@ -468,6 +479,7 @@ public class VouchersPage extends Abstract {
                 .until(d -> !d.findElements(By.cssSelector("li.vs__dropdown-option")).isEmpty());
     }
 
+    @Step("اختيار الحساب {accountText} للبند الأول")
     public void selectAccountFromFirstRow(String accountText) {
         By option =
                 By.xpath(
@@ -494,6 +506,7 @@ public class VouchersPage extends Abstract {
                 .toList();
     }
 
+    @Step("حذف القيود المطابقة للمرجع {markerPrefix}")
     public void deleteVoucherRowsContaining(String markerPrefix) {
         List<WebElement> matches =
                 driver.findElements(By.xpath("//tr[@role='row' and @data-pk]")).stream()
@@ -515,6 +528,7 @@ public class VouchersPage extends Abstract {
         }
     }
 
+    @Step("فتح القيد المحدد للتعديل: {marker}")
     public void editVoucherListRowByMarker(String marker) {
         By editButton =
                 By.xpath(
@@ -533,6 +547,7 @@ public class VouchersPage extends Abstract {
                                         d.findElement(By.id("textarea")).getDomProperty("value")));
     }
 
+    @Step("حذف القيد المحدد: {marker}")
     public void deleteVoucherListRowByMarker(String marker) {
         By row =
                 By.xpath(

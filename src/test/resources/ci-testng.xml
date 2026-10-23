@@ -11,12 +11,17 @@
             <class name="SuiteSupport.RuntimeCompatibilityTest"/>
             <class name="SuiteSupport.BrowserLifecycleTest"/>
             <class name="SuiteSupport.ModuleChoiceTest"/>
+            <class name="SuiteSupport.ModuleFixtureContractTest"/>
+            <class name="TestSupport.BasicDataFixturesTest"/>
+            <class name="TestSupport.TreasuryAmountsTest"/>
             <class name="Plugin_ERP.Utiel.ConfigurationPropertiesTest"/>
             <class name="Plugin_ERP.Utiel.FormInteractionsTest"/>
             <class name="Plugin_ERP.Utiel.DropdownPolicyTest"/>
             <class name="Plugin_ERP.Valditon.LegacyAssertionsTest"/>
             <class name="Plugin_ERP.Utiel.Allur.AllureReportPolicyTest"/>
+            <class name="Plugin_ERP.Utiel.Allur.ScenarioJourneyReportTest"/>
             <class name="Plugin_ERP.Utiel.Allur.ReportMailTest"/>
+            <class name="Plugin_ERP.Utiel.Allur.DriveReportStoreTest"/>
             <class name="Plugin_ERP.Utiel.Allur.ReportMailTemplateTest"/>
             <class name="SuiteSupport.CiSuiteContractTest"/>
             <class name="SuiteSupport.SuiteDefinitionsTest"/>
@@ -33,6 +38,7 @@
             <class name="Plugin_ERP.System_Modules.Login.purches.PurchaseCalendarTest"/>
             <class name="FinancialMovementsTest.FinancialCleanupTest"/>
             <class name="DealerModelTest.DealerCleanupTest"/>
+            <class name="DealerModelTest.DealerMarkerCleanupTest"/>
             <class name="SpecialSalesTest.SpecialSalesCleanupTest"/>
         </classes>
     </test>

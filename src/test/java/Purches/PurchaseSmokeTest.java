@@ -9,7 +9,7 @@ public final class PurchaseSmokeTest extends PurchaseScenarioTest {
     }
 
     @Test
-    @Story("حفظ فاتورة مشتريات آجلة ببيانات مستقلة والتحقق من زيادة المخزون ورصيد المورد")
+    @Story("حفظ فاتورة مشتريات آجلة ببيانات الفاتورة والتحقق من زيادة المخزون ورصيد المورد")
     public void savesOwnedCreditPurchase() {
         create("picker", "Credit", false);
     }

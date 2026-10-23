@@ -133,7 +133,8 @@ public final class PendingFixtureWrites {
     private static boolean matchesName(Map<?, ?> row, String name) {
         return name.equals(row.get("arabicName"))
                 || name.equals(row.get("englishName"))
-                || name.equals(row.get("notes"));
+                || name.equals(row.get("notes"))
+                || name.equals(row.get("fullName"));
     }
 
     @SuppressWarnings("unchecked")

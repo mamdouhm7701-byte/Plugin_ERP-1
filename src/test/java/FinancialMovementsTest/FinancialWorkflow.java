@@ -103,8 +103,8 @@ public final class FinancialWorkflow implements AutoCloseable {
     Movement movement = new Movement(saved.get("id"), marker, kind.endpoint, values);
     Map<String, Object> stored = read(movement);
     Assert.assertNotNull(stored);
-    Assert.assertEquals(stored.get("dealerId"), partyId);
-    Assert.assertEquals(stored.get("notes"), marker);
+    Assert.assertEquals(stored.get("dealerId"), partyId, "مطابقة العميل أو المورد");
+    Assert.assertEquals(stored.get("notes"), marker, "مطابقة الملاحظات");
     equalAmount(stored.get("value"), amount);
     Assert.assertEquals(stored.get("paymentMethodId"), data.payment().id());
     Object allocations = stored.get("financialTransactionAllocations");

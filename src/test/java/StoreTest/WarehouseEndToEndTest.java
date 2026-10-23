@@ -51,11 +51,11 @@ public final class WarehouseEndToEndTest extends StoreScenarioTest {
     data.track(current.endpoint, saved.get("id"), note, values);
     var record = new StoreTestData.Record(current.endpoint, saved.get("id"), note, values);
     var stored = data.read(record);
-    Assert.assertEquals(stored.get("storeId"), data.store(from).id());
+    Assert.assertEquals(stored.get("storeId"), data.store(from).id(), "مطابقة المخزن");
     if (current == StoreMovementKind.TRANSFER) Assert.assertEquals(stored.get("destinationStoreId"), data.store(to).id());
     if (partyId != null) Assert.assertEquals(stored.get("selectedDestinationId"), partyId);
     var lines = (java.util.List<Map<String, Object>>) stored.get("lines");
-    Assert.assertEquals(lines.size(), 1); Assert.assertEquals(lines.get(0).get("itemId"), item.id());
+    Assert.assertEquals(lines.size(), 1); Assert.assertEquals(lines.get(0).get("itemId"), item.id(), "مطابقة الصنف");
     sameNumber(lines.get(0).get("quantity"), quantity);
     Allure.addAttachment("E2E warehouse stage " + current, "application/json", new org.json.JSONObject(stored).toString(), ".json");
     page.smDismiss(); return record;

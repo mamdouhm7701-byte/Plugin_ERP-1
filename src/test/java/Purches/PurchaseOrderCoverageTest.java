@@ -13,7 +13,7 @@ public final class PurchaseOrderCoverageTest extends PurchaseFormTest {
     @Test
     @Story("أمر الشراء النقدي ينشئ سند قبض ولا يغير المخزون")
     @Description(
-            "حفظ أمر شراء نقدي بوسيلة دفع ومورد مستقلين، ثم البحث عن سند القبض الفعلي الخاص"
+            "حفظ أمر شراء نقدي بوسيلة الدفع والمورد المحددين، ثم البحث عن سند القبض الفعلي الخاص"
                     + " بهذا المورد والتحقق من قيمته مع بقاء المخزون دون تغيير.")
     public void cashOrderCreatesReceiptWithoutStockMovement() {
         var order = create("picker", "Cash", false);

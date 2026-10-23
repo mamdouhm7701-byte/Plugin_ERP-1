@@ -43,9 +43,6 @@ public class TreasuryHandoverPage extends AbstractForDealer {
     private By CashCloseBalnce = By.xpath("//input[@name='cashBalance']");
     private By DifferenceCloseBalnce = By.xpath("//input[@name='deficit']");
     private By TotalCloseBalnce = By.xpath("//input[@name='totalBalance']");
-    private By OpenTreaury =
-            By.xpath(
-                    "(//tr[.//button[@data-action-type='close']])[last()]//button[@data-action-type='close']");
 
     // Methods
 
@@ -61,12 +58,25 @@ public class TreasuryHandoverPage extends AbstractForDealer {
         utilites.TaypeText(OpenBalnce, String.valueOf(balnce));
     }
 
-    @Step("فتح الخزينه للمراجعه")
-    public void OpenTreasuryForReview() {
-        utilites.waits().waitForOverlayToDisappear();
-        utilites.ClickElement(OpenTreaury);
-        utilites.waits().waitForOverlayToDisappear();
+    @Override
+    public boolean isErrorPopupDisplayed() {
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(10)).until(
+                    ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".swal2-icon.swal2-error")));
+            return true;
+        } catch (org.openqa.selenium.TimeoutException missingError) { return false; }
     }
+
+    @Step("فتح تسليم الاختبار بالهوية المحددة")
+    public void OpenTreasuryForReview(Object id) {
+        if (id == null || !id.toString().matches("[A-Za-z0-9-]+"))
+            throw new IllegalArgumentException("Invalid treasury transaction identity");
+        String origin = ((JavascriptExecutor)driver).executeScript("return location.origin").toString();
+        driver.get(origin + "/#/safe-transaction/close/" + id);
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(
+                ExpectedConditions.visibilityOfElementLocated(TotalCloseBalnce));
+    }
+
 
     @Step("حفظ وطباعة التقرير")
     public void SaveAndPrint() {
@@ -75,29 +85,26 @@ public class TreasuryHandoverPage extends AbstractForDealer {
         utilites.waits().waitForReportReady(60);
     }
 
-    @Step("التاكد من ان الخزينه تم فتحها")
-    public void GetTotalBalnceClose() {
-        // انتظر حتى يكون cashBalance محمّل بقيمة حقيقية
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        wait.until(
-                driver -> {
-                    WebElement el = driver.findElement(By.xpath("//input[@name='cashBalance']"));
-                    String val = el.getDomProperty("value");
-                    return val != null && !val.trim().isEmpty() && !val.trim().equals("0");
-                });
-
-        utilites.Utility().getInputValue(CloseBalnce, "0");
-        utilites.Utility().getInputValue(CashCloseBalnce, "1000");
-        utilites.Utility().getInputValue(DifferenceCloseBalnce, "-1000");
-        utilites.Utility().getInputValue(TotalCloseBalnce, "1000");
+    @Step("مطابقة رصيد الإغلاق: نقدي {cash}، إجمالي {total}، فعلي {actual}، عجز {deficit}")
+    public void AssertClosingAmounts(java.math.BigDecimal cash, java.math.BigDecimal total,
+            java.math.BigDecimal actual, java.math.BigDecimal deficit) {
+        assertNumber(driver.findElement(CashCloseBalnce).getDomProperty("value"), cash);
+        assertNumber(driver.findElement(TotalCloseBalnce).getDomProperty("value"), total);
+        assertNumber(driver.findElement(CloseBalnce).getDomProperty("value"), actual);
+        assertNumber(driver.findElement(DifferenceCloseBalnce).getDomProperty("value"), deficit);
     }
 
-    @Step("التاكد من قيم التقرير")
-    public void GetTotalBalnceinReport() {
-        utilites.validation().assertValue("1000", TotalBalnce);
-        utilites.validation().assertValue("1,000.000000", CashBalnce);
-        utilites.validation().assertValue("-1,000.000000", DifferenceBalnce);
-        utilites.validation().assertValue("0.000000", ActualBalnce);
-        browserAction.navigateTo("https://binfares.plugin-erp.com/#/safe-transaction/");
+    @Step("مطابقة التقرير المطبوع: نقدي {cash}، إجمالي {total}، فعلي {actual}، عجز {deficit}")
+    public void AssertPrintedAmounts(java.math.BigDecimal cash, java.math.BigDecimal total,
+            java.math.BigDecimal actual, java.math.BigDecimal deficit) {
+        assertNumber(driver.findElement(CashBalnce).getText(), cash);
+        assertNumber(driver.findElement(TotalBalnce).getText(), total);
+        assertNumber(driver.findElement(ActualBalnce).getText(), actual);
+        assertNumber(driver.findElement(DifferenceBalnce).getText(), deficit);
+    }
+
+    private void assertNumber(String text, java.math.BigDecimal expected) {
+        Assert.assertEquals(new java.math.BigDecimal(text.replace(",", "").trim()).compareTo(expected), 0,
+                "Treasury amount differs from its transaction ledger: " + text + " expected " + expected);
     }
 }

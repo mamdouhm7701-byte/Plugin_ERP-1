@@ -82,7 +82,7 @@ public class SalesCleanupTest {
     }
 
     @Test
-    @Story("انتظار تحميل الفرع الأصلي قبل الوصول إلى بيانات الاختبار")
+    @Story("انتظار تحميل الفرع الأصلي قبل الوصول إلى البيانات المدخلة")
     public void waitsForOriginalBranchHydrationBeforeFixtureAccess() {
         SalesFixtureApiStub api = new SalesFixtureApiStub();
         var data = new SalesTestData(api.driver());
@@ -351,7 +351,7 @@ public class SalesCleanupTest {
 
 
     @Test
-    @Story("حذف الحركة المملوكة للاختبار قبل أصنافها ومخازنها")
+    @Story("حذف الحركة المحددة قبل أصنافها ومخازنها")
     public void deletesOwnedMovementBeforeItsItemsAndStores() {
         SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
@@ -410,7 +410,7 @@ public class SalesCleanupTest {
     }
 
     @Test
-    @Story("التحقق من استمرار ارتباط المخزن غير المؤكد بحسابه المملوك للاختبار")
+    @Story("التحقق من استمرار ارتباط المخزن غير المؤكد بحسابه المحدد")
     public void uncertainStoreMustStillReferenceItsOwnedAccount() {
         SalesFixtureApiStub api = new SalesFixtureApiStub();
         api.failAfterStoreInsert = true;
@@ -773,7 +773,7 @@ public class SalesCleanupTest {
     }
 
     @Test
-    @Story("الاحتفاظ بالمخزن وحساباته عند تعذر إزالة ارتباطه المملوك للاختبار")
+    @Story("الاحتفاظ بالمخزن وحساباته عند تعذر إزالة ارتباطه المحدد")
     public void retainsStoreAndAccountsWhenOwnedMembershipCannotBeRemoved() {
         SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
@@ -859,7 +859,7 @@ public class SalesCleanupTest {
     }
 
     @Test
-    @Story("تنظيف صنف الاختبار الذي حُفظ رغم فشل طلب الإنشاء")
+    @Story("تنظيف الصنف الذي حُفظ رغم فشل طلب الإنشاء")
     public void cleansOwnedItemCommittedBeforeCreateFailure() {
         SalesFixtureApiStub api = new SalesFixtureApiStub();
         api.failAfterItemInsert = true;

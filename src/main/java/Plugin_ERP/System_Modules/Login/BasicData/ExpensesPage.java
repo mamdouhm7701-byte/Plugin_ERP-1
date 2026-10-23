@@ -43,6 +43,7 @@ public class ExpensesPage extends AbstractForDealer {
     }
 
     @Override
+    @Step("فتح نموذج جديد")
     public void ClickNew() {
         waitLoading();
         super.ClickNew();
@@ -51,11 +52,13 @@ public class ExpensesPage extends AbstractForDealer {
     }
 
     @Override
+    @Step("إغلاق النموذج دون حفظ")
     public void ClickCloseButton() {
         if (visible(By.xpath("//button[normalize-space()='إغلاق']"))) super.ClickCloseButton();
     }
 
     @Override
+    @Step("حفظ البيانات المدخلة")
     public void ClickSaveButton() {
         super.ClickSaveButton();
         By success =
@@ -307,7 +310,7 @@ public class ExpensesPage extends AbstractForDealer {
                 || visible(By.cssSelector("input[name='arabicName'].is-invalid"));
     }
 
-    @Step("طلب حذف المصروف المملوك للاختبار")
+    @Step("طلب حذف المصروف المحدد")
     public void RequestDeleteByName(String n) {
         row(n).findElement(By.cssSelector("button[data-action-type='delete']")).click();
         new WebDriverWait(driver, Duration.ofSeconds(10))
@@ -321,7 +324,7 @@ public class ExpensesPage extends AbstractForDealer {
                 && visible(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"));
     }
 
-    @Step("تأكيد حذف المصروف المملوك للاختبار")
+    @Step("تأكيد حذف المصروف المحدد")
     public void ConfirmDelete() {
         WebElement yes =
                 new WebDriverWait(driver, Duration.ofSeconds(10))
@@ -363,6 +366,7 @@ public class ExpensesPage extends AbstractForDealer {
         }
     }
 
+    @Step("إلغاء الحذف")
     public void CancelDelete() {
         driver.findElement(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"))
                 .click();

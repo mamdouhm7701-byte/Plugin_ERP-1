@@ -148,10 +148,10 @@ public abstract class PurchaseScenarioTest extends BaseTest {
                         .toString(),
                 ".json");
         Assert.assertNotNull(stored);
-        Assert.assertEquals(stored.get("notes"), record.name());
-        Assert.assertEquals(stored.get("storeId"), data.store(1).id());
-        Assert.assertEquals(stored.get("dealerId"), supplier.id());
-        Assert.assertEquals(stored.get("agentId"), agent.id());
+        Assert.assertEquals(stored.get("notes"), record.name(), "مطابقة الملاحظات");
+        Assert.assertEquals(stored.get("storeId"), data.store(1).id(), "مطابقة المخزن");
+        Assert.assertEquals(stored.get("dealerId"), supplier.id(), "مطابقة العميل أو المورد");
+        Assert.assertEquals(stored.get("agentId"), agent.id(), "مطابقة المندوب");
         Assert.assertTrue(
                 documentKind().type.equalsIgnoreCase(String.valueOf(stored.get("transactionType"))),
                 "Persisted purchase document has the wrong transaction type");
@@ -171,7 +171,7 @@ public abstract class PurchaseScenarioTest extends BaseTest {
                             .map(p -> number(p.get("value")))
                             .reduce(BigDecimal.ZERO, BigDecimal::add);
             sameNumber(paid, stored.get("net").toString());
-            Assert.assertEquals(stored.get("paymentType"), "Cash");
+            Assert.assertEquals(stored.get("paymentType"), "Cash", "مطابقة نوع السداد");
         }
         if (print) page.puVerifyPrintedReport(mainWindow, item.name());
         else page.puDismiss();
@@ -199,6 +199,7 @@ public abstract class PurchaseScenarioTest extends BaseTest {
         return new BigDecimal(value.toString().replace(",", ""));
     }
 
+    @io.qameta.allure.Step("مطابقة القيمة: المتوقع {expected}، الفعلي {actual}")
     protected static void sameNumber(Object actual, String expected) {
         Assert.assertEquals(
                 number(actual).compareTo(new BigDecimal(expected)),
@@ -213,12 +214,14 @@ public abstract class PurchaseScenarioTest extends BaseTest {
                 .subtract(number(value.get("prevCredit")));
     }
 
+    @io.qameta.allure.Step("التحقق من تغير رصيد المورد: المتوقع {delta}")
     protected void assertSupplierDelta(Map<String, Object> before, String delta) {
         var expected = signedBalance(before).add(number(delta));
         new WebDriverWait(driver, Duration.ofSeconds(30))
                 .until(d -> signedBalance(data.read(supplier)).compareTo(expected) == 0);
     }
 
+    @io.qameta.allure.Step("التحقق من أثر المشتريات على كمية المخزون: {quantity}")
     protected void assertStock(String quantity) {
         var expected = initialBalances.get(1);
         if (documentKind() == PurchaseDocumentKind.INVOICE)

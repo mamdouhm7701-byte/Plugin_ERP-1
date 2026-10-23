@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 
 public class MainDealerTest extends DealerScenarioTest {
     private String unique(String suffix) {
-        return "QA-MAIN-DEALER-" + suffix + "-" + System.currentTimeMillis();
+        return ownedName(new MainDealer(driver), Pages.MAINDEALERS, suffix);
     }
 
     private MainDealer open() {
@@ -28,24 +28,6 @@ public class MainDealerTest extends DealerScenarioTest {
         page.ClickSaveButton();
         new org.openqa.selenium.support.ui.WebDriverWait(driver, Duration.ofSeconds(20))
                 .until(ignored -> page.GetExactMatchCount(name) == 1);
-    }
-
-    private void cleanup(MainDealer page, String... names) {
-        page.NavigationHelper(Pages.MAINDEALERS);
-        for (String name : names) {
-            try {
-                if (name != null && page.GetExactMatchCount(name) > 0) {
-                    page.RequestDeleteByName(name);
-                    page.ConfirmDeleteByName(name);
-                }
-            } catch (Exception exception) {
-                System.err.println(
-                        "Could not clean owned Main Dealer test row '"
-                                + name
-                                + "': "
-                                + exception.getMessage());
-            }
-        }
     }
 
     @Test(priority = 0)
@@ -119,6 +101,7 @@ public class MainDealerTest extends DealerScenarioTest {
         MainDealer page = open();
         page.ClickNew();
         page.SelectFromDropDawn("العملاء", "النوع");
+        page.AddEnglishName(ownedName(page, Pages.MAINDEALERS, "INVALID-ARABIC-NAME"));
         page.ClickSaveButton();
         Assert.assertTrue(page.IsArabicNameRequiredDisplayed());
     }
@@ -148,15 +131,11 @@ public class MainDealerTest extends DealerScenarioTest {
     public void MD_005_CreateCustomer() {
         MainDealer page = open();
         String name = unique("CUSTOMER");
-        try {
-            create(page, name, "العملاء");
-            page.OpenForEditByName(name);
-            Assert.assertEquals(page.GetArabicNameValue(), name);
-            Assert.assertEquals(page.GetEnglishNameValue(), "Test " + name);
-            Assert.assertEquals(page.GetSelectedKindValue(), "العملاء");
-        } finally {
-            cleanup(page, name);
-        }
+        create(page, name, "العملاء");
+        page.OpenForEditByName(name);
+        Assert.assertEquals(page.GetArabicNameValue(), name);
+        Assert.assertEquals(page.GetEnglishNameValue(), "Test " + name);
+        Assert.assertEquals(page.GetSelectedKindValue(), "العملاء");
     }
 
     @Test(priority = 5)
@@ -169,13 +148,9 @@ public class MainDealerTest extends DealerScenarioTest {
     public void MD_006_CreateSupplier() {
         MainDealer page = open();
         String name = unique("SUPPLIER");
-        try {
-            create(page, name, "الموردين");
-            page.OpenForEditByName(name);
-            Assert.assertEquals(page.GetSelectedKindValue(), "الموردين");
-        } finally {
-            cleanup(page, name);
-        }
+        create(page, name, "الموردين");
+        page.OpenForEditByName(name);
+        Assert.assertEquals(page.GetSelectedKindValue(), "الموردين");
     }
 
     @Test(priority = 6)
@@ -188,17 +163,13 @@ public class MainDealerTest extends DealerScenarioTest {
     public void MD_007_EditOwnedRecord() {
         MainDealer page = open();
         String originalName = unique("EDIT");
-        String updatedName = originalName + "-UPDATED";
-        try {
-            create(page, originalName, "العملاء");
-            page.OpenForEditByName(originalName);
-            page.AddArabicName(updatedName);
-            page.ClickSaveButton();
-            new org.openqa.selenium.support.ui.WebDriverWait(driver, Duration.ofSeconds(20))
-                    .until(ignored -> page.GetExactMatchCount(updatedName) == 1);
-        } finally {
-            cleanup(page, updatedName, originalName);
-        }
+        String updatedName = unique("UPDATED");
+        create(page, originalName, "العملاء");
+        page.OpenForEditByName(originalName);
+        page.AddArabicName(updatedName);
+        page.ClickSaveButton();
+        new org.openqa.selenium.support.ui.WebDriverWait(driver, Duration.ofSeconds(20))
+                .until(ignored -> page.GetExactMatchCount(updatedName) == 1);
     }
 
     @Test(priority = 7)
@@ -211,19 +182,15 @@ public class MainDealerTest extends DealerScenarioTest {
     public void MD_008_DeleteOwnedRecord() {
         MainDealer page = open();
         String name = unique("DELETE");
-        try {
-            create(page, name, "العملاء");
-            page.RequestDeleteByName(name);
-            page.CancelDelete();
-            Assert.assertEquals(
-                    page.GetExactMatchCount(name), 1, "إلغاء الحذف يجب أن يبقي سجل الاختبار");
+        create(page, name, "العملاء");
+        page.RequestDeleteByName(name);
+        page.CancelDelete();
+        Assert.assertEquals(
+                page.GetExactMatchCount(name), 1, "إلغاء الحذف يجب أن يبقي سجل الاختبار");
 
-            page.RequestDeleteByName(name);
-            page.ConfirmDeleteByName(name);
-            Assert.assertEquals(page.GetExactMatchCount(name), 0);
-        } finally {
-            cleanup(page, name);
-        }
+        page.RequestDeleteByName(name);
+        page.ConfirmDeleteByName(name);
+        Assert.assertEquals(page.GetExactMatchCount(name), 0);
     }
 
     @Test(priority = 90)

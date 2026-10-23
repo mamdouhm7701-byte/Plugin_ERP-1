@@ -5,7 +5,7 @@ import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.Listners.TestNGListeners;
 import Plugin_ERP.System_Modules.Login.BasicData.TypesofdiscountsPage;
 import Plugin_ERP.System_Modules.Login.Login.LoginPage;
-import Plugin_ERP.Tests.LoginTest.BaseTest;
+import TestSupport.BasicDataScenarioTest;
 import Plugin_ERP.Utiel.PropertyReader;
 import io.qameta.allure.*;
 import io.qameta.allure.testng.AllureTestNg;
@@ -16,7 +16,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-public class TaypeOfDiscountTest extends BaseTest {
+public class TaypeOfDiscountTest extends BasicDataScenarioTest {
 
     @Test(priority = 1)
     @Owner("MAMDOUH")
@@ -34,15 +34,16 @@ public class TaypeOfDiscountTest extends BaseTest {
         TypesofdiscountsPage typesofdiscountsPage = new TypesofdiscountsPage(driver);
         typesofdiscountsPage.NavigationHelper(Pages.DISCONTTAYPES);
         typesofdiscountsPage.ClickNew();
-        typesofdiscountsPage.AddArabicName("خصم تجريبي");
+        String name = ownedName("DiscountTypes", "create");
+        typesofdiscountsPage.AddArabicName(name);
         typesofdiscountsPage.AddEnglishName("Test Discount");
         typesofdiscountsPage.AddSecretCode(typesofdiscountsPage.generateRandomNumber());
         typesofdiscountsPage.AddDiscount(5);
         typesofdiscountsPage.ClickToAddUsers();
-        typesofdiscountsPage.ClickSelectUsers(1);
+        typesofdiscountsPage.ClickSelectUsers(Integer.parseInt(basicData().user("discount").values().get("code").toString()));
         typesofdiscountsPage.ClickCloseButton();
         typesofdiscountsPage.ClickSaveButton();
-        typesofdiscountsPage.AssertReceiptAdded("خصم تجريبي");
+        typesofdiscountsPage.AssertReceiptAdded(name);
     }
 
     @Test(priority = 2)
@@ -59,18 +60,22 @@ public class TaypeOfDiscountTest extends BaseTest {
     public void EditTypeOfDiscount() {
         TypesofdiscountsPage typesofdiscountsPage = new TypesofdiscountsPage(driver);
         typesofdiscountsPage.NavigationHelper(Pages.DISCONTTAYPES);
-        typesofdiscountsPage.Edit();
-        typesofdiscountsPage.AddArabicName("خصم معدل");
+        String original = seedDiscount("edit");
+        driver.navigate().refresh();
+        typesofdiscountsPage.NavigationHelper(Pages.DISCONTTAYPES);
+        typesofdiscountsPage.OpenOwnedForEdit(original);
+        String edited = ownedName("DiscountTypes", "edited");
+        typesofdiscountsPage.AddArabicName(edited);
         typesofdiscountsPage.AddEnglishName("Test Discount");
         typesofdiscountsPage.SmartCheck("فعال", true);
         typesofdiscountsPage.SmartCheck("فعال", true);
         typesofdiscountsPage.AddSecretCode(typesofdiscountsPage.generateRandomNumber());
         typesofdiscountsPage.AddDiscount(10);
         typesofdiscountsPage.ClickToAddUsers();
-        typesofdiscountsPage.ClickSelectUsers(1);
+        typesofdiscountsPage.ClickSelectUsers(Integer.parseInt(basicData().user("discount").values().get("code").toString()));
         typesofdiscountsPage.ClickCloseButton();
         typesofdiscountsPage.ClickSaveButton();
-        typesofdiscountsPage.AssertReceiptAdded("خصم معدل");
+        typesofdiscountsPage.AssertReceiptAdded(edited);
     }
 
     @Test(priority = 3)
@@ -84,7 +89,10 @@ public class TaypeOfDiscountTest extends BaseTest {
     public void DeleteTypeOfDiscount() {
         TypesofdiscountsPage typesofdiscountsPage = new TypesofdiscountsPage(driver);
         typesofdiscountsPage.NavigationHelper(Pages.DISCONTTAYPES);
-        typesofdiscountsPage.Delete();
+        String original = seedDiscount("delete");
+        driver.navigate().refresh();
+        typesofdiscountsPage.NavigationHelper(Pages.DISCONTTAYPES);
+        typesofdiscountsPage.DeleteOwned(original);
     }
 
     @Test(priority = 4)
@@ -103,6 +111,7 @@ public class TaypeOfDiscountTest extends BaseTest {
         typesofdiscountsPage.NavigationHelper(Pages.DISCONTTAYPES);
         typesofdiscountsPage.ClickNew();
         typesofdiscountsPage.AddArabicName("");
+        typesofdiscountsPage.AddEnglishName(ownedName("DiscountTypes", "invalid-name"));
         typesofdiscountsPage.AddSecretCode(typesofdiscountsPage.generateRandomNumber());
         typesofdiscountsPage.AddDiscount(10);
         typesofdiscountsPage.ClickSaveButton();
@@ -124,7 +133,7 @@ public class TaypeOfDiscountTest extends BaseTest {
         TypesofdiscountsPage typesofdiscountsPage = new TypesofdiscountsPage(driver);
         typesofdiscountsPage.NavigationHelper(Pages.DISCONTTAYPES);
         typesofdiscountsPage.ClickNew();
-        typesofdiscountsPage.AddArabicName("test");
+        typesofdiscountsPage.AddArabicName(ownedName("DiscountTypes", "validation"));
         typesofdiscountsPage.AddDiscount(10);
         typesofdiscountsPage.ClickSaveButton();
         Assert.assertTrue(typesofdiscountsPage.IsSecretCodeRequiredErrorDisplayed());
@@ -145,9 +154,13 @@ public class TaypeOfDiscountTest extends BaseTest {
         TypesofdiscountsPage typesofdiscountsPage = new TypesofdiscountsPage(driver);
         typesofdiscountsPage.NavigationHelper(Pages.DISCONTTAYPES);
         typesofdiscountsPage.ClickNew();
-        typesofdiscountsPage.AddArabicName("test");
+        typesofdiscountsPage.AddArabicName(ownedName("DiscountTypes", "validation"));
         typesofdiscountsPage.AddSecretCode(typesofdiscountsPage.generateRandomNumber());
         typesofdiscountsPage.ClickSaveButton();
         Assert.assertTrue(typesofdiscountsPage.IsPercentageRequiredErrorDisplayed());
+    }
+    private String seedDiscount(String key) {
+        return basicData().fixture(key, "DiscountTypes", TestSupport.BasicDataFixtures.fields(
+                "secretCode", String.valueOf(System.nanoTime()), "discountPercentage", 5)).name();
     }
 }

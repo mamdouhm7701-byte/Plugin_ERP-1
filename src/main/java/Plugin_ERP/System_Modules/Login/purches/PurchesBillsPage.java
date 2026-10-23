@@ -18,6 +18,7 @@ public class PurchesBillsPage extends AbstractForPurchases {
     private By ClickToTransToReturnOrder =
             By.xpath("//button[.//*[contains(@id,'fileText-icon')]]");
 
+    @Step("تحويل فاتورة المشتريات إلى مرتجع")
     public void ClickToTransToReturnOrder() {
         utilites.waits().waitForOverlayToDisappear();
         utilites.ClickElement(ClickToTransToReturnOrder);

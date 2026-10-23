@@ -35,8 +35,9 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
             try {
                 new org.testng.reporters.EmailableReporter2().generateReport(xmlSuites, suites, mailReport.toString());
                 Plugin_ERP.Utiel.Allur.ReportMail.send(mailReport);
-                LogUtils.info("Allure and TestNG reports sent successfully.");
-                System.setProperty("report.mail.last.status", "sent");
+                LogUtils.info("sent".equals(System.getProperty("report.mail.last.status"))
+                        ? "SMTP accepted summary and Allure/TestNG delivery."
+                        : "SMTP accepted summary; large report delivery incomplete. See target/report-mail/deliveries.");
             } finally {
                 try (var paths = Files.walk(mailReport)) {
                     for (Path path : paths.sorted(java.util.Comparator.reverseOrder()).toList()) Files.deleteIfExists(path);
@@ -160,6 +161,20 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
     @Override
     public void onTestStart(ITestResult result) {
         testStartTime.set(System.currentTimeMillis());
+        if (WebDriverFactory.getDriver() != null) {
+            Plugin_ERP.Utiel.Allur.ScenarioAccess.capture(WebDriverFactory.getDriver(), "الشاشة عند بدء الحالة");
+            Plugin_ERP.Utiel.Allur.ScenarioAssertions.begin();
+            var method = result.getMethod().getConstructorOrMethod().getMethod();
+            if (method != null) {
+                var description = method.getAnnotation(io.qameta.allure.Description.class);
+                var story = method.getAnnotation(io.qameta.allure.Story.class);
+                String title = description != null ? description.value() : story != null ? story.value() : null;
+                if (title != null && !title.isBlank()) {
+                    String readable = title.length() > 180 ? title.substring(0, 180) + "…" : title;
+                    io.qameta.allure.Allure.getLifecycle().updateTestCase(test -> test.setName(readable));
+                }
+            }
+        } else Plugin_ERP.Utiel.Allur.ScenarioAssertions.end();
 
         // Update browser values without dropping the other run metadata.
         try {
@@ -179,16 +194,19 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
 
     @Override
     public void onTestSuccess(ITestResult result) {
+        Plugin_ERP.Utiel.Allur.ScenarioAssertions.end();
         takeScreenshot(result, "PASS");
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
+        Plugin_ERP.Utiel.Allur.ScenarioAssertions.end();
         takeScreenshot(result, "FAIL");
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
+        Plugin_ERP.Utiel.Allur.ScenarioAssertions.end();
         takeScreenshot(result, "SKIPPED");
     }
 
@@ -197,6 +215,9 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
     private void takeScreenshot(ITestResult result, String status) {
         WebDriver driver = WebDriverFactory.getDriver();
         if (driver == null) return;
+
+        Plugin_ERP.Utiel.Allur.ScenarioAccess.capture(driver,
+                "FAIL".equals(status) ? "الشاشة وقت الخطأ" : "الشاشة عند انتهاء الحالة");
 
         ScreenShotsUtils.takeScreenShot(driver, status + "_" + result.getName());
     }

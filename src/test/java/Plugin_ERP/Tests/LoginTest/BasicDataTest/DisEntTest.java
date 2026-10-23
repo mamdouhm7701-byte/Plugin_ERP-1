@@ -2,14 +2,14 @@ package Plugin_ERP.Tests.LoginTest.BasicDataTest;
 
 import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.System_Modules.Login.BasicData.DistributionEntityPage;
-import Plugin_ERP.Tests.LoginTest.BaseTest;
+import TestSupport.BasicDataScenarioTest;
 import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class DisEntTest extends BaseTest {
+public class DisEntTest extends BasicDataScenarioTest {
     private String uniqueName(String suffix) {
-        return "QA-DIST-" + suffix + "-" + System.currentTimeMillis();
+        return ownedName("ExchangeDestinations", suffix);
     }
 
     private DistributionEntityPage openPage() {
@@ -27,25 +27,6 @@ public class DisEntTest extends BaseTest {
                 page.GetExactMatchCount(name), 1, "يجب ظهور سجل الاختبار مرة واحدة: " + name);
     }
 
-    private void cleanup(DistributionEntityPage page, String... names) {
-        for (String name : names) {
-            if (name == null || name.isBlank()) continue;
-            try {
-                page.CloseFormIfOpen();
-                page.Search("");
-                if (page.GetExactMatchCount(name) == 0) continue;
-                page.RequestDeleteByName(name);
-                page.ConfirmDelete();
-            } catch (Exception e) {
-                System.err.println(
-                        "Could not clean owned Distribution Entity '"
-                                + name
-                                + "': "
-                                + e.getMessage());
-            }
-        }
-    }
-
     @Test(priority = 0)
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
@@ -54,7 +35,9 @@ public class DisEntTest extends BaseTest {
     @Story("DE-001 بنية قائمة جهات الصرف")
     @Description("يتحقق من ظهور الكود واسم جهة الصرف وإجراءات الصفوف.")
     public void DE_001_ListStructureIsDisplayed() {
-        Assert.assertTrue(openPage().IsListStructureDisplayed());
+        DistributionEntityPage page = openPage();
+        create(page, uniqueName("LIST"), null);
+        Assert.assertTrue(page.IsListStructureDisplayed());
     }
 
     @Test(priority = 1)
@@ -100,6 +83,7 @@ public class DisEntTest extends BaseTest {
         DistributionEntityPage page = openPage();
         int before = page.GetEditableRowCount();
         page.ClickNew();
+        page.AddEnglishName(uniqueName("INVALID-NAME"));
         page.ClickSaveButton();
         Assert.assertTrue(page.IsArabicNameRequiredDisplayed());
         Assert.assertEquals(page.GetEditableRowCount(), before);
@@ -118,6 +102,7 @@ public class DisEntTest extends BaseTest {
         int before = page.GetEditableRowCount();
         page.ClickNew();
         page.AddArabicName("   ");
+        page.AddEnglishName(uniqueName("WHITESPACE"));
         page.ClickSaveButton();
         Assert.assertTrue(page.IsArabicNameRequiredDisplayed());
         Assert.assertEquals(page.GetEditableRowCount(), before);
@@ -135,16 +120,12 @@ public class DisEntTest extends BaseTest {
         DistributionEntityPage page = openPage();
         String name = uniqueName("CREATE");
         String english = "Distribution " + System.currentTimeMillis();
-        try {
-            create(page, name, english);
-            page.OpenForEditByName(name);
-            Assert.assertEquals(page.GetArabicNameValue(), name);
-            Assert.assertEquals(page.GetEnglishNameValue(), english);
-            Assert.assertFalse(page.GetCodeValue().isBlank());
-            page.ClickCloseButton();
-        } finally {
-            cleanup(page, name);
-        }
+        create(page, name, english);
+        page.OpenForEditByName(name);
+        Assert.assertEquals(page.GetArabicNameValue(), name);
+        Assert.assertEquals(page.GetEnglishNameValue(), english);
+        Assert.assertFalse(page.GetCodeValue().isBlank());
+        page.ClickCloseButton();
     }
 
     @Test(priority = 6)
@@ -157,17 +138,13 @@ public class DisEntTest extends BaseTest {
     public void DE_007_AccountCanBeOmitted() {
         DistributionEntityPage page = openPage();
         String name = uniqueName("NO-ACCOUNT");
-        try {
-            create(page, name, null);
-            page.OpenForEditByName(name);
-            Assert.assertEquals(page.GetArabicNameValue(), name);
-            Assert.assertEquals(page.GetEnglishNameValue(), name);
-            Assert.assertTrue(
-                    page.GetSelectedAccountValue().isEmpty(), "يجب ألا يكون هناك حساب محدد");
-            page.ClickCloseButton();
-        } finally {
-            cleanup(page, name);
-        }
+        create(page, name, null);
+        page.OpenForEditByName(name);
+        Assert.assertEquals(page.GetArabicNameValue(), name);
+        Assert.assertEquals(page.GetEnglishNameValue(), name);
+        Assert.assertTrue(
+                page.GetSelectedAccountValue().isEmpty(), "يجب ألا يكون هناك حساب محدد");
+        page.ClickCloseButton();
     }
 
     @Test(priority = 7)
@@ -180,16 +157,12 @@ public class DisEntTest extends BaseTest {
     public void DE_021_EditOwnedEntity() {
         DistributionEntityPage page = openPage();
         String name = uniqueName("EDIT");
-        String updated = name + "-UPDATED";
-        try {
-            create(page, name, "Edit entity");
-            page.OpenForEditByName(name);
-            page.AddArabicName(updated);
-            page.ClickSaveButton();
-            Assert.assertEquals(page.GetExactMatchCount(updated), 1);
-        } finally {
-            cleanup(page, updated, name);
-        }
+        String updated = uniqueName("UPDATED");
+        create(page, name, "Edit entity");
+        page.OpenForEditByName(name);
+        page.AddArabicName(updated);
+        page.ClickSaveButton();
+        Assert.assertEquals(page.GetExactMatchCount(updated), 1);
     }
 
     @Test(priority = 8)
@@ -201,7 +174,8 @@ public class DisEntTest extends BaseTest {
     @Description("يتحقق من تجاهل التعديل عند إغلاق النموذج دون حفظ.")
     public void DE_022_CancelEditRetainsOriginal() {
         DistributionEntityPage page = openPage();
-        String name = page.GetFirstCellByHeader("اسم جهة الصرف");
+        String name = uniqueName("CANCEL-ORIGINAL");
+        create(page, name, null);
         page.OpenForEditByName(name);
         page.AddArabicName(uniqueName("CANCEL-EDIT"));
         page.ClickCloseButton();
@@ -220,15 +194,11 @@ public class DisEntTest extends BaseTest {
     public void DE_023_DeleteOwnedEntity() {
         DistributionEntityPage page = openPage();
         String name = uniqueName("DELETE");
-        try {
-            create(page, name, null);
-            page.RequestDeleteByName(name);
-            Assert.assertTrue(page.IsDeleteConfirmationDisplayed());
-            page.ConfirmDelete();
-            Assert.assertEquals(page.GetExactMatchCount(name), 0);
-        } finally {
-            cleanup(page, name);
-        }
+        create(page, name, null);
+        page.RequestDeleteByName(name);
+        Assert.assertTrue(page.IsDeleteConfirmationDisplayed());
+        page.ConfirmDelete();
+        Assert.assertEquals(page.GetExactMatchCount(name), 0);
     }
 
     @Test(priority = 10)
@@ -241,15 +211,11 @@ public class DisEntTest extends BaseTest {
     public void DE_024_CancelDeleteRetainsEntity() {
         DistributionEntityPage page = openPage();
         String name = uniqueName("CANCEL-DELETE");
-        try {
-            create(page, name, null);
-            page.RequestDeleteByName(name);
-            Assert.assertTrue(page.IsDeleteConfirmationDisplayed());
-            page.CancelDelete();
-            Assert.assertEquals(page.GetExactMatchCount(name), 1);
-        } finally {
-            cleanup(page, name);
-        }
+        create(page, name, null);
+        page.RequestDeleteByName(name);
+        Assert.assertTrue(page.IsDeleteConfirmationDisplayed());
+        page.CancelDelete();
+        Assert.assertEquals(page.GetExactMatchCount(name), 1);
     }
 
     @Test(priority = 11)
@@ -262,13 +228,9 @@ public class DisEntTest extends BaseTest {
     public void DE_032_PersistsAfterRefresh() {
         DistributionEntityPage page = openPage();
         String name = uniqueName("REFRESH");
-        try {
-            create(page, name, "Refresh entity");
-            driver.navigate().refresh();
-            page = openPage();
-            Assert.assertEquals(page.GetExactMatchCount(name), 1);
-        } finally {
-            cleanup(page, name);
-        }
+        create(page, name, "Refresh entity");
+        driver.navigate().refresh();
+        page = openPage();
+        Assert.assertEquals(page.GetExactMatchCount(name), 1);
     }
 }

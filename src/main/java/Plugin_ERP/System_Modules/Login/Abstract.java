@@ -362,8 +362,9 @@ public abstract class Abstract {
         LogUtils.info("تم الانتقال الى: " + url);
     }
 
-    @Step("اضافه رابط الصفحه:{route}")
+    @Step("فتح شاشة {route}")
     public void NavigationHelper(Pages route) {
+        Plugin_ERP.Utiel.Allur.ScreenNames.opening(route.getRoute());
         utilites.waits().waitForOverlayToDisappear();
 
         browserAction.OpenNavigationHelper(Pages.valueOf(route.name()));

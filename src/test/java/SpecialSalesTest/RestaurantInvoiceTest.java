@@ -8,7 +8,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 @Epic("المبيعات")
-@Feature("فاتورة المطعم المستقلة")
+@Feature("فاتورة المطعم")
 public class RestaurantInvoiceTest extends SpecialSalesScenario {
     protected SpecialSalesPage createPage() {
         return new RestaurantInvoicePage(driver);
@@ -20,6 +20,7 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
         return (RestaurantInvoicePage) page;
     }
 
+    @Step("إنشاء طلب بصنف وتعليقه على الطاولة")
     private SpecialSalesTestData.Record holdOrder() {
         table = data.table();
         restartPage();
@@ -31,12 +32,13 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
         prepareSave();
         restaurant().hold();
         var invoice = saved();
-        Assert.assertEquals(data.read(invoice).get("isOnHold"), true);
+        Assert.assertEquals(data.read(invoice).get("isOnHold"), true, "مطابقة حالة تعليق الفاتورة");
         number(data.balance(item, 1), "999");
         number(data.balance(item, 2), "1000");
         return invoice;
     }
 
+    @Step("استرجاع الطلب المعلق وفتح أصنافه")
     private void reopen(SpecialSalesTestData.Record invoice) {
         restaurant().type("داخلية");
         restaurant().selectTable(data.read(table).get("code").toString());
@@ -44,12 +46,12 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
     }
 
     @Test
-    @Story("استقلال الصفحة")
-    @Description("التحقق من قناة المطعم والعميل والمخزن المملوكين للاختبار.")
+    @Story("إعدادات الشاشة عند الفتح")
+    @Description("التحقق من قناة المطعم والعميل والمخزن المحددين.")
     public void ownedDefaultsAndChannel() {
-        Assert.assertEquals(page.document().get("transactionChannel"), "Resturant");
-        Assert.assertEquals(page.document().get("dealerId"), customer.id());
-        Assert.assertEquals(page.document().get("storeId"), data.store(1).id());
+        Assert.assertEquals(page.document().get("transactionChannel"), "Resturant", "مطابقة قناة البيع");
+        Assert.assertEquals(page.document().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
+        Assert.assertEquals(page.document().get("storeId"), data.store(1).id(), "مطابقة المخزن");
     }
 
     @Test
@@ -59,7 +61,7 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
                     + " مجرد الإضافة.")
     public void catalogAddsItem() {
         add();
-        Assert.assertEquals(lines().size(), 1);
+        Assert.assertEquals(lines().size(), 1, "مطابقة عدد بنود الفاتورة");
         number(page.document().get("total"), "100");
         number(data.balance(item, 1), "1000");
     }
@@ -92,15 +94,15 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
     public void deliveryAndExternal() {
         var restaurant = (RestaurantInvoicePage) page;
         restaurant.type("توصيل");
-        Assert.assertEquals(page.document().get("restaurantInvoiceType"), "Delivery");
+        Assert.assertEquals(page.document().get("restaurantInvoiceType"), "Delivery", "مطابقة نوع طلب المطعم");
         restaurant.type("خارجية");
-        Assert.assertEquals(page.document().get("restaurantInvoiceType"), "External");
+        Assert.assertEquals(page.document().get("restaurantInvoiceType"), "External", "مطابقة نوع طلب المطعم");
     }
 
     @Test
     @Story("تعليق الطلب")
     @Description(
-            "حفظ طلب داخلي معلق على طاولة مملوكة يخصم الكمية فور التعليق من المخزن المحدد فقط.")
+            "حفظ طلب داخلي معلق على الطاولة المحددة يخصم الكمية فور التعليق من المخزن المحدد فقط.")
     public void holdDeductsStockImmediately() {
         holdOrder();
     }
@@ -111,7 +113,7 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
     public void reopeningHoldKeepsItems() {
         var invoice = holdOrder();
         reopen(invoice);
-        Assert.assertEquals(lines().size(), 1);
+        Assert.assertEquals(lines().size(), 1, "مطابقة عدد بنود الفاتورة");
         page.waitTotal("100");
         number(data.balance(item, 1), "999");
     }
@@ -155,7 +157,7 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
     @Test
     @Story("دفع المعلق")
     @Description(
-            "دفع طلب معلق بطريقة دفع مملوكة وإغلاقه يحفظ الدفع دون تكرار خصم المخزون المحجوز عند"
+            "دفع طلب معلق بطريقة الدفع المحددة وإغلاقه يحفظ الدفع دون تكرار خصم المخزون المحجوز عند"
                     + " التعليق.")
     public void payingHoldDoesNotDeductAgain() {
         var payment = data.payment();
@@ -169,16 +171,16 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
         var paid = saved();
         Assert.assertEquals(paid.id(), invoice.id());
         var stored = data.read(paid);
-        Assert.assertEquals(stored.get("isComplete"), true);
-        Assert.assertEquals(stored.get("isOnHold"), false);
-        Assert.assertTrue(stored.get("payments").toString().contains(payment.id().toString()));
+        Assert.assertEquals(stored.get("isComplete"), true, "مطابقة حالة اكتمال الفاتورة");
+        Assert.assertEquals(stored.get("isOnHold"), false, "مطابقة حالة تعليق الفاتورة");
+        Assert.assertTrue(stored.get("payments").toString().contains(payment.id().toString()), "التحقق من دفعات الفاتورة");
         number(data.balance(item, 1), "999");
     }
 
     @Test
     @Story("دفع طلب خارجي")
     @Description(
-            "حفظ طلب خارجي مدفوع بطريقة دفع مستقلة والتحقق من مرجع الدفع وخصم الصنف من المخزن.")
+            "حفظ طلب خارجي مدفوع بطريقة الدفع المحددة والتحقق من مرجع الدفع وخصم الصنف من المخزن.")
     public void savesPaidExternalOrder() {
         var payment = data.payment();
         restartPage();
@@ -191,7 +193,7 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
         restaurant().payAndClose();
         var invoice = saved();
         Assert.assertTrue(
-                data.read(invoice).get("payments").toString().contains(payment.id().toString()));
+                data.read(invoice).get("payments").toString().contains(payment.id().toString()), "التحقق من دفعات الفاتورة");
         number(data.balance(item, 1), "999");
     }
 
@@ -222,7 +224,7 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
         restaurant().payAndClose();
         var paid = saved();
         var stored = data.read(paid);
-        Assert.assertFalse(((java.util.List<?>) stored.get("payments")).isEmpty());
+        Assert.assertFalse(((java.util.List<?>) stored.get("payments")).isEmpty(), "التحقق من دفعات الفاتورة");
         restaurant().invoices();
         page.invoiceAction(paid.id(), stored.get("code").toString(), "trash");
         page.confirm(true);
@@ -269,7 +271,7 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
     @Test
     @Story("حفظ وطباعة المطعم")
     @Description(
-            "حفظ وطباعة طلب مطعم خارجي جديد بطريقة دفع مملوكة والتحقق من الإيصال الفعلي وحفظ فاتورة"
+            "حفظ وطباعة طلب مطعم خارجي جديد بطريقة الدفع المحددة والتحقق من الإيصال الفعلي وحفظ فاتورة"
                     + " واحدة فقط وخصم وحدة واحدة من المخزون.")
     public void savesAndPrintsOneInvoice() {
         var payment = data.payment();
@@ -293,7 +295,7 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
                 data.read(invoice.get())
                         .get("payments")
                         .toString()
-                        .contains(payment.id().toString()));
+                        .contains(payment.id().toString()), "التحقق من دفعات الفاتورة");
         number(data.balance(item, 1), "999");
     }
 }

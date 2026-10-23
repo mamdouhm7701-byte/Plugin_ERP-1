@@ -36,7 +36,7 @@ public class ManufacturingTest extends StoreScenarioTest {
     }
 
     @Test(groups = "stores")
-    @Story("حذف سند الاختبار فقط مع التحقق من عكس الرصيد")
+    @Story("حذف السند فقط مع التحقق من عكس الرصيد")
     public void DeleteManufacturingByBarcodeTest() {
         deleteOwn();
     }

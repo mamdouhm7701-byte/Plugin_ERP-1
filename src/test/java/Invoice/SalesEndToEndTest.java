@@ -50,15 +50,15 @@ public final class SalesEndToEndTest extends SalesScenarioTest {
         page.slCapture(marker, data.store(1).id(), item.id(), kind().endpoint);
         page.slNotes(marker + "-RETURN");
         Assert.assertEquals(page.slDocument().get("sourceTransactionId"), invoice.id());
-        Assert.assertEquals(page.slDocument().get("dealerId"), customer.id());
-        Assert.assertEquals(page.slDocument().get("agentId"), agent.id());
+        Assert.assertEquals(page.slDocument().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
+        Assert.assertEquals(page.slDocument().get("agentId"), agent.id(), "مطابقة المندوب");
         page.slQuantity(item.name(), "3");
         page.slWaitNet(salesNet("300"));
 
         var returned = save(false);
         var storedReturn = data.read(returned);
         Assert.assertEquals(storedReturn.get("sourceTransactionId"), invoice.id());
-        Assert.assertEquals(firstLine(storedReturn).get("itemId"), item.id());
+        Assert.assertEquals(firstLine(storedReturn).get("itemId"), item.id(), "مطابقة الصنف");
         sameNumber(firstLine(storedReturn).get("quantity"), "3");
         sameNumber(storedReturn.get("net"), salesNet("300"));
         assertStock("3");

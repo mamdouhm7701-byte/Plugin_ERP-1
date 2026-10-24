@@ -26,6 +26,9 @@ final class StoreFixtureApiStub {
 
     boolean missingDelete400;
     boolean missingDeleteForExisting;
+    String activeOrigin = "offline";
+    String activeBranch = "branch-test";
+    int missingBranchReads;
     boolean rejectBranchUnlink;
     boolean timeoutBranchUnlinkAfterCommit;
     boolean rejectMovement;
@@ -58,11 +61,15 @@ final class StoreFixtureApiStub {
                         getClass().getClassLoader(),
                         new Class<?>[] {WebDriver.class, JavascriptExecutor.class},
                         (proxy, method, args) -> {
-                            if (method.getName().equals("executeScript"))
-                                return ((String) args[0])
-                                                .startsWith("return document.querySelector")
-                                        ? "branch-test"
-                                        : true;
+                            if (method.getName().equals("executeScript")) {
+                                String script = (String) args[0];
+                                if (script.startsWith("return location.origin")) return activeOrigin;
+                                if (script.startsWith("return document.querySelector")) {
+                                    if (missingBranchReads > 0) { missingBranchReads--; return null; }
+                                    return activeBranch;
+                                }
+                                return true;
+                            }
                             if (method.getName().equals("manage")) return options;
                             if (method.getName().equals("executeAsyncScript"))
                                 return request((Object[]) args[1]);
@@ -74,6 +81,9 @@ final class StoreFixtureApiStub {
 
     @SuppressWarnings("unchecked")
     Object request(Object[] args) {
+        if (missingBranchReads > 0 || !java.util.Objects.equals(args[3], activeOrigin)
+                || !java.util.Objects.equals(args[4], activeBranch))
+            return Map.of("error", "ERP origin or branch changed; refusing fixture access");
         String action = (String) args[0], endpoint = (String) args[1];
         Map<String, Object> values = (Map<String, Object>) args[2];
         if (endpoint.equals("Branches")) {

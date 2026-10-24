@@ -53,6 +53,15 @@ final class StoreFixtureDefinitions {
     return data.fixture("item-"+index,"Items",values);
   }
 
+  /** Posted inventory audits need one store; a second retained store wastes licensed capacity. */
+  Record inventoryItem(int index){
+    Map<String,Object> values=itemValues();
+    values.put("stores",List.of(fields("storeId",data.store(1).id(),"itemPlace","QA",
+        "openingBalance",1000,"currentBalance",1000,"minimumLimit",0,"reorderLimit",0,
+        "costPrice",80,"isActive",true)));
+    return data.fixture("inventory-item-"+index,"Items",values);
+  }
+
   Record manufactured(){return manufactured(1);}
 
   Record manufactured(int index){

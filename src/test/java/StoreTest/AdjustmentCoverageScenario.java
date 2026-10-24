@@ -28,7 +28,7 @@ public abstract class AdjustmentCoverageScenario extends BaseTest {
     @BeforeClass(alwaysRun=true) public void closeOwnedStocktakingThroughUi() {
         requirePreparedSession();
         refs=new StoreTestData(driver); documents=new BasicDataFixtures(driver); page=new ScreenPage(driver);
-        refs.beginScenario();documents.beginScenario(); item=refs.item(1);
+        refs.beginScenario();documents.beginScenario(); item=refs.inventoryItem(1);
         BigDecimal before=new BigDecimal(refs.balance(item,1).toString());
         expected=before.add(new BigDecimal("1.25").multiply(BigDecimal.valueOf(stockDirection())));
         String marker=documents.reserveName("Stocktakings","close-for-"+endpoint());

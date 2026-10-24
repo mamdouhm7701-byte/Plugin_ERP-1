@@ -132,6 +132,9 @@ final class StoreTestData implements AutoCloseable {
   Record item(int index) {
       return definitions.item(index);
   }
+  Record inventoryItem(int index) {
+      return definitions.inventoryItem(index);
+  }
   Record manufactured() {
       return definitions.manufactured();
   }
@@ -158,10 +161,11 @@ final class StoreTestData implements AutoCloseable {
   /** A stocktaking close may reload the application; wait only for the original session. */
   void awaitOriginalSession() {
     new WebDriverWait(driver,Duration.ofSeconds(30)).until(d->{
-      Object actualOrigin=((JavascriptExecutor)d).executeScript("return location.origin");
+      Object location=((JavascriptExecutor)d).executeScript("return location.origin");
+      String actualOrigin=location instanceof String value?value:"offline";
       Object branch=((JavascriptExecutor)d).executeScript("return document.querySelector('#app')?.__vue__?.$store?.getters['app/currentBranch']?.id");
       if(!origin.equals(actualOrigin)||(branch!=null&&!sessionBranchId.equals(branch)))
-        throw new AssertionError("Original inventory session changed after closing stocktaking");
+        throw new AssertionError("Warehouse fixture origin or branch changed; refusing access");
       return sessionBranchId.equals(branch);
     });
   }
@@ -265,6 +269,7 @@ final class StoreTestData implements AutoCloseable {
   }
 
   private Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
+      awaitOriginalSession();
       return api.call(action, endpoint, values);
   }
 

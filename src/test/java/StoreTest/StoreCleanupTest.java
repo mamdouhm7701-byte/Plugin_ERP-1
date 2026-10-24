@@ -11,6 +11,55 @@ import org.testng.annotations.Test;
 
 public class StoreCleanupTest {
     @Test
+    public void fixtureCallWaitsForOriginalBranchToHydrateAfterNavigation() {
+        StoreFixtureApiStub api = new StoreFixtureApiStub();
+        try (StoreTestData data = new StoreTestData(api.driver())) {
+            api.missingBranchReads = 2;
+            Assert.assertNotNull(data.store(1).id());
+            Assert.assertEquals(api.missingBranchReads, 0);
+        }
+        Assert.assertTrue(api.records.isEmpty());
+    }
+
+    @Test
+    public void fixtureCallStillRejectsAnActualBranchChangeBeforeMutation() {
+        StoreFixtureApiStub api = new StoreFixtureApiStub();
+        StoreTestData data = new StoreTestData(api.driver());
+        api.activeBranch = "another-branch";
+        Assert.expectThrows(AssertionError.class, () -> data.store(1));
+        Assert.assertTrue(api.records.isEmpty());
+        api.activeBranch = "branch-test";
+        data.close();
+    }
+
+    @Test
+    public void fixtureCallStillRejectsAnActualOriginChangeBeforeMutation() {
+        StoreFixtureApiStub api = new StoreFixtureApiStub();
+        StoreTestData data = new StoreTestData(api.driver());
+        api.activeOrigin = "https://another-tenant.invalid";
+        Assert.expectThrows(AssertionError.class, () -> data.store(1));
+        Assert.assertTrue(api.records.isEmpty());
+        api.activeOrigin = "offline";
+        data.close();
+    }
+
+    @Test
+    public void postedInventoryFixtureCreatesOnlyTheStoreItsAuditNeeds() {
+        StoreFixtureApiStub api = new StoreFixtureApiStub();
+        try (StoreTestData data = new StoreTestData(api.driver())) {
+            var item = data.inventoryItem(1);
+            var stores = (List<?>) item.values().get("stores");
+            Assert.assertEquals(stores.size(), 1, "Inventory audit must not retain an unused second store");
+            var stock = (Map<?, ?>) stores.getFirst();
+            Assert.assertEquals(stock.get("storeId"), data.store(1).id());
+            Assert.assertEquals(stock.get("openingBalance"), 1000);
+            Assert.assertEquals(api.records.values().stream()
+                    .filter(row -> String.valueOf(row.get("arabicName")).contains("store-2-")).count(), 0L);
+        }
+        Assert.assertTrue(api.records.isEmpty(), "Unposted fixture must remain fully cleanable");
+    }
+
+    @Test
     public void uncertainCreateStillRejectsUntrackedMovementInOwnedStore() {
         StoreFixtureApiStub api = new StoreFixtureApiStub();
         StoreTestData data = new StoreTestData(api.driver());

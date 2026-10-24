@@ -30,7 +30,8 @@ public final class TreasuryLedgerCoverageTest extends BaseTest {
             String username="qa_treasury_"+UUID.randomUUID().toString().replace("-", "");
             String password=UUID.randomUUID()+"Aa1!";
             var permissions=List.of("viewCollectionTransactions","addCollectionTransactions","viewPaymentTransactions",
-                    "addPaymentTransactions","EnableSaveCollectionWithoutAllocation","viewCustomers","viewSuppliers","viewAgents","viewSafes","viewPaymentMethods");
+                    // The aggregate omits UserSafes without this permission, even for an owned open handover.
+                    "addPaymentTransactions","EnableSaveCollectionWithoutAllocation","viewCustomers","viewSuppliers","viewAgents","viewSafes","viewSafeTransactions","viewPaymentMethods");
             var user=basic.fixture("ledger-user","users",fields("userName",username,"passwordHash",password,
                     "isAdmin",false,"isActive",true,"agentId",null,"maxAllowedDiscount",0,"paymentMethodType","Safe","safeId",safe.id(),
                     "permissions",permissions.stream().map(id->fields("permissionId",id)).toList(),
@@ -121,7 +122,15 @@ public final class TreasuryLedgerCoverageTest extends BaseTest {
             io.qameta.allure.Allure.addAttachment("Treasury operator form","image/png",
                     new java.io.ByteArrayInputStream(((TakesScreenshot)operator).getScreenshotAs(OutputType.BYTES)),".png");
             throw new AssertionError("Treasury movement did not save. Validation: "+page.validationMessages(),failure);
-        } finally { refs.rememberAttempts(page.capturedAttempts(),marker); }
+        } finally {
+            refs.rememberAttempts(page.capturedAttempts(),marker);
+            // Re-reading the capture must also acknowledge saves already confirmed by the server.
+            // Otherwise a successful create is requeued as an uncertain write during audit retention.
+            for(var captured:page.capturedSaves()) {
+                var values=(Map<String,Object>)captured.get("values");
+                refs.track((String)captured.get("endpoint"),captured.get("id"),marker,values);
+            }
+        }
     }
     private void exact(Object actual,String expected) {
         Assert.assertNotNull(actual);Assert.assertEquals(new BigDecimal(actual.toString()).compareTo(new BigDecimal(expected)),0);

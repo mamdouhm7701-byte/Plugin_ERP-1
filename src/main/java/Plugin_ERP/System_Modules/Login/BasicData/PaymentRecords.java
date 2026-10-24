@@ -1,0 +1,153 @@
+package Plugin_ERP.System_Modules.Login.BasicData;
+
+import Plugin_ERP.System_Modules.Login.AbstractForDealer;
+import io.qameta.allure.Step;
+import java.time.Duration;
+import java.util.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.*;
+
+/** Payment Records: focused operations used by the original page facade. */
+final class PaymentRecords {
+    private final PaymentPage owner;
+    private final WebDriver driver;
+    PaymentRecords(PaymentPage owner, WebDriver driver) {
+        this.owner = owner;
+        this.driver = driver;
+    }
+    private final By rows = By.cssSelector("table tbody tr[role='row']"),
+            headers = By.cssSelector("table thead th"),
+            save = By.cssSelector("button[data-action-type='save']");
+    private boolean visible(By b) { return owner.recordVisible(b); }
+    private void waitLoading() { owner.recordWaitLoading(); }
+    private void waitAlert() { owner.recordWaitAlert(); }
+
+    boolean IsListStructureDisplayed() {
+        List<String> h =
+                driver.findElements(headers).stream()
+                        .filter(WebElement::isDisplayed)
+                        .map(e -> e.getText().trim())
+                        .toList();
+        boolean headings =
+                h.stream().anyMatch(s -> s.contains("الكود"))
+                        && h.stream().anyMatch(s -> s.contains("طريقة الدفع"));
+        List<WebElement> editable =
+                driver.findElements(rows).stream()
+                        .filter(WebElement::isDisplayed)
+                        .filter(
+                                r ->
+                                        !r.findElements(
+                                                        By.cssSelector(
+                                                                "button[data-action-type='edit']"))
+                                                .isEmpty())
+                        .toList();
+        return headings
+                && !editable.isEmpty()
+                && editable.stream()
+                        .allMatch(
+                                r ->
+                                        !r.findElements(
+                                                        By.cssSelector(
+                                                                "button[data-action-type='delete']"))
+                                                .isEmpty());
+    }
+
+    int GetExactMatchCount(String n) {
+        int count = 0;
+        for (WebElement r : driver.findElements(rows))
+            try {
+                if (!r.isDisplayed()) continue;
+                for (WebElement c : r.findElements(By.cssSelector("td")))
+                    if (c.getText().trim().equals(n)) {
+                        count++;
+                        break;
+                    }
+            } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
+            }
+        return count;
+    }
+
+    WebElement row(String n) {
+        return new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(
+                        d ->
+                                d.findElements(rows).stream()
+                                        .filter(WebElement::isDisplayed)
+                                        .filter(
+                                                r ->
+                                                        r
+                                                                .findElements(By.cssSelector("td"))
+                                                                .stream()
+                                                                .anyMatch(
+                                                                        c ->
+                                                                                c.getText()
+                                                                                        .trim()
+                                                                                        .equals(n)))
+                                        .findFirst()
+                                        .orElse(null));
+    }
+
+    void openEdit(WebElement r) {
+        r.findElement(By.cssSelector("button[data-action-type='edit']")).click();
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(save));
+    }
+
+    void OpenForEditByName(String n) {
+        openEdit(row(n));
+    }
+
+    void RequestDeleteByName(String n) {
+        row(n).findElement(By.cssSelector("button[data-action-type='delete']")).click();
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(
+                        ExpectedConditions.visibilityOfElementLocated(
+                                By.cssSelector(".swal2-popup")));
+    }
+
+    boolean IsDeleteConfirmationDisplayed() {
+        return visible(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-confirm"))
+                && visible(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"));
+    }
+
+    void ConfirmDelete() {
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(
+                        ExpectedConditions.elementToBeClickable(
+                                By.cssSelector(
+                                        ".swal2-container.swal2-backdrop-show .swal2-confirm")))
+                .click();
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(
+                        d ->
+                                d
+                                        .findElements(
+                                                By.cssSelector(
+                                                        ".swal2-container.swal2-backdrop-show .swal2-cancel"))
+                                        .stream()
+                                        .noneMatch(
+                                                e -> {
+                                                    try {
+                                                        return e.isDisplayed();
+                                                    } catch (Exception ignored) {
+                                                        return false;
+                                                    }
+                                                }));
+        waitLoading();
+        By success =
+                By.xpath(
+                        "//div[contains(@class,'swal2-popup') and contains(normalize-space(.),'تم الحذف')]");
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(3))
+                    .until(ExpectedConditions.visibilityOfElementLocated(success));
+            owner.DismissAlertIfPresent();
+        } catch (org.openqa.selenium.TimeoutException ignored) {
+        }
+    }
+
+    void CancelDelete() {
+        driver.findElement(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"))
+                .click();
+        waitAlert();
+    }
+}

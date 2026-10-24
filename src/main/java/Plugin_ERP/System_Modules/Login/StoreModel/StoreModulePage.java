@@ -11,19 +11,24 @@ import org.openqa.selenium.support.ui.*;
 
 /** Warehouse UI interactions; scenarios and persisted inventory assertions live in tests. */
 public class StoreModulePage extends AbstractForStore {
+    private final StoreRecordList records;
+    private final StoreSaveCapture saveCapture;
+    private final StoreItemSelection itemSelection;
     protected final WebDriverWait ready;
     private final FormInteractions interactions;
-    private Object ownedId;
-    private String ownedMarker;
-    private By listSearch;
+    private final StoreDocumentLines lines;
 
     public StoreModulePage(WebDriver driver) {
         super(driver);
+        saveCapture = new StoreSaveCapture(this);
+        itemSelection = new StoreItemSelection(this);
         ready = new WebDriverWait(driver, Duration.ofSeconds(35));
         ready.ignoring(StaleElementReferenceException.class)
                 .ignoring(ElementClickInterceptedException.class);
         interactions = new FormInteractions(ready,
                 element -> js("arguments[0].scrollIntoView({block:'center',inline:'center'})", element));
+        lines = new StoreDocumentLines(this, driver, ready);
+        records = new StoreRecordList(this, driver, ready);
     }
 
     public void smAwaitSession() {
@@ -60,7 +65,7 @@ public class StoreModulePage extends AbstractForStore {
         smType(by, value, true);
     }
 
-    private void smType(By by, String value, boolean blur) {
+    void smType(By by, String value, boolean blur) {
         interactions.type(by, value, blur, FormInteractions.InputMode.CLEAR_REPLACE);
     }
 
@@ -185,242 +190,67 @@ public class StoreModulePage extends AbstractForStore {
                 });
     }
 
-    private By line(String name) {
-        return By.xpath("//form//tbody/tr[.//td[contains(normalize-space(),'" + name + "')]]");
-    }
-
     public int smLineCount(String name) {
-        return (int)
-                driver.findElements(line(name)).stream().filter(WebElement::isDisplayed).count();
+        return lines.smLineCount(name);
     }
 
     public Map<String, String> smLineValues(String name) {
-        return ready.until(
-                d -> {
-                    WebElement row =
-                            d.findElements(line(name)).stream()
-                                    .filter(WebElement::isDisplayed)
-                                    .findFirst()
-                                    .orElse(null);
-                    if (row == null) return null;
-                    Map<String, String> values = new LinkedHashMap<>();
-                    for (WebElement header :
-                            row.findElement(By.xpath("ancestor::table[1]"))
-                                    .findElements(By.cssSelector("thead th"))) {
-                        js("arguments[0].scrollIntoView({block:'center',inline:'center'})", header);
-                        String label = header.getText().trim();
-                        if (label.isBlank()) continue;
-                        List<WebElement> cells =
-                                row.findElements(
-                                        By.cssSelector(
-                                                "td[aria-colindex='"
-                                                        + header.getDomAttribute("aria-colindex")
-                                                        + "']"));
-                        if (cells.isEmpty()) continue;
-                        WebElement cell = cells.get(0);
-                        js("arguments[0].scrollIntoView({block:'center',inline:'center'})", cell);
-                        List<WebElement> inputs =
-                                cell.findElements(By.cssSelector("input:not([type='hidden'])"));
-                        values.put(
-                                label,
-                                inputs.isEmpty()
-                                        ? cell.getText().trim()
-                                        : inputs.get(0).getDomProperty("value"));
-                    }
-                    return values;
-                });
-    }
-
-    private void radio(String value) {
-        ready.until(
-                d -> {
-                    for (WebElement input :
-                            d.findElements(
-                                    By.cssSelector(
-                                            "form input[type='radio'][value='" + value + "']"))) {
-                        if (!input.isSelected()) {
-                            WebElement label = input.findElement(By.xpath("ancestor::label[1]"));
-                            js(
-                                    "arguments[0].scrollIntoView({block:'center',inline:'center'})",
-                                    label);
-                            label.click();
-                        }
-                        return input.isSelected();
-                    }
-                    return false;
-                });
+        return lines.smLineValues(name);
     }
 
     @Step("إضافة الصنف بالاسم: {name}")
     public void smAddName(String name) {
-        radio("name");
-        smType(By.cssSelector("form input#autosuggest__input"), name, false);
-        try {
-            smClick(
-                    By.xpath(
-                            "//div[@id='autosuggest-autosuggest__results']//li[contains(normalize-space(),'"
-                                    + name
-                                    + "')] | //span[contains(@class,'my-suggestion-item') and contains(normalize-space(),'"
-                                    + name
-                                    + "')]"));
-            ready.until(d -> smLineCount(name) > 0);
-        } catch (TimeoutException e) {
-            throw new AssertionError(
-                    "Owned item did not appear in name autocomplete. "
-                            + smItemCacheDiagnostics(name),
-                    e);
-        }
+        itemSelection.smAddName(name);
     }
 
     @Step("إضافة الصنف بالباركود: {barcode}")
     public void smAddBarcode(String barcode, String name) {
-        radio("barcode");
-        smType(
-                By.cssSelector("form input[placeholder='بحث ....']:not(#autosuggest__input)"),
-                barcode,
-                false);
-        ready.until(
-                d -> {
-                    for (WebElement input :
-                            d.findElements(
-                                    By.cssSelector(
-                                            "form input[placeholder='بحث ....']:not(#autosuggest__input)")))
-                        if (input.isDisplayed()) {
-                            input.sendKeys(Keys.ENTER);
-                            return true;
-                        }
-                    return false;
-                });
-        try {
-            ready.until(d -> smLineCount(name) > 0);
-        } catch (TimeoutException e) {
-            throw new AssertionError(
-                    "Owned barcode did not add its item. " + smItemCacheDiagnostics(name), e);
-        }
-    }
-
-    private Object smItemCacheDiagnostics(String name) {
-        return js(
-                "const raw=sessionStorage.getItem('cachedArray');let rows;try{rows=JSON.parse(raw)}catch(e){return {cacheInvalid:true}}return {cachePresent:raw!==null,cacheCount:Array.isArray(rows)?rows.length:null,ownedItemCached:Array.isArray(rows)&&rows.some(r=>r.arabicName===arguments[0]),lookups:window.__storeQA?.lookups||[]}",
-                name);
+        itemSelection.smAddBarcode(barcode, name);
     }
 
     @Step("إضافة الصنف من قائمة الأصناف: {name}")
     public void smAddPicker(String name) {
-        smButton("إضافة أصناف");
-        smType(By.cssSelector(".modal.show input[label-text='arabicName']"), name);
-        smClick(
-                By.xpath(
-                        "//div[contains(@class,'modal') and contains(@class,'show')]//tr[.//td[contains(normalize-space(),'"
-                                + name
-                                + "')]]//button[.//*[local-name()='svg' and contains(@class,'feather-plus')]]"));
-        smClick(
-                By.xpath(
-                        "//div[contains(@class,'modal') and contains(@class,'show')]//button[normalize-space()='حفظ']"));
-        ready.until(d -> smLineCount(name) > 0);
+        itemSelection.smAddPicker(name);
     }
 
     @Step("تحديد كمية {name}: {quantity}")
     public void smQuantity(String name, String quantity) {
-        ready.until(
-                d -> {
-                    WebElement row =
-                            d.findElements(line(name)).stream()
-                                    .filter(WebElement::isDisplayed)
-                                    .findFirst()
-                                    .orElse(null);
-                    if (row == null) return false;
-                    WebElement table = row.findElement(By.xpath("ancestor::table[1]"));
-                    String col =
-                            table.findElements(By.cssSelector("thead th")).stream()
-                                    .filter(e -> e.getText().trim().equals("الكمية"))
-                                    .map(e -> e.getDomAttribute("aria-colindex"))
-                                    .findFirst()
-                                    .orElseThrow(
-                                            () -> new AssertionError("Quantity column missing"));
-                    List<WebElement> inputs =
-                            row.findElements(
-                                    By.cssSelector(
-                                            "td[aria-colindex='"
-                                                    + col
-                                                    + "'] input:not([type='hidden'])"));
-                    for (WebElement e : inputs) {
-                        js("arguments[0].scrollIntoView({block:'center',inline:'center'})", e);
-                        if (!e.isDisplayed() || !e.isEnabled()) continue;
-                        e.click();
-                        e.sendKeys(Keys.CONTROL + "a");
-                        e.sendKeys(quantity);
-                        e.sendKeys(Keys.TAB);
-                        return new java.math.BigDecimal(e.getDomProperty("value"))
-                                .compareTo(new java.math.BigDecimal(quantity)) == 0;
-                    }
-                    return false;
-                });
+        lines.smQuantity(name, quantity);
     }
 
     @Step("حذف الصنف {name} من السند")
     public void smRemoveLine(String name) {
-        smClick(
-                By.xpath(
-                        "//form//tr[.//td[contains(normalize-space(),'"
-                                + name
-                                + "')]]//button[.//*[local-name()='svg' and contains(@class,'feather-trash')]]"));
-        ready.until(d -> smLineCount(name) == 0);
+        lines.smRemoveLine(name);
     }
 
     public void smCapture(String marker, Object storeId, Object itemId) {
-        js(
-                """
-    const store=document.querySelector('#app').__vue__.$store;
-    window.__storeQA={marker:arguments[0],storeId:arguments[1],itemId:arguments[2],saves:[],attempts:[],pending:0,errors:[],lookups:[],uiErrors:[]};
-    if(!window.__storeQAErrorsInstalled){window.__storeQAErrorsInstalled=true;
-      addEventListener('error',e=>window.__storeQA?.uiErrors.push(e.message));
-      addEventListener('unhandledrejection',e=>window.__storeQA?.uiErrors.push(String(e.reason?.stack||e.reason)));}
-    if(store.__storeQACaptureInstalled)return;store.__storeQACaptureInstalled=true;const dispatch=store.dispatch.bind(store);
-    store.dispatch=function(action,payload,...rest){const cap=window.__storeQA;
-      const lookup=cap&&action==='app/get'&&/^items[?]/i.test(payload?.url||'')&&String(payload.url).includes('storeId='+cap.storeId);
-      const owned=cap&&['app/create','app/update'].includes(action)&&
-        ((typeof payload?.data?.notes==='string'&&payload.data.notes.startsWith(cap.marker))||
-        (payload?.url==='ManufacturingOrders'&&payload.data?.storeId===cap.storeId&&payload.data.lines?.length>0&&payload.data.lines.every(l=>l.itemId===cap.itemId)));
-      const sent=owned?JSON.parse(JSON.stringify(payload.data)):null;if(owned){cap.pending++;cap.attempts.push({endpoint:payload.url,values:sent});}
-      return dispatch(action,payload,...rest).then(result=>{if(lookup){const data=result?.data||result;cap.lookups.push({url:payload.url,total:data?.totalRecords,items:data?.pageData?.map(i=>({id:i.id,arabicName:i.arabicName,currentBalance:i.currentBalance,costPrice:i.costPrice,stores:i.stores?.map(s=>({storeId:s.storeId,currentBalance:s.currentBalance,costPrice:s.costPrice}))}))});}
-        if(owned){cap.pending--;const entity=result?.data||result;
-        cap.saves.push({endpoint:payload.url,id:sent.id||entity?.id||(typeof entity==='string'||typeof entity==='number'?entity:null),values:sent});}return result;})
-        .catch(error=>{const detail=error?.response?.data??error?.data??{message:error?.message,errors:error?.errors,error:error?.error,title:error?.title,detail:error?.detail,code:error?.code};
-          const diagnostic=JSON.stringify({status:error?.response?.status??error?.status,detail});
-          if(lookup)cap.lookups.push({url:payload.url,error:diagnostic,status:error?.response?.status});if(owned){cap.pending--;cap.errors.push(diagnostic);}throw error;});};
-    """,
-                marker,
-                storeId,
-                itemId);
+        saveCapture.smCapture(marker, storeId, itemId);
     }
 
     public String smCaptureMarker() {
-        return (String) js("return window.__storeQA?.marker||null");
+        return saveCapture.smCaptureMarker();
     }
 
     @SuppressWarnings("unchecked")
     public List<Map<String, Object>> smSaves() {
-        return (List<Map<String, Object>>) js("return window.__storeQA?.saves||[]");
+        return saveCapture.smSaves();
     }
 
     @SuppressWarnings("unchecked")
     public List<Map<String, Object>> smAttempts() {
-        return (List<Map<String, Object>>) js("return window.__storeQA?.attempts||[]");
+        return saveCapture.smAttempts();
     }
 
     public void smSettled() {
-        ready.until(d -> !Boolean.TRUE.equals(js("return (window.__storeQA?.pending||0)>0")));
+        saveCapture.smSettled();
     }
 
     public String smSaveErrors() {
-        return String.valueOf(js("return window.__storeQA?.errors||[]"));
+        return saveCapture.smSaveErrors();
     }
 
     public String smDiagnostics() {
-        return String.valueOf(
-                js(
-                        "return JSON.stringify({lookups:window.__storeQA?.lookups||[],errors:window.__storeQA?.uiErrors||[],saveErrors:window.__storeQA?.errors||[],attempts:window.__storeQA?.attempts||[],saves:window.__storeQA?.saves||[]})"));
+        return saveCapture.smDiagnostics();
     }
 
     @Step("فتح السند للتعديل")
@@ -436,94 +266,29 @@ public class StoreModulePage extends AbstractForStore {
 
     @Step("البحث عن السند فقط: {marker}")
     public void smFind(String route, String marker, Object id, Object code) {
-        if (!marker.startsWith("QA-ST-") || id == null)
-            throw new AssertionError("Refuse unrelated warehouse row");
-        ownedId = id;
-        ownedMarker = marker;
-        smOpen(route);
-        By search =
-                By.cssSelector(
-                        route.equals("damage-adjustment")
-                                ? "input[placeholder*='بحث']"
-                                : "input#code,input[name='fCode']");
-        listSearch = search;
-        ready.until(
-                d -> {
-                    if (d.findElements(search).stream().anyMatch(WebElement::isDisplayed))
-                        return true;
-                    for (WebElement b :
-                            d.findElements(
-                                    By.xpath(
-                                            "//button[contains(normalize-space(),'عرض التصفية')]")))
-                        if (b.isDisplayed()) {
-                            b.click();
-                            break;
-                        }
-                    return false;
-                });
-        smType(search, route.equals("damage-adjustment") ? marker : code.toString());
-        ready.until(d -> smHasDocument(marker));
+        records.smFind(route, marker, id, code);
     }
 
     @Step("البحث عن السند: {value}")
     public void smSearch(String value) {
-        smType(listSearch, value);
-    }
-
-    private By ownedRow() {
-        return By.cssSelector(
-                "tbody tr[data-pk='"
-                        + ownedId
-                        + "'],tbody tr[id$='__row_"
-                        + ownedId
-                        + "'],tbody tr:has([id*='invoice-row-"
-                        + ownedId
-                        + "-'])");
+        records.smSearch(value);
     }
 
     public boolean smHasDocument(String marker) {
-        return marker.equals(ownedMarker)
-                && driver.findElements(ownedRow()).stream().anyMatch(WebElement::isDisplayed);
+        return records.smHasDocument(marker);
     }
 
     @Step("حذف السند فقط: {marker}")
     public void smDeleteOwn(String marker, boolean confirm) {
-        if (!marker.startsWith("QA-ST-") || !marker.equals(ownedMarker) || ownedId == null)
-            throw new AssertionError("Refuse unrelated document deletion");
-        ready.until(
-                d -> {
-                    for (WebElement row : d.findElements(ownedRow()))
-                        for (WebElement b :
-                                row.findElements(
-                                        By.cssSelector(
-                                                "[data-action-type='delete'],[id*='-delete-']"))) {
-                            js("arguments[0].scrollIntoView({block:'center',inline:'center'})", b);
-                            if (b.isDisplayed() && b.isEnabled()) {
-                                b.click();
-                                return true;
-                            }
-                        }
-                    return false;
-                });
-        smClick(By.cssSelector(confirm ? "button.swal2-confirm" : "button.swal2-cancel"));
-        ready.until(
-                ExpectedConditions.invisibilityOfElementLocated(
-                        By.cssSelector(".swal2-container")));
+        records.smDeleteOwn(marker, confirm);
     }
 
     public List<String> smHeaders() {
-        return driver.findElements(By.cssSelector("thead th")).stream()
-                .filter(WebElement::isDisplayed)
-                .map(WebElement::getText)
-                .toList();
+        return records.smHeaders();
     }
 
     @Step("تصدير القائمة بصيغة {format}")
     public void smExport(String format) {
-        smClick(
-                By.cssSelector(
-                        "button:has(img[src*='"
-                                + (format.equals("pdf") ? "pdf." : "xls.")
-                                + "'])"));
+        records.smExport(format);
     }
 }

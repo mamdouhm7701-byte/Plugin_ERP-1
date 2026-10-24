@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Final architecture refactor verification: serial Demo, owned fixtures, existing cleanup. -->
+<suite name="Page responsibilities final verification" parallel="none" configfailurepolicy="continue">
+    <test name="Changed page capabilities" preserve-order="true"><classes>
+        <class name="Invoice.SalesInvoiceCoverageTest"><methods>
+            <include name="savesAndPrintsOwnedInvoice"/>
+        </methods></class>
+        <class name="Purches.PurchaseInvoiceCoverageTest"><methods>
+            <include name="savesAndPrintsOwnedDocument"/>
+        </methods></class>
+        <class name="DealerModelTest.CustomersTest"><methods>
+            <include name="CU_005_OwnedCustomerCreateEditDelete"/>
+        </methods></class>
+        <class name="DealerModelTest.MainDealerTest"><methods>
+            <include name="MD_011_CancelDelete"/>
+        </methods></class>
+        <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest"><methods>
+            <include name="BK_022_CancelEditDoesNotChangeBank"/>
+            <include name="BK_024_CancelDeleteRetainsBank"/>
+        </methods></class>
+        <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.DisEntTest"><methods>
+            <include name="DE_021_EditOwnedEntity"/>
+        </methods></class>
+        <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.ExpensesTest"><methods>
+            <include name="EX_021_EditOwned"/>
+        </methods></class>
+        <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.PaymentTest"><methods>
+            <include name="PAY_021_EditOwned"/>
+        </methods></class>
+        <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest"><methods>
+            <include name="REV_021_EditOwned"/>
+        </methods></class>
+        <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.RoutLineTest"><methods>
+            <include name="RL_021_EditOwned"/>
+        </methods></class>
+        <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.StoreTest"><methods>
+            <include name="STORE_006_EditOwned"/>
+        </methods></class>
+        <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest"><methods>
+            <include name="AR_030_NavigateAreaPagesWhenAvailable"/>
+        </methods></class>
+        <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest"><methods>
+            <include name="WH_028_SafeListCanBeSortedByCode"/>
+        </methods></class>
+        <class name="GenralAccountantTest.VouchersTest"><methods>
+            <include name="MultiLineDecimalTotalsTest"/>
+        </methods></class>
+        <class name="StoreTest.TransBetweenStoreTest"><methods>
+            <include name="SM_DecimalQuantity"/>
+        </methods></class>
+        <class name="ProductsTest.AddProductsTest"><methods>
+            <include name="addNewProductWithValidData"/>
+            <include name="AddComponent"/>
+        </methods></class>
+        <class name="FinancialMovementsTest.CustomerReceiptTest"><methods>
+            <include name="AddCustomerWithSaveAndCustomerReceiptTest"/>
+        </methods></class>
+        <class name="SpecialSalesTest.PointOfSaleTest"><methods>
+            <include name="quantityButtons"/>
+        </methods></class>
+    </classes></test>
+</suite>

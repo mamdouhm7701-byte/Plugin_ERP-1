@@ -2,6 +2,24 @@
 
 هذه الملفات تختار سيناريوهات فعلية من مشروع TestNG الحالي. اسم المجموعة يوضح غرض تشغيلها، ولا يغير النتيجة المتوقعة أو يخفي عيباً معروفاً. الشرح المختصر موجود أيضاً كتعليقات عربية داخل كل ملف XML وكلاسات الرحلات الجديدة.
 
+## تحديث24 أكتوبر2026 وإعادة التشغيل المنتظرة
+
+نجحت459 حالة محلية بعد إصلاح مقارنة مسار E2E عند فتح مرتجع مرتبط بمعرّف فاتورة في معاملات الرابط. يظل الرابط الكامل مستخدمًا للتنقل، وتُقارن جاهزية Vue Router بمساره دون معاملات. يحتفظ التقاط المستندات بنوع المستند الحقيقي عند التنظيف، مع تحقق مستقل من نوع المستند المحفوظ في خطوة الرحلة. إعادة التشغيل الحي بعد هذا التعديل بانتظار نتائج المستخدم.
+
+للتشغيل على Demo دون تغيير ملف الإعدادات، شغّل الأوامر التالية **واحدًا بعد الآخر بعد اكتمال السابق وتنظيفه**. لا تستخدم `mvn clean` بين الرنات؛ سجلات استعادة البيانات داخل `target` مطلوبة عند التعطل. اختَر اسم ملف سجل جديدًا لكل إعادة كي تحتفظ بالمحاولات السابقة.
+
+```powershell
+$env:REPORT_MAIL_ENABLED='false'
+mvn --batch-mode --no-transfer-progress '-DTenant=Demo' '-DExecutionType=LocalHeadless' '-Dallure.report.generate=false' '-Dallure.report.open=false' '-Dallure.results.directory=target/manual-verification/smoke/allure-results' '-Dsurefire.suiteXmlFiles=src/test/resources/smoke-testng.xml' test *> smoke-demo.log
+mvn --batch-mode --no-transfer-progress '-DTenant=Demo' '-DExecutionType=LocalHeadless' '-Dallure.report.generate=false' '-Dallure.report.open=false' '-Dallure.results.directory=target/manual-verification/sanity/allure-results' '-Dsurefire.suiteXmlFiles=src/test/resources/sanity-testng.xml' test *> sanity-demo.log
+mvn --batch-mode --no-transfer-progress '-DTenant=Demo' '-DExecutionType=LocalHeadless' '-Dallure.report.generate=false' '-Dallure.report.open=false' '-Dallure.results.directory=target/manual-verification/e2e/allure-results' '-Dsurefire.suiteXmlFiles=src/test/resources/e2e-testng.xml' test *> e2e-demo.log
+mvn --batch-mode --no-transfer-progress '-DTenant=Demo' '-DExecutionType=LocalHeadless' '-Dallure.report.generate=false' '-Dallure.report.open=false' '-Dallure.results.directory=target/manual-verification/regression/allure-results' '-Dsurefire.suiteXmlFiles=src/test/resources/regression-testng.xml' test *> regression-demo.log
+```
+
+هذه أوامر مستقلة؛ لا تنتقل تلقائيًا للمجموعة التالية بعد فشل تجهيز أو تنظيف غير مفهوم. مدة Regression تعتمد على البيئة والانتظار والتنظيف؛ تقدير8 ساعات ليس مهلة إنهاء أو دليل اكتمال. احفظ سجل كل رن ونتيجته النهائية ونتائج Allure قبل تشغيل التالي لأن مجلد Surefire الافتراضي يُعاد استخدامه.
+
+يُعتمد التشغيل بعد اكتمال Maven وخطافات التنظيف، ومراجعة عدد الحالات المنفذة والمتخطاة وفشل التهيئة، وفرز كل فشل. بجات البرنامج المعروفة تبقى فاشلة ومرفقة بالأدلة؛ لا تجعل خروج Maven بالفشل عطل أتمتة تلقائيًا، ولا تجعل انتهاء الرن وحده نجاحًا. بعد وصول النتائج نحدّث الحالة الفعلية لكل مجموعة؛ لا يُعلن نجاحها مسبقًا.
+
 ## سياسة العميل المستخدم في الاختبارات
 
 العميل العادي، بما فيه العميل الافتراضي المؤقت لنقاط البيع والمطعم، ينشأ خاضعاً للضريبة (`isTaxable=true`) ودائماً (`isOnTheFly=false`) وله حساب مستقل وصلاحية التعامل مع سندات التحصيل (`creditNote=true`). لا نستخدم العميل النقدي كبديل للعميل المستمر خلال البيع والمرتجع والتحصيل في E2E. صلاحيتا `cashSales` و`creditSales` تسمحان بأنواع الفواتير؛ تفعيل الأولى لا يجعل العميل نفسه نقدياً. مورد رحلة الشراء والسداد يسمح بسند الصرف (`debitNote=true`) كي يستمر نفس الطرف عبر الشاشتين.
@@ -65,7 +83,7 @@ API يجهز المراجع كالوحدة والمخزن والطرف والص�
 الاستثناءات المقصودة:
 
 - ملفات `additional/legacy/sales-compatibility-testng.xml` و`additional/legacy/purchases-compatibility-testng.xml` خارج Regression لتجنب تكرار المداخل القديمة المكافئة.
-- تسليم الخزينة وأنواع الخصم القديمة وخط سير المندوب القديم خارج المجموعة الجديدة لأنها تستخدم أسماء ثابتة أو تختار سجلات دون عزل كاف. ملفاتها القديمة لم تُحذف؛ تحتاج ترحيل بياناتها قبل ضمها.
+- تسليم الخزينة وأنواع الخصم موجودان حاليًا ضمن `basic-data-testng.xml`، وخط سير المندوب ضمن `dealer-model-testng.xml`؛ وأضيف دفتر الخزينة المستقل إلى `financial-movements-testng.xml`. وصف استبعادهما في المراجعات القديمة لم يعد يصف ملفات التشغيل الحالية.
 - اختبارات المصادقة المستقلة موجودة في `login-testng.xml`: جلسة جديدة لكل حالة، والتحقق من الوصول للصفحة الرئيسية عند نجاح الدخول، أو رسالة رفض حساب غير موجود والبقاء في شاشة الدخول. لا تدخل ضمن Smoke حاليًا. `BaseTest` يسجل الدخول قبل اختبارات الواجهة، ثم العملية المختارة تثبت إمكان الوصول والعمل.
 - ملفات الفحص اليدوي أو التجريبي و`PurchaseDiscoveryTest` والمداخل القديمة لا تضاف لمجرد أنها تحمل اسم Test.
 

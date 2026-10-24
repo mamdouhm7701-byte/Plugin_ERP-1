@@ -13,14 +13,17 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class AreaPage extends AbstractForDealer {
+    private final AreaRecordActions recordControls;
+    private final AreaGridControls grid;
 
-    private final By searchInput = By.cssSelector("input[placeholder='بحث ....']");
     private final By areaRows = By.cssSelector("table tbody tr[role='row']");
     private final By saveButton = By.cssSelector("button[data-action-type='save']");
     private final By areaHeaders = By.cssSelector("table thead th");
 
     public AreaPage(WebDriver driver) {
         super(driver);
+        grid = new AreaGridControls(this, driver, this::waitForAreaRows, this::findAreaRow);
+        recordControls = new AreaRecordActions(this, driver);
     }
 
     // locators
@@ -43,14 +46,7 @@ public class AreaPage extends AbstractForDealer {
 
     @Step("البحث عن منطقة: {name}")
     public void SearchArea(String name) {
-        utilites.waits().waitForOverlayToDisappear();
-        WebElement input =
-                new WebDriverWait(driver, Duration.ofSeconds(10))
-                        .until(ExpectedConditions.visibilityOfElementLocated(searchInput));
-        input.clear();
-        input.sendKeys(name);
-        input.sendKeys(Keys.ENTER);
-        waitForAreaRows();
+        recordControls.SearchArea(name);
     }
 
     @Override
@@ -79,21 +75,17 @@ public class AreaPage extends AbstractForDealer {
 
     @Step("فتح تعديل المنطقة المحددة بالاسم: {name}")
     public void EditAreaByName(String name) {
-        WebElement row = findAreaRow(name);
-        row.findElement(By.cssSelector("button[data-action-type='edit']")).click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOfElementLocated(saveButton));
+        recordControls.EditAreaByName(name);
     }
 
     @Step("حذف المنطقة المحددة بالاسم: {name}")
     public void DeleteAreaByName(String name) {
-        RequestDeleteAreaByName(name);
-        ConfirmAreaDelete();
+        recordControls.DeleteAreaByName(name);
     }
 
     @Step("التحقق من وجود المنطقة: {name}")
     public boolean IsAreaDisplayed(String name) {
-        return driver.findElements(areaRows).stream().anyMatch(row -> row.getText().contains(name));
+        return recordControls.IsAreaDisplayed(name);
     }
 
     @Step("التحقق من الاسم العربي الإلزامي")
@@ -105,14 +97,7 @@ public class AreaPage extends AbstractForDealer {
     }
 
     private WebElement findAreaRow(String name) {
-        return new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        d ->
-                                d.findElements(areaRows).stream()
-                                        .filter(row -> row.findElements(By.cssSelector("td")).stream()
-                                                .anyMatch(cell -> cell.getText().trim().equals(name)))
-                                        .findFirst()
-                                        .orElse(null));
+        return recordControls.findAreaRow(name);
     }
 
     @Step("التحقق من أعمدة وإجراءات قائمة المناطق")
@@ -169,97 +154,31 @@ public class AreaPage extends AbstractForDealer {
 
     @Step("قراءة عدد صفوف المناطق الظاهرة")
     public int GetVisibleAreaRowCount() {
-        return (int)
-                driver.findElements(areaRows).stream()
-                        .filter(WebElement::isDisplayed)
-                        .filter(
-                                row -> {
-                                    String text = row.getText().trim().toLowerCase();
-                                    return !text.contains("لا يوجد بيانات")
-                                            && !text.contains(
-                                                    "there are no records matching your request")
-                                            && !text.contains("no matching records")
-                                            && !text.contains("no data");
-                                })
-                        .count();
+        return grid.GetVisibleAreaRowCount();
     }
 
     @Step("قراءة عدد السجلات المطابقة للاسم الدقيق: {name}")
     public int GetExactAreaMatchCount(String name) {
-        return (int)
-                driver.findElements(areaRows).stream()
-                        .filter(WebElement::isDisplayed)
-                        .filter(
-                                row ->
-                                        row.findElements(By.cssSelector("td")).stream()
-                                                .anyMatch(
-                                                        cell -> cell.getText().trim().equals(name)))
-                        .count();
+        return grid.GetExactAreaMatchCount(name);
     }
 
     @Step("قراءة قيمة أول صف في عمود: {headerName}")
     public String GetFirstAreaCellByHeader(String headerName) {
-        int index = getColumnIndex(headerName);
-        WebElement row =
-                driver.findElements(areaRows).stream()
-                        .filter(WebElement::isDisplayed)
-                        .filter(
-                                candidate ->
-                                        !candidate
-                                                .findElements(
-                                                        By.cssSelector(
-                                                                "button[data-action-type='edit']"))
-                                                .isEmpty())
-                        .findFirst()
-                        .orElseThrow(() -> new IllegalStateException("No Area row is displayed"));
-        return row.findElements(By.cssSelector("td")).get(index).getText().trim();
+        return grid.GetFirstAreaCellByHeader(headerName);
     }
 
     public String GetAreaCellByName(String name, String headerName) {
-        return findAreaRow(name).findElements(By.cssSelector("td"))
-                .get(getColumnIndex(headerName)).getText().trim();
+        return grid.GetAreaCellByName(name, headerName);
     }
 
     @Step("قراءة قيم عمود المناطق: {headerName}")
     public java.util.List<String> GetAreaColumnValues(String headerName) {
-        int index = getColumnIndex(headerName);
-        return driver.findElements(areaRows).stream()
-                .filter(WebElement::isDisplayed)
-                .filter(
-                        row ->
-                                !row.findElements(By.cssSelector("button[data-action-type='edit']"))
-                                        .isEmpty())
-                .map(row -> row.findElements(By.cssSelector("td")).get(index).getText().trim())
-                .toList();
-    }
-
-    private int getColumnIndex(String headerName) {
-        java.util.List<WebElement> headers = driver.findElements(areaHeaders);
-        for (int i = 0; i < headers.size(); i++)
-            if (headers.get(i).getText().contains(headerName)) return i;
-        throw new IllegalStateException("Area column not found: " + headerName);
+        return grid.GetAreaColumnValues(headerName);
     }
 
     @Step("فتح أول منطقة للتعديل")
     public void OpenFirstAreaForEdit() {
-        WebElement row =
-                driver.findElements(areaRows).stream()
-                        .filter(WebElement::isDisplayed)
-                        .filter(
-                                candidate ->
-                                        !candidate
-                                                .findElements(
-                                                        By.cssSelector(
-                                                                "button[data-action-type='edit']"))
-                                                .isEmpty())
-                        .findFirst()
-                        .orElseThrow(
-                                () ->
-                                        new IllegalStateException(
-                                                "No editable Area row is displayed"));
-        row.findElement(By.cssSelector("button[data-action-type='edit']")).click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOfElementLocated(saveButton));
+        recordControls.OpenFirstAreaForEdit();
     }
 
     @Step("قراءة كود المنطقة من النموذج")
@@ -290,210 +209,62 @@ public class AreaPage extends AbstractForDealer {
 
     @Step("قراءة حجم الصفحة المحدد")
     public int GetAreaPageSize() {
-        return Integer.parseInt(
-                new Select(getPageSizeSelect()).getFirstSelectedOption().getText().trim());
+        return grid.GetAreaPageSize();
     }
 
     @Step("قراءة حجم صفحة بديل أكبر من {current}")
     public int GetAlternativeAreaPageSize(int current) {
-        return new Select(getPageSizeSelect())
-                .getOptions().stream()
-                        .map(o -> o.getText().trim())
-                        .filter(s -> s.matches("\\d+"))
-                        .map(Integer::parseInt)
-                        .filter(n -> n > current)
-                        .findFirst()
-                        .orElseThrow(
-                                () -> new IllegalStateException("No larger Area page size option"));
+        return grid.GetAlternativeAreaPageSize(current);
     }
 
     @Step("اختيار حجم الصفحة: {size}")
     public void SelectAreaPageSize(int size) {
-        new Select(getPageSizeSelect()).selectByVisibleText(String.valueOf(size));
-        waitForAreaRows();
-    }
-
-    private WebElement getPageSizeSelect() {
-        return driver.findElements(By.cssSelector("select")).stream()
-                .filter(WebElement::isDisplayed)
-                .filter(
-                        s ->
-                                s.findElements(By.cssSelector("option")).stream()
-                                        .anyMatch(o -> o.getText().matches("\\d+")))
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Area page-size selector not found"));
+        grid.SelectAreaPageSize(size);
     }
 
     @Step("فتح صفحة المنطقة التالية")
     public void GoToNextAreaPage() {
-        clickPageButton(true);
+        grid.GoToNextAreaPage();
     }
 
     @Step("العودة إلى صفحة المناطق السابقة")
     public void GoToPreviousAreaPage() {
-        clickPageButton(false);
+        grid.GoToPreviousAreaPage();
     }
 
     @Step("التحقق من إمكانية الانتقال إلى الصفحة التالية")
     public boolean IsNextAreaPageEnabled() {
-        java.util.List<WebElement> buttons = getPageButtons();
-        return !buttons.isEmpty() && isPageButtonEnabled(buttons.get(buttons.size() - 1));
-    }
-
-    private void clickPageButton(boolean next) {
-        java.util.List<WebElement> buttons = getPageButtons();
-        WebElement button = buttons.get(next ? buttons.size() - 1 : 0);
-        if (!isPageButtonEnabled(button))
-            throw new IllegalStateException("Requested Area page is not available");
-        String firstCode = GetFirstAreaCellByHeader("الكود");
-        button.click();
-        new WebDriverWait(driver, Duration.ofSeconds(15))
-                .until(d -> !GetFirstAreaCellByHeader("الكود").equals(firstCode));
-    }
-
-    private java.util.List<WebElement> getPageButtons() {
-        java.util.List<WebElement> buttons =
-                driver
-                        .findElements(
-                                By.cssSelector(
-                                        ".pagination .page-item button, .pagination .page-item a, .page-item button,"
-                                                + " .page-item a"))
-                        .stream()
-                        .filter(WebElement::isDisplayed)
-                        .toList();
-        return buttons.size() < 3 ? java.util.List.of() : buttons;
-    }
-
-    private boolean isPageButtonEnabled(WebElement button) {
-        String classes =
-                (button.getAttribute("class")
-                                + " "
-                                + button.findElement(
-                                                By.xpath(
-                                                        "ancestor::*[contains(@class,'page-item')][1]"))
-                                        .getAttribute("class"))
-                        .toLowerCase();
-        return button.isEnabled()
-                && !classes.contains("disabled")
-                && !"true".equals(button.getAttribute("aria-disabled"));
+        return grid.IsNextAreaPageEnabled();
     }
 
     @Step("فرز قائمة المناطق حسب العمود: {headerName}")
     public void ClickAreaColumnHeader(String headerName) {
-        driver.findElements(areaHeaders).stream()
-                .filter(WebElement::isDisplayed)
-                .filter(h -> h.getText().contains(headerName))
-                .findFirst()
-                .orElseThrow(
-                        () -> new IllegalStateException("Area header not found: " + headerName))
-                .click();
-        waitForAreaRows();
+        grid.ClickAreaColumnHeader(headerName);
     }
 
     @Step("ترتيب أكواد المناطق تصاعديًا أو تنازليًا")
     public java.util.List<String> SortAreaCodes(java.util.List<String> values, boolean ascending) {
-        java.util.List<String> sorted = new java.util.ArrayList<>(values);
-        sorted.sort(
-                (left, right) -> {
-                    int comparison;
-                    try {
-                        comparison = Long.compare(Long.parseLong(left), Long.parseLong(right));
-                    } catch (NumberFormatException ignored) {
-                        comparison = left.compareToIgnoreCase(right);
-                    }
-                    return ascending ? comparison : -comparison;
-                });
-        return sorted;
+        return grid.SortAreaCodes(values, ascending);
     }
 
     @Step("طلب حذف المنطقة المحددة: {name}")
     public void RequestDeleteAreaByName(String name) {
-        findAreaRow(name).findElement(By.cssSelector("button[data-action-type='delete']")).click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        ExpectedConditions.visibilityOfElementLocated(
-                                By.cssSelector(".swal2-popup")));
+        recordControls.RequestDeleteAreaByName(name);
     }
 
     @Step("التحقق من نافذة تأكيد حذف المنطقة")
     public boolean IsAreaDeleteConfirmationDisplayed() {
-        return driver
-                        .findElements(
-                                By.cssSelector(
-                                        ".swal2-container.swal2-backdrop-show .swal2-confirm"))
-                        .stream()
-                        .anyMatch(b -> b.isDisplayed() && b.getText().contains("نعم"))
-                && driver
-                        .findElements(
-                                By.cssSelector(
-                                        ".swal2-container.swal2-backdrop-show .swal2-cancel"))
-                        .stream()
-                        .anyMatch(b -> b.isDisplayed() && b.isEnabled());
+        return recordControls.IsAreaDeleteConfirmationDisplayed();
     }
 
     @Step("تأكيد حذف سجل المنطقة المحدد")
     public void ConfirmAreaDelete() {
-        WebElement confirm =
-                new WebDriverWait(driver, Duration.ofSeconds(10))
-                        .until(
-                                d ->
-                                        d
-                                                .findElements(
-                                                        By.cssSelector(
-                                                                ".swal2-container.swal2-backdrop-show .swal2-confirm"))
-                                                .stream()
-                                                .filter(WebElement::isDisplayed)
-                                                .filter(b -> b.getText().contains("نعم"))
-                                                .findFirst()
-                                                .orElse(null));
-        confirm.click();
-        new WebDriverWait(driver, Duration.ofSeconds(15))
-                .until(
-                        d ->
-                                d
-                                        .findElements(
-                                                By.cssSelector(
-                                                        ".swal2-container.swal2-backdrop-show .swal2-confirm"))
-                                        .stream()
-                                        .noneMatch(
-                                                b ->
-                                                        b.isDisplayed()
-                                                                && b.getText().contains("نعم")));
-        waitForAreaRows();
-        dismissDeleteSuccessPopup();
+        recordControls.ConfirmAreaDelete();
     }
 
     @Step("إلغاء حذف سجل المنطقة")
     public void CancelAreaDelete() {
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        ExpectedConditions.elementToBeClickable(
-                                By.cssSelector(
-                                        ".swal2-container.swal2-backdrop-show .swal2-cancel")))
-                .click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        d ->
-                                d
-                                        .findElements(
-                                                By.cssSelector(
-                                                        ".swal2-container.swal2-backdrop-show"))
-                                        .stream()
-                                        .noneMatch(WebElement::isDisplayed));
-    }
-
-    private void dismissDeleteSuccessPopup() {
-        try {
-            WebElement ok =
-                    new WebDriverWait(driver, Duration.ofSeconds(3))
-                            .until(
-                                    ExpectedConditions.elementToBeClickable(
-                                            By.cssSelector(
-                                                    ".swal2-container.swal2-backdrop-show .swal2-confirm")));
-            if (ok.getText().contains("نعم")) return;
-            ok.click();
-        } catch (org.openqa.selenium.TimeoutException ignored) {
-        }
+        recordControls.CancelAreaDelete();
     }
 
     @Step("حفظ المنطقة مرتين بسرعة")
@@ -516,4 +287,6 @@ public class AreaPage extends AbstractForDealer {
                                         .stream()
                                         .noneMatch(WebElement::isDisplayed));
     }
+    void recordWaitForAreaSaveSuccessPopupToDisappear() { waitForAreaSaveSuccessPopupToDisappear(); }
+    void recordWaitForAreaRows() { waitForAreaRows(); }
 }

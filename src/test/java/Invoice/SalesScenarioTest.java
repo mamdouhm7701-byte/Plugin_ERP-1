@@ -145,14 +145,18 @@ public abstract class SalesScenarioTest extends BaseTest {
         data.rememberAttempts(page.slAttempts(), page.slSaves(), marker);
         List<SalesTestData.Record> records = new ArrayList<>();
         for (var saved : page.slSaves()) {
-            Assert.assertEquals(saved.get("endpoint"), kind().endpoint);
+            String endpoint=(String)saved.get("endpoint");
+            Assert.assertTrue(Arrays.stream(SalesDocumentKind.values()).anyMatch(k->k.endpoint.equals(endpoint)),
+                    "Unexpected captured sales endpoint: "+endpoint);
             Map<String, Object> values = (Map<String, Object>) saved.get("values");
             String note =
                     values.get("notes") instanceof String text && text.startsWith(marker)
                             ? text
                             : marker;
-            data.track(kind().endpoint, saved.get("id"), note, values);
-            records.add(new SalesTestData.Record(kind().endpoint, saved.get("id"), note, values));
+            // A failed transition can leave the previous document's capture active.
+            // Cleanup must keep its real type, not relabel it as the next journey step.
+            data.track(endpoint, saved.get("id"), note, values);
+            records.add(new SalesTestData.Record(endpoint, saved.get("id"), note, values));
         }
         data.rememberAttempts(page.slAttempts(), page.slSaves(), marker);
         return records;
@@ -180,6 +184,7 @@ public abstract class SalesScenarioTest extends BaseTest {
         page.slSettled();
         var records = capture();
         var record = records.get(records.size() - 1);
+        Assert.assertEquals(record.endpoint(),kind().endpoint,"Saved document must match the current journey step");
         Map<String, Object> stored = data.read(record);
         Allure.addAttachment(
                 "Saved sales document",

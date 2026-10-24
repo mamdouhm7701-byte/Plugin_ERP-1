@@ -11,12 +11,14 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class PaymentPage extends AbstractForDealer {
+    private final PaymentRecords records;
     private final By rows = By.cssSelector("table tbody tr[role='row']"),
             headers = By.cssSelector("table thead th"),
             save = By.cssSelector("button[data-action-type='save']");
 
     public PaymentPage(WebDriver driver) {
         super(driver);
+        records = new PaymentRecords(this, driver);
     }
 
     private boolean visible(By b) {
@@ -113,33 +115,7 @@ public class PaymentPage extends AbstractForDealer {
 
     @Step("التحقق من أعمدة قائمة طرق الدفع")
     public boolean IsListStructureDisplayed() {
-        List<String> h =
-                driver.findElements(headers).stream()
-                        .filter(WebElement::isDisplayed)
-                        .map(e -> e.getText().trim())
-                        .toList();
-        boolean headings =
-                h.stream().anyMatch(s -> s.contains("الكود"))
-                        && h.stream().anyMatch(s -> s.contains("طريقة الدفع"));
-        List<WebElement> editable =
-                driver.findElements(rows).stream()
-                        .filter(WebElement::isDisplayed)
-                        .filter(
-                                r ->
-                                        !r.findElements(
-                                                        By.cssSelector(
-                                                                "button[data-action-type='edit']"))
-                                                .isEmpty())
-                        .toList();
-        return headings
-                && !editable.isEmpty()
-                && editable.stream()
-                        .allMatch(
-                                r ->
-                                        !r.findElements(
-                                                        By.cssSelector(
-                                                                "button[data-action-type='delete']"))
-                                                .isEmpty());
+        return records.IsListStructureDisplayed();
     }
 
     @Step("التحقق من عناصر نموذج الدفع")
@@ -162,49 +138,12 @@ public class PaymentPage extends AbstractForDealer {
 
     @Step("عدد السجلات المطابقة بالاسم الدقيق")
     public int GetExactMatchCount(String n) {
-        int count = 0;
-        for (WebElement r : driver.findElements(rows))
-            try {
-                if (!r.isDisplayed()) continue;
-                for (WebElement c : r.findElements(By.cssSelector("td")))
-                    if (c.getText().trim().equals(n)) {
-                        count++;
-                        break;
-                    }
-            } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
-            }
-        return count;
-    }
-
-    private WebElement row(String n) {
-        return new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        d ->
-                                d.findElements(rows).stream()
-                                        .filter(WebElement::isDisplayed)
-                                        .filter(
-                                                r ->
-                                                        r
-                                                                .findElements(By.cssSelector("td"))
-                                                                .stream()
-                                                                .anyMatch(
-                                                                        c ->
-                                                                                c.getText()
-                                                                                        .trim()
-                                                                                        .equals(n)))
-                                        .findFirst()
-                                        .orElse(null));
-    }
-
-    private void openEdit(WebElement r) {
-        r.findElement(By.cssSelector("button[data-action-type='edit']")).click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOfElementLocated(save));
+        return records.GetExactMatchCount(n);
     }
 
     @Step("فتح طريقة الدفع المطابقة للتعديل")
     public void OpenForEditByName(String n) {
-        openEdit(row(n));
+        records.OpenForEditByName(n);
     }
 
     private String value(By b) {
@@ -263,58 +202,23 @@ public class PaymentPage extends AbstractForDealer {
 
     @Step("طلب حذف طريقة الدفع المطابقة للاسم")
     public void RequestDeleteByName(String n) {
-        row(n).findElement(By.cssSelector("button[data-action-type='delete']")).click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        ExpectedConditions.visibilityOfElementLocated(
-                                By.cssSelector(".swal2-popup")));
+        records.RequestDeleteByName(n);
     }
 
     public boolean IsDeleteConfirmationDisplayed() {
-        return visible(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-confirm"))
-                && visible(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"));
+        return records.IsDeleteConfirmationDisplayed();
     }
 
     @Step("تأكيد حذف طريقة الدفع المحددة")
     public void ConfirmDelete() {
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        ExpectedConditions.elementToBeClickable(
-                                By.cssSelector(
-                                        ".swal2-container.swal2-backdrop-show .swal2-confirm")))
-                .click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        d ->
-                                d
-                                        .findElements(
-                                                By.cssSelector(
-                                                        ".swal2-container.swal2-backdrop-show .swal2-cancel"))
-                                        .stream()
-                                        .noneMatch(
-                                                e -> {
-                                                    try {
-                                                        return e.isDisplayed();
-                                                    } catch (Exception ignored) {
-                                                        return false;
-                                                    }
-                                                }));
-        waitLoading();
-        By success =
-                By.xpath(
-                        "//div[contains(@class,'swal2-popup') and contains(normalize-space(.),'تم الحذف')]");
-        try {
-            new WebDriverWait(driver, Duration.ofSeconds(3))
-                    .until(ExpectedConditions.visibilityOfElementLocated(success));
-            DismissAlertIfPresent();
-        } catch (org.openqa.selenium.TimeoutException ignored) {
-        }
+        records.ConfirmDelete();
     }
 
     @Step("إلغاء الحذف")
     public void CancelDelete() {
-        driver.findElement(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"))
-                .click();
-        waitAlert();
+        records.CancelDelete();
     }
+    boolean recordVisible(By b) { return visible(b); }
+    void recordWaitLoading() { waitLoading(); }
+    void recordWaitAlert() { waitAlert(); }
 }

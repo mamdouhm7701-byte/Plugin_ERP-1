@@ -12,12 +12,14 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class StorePage extends AbstractForDealer {
+    private final WarehouseRecords recordControls;
     private final By rows = By.cssSelector("table tbody tr[role='row']"),
             headers = By.cssSelector("table thead th"),
             save = By.cssSelector("button[data-action-type='save']");
 
     public StorePage(WebDriver driver) {
         super(driver);
+        recordControls = new WarehouseRecords(this, driver);
     }
 
     private boolean visible(By b) {
@@ -128,57 +130,17 @@ public class StorePage extends AbstractForDealer {
 
     @Step("التحقق من بنية قائمة المخازن")
     public boolean IsListStructureDisplayed() {
-        List<String> h =
-                driver.findElements(headers).stream()
-                        .filter(WebElement::isDisplayed)
-                        .map(e -> e.getText().trim())
-                        .toList();
-        return h.stream().anyMatch(x -> x.contains("الكود"))
-                && h.stream().anyMatch(x -> x.contains("اسم المخزن"))
-                && h.stream().anyMatch(x -> x.contains("رقم الحساب"));
+        return recordControls.IsListStructureDisplayed();
     }
 
     @Step("عدد السجلات المطابقة بالاسم الدقيق")
     public int GetExactMatchCount(String n) {
-        int c = 0;
-        for (WebElement r : driver.findElements(rows))
-            try {
-                if (!r.isDisplayed()) continue;
-                for (WebElement td : r.findElements(By.cssSelector("td")))
-                    if (td.getText().trim().equals(n)) {
-                        c++;
-                        break;
-                    }
-            } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
-            }
-        return c;
-    }
-
-    private WebElement row(String n) {
-        return new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        d ->
-                                d.findElements(rows).stream()
-                                        .filter(WebElement::isDisplayed)
-                                        .filter(
-                                                r ->
-                                                        r
-                                                                .findElements(By.cssSelector("td"))
-                                                                .stream()
-                                                                .anyMatch(
-                                                                        td ->
-                                                                                td.getText()
-                                                                                        .trim()
-                                                                                        .equals(n)))
-                                        .findFirst()
-                                        .orElse(null));
+        return recordControls.GetExactMatchCount(n);
     }
 
     @Step("فتح المخزن المحدد للاختبار")
     public void OpenForEditByName(String n) {
-        row(n).findElement(By.cssSelector("button[data-action-type='edit']")).click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOfElementLocated(save));
+        recordControls.OpenForEditByName(n);
     }
 
     public String GetArabicNameValue() {
@@ -212,64 +174,28 @@ public class StorePage extends AbstractForDealer {
 
     @Step("طلب حذف المخزن المحدد")
     public void RequestDeleteByName(String n) {
-        row(n).findElement(By.cssSelector("button[data-action-type='delete']")).click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        ExpectedConditions.visibilityOfElementLocated(
-                                By.cssSelector(".swal2-popup")));
+        recordControls.RequestDeleteByName(n);
     }
 
     public boolean IsDeleteConfirmationDisplayed() {
-        return visible(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-confirm"))
-                && visible(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"));
+        return recordControls.IsDeleteConfirmationDisplayed();
     }
 
     @Step("تأكيد حذف مخزن الاختبار")
     public void ConfirmDelete(String name) {
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        ExpectedConditions.elementToBeClickable(
-                                By.cssSelector(
-                                        ".swal2-container.swal2-backdrop-show .swal2-confirm")))
-                .click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        d ->
-                                d
-                                        .findElements(
-                                                By.cssSelector(
-                                                        ".swal2-container.swal2-backdrop-show .swal2-cancel"))
-                                        .stream()
-                                        .noneMatch(
-                                                e -> {
-                                                    try {
-                                                        return e.isDisplayed();
-                                                    } catch (Exception ignored) {
-                                                        return false;
-                                                    }
-                                                }));
-        waitLoading();
-        By success =
-                By.xpath(
-                        "//div[contains(@class,'swal2-popup') and contains(normalize-space(.),'تم الحذف')]");
-        try {
-            new WebDriverWait(driver, Duration.ofSeconds(3))
-                    .until(ExpectedConditions.visibilityOfElementLocated(success));
-            DismissAlertIfPresent();
-        } catch (org.openqa.selenium.TimeoutException ignored) {
-        }
-        new WebDriverWait(driver, Duration.ofSeconds(20)).until(d -> GetExactMatchCount(name) == 0);
+        recordControls.ConfirmDelete(name);
     }
 
     @Step("إلغاء حذف المخزن")
     public void CancelDelete() {
-        driver.findElement(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"))
-                .click();
-        waitAlert();
+        recordControls.CancelDelete();
     }
 
     @Step("إغلاق النموذج إن كان مفتوحا")
     public void CloseFormIfOpen() {
         ClickCloseButton();
     }
+    boolean recordVisible(By b) { return visible(b); }
+    void recordWaitLoading() { waitLoading(); }
+    void recordWaitAlert() { waitAlert(); }
 }

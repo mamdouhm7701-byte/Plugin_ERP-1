@@ -12,6 +12,8 @@ import org.openqa.selenium.support.ui.*;
 
 /** Product-module interactions shared by the four existing Page Objects. */
 public class ProductsModulePage extends Abstract {
+    private final ProductRecordList records;
+    private final ProductSaveCapture saveCapture;
   protected final WebDriverWait ready;
   private final FormInteractions choices;
   private final FormInteractions inputs;
@@ -21,7 +23,9 @@ public class ProductsModulePage extends Abstract {
     ready.ignoring(StaleElementReferenceException.class).ignoring(ElementClickInterceptedException.class);
     choices=new FormInteractions(ready,e->((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'})",e));
     inputs=new FormInteractions(ready,e->{if(e.isEnabled())((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center',inline:'center'})",e);});
-  }
+      saveCapture = new ProductSaveCapture(this, driver, ready);
+        records = new ProductRecordList(this, driver, ready);
+    }
   public void prAwaitSession(){
     java.util.function.Function<WebDriver,Boolean> authenticated=d->!d.getCurrentUrl().contains("/login")&&Boolean.TRUE.equals(((JavascriptExecutor)d)
         .executeScript("return Boolean(document.querySelector('#app')?.__vue__?.$store?.getters['app/currentBranch']?.id)"));
@@ -37,13 +41,14 @@ public class ProductsModulePage extends Abstract {
     }
     }
   @Step("فتح قائمة موديول الأصناف: {route}")
-  public void prOpen(Pages route){
+    public void prOpen(Pages route){
         Plugin_ERP.Utiel.Allur.ScreenNames.opening(route.getRoute());
     listUrl=PropertyReader.getApplicationUrl()+route.getRoute();driver.get(listUrl);driver.navigate().refresh();
     ready.until(d->d.findElements(By.cssSelector("button[data-action-type='new']")).stream().anyMatch(WebElement::isDisplayed));
     prDismiss();
   }
-  @Step("فتح سجل جديد") public void prNew(){
+  @Step("فتح سجل جديد")
+    public void prNew(){
     String before=driver.getCurrentUrl();
     ready.until(d->{if(prFormVisible())return true;if(!before.equals(d.getCurrentUrl()))return false;
       List<WebElement> buttons=d.findElements(By.xpath("//button[@data-action-type='new' and normalize-space()='جديد']"));
@@ -55,7 +60,8 @@ public class ProductsModulePage extends Abstract {
   protected WebElement visible(By locator){return ready.until(d->d.findElements(locator).stream().filter(WebElement::isDisplayed).findFirst().orElse(null));}
   public void prType(By locator,String value){inputs.type(locator,value,true,FormInteractions.InputMode.CLEAR_REPLACE);}
   protected void prClick(By locator){inputs.click(locator);}
-  @Step("إدخال الاسم العربي: {name}") public void prArabic(String name){prType(By.cssSelector("form input[name='arabicName'],form [data-title='الاسم العربي'] input"),name);}
+  @Step("إدخال الاسم العربي: {name}")
+    public void prArabic(String name){prType(By.cssSelector("form input[name='arabicName'],form [data-title='الاسم العربي'] input"),name);}
   @Step("إدخال الاسم الإنجليزي: {name}")
     public void prEnglish(String name){prType(By.cssSelector("form input[name='englishName'],form [data-title='الاسم الإنجليزي'] input"),name);}
   @Step("إدخال الملاحظات: {notes}")
@@ -64,11 +70,13 @@ public class ProductsModulePage extends Abstract {
     public void prField(String name,String value){prType(By.cssSelector("form input[name='"+name+"']"),value);}
   @Step("إدخال {title}: {value}")
     public void prTitledField(String title,String value){prType(By.cssSelector("form [data-title='"+title+"'] input"),value);}
-  @Step("اختيار {name} من {label}") public void prChoose(String label,String name) {
+  @Step("اختيار {name} من {label}")
+    public void prChoose(String label,String name) {
     By locator=By.xpath("//*[self::label or self::legend][normalize-space()='"+label+"']/following::input[contains(@class,'vs__search')][1]");
     choices.choose(locator,name,FormInteractions.OptionMatch.EXACT,"Ambiguous test-owned option: ");
   }
-  @Step("تغيير اختيار {label}: {selected}") public void prCheck(String label,boolean selected){
+  @Step("تغيير اختيار {label}: {selected}")
+    public void prCheck(String label,boolean selected){
     By locator=By.xpath("//label[normalize-space()='"+label+"']/preceding-sibling::input[@type='checkbox'] | //label[normalize-space()='"+label+"']/following::input[@type='checkbox'][1]");
     WebElement input=driver.findElements(locator).stream().findFirst().orElseThrow(()->new AssertionError("Checkbox missing: "+label));
     if(input.isSelected()!=selected)((JavascriptExecutor)driver).executeScript("arguments[0].click()",input);
@@ -78,14 +86,16 @@ public class ProductsModulePage extends Abstract {
     public void prTab(String text){prClick(By.xpath("//*[@role='tab' and normalize-space()='"+text+"']"));}
   @Step("الضغط على زر {text}")
     public void prButton(String text){prClick(By.xpath("//button[normalize-space()='"+text+"']"));}
-  @Step("حفظ السجل") public void prSave(){prClick(By.xpath("//form//button[@data-action-type='save' or normalize-space()='حفظ']"));}
+  @Step("حفظ السجل")
+    public void prSave(){prClick(By.xpath("//form//button[@data-action-type='save' or normalize-space()='حفظ']"));}
   @Step("حفظ البيانات وطباعة التقرير")
     public void prSavePrint(){prButton("حفظ و طباعة");}
   public void prDismiss(){ready.until(d->{List<WebElement> overlays=d.findElements(By.cssSelector(".swal2-container"));
     if(overlays.stream().noneMatch(WebElement::isDisplayed))return true;
     for(WebElement b:d.findElements(By.cssSelector("button.swal2-confirm")))if(b.isDisplayed())b.click();return false;});}
   public void prWaitList(){ready.until(d->!prFormVisible());prDismiss();}
-  @Step("إغلاق النموذج دون حفظ") public void prDiscard(){prDismiss();driver.get(listUrl);driver.navigate().refresh();ready.until(d->!prFormVisible());}
+  @Step("إغلاق النموذج دون حفظ")
+    public void prDiscard(){prDismiss();driver.get(listUrl);driver.navigate().refresh();ready.until(d->!prFormVisible());}
   public String prValidation(){return ready.until(d->{
     List<String> messages=new ArrayList<>();
     for(WebElement e:d.findElements(By.cssSelector("small.text-danger,.invalid-feedback,.swal2-title,.swal2-html-container"))){
@@ -109,59 +119,55 @@ public class ProductsModulePage extends Abstract {
     }
     return messages.isEmpty()?null:String.join(" | ",new LinkedHashSet<>(messages));
   });}
-  @Step("البحث عن سجل الاختبار: {name}") public void prSearch(String name){
-    By locator=By.xpath("//input[@id='arabicName' or @name='arabicNamePart' or contains(@placeholder,'بحث') or (@type='search' and not(contains(@class,'vs__search')))] | //*[self::label or self::legend][normalize-space()='الاسم العربي']/following::input[1]");
-    ready.until(d->{
-      if(d.findElements(locator).stream().anyMatch(WebElement::isDisplayed))return true;
-      for(WebElement b:d.findElements(By.xpath("//button[contains(normalize-space(),'عرض التصفية')]")))
-        if(b.isDisplayed()){b.click();break;}
-      return false;
-    });
-    prType(locator,name);
-  }
-  public boolean prHasRow(String name){return driver.findElements(By.cssSelector("tbody tr")).stream().filter(WebElement::isDisplayed)
-      .anyMatch(r->r.findElements(By.cssSelector("td")).stream().anyMatch(c->c.getText().trim().equals(name)));}
-  public void prWaitRow(String name){ready.until(d->prHasRow(name));}
-  @Step("تعديل سجل مملوك للاختبار: {name}") public void prEdit(String name){
-    prRowAction(name,"edit");
-    // The form mounts before its API response; typing earlier is overwritten by hydration.
-    ready.until(d->prNameInputs().stream().anyMatch(e->e.isDisplayed()&&e.isEnabled()&&name.equals(e.getDomProperty("value"))));
-  }
-  @Step("طلب حذف سجل مملوك للاختبار: {name}") public void prDelete(String name){prRowAction(name,"delete");visible(By.cssSelector("button.swal2-confirm"));}
+  @Step("البحث عن سجل الاختبار: {name}")
+    public void prSearch(String name){
+        records.prSearch(name);
+    }
+  public boolean prHasRow(String name){
+        return records.prHasRow(name);
+    }
+  public void prWaitRow(String name){
+        records.prWaitRow(name);
+    }
+  @Step("تعديل سجل مملوك للاختبار: {name}")
+    public void prEdit(String name){
+        records.prEdit(name);
+    }
+  @Step("طلب حذف سجل مملوك للاختبار: {name}")
+    public void prDelete(String name){
+        records.prDelete(name);
+    }
   private void prRowAction(String name,String action){
-    ready.until(d->{WebElement row=d.findElements(By.cssSelector("tbody tr")).stream().filter(WebElement::isDisplayed)
-      .filter(r->r.findElements(By.cssSelector("td")).stream().anyMatch(c->c.getText().trim().equals(name))).findFirst().orElse(null);
-      if(row==null)return false;List<WebElement> buttons=row.findElements(By.cssSelector("[id*='"+action+"'],[data-action-type='"+action+"']"+(action.equals("edit")?",[id$='-preview-icon']":"")));
-      for(WebElement b:buttons){((JavascriptExecutor)d).executeScript("arguments[0].scrollIntoView({block:'center',inline:'center'})",b);if(b.isDisplayed()){b.click();return true;}}return false;});
-  }
+        records.prRowAction(name, action);
+    }
   @Step("تأكيد الإجراء أو إلغاؤه: {confirm}")
     public void prConfirm(boolean confirm){prClick(By.cssSelector(confirm?"button.swal2-confirm":"button.swal2-cancel"));ready.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".swal2-container")));}
   @Step("تصدير القائمة بصيغة {format}")
     public void prExport(String format){prClick(By.cssSelector("button:has(img[src*='"+(format.equals("pdf")?"pdf.":"xls.")+"'])"));}
   public List<String> prHeaders(){return driver.findElements(By.cssSelector("thead th")).stream().filter(WebElement::isDisplayed).map(WebElement::getText).toList();}
   public void prCapture(String marker){
-    ((JavascriptExecutor)driver).executeScript("""
-      const store=document.querySelector('#app').__vue__.$store;
-      window.__productsQA={marker:arguments[0],saves:[],attempts:[],pending:0,errors:[]};
-      if(store.__productsCaptureInstalled)return;store.__productsCaptureInstalled=true;
-      const dispatch=store.dispatch.bind(store);
-      store.dispatch=function(action,payload,...rest){const cap=window.__productsQA;
-        const owned=(action==='app/create'||action==='app/update')&&cap&&
-          [payload?.data?.arabicName,payload?.data?.englishName,payload?.data?.notes].some(v=>typeof v==='string'&&v.startsWith(cap.marker));
-        const sent=owned?JSON.parse(JSON.stringify(payload.data)):null;
-        if(owned){cap.pending++;cap.attempts.push({endpoint:payload.url,values:sent});}
-        return dispatch(action,payload,...rest).then(result=>{if(owned){cap.pending--;const entity=result?.data||result;
-          cap.saves.push({endpoint:payload.url,id:sent.id||entity?.id||(typeof entity==='string'?entity:null),values:sent});}return result;
-        }).catch(error=>{if(owned){cap.pending--;cap.errors.push(String(error));}throw error;});};
-      """,marker);
-  }
-  public String prCaptureMarker(){return (String)((JavascriptExecutor)driver).executeScript("return window.__productsQA?.marker||null");}
-  @SuppressWarnings("unchecked") public List<Map<String,Object>> prSaves(){return (List<Map<String,Object>>)((JavascriptExecutor)driver).executeScript("return window.__productsQA?.saves||[]");}
-  @SuppressWarnings("unchecked") public List<Map<String,Object>> prAttempts(){return (List<Map<String,Object>>)((JavascriptExecutor)driver).executeScript("return window.__productsQA?.attempts||[]");}
-  public void prSettled(){ready.until(d->!Boolean.TRUE.equals(((JavascriptExecutor)d).executeScript("return (window.__productsQA?.pending||0)>0")));}
-  public String prSaveErrors(){return String.valueOf(((JavascriptExecutor)driver).executeScript("return window.__productsQA?.errors||[]"));}
+        saveCapture.prCapture(marker);
+    }
+  public String prCaptureMarker(){
+        return saveCapture.prCaptureMarker();
+    }
+  @SuppressWarnings("unchecked")
+    public List<Map<String,Object>> prSaves(){
+        return saveCapture.prSaves();
+    }
+  @SuppressWarnings("unchecked")
+    public List<Map<String,Object>> prAttempts(){
+        return saveCapture.prAttempts();
+    }
+  public void prSettled(){
+        saveCapture.prSettled();
+    }
+  public String prSaveErrors(){
+        return saveCapture.prSaveErrors();
+    }
   public void prAwaitReport(){utilites.waits().waitForReportReady(60);}
-  @Step("اختيار الصنف من النافذة: {name}") public void prPickItem(String name){
+  @Step("اختيار الصنف من النافذة: {name}")
+    public void prPickItem(String name){
     prType(By.cssSelector(".modal.show input#arabicName,.modal.show input[placeholder*='بحث']"),name);
     prClick(By.xpath("//div[contains(@class,'modal') and contains(@class,'show')]//tr[.//td[normalize-space()='"+name+"']]//button[contains(@class,'btn-outline-primary')]"));
   }
@@ -169,4 +175,6 @@ public class ProductsModulePage extends Abstract {
     public void prClosePicker(){prClick(By.xpath("//div[contains(@class,'modal') and contains(@class,'show')]//button[normalize-space()='إغلاق']"));
     ready.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".modal.show")));}
   public int prFormRowsContaining(String name){return (int)driver.findElements(By.cssSelector("form tbody tr")).stream().filter(WebElement::isDisplayed).filter(r->r.getText().contains(name)).count();}
+    void clickRecordControl(By locator) { prClick(locator); }
+    List<WebElement> recordNameInputs() { return prNameInputs(); }
 }

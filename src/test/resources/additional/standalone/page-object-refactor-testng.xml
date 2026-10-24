@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Focused live regression for extracted page components. Run serially on Demo;
+     each class retains its owned fixtures and cleanup. This is not full Regression. -->
+<suite name="Page object component regression" parallel="none" configfailurepolicy="continue">
+    <test name="Invoice list calendar"><classes>
+        <class name="Invoice.InvoiceListTestCases"><methods>
+            <include name="BroadValidInvoiceDateRangeKeepsTheInvoiceListAvailable"/>
+            <include name="CombinedCodeAndDateFilterReturnsOnlyMatchingCode"/>
+            <include name="InvoiceListTableShowsColumnsAndAlignedRows"/>
+            <include name="InvoicePageSizeOptionsAreExpected"/>
+            <include name="InvoicePageSizeCanBeSelected"/>
+            <include name="PaginationMovesForwardAndBack"/>
+            <include name="PaginationCanOpenAnExplicitPageNumber"/>
+        </methods></class>
+    </classes></test>
+    <test name="Sales lines and totals"><classes>
+        <class name="Invoice.SalesInvoiceCoverageTest"><methods>
+            <include name="fractionalQuantityPersists"/>
+            <include name="removedItemIsNotSaved"/>
+            <include name="savedDocumentEditPolicy"/>
+            <include name="savesAndPrintsOwnedInvoice"/>
+            <include name="savesOwnedItemByName"/>
+            <include name="savesOwnedItemByBarcode"/>
+            <include name="savesOwnedItemFromPicker"/>
+            <include name="barcodeApiFallbackAddsOwnedItemAbsentFromCache"/>
+        </methods></class>
+        <class name="Invoice.SalesInvoiceTestCases"><methods>
+            <include name="TC_SI_014_FilterItemsByCategory"/>
+            <include name="TC_SI_015_SearchByBarcodeInAddItemsDialog"/>
+            <include name="TC_SI_016_SearchByArabicNameInAddItemsDialog"/>
+        </methods></class>
+    </classes></test>
+    <test name="Purchase lines and totals"><classes>
+        <class name="Purches.PurchaseInvoiceCoverageTest"><methods>
+            <include name="fractionalQuantityPersists"/>
+            <include name="removedItemIsNotSaved"/>
+            <include name="savedDocumentCanBeEdited"/>
+            <include name="savesAndPrintsOwnedDocument"/>
+            <include name="savesOwnedItemByName"/>
+            <include name="savesOwnedItemByBarcode"/>
+            <include name="savesOwnedItemFromPicker"/>
+        </methods></class>
+    </classes></test>
+    <test name="Safe list and download"><classes>
+        <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest"><methods>
+            <include name="WH_028_SafeListCanBeSortedByCode"/>
+            <include name="WH_029_ChangingPageSizeUpdatesVisibleRows"/>
+            <include name="WH_030_NavigateSafeListPagesWhenAvailable"/>
+            <include name="ExportSafesToExcel"/>
+        </methods></class>
+    </classes></test>
+    <test name="Area grid"><classes>
+        <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest"><methods>
+            <include name="AR_028_AreaListCanBeSortedByCode"/>
+            <include name="AR_029_ChangingPageSizeUpdatesVisibleRows"/>
+            <include name="AR_030_NavigateAreaPagesWhenAvailable"/>
+        </methods></class>
+    </classes></test>
+    <test name="Voucher account selection"><classes>
+        <class name="GenralAccountantTest.VouchersTest"><methods>
+            <include name="SearchAccountByNameTest"/>
+            <include name="SelectAccountFromSearchTest"/>
+            <include name="AccountSearchAvailableInLinesTest"/>
+        </methods></class>
+    </classes></test>
+    <test name="Warehouse document lines"><classes>
+        <class name="StoreTest.TransBetweenStoreTest"><methods>
+            <include name="SM_DecimalQuantity"/>
+            <include name="SM_LineCalculations"/>
+            <include name="SM_RemoveItem"/>
+        </methods></class>
+    </classes></test>
+</suite>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Serial Demo verification for shared base-page components. Owned fixtures retain their cleanup. -->
+<suite name="Shared page responsibilities regression" parallel="none" configfailurepolicy="continue">
+    <test name="Invoice filter and grid"><classes>
+        <class name="Invoice.InvoiceListTestCases"><methods>
+            <include name="CombinedCodeAndDateFilterReturnsOnlyMatchingCode"/>
+            <include name="InvoiceListTableShowsColumnsAndAlignedRows"/>
+        </methods></class>
+    </classes></test>
+    <test name="Sales and purchase capture"><classes>
+        <class name="Invoice.SalesInvoiceCoverageTest"><methods>
+            <include name="savesOwnedItemFromPicker"/>
+        </methods></class>
+        <class name="Purches.PurchaseInvoiceCoverageTest"><methods>
+            <include name="savesOwnedItemFromPicker"/>
+        </methods></class>
+    </classes></test>
+    <test name="Dealer lifecycle"><classes>
+        <class name="DealerModelTest.CustomersTest"><methods>
+            <include name="CU_004_CancelCustomerDelete"/>
+            <include name="CU_005_OwnedCustomerCreateEditDelete"/>
+        </methods></class>
+    </classes></test>
+    <test name="Voucher lines"><classes>
+        <class name="GenralAccountantTest.VouchersTest"><methods>
+            <include name="MultiLineDecimalTotalsTest"/>
+            <include name="RemoveLineUpdatesDraftTotalsTest"/>
+            <include name="LineNotesAcceptMixedTextTest"/>
+        </methods></class>
+    </classes></test>
+    <test name="Safe record actions"><classes>
+        <class name="Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest"><methods>
+            <include name="WH_028_SafeListCanBeSortedByCode"/>
+        </methods></class>
+    </classes></test>
+    <test name="Store item and capture"><classes>
+        <class name="StoreTest.TransBetweenStoreTest"><methods>
+            <include name="SM_DecimalQuantity"/>
+        </methods></class>
+    </classes></test>
+    <test name="Counter lines and capture"><classes>
+        <class name="SpecialSalesTest.PointOfSaleTest"><methods>
+            <include name="quantityButtons"/>
+            <include name="savesCreditAndDeductsStock"/>
+        </methods></class>
+        <class name="SpecialSalesTest.RestaurantInvoiceTest"><methods>
+            <include name="fractionalQuantity"/>
+        </methods></class>
+    </classes></test>
+</suite>

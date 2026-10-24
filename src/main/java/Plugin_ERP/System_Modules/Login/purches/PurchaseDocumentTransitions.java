@@ -1,0 +1,79 @@
+package Plugin_ERP.System_Modules.Login.purches;
+
+import Plugin_ERP.System_Modules.Login.AbstractForPurchases;
+import Plugin_ERP.Utiel.FormInteractions;
+import Plugin_ERP.Utiel.PropertyReader;
+import io.qameta.allure.Step;
+import java.time.Duration;
+import java.util.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.*;
+
+/** Purchase Document Transitions: focused operations used by the original page facade. */
+final class PurchaseDocumentTransitions {
+    private final PurchaseModulePage owner;
+    private final WebDriver driver;
+    private final Plugin_ERP.Bots.ElmentAction utilites;
+    private final WebDriverWait ready;
+    PurchaseDocumentTransitions(PurchaseModulePage owner, WebDriver driver, WebDriverWait ready) {
+        this.owner = owner;
+        this.driver = driver;
+        this.utilites = owner.context().elements();
+        this.ready = ready;
+    }
+
+    void puLinkedReturn(Object invoiceId, String itemName) {
+        owner.puOpen(
+                "return-purch/new?sourceTransactionId="
+                        + invoiceId
+                        + "&sourceTransactionType=Purch");
+        owner.puFormReady();
+        ready.until(d -> owner.puLineCount(itemName) > 0);
+    }
+
+    void puConvertOwned(String supplier, String code, boolean toInvoice, String itemName) {
+        owner.puListScope(supplier);
+        owner.puListText("filteredCode", code);
+        ready.until(
+                d ->
+                        owner.puListRows().size() == 1
+                                && code.equals(String.valueOf(owner.puListRows().get(0).get("code"))));
+        Object sourceId = owner.puListRows().get(0).get("id");
+        String icon = toInvoice ? "repeat" : "refresh-cw";
+        owner.puClick(
+                By.xpath(
+                        "//table//tbody/tr[.//td[normalize-space()='"
+                                + code
+                                + "']]//button[.//*[contains(@class,'"
+                                + icon
+                                + "')]]"));
+        ready.until(d -> d.getCurrentUrl().contains(toInvoice ? "purch-invoice" : "return-purch"));
+        owner.puFormReady();
+        ready.until(
+                d ->
+                        sourceId.equals(owner.puDocument().get("sourceTransactionId"))
+                                && owner.puLineCount(itemName) > 0);
+        ready.until(
+                d ->
+                        d.findElements(By.cssSelector("#loading-bg,div.b-overlay")).stream()
+                                .noneMatch(WebElement::isDisplayed));
+        utilites.waits().waitForOverlayToDisappear();
+    }
+
+    void puDeleteOwned(String supplier, String code) {
+        owner.puListScope(supplier);
+        owner.puListText("filteredCode", code);
+        ready.until(
+                d ->
+                        owner.puListRows().size() == 1
+                                && code.equals(String.valueOf(owner.puListRows().get(0).get("code"))));
+        owner.puClick(
+                By.xpath(
+                        "//table//tbody/tr[.//td[normalize-space()='"
+                                + code
+                                + "']]//button[@data-action-type='delete']"));
+        owner.puClick(By.cssSelector("button.swal2-confirm"));
+        owner.puDismiss();
+        owner.puWaitListIds(Set.of());
+    }
+}

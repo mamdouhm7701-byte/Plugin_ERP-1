@@ -12,13 +12,14 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class BankPage extends AbstractForDealer {
-    private final By rows = By.cssSelector("table tbody tr[role='row']");
-    private final By headers = By.cssSelector("table thead th");
+    private final BankRecords records;
+
     private final By search = By.cssSelector("input[placeholder*='بحث']");
     private final By save = By.cssSelector("button[data-action-type='save']");
 
     public BankPage(WebDriver driver) {
         super(driver);
+        records = new BankRecords(this, driver);
     }
 
     private boolean visible(By locator) {
@@ -87,20 +88,7 @@ public class BankPage extends AbstractForDealer {
 
     @Step("البحث في قائمة البنوك")
     public void SearchBank(String value) {
-        waitRows();
-        By closeForm = By.xpath("//button[normalize-space()='إغلاق']");
-        if (visible(closeForm)) ClickCloseButton();
-        waitAlertToDisappear();
-        WebElement input =
-                new WebDriverWait(driver, Duration.ofSeconds(15))
-                        .until(ExpectedConditions.elementToBeClickable(search));
-        ((org.openqa.selenium.JavascriptExecutor) driver)
-                .executeScript("arguments[0].scrollIntoView({block:'center'});", input);
-        new org.openqa.selenium.interactions.Actions(driver).moveToElement(input).click().perform();
-        input.clear();
-        if (value != null && !value.isBlank()) input.sendKeys(value);
-        input.sendKeys(Keys.ENTER);
-        waitRows();
+        records.SearchBank(value);
     }
 
     private void waitAlertToDisappear() {
@@ -152,26 +140,7 @@ public class BankPage extends AbstractForDealer {
 
     @Step("التحقق من بنية قائمة البنوك")
     public boolean IsBankListStructureDisplayed() {
-        List<String> text =
-                driver.findElements(headers).stream()
-                        .filter(WebElement::isDisplayed)
-                        .map(e -> e.getText().trim())
-                        .toList();
-        return text.stream().anyMatch(v -> v.contains("الكود"))
-                && text.stream().anyMatch(v -> v.contains("اسم البنك"))
-                && text.stream().anyMatch(v -> v.contains("رقم الحساب"))
-                && driver.findElements(rows).stream()
-                        .filter(WebElement::isDisplayed)
-                        .anyMatch(
-                                r ->
-                                        !r.findElements(
-                                                                By.cssSelector(
-                                                                        "button[data-action-type='edit']"))
-                                                        .isEmpty()
-                                                && !r.findElements(
-                                                                By.cssSelector(
-                                                                        "button[data-action-type='delete']"))
-                                                        .isEmpty());
+        return records.IsBankListStructureDisplayed();
     }
 
     @Step("عناصر نموذج البنك غير الظاهرة")
@@ -195,99 +164,27 @@ public class BankPage extends AbstractForDealer {
 
     @Step("عدد صفوف البنوك القابلة للتعديل")
     public int GetEditableBankCount() {
-        return (int)
-                driver.findElements(rows).stream()
-                        .filter(WebElement::isDisplayed)
-                        .filter(
-                                r ->
-                                        !r.findElements(
-                                                        By.cssSelector(
-                                                                "button[data-action-type='edit']"))
-                                                .isEmpty())
-                        .count();
-    }
-
-    private WebElement findRow(String name) {
-        return new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        d ->
-                                d.findElements(rows).stream()
-                                        .filter(WebElement::isDisplayed)
-                                        .filter(
-                                                r ->
-                                                        r
-                                                                .findElements(By.cssSelector("td"))
-                                                                .stream()
-                                                                .anyMatch(
-                                                                        c ->
-                                                                                c.getText()
-                                                                                        .trim()
-                                                                                        .equals(
-                                                                                                name)))
-                                        .findFirst()
-                                        .orElse(null));
+        return records.GetEditableBankCount();
     }
 
     @Step("عدد البنوك المطابقة بالاسم الدقيق")
     public int GetExactBankMatchCount(String name) {
-        return (int)
-                driver.findElements(rows).stream()
-                        .filter(WebElement::isDisplayed)
-                        .filter(
-                                r ->
-                                        r.findElements(By.cssSelector("td")).stream()
-                                                .anyMatch(c -> c.getText().trim().equals(name)))
-                        .count();
-    }
-
-    private int columnIndex(String label) {
-        List<WebElement> list = driver.findElements(headers);
-        for (int i = 0; i < list.size(); i++) if (list.get(i).getText().contains(label)) return i;
-        throw new IllegalStateException("Bank column not found: " + label);
+        return records.GetExactBankMatchCount(name);
     }
 
     @Step("قراءة أول خلية من عمود البنك")
     public String GetFirstBankCellByHeader(String label) {
-        int i = columnIndex(label);
-        WebElement row =
-                driver.findElements(rows).stream()
-                        .filter(WebElement::isDisplayed)
-                        .filter(
-                                r ->
-                                        !r.findElements(
-                                                        By.cssSelector(
-                                                                "button[data-action-type='edit']"))
-                                                .isEmpty())
-                        .findFirst()
-                        .orElseThrow(() -> new IllegalStateException("No editable Bank row"));
-        return row.findElements(By.cssSelector("td")).get(i).getText().trim();
+        return records.GetFirstBankCellByHeader(label);
     }
 
     @Step("فتح صف البنك المعروض للتعديل")
     public void OpenFirstBankForEdit() {
-        WebElement row =
-                driver.findElements(rows).stream()
-                        .filter(WebElement::isDisplayed)
-                        .filter(
-                                r ->
-                                        !r.findElements(
-                                                        By.cssSelector(
-                                                                "button[data-action-type='edit']"))
-                                                .isEmpty())
-                        .findFirst()
-                        .orElseThrow(() -> new IllegalStateException("No editable Bank row"));
-        openEdit(row);
+        records.OpenFirstBankForEdit();
     }
 
     @Step("فتح البنك المطابق بالاسم للتعديل")
     public void OpenBankForEditByName(String name) {
-        openEdit(findRow(name));
-    }
-
-    private void openEdit(WebElement row) {
-        row.findElement(By.cssSelector("button[data-action-type='edit']")).click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOfElementLocated(save));
+        records.OpenBankForEditByName(name);
     }
 
     private String value(By locator) {
@@ -345,47 +242,24 @@ public class BankPage extends AbstractForDealer {
 
     @Step("طلب حذف البنك المحدد بالاسم المطابق")
     public void RequestDeleteBankByName(String name) {
-        findRow(name).findElement(By.cssSelector("button[data-action-type='delete']")).click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        ExpectedConditions.visibilityOfElementLocated(
-                                By.cssSelector(".swal2-popup")));
+        records.RequestDeleteBankByName(name);
     }
 
     public boolean IsBankDeleteConfirmationDisplayed() {
-        return visible(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-confirm"))
-                && visible(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"));
+        return records.IsBankDeleteConfirmationDisplayed();
     }
 
     @Step("تأكيد حذف بنك الاختبار")
     public void ConfirmBankDelete() {
-        waitAlertToDisappear();
-        WebElement confirm =
-                new WebDriverWait(driver, Duration.ofSeconds(10))
-                        .until(
-                                ExpectedConditions.elementToBeClickable(
-                                        By.cssSelector(
-                                                ".swal2-container.swal2-backdrop-show .swal2-confirm")));
-        confirm.click();
-        waitRows();
-        By success =
-                By.xpath(
-                        "//div[contains(@class,'swal2-popup') and contains(normalize-space(.),'تم الحذف')]");
-        try {
-            new WebDriverWait(driver, Duration.ofSeconds(3))
-                    .until(ExpectedConditions.visibilityOfElementLocated(success));
-            dismissSaveSuccessIfPresent();
-        } catch (org.openqa.selenium.TimeoutException ignored) {
-        }
+        records.ConfirmBankDelete();
     }
 
     @Step("إلغاء حذف البنك")
     public void CancelBankDelete() {
-        driver.findElement(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"))
-                .click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        ExpectedConditions.invisibilityOfElementLocated(
-                                By.cssSelector(".swal2-container.swal2-backdrop-show")));
+        records.CancelBankDelete();
     }
+    boolean recordVisible(By locator) { return visible(locator); }
+    void recordWaitRows() { waitRows(); }
+    void recordWaitAlertToDisappear() { waitAlertToDisappear(); }
+    void recordDismissSaveSuccessIfPresent() { dismissSaveSuccessIfPresent(); }
 }

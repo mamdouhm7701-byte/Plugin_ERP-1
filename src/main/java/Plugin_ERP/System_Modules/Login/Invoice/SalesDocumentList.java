@@ -19,7 +19,10 @@ final class SalesDocumentList {
     void slListScope(String customer) {
         page.slOpen("invoice-list");
         slAwaitListReady();
-        page.slButton("عرض التصفية");
+        if (driver.findElements(By.cssSelector("input[name='filteredCode']")).stream()
+                .noneMatch(WebElement::isDisplayed)) {
+            page.slButton("عرض التصفية");
+        }
         page.slChoose("العميل", customer);
         slApplyListFilters();
     }

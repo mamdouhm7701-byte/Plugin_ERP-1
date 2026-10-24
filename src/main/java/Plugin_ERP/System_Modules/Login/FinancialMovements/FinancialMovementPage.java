@@ -13,16 +13,19 @@ import org.openqa.selenium.support.ui.*;
 
 /** Shared interactions for financial forms; business expectations belong in tests. */
 public class FinancialMovementPage extends Abstract {
+    private final FinancialRecordList records;
+    private final FinancialSaveCapture saveCapture;
   private final WebDriverWait ready;
   private final FormInteractions choices;
   private String listUrl;
-  private final Map<String,String> ownedCodes=new HashMap<>();
   public FinancialMovementPage(WebDriver driver) {
     super(driver);
     ready = new WebDriverWait(driver, Duration.ofSeconds(25));
     ready.ignoring(StaleElementReferenceException.class).ignoring(ElementClickInterceptedException.class);
     choices=new FormInteractions(ready,e->((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'})",e));
-  }
+      saveCapture = new FinancialSaveCapture(this, driver, ready);
+        records = new FinancialRecordList(this, driver, ready);
+    }
   @Step("فتح قائمة الحركة المالية: {route}")
   public void openList(Pages route) {
         Plugin_ERP.Utiel.Allur.ScreenNames.opening(route.getRoute());
@@ -191,7 +194,9 @@ public class FinancialMovementPage extends Abstract {
   }
   public boolean isFormVisible(){return driver.findElements(By.cssSelector("input[name='value']")).stream().anyMatch(WebElement::isDisplayed);}
   public boolean isFormPresent(){return !driver.findElements(By.cssSelector("input[name='value']")).isEmpty();}
-  public void identifyMovement(String note,Object code){if(code==null)throw new IllegalArgumentException("Saved movement has no code");ownedCodes.put(note,code.toString());}
+  public void identifyMovement(String note,Object code){
+        records.identifyMovement(note, code);
+    }
   @Step("إغلاق الحركة دون حفظ")
   public void closeWithoutSaving(){dismissPopup();driver.get(listUrl);driver.navigate().refresh();ready.until(d->!isFormPresent());}
   public void dismissPopup(){
@@ -202,27 +207,19 @@ public class FinancialMovementPage extends Abstract {
     });
   }
   private WebElement row(String note){
-    return ready.until(d->d.findElements(By.cssSelector("tbody tr"))
-        .stream().filter(WebElement::isDisplayed)
-        .filter(r->matchesOwnedRow(r,note))
-        .findFirst().orElse(null));
-  }
-  private boolean matchesOwnedRow(WebElement row,String note){
-    if(ownedCodes.containsKey(note)){
-      List<WebElement> headers=driver.findElements(By.cssSelector("thead th"));
-      for(int i=0;i<headers.size();i++)if(headers.get(i).getDomProperty("textContent").contains("الكود")){
-        List<WebElement> cells=row.findElements(By.cssSelector("td"));
-        return cells.size()>i&&cells.get(i).getDomProperty("textContent").trim().equals(ownedCodes.get(note));
-      }
-      throw new AssertionError("Financial list code column missing");
+        return records.row(note);
     }
-    return row.findElements(By.cssSelector("td")).stream().anyMatch(c->c.getDomProperty("textContent").trim().equals(note));
-  }
-  public boolean hasRow(String note){return driver.findElements(By.cssSelector("tbody tr"))
-      .stream().filter(WebElement::isDisplayed).anyMatch(r->matchesOwnedRow(r,note));}
-  public void waitForRow(String note){row(note);}
+
+  public boolean hasRow(String note){
+        return records.hasRow(note);
+    }
+  public void waitForRow(String note){
+        records.waitForRow(note);
+    }
   @Step("تعديل الحركة المحددة بملاحظاتها: {note}")
-  public void editOwned(String note){clickOwnedAction(note,"edit");ready.until(d->isFormVisible());ready.until(d->notesValue().equals(note));}
+  public void editOwned(String note){
+        records.editOwned(note);
+    }
   @Step("إلغاء التخصيص السابق للسند المملوك قبل تعديل قيمته وإعادة تخصيصه")
   public void clearAllocationForEdit(){
     By amount=By.cssSelector("input[name='value']");
@@ -241,22 +238,27 @@ public class FinancialMovementPage extends Abstract {
     });
   }
   @Step("طلب حذف الحركة المحددة فقط: {note}")
-  public void requestDeleteOwned(String note){clickOwnedAction(note,"delete");ready.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".swal2-popup")));}
-  private void clickOwnedAction(String note,String action){ready.until(d->{
-    WebElement button=row(note).findElement(By.cssSelector("button[data-action-type='"+action+"']"));
-    ((JavascriptExecutor)d).executeScript("arguments[0].scrollIntoView({block:'center'})",button);
-    button.click();return true;
-  });}
+  public void requestDeleteOwned(String note){
+        records.requestDeleteOwned(note);
+    }
+
   @Step("تأكيد الحذف أو إلغاؤه: {confirm}")
-    public void confirmDelete(boolean confirm){click(By.cssSelector(confirm?"button.swal2-confirm":"button.swal2-cancel"));ready.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".swal2-container")));}
-  public void waitForRemoval(String note){ready.until(d->!hasRow(note));}
-  public boolean hasListHeaders(){return driver.findElements(By.cssSelector("thead th")).stream().anyMatch(WebElement::isDisplayed);}
-  public void waitForList(){ready.until(d->!isFormPresent());dismissPopup();ready.until(d->hasListHeaders());}
+    public void confirmDelete(boolean confirm){
+        records.confirmDelete(confirm);
+    }
+  public void waitForRemoval(String note){
+        records.waitForRemoval(note);
+    }
+  public boolean hasListHeaders(){
+        return records.hasListHeaders();
+    }
+  public void waitForList(){
+        records.waitForList();
+    }
   @Step("تصدير القائمة بصيغة {format}")
     public void export(String format){
-    if(!List.of("pdf","excel").contains(format))throw new IllegalArgumentException(format);
-    click(By.cssSelector("button:has(img[src*='"+(format.equals("pdf")?"pdf.":"xls.")+"'])"));
-  }
+        records.export(format);
+    }
   public void type(By locator,String value){
     ready.until(d->{
       WebElement e=d.findElements(locator).stream().filter(WebElement::isDisplayed)
@@ -277,29 +279,21 @@ public class FinancialMovementPage extends Abstract {
   }
   private void click(By by){ready.until(d->{WebElement e=d.findElements(by).stream().filter(WebElement::isDisplayed).findFirst().orElse(null);if(e==null||!e.isEnabled())return false;((JavascriptExecutor)d).executeScript("arguments[0].scrollIntoView({block:'center'})",e);e.click();return true;});}
   public void captureSaves(String marker) {
-    ((JavascriptExecutor)driver).executeScript("""
-      const store=document.querySelector('#app').__vue__.$store;
-      window.__financialQA={marker:arguments[0],saves:[],attempts:[],pending:0,errors:[]};
-      if(store.__financialCaptureInstalled)return;
-      store.__financialCaptureInstalled=true;
-      const dispatch=store.dispatch.bind(store);
-      store.dispatch=function(action,payload,...rest){
-        const cap=window.__financialQA;
-        const owned=(action==='app/create'||action==='app/update')&&payload?.data?.notes?.startsWith(cap?.marker);
-        const sent=owned?JSON.parse(JSON.stringify(payload.data)):null;
-        if(owned){cap.pending++;cap.attempts.push({endpoint:payload.url,values:sent});}
-        return dispatch(action,payload,...rest).then(result=>{
-          if(owned){cap.pending--;const entity=result?.data||result; cap.saves.push({endpoint:payload.url,
-            id:sent.id||entity?.id||(typeof entity==='string'?entity:null),values:sent});}
-          return result;
-        }).catch(error=>{if(owned){cap.pending--;cap.errors.push(String(error));}throw error;});
-      };
-      """,marker);
-  }
+        saveCapture.captureSaves(marker);
+    }
   @SuppressWarnings("unchecked")
-  public List<Map<String,Object>> capturedSaves(){return (List<Map<String,Object>>)((JavascriptExecutor)driver).executeScript("return window.__financialQA?.saves||[]");}
-  public String captureMarker(){return (String)((JavascriptExecutor)driver).executeScript("return window.__financialQA?.marker||null");}
-  @SuppressWarnings("unchecked") public List<Map<String,Object>> capturedAttempts(){return (List<Map<String,Object>>)((JavascriptExecutor)driver).executeScript("return window.__financialQA?.attempts||[]");}
-  public boolean hasSaveStarted(){return Boolean.TRUE.equals(((JavascriptExecutor)driver).executeScript("return !!window.__financialQA && (window.__financialQA.pending>0 || window.__financialQA.saves.length>0)"));}
-  public void awaitSavesSettled(){ready.until(d->!Boolean.TRUE.equals(((JavascriptExecutor)d).executeScript("return (window.__financialQA?.pending||0)>0")));}
+  public List<Map<String,Object>> capturedSaves(){
+        return saveCapture.capturedSaves();
+    }
+  public String captureMarker(){
+        return saveCapture.captureMarker();
+    }
+  public List<Map<String,Object>> capturedAttempts(){return saveCapture.capturedAttempts();}
+  public boolean hasSaveStarted(){
+        return saveCapture.hasSaveStarted();
+    }
+  public void awaitSavesSettled(){
+        saveCapture.awaitSavesSettled();
+    }
+    void clickFinancialControl(By locator) { click(locator); }
 }

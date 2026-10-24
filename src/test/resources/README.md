@@ -4,6 +4,10 @@
 
 ملفات التشغيل الأساسية موجودة مباشرة في هذا المجلد:
 
+تحديث24 أكتوبر2026: `smoke-testng.xml` يختار13 حالة، و`sanity-testng.xml` يختار57، و`e2e-testng.xml` يختار41 رحلة، و`regression-testng.xml` يختار1124 دالة دون تكرار اختيار الكلاس والدالة داخل المجموعة. يضم Regression الحالات نفسها عبر مداخل الموديولات و`coverage-expansion-testng.xml`؛ لا تضف E2E أو Sanity كاملتين إليه مرة أخرى.
+
+`coverage-expansion-testng.xml` للشاشات الجديدة، و`coverage-observations-testng.xml` لفحوص الملاحظات، و`coverage-verification-testng.xml` يجمعهما في75 حالة. هذه مداخل تحقق مستهدفة، وليست بديلًا عن تشغيل المستويات الأربعة كاملة. `coverage-recovery-testng.xml` يستعيد فقط سجلات المالك المحددة صراحةً؛ ليس تنظيفًا عامًا لبيانات البيئة.
+
 التشغيل الموحد من جذر المشروع: `./scripts/Test-Project.ps1` للمحلي، و`-Mode Acceptance` للمحلي ثم الدخول وSmoke، و`-Mode Regression` للمحلي ثم Regression الحي. النتائج في `target/validation/<run-id>`، دون تنظيف سجلات الاستعادة.
 
 - الفحوص المحلية الآلية: `ci-testng.xml`، وتشغيلها المفضل `mvn -Pci verify` لعزل النتائج وتعطيل توليد وفتح Allure تلقائيًا. لا يتصل هذا المدخل بـERP ولا يحتاج بيانات دخول.
@@ -60,3 +64,7 @@ mvn '-DExecutionType=LocalHeadless' '-Dsurefire.suiteXmlFiles=src/test/resources
 البيانات الأساسية: `basic-data-testng.xml`، والقيود اليومية: `general-accounting-testng.xml`. تجهيز البيانات والعزل والتنظيف واستثناء الإغلاق والمراجعة لتسليم الخزينة موضحة في `docs/testing/MODULE_FIXTURES_AR.md`.
 
 فحص رحلة التقرير داخل الشاشات: `additional/standalone/allure-journey-smoke-testng.xml`. طريقة عرض الإجراءات والمقارنات ونتائج التحقق موثقة في `docs/testing/ALLURE_SCREEN_JOURNEYS_AR.md`.
+
+إعادة التحقق بعد تقسيم Page Objects: `additional/standalone/page-object-refactor-testng.xml` للمكونات الأولى، و`additional/standalone/page-object-core-refactor-testng.xml` للكلاسات الأساسية المشتركة. يشغل كل ملف بالتتابع على Demo ببياناته المملوكة وتنظيفه المعتاد؛ لا يضاف إلى Regression حتى لا تتكرر الحالات. نتائج كل دفعة وحدود التحقق في `docs/testing/PAGE_OBJECT_REFACTOR_2026_10_24_AR.md`.
+
+التحقق النهائي بعد فك الوراثة واستكمال فصل الصفحات: `additional/standalone/page-object-final-refactor-testng.xml`، ويختار 20 حالة تشمل الحفظ والطباعة، والمتعاملين، والبيانات الأساسية، والمنتجات، والحركات المالية، والمخازن والكاشير. الاختبارات الأساسية الأربعة تظل تستخدم الحالات نفسها ولا تحتاج تكرارها داخل ملفات التشغيل بسبب نقل تنفيذ Page Objects.

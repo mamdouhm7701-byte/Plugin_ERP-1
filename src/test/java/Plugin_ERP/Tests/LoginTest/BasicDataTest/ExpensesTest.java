@@ -13,6 +13,8 @@ public class ExpensesTest extends BasicDataScenarioTest {
     }
 
     private ExpensesPage open() {
+        // The screen loads account choices when mounted, before opening its form.
+        basicData().account("expenses");
         ExpensesPage p = new ExpensesPage(driver);
         p.NavigationHelper(Pages.EXPENSES);
         return p;

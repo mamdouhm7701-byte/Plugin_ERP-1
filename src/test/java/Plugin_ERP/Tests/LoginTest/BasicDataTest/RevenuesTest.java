@@ -13,6 +13,8 @@ public class RevenuesTest extends BasicDataScenarioTest {
     }
 
     private RevenuesPage open() {
+        // Seed before navigation so the mounted account lookup includes this case.
+        basicData().account("revenues");
         RevenuesPage p = new RevenuesPage(driver);
         p.NavigationHelper(Pages.REVENUES);
         return p;

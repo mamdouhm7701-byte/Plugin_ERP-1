@@ -13,6 +13,8 @@ public class StoreTest extends BasicDataScenarioTest {
     }
 
     private StorePage open() {
+        // Account choices are a mount-time snapshot, so create the owned reference first.
+        basicData().account("stores");
         StorePage p = new StorePage(driver);
         p.NavigationHelper(Pages.WAREHOUSES);
         return p;

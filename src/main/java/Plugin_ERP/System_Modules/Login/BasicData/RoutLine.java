@@ -11,9 +11,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class RoutLine extends AbstractForDealer {
+    private final RouteRecords recordControls;
 
-    private final By rows = By.cssSelector("table tbody tr[role='row']");
-    private final By headers = By.cssSelector("table thead th");
     private final By save = By.cssSelector("button[data-action-type='save']");
 
     private boolean visible(By locator) {
@@ -110,34 +109,7 @@ public class RoutLine extends AbstractForDealer {
 
     @Step("التحقق من بنية قائمة حالات خط السير")
     public boolean IsListStructureDisplayed() {
-        List<String> h =
-                driver.findElements(headers).stream()
-                        .filter(WebElement::isDisplayed)
-                        .map(e -> e.getText().trim())
-                        .toList();
-        boolean headings =
-                h.stream().anyMatch(s -> s.contains("الكود"))
-                        && h.stream().anyMatch(s -> s.contains("حالة خط السير"))
-                        && h.stream().anyMatch(s -> s.contains("نوع المستند"));
-        List<WebElement> editable =
-                driver.findElements(rows).stream()
-                        .filter(WebElement::isDisplayed)
-                        .filter(
-                                r ->
-                                        !r.findElements(
-                                                        By.cssSelector(
-                                                                "button[data-action-type='edit']"))
-                                                .isEmpty())
-                        .toList();
-        return headings
-                && (editable.isEmpty()
-                        || editable.stream()
-                                .allMatch(
-                                        r ->
-                                                !r.findElements(
-                                                                By.cssSelector(
-                                                                        "button[data-action-type='delete']"))
-                                                        .isEmpty()));
+        return recordControls.IsListStructureDisplayed();
     }
 
     @Step("التحقق من عناصر نموذج حالة خط السير")
@@ -161,45 +133,12 @@ public class RoutLine extends AbstractForDealer {
 
     @Step("عدد حالات خط السير المطابقة بالاسم")
     public int GetExactMatchCount(String n) {
-        int count = 0;
-        for (WebElement r : driver.findElements(rows))
-            try {
-                if (!r.isDisplayed()) continue;
-                for (WebElement c : r.findElements(By.cssSelector("td")))
-                    if (c.getText().trim().equals(n)) {
-                        count++;
-                        break;
-                    }
-            } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
-            }
-        return count;
-    }
-
-    private WebElement row(String n) {
-        return new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        d ->
-                                d.findElements(rows).stream()
-                                        .filter(WebElement::isDisplayed)
-                                        .filter(
-                                                r ->
-                                                        r
-                                                                .findElements(By.cssSelector("td"))
-                                                                .stream()
-                                                                .anyMatch(
-                                                                        c ->
-                                                                                c.getText()
-                                                                                        .trim()
-                                                                                        .equals(n)))
-                                        .findFirst()
-                                        .orElse(null));
+        return recordControls.GetExactMatchCount(n);
     }
 
     @Step("فتح حالة خط السير المطابقة للتعديل")
     public void OpenForEditByName(String n) {
-        row(n).findElement(By.cssSelector("button[data-action-type='edit']")).click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOfElementLocated(save));
+        recordControls.OpenForEditByName(n);
     }
 
     private String value(By b) {
@@ -266,64 +205,27 @@ public class RoutLine extends AbstractForDealer {
 
     @Step("طلب حذف حالة خط السير المطابقة")
     public void RequestDeleteByName(String n) {
-        row(n).findElement(By.cssSelector("button[data-action-type='delete']")).click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        ExpectedConditions.visibilityOfElementLocated(
-                                By.cssSelector(".swal2-popup")));
+        recordControls.RequestDeleteByName(n);
     }
 
     public boolean IsDeleteConfirmationDisplayed() {
-        return visible(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-confirm"))
-                && visible(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"));
+        return recordControls.IsDeleteConfirmationDisplayed();
     }
 
     @Step("تأكيد حذف حالة الاختبار")
     public void ConfirmDelete() {
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        ExpectedConditions.elementToBeClickable(
-                                By.cssSelector(
-                                        ".swal2-container.swal2-backdrop-show .swal2-confirm")))
-                .click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        d ->
-                                d
-                                        .findElements(
-                                                By.cssSelector(
-                                                        ".swal2-container.swal2-backdrop-show .swal2-cancel"))
-                                        .stream()
-                                        .noneMatch(
-                                                e -> {
-                                                    try {
-                                                        return e.isDisplayed();
-                                                    } catch (Exception ignored) {
-                                                        return false;
-                                                    }
-                                                }));
-        waitLoading();
-        By success =
-                By.xpath(
-                        "//div[contains(@class,'swal2-popup') and contains(normalize-space(.),'تم الحذف')]");
-        try {
-            new WebDriverWait(driver, Duration.ofSeconds(3))
-                    .until(ExpectedConditions.visibilityOfElementLocated(success));
-            DismissAlertIfPresent();
-        } catch (org.openqa.selenium.TimeoutException ignored) {
-        }
+        recordControls.ConfirmDelete();
     }
 
     @Step("إلغاء الحذف")
     public void CancelDelete() {
-        driver.findElement(By.cssSelector(".swal2-container.swal2-backdrop-show .swal2-cancel"))
-                .click();
-        waitAlert();
+        recordControls.CancelDelete();
     }
 
     // Constructors
     public RoutLine(WebDriver driver) {
         super(driver);
+        recordControls = new RouteRecords(this, driver);
     }
 
     // Locators
@@ -350,4 +252,7 @@ public class RoutLine extends AbstractForDealer {
     public void SelectRadiBouton(String RadiBouton) {
         utilites.checkbox().selectRadioButton(RadiBouton);
     }
+    boolean recordVisible(By locator) { return visible(locator); }
+    void recordWaitLoading() { waitLoading(); }
+    void recordWaitAlert() { waitAlert(); }
 }

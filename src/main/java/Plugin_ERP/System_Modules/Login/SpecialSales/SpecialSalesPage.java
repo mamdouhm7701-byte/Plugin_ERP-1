@@ -13,13 +13,19 @@ import java.util.*;
 
 /** Native controls shared by the two counter screens; independent of the normal invoice POM. */
 public abstract class SpecialSalesPage extends Abstract {
+    private final CounterPaymentControls recordControls;
+    private final CounterDocumentLines lines;
+    private final CounterSaveCapture saveCapture;
     protected final WebDriverWait ready;
 
     protected SpecialSalesPage(WebDriver driver) {
         super(driver);
+        lines = new CounterDocumentLines(this, driver);
+        saveCapture = new CounterSaveCapture(this);
         ready = new WebDriverWait(driver, Duration.ofSeconds(45));
         ready.ignoring(StaleElementReferenceException.class)
                 .ignoring(ElementClickInterceptedException.class);
+        recordControls = new CounterPaymentControls(this, driver, ready);
     }
 
     public abstract String route();
@@ -173,113 +179,59 @@ public abstract class SpecialSalesPage extends Abstract {
     }
 
     public void capture(String marker) {
-        js(
-                """
-                const root=document.querySelector('#app').__vue__,store=root.$store;
-                window.__specialSalesQA={marker:arguments[0],endpoint:arguments[1],attempts:[],saves:[],errors:[],pending:0};
-                if(store.__specialSalesCaptureInstalled)return;store.__specialSalesCaptureInstalled=true;const dispatch=store.dispatch.bind(store);
-                store.dispatch=function(action,payload,...rest){const c=window.__specialSalesQA;
-                  const owned=c&&payload?.url===c.endpoint&&['app/create','app/update'].includes(action)&&payload?.data?.notes?.startsWith(c.marker);
-                  const sent=owned?JSON.parse(JSON.stringify(payload.data)):null;
-                  if(owned){c.pending++;c.attempts.push({endpoint:payload.url,values:sent});}
-                  return dispatch(action,payload,...rest).then(result=>{if(owned){c.pending--;const entity=result?.data||result;c.saves.push({endpoint:payload.url,id:sent.id||entity?.id||(typeof entity==='string'?entity:null),values:sent});}return result;})
-                    .catch(error=>{if(owned){c.pending--;c.errors.push(JSON.stringify(error?.response?.data||error?.data||{message:String(error)}));}throw error;});};
-                """,
-                marker,
-                endpoint());
+        saveCapture.capture(marker);
     }
 
     public String captureMarker() {
-        return (String) js("return window.__specialSalesQA?.marker||null");
+        return saveCapture.captureMarker();
     }
 
     @SuppressWarnings("unchecked")
     public List<Map<String, Object>> attempts() {
-        return (List<Map<String, Object>>) js("return window.__specialSalesQA?.attempts||[]");
+        return saveCapture.attempts();
     }
 
     @SuppressWarnings("unchecked")
     public List<Map<String, Object>> saves() {
-        return (List<Map<String, Object>>) js("return window.__specialSalesQA?.saves||[]");
+        return saveCapture.saves();
     }
 
     public void settled() {
-        ready.until(
-                d -> !Boolean.TRUE.equals(js("return (window.__specialSalesQA?.pending||0)>0")));
+        saveCapture.settled();
     }
 
     protected By line(String name) {
-        return By.xpath(
-                "//section[@id='lines']//div[contains(concat(' ',normalize-space(@class),' '),'"
-                        + " ecommerce-card ')][.//*[normalize-space(text())='"
-                        + name
-                        + "']]");
+        return lines.line(name);
     }
 
     @Step("تغيير كمية الصنف {name} إلى {value}")
     public void quantity(String name, String value) {
-        var card =
-                ready.until(
-                        d ->
-                                d.findElements(line(name)).stream()
-                                        .filter(WebElement::isDisplayed)
-                                        .findFirst()
-                                        .orElse(null));
-        var input = card.findElement(By.cssSelector("input[placeholder='الكمية']"));
-        input.click();
-        input.sendKeys(Keys.CONTROL + "a");
-        input.sendKeys(value);
-        blur();
+        lines.quantity(name, value);
     }
 
     @Step("تغيير كمية الصنف {name} بزر الزيادة أو النقصان: {plus}")
     public void changeQuantity(String name, boolean plus) {
-        var card = driver.findElement(line(name));
-        card.findElement(
-                        By.xpath(
-                                ".//div[contains(@class,'quantity-input')]//button[.//*[local-name()='svg'"
-                                    + " and contains(@class,'feather-"
-                                        + (plus ? "plus" : "minus")
-                                        + "')]]"))
-                .click();
+        lines.changeQuantity(name, plus);
     }
 
     @Step("حذف الصنف {name} من الفاتورة")
     public void removeLine(String name) {
-        var card = driver.findElement(line(name));
-        card.findElement(
-                        By.xpath(
-                                ".//button[.//*[local-name()='svg' and"
-                                        + " contains(@class,'feather-x')]]"))
-                .click();
+        lines.removeLine(name);
     }
 
     @Step("إدخال الخصم {value}، خصم بنسبة: {percentage}")
     public void discount(String value, boolean percentage) {
-        text(
-                percentage
-                        ? By.cssSelector("input[placeholder='النسبة']")
-                        : By.cssSelector("input[name='discountValue']"),
-                value);
+        recordControls.discount(value, percentage);
     }
 
     @Step("إغلاق نافذة السداد")
     public void closePayment() {
-        for (var e : driver.findElements(By.cssSelector(".b-sidebar-backdrop")))
-            if (e.isDisplayed()) {
-                e.click();
-                break;
-            }
+        recordControls.closePayment();
     }
 
     @Step("حفظ الفاتورة وطباعة التقرير")
     public void saveAndPrint() {
-        By sidebar =
-                By.xpath(
-                        "//div[@id='sidebar-invoice-add-payment']//button[normalize-space()='حفظ و"
-                                + " طباعة']");
-        if (driver.findElements(sidebar).stream().anyMatch(WebElement::isDisplayed)) click(sidebar);
-        else button("حفظ و طباعة");
+        recordControls.saveAndPrint();
     }
 
     @Step("فتح إجراء {icon} للفاتورة رقم {code}")
@@ -337,76 +289,29 @@ public abstract class SpecialSalesPage extends Abstract {
 
     @Step("إضافة طريقة الدفع {name} بمبلغ {value}")
     public void addOtherPayment(String name, String value) {
-        int count = ((List<?>) document().get("payments")).size();
-        click(By.xpath("//label[normalize-space()='آخرى']"));
-        choose("طريقة الدفع", name);
-        text(By.cssSelector("input[name='value']:not([disabled])"), value);
-        click(
-                By.xpath(
-                        "//fieldset[@label-text='paymentWay']/ancestor::div[contains(concat('"
-                                + " ',normalize-space(@class),' '),' row"
-                                + " ')][1]//button[.//*[local-name()='svg' and"
-                                + " contains(@class,'feather-plus')]]"));
-        ready.until(d -> ((List<?>) document().get("payments")).size() == count + 1);
+        recordControls.addOtherPayment(name, value);
     }
 
     @Step("التحقق من وصول صافي الفاتورة إلى {value}")
     public void waitNet(String value) {
-        try {
-            ready.until(d -> new java.math.BigDecimal(document().get("net").toString())
-                    .compareTo(new java.math.BigDecimal(value)) == 0);
-        } catch (TimeoutException failure) {
-            throw new AssertionError("صافي الفاتورة غير مطابق: المتوقع " + value
-                    + "، الفعلي " + document().get("net"), failure);
-        }
+        lines.waitNet(value);
     }
 
     @Step("التحقق من وصول إجمالي الفاتورة إلى {value}")
     public void waitTotal(String value) {
-        try {
-            ready.until(d -> new java.math.BigDecimal(document().get("total").toString())
-                    .compareTo(new java.math.BigDecimal(value)) == 0);
-        } catch (TimeoutException failure) {
-            throw new AssertionError("إجمالي الفاتورة غير مطابق: المتوقع " + value
-                    + "، الفعلي " + document().get("total"), failure);
-        }
+        lines.waitTotal(value);
     }
 
     public void awaitTotals() {
-        try {
-            ready.until(
-                    d ->
-                            Boolean.TRUE.equals(
-                                    js(
-                                            vmScript()
-                                                    + "return"
-                                                    + " Math.abs(Number(vm.selectedItem.total)-(vm.selectedItem.lines||[]).reduce((sum,line)=>sum+Number(line.total||0),0))<0.00001;")));
-        } catch (TimeoutException failure) {
-            var value = document();
-            var sum =
-                    ((List<?>) value.get("lines"))
-                            .stream()
-                                    .map(
-                                            row ->
-                                                    new java.math.BigDecimal(
-                                                            ((Map<?, ?>) row)
-                                                                    .get("total")
-                                                                    .toString()))
-                                    .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add);
-            throw new AssertionError(
-                    "إجمالي الفاتورة لا يطابق مجموع البنود: المتوقع " + sum + "، الفعلي " + value.get("total"),
-                    failure);
-        }
+        lines.awaitTotals();
     }
 
     public void awaitSave() {
-        ready.until(d -> !saves().isEmpty());
-        settled();
+        saveCapture.awaitSave();
     }
 
     public void awaitSaveCount(int count) {
-        ready.until(d -> saves().size() >= count);
-        settled();
+        saveCapture.awaitSaveCount(count);
     }
 
     public void awaitInvoice(Object id) {

@@ -31,6 +31,9 @@ public final class SuiteDefinitionsTest {
         {"additional/standalone/purchase-calendar-smoke"},
         {"additional/standalone/document-list-refactor-smoke"},
         {"additional/standalone/form-interactions-smoke"},
+        {"additional/standalone/page-object-refactor"},
+        {"additional/standalone/page-object-core-refactor"},
+        {"additional/standalone/page-object-final-refactor"},
         {"additional/standalone/products-finance-interactions-smoke"},
         {"additional/standalone/acceptance"}, {"additional/standalone/module-lifecycle-smoke"}, {"additional/standalone/allure-journey-smoke"}
     };

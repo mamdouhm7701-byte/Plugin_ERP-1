@@ -901,10 +901,14 @@ public class CashTest extends BasicDataScenarioTest {
     }
 
     private Path prepareExportDirectory() throws IOException {
-        Path directory =
-                Path.of(System.getProperty("user.dir"), "target", "cash-export-downloads")
-                        .toAbsolutePath();
-        Files.createDirectories(directory);
+        Path root = Path.of(System.getProperty("user.dir"), "target", "cash-export-downloads")
+                .toAbsolutePath();
+        Files.createDirectories(root);
+        Path directory = Files.createTempDirectory(root, "case-");
+        if (driver instanceof org.openqa.selenium.chromium.HasCdp cdp) {
+            cdp.executeCdpCommand("Page.setDownloadBehavior", java.util.Map.of(
+                    "behavior", "allow", "downloadPath", directory.toString()));
+        }
         return directory;
     }
 

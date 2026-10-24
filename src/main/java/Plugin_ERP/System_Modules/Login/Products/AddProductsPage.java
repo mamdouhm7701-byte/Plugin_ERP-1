@@ -12,6 +12,8 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 public class AddProductsPage extends ProductsModulePage {
+    private final ProductComponents components;
+    private final ProductUnits units;
     @Step("ربط الصنف بالمخزن {store}: رصيد {opening}، حد أدنى {minimum}، تكلفة {cost}")
     public void prStock(String store, String opening, String minimum, String cost) {
         prChoose("مخازن", store);
@@ -51,6 +53,8 @@ public class AddProductsPage extends ProductsModulePage {
     // Constructors
     public AddProductsPage(WebDriver driver) {
         super(driver);
+        units = new ProductUnits(this, driver);
+        components = new ProductComponents(this, driver);
     }
 
     // locators
@@ -71,23 +75,15 @@ public class AddProductsPage extends ProductsModulePage {
     private By CostPrice = By.xpath("//div[@data-title='سعر التكلفة']//input[@type='number']");
     private By LowestAvailableQuantity = By.xpath("//div[@data-title='الحد الأدني']//input");
     private By AddStore = By.xpath("//button[contains(.,'اضافة مخزن')]");
-    private By UnitProduct = By.xpath("//a[contains(.,'وحدات الصنف')]");
-    private By TransUnit = By.xpath("//div[@data-title='معامل التحويل']//input[@type='number']");
+
     private By AddBarcode = By.xpath("(//div[@data-title='الباركود']//input)[3]");
-    private By AddSalePrice = By.xpath("//div[@data-title='سعر البيع']//input[@type='number']");
+
     private By AddMiniSalePrice =
             By.xpath("//div[@data-title='أقل سعر بيع']//input[@type='number']");
     private By AddMaxSalePrice = By.xpath("//input[@name='maxSalesPrice']");
-    private By AddUnite = By.xpath("//button[contains(.,'اضافة وحدة')]");
+
     private By CntrolleProduct = By.xpath("//a[contains(.,'التحكم في الأصناف')]");
-    private By CompletedProduct = By.xpath("//input[@value='PerfectlyMade']");
-    private By Component = By.xpath("//a[@role='tab' and text()='المكونات']");
-    private By AddComponent = By.xpath("//button[contains(text(),'اضافة مكونات')]");
-    private By SerchComponent = By.xpath("//input[@id='arabicName']");
-    private By CloseComponent = By.xpath("//button[contains(.,'إغلاق')]");
-    private By ComponentQuantity =
-            By.xpath("//input[@type='number' and contains(@class,'form-control-sm')]");
-    private By ComponetNotest = By.xpath("//input[@id='textarea']");
+
     private By DeletStore = By.xpath("//*[contains(@id,'delete-icon')]");
     private By SaveEditeButton = By.cssSelector("button[data-action-type='save']");
     private By UniteNameRequiredMsg =
@@ -177,37 +173,37 @@ public class AddProductsPage extends ProductsModulePage {
 
     @Step("الضغط على تبويب وحدات الصنف")
     public void ClickUnitProduct() {
-        utilites.ClickElement(UnitProduct);
+        units.ClickUnitProduct();
     }
 
     @Step("إدخال معامل التحويل: {transUnit}")
     public void AddTransUnit(String transUnit) {
-        utilites.TaypeTextB(TransUnit, transUnit);
+        units.AddTransUnit(transUnit);
     }
 
     @Step("إدخال الباركود للوحدة الثانية: {addBarcode}")
     public void AddBarcode_2(String addBarcode) {
-        utilites.TaypeTextB(AddBarcode, addBarcode);
+        units.AddBarcode_2(addBarcode);
     }
 
     @Step("إدخال سعر البيع للوحدة الثانية: {addSalePrice}")
     public void AddSalePrice_2(String addSalePrice) {
-        utilites.TaypeTextB(AddSalePrice, addSalePrice);
+        units.AddSalePrice_2(addSalePrice);
     }
 
     @Step("إدخال أقل سعر بيع للوحدة الثانية: {addMiniSalePrice}")
     public void AddMiniSalePrice_2(String addMiniSalePrice) {
-        utilites.TaypeTextB(AddMiniSalePrice, addMiniSalePrice);
+        units.AddMiniSalePrice_2(addMiniSalePrice);
     }
 
     @Step("إدخال أعلى سعر بيع للوحدة الثانية: {addMaxSalePrice}")
     public void AddMaxSalePrice_2(String addMaxSalePrice) {
-        utilites.TaypeTextB(AddMaxSalePrice, addMaxSalePrice);
+        units.AddMaxSalePrice_2(addMaxSalePrice);
     }
 
     @Step("الضغط على زر إضافة وحدة")
     public void ClickAddUnit() {
-        utilites.ClickElement(AddUnite);
+        units.ClickAddUnit();
     }
 
     @Step("الضغط على تبويب التحكم في الأصناف")
@@ -229,42 +225,42 @@ public class AddProductsPage extends ProductsModulePage {
 
     @Step("تحديد الصنف كمنتج مكتمل الصنع")
     public void ClickCompletedProduct() {
-        utilites.ClickElement(CompletedProduct);
+        components.ClickCompletedProduct();
     }
 
     @Step("الضغط على تبويب المكونات")
     public void ClickComponentTab() {
-        utilites.ClickElement(Component);
+        components.ClickComponentTab();
     }
 
     @Step("الضغط على زر إضافة مكونات")
     public void ClickAddComponent() {
-        utilites.ClickElement(AddComponent);
+        components.ClickAddComponent();
     }
 
     @Step("البحث عن مكون: {searchComponent}")
     public void SearchComponent(String searchComponent) {
-        utilites.TaypeTextB(SerchComponent, searchComponent);
+        components.SearchComponent(searchComponent);
     }
 
     @Step("اختيار الصنف: {productName}")
     public void SelectProduct(String productName) {
-        utilites.dropdown().selectProductByName(productName);
+        components.SelectProduct(productName);
     }
 
     @Step("الضغط على زر إغلاق نافذة المكونات")
     public void ClickCloseComponent() {
-        utilites.ClickElement(CloseComponent);
+        components.ClickCloseComponent();
     }
 
     @Step("إدخال كمية المكون: {value}")
     public void AddComponentQuantity(String value) {
-        utilites.TaypeTextB(ComponentQuantity, value);
+        components.AddComponentQuantity(value);
     }
 
     @Step("إدخال ملاحظات المكون: {notes}")
     public void AddComponentNotes(String notes) {
-        utilites.TaypeTextB(ComponetNotest, notes);
+        components.AddComponentNotes(notes);
     }
 
     @Step("التحقق من ظهور رسالة خطأ الباركود الإلزامي")

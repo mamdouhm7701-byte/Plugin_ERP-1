@@ -19,10 +19,12 @@ import java.util.List;
 import java.util.Map;
 
 public class ReturnOrderPage extends AbstractForPurchases {
+    private final ReturnOrderRows rowReader;
 
     public ReturnOrderPage(WebDriver driver) {
 
         super(driver);
+        rowReader = new ReturnOrderRows(this, driver);
     }
 
     private By ClickPlusToAddPayForReturn =
@@ -83,62 +85,7 @@ public class ReturnOrderPage extends AbstractForPurchases {
     }
 
     public List<InvoiceRow> getInvoiceRowsForReturnOrder() {
-
-        List<InvoiceRow> invoiceRows = new ArrayList<>();
-
-        String nameColIndex =
-                driver.findElement(
-                                By.xpath(
-                                        "//th[@role='columnheader'][.//div[normalize-space()='الاسم']]"))
-                        .getAttribute("aria-colindex");
-
-        String quantityColIndex =
-                driver.findElement(
-                                By.xpath(
-                                        "//th[@role='columnheader'][.//div[normalize-space()='الكمية']]"))
-                        .getAttribute("aria-colindex");
-
-        String priceColIndex =
-                driver.findElement(
-                                By.xpath(
-                                        "//th[@role='columnheader'][.//div[normalize-space()='السعر']]"))
-                        .getAttribute("aria-colindex");
-
-        List<WebElement> rows = driver.findElements(By.xpath("//tbody//tr[@role='row']"));
-
-        for (WebElement row : rows) {
-
-            List<WebElement> nameCells =
-                    row.findElements(By.xpath(".//td[@aria-colindex='" + nameColIndex + "']"));
-
-            if (nameCells.isEmpty()) continue;
-
-            String name = nameCells.get(0).getText().trim();
-
-            BigDecimal quantity =
-                    new BigDecimal(
-                            row.findElement(
-                                            By.xpath(
-                                                    ".//td[@aria-colindex='"
-                                                            + quantityColIndex
-                                                            + "']//input[not(@type='hidden')]"))
-                                    .getAttribute("value")
-                                    .trim());
-
-            BigDecimal price =
-                    new BigDecimal(
-                            row.findElement(
-                                            By.xpath(
-                                                    ".//td[@aria-colindex='"
-                                                            + priceColIndex
-                                                            + "']//input[not(@type='hidden')]"))
-                                    .getAttribute("value")
-                                    .trim());
-
-            invoiceRows.add(new InvoiceRow(name, quantity, price));
-        }
-
-        return invoiceRows;
+        return rowReader.getInvoiceRowsForReturnOrder();
     }
 
     @Step("احتساب  ارقام الفاتوره ومطابقتها بالفرونت")
@@ -166,62 +113,7 @@ public class ReturnOrderPage extends AbstractForPurchases {
     }
 
     public Map<String, String> GetNamesQuantitiesAndPricesForReturnOrder() {
-
-        Map<String, String> data = new LinkedHashMap<>();
-
-        String nameColIndex =
-                driver.findElement(
-                                By.xpath(
-                                        "//th[@role='columnheader'][.//div[normalize-space()='الاسم']]"))
-                        .getAttribute("aria-colindex");
-
-        String quantityColIndex =
-                driver.findElement(
-                                By.xpath(
-                                        "//th[@role='columnheader'][.//div[normalize-space()='الكمية']]"))
-                        .getAttribute("aria-colindex");
-
-        String priceColIndex =
-                driver.findElement(
-                                By.xpath(
-                                        "//th[@role='columnheader'][.//div[normalize-space()='السعر']]"))
-                        .getAttribute("aria-colindex");
-
-        List<WebElement> rows = driver.findElements(By.xpath("//tbody//tr[@role='row']"));
-
-        for (WebElement row : rows) {
-
-            List<WebElement> nameCells =
-                    row.findElements(By.xpath(".//td[@aria-colindex='" + nameColIndex + "']"));
-
-            if (nameCells.isEmpty()) continue;
-
-            String name = nameCells.get(0).getText().trim();
-
-            String quantity =
-                    row.findElement(
-                                    By.xpath(
-                                            ".//td[@aria-colindex='"
-                                                    + quantityColIndex
-                                                    + "']//input[not(@type='hidden')]"))
-                            .getAttribute("value")
-                            .trim();
-
-            String price =
-                    row.findElement(
-                                    By.xpath(
-                                            ".//td[@aria-colindex='"
-                                                    + priceColIndex
-                                                    + "']//input[not(@type='hidden')]"))
-                            .getAttribute("value")
-                            .trim();
-
-            System.out.printf("Item=%s , Quantity=%s , Price=%s%n", name, quantity, price);
-
-            data.put(name, quantity + "|" + price);
-        }
-
-        return data;
+        return rowReader.GetNamesQuantitiesAndPricesForReturnOrder();
     }
 
     @Step("الضغط على علامه ال+ لاضافه طريقه الدفع")

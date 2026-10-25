@@ -16,13 +16,19 @@ public class DropdownActions extends BaseAction {
 
     public void selectUsersByCode(int... codes) {
         for (int code : codes) {
-            WebElement addButton =
-                    driver.findElement(
-                            By.xpath(
-                                    "//td[normalize-space()='"
-                                            + code
-                                            + "']/following-sibling::td//button[@data-action-type='save']"));
-            addButton.click();
+            By add = By.xpath("//div[contains(@class,'modal') and contains(@class,'show')]"
+                    + "//td[normalize-space()='" + code
+                    + "']/following-sibling::td//button[@data-action-type='save']");
+            wait.ignoring(StaleElementReferenceException.class)
+                    .ignoring(ElementClickInterceptedException.class).until(d -> {
+                        for (WebElement button : d.findElements(add)) {
+                            if (!button.isDisplayed() || !button.isEnabled()) continue;
+                            scrollIntoView(button);
+                            button.click();
+                            return true;
+                        }
+                        return false;
+                    });
         }
     }
 

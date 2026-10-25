@@ -242,70 +242,39 @@ public abstract class PurchaseFormActions extends PurchaseScenarioTest {
         assertStock("0");
     }
 
-    protected void linkedReturn() {
+    protected PurchaseTestData.Record prepareLinkedReturn() {
         convertedKind = PurchaseDocumentKind.INVOICE;
         var invoice = create("picker", "Credit", false);
         String code = data.read(invoice).get("code").toString();
-        page.puConvertOwned(supplier.name(), code, false, item.name());
+        page.puConvertOwned(supplier.name(), code, invoice.id(), false, item.name());
         convertedKind = PurchaseDocumentKind.RETURN;
         for (int i = 1; i <= 2; i++) initialBalances.put(i, number(data.balance(item, i)));
         sameNumber(firstLine(page.puDocument()).get("quantity"), "3");
         page.puNotes(marker);
         page.puCapture(marker, data.store(1).id(), item.id(), documentKind().endpoint);
-        if (!page.puLineReadOnly(item.name(), "الكمية")) {
-            page.puQuantity(item.name(), "2");
-            var quantity = number(firstLine(page.puDocument()).get("quantity"));
-            if (quantity.compareTo(number("3")) != 0) {
-                sameNumber(quantity, "2");
-                page.puWaitNet("200");
-                var before = data.documentIdentities();
-                if (!page.puSaveDisabled()) {
-                    page.puSave(false);
-                    page.puWaitSaveOutcome();
-                    page.puSettled();
-                    var captured = capture();
-                    if (!captured.isEmpty()) {
-                        var normalized = data.read(captured.get(captured.size() - 1));
-                        io.qameta.allure.Allure.addAttachment(
-                                "Linked purchase return quantity evidence",
-                                "application/json",
-                                new org.json.JSONObject(
-                                                PurchaseTestData.fields(
-                                                        "requestedQuantity",
-                                                        2,
-                                                        "originalQuantity",
-                                                        3,
-                                                        "stored",
-                                                        normalized))
-                                        .toString(),
-                                ".json");
-                        sameNumber(firstLine(normalized).get("quantity"), "3");
-                        sameNumber(normalized.get("net"), "300");
-                        page.puDismiss();
-                        assertSource(captured.get(captured.size() - 1), invoice.id());
-                        assertStock("3");
-                        return;
-                    }
-                }
-                data.verifyNoNewDocuments(before);
-                assertStock("0");
-                page.puDismiss();
-                page.puQuantity(item.name(), "3");
-                page.puWaitNet("300");
-                page.puCapture(marker, data.store(1).id(), item.id(), documentKind().endpoint);
-            }
-        }
+        return invoice;
+    }
+
+    protected void linkedReturn() {
+        var invoice = prepareLinkedReturn();
+        var supplierBefore = data.read(supplier);
+        page.puQuantity(item.name(), "2");
+        page.puWaitNet("200");
         var returned = save(false);
         assertSource(returned, invoice.id());
-        sameNumber(firstLine(data.read(returned)).get("quantity"), "3");
-        assertStock("3");
+        sameNumber(firstLine(data.read(returned)).get("quantity"), "2");
+        sameNumber(data.read(returned).get("net"), "200");
+        assertStock("2");
+        assertSupplierDelta(supplierBefore, "200");
+        sameNumber(firstLine(data.read(invoice)).get("quantity"), "3");
+        sameNumber(data.read(invoice).get("net"), "300");
     }
 
     protected void convertOrder() {
         convertedKind = PurchaseDocumentKind.ORDER;
         var order = create("picker", "Credit", false);
         String code = data.read(order).get("code").toString();
-        page.puConvertOwned(supplier.name(), code, true, item.name());
+        page.puConvertOwned(supplier.name(), code, order.id(), true, item.name());
         convertedKind = PurchaseDocumentKind.INVOICE;
         page.puNotes(marker);
         page.puCapture(marker, data.store(1).id(), item.id(), documentKind().endpoint);
@@ -320,8 +289,12 @@ public abstract class PurchaseFormActions extends PurchaseScenarioTest {
         if (!stored.containsKey("sourceTransactionId")) {
             page.puListScope(supplier.name());
             page.puListText("filteredCode", stored.get("code").toString());
-            page.puWaitListIds(Set.of(record.id()));
-            var row = page.puListRows().get(0);
+            // Codes are shared by different document kinds; a linked return and its invoice
+            // can both match the code filter. Assert identity rather than assuming one row.
+            new org.openqa.selenium.support.ui.WebDriverWait(driver, java.time.Duration.ofSeconds(35))
+                    .until(d -> page.puListRows().stream().anyMatch(r -> record.id().equals(r.get("id"))));
+            var row = page.puListRows().stream().filter(r -> record.id().equals(r.get("id")))
+                    .findFirst().orElseThrow();
             actual = row.get("sourceTransactionId");
             io.qameta.allure.Allure.addAttachment(
                     "Purchase source relationship from list",

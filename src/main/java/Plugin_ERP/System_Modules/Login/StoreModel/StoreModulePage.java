@@ -178,6 +178,33 @@ public class StoreModulePage extends AbstractForStore {
         return ready.until(
                 d -> {
                     List<String> out = new ArrayList<>();
+                    for (WebElement input : d.findElements(By.cssSelector("form input.is-invalid,form input[aria-invalid='true']"))) {
+                        if (!input.isDisplayed()) continue;
+                        js("arguments[0].scrollIntoView({block:'center',inline:'center'})", input);
+                        new org.openqa.selenium.interactions.Actions(d).moveToElement(input).perform();
+                        Object field = js("""
+                            const e=arguments[0],cell=e.closest('td'),table=e.closest('table');
+                            const col=cell?.getAttribute('aria-colindex');
+                            return (col&&table?.querySelector('th[aria-colindex="'+col+'"]')?.innerText)
+                                ||e.getAttribute('placeholder')||e.name||'input';
+                            """, input);
+                        for (WebElement tip : d.findElements(By.cssSelector(".tooltip-inner")))
+                            if (tip.isDisplayed() && !tip.getText().isBlank())
+                                out.add(field + ": " + tip.getText());
+                    }
+                    for (WebElement input : d.findElements(By.cssSelector("form input:invalid"))) {
+                        if (!input.isDisplayed()) continue;
+                        String nativeMessage = input.getDomProperty("validationMessage");
+                        if (nativeMessage != null && !nativeMessage.isBlank()) {
+                            Object label = js("""
+                                const e=arguments[0],cell=e.closest('td'),table=e.closest('table');
+                                const col=cell?.getAttribute('aria-colindex');
+                                const header=col&&table?.querySelector('th[aria-colindex="'+col+'"]');
+                                return header?.innerText||e.getAttribute('placeholder')||e.name||'input';
+                                """, input);
+                            out.add(label + ": " + nativeMessage);
+                        }
+                    }
                     for (WebElement e :
                             d.findElements(
                                     By.cssSelector(
@@ -192,6 +219,10 @@ public class StoreModulePage extends AbstractForStore {
 
     public int smLineCount(String name) {
         return lines.smLineCount(name);
+    }
+
+    public Map<String, String> smAwaitInvalidQuantity(String name) {
+        return lines.smAwaitInvalidQuantity(name);
     }
 
     public Map<String, String> smLineValues(String name) {
@@ -273,6 +304,8 @@ public class StoreModulePage extends AbstractForStore {
     public void smSearch(String value) {
         records.smSearch(value);
     }
+
+    public boolean smHasListSearch() { return records.smHasSearch(); }
 
     public boolean smHasDocument(String marker) {
         return records.smHasDocument(marker);

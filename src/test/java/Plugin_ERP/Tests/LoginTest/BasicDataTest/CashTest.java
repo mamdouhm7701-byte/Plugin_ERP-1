@@ -112,8 +112,10 @@ public class CashTest extends BasicDataScenarioTest {
                 "WH-020: يجب تحميل الاسم العربي الحالي من السجل المحدد");
         Assert.assertEquals(
                 cashPage.getSafeAccountValue(),
-                accountInList,
-                "WH-034: يجب أن يتطابق رقم الحساب في النموذج مع رقم الحساب في الصف");
+                basicData().account("safe").name(),
+                "WH-034: يجب أن يطابق اسم الحساب المختار حساب بيانات الاختبار");
+        Assert.assertEquals(accountInList, basicData().read(basicData().account("safe")).get("code").toString(),
+                "WH-034: يجب أن يطابق كود الحساب في الصف نفس الحساب المختار");
         cashPage.ClickCloseButton();
     }
 
@@ -205,18 +207,19 @@ public class CashTest extends BasicDataScenarioTest {
 
     public void InvalidCashTest() {
         CashPage cashPage = new CashPage(driver);
+        String accountName = prepareSafeAccount();
         cashPage.NavigationHelper(Pages.SAFES);
         cashPage.ClickNew();
         cashPage.AddArabicName("");
         cashPage.AddEnglishName(ownedName("Safes", "required-field"));
-        cashPage.SelectFromDropDawn(basicData().account("safe").name(), "رقم الحساب");
-        int rowCountBefore = cashPage.getSafeTotalRowCount();
+        cashPage.SelectFromDropDawn(accountName, "رقم الحساب");
+        long rowCountBefore = recordCount("Safes");
         cashPage.ClickSaveButton();
         Assert.assertTrue(
                 cashPage.IsArabicNameRequiredErrorDisplayed(),
                 "WH-004: يجب إظهار رسالة تحقق الاسم العربي الفارغ");
         Assert.assertEquals(
-                cashPage.getSafeTotalRowCount(),
+                recordCount("Safes"),
                 rowCountBefore,
                 "WH-004: يجب ألا ينشأ سجل عند غياب الاسم العربي");
         cashPage.ClickCloseButton();
@@ -232,7 +235,7 @@ public class CashTest extends BasicDataScenarioTest {
     public void EmptyCashFormIsRejected() {
         CashPage cashPage = new CashPage(driver);
         cashPage.NavigationHelper(Pages.SAFES);
-        int rowCountBefore = cashPage.getSafeTotalRowCount();
+        long rowCountBefore = recordCount("Safes");
         cashPage.ClickNew();
         cashPage.AddEnglishName(ownedName("Safes", "required-name"));
         cashPage.ClickSaveButton();
@@ -241,7 +244,7 @@ public class CashTest extends BasicDataScenarioTest {
                 cashPage.IsArabicNameRequiredErrorDisplayed(),
                 "يجب أن يظهر تحقق الاسم العربي عند حفظ نموذج فارغ");
         Assert.assertEquals(
-                cashPage.getSafeTotalRowCount(),
+                recordCount("Safes"),
                 rowCountBefore,
                 "WH-006: يجب ألا ينشأ سجل عند ترك النموذج فارغًا");
         cashPage.ClickCloseButton();
@@ -256,19 +259,20 @@ public class CashTest extends BasicDataScenarioTest {
     @Description("يتحقق من معاملة المسافات فقط في الاسم العربي كقيمة فارغة.")
     public void CashArabicNameWhitespaceIsRejected() {
         CashPage cashPage = new CashPage(driver);
+        String accountName = prepareSafeAccount();
         cashPage.NavigationHelper(Pages.SAFES);
-        int rowCountBefore = cashPage.getSafeTotalRowCount();
+        long rowCountBefore = recordCount("Safes");
         cashPage.ClickNew();
         cashPage.AddArabicName("   ");
         cashPage.AddEnglishName(ownedName("Safes", "whitespace"));
-        cashPage.SelectFromDropDawn(basicData().account("safe").name(), "رقم الحساب");
+        cashPage.SelectFromDropDawn(accountName, "رقم الحساب");
         cashPage.ClickSaveButton();
 
         Assert.assertTrue(
                 cashPage.IsArabicNameRequiredErrorDisplayed(),
                 "يجب رفض الاسم العربي المكوّن من مسافات فقط");
         Assert.assertEquals(
-                cashPage.getSafeTotalRowCount(),
+                recordCount("Safes"),
                 rowCountBefore,
                 "WH-005: يجب ألا ينشأ سجل للاسم المكوّن من مسافات");
         cashPage.ClickCloseButton();
@@ -283,6 +287,7 @@ public class CashTest extends BasicDataScenarioTest {
     @Description("يتحقق من إمكانية تصحيح الاسم العربي بعد إظهار رسالة الإلزامية ثم حفظ الخزنة.")
     public void CorrectArabicNameAfterValidationError() {
         CashPage cashPage = new CashPage(driver);
+        String accountName = prepareSafeAccount();
         String uniqueSuffix = String.valueOf(System.currentTimeMillis());
         String arabicName = ownedName("Safes", "arabicName");
 
@@ -297,7 +302,7 @@ public class CashTest extends BasicDataScenarioTest {
 
             cashPage.AddArabicName(arabicName);
             cashPage.AddEnglishName("Corrected Safe " + uniqueSuffix);
-            cashPage.SelectFromDropDawn(basicData().account("safe").name(), "رقم الحساب");
+            cashPage.SelectFromDropDawn(accountName, "رقم الحساب");
             cashPage.ClickSaveButton();
             cashPage.searchSafes(arabicName);
             Assert.assertEquals(
@@ -470,7 +475,10 @@ public class CashTest extends BasicDataScenarioTest {
         driver.navigate().refresh();
         cashPage.NavigationHelper(Pages.SAFES);
         int defaultPageSize = cashPage.getSelectedSafePageSize();
-        int rowsBeforeChange = cashPage.getVisibleSafeRowCount();
+        // Read the complete list at the largest supported size before checking pagination.
+        cashPage.selectSafePageSize(500);
+        int totalRows = cashPage.getVisibleSafeRowCount();
+        cashPage.selectSafePageSize(defaultPageSize);
         int availablePageSize = cashPage.getAlternativeSafePageSize(defaultPageSize);
 
         Assert.assertTrue(
@@ -479,7 +487,7 @@ public class CashTest extends BasicDataScenarioTest {
         cashPage.selectSafePageSize(availablePageSize);
         Assert.assertEquals(
                 cashPage.getVisibleSafeRowCount(),
-                Math.min(rowsBeforeChange, availablePageSize),
+                Math.min(totalRows, availablePageSize),
                 "WH-029: يجب أن يتغير عدد الصفوف حسب حجم الصفحة أو إجمالي السجلات المتاحة");
     }
 
@@ -604,6 +612,7 @@ public class CashTest extends BasicDataScenarioTest {
     @Story("WH-012 منع إنشاء سجل مكرر عند الضغط على حفظ مرتين")
     public void WH_012_RapidDoubleSaveCreatesSingleSafe() {
         CashPage cashPage = new CashPage(driver);
+        String accountName = prepareSafeAccount();
         String suffix = String.valueOf(System.currentTimeMillis());
         String arabicName = ownedName("Safes", "arabicName");
         cashPage.NavigationHelper(Pages.SAFES);
@@ -611,7 +620,7 @@ public class CashTest extends BasicDataScenarioTest {
             cashPage.ClickNew();
             cashPage.AddArabicName(arabicName);
             cashPage.AddEnglishName("Double Save " + suffix);
-            cashPage.SelectFromDropDawn(basicData().account("safe").name(), "رقم الحساب");
+            cashPage.SelectFromDropDawn(accountName, "رقم الحساب");
             cashPage.clickSaveTwiceRapidly();
             cashPage.searchSafes(arabicName);
             Assert.assertEquals(
@@ -807,6 +816,14 @@ public class CashTest extends BasicDataScenarioTest {
         Assert.assertTrue(Files.size(downloadedFile) > 0, "ملف Excel الناتج فارغ");
     }
 
+    private String prepareSafeAccount() {
+        String name = basicData().account("safe").name();
+        // The safe form loads account choices when its component mounts.
+        driver.navigate().refresh();
+        basicData().installCapture();
+        return name;
+    }
+
     private void createSafe(
             CashPage cashPage,
             String arabicName,
@@ -814,6 +831,10 @@ public class CashTest extends BasicDataScenarioTest {
             String accountName,
             boolean general,
             String notes) {
+        // API fixtures may be created after this route cached its account options.
+        driver.navigate().refresh();
+        cashPage.NavigationHelper(Pages.SAFES);
+        basicData().installCapture();
         cashPage.ClickNew();
         cashPage.AddArabicName(arabicName);
         cashPage.AddEnglishName(englishName);
@@ -896,8 +917,10 @@ public class CashTest extends BasicDataScenarioTest {
     }
 
     private String seedSafe(String key) {
-        return basicData().fixture(key, "Safes", TestSupport.BasicDataFixtures.fields(
+        String name = basicData().fixture(key, "Safes", TestSupport.BasicDataFixtures.fields(
                 "accountId", basicData().account("safe").id())).name();
+        driver.navigate().refresh();
+        return name;
     }
 
     private Path prepareExportDirectory() throws IOException {

@@ -24,6 +24,7 @@ final class CashRecordActions {
 
     void searchSafes(String searchText) {
         waitForCashPageLoading();
+        if (owner.isCashCreationFormDisplayed()) owner.ClickCloseButton();
         waitForCashAlertToDisappear();
         WebElement search =
                 new WebDriverWait(driver, Duration.ofSeconds(10))
@@ -32,20 +33,21 @@ final class CashRecordActions {
         if (searchText != null && !searchText.isEmpty()) {
             search.sendKeys(searchText);
         }
+        search.sendKeys(org.openqa.selenium.Keys.ENTER);
         waitForCashPageLoading();
+        new GridProviderWait(driver, "safes").awaitReady();
     }
 
     boolean isSafeVisibleInSearchResults(String safeText) {
-        return driver.findElements(SafeRows).stream()
-                .anyMatch(row -> row.getText().contains(safeText));
+        new GridProviderWait(driver, "safes").awaitReady();
+        return Boolean.TRUE.equals(((JavascriptExecutor) driver).executeScript("""
+                return [...document.querySelectorAll('#mainTable tbody tr[role="row"]')]
+                    .some(r=>r.getClientRects().length&&r.innerText.includes(arguments[0]));
+                """, safeText));
     }
 
     int getExactSafeMatchCount(String safeName) {
-        return (int)
-                driver.findElements(SafeRows).stream()
-                        .filter(WebElement::isDisplayed)
-                        .filter(row -> row.getText().contains(safeName))
-                        .count();
+        return new GridProviderWait(driver, "safes").exactMatches(safeName);
     }
 
     void openSafeForEditByName(String safeName) {
@@ -53,9 +55,8 @@ final class CashRecordActions {
         WebElement row = findSafeRowByName(safeName);
         row.findElement(By.cssSelector("button[data-action-type='edit']")).click();
         new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(
-                        ExpectedConditions.visibilityOfElementLocated(
-                                By.cssSelector("input[name='arabicName']")));
+                .until(d -> d.findElements(By.cssSelector("input[name='arabicName']")).stream()
+                        .anyMatch(e -> e.isDisplayed() && safeName.equals(e.getDomProperty("value"))));
     }
 
     void requestDeleteSafeByName(String safeName) {

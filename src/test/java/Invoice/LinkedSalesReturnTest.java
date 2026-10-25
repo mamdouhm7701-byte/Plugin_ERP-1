@@ -14,7 +14,9 @@ public final class LinkedSalesReturnTest extends SalesScenarioTest {
     }
 
     private void linked() {
-        prepare("Credit");
+        // The return customer picker lists customers with source invoices. Seed the source
+        // before opening its linked return instead of searching for an unfunded new customer.
+        prepare("Credit", false, false, false);
         var beforeSource = number(data.balance(item, 1));
         source = data.seedInvoice(101, "Sales", page.slDocumentDate(), "3", "0");
         awaitOwnedStock(

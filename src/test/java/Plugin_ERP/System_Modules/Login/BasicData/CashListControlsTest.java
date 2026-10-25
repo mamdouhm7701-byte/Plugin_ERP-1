@@ -19,7 +19,7 @@ public final class CashListControlsTest {
         WebElement row = element("12", List.of(element("12", List.of())));
         WebDriver driver = (WebDriver) Proxy.newProxyInstance(getClass().getClassLoader(),
                 new Class<?>[] {WebDriver.class, JavascriptExecutor.class}, (proxy, method, args) -> {
-                    if (method.getName().equals("executeScript")) return true;
+                    if (method.getName().equals("executeScript")) return "[]";
                     if (method.getName().equals("findElements")) {
                         if (args[0].toString().contains("thead")) return List.of(header);
                         return rowReads.incrementAndGet() == 1 ? List.of() : List.of(row);
@@ -39,7 +39,7 @@ public final class CashListControlsTest {
         WebElement row = element("12", List.of(value));
         WebDriver driver = (WebDriver) Proxy.newProxyInstance(getClass().getClassLoader(),
                 new Class<?>[] {WebDriver.class, JavascriptExecutor.class}, (proxy, method, args) -> {
-                    if (method.getName().equals("executeScript")) return readinessChecks.incrementAndGet() >= 2;
+                    if (method.getName().equals("executeScript")) return readinessChecks.incrementAndGet() >= 2 ? "[]" : null;
                     if (method.getName().equals("findElements")) {
                         Assert.assertTrue(readinessChecks.get() >= 2,
                                 "A visible search input must not stand in for a loaded grid");

@@ -59,6 +59,7 @@ final class DistributionRecords {
     }
 
     int GetEditableRowCount() {
+        new GridProviderWait(driver, "ExchangeDestinations").awaitReady();
         return (int)
                 driver.findElements(rows).stream()
                         .filter(WebElement::isDisplayed)

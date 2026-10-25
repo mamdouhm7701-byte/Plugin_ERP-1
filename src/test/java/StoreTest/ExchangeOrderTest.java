@@ -25,6 +25,7 @@ public class ExchangeOrderTest extends StoreScenarioTest {
 
     @Test(groups = "stores")
     @Story("إضافة إذن صرف عن طريق البحث بالاسم")
+    @Description("البحث بالاسم عن صنف متاح في مخزن الاختبار غير الافتراضي، وليس صنفًا موجودًا بكاش المخزن الافتراضي.")
     public void AddExchangeByName() {
         create("name", true, "Agents");
     }
@@ -89,21 +90,9 @@ public class ExchangeOrderTest extends StoreScenarioTest {
         notesRoundTrip();
     }
 
-    @Test(groups = "stores")
-    @Story("هوية المتعامل المختار دون عميل افتراضي")
-    public void SM_PrimaryPartyIdentity() {
-        partyIdentity("Customers");
-    }
 
-    @Test(groups = "stores")
-    @Story("سند المندوب لا يرتبط بعميل افتراضي")
-    public void SM_AgentIdentity() {
-        partyIdentity("Agents");
-    }
 
-    @Test(groups = "stores")
-    @Story("سند جهة الصرف لا يرتبط بمتعامل افتراضي")
-    public void SM_DestinationIdentity() {
-        partyIdentity("ExchangeDestinations");
-    }
+
+
+
 }

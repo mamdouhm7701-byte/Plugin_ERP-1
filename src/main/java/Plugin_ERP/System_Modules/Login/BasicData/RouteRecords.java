@@ -54,22 +54,12 @@ final class RouteRecords {
     }
 
     int GetExactMatchCount(String n) {
-        int count = 0;
-        for (WebElement r : driver.findElements(rows))
-            try {
-                if (!r.isDisplayed()) continue;
-                for (WebElement c : r.findElements(By.cssSelector("td")))
-                    if (c.getText().trim().equals(n)) {
-                        count++;
-                        break;
-                    }
-            } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
-            }
-        return count;
+        return new GridProviderWait(driver, "AgentItinerariesStatus").exactMatches(n);
     }
 
     WebElement row(String n) {
         return new WebDriverWait(driver, Duration.ofSeconds(10))
+                .ignoring(StaleElementReferenceException.class)
                 .until(
                         d ->
                                 d.findElements(rows).stream()
@@ -91,7 +81,8 @@ final class RouteRecords {
     void OpenForEditByName(String n) {
         row(n).findElement(By.cssSelector("button[data-action-type='edit']")).click();
         new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOfElementLocated(save));
+                .until(d -> d.findElements(By.cssSelector("input[name='arabicName']")).stream()
+                        .anyMatch(e -> e.isDisplayed() && n.equals(e.getDomProperty("value"))));
     }
 
     void RequestDeleteByName(String n) {

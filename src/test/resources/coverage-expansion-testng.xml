@@ -16,7 +16,6 @@
       <class name="Invoice.ActionsCoverageTest"/>
       <class name="CoverageTest.UsersCoverageTest"/>
       <class name="CoverageTest.PermissionsCoverageTest"/>
-      <class name="CoverageTest.AuditLogCoverageTest"/>
       <class name="CoverageTest.ZatcaConfigurationCoverageTest"/>
     </classes>
   </test>

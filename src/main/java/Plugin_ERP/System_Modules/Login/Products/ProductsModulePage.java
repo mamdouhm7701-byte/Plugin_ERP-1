@@ -64,10 +64,39 @@ public class ProductsModulePage extends Abstract {
     public void prArabic(String name){prType(By.cssSelector("form input[name='arabicName'],form [data-title='الاسم العربي'] input"),name);}
   @Step("إدخال الاسم الإنجليزي: {name}")
     public void prEnglish(String name){prType(By.cssSelector("form input[name='englishName'],form [data-title='الاسم الإنجليزي'] input"),name);}
+    public String prEnglishValue(){return visible(By.cssSelector("form input[name='englishName'],form [data-title='الاسم الإنجليزي'] input")).getDomProperty("value");}
   @Step("إدخال الملاحظات: {notes}")
     public void prNotes(String notes){prType(By.cssSelector("form textarea"),notes);}
   @Step("إدخال {name}: {value}")
     public void prField(String name,String value){prType(By.cssSelector("form input[name='"+name+"']"),value);}
+  public String prFieldValue(String name){
+    return driver.findElements(By.cssSelector("form input[name='"+name+"']")).stream()
+        .filter(WebElement::isDisplayed).findFirst()
+        .orElseThrow(()->new AssertionError("Visible product field missing: "+name))
+        .getDomProperty("value");
+  }
+  /** Snapshot of visible price-field feedback; success dialogs are not validation messages. */
+  public Map<String,String> prPriceValidationMessages(){
+    Map<String,String> messages=new LinkedHashMap<>();
+    for(String name:List.of("salesPrice","minSalesPrice","maxSalesPrice")){
+      for(WebElement input:driver.findElements(By.cssSelector("form input[name='"+name+"']"))){
+        if(!input.isDisplayed())continue;
+        List<WebElement> groups=input.findElements(By.xpath(
+            "ancestor::*[self::fieldset or contains(concat(' ',normalize-space(@class),' '),' form-group ')][1]"));
+        if(groups.isEmpty())continue;
+        Set<String> feedback=new LinkedHashSet<>();
+        for(WebElement message:groups.get(0).findElements(By.cssSelector("small.text-danger,.invalid-feedback"))){
+          if(message.isDisplayed()){
+            String text=message.getText().trim();
+            if(!text.isBlank())feedback.add(text);
+          }
+        }
+        if(!feedback.isEmpty())messages.put(name,String.join(" | ",feedback));
+        break;
+      }
+    }
+    return messages;
+  }
   @Step("إدخال {title}: {value}")
     public void prTitledField(String title,String value){prType(By.cssSelector("form [data-title='"+title+"'] input"),value);}
   @Step("اختيار {name} من {label}")
@@ -88,6 +117,14 @@ public class ProductsModulePage extends Abstract {
     public void prButton(String text){prClick(By.xpath("//button[normalize-space()='"+text+"']"));}
   @Step("حفظ السجل")
     public void prSave(){prClick(By.xpath("//form//button[@data-action-type='save' or normalize-space()='حفظ']"));}
+  public boolean prSaveDisabled(){
+    List<WebElement> buttons=driver.findElements(By.cssSelector("form button[data-action-type='save']"));
+    if(buttons.stream().noneMatch(WebElement::isDisplayed))
+      buttons=driver.findElements(By.xpath("//form//button[@data-action-type='save' or normalize-space()='حفظ']"));
+    WebElement save=buttons.stream().filter(WebElement::isDisplayed).findFirst()
+        .orElseThrow(()->new AssertionError("Visible product save button missing"));
+    return !save.isEnabled()||"true".equals(save.getDomAttribute("aria-disabled"));
+  }
   @Step("حفظ البيانات وطباعة التقرير")
     public void prSavePrint(){prButton("حفظ و طباعة");}
   public void prDismiss(){ready.until(d->{List<WebElement> overlays=d.findElements(By.cssSelector(".swal2-container"));

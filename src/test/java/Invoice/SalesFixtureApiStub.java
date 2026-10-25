@@ -34,6 +34,8 @@ final class SalesFixtureApiStub {
     boolean timeoutBranchUnlinkAfterCommit;
     boolean rejectMovement;
     boolean failMovementLookup;
+    boolean delayMovementCreate;
+    Map<String, Object> delayedMovement;
     Map<String, Object> branch =
             new LinkedHashMap<>(
                     Map.of(
@@ -107,6 +109,10 @@ final class SalesFixtureApiStub {
             String id = endpoint + "-" + (records.size() + 1);
             Map<String, Object> saved = new LinkedHashMap<>(values);
             saved.put("id", id);
+            if (endpoint.startsWith("ItemTransactions-") && delayMovementCreate) {
+                delayedMovement = saved;
+                throw new TimeoutException("Movement create is still pending");
+            }
             records.put(id, saved);
             if (endpoint.equals("Items") && failAfterItemInsert)
                 return Map.of("error", "Failed after insert", "status", 500);

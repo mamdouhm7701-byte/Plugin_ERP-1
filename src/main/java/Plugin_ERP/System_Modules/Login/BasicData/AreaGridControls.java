@@ -45,16 +45,7 @@ final class AreaGridControls {
     }
 
     int GetExactAreaMatchCount(String name) {
-        provider.awaitReady();
-        return (int)
-                driver.findElements(areaRows).stream()
-                        .filter(WebElement::isDisplayed)
-                        .filter(
-                                row ->
-                                        row.findElements(By.cssSelector("td")).stream()
-                                                .anyMatch(
-                                                        cell -> cell.getText().trim().equals(name)))
-                        .count();
+        return provider.exactMatches(name);
     }
 
     String GetFirstAreaCellByHeader(String headerName) {

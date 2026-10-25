@@ -304,6 +304,12 @@ public class AddProductsTest extends ProductScenarioTest {
     }
 
     @Test(groups = "products")
+    @Story("قبول تساوي أسعار البيع الثلاثة بالصفر")
+    public void PR_AllPricesZero() {
+        pricesValid("0", "0", "0");
+    }
+
+    @Test(groups = "products")
     @Story("قبول سعر البيع عند الحد الأدنى")
     public void PR_SalePriceEqualsMinimum() {
         pricesValid("90", "90", "110");
@@ -319,6 +325,9 @@ public class AddProductsTest extends ProductScenarioTest {
         page.prField("minSalesPrice", minimum);
         page.prField("maxSalesPrice", maximum);
         page.prField("salesPrice", sale);
+        assertNumber(page.prFieldValue("salesPrice"), sale);
+        assertNumber(page.prFieldValue("minSalesPrice"), minimum);
+        assertNumber(page.prFieldValue("maxSalesPrice"), maximum);
     }
 
     private void pricesValid(String sale, String minimum, String maximum) {
@@ -336,10 +345,35 @@ public class AddProductsTest extends ProductScenarioTest {
         openNew();
         fill(null);
         enterPrices(sale, minimum, maximum);
-        page.prSave();
-        String message = page.prValidation();
+        Map<String, String> messages = new LinkedHashMap<>(page.prPriceValidationMessages());
+        try {
+            new org.openqa.selenium.support.ui.WebDriverWait(driver, java.time.Duration.ofSeconds(10))
+                    .until(d -> {
+                        messages.putAll(page.prPriceValidationMessages());
+                        return !messages.isEmpty();
+                    });
+        } catch (org.openqa.selenium.TimeoutException missingInlineFeedback) {
+            // Still exercise Save so missing feedback cannot conceal a persisted invalid product.
+        }
+        io.qameta.allure.Allure.addAttachment(
+                "Price fields before save", "image/png",
+                new java.io.ByteArrayInputStream(((org.openqa.selenium.TakesScreenshot) driver)
+                        .getScreenshotAs(org.openqa.selenium.OutputType.BYTES)), ".png");
+        if (!page.prSaveDisabled()) page.prSave();
+        try {
+            new org.openqa.selenium.support.ui.WebDriverWait(driver, java.time.Duration.ofSeconds(30))
+                    .until(d -> {
+                        messages.putAll(page.prPriceValidationMessages());
+                        return !messages.isEmpty() || !page.prSaves().isEmpty();
+                    });
+        } catch (org.openqa.selenium.TimeoutException missingOutcome) {
+            // Capture requests and any saved entity before reporting missing field feedback.
+        }
         page.prSettled();
         var records = capture();
+        io.qameta.allure.Allure.addAttachment(
+                "Visible price field validation", "application/json",
+                new org.json.JSONObject(messages).toString(), ".json");
         for (var record : records) {
             var stored = data.read(record);
             io.qameta.allure.Allure.addAttachment(
@@ -377,7 +411,9 @@ public class AddProductsTest extends ProductScenarioTest {
                             + record.id());
         }
         Assert.assertTrue(page.prSaves().isEmpty(), "Invalid price save was accepted");
-        Assert.assertTrue(message.contains("سعر"), "Expected price validation: " + message);
+        Assert.assertFalse(messages.isEmpty(),
+                "Expected a visible validation message under a price field; save errors: "
+                        + page.prSaveErrors());
     }
 
     @Test(groups = "products")

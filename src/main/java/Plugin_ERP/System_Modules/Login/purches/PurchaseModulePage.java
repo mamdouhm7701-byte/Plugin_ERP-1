@@ -331,6 +331,10 @@ public class PurchaseModulePage extends AbstractForPurchases {
         transitions.puConvertOwned(supplier, code, toInvoice, itemName);
     }
 
+    public void puConvertOwned(String supplier, String code, Object sourceId, boolean toInvoice, String itemName) {
+        transitions.puConvertOwned(supplier, code, sourceId, toInvoice, itemName);
+    }
+
     @Step("حذف مستند الاختبار من القائمة: {code}")
     public void puDeleteOwned(String supplier, String code) {
         transitions.puDeleteOwned(supplier, code);

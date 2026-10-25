@@ -74,6 +74,10 @@ API يجهز المراجع كالوحدة والمخزن والطرف والص�
 
 ## نطاق Regression والاستثناءات
 
+تحديث أسعار الأصناف — 25 أكتوبر 2026: Regression يختار حالات الأسعار الإحدى عشرة مرة واحدة عبر `products-testng.xml`، بما فيها الصفر والتساوي. الحالات المخالفة تتحقق من رسالة تحت حقل السعر ومنع الحفظ معًا، وتظل حالات البج السبع مفعّلة وظاهرة كفشل؛ لا تُستثنى ولا تُحوّل إلى نجاح متوقع. اختبار `SuiteDefinitionsTest.regressionRetainsAllPriceBusinessCasesWithoutHidingKnownFailures` يحمي هذا الاختيار. نتائج الإعادة الحية المركزة وحدودها في [تقرير أسعار الأصناف](PRODUCT_PRICE_BUSINESS_2026_10_25_AR.md)؛ لم تُشغّل Regression كاملة ضمن تحديث تعريفها.
+
+التحقق من التعريف الجديد: نجح تجميع المصادر الحالية بمعزل عن ملفات التشغيل، ونجحت **35 حالة محلية لتعريفات السويتات دون فشل أو تخطي**. صُحح توقع عدد Sanity من 57 إلى 56 لمطابقة إزالة شاشة الملف التاريخي السابقة؛ لم تُحذف حالة جديدة في هذا التحديث. الأدلة في `target/regression-price-config-20261025/final-results/testng-results.xml` وسجل `final-check.log`. الأعداد والنتائج المؤرخة قبل هذا التحديث أدناه تخص تعريفاتها السابقة.
+
 `regression-testng.xml` يجمع ملفات الموديولات الستة و`special-sales-testng.xml` بواسطة `suite-files` بدلاً من نسخ قوائم كلاساتها. إذا أضيفت تغطية إلى أحد هذه الملفات تدخل تلقائياً إلى Regression. الملف الخاص بالكاشير يضم حالاته الثلاثين واختبارات ملكية البيانات والاسترجاع السبعة.
 
 `additional/standalone/point-of-sale-testng.xml` و`additional/standalone/restaurant-testng.xml` مدخلان مستقلان لفحص شاشة واحدة. لا ندرجهما مع `special-sales-testng.xml` داخل Regression لأن ذلك يكرر نفس الحالات. `additional/standalone/fixture-lifecycle-testng.xml` صار يضم اختبارات تنظيف الكاشير المحلية أيضاً؛ هذا مدخل تشخيص مستقل ولا يضاف مرة أخرى إلى Regression.

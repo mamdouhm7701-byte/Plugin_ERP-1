@@ -271,6 +271,11 @@ public class FinancialMovementPage extends Abstract {
       e.sendKeys(Keys.TAB);
       String actual=e.getDomProperty("value");
       if(value.equals(actual))return true;
+      if("YYYY-MM-DD".equals(e.getDomAttribute("placeholder"))) {
+        try { return Plugin_ERP.Utiel.DocumentDates.parse(value)
+            .equals(Plugin_ERP.Utiel.DocumentDates.parse(actual)); }
+        catch(java.time.DateTimeException invalidDate) { return false; }
+      }
       if("number".equals(e.getDomAttribute("type"))||"value".equals(e.getDomAttribute("name")))try{
         return new BigDecimal(value).compareTo(new BigDecimal(actual))==0;
       }catch(NumberFormatException ignored){return false;}

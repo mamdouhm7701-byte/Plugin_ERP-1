@@ -11,13 +11,21 @@ public final class PurchaseLinkedCoverageTest extends PurchaseFormActions {
     }
 
     @Test
-    @Story("تحويل فاتورة الاختبار إلى مرتجع مرتبط يمنع تسجيل كمية مختلفة عن المصدر")
+    @Story("مرتجع مشتريات جزئي يحافظ على كمية الفاتورة الأصلية")
     @Description(
-            "إنشاء فاتورة ثم تحويل صفها المحدد بالكود إلى مرتجع؛ إذا كان حقل الكمية"
-                    + " مفتوحاً نحاول تغييره ونتحقق من رفض حفظ التغيير، ثم نتحقق من حفظ الكمية الأصلية"
-                    + " ورابط المصدر وأثر المخزون، مع حذف المرتجع قبل المصدر.")
+            "فاتورة بكمية٣ ثم مرتجع مرتبط بكمية٢؛ التحقق من قيمة المرتجع٢٠٠ وأثر المخزون"
+                    + " ورصيد المورد ورابط المصدر، مع بقاء كمية وقيمة الفاتورة الأصلية دون تغيير.")
     public void linkedReturnKeepsOriginalQuantity() {
         linkedReturn();
+    }
+
+    @Test
+    @Story("منع مرتجع مشتريات مرتبط يتجاوز كمية المصدر")
+    public void linkedReturnCannotExceedSourceQuantity() {
+        var invoice = prepareLinkedReturn();
+        page.puQuantity(item.name(), "4");
+        rejectSave();
+        sameNumber(firstLine(data.read(invoice)).get("quantity"), "3");
     }
 
     @Test

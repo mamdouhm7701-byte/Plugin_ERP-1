@@ -71,6 +71,8 @@ public abstract class MasterCoverageScenario extends BasicDataScenarioTest {
         open();
         if (tree()) selectTreeRecord(record);
         else page.rowAction(table() ? basicData().read(record).get("code").toString() : record.name(), "edit");
+        if (!table()) new WebDriverWait(driver, Duration.ofSeconds(20)).until(d ->
+                record.name().equals(page.value(By.cssSelector("input[name='arabicName']"))));
     }
     private void selectTreeRecord(BasicDataFixtures.Record record) {
         // Child rows are created lazily when the owned root is expanded.

@@ -39,7 +39,8 @@ final class AreaRecordActions {
         WebElement row = findAreaRow(name);
         row.findElement(By.cssSelector("button[data-action-type='edit']")).click();
         new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOfElementLocated(saveButton));
+                .until(d -> d.findElements(By.cssSelector("input[name='arabicName']")).stream()
+                        .anyMatch(e -> e.isDisplayed() && name.equals(e.getDomProperty("value"))));
     }
 
     void DeleteAreaByName(String name) {
@@ -53,6 +54,7 @@ final class AreaRecordActions {
 
     WebElement findAreaRow(String name) {
         return new WebDriverWait(driver, Duration.ofSeconds(10))
+                .ignoring(StaleElementReferenceException.class)
                 .until(
                         d ->
                                 d.findElements(areaRows).stream()

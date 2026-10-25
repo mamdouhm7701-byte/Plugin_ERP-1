@@ -65,6 +65,7 @@ final class BankRecords {
     }
 
     int GetEditableBankCount() {
+        new GridProviderWait(driver, "banks").awaitReady();
         return (int)
                 driver.findElements(rows).stream()
                         .filter(WebElement::isDisplayed)
@@ -79,6 +80,7 @@ final class BankRecords {
 
     WebElement findRow(String name) {
         return new WebDriverWait(driver, Duration.ofSeconds(10))
+                .ignoring(StaleElementReferenceException.class)
                 .until(
                         d ->
                                 d.findElements(rows).stream()
@@ -99,14 +101,7 @@ final class BankRecords {
     }
 
     int GetExactBankMatchCount(String name) {
-        return (int)
-                driver.findElements(rows).stream()
-                        .filter(WebElement::isDisplayed)
-                        .filter(
-                                r ->
-                                        r.findElements(By.cssSelector("td")).stream()
-                                                .anyMatch(c -> c.getText().trim().equals(name)))
-                        .count();
+        return new GridProviderWait(driver, "banks").exactMatches(name);
     }
 
     int columnIndex(String label) {
@@ -148,6 +143,9 @@ final class BankRecords {
 
     void OpenBankForEditByName(String name) {
         openEdit(findRow(name));
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(d ->
+                d.findElements(By.cssSelector("input[name='arabicName']")).stream()
+                        .anyMatch(e -> e.isDisplayed() && name.equals(e.getDomProperty("value"))));
     }
 
     void openEdit(WebElement row) {

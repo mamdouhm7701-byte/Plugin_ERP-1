@@ -84,12 +84,17 @@ final class CashFormReader {
     }
 
     String getArabicNameInputValue() {
-        return driver.findElement(By.cssSelector("input[name='arabicName']")).getAttribute("value");
+        return visibleValue(By.cssSelector("input[name='arabicName']"));
     }
 
     String getEnglishNameInputValue() {
-        return driver.findElement(By.cssSelector("input[name='englishName']"))
-                .getAttribute("value");
+        return visibleValue(By.cssSelector("input[name='englishName']"));
+    }
+
+    private String visibleValue(By locator) {
+        return new WebDriverWait(driver, Duration.ofSeconds(10)).until(d ->
+                d.findElements(locator).stream().filter(WebElement::isDisplayed)
+                        .findFirst().map(e -> e.getDomProperty("value")).orElse(null));
     }
 
     String getNotesValue() {
@@ -133,6 +138,7 @@ final class CashFormReader {
                 driver.findElements(
                         By.xpath(
                                 "//label[normalize-space()='رقم الحساب']/following::div[contains(@class,'vs__dropdown-toggle')][1]//div[contains(@class,'vs__selected')]"));
-        return selectedValues.isEmpty() ? "" : selectedValues.get(0).getText().trim();
+        return selectedValues.stream().filter(WebElement::isDisplayed)
+                .findFirst().map(e -> e.getText().trim()).orElse("");
     }
 }

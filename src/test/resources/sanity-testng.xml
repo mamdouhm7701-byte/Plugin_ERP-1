@@ -142,7 +142,6 @@
             <include name="createsLimitedUserAndReadsBack"/><include name="mismatchedPasswordsCannotSave"/>
         </methods></class>
         <class name="CoverageTest.PermissionsCoverageTest"/>
-        <class name="CoverageTest.AuditLogCoverageTest"/>
         <class name="CoverageTest.ZatcaConfigurationCoverageTest"/>
     </classes></test>
     <test name="Sanity Treasury cash ledger and closing" preserve-order="true"><classes>

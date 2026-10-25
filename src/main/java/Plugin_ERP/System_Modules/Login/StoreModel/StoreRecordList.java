@@ -31,6 +31,31 @@ final class StoreRecordList {
         ownedId = id;
         ownedMarker = marker;
         owner.smOpen(route);
+        if (route.equals("damage-adjustment")) {
+            // This screen has no search/filter control. Locate the owned identity on its pages.
+            listSearch = null;
+            // Bootstrap initially renders a 1000-row pagination placeholder. Do not click its
+            // last page until real records (with identities) have reached the DOM.
+            ready.until(d -> d.findElements(By.cssSelector(
+                    "tbody tr[data-pk],tbody tr[id*='__row_'],tbody tr:has([id*='invoice-row-'])"))
+                    .stream().anyMatch(WebElement::isDisplayed));
+            while (!smHasDocument(marker)) {
+                var previous = driver.findElements(By.cssSelector("tbody tr")).stream()
+                        .map(WebElement::getText).toList();
+                ready.until(d -> {
+                    if (smHasDocument(marker)) return true;
+                    var next = d.findElements(By.cssSelector(".pagination .page-item:last-child button"))
+                            .stream().filter(WebElement::isDisplayed).filter(WebElement::isEnabled)
+                            .findFirst().orElseThrow(() -> new AssertionError("Owned damage document not found: " + id));
+                    next.click();
+                    return true;
+                });
+                if (smHasDocument(marker)) break;
+                ready.until(d -> !d.findElements(By.cssSelector("tbody tr")).stream()
+                        .map(WebElement::getText).toList().equals(previous));
+            }
+            return;
+        }
         By search =
                 By.cssSelector(
                         route.equals("damage-adjustment")
@@ -56,8 +81,11 @@ final class StoreRecordList {
     }
 
     void smSearch(String value) {
+        if (listSearch == null) throw new IllegalStateException("This warehouse list has no search control");
         owner.smType(listSearch, value);
     }
+
+    boolean smHasSearch() { return listSearch != null; }
 
     By ownedRow() {
         return By.cssSelector(

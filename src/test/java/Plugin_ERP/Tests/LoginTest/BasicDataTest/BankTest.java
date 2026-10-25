@@ -125,12 +125,12 @@ public class BankTest extends BasicDataScenarioTest {
     @Description("يتحقق من منع الحفظ دون اسم عربي وعدم إضافة سجل جديد.")
     public void BK_004_ArabicNameIsRequired() {
         BankPage page = openBanks();
-        int before = page.GetEditableBankCount();
+        long before = recordCount("Banks");
         page.ClickNew();
         page.AddNoteForDealer(uniqueName("INVALID-NAME"));
         page.ClickSaveButton();
         Assert.assertTrue(page.IsBankArabicNameRequiredDisplayed());
-        Assert.assertEquals(page.GetEditableBankCount(), before);
+        Assert.assertEquals(recordCount("Banks"), before);
         page.ClickCloseButton();
     }
 
@@ -143,13 +143,13 @@ public class BankTest extends BasicDataScenarioTest {
     @Description("يتحقق من رفض المسافات فقط كاسم عربي للبنك.")
     public void BK_005_WhitespaceNameIsRejected() {
         BankPage page = openBanks();
-        int before = page.GetEditableBankCount();
+        long before = recordCount("Banks");
         page.ClickNew();
         page.AddArabicName("   ");
         page.AddNoteForDealer(uniqueName("WHITESPACE"));
         page.ClickSaveButton();
         Assert.assertTrue(page.IsBankArabicNameRequiredDisplayed());
-        Assert.assertEquals(page.GetEditableBankCount(), before);
+        Assert.assertEquals(recordCount("Banks"), before);
         page.ClickCloseButton();
     }
 
@@ -163,13 +163,13 @@ public class BankTest extends BasicDataScenarioTest {
     public void BK_008_InvalidEmailIsRejected() {
         BankPage page = openBanks();
         String name = uniqueName("INVALID-EMAIL");
-        int before = page.GetEditableBankCount();
+        long before = recordCount("Banks");
         page.ClickNew();
         page.AddArabicName(name);
         page.AddEmail("not-an-email");
         page.ClickSaveButton();
         Assert.assertTrue(page.IsInvalidBankEmailDisplayed(), "يجب إظهار خطأ صيغة البريد");
-        Assert.assertEquals(page.GetEditableBankCount(), before);
+        Assert.assertEquals(recordCount("Banks"), before);
         page.ClickCloseButton();
     }
 

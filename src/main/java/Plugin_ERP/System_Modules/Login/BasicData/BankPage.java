@@ -188,7 +188,9 @@ public class BankPage extends AbstractForDealer {
     }
 
     private String value(By locator) {
-        return driver.findElement(locator).getAttribute("value").trim();
+        return new WebDriverWait(driver, Duration.ofSeconds(10)).until(d ->
+                d.findElements(locator).stream().filter(WebElement::isDisplayed)
+                        .findFirst().map(e -> e.getDomProperty("value").trim()).orElse(null));
     }
 
     public String GetArabicNameValue() {

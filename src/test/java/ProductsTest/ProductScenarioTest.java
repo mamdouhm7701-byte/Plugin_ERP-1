@@ -376,6 +376,7 @@ public abstract class ProductScenarioTest extends BaseTest {
         openNew();
         fill(null);
         page.prEnglish("");
+        Assert.assertEquals(page.prEnglishValue(), "", "English input must actually be cleared before saving");
         ProductsTestData.Record record = save(false);
         assertOptionalEnglish(data.read(record));
     }

@@ -56,7 +56,7 @@ public final class SuiteDefinitionsTest {
     List<String> e2e = selectedCases("e2e");
     List<String> regression = selectedCases("regression");
     Assert.assertEquals(smoke.size(), 13, "Core availability plus representative new screens and access protection");
-    Assert.assertEquals(sanity.size(), 57, "Focused original and expanded screen checks by changed scope");
+    Assert.assertEquals(sanity.size(), 56, "Focused screen checks after removal of the unavailable audit screen");
     Assert.assertEquals(e2e.size(), 41, "Existing journeys plus adjustments, kitchen, posting and treasury");
     Assert.assertTrue(regression.size() > sanity.size());
     Assert.assertTrue(regression.containsAll(smoke), "Regression omitted a smoke contract");
@@ -138,6 +138,28 @@ public final class SuiteDefinitionsTest {
     Assert.assertTrue(smoke.stream().noneMatch(c -> c.startsWith(cleanup))
         && sanity.stream().noneMatch(c -> c.startsWith(cleanup)),
         "Screen smoke and sanity must not be inflated with local cleanup tests");
+  }
+
+  @Test
+  public void regressionRetainsAllPriceBusinessCasesWithoutHidingKnownFailures() throws Exception {
+    List<String> regression = selectedCases("regression");
+    Set<String> priceCases = Set.of(
+        "PR_AllPricesZero", "PR_AllPricesEqual",
+        "PR_SalePriceEqualsMinimum", "PR_SalePriceEqualsMaximum",
+        "PR_NegativeSalePrice", "PR_MinimumAboveSalePrice", "PR_MaximumBelowSalePrice",
+        "PR_MinimumAboveMaximum", "PR_MaximumBelowMinimum",
+        "PR_SalePriceBelowMinimum", "PR_SalePriceAboveMaximum");
+    Class<?> type = Class.forName("ProductsTest.AddProductsTest");
+    for (String name : priceCases) {
+      String selected = type.getName() + "#" + name;
+      Assert.assertEquals(java.util.Collections.frequency(regression, selected), 1,
+          "Regression must select each price contract exactly once: " + selected);
+      Test annotation = type.getMethod(name).getAnnotation(Test.class);
+      Assert.assertNotNull(annotation, "Missing price test annotation: " + name);
+      Assert.assertTrue(annotation.enabled(), "Price contract must stay enabled: " + name);
+      Assert.assertEquals(annotation.expectedExceptions().length, 0,
+          "Known price defects must remain failures: " + name);
+    }
   }
 
   private static List<String> selectedCases(String level) throws Exception {

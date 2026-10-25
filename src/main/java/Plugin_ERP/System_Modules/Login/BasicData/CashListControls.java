@@ -59,12 +59,12 @@ final class CashListControls {
     }
 
     void selectSafePageSize(int pageSize) {
-        int currentRowCount = page.getVisibleSafeRowCount();
         new org.openqa.selenium.support.ui.Select(findSafePageSizeSelect())
                 .selectByVisibleText(String.valueOf(pageSize));
         waitForCashPageLoading();
         new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(d -> page.getVisibleSafeRowCount() == Math.min(currentRowCount, pageSize));
+                .until(d -> getSelectedSafePageSize() == pageSize
+                        && page.getVisibleSafeRowCount() <= pageSize);
     }
 
     private WebElement findSafePageSizeSelect() {

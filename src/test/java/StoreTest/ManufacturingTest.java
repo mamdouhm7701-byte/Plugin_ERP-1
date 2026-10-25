@@ -31,6 +31,7 @@ public class ManufacturingTest extends StoreScenarioTest {
 
     @Test(groups = "stores")
     @Story("إضافة إذن تصنيع باستخدام اسم الصنف")
+    @Description("البحث بالاسم عن صنف مصنع متاح في مخزن الاختبار غير الافتراضي، وليس صنفًا موجودًا بكاش المخزن الافتراضي.")
     public void AddManufacturingByNameTest() {
         create("name", false, "Agents");
     }

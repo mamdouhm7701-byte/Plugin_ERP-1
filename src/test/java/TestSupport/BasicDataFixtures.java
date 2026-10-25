@@ -118,8 +118,17 @@ public final class BasicDataFixtures implements AutoCloseable {
   }
 
   public Record awaitSaved(String endpoint, String name) {
-    return new WebDriverWait(driver, Duration.ofSeconds(35)).withMessage("Owned UI save was not captured: " + name)
-        .until(d -> { installCapture(); return captured(endpoint, name); });
+    try {
+      return new WebDriverWait(driver, Duration.ofSeconds(35)).withMessage("Owned UI save was not captured: " + name)
+          .until(d -> { installCapture(); return captured(endpoint, name); });
+    } catch (org.openqa.selenium.TimeoutException failure) {
+      try {
+        Object diagnostics=((JavascriptExecutor)driver).executeScript("return {attempts:window.__basicDataQA?.attempts||[],errors:window.__basicDataQA?.errors||[],pending:window.__basicDataQA?.pending}");
+        io.qameta.allure.Allure.addAttachment("Owned basic data save diagnostics", "application/json",
+            new org.json.JSONObject((Map<?,?>)diagnostics).toString(), ".json");
+      } catch (RuntimeException diagnosticFailure) { failure.addSuppressed(diagnosticFailure); }
+      throw failure;
+    }
   }
 
   @SuppressWarnings("unchecked")
@@ -249,7 +258,8 @@ public final class BasicDataFixtures implements AutoCloseable {
         const owned=['app/create','app/update'].includes(action)&&allowed.has(payload?.url)&&
           ['arabicName','englishName','notes','fullName'].some(key=>names.includes(data?.[key]));
         const sent=owned?JSON.parse(JSON.stringify(data)):null;
-        if(owned){delete sent.passwordHash;cap.pending++;persist(cap);}
+        if(owned){delete sent.passwordHash;delete sent.password;cap.pending++;
+          (cap.attempts||=[]).push({endpoint:payload.url,values:sent});persist(cap);}
         let response;
         try{response=dispatch(action,payload,...rest);}
         catch(error){if(owned){cap.pending--;persist(cap);}throw error;}
@@ -258,7 +268,10 @@ public final class BasicDataFixtures implements AutoCloseable {
             cap.saves.push({endpoint:payload.url,id:sent.id||entity?.id||
               (typeof entity==='string'||typeof entity==='number'?entity:null),values:sent});persist(cap);}
           return result;
-        },error=>{if(owned){cap.pending--;persist(cap);}throw error;});
+        },error=>{if(owned){cap.pending--;
+          (cap.errors||=[]).push({endpoint:payload.url,status:error?.response?.status,
+            detail:error?.response?.data??error?.data??{message:error?.message,errors:error?.errors}});
+          persist(cap);}throw error;});
       };
       """,new ArrayList<>(ALLOWED),suffix);
     ((JavascriptExecutor)driver).executeScript("window.__basicDataReservedNames=arguments[0]",new ArrayList<>(reservedNames));

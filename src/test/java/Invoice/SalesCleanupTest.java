@@ -11,6 +11,29 @@ import io.qameta.allure.Story;
 
 public class SalesCleanupTest {
     @Test
+    @Story("احتفاظ التنظيف بمحاولة الإنشاء المتأخرة وتبعياتها حتى ظهور المستند")
+    public void delayedSeedCreateRetainsParentsUntilItsDocumentCanBeRecovered() throws Exception {
+        SalesFixtureApiStub api = new SalesFixtureApiStub();
+        SalesTestData data = new SalesTestData(api.driver());
+        api.delayMovementCreate = true;
+        Assert.expectThrows(org.openqa.selenium.TimeoutException.class,
+                () -> data.seedInvoice(1, "Sales", "2026-01-01", "1", "40"));
+        var failure = Assert.expectThrows(AssertionError.class, data::close);
+        Assert.assertTrue(failure.getMessage().contains("still unresolved"));
+        Assert.assertTrue(api.deletes.isEmpty(), "A pending create can still reference its parents");
+        String marker = api.delayedMovement.get("notes").toString();
+        String suffix = marker.substring(marker.length() - 12);
+        SalesTestData resumed = SalesTestData.resume(api.driver(), suffix);
+        Assert.expectThrows(AssertionError.class, resumed::close);
+        Assert.assertTrue(api.deletes.isEmpty(), "The persisted timeout must also block recovery cleanup");
+        String delayedId = api.delayedMovement.get("id").toString();
+        api.records.put(delayedId, api.delayedMovement);
+        resumed.close();
+        Assert.assertEquals(api.deletes.get(0), delayedId);
+        Assert.assertTrue(api.records.isEmpty());
+    }
+
+    @Test
     @io.qameta.allure.Description("العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
     public void normalCustomerIsTaxableAndKeepsItsOwnAccount() {
         SalesFixtureApiStub api = new SalesFixtureApiStub();

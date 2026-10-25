@@ -8,6 +8,12 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class RoutLineTest extends BasicDataScenarioTest {
+    @org.testng.annotations.AfterMethod(alwaysRun = true)
+    public void releaseOwnedDocumentKinds() {
+        collectBasicDataScenario();
+        basicData().close();
+    }
+
     private String unique(String s) {
         return ownedName("AgentItinerariesStatus", s);
     }
@@ -26,6 +32,9 @@ public class RoutLineTest extends BasicDataScenarioTest {
         p.AddNoteForDealer("QA route test");
         p.SetRouteLocation(location);
         p.ClickSaveButton();
+        var saved = basicData().awaitSaved("AgentItinerariesStatus", n);
+        Assert.assertEquals(basicData().read(saved).get("arabicName"), n,
+                "Owned route status must be persisted before checking its row");
         Assert.assertEquals(p.GetExactMatchCount(n), 1, "يجب ظهور حالة خط السير مرة واحدة: " + n);
     }
 

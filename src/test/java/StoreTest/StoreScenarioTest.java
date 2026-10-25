@@ -116,7 +116,9 @@ public abstract class StoreScenarioTest extends BaseTest {
     if(!page.smSaveDisabled()){page.smSave(false);String message=page.smValidation();Assert.assertTrue(message.replace('ة','ه').contains(expected.replace('ة','ه')),"Expected "+expected+": "+message);}
     page.smSettled();capture();Assert.assertTrue(page.smSaves().isEmpty(),"Required field was accepted");balance(item,1,initial(item,1));}
   protected void rejectQuantity(String quantity){prepare(null,defaultParty());fill(baselineMode());page.smQuantity(item.name(),quantity);if(!page.smSaveDisabled())page.smSave(false);
-    String message=page.smValidation();page.smSettled();capture();Assert.assertTrue(page.smSaves().isEmpty(),"Invalid quantity was persisted: "+quantity);Assert.assertTrue(message.contains("كمي")||message.contains("رصيد"),message);balance(item,1,initial(item,1));}
+    var invalid=page.smAwaitInvalidQuantity(item.name());
+    Allure.addAttachment("Visible quantity rejection state","application/json",new org.json.JSONObject(invalid).toString(),".json");
+    page.smSettled();capture();Assert.assertTrue(page.smSaves().isEmpty(),"Invalid quantity was persisted: "+quantity);balance(item,1,initial(item,1));}
   protected void noItems(){prepare(null,defaultParty());if(!page.smSaveDisabled()){page.smSave(false);String message=page.smValidation();Assert.assertTrue(message.contains("صنف")||message.contains("أصناف")||message.contains("اصناف"),message);}page.smSettled();capture();Assert.assertTrue(page.smSaves().isEmpty());}
   protected void oldDate(){prepare(null,defaultParty());fill(baselineMode());page.smDate(page.smCurrentDate().minusYears(1).toString());page.smSave(false);String message=page.smValidation();page.smSettled();capture();Assert.assertTrue(page.smSaves().isEmpty(),"Date outside active fiscal year was accepted");Assert.assertTrue(message.contains("تاريخ")||message.contains("فتر")||message.contains("سن"),message);}
   protected void pickerWithoutStore(){prepare("store",defaultParty());page.smButton("إضافة أصناف");Assert.assertTrue(page.smValidation().contains("مخزن"));Assert.assertTrue(page.smSaves().isEmpty());}
@@ -153,7 +155,20 @@ public abstract class StoreScenarioTest extends BaseTest {
   @Test(groups="stores") @Story("تصدير PDF فعلي لقائمة السندات") public void SM_ExportPdf(){export("pdf");}
   @Test(groups="stores") @Story("تصدير Excel فعلي لقائمة السندات") public void SM_ExportExcel(){export("excel");}
   private void export(String format){var record=create(baselineMode(),false,defaultParty());find(record);StoreExportAssertions.assertExportDownloaded(driver,()->page.smExport(format),format);}
-  @Test(groups="stores") @Story("البحث عن السند وتصفير نتيجة بحث غير موجود") public void SM_SearchAndReset(){var record=create(baselineMode(),false,defaultParty());find(record);page.smSearch(kind()==StoreMovementKind.DAMAGE?record.name()+"-NO-MATCH":"999999999999");new WebDriverWait(driver,Duration.ofSeconds(25)).until(d->!page.smHasDocument(record.name()));page.smSearch(kind()==StoreMovementKind.DAMAGE?record.name():data.read(record).get("code").toString());new WebDriverWait(driver,Duration.ofSeconds(25)).until(d->page.smHasDocument(record.name()));}
+  @Test(groups="stores") @Story("البحث وإعادة التصفية في الأذونات، أو إعادة فتح قائمة التوالف التي لا تدعم البحث")
+  public void SM_SearchAndReset(){
+    var record=create(baselineMode(),false,defaultParty());find(record);
+    if(kind()==StoreMovementKind.DAMAGE){
+      Assert.assertFalse(page.smHasListSearch(),"Damage-list contract changed; add explicit search coverage");
+      find(record);
+      Assert.assertTrue(page.smHasDocument(record.name()),"Owned damage record must survive reopening its list");
+      Allure.addAttachment("Damage list search capability","text/plain","No search control is exposed; verified list reopening, not text-search coverage.");
+      return;
+    }
+    Assert.assertTrue(page.smHasListSearch());
+    page.smSearch("999999999999");new WebDriverWait(driver,Duration.ofSeconds(25)).until(d->!page.smHasDocument(record.name()));
+    page.smSearch(data.read(record).get("code").toString());new WebDriverWait(driver,Duration.ofSeconds(25)).until(d->page.smHasDocument(record.name()));
+  }
   @AfterMethod(alwaysRun=true) public void cleanStoreScenario(org.testng.ITestResult result){if(driver==null||page==null||data==null||pending.isEmpty())return;
     if(result!=null&&!result.isSuccess()){Allure.addAttachment("Warehouse failure DOM","text/html",page.smDiagnosticMarkup(),".html");Allure.addAttachment("Warehouse lookup diagnostics","application/json",page.smDiagnostics(),".json");}
     for(String window:new ArrayList<>(driver.getWindowHandles()))if(!window.equals(mainWindow)){driver.switchTo().window(window);driver.close();}driver.switchTo().window(mainWindow);

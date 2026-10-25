@@ -171,9 +171,17 @@ public class PointOfSaleTest extends SpecialSalesScenario {
         prepareSave();
         page.save();
         var invoice = saved();
+        var stored = data.read(invoice);
         Assert.assertTrue(
-                data.read(invoice).get("payments").toString().contains(payment.id().toString()), "التحقق من دفعات الفاتورة");
-        number(data.balance(item, 1), "999");
+                stored.get("payments").toString().contains(payment.id().toString()), "التحقق من دفعات الفاتورة");
+        Assert.assertEquals(stored.get("storeId"), data.store(1).id(), "مطابقة مخزن الفاتورة المحفوظة");
+        var storedLines = (java.util.List<?>) stored.get("lines");
+        Assert.assertEquals(storedLines.size(), 1, "مطابقة عدد البنود المحفوظة");
+        var line = (java.util.Map<?, ?>) storedLines.getFirst();
+        Assert.assertEquals(line.get("itemId"), item.id(), "مطابقة الصنف المحفوظ");
+        Assert.assertEquals(line.get("unitId"), data.unit(1).id(), "مطابقة الوحدة المحفوظة");
+        number(line.get("quantity"), "1");
+        StockBalanceWait.await(() -> data.balance(item, 1), "999", java.time.Duration.ofSeconds(30));
         customerBalance("0");
     }
 

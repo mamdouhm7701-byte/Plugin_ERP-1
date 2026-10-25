@@ -530,6 +530,10 @@ final class SalesTestData implements AutoCloseable {
         try {
             response = call("create", endpoint, values);
         } catch (ApiFailure | org.openqa.selenium.TimeoutException failure) {
+            if (attempt != null && failure instanceof org.openqa.selenium.TimeoutException) {
+                attempt.put("creationTimedOut", true);
+                journalAttempts();
+            }
             // Retain a partial commit for cleanup; the original creation still fails.
             if (endpoint.equals("Items"))
                 try {
@@ -899,6 +903,10 @@ final class SalesTestData implements AutoCloseable {
             }
             if (matches.size() > 1)
                 throw new AssertionError("Ambiguous uncertain sales create: " + name);
+            if (matches.isEmpty() && Boolean.TRUE.equals(attempt.get("creationTimedOut")))
+                throw new AssertionError(
+                        "Timed-out sales create is still unresolved; retaining its journal and parent fixtures: "
+                                + name);
             if (matches.size() == 1) {
                 Record found = matches.get(0);
                 Map<String, Object> stored = read(found);

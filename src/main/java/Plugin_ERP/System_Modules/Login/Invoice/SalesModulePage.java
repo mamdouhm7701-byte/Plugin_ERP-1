@@ -55,12 +55,18 @@ public class SalesModulePage extends AbstractForSales {
         return "/" + route.split("[?#]",2)[0].replaceAll("^/+|/+$","");
     }
 
+    protected static boolean reusesFormComponent(String current, String destination) {
+        return current.split("\\?", 2)[0].equals(destination.split("\\?", 2)[0]);
+    }
+
     @Step("فتح شاشة المبيعات: {route}")
     public void slOpen(String route) {
         Plugin_ERP.Utiel.Allur.ScreenNames.opening(route);
         String destination=PropertyReader.getApplicationUrl().replaceAll("/+$","") + "/#/" + route;
-        if(driver.getCurrentUrl().equals(destination)) driver.navigate().refresh();
-        else driver.get(destination);
+        boolean reused = reusesFormComponent(driver.getCurrentUrl(), destination);
+        if (!driver.getCurrentUrl().equals(destination)) driver.get(destination);
+        // A query-only route change reuses Vue's mounted form and does not load its source.
+        if (reused) driver.navigate().refresh();
         slAwaitSession();
         ready.until(d -> Boolean.TRUE.equals(js("""
             const route=document.querySelector('#app')?.__vue__?.$router?.currentRoute;

@@ -32,21 +32,25 @@ final class PurchaseDocumentTransitions {
     }
 
     void puConvertOwned(String supplier, String code, boolean toInvoice, String itemName) {
+        puConvertOwned(supplier, code, null, toInvoice, itemName);
+    }
+
+    void puConvertOwned(String supplier, String code, Object expectedSourceId, boolean toInvoice, String itemName) {
         owner.puListScope(supplier);
         owner.puListText("filteredCode", code);
-        ready.until(
-                d ->
-                        owner.puListRows().size() == 1
-                                && code.equals(String.valueOf(owner.puListRows().get(0).get("code"))));
-        Object sourceId = owner.puListRows().get(0).get("id");
+        var source = ready.until(d -> {
+            var rows = owner.puListRows().stream()
+                    .filter(r -> code.equals(String.valueOf(r.get("code"))))
+                    .filter(r -> expectedSourceId == null || expectedSourceId.equals(r.get("id"))).toList();
+            if (rows.isEmpty()) return null;
+            if (rows.size() != 1) throw new AssertionError("Purchase conversion requires a unique source identity");
+            return rows.get(0);
+        });
+        Object sourceId = source.get("id");
         String icon = toInvoice ? "repeat" : "refresh-cw";
         owner.puClick(
-                By.xpath(
-                        "//table//tbody/tr[.//td[normalize-space()='"
-                                + code
-                                + "']]//button[.//*[contains(@class,'"
-                                + icon
-                                + "')]]"));
+                By.cssSelector("tbody tr[data-pk='" + sourceId + "'] button:has([class*='" + icon
+                        + "']),tbody tr[id$='__row_" + sourceId + "'] button:has([class*='" + icon + "'])"));
         ready.until(d -> d.getCurrentUrl().contains(toInvoice ? "purch-invoice" : "return-purch"));
         owner.puFormReady();
         ready.until(

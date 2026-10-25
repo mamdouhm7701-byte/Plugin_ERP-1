@@ -38,6 +38,8 @@ public class CashPage extends AbstractForDealer {
             return;
         }
         driver.navigate().to(PropertyReader.getApplicationUrl() + route.getRoute());
+        // A same-route navigation does not recreate the Vue component or discard its modal.
+        if (isCashCreationFormDisplayed()) ClickCloseButton();
         new WebDriverWait(driver, Duration.ofSeconds(20))
                 .until(
                         d ->
@@ -89,6 +91,7 @@ public class CashPage extends AbstractForDealer {
     @Step("فتح نموذج إضافة خزنة")
     public void ClickNew() {
         waitForCashPageLoading();
+        if (isCashCreationFormDisplayed()) ClickCloseButton();
         super.ClickNew();
         new WebDriverWait(driver, Duration.ofSeconds(15))
                 .until(
@@ -158,7 +161,11 @@ public class CashPage extends AbstractForDealer {
     public void ClickCloseButton() {
         waitForCashPageLoading();
         if (isCashCreationFormDisplayed()) {
-            super.ClickCloseButton();
+            By close = By.cssSelector(".modal.show .modal-header button.close,.modal.show .modal-header button[aria-label='Close']");
+            new WebDriverWait(driver, Duration.ofSeconds(15))
+                    .until(ExpectedConditions.elementToBeClickable(close)).click();
+            new WebDriverWait(driver, Duration.ofSeconds(15))
+                    .until(d -> !isCashCreationFormDisplayed());
             waitForCashPageLoading();
         }
     }
@@ -186,7 +193,10 @@ public class CashPage extends AbstractForDealer {
     }
 
     private boolean isVisible(By locator) {
-        return driver.findElements(locator).stream().anyMatch(WebElement::isDisplayed);
+        return new WebDriverWait(driver, Duration.ofSeconds(5))
+                .ignoring(org.openqa.selenium.StaleElementReferenceException.class)
+                .until(d -> d.findElements(locator).stream().map(WebElement::isDisplayed).toList())
+                .contains(Boolean.TRUE);
     }
 
     @Step("انتظار اكتمال تحميل شاشة الخزن")

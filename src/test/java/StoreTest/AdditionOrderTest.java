@@ -25,6 +25,7 @@ public class AdditionOrderTest extends StoreScenarioTest {
 
     @Test(groups = "stores")
     @Story("إضافة إذن استلام عن طريق البحث بالاسم")
+    @Description("البحث بالاسم عن صنف متاح في مخزن الاختبار غير الافتراضي، وليس صنفًا موجودًا بكاش المخزن الافتراضي.")
     public void AddAdditionOrderTestByName() {
         create("name", true, "Agents");
     }

@@ -30,6 +30,7 @@ public class TaypeOfDiscountTest extends BasicDataScenarioTest {
                     + " البيانات والتحقق من إضافة السجل بنجاح.")
 
     public void ValidTaypeOfDiscountTest() {
+        int userCode = Integer.parseInt(basicData().user("discount").values().get("code").toString());
         System.out.println("TaypeOfDiscount test started");
         TypesofdiscountsPage typesofdiscountsPage = new TypesofdiscountsPage(driver);
         typesofdiscountsPage.NavigationHelper(Pages.DISCONTTAYPES);
@@ -40,7 +41,7 @@ public class TaypeOfDiscountTest extends BasicDataScenarioTest {
         typesofdiscountsPage.AddSecretCode(typesofdiscountsPage.generateRandomNumber());
         typesofdiscountsPage.AddDiscount(5);
         typesofdiscountsPage.ClickToAddUsers();
-        typesofdiscountsPage.ClickSelectUsers(Integer.parseInt(basicData().user("discount").values().get("code").toString()));
+        typesofdiscountsPage.ClickSelectUsers(userCode);
         typesofdiscountsPage.ClickCloseButton();
         typesofdiscountsPage.ClickSaveButton();
         typesofdiscountsPage.AssertReceiptAdded(name);
@@ -61,6 +62,7 @@ public class TaypeOfDiscountTest extends BasicDataScenarioTest {
         TypesofdiscountsPage typesofdiscountsPage = new TypesofdiscountsPage(driver);
         typesofdiscountsPage.NavigationHelper(Pages.DISCONTTAYPES);
         String original = seedDiscount("edit");
+        int editedUserCode = Integer.parseInt(basicData().user("discount-edit").values().get("code").toString());
         driver.navigate().refresh();
         typesofdiscountsPage.NavigationHelper(Pages.DISCONTTAYPES);
         typesofdiscountsPage.OpenOwnedForEdit(original);
@@ -72,7 +74,7 @@ public class TaypeOfDiscountTest extends BasicDataScenarioTest {
         typesofdiscountsPage.AddSecretCode(typesofdiscountsPage.generateRandomNumber());
         typesofdiscountsPage.AddDiscount(10);
         typesofdiscountsPage.ClickToAddUsers();
-        typesofdiscountsPage.ClickSelectUsers(Integer.parseInt(basicData().user("discount").values().get("code").toString()));
+        typesofdiscountsPage.ClickSelectUsers(editedUserCode);
         typesofdiscountsPage.ClickCloseButton();
         typesofdiscountsPage.ClickSaveButton();
         typesofdiscountsPage.AssertReceiptAdded(edited);
@@ -161,6 +163,7 @@ public class TaypeOfDiscountTest extends BasicDataScenarioTest {
     }
     private String seedDiscount(String key) {
         return basicData().fixture(key, "DiscountTypes", TestSupport.BasicDataFixtures.fields(
-                "secretCode", String.valueOf(System.nanoTime()), "discountPercentage", 5)).name();
+                "secretCode", String.valueOf(System.nanoTime()), "discountPercentage", 5,
+                "users", java.util.List.of(TestSupport.BasicDataFixtures.fields("userId", basicData().user("discount").id())))).name();
     }
 }

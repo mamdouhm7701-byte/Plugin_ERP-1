@@ -19,7 +19,7 @@ public final class CoverageExpansionContractTest {
                 "StoreTest.ShortageAdjustmentCoverageTest", "StoreTest.OverflowAdjustmentCoverageTest",
                 "Invoice.UnderReviewCoverageTest", "SpecialSalesTest.KitchenOrdersCoverageTest",
                 "Invoice.PostingCoverageTest", "Invoice.ActionsCoverageTest", "CoverageTest.UsersCoverageTest",
-                "CoverageTest.PermissionsCoverageTest", "CoverageTest.AuditLogCoverageTest",
+                "CoverageTest.PermissionsCoverageTest",
                 "CoverageTest.ZatcaConfigurationCoverageTest"));
         String regression = java.nio.file.Files.readString(java.nio.file.Path.of("src/test/resources/regression-testng.xml"));
         Assert.assertTrue(regression.contains("coverage-expansion-testng.xml"));

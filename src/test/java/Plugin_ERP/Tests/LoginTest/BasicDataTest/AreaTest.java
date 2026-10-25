@@ -410,7 +410,12 @@ public class AreaTest extends BasicDataScenarioTest {
         page.EditAreaByName(name);
         page.AddArabicName(updated);
         page.ClickSaveButton();
+        var savedEdit = basicData().awaitSaved("Areas", updated);
+        Assert.assertEquals(basicData().read(savedEdit).get("arabicName"), updated,
+                "Edited area must persist before checking its list row");
         page.SearchArea(updated);
+        new org.openqa.selenium.support.ui.WebDriverWait(driver, java.time.Duration.ofSeconds(20))
+                .until(d -> page.GetExactAreaMatchCount(updated) == 1);
         Assert.assertEquals(page.GetExactAreaMatchCount(updated), 1);
     }
 

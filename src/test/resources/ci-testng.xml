@@ -26,6 +26,8 @@
             <class name="Plugin_ERP.System_Modules.Login.Invoice.InvoiceListExportTest"/>
             <class name="Plugin_ERP.System_Modules.Login.Invoice.SalesListScopeTest"/>
             <class name="Plugin_ERP.System_Modules.Login.BasicData.CashListControlsTest"/>
+            <class name="Plugin_ERP.System_Modules.Login.BasicData.GridProviderWaitTest"/>
+            <class name="Plugin_ERP.System_Modules.Login.Products.ProductsPriceValidationTest"/>
             <class name="Plugin_ERP.Utiel.PrintedInvoiceAssertionsTest"/>
             <class name="Plugin_ERP.Utiel.Allur.ReportMailTest"/>
             <class name="Plugin_ERP.Utiel.Allur.DriveReportStoreTest"/>
@@ -54,6 +56,7 @@
             <class name="DealerModelTest.DealerCleanupTest"/>
             <class name="DealerModelTest.DealerMarkerCleanupTest"/>
             <class name="SpecialSalesTest.SpecialSalesCleanupTest"/>
+            <class name="SpecialSalesTest.StockBalanceWaitTest"/>
         </classes>
     </test>
 </suite>

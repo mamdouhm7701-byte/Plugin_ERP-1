@@ -87,7 +87,7 @@ public final class SupplyChainEndToEndTest extends PurchaseFormActions {
     seller.returnPart(sale, "3"); stock(sourceBefore, destinationBefore.add(number("3"))); customerDebt("0");
     var reverse = new TransferWorkflow(driver, ref(item)); reverseTransfers.add(reverse);
     reverse.transfer(ref(data.store(2)), ref(data.store(1)), "3"); stock(sourceBefore.add(number("3")), destinationBefore);
-    page.puConvertOwned(supplier.name(), data.read(purchase).get("code").toString(), false, item.name());
+    page.puConvertOwned(supplier.name(), data.read(purchase).get("code").toString(), purchase.id(), false, item.name());
     convertedKind = PurchaseDocumentKind.RETURN;
     for (int i = 1; i <= 2; i++) initialBalances.put(i, number(data.balance(item, i)));
     page.puNotes(marker + "-PURCHASE-RETURN"); page.puCapture(marker, data.store(1).id(), item.id(), documentKind().endpoint);

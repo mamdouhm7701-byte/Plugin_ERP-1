@@ -129,8 +129,20 @@ public abstract class SalesListActions extends SalesScenarioTest {
 
     protected void paymentStatusesMatchOwnedAmounts() {
         var unpaid = seed(1);
-        var paid = data.seedInvoice(2, "Sales", seedDate, "1", "100");
+        String fullAmount = data.read(unpaid).get("net").toString();
+        var paid = data.seedInvoice(2, "Sales", seedDate, "1", fullAmount);
         var partial = data.seedInvoice(3, "Sales", seedDate, "1", "40");
+        var unpaidStored = data.read(unpaid);
+        var paidStored = data.read(paid);
+        var partialStored = data.read(partial);
+        io.qameta.allure.Allure.addAttachment("Owned payment status fixtures", "application/json",
+                new org.json.JSONObject(SalesTestData.fields("unpaid", unpaidStored,
+                        "paid", paidStored, "partial", partialStored)).toString(), ".json");
+        sameNumber(unpaidStored.get("paid"), "0");
+        sameNumber(paidStored.get("paid"), paidStored.get("net").toString());
+        Assert.assertTrue(number(partialStored.get("paid")).signum() > 0
+                        && number(partialStored.get("paid")).compareTo(number(partialStored.get("net"))) < 0,
+                "Partial-payment fixture must actually be partially paid");
         page.slListScope(data.customer().name());
         var all = Set.of(unpaid.id(), paid.id(), partial.id());
         page.slWaitListIds(all);

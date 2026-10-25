@@ -9,7 +9,7 @@ public final class PurchaseEndToEndTest extends PurchaseFormActions {
   @Override protected PurchaseDocumentKind kind() { return PurchaseDocumentKind.INVOICE; }
 
   private PurchaseTestData.Record convert(PurchaseTestData.Record source, boolean toInvoice) {
-    page.puConvertOwned(supplier.name(), data.read(source).get("code").toString(), toInvoice, item.name());
+    page.puConvertOwned(supplier.name(), data.read(source).get("code").toString(), source.id(), toInvoice, item.name());
     convertedKind = toInvoice ? PurchaseDocumentKind.INVOICE : PurchaseDocumentKind.RETURN;
     for (int i = 1; i <= 2; i++) initialBalances.put(i, number(data.balance(item, i)));
     page.puNotes(marker + "-" + convertedKind);

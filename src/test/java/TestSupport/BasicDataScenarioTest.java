@@ -18,6 +18,14 @@ public abstract class BasicDataScenarioTest extends BaseTest {
         basicData().installCapture();
         return name;
     }
+
+    protected final long recordCount(String endpoint) {
+        Object result = basicData().query(endpoint);
+        if (result instanceof java.util.Map<?, ?> dto && dto.get("totalRecords") instanceof Number total)
+            return total.longValue();
+        if (result instanceof java.util.List<?> rows) return rows.size();
+        throw new AssertionError("Cannot verify persisted record count for " + endpoint);
+    }
     @BeforeMethod(alwaysRun = true)
     public void beginBasicDataScenario() {
         requirePreparedSession();

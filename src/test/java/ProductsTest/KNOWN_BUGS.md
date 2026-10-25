@@ -1,5 +1,7 @@
 # Product application defects — 18 October 2026
 
+Price-contract clarification on 25 October 2026: zero/zero/zero is valid, as is equality of all three nonzero values. Invalid bounds must show visible feedback beneath a price field AND prevent saving. `PR_AllPricesZero` now covers zero values with persisted read-back; price tests also verify the actual inputs after typing. Invalid-price checks read field-scoped feedback rather than treating a success dialog as validation. The results below are historical evidence from 18 October; see `docs/testing/PRODUCT_PRICE_BUSINESS_2026_10_25_AR.md` for the focused recheck.
+
 The business owner confirmed **minimum <= sale <= maximum**, with equality allowed. Negative sale prices must be rejected. Every case creates its own prerequisites and product, verifies the saved entity by its captured ID, and cleans its own data in dependency order.
 
 | Test | Minimum | Sale | Maximum | Expected | Observed |

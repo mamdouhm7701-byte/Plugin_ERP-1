@@ -103,12 +103,33 @@ final class StoreDocumentLines {
                 });
     }
 
+    Map<String, String> smAwaitInvalidQuantity(String name) {
+        return ready.until(d -> {
+            for (WebElement row : d.findElements(line(name))) {
+                if (!row.isDisplayed()) continue;
+                for (WebElement input : row.findElements(By.xpath(
+                        "./td[@aria-colindex=ancestor::table/thead/tr/th[normalize-space(.)='الكمية']/@aria-colindex]//input[not(@type='hidden')]"))) {
+                    if (!input.isDisplayed()) continue;
+                    String state = input.getDomAttribute("aria-invalid");
+                    String classes = input.getDomAttribute("class");
+                    if ("true".equals(state) && classes != null
+                            && Arrays.asList(classes.split("\\s+")).contains("is-invalid")) {
+                        return Map.of("quantity", input.getDomProperty("value"),
+                                "aria-invalid", state, "class", classes,
+                                "title", Objects.toString(input.getDomAttribute("title"), ""));
+                    }
+                }
+            }
+            return null;
+        });
+    }
+
     void smRemoveLine(String name) {
         page.smClick(
                 By.xpath(
                         "//form//tr[.//td[contains(normalize-space(),'"
                                 + name
-                                + "')]]//button[.//*[local-name()='svg' and contains(@class,'feather-trash')]]"));
+                                + "')]]//*[local-name()='svg' and contains(@class,'feather-trash')]"));
         ready.until(d -> page.smLineCount(name) == 0);
     }
 }

@@ -75,6 +75,10 @@ public abstract class SalesScenarioTest extends BaseTest {
     }
 
     protected void prepare(String paymentType, boolean usePriceList, boolean useDiscountType) {
+        prepare(paymentType, usePriceList, useDiscountType, true);
+    }
+
+    protected void prepare(String paymentType, boolean usePriceList, boolean useDiscountType, boolean selectCustomer) {
         this.paymentType = paymentType;
         item = ownItem(1);
         customer = data.customer();
@@ -114,7 +118,7 @@ public abstract class SalesScenarioTest extends BaseTest {
         page.slChoose("المخزن", data.store(1).name());
         if (kind() != SalesDocumentKind.QUOTATION)
             page.slChoose("نوع السداد", paymentType.equals("Cash") ? "نقدي" : "آجل");
-        page.slChoose("العميل", customer.name());
+        if (selectCustomer) page.slChoose("العميل", customer.name());
         page.slChoose("مندوب", agent.name());
         if (usePriceList) page.slChoose("قوائم الأسعار", priceList.name());
         else if (page.slHasChoice("قوائم الأسعار") && !page.slChoiceEmpty("قوائم الأسعار"))

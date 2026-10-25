@@ -31,6 +31,7 @@ public class TransBetweenStoreTest extends StoreScenarioTest {
 
     @Test(groups = "stores")
     @Story("إنشاء تحويل بين المخازن باستخدام اسم الصنف")
+    @Description("البحث بالاسم عن صنف متاح في مخزن المصدر المملوك غير الافتراضي، وليس صنفًا موجودًا بكاش المخزن الافتراضي.")
     public void TransBetweenStoreAddWithNameTest() {
         create("name", true, "Agents");
     }

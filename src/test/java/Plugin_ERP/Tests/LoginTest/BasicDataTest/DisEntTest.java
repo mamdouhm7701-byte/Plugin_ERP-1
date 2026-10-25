@@ -81,12 +81,12 @@ public class DisEntTest extends BasicDataScenarioTest {
     @Description("يتحقق من رفض النموذج الفارغ وعدم إنشاء صف جديد.")
     public void DE_004_ArabicNameIsRequired() {
         DistributionEntityPage page = openPage();
-        int before = page.GetEditableRowCount();
+        long before = recordCount("ExchangeDestinations");
         page.ClickNew();
         page.AddEnglishName(uniqueName("INVALID-NAME"));
         page.ClickSaveButton();
         Assert.assertTrue(page.IsArabicNameRequiredDisplayed());
-        Assert.assertEquals(page.GetEditableRowCount(), before);
+        Assert.assertEquals(recordCount("ExchangeDestinations"), before);
         page.ClickCloseButton();
     }
 
@@ -99,13 +99,13 @@ public class DisEntTest extends BasicDataScenarioTest {
     @Description("يتحقق من رفض المسافات فقط في حقل الاسم العربي.")
     public void DE_005_WhitespaceNameIsRejected() {
         DistributionEntityPage page = openPage();
-        int before = page.GetEditableRowCount();
+        long before = recordCount("ExchangeDestinations");
         page.ClickNew();
         page.AddArabicName("   ");
         page.AddEnglishName(uniqueName("WHITESPACE"));
         page.ClickSaveButton();
         Assert.assertTrue(page.IsArabicNameRequiredDisplayed());
-        Assert.assertEquals(page.GetEditableRowCount(), before);
+        Assert.assertEquals(recordCount("ExchangeDestinations"), before);
         page.ClickCloseButton();
     }
 

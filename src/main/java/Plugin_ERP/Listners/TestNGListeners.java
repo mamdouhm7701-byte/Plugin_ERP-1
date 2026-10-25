@@ -161,19 +161,13 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
     @Override
     public void onTestStart(ITestResult result) {
         testStartTime.set(System.currentTimeMillis());
+        var scenarioMethod = result.getMethod().getConstructorOrMethod().getMethod();
+        String scenarioClass = result.getTestClass().getName();
+        io.qameta.allure.Allure.getLifecycle().updateTestCase(test ->
+                Plugin_ERP.Utiel.Allur.ScenarioReportCatalog.apply(test, scenarioClass, scenarioMethod));
         if (WebDriverFactory.getDriver() != null) {
             Plugin_ERP.Utiel.Allur.ScenarioAccess.capture(WebDriverFactory.getDriver(), "الشاشة عند بدء الحالة");
             Plugin_ERP.Utiel.Allur.ScenarioAssertions.begin();
-            var method = result.getMethod().getConstructorOrMethod().getMethod();
-            if (method != null) {
-                var description = method.getAnnotation(io.qameta.allure.Description.class);
-                var story = method.getAnnotation(io.qameta.allure.Story.class);
-                String title = description != null ? description.value() : story != null ? story.value() : null;
-                if (title != null && !title.isBlank()) {
-                    String readable = title.length() > 180 ? title.substring(0, 180) + "…" : title;
-                    io.qameta.allure.Allure.getLifecycle().updateTestCase(test -> test.setName(readable));
-                }
-            }
         } else Plugin_ERP.Utiel.Allur.ScenarioAssertions.end();
 
         // Update browser values without dropping the other run metadata.
@@ -201,6 +195,11 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
     @Override
     public void onTestFailure(ITestResult result) {
         Plugin_ERP.Utiel.Allur.ScenarioAssertions.end();
+        try {
+            Plugin_ERP.Utiel.Allur.ScenarioFailureReport.attach(result);
+        } catch (RuntimeException reportFailure) {
+            LogUtils.error("Could not attach readable failure summary; original test failure retained.");
+        }
         takeScreenshot(result, "FAIL");
     }
 

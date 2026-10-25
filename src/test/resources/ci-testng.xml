@@ -20,6 +20,9 @@
             <class name="Plugin_ERP.Valditon.LegacyAssertionsTest"/>
             <class name="Plugin_ERP.Utiel.Allur.AllureReportPolicyTest"/>
             <class name="Plugin_ERP.Utiel.Allur.ScenarioJourneyReportTest"/>
+            <class name="Plugin_ERP.Utiel.Allur.ScenarioReportCatalogTest"/>
+            <class name="Plugin_ERP.Utiel.Allur.ScenarioCaseDescriptionTest"/>
+            <class name="Plugin_ERP.Utiel.Allur.ScenarioFailureReportTest"/>
             <class name="Plugin_ERP.Utiel.Allur.ScenarioAccessTest"/>
             <class name="Plugin_ERP.Utiel.InteractionAccuracyTest"/>
             <class name="Plugin_ERP.Utiel.SalesNavigationTest"/>

@@ -1,7 +1,5 @@
 package Plugin_ERP.System_Modules.Login.BasicData;
 
-import Plugin_ERP.System_Modules.Login.AbstractForDealer;
-import io.qameta.allure.Step;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -11,17 +9,28 @@ import org.openqa.selenium.support.ui.*;
 final class DistributionRecords {
     private final DistributionEntityPage owner;
     private final WebDriver driver;
+
     DistributionRecords(DistributionEntityPage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
     }
+
     private final By rows = By.cssSelector("table tbody tr[role='row']");
     private final By headers = By.cssSelector("table thead th");
     private final By search = By.cssSelector("input[placeholder*='بحث']");
     private final By save = By.cssSelector("button[data-action-type='save']");
-    private boolean visible(By locator) { return owner.recordVisible(locator); }
-    private void waitLoading() { owner.recordWaitLoading(); }
-    private void waitAlertToDisappear() { owner.recordWaitAlertToDisappear(); }
+
+    private boolean visible(By locator) {
+        return owner.recordVisible(locator);
+    }
+
+    private void waitLoading() {
+        owner.recordWaitLoading();
+    }
+
+    private void waitAlertToDisappear() {
+        owner.recordWaitAlertToDisappear();
+    }
 
     void Search(String text) {
         waitLoading();
@@ -191,6 +200,10 @@ final class DistributionRecords {
                                                     try {
                                                         return e.isDisplayed();
                                                     } catch (Exception ignored) {
+                                                        Plugin_ERP.Bots.LogUtils.debug(
+                                                                "DistributionRecords condition unavailable: "
+                                                                        + ignored.getClass()
+                                                                                .getSimpleName());
                                                         return false;
                                                     }
                                                 }));
@@ -203,6 +216,8 @@ final class DistributionRecords {
                     .until(ExpectedConditions.visibilityOfElementLocated(success));
             dismissSuccessIfPresent();
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "DistributionRecords fallback: " + ignored.getClass().getSimpleName());
         }
     }
 
@@ -222,6 +237,8 @@ final class DistributionRecords {
                         .executeScript("arguments[0].click();", buttons.get(0));
             waitAlertToDisappear();
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "DistributionRecords fallback: " + ignored.getClass().getSimpleName());
         }
     }
 

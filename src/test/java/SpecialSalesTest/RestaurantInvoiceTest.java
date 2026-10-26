@@ -1,9 +1,7 @@
 package SpecialSalesTest;
 
 import Plugin_ERP.System_Modules.Login.SpecialSales.*;
-
 import io.qameta.allure.*;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -49,8 +47,10 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
     @Story("إعدادات الشاشة عند الفتح")
     @Description("التحقق من قناة المطعم والعميل والمخزن المحددين.")
     public void ownedDefaultsAndChannel() {
-        Assert.assertEquals(page.document().get("transactionChannel"), "Resturant", "مطابقة قناة البيع");
-        Assert.assertEquals(page.document().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
+        Assert.assertEquals(
+                page.document().get("transactionChannel"), "Resturant", "مطابقة قناة البيع");
+        Assert.assertEquals(
+                page.document().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
         Assert.assertEquals(page.document().get("storeId"), data.store(1).id(), "مطابقة المخزن");
     }
 
@@ -94,9 +94,11 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
     public void deliveryAndExternal() {
         var restaurant = (RestaurantInvoicePage) page;
         restaurant.type("توصيل");
-        Assert.assertEquals(page.document().get("restaurantInvoiceType"), "Delivery", "مطابقة نوع طلب المطعم");
+        Assert.assertEquals(
+                page.document().get("restaurantInvoiceType"), "Delivery", "مطابقة نوع طلب المطعم");
         restaurant.type("خارجية");
-        Assert.assertEquals(page.document().get("restaurantInvoiceType"), "External", "مطابقة نوع طلب المطعم");
+        Assert.assertEquals(
+                page.document().get("restaurantInvoiceType"), "External", "مطابقة نوع طلب المطعم");
     }
 
     @Test
@@ -173,7 +175,9 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
         var stored = data.read(paid);
         Assert.assertEquals(stored.get("isComplete"), true, "مطابقة حالة اكتمال الفاتورة");
         Assert.assertEquals(stored.get("isOnHold"), false, "مطابقة حالة تعليق الفاتورة");
-        Assert.assertTrue(stored.get("payments").toString().contains(payment.id().toString()), "التحقق من دفعات الفاتورة");
+        Assert.assertTrue(
+                stored.get("payments").toString().contains(payment.id().toString()),
+                "التحقق من دفعات الفاتورة");
         number(data.balance(item, 1), "999");
     }
 
@@ -193,7 +197,8 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
         restaurant().payAndClose();
         var invoice = saved();
         Assert.assertTrue(
-                data.read(invoice).get("payments").toString().contains(payment.id().toString()), "التحقق من دفعات الفاتورة");
+                data.read(invoice).get("payments").toString().contains(payment.id().toString()),
+                "التحقق من دفعات الفاتورة");
         number(data.balance(item, 1), "999");
     }
 
@@ -224,7 +229,8 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
         restaurant().payAndClose();
         var paid = saved();
         var stored = data.read(paid);
-        Assert.assertFalse(((java.util.List<?>) stored.get("payments")).isEmpty(), "التحقق من دفعات الفاتورة");
+        Assert.assertFalse(
+                ((java.util.List<?>) stored.get("payments")).isEmpty(), "التحقق من دفعات الفاتورة");
         restaurant().invoices();
         page.invoiceAction(paid.id(), stored.get("code").toString(), "trash");
         page.confirm(true);
@@ -295,7 +301,8 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
                 data.read(invoice.get())
                         .get("payments")
                         .toString()
-                        .contains(payment.id().toString()), "التحقق من دفعات الفاتورة");
+                        .contains(payment.id().toString()),
+                "التحقق من دفعات الفاتورة");
         number(data.balance(item, 1), "999");
     }
 }

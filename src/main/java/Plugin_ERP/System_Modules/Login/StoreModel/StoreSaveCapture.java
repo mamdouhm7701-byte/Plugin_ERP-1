@@ -6,10 +6,14 @@ import java.util.Map;
 /** Observe requests and outcomes for owned warehouse documents. */
 final class StoreSaveCapture {
     private final StoreModulePage owner;
+
     StoreSaveCapture(StoreModulePage owner) {
         this.owner = owner;
     }
-    private Object js(String script, Object... args) { return owner.js(script, args); }
+
+    private Object js(String script, Object... args) {
+        return owner.js(script, args);
+    }
 
     void smCapture(String marker, Object storeId, Object itemId) {
         owner.js(
@@ -51,7 +55,8 @@ final class StoreSaveCapture {
     }
 
     void smSettled() {
-        owner.ready.until(d -> !Boolean.TRUE.equals(owner.js("return (window.__storeQA?.pending||0)>0")));
+        owner.ready.until(
+                d -> !Boolean.TRUE.equals(owner.js("return (window.__storeQA?.pending||0)>0")));
     }
 
     String smSaveErrors() {

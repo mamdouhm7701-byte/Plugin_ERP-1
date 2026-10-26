@@ -3,7 +3,6 @@ package Plugin_ERP.System_Modules.Login.BasicData;
 import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -13,14 +12,22 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 final class CashRecordActions {
     private final CashPage owner;
     private final WebDriver driver;
+
     CashRecordActions(CashPage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
     }
+
     private final By GridSearch = By.cssSelector("input[placeholder*='بحث']");
     private final By SafeRows = By.xpath("//tbody//tr[@role='row']");
-    private void waitForCashPageLoading() { owner.awaitCashLoading(); }
-    private void waitForCashAlertToDisappear() { owner.awaitCashAlert(); }
+
+    private void waitForCashPageLoading() {
+        owner.awaitCashLoading();
+    }
+
+    private void waitForCashAlertToDisappear() {
+        owner.awaitCashAlert();
+    }
 
     void searchSafes(String searchText) {
         waitForCashPageLoading();
@@ -40,10 +47,14 @@ final class CashRecordActions {
 
     boolean isSafeVisibleInSearchResults(String safeText) {
         new GridProviderWait(driver, "safes").awaitReady();
-        return Boolean.TRUE.equals(((JavascriptExecutor) driver).executeScript("""
+        return Boolean.TRUE.equals(
+                ((JavascriptExecutor) driver)
+                        .executeScript(
+                                """
                 return [...document.querySelectorAll('#mainTable tbody tr[role="row"]')]
                     .some(r=>r.getClientRects().length&&r.innerText.includes(arguments[0]));
-                """, safeText));
+                """,
+                                safeText));
     }
 
     int getExactSafeMatchCount(String safeName) {
@@ -55,8 +66,15 @@ final class CashRecordActions {
         WebElement row = findSafeRowByName(safeName);
         row.findElement(By.cssSelector("button[data-action-type='edit']")).click();
         new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(d -> d.findElements(By.cssSelector("input[name='arabicName']")).stream()
-                        .anyMatch(e -> e.isDisplayed() && safeName.equals(e.getDomProperty("value"))));
+                .until(
+                        d ->
+                                d.findElements(By.cssSelector("input[name='arabicName']")).stream()
+                                        .anyMatch(
+                                                e ->
+                                                        e.isDisplayed()
+                                                                && safeName.equals(
+                                                                        e.getDomProperty(
+                                                                                "value"))));
     }
 
     void requestDeleteSafeByName(String safeName) {

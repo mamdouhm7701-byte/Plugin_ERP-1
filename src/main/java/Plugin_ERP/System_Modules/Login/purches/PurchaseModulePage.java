@@ -1,9 +1,9 @@
 package Plugin_ERP.System_Modules.Login.purches;
 
 import Plugin_ERP.System_Modules.Login.AbstractForPurchases;
-import Plugin_ERP.Utiel.PropertyReader;
+import Plugin_ERP.Util.FormInteractions;
+import Plugin_ERP.Util.PropertyReader;
 import io.qameta.allure.Step;
-import Plugin_ERP.Utiel.FormInteractions;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -31,8 +31,13 @@ public class PurchaseModulePage extends AbstractForPurchases {
         ready = new WebDriverWait(driver, Duration.ofSeconds(35));
         ready.ignoring(StaleElementReferenceException.class)
                 .ignoring(ElementClickInterceptedException.class);
-        interactions = new FormInteractions(ready,
-                element -> js("arguments[0].scrollIntoView({block:'center',inline:'center'})", element));
+        interactions =
+                new FormInteractions(
+                        ready,
+                        element ->
+                                js(
+                                        "arguments[0].scrollIntoView({block:'center',inline:'center'})",
+                                        element));
         documentList = new PurchaseDocumentList(this, driver, ready);
         itemSelection = new PurchaseItemSelection(this, driver, ready);
         lines = new PurchaseDocumentLines(this, driver, ready);
@@ -57,7 +62,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
 
     @Step("فتح شاشة المشتريات: {route}")
     public void puOpen(String route) {
-        Plugin_ERP.Utiel.Allur.ScreenNames.opening(route);
+        Plugin_ERP.Util.Allur.ScreenNames.opening(route);
         driver.get(PropertyReader.getApplicationUrl() + "/#/" + route);
         driver.navigate().refresh();
         puAwaitSession();
@@ -331,7 +336,8 @@ public class PurchaseModulePage extends AbstractForPurchases {
         transitions.puConvertOwned(supplier, code, toInvoice, itemName);
     }
 
-    public void puConvertOwned(String supplier, String code, Object sourceId, boolean toInvoice, String itemName) {
+    public void puConvertOwned(
+            String supplier, String code, Object sourceId, boolean toInvoice, String itemName) {
         transitions.puConvertOwned(supplier, code, sourceId, toInvoice, itemName);
     }
 
@@ -418,6 +424,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
     public void puVerifyPrintedReport(String main, String item) {
         printing.puVerifyPrintedReport(main, item);
     }
+
     public void puVerifyPrintedReport(String main, String item, Runnable contentAssertions) {
         printing.puVerifyPrintedReport(main, item, contentAssertions);
     }
@@ -440,6 +447,11 @@ public class PurchaseModulePage extends AbstractForPurchases {
         calendar.selectDate(hiddenInput, value);
     }
 
-    FormInteractions formInteractions() { return interactions; }
-    void selectPaymentMode(String value) { radio(value); }
+    FormInteractions formInteractions() {
+        return interactions;
+    }
+
+    void selectPaymentMode(String value) {
+        radio(value);
+    }
 }

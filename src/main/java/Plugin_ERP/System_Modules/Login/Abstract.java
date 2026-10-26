@@ -4,15 +4,8 @@ import Plugin_ERP.Bots.*;
 import Plugin_ERP.Enums.Pages;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-
-import java.time.Duration;
 
 public abstract class Abstract {
     private final PageFeedback feedback;
@@ -24,23 +17,25 @@ public abstract class Abstract {
 
     // Variables
     protected WebDriver driver;
-    protected ElmentAction utilites;
+    protected ElementActions utilites;
     protected AlertAction alertAction;
-    protected WaitMangment waitMangment;
+    protected WaitManagement waitManagement;
     protected BrowserAction browserAction;
     protected Actions actions;
     private final PageContext context;
 
-    public final PageContext context() { return context; }
+    public final PageContext context() {
+        return context;
+    }
 
     // Constructors
     public Abstract(WebDriver driver) {
         this.driver = driver;
-        this.utilites = new ElmentAction(driver);
-        this.waitMangment = new WaitMangment(driver);
+        this.utilites = new ElementActions(driver);
+        this.waitManagement = new WaitManagement(driver);
         this.browserAction = new BrowserAction(driver);
         this.actions = new Actions(driver);
-        this.context = new PageContext(driver, utilites, waitMangment, browserAction, actions);
+        this.context = new PageContext(driver, utilites, waitManagement, browserAction, actions);
         formFields = new PageFormFields(this, driver);
         records = new PageRecordActions(this, driver);
         printing = new PrintedDocumentControls(this, driver);

@@ -25,7 +25,8 @@ public class DamageAdjustmentTest extends StoreScenarioTest {
 
     @Test(groups = "stores")
     @Story("إضافة تسوية توالف باستخدام اسم الصنف")
-    @Description("البحث بالاسم عن صنف متاح في مخزن الاختبار غير الافتراضي، وليس صنفًا موجودًا بكاش المخزن الافتراضي.")
+    @Description(
+            "البحث بالاسم عن صنف متاح في مخزن الاختبار غير الافتراضي، وليس صنفًا موجودًا بكاش المخزن الافتراضي.")
     public void AddDamageAdjustmentByNameTest() {
         create("name", true, "Agents");
     }

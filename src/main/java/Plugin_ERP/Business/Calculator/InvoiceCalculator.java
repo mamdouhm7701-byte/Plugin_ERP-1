@@ -1,8 +1,7 @@
 package Plugin_ERP.Business.Calculator;
 
 import Plugin_ERP.Models.*;
-import Plugin_ERP.Utiel.PropertyReader;
-
+import Plugin_ERP.Util.PropertyReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;

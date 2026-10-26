@@ -23,7 +23,7 @@
 
 | التوقيع كما في المصدر | الإتاحة | كيف تقرأ الغرض؟ |
 |---|---|---|
-| `public AlertAction(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
+| `public AlertAction(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 | `public void acceptSwalConfirm()` | public | تنفيذ جزء متعلق بـ رسالة تأكيد الصفحة / التأكيد، حسب المدخلات والتخصص. |
 | `public void dismissAlert()` | public | إغلاق تنبيه تنبيه المتصفح، حسب المدخلات والتخصص. |
 | `public String getAlertText()` | public | قراءة أو إرجاع تنبيه المتصفح / النص، حسب المدخلات والتخصص. |
@@ -45,7 +45,7 @@
 
 | التوقيع كما في المصدر | الإتاحة | كيف تقرأ الغرض؟ |
 |---|---|---|
-| `public BaseAction(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
+| `public BaseAction(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 | `protected void scrollIntoView(WebElement element)` | protected | تنفيذ جزء متعلق بـ التمرير، حسب المدخلات والتخصص. |
 | `protected void jsClick(WebElement element)` | protected | تنفيذ جزء متعلق بـ النقر، حسب المدخلات والتخصص. |
 | `public void clickOnEmptyArea()` | public | ضغط إجراء النقر / المنطقة، حسب المدخلات والتخصص. |
@@ -98,7 +98,7 @@
 
 | التوقيع كما في المصدر | الإتاحة | كيف تقرأ الغرض؟ |
 |---|---|---|
-| `public CheckboxActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
+| `public CheckboxActions(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 | `public void stableFastSetCheckboxByText(String text, boolean shouldBeChecked)` | public | تنفيذ جزء متعلق بـ مربع الاختيار / النص، حسب المدخلات والتخصص. |
 | `public void stableFastSetCheckboxByTextCloude(String text, boolean shouldBeChecked)` | public | تنفيذ جزء متعلق بـ مربع الاختيار / النص، حسب المدخلات والتخصص. |
 | `public void assertCheckboxState(String text, boolean expectedState)` | public | مقارنة متوقعة مربع الاختيار، حسب المدخلات والتخصص. |
@@ -124,7 +124,7 @@
 
 | التوقيع كما في المصدر | الإتاحة | كيف تقرأ الغرض؟ |
 |---|---|---|
-| `public DropdownActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
+| `public DropdownActions(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 | `public void selectUsersByCode(int... codes)` | public | اختيار الكود، حسب المدخلات والتخصص. |
 | `public void typeAndVerify(WebElement input, String expectedText)` | public | كتابة القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 | `public void selectVueOptionboth(String labelText, String optionText)` | public | اختيار القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
@@ -136,9 +136,9 @@
 | `public void selectFirstProducts(int count)` | public | اختيار الأول، حسب المدخلات والتخصص. |
 
 <a id="file-11a21e33ca10"></a>
-## ElmentAction.java
+## ElementActions.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Bots/ElmentAction.java](../../../src/main/java/Plugin_ERP/Bots/ElmentAction.java)
+**المصدر:** [src/main/java/Plugin_ERP/Bots/ElementActions.java](../../../src/main/java/Plugin_ERP/Bots/ElementActions.java)
 
 **دوره:** واجهة أدوات قديمة تنشئ مساعداتها وتقدم قراءة وضغطًا وكتابة وعمليات صفوف؛ ما زالت واسعة المسؤولية.
 
@@ -152,7 +152,7 @@
 
 | التوقيع كما في المصدر | الإتاحة | كيف تقرأ الغرض؟ |
 |---|---|---|
-| `public ElmentAction(WebDriver driver)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
+| `public ElementActions(WebDriver driver)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 | `public DropdownActions dropdown()` | public | تنفيذ جزء متعلق بـ القائمة المنسدلة، حسب المدخلات والتخصص. |
 | `public ValidationActions validation()` | public | تنفيذ جزء متعلق بـ التحقق، حسب المدخلات والتخصص. |
 | `public WaitActions waits()` | public | تنفيذ جزء متعلق بـ القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
@@ -166,14 +166,14 @@
 | `private void scrollIntoView(WebElement element)` | private | تنفيذ جزء متعلق بـ التمرير، حسب المدخلات والتخصص. |
 | `private void jsClick(WebElement element)` | private | تنفيذ جزء متعلق بـ النقر، حسب المدخلات والتخصص. |
 | `public void ClickElement(By locator)` | public | انتظار عنصر ظاهر ومفعل ثم الضغط عليه بالطريقة المحددة. |
-| `public void TaypeText(By locator, String value)` | public | كتابة قديمة بمحاولات تحقق وتعامل مع عناصر متغيرة. |
+| `public void typeText(By locator, String value)` | public | كتابة قديمة بمحاولات تحقق وتعامل مع عناصر متغيرة. |
 | `public WebElement findElement(By locator)` | public | البحث عن عنصر الشاشة، حسب المدخلات والتخصص. |
 | `public String getPageTitle()` | public | قراءة أو إرجاع الصفحة / العنوان، حسب المدخلات والتخصص. |
 | `public String getText(By locator)` | public | قراءة أو إرجاع النص، حسب المدخلات والتخصص. |
 | `public boolean isDisplayed(By locator)` | public | السؤال عن حالة القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 | `public WebElement getVisibleElement(By locator)` | public | قراءة أو إرجاع الظاهر / عنصر الشاشة، حسب المدخلات والتخصص. |
 | `public void clickOnEmptyArea()` | public | ضغط إجراء النقر / المنطقة، حسب المدخلات والتخصص. |
-| `public void TaypeTextB(By locator, String value)` | public | كتابة قديمة موسعة مع تحقق من القيمة وبدائل معالجة. |
+| `public void typeTextAndVerify(By locator, String value)` | public | كتابة قديمة موسعة مع تحقق من القيمة وبدائل معالجة. |
 | `public By getLastEditButtonForCustomerReceipt()` | public | قراءة أو إرجاع الأخير / الزر / العميل، حسب المدخلات والتخصص. |
 | `public By getLastEditButtonForAdjustDamage()` | public | قراءة أو إرجاع الأخير / الزر، حسب المدخلات والتخصص. |
 | `public void ClickPlusButtonByRow(int numberOfRows, int timesPerRow)` | public | ضغط إجراء النقر / الزر / الصف، حسب المدخلات والتخصص. |
@@ -196,7 +196,7 @@
 
 | التوقيع كما في المصدر | الإتاحة | كيف تقرأ الغرض؟ |
 |---|---|---|
-| `public GridActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
+| `public GridActions(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 | `public void ClickElement(By locator)` | public | انتظار عنصر ظاهر ومفعل ثم الضغط عليه بالطريقة المحددة. |
 | `public By getLastEditButton()` | public | قراءة أو إرجاع الأخير / الزر، حسب المدخلات والتخصص. |
 | `public void deleteAllRowsSvg(By confirmDeleteButton)` | public | حذف الصفوف، حسب المدخلات والتخصص. |
@@ -239,7 +239,7 @@
 
 **حالته:** مصدر نشط · **عدد أسطره:** 36
 
-**ملفات تشير إليه مباشرة:** [Chrome.java](MAIN_Drivers_AR.md#file-14889194f9e4)، [Edge.java](MAIN_Drivers_AR.md#file-e957d0c8ef7e)، [Firfox.java](MAIN_Drivers_AR.md#file-cafcec966ff0)، [WebDriverFactory.java](MAIN_Drivers_AR.md#file-933f9d647645)، [TestNGListeners.java](MAIN_Listners_AR.md#file-010e5aae21a3)، [AbstractForDealer.java](MAIN_PAGES_Shared_AR.md#file-0c718cf5399e)، [DealerFormControls.java](MAIN_PAGES_Shared_AR.md#file-401cc8ed0aa1)، [Agent.java](MAIN_PAGES_DealerModel_AR.md#file-e245cb653316)؛ العرض مختصر وليس قائمة كاملة.
+**ملفات تشير إليه مباشرة:** [Chrome.java](MAIN_Drivers_AR.md#file-14889194f9e4)، [Edge.java](MAIN_Drivers_AR.md#file-e957d0c8ef7e)، [Firefox.java](MAIN_Drivers_AR.md#file-cafcec966ff0)، [WebDriverFactory.java](MAIN_Drivers_AR.md#file-933f9d647645)، [TestNGListeners.java](MAIN_Listners_AR.md#file-010e5aae21a3)، [AbstractForDealer.java](MAIN_PAGES_Shared_AR.md#file-0c718cf5399e)، [DealerFormControls.java](MAIN_PAGES_Shared_AR.md#file-401cc8ed0aa1)، [Agent.java](MAIN_PAGES_DealerModel_AR.md#file-e245cb653316)؛ العرض مختصر وليس قائمة كاملة.
 
 ### خريطة الميثودات المعلنة
 
@@ -270,7 +270,7 @@
 
 | التوقيع كما في المصدر | الإتاحة | كيف تقرأ الغرض؟ |
 |---|---|---|
-| `public PriceListActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
+| `public PriceListActions(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 | `public List<String> getSelectedProducts()` | public | قراءة أو إرجاع القيمة المختارة، حسب المدخلات والتخصص. |
 | `public List<String> getEnteredPrices()` | public | قراءة أو إرجاع القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 | `public void enterPriceByRowIndex(Object... rowsAndPrices)` | public | تنفيذ جزء متعلق بـ السعر / الصف، حسب المدخلات والتخصص. |
@@ -297,7 +297,7 @@
 
 | التوقيع كما في المصدر | الإتاحة | كيف تقرأ الغرض؟ |
 |---|---|---|
-| `public UtilityActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
+| `public UtilityActions(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 | `public Void printLocatorCount(By locator)` | public | تنفيذ جزء متعلق بـ الطباعة / محدد العنصر، حسب المدخلات والتخصص. |
 | `public String TypeTodayDate(String pattern)` | public | كتابة التاريخ، حسب المدخلات والتخصص. |
 | `public String TypePastYearDate(String pattern)` | public | كتابة التاريخ، حسب المدخلات والتخصص. |
@@ -324,7 +324,7 @@
 
 | التوقيع كما في المصدر | الإتاحة | كيف تقرأ الغرض؟ |
 |---|---|---|
-| `public ValidationActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
+| `public ValidationActions(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 | `private String getText(By locator)` | private | قراءة أو إرجاع النص، حسب المدخلات والتخصص. |
 | `public String normalizePrice(String value)` | public | توحيد صيغة السعر، حسب المدخلات والتخصص. |
 | `private String normalizeDate(String date)` | private | توحيد صيغة التاريخ، حسب المدخلات والتخصص. |
@@ -354,7 +354,7 @@
 
 | التوقيع كما في المصدر | الإتاحة | كيف تقرأ الغرض؟ |
 |---|---|---|
-| `public WaitActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
+| `public WaitActions(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 | `public void waitForUrlContains(String text)` | public | انتظار عنوان الشاشة، حسب المدخلات والتخصص. |
 | `public void waitForElementVisible(By locator)` | public | انتظار عنصر الشاشة / الظاهر، حسب المدخلات والتخصص. |
 | `public void WaitForElementVisible(By locator)` | public | انتظار عنصر الشاشة / الظاهر، حسب المدخلات والتخصص. |
@@ -369,9 +369,9 @@
 | `public WebElement waitForInputByRow(String columnName, int rowNumber)` | public | انتظار الصف، حسب المدخلات والتخصص. |
 
 <a id="file-98afc8ddbc07"></a>
-## WaitMangment.java
+## WaitManagement.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Bots/WaitMangment.java](../../../src/main/java/Plugin_ERP/Bots/WaitMangment.java)
+**المصدر:** [src/main/java/Plugin_ERP/Bots/WaitManagement.java](../../../src/main/java/Plugin_ERP/Bots/WaitManagement.java)
 
 **دوره:** بناء FluentWait من مهلة الإعداد وقائمة الاستثناءات المؤقتة.
 
@@ -385,7 +385,6 @@
 
 | التوقيع كما في المصدر | الإتاحة | كيف تقرأ الغرض؟ |
 |---|---|---|
-| `public WaitMangment(WebDriver driver)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
+| `public WaitManagement(WebDriver driver)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 | `public FluentWait<WebDriver> fluentWait()` | public | تنفيذ جزء متعلق بـ القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 | `private ArrayList<Class<? extends Exception>> getExceptions()` | private | قراءة أو إرجاع القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
-

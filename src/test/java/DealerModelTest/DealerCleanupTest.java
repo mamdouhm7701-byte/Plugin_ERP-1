@@ -8,7 +8,6 @@ import org.testng.annotations.Test;
 
 public class DealerCleanupTest {
 
-
     @Test
     public void retriesUncommittedDeleteBeforeParentAccounts() {
         DealerFixtureApiStub api = new DealerFixtureApiStub();

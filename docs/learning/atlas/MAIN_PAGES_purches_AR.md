@@ -424,4 +424,3 @@
 | `ReturnOrderRows(ReturnOrderPage owner, WebDriver driver)` | داخل الحزمة | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 | `List<InvoiceRow> getInvoiceRowsForReturnOrder()` | داخل الحزمة | قراءة أو إرجاع الفاتورة / الصفوف / المرتجع، حسب المدخلات والتخصص. |
 | `Map<String, String> GetNamesQuantitiesAndPricesForReturnOrder()` | داخل الحزمة | قراءة أو إرجاع المرتجع، حسب المدخلات والتخصص. |
-

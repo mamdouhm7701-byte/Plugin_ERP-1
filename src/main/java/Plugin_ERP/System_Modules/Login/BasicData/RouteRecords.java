@@ -1,7 +1,5 @@
 package Plugin_ERP.System_Modules.Login.BasicData;
 
-import Plugin_ERP.System_Modules.Login.AbstractForDealer;
-import io.qameta.allure.Step;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -11,16 +9,27 @@ import org.openqa.selenium.support.ui.*;
 final class RouteRecords {
     private final RoutLine owner;
     private final WebDriver driver;
+
     RouteRecords(RoutLine owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
     }
+
     private final By rows = By.cssSelector("table tbody tr[role='row']");
     private final By headers = By.cssSelector("table thead th");
     private final By save = By.cssSelector("button[data-action-type='save']");
-    private boolean visible(By locator) { return owner.recordVisible(locator); }
-    private void waitLoading() { owner.recordWaitLoading(); }
-    private void waitAlert() { owner.recordWaitAlert(); }
+
+    private boolean visible(By locator) {
+        return owner.recordVisible(locator);
+    }
+
+    private void waitLoading() {
+        owner.recordWaitLoading();
+    }
+
+    private void waitAlert() {
+        owner.recordWaitAlert();
+    }
 
     boolean IsListStructureDisplayed() {
         List<String> h =
@@ -81,8 +90,15 @@ final class RouteRecords {
     void OpenForEditByName(String n) {
         row(n).findElement(By.cssSelector("button[data-action-type='edit']")).click();
         new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(d -> d.findElements(By.cssSelector("input[name='arabicName']")).stream()
-                        .anyMatch(e -> e.isDisplayed() && n.equals(e.getDomProperty("value"))));
+                .until(
+                        d ->
+                                d.findElements(By.cssSelector("input[name='arabicName']")).stream()
+                                        .anyMatch(
+                                                e ->
+                                                        e.isDisplayed()
+                                                                && n.equals(
+                                                                        e.getDomProperty(
+                                                                                "value"))));
     }
 
     void RequestDeleteByName(String n) {
@@ -118,6 +134,10 @@ final class RouteRecords {
                                                     try {
                                                         return e.isDisplayed();
                                                     } catch (Exception ignored) {
+                                                        Plugin_ERP.Bots.LogUtils.debug(
+                                                                "RouteRecords condition unavailable: "
+                                                                        + ignored.getClass()
+                                                                                .getSimpleName());
                                                         return false;
                                                     }
                                                 }));
@@ -130,6 +150,8 @@ final class RouteRecords {
                     .until(ExpectedConditions.visibilityOfElementLocated(success));
             owner.DismissAlertIfPresent();
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "RouteRecords fallback: " + ignored.getClass().getSimpleName());
         }
     }
 

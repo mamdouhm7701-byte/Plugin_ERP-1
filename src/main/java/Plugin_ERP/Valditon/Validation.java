@@ -11,7 +11,7 @@ public class Validation extends BaseAssertion {
     private static SoftAssert currentAssertions() {
         SoftAssert current = assertions.get();
         if (current == null) {
-            current = new Plugin_ERP.Utiel.Allur.ScenarioSoftAssert();
+            current = new Plugin_ERP.Util.Allur.ScenarioSoftAssert();
             assertions.set(current);
         }
         return current;

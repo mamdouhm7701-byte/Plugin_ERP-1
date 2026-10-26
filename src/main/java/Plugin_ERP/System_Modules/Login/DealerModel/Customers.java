@@ -51,22 +51,22 @@ public class Customers extends AbstractForDealer {
 
     @Step("Add Address; {address}")
     public void AddAddress(String address) {
-        utilites.TaypeTextB(AddAddress, address);
+        utilites.typeTextAndVerify(AddAddress, address);
     }
 
     @Step("Add Mobile Number: {MobileNumber}")
     public void AddMobileNumber(String MobileNumber) {
-        utilites.TaypeTextB(mobileNumber, MobileNumber);
+        utilites.typeTextAndVerify(mobileNumber, MobileNumber);
     }
 
     @Step("Add Location: {Location}")
     public void AddLocation(String Location) {
-        utilites.TaypeTextB(AddLocation, Location);
+        utilites.typeTextAndVerify(AddLocation, Location);
     }
 
     @Step("Add Agent Name: {AgentName}")
     public void AddAgentName(String AgentName) {
-        utilites.TaypeTextB(AddAgentName, AgentName);
+        utilites.typeTextAndVerify(AddAgentName, AgentName);
     }
 
     @Step("Click Link Data Tax")

@@ -418,4 +418,3 @@
 | `public void PR_OptionalEnglish()` | public · @Test | حالة تحقق مرتبطة بـالإنجليزي؛ تفاصيل الشرط والمتوقع داخل جسم الاختبار. |
 
 **علاقته بالتشغيل:** ابحث عن الاسم الكامل `ProductsTest.UnitTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
-

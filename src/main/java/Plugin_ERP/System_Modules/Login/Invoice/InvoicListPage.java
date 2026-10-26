@@ -1,20 +1,13 @@
 package Plugin_ERP.System_Modules.Login.Invoice;
 
-import Plugin_ERP.System_Modules.Login.AbstractForSales;
 import io.qameta.allure.Step;
+import java.time.Duration;
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class InvoicListPage extends SalesModulePage {
     private final InvoiceListGrid grid;
@@ -32,17 +25,21 @@ public class InvoicListPage extends SalesModulePage {
         filters = new InvoiceListFilters(this, driver);
         calendar = new InvoiceListCalendar(driver);
         exports = new InvoiceListExport(driver);
-        pagination = new InvoiceListPagination(this, driver, this::gridSnapshot, this::waitForGridRefresh);
+        pagination =
+                new InvoiceListPagination(
+                        this, driver, this::gridSnapshot, this::waitForGridRefresh);
     }
 
     @Step("انتظار ظهور قائمة الفواتير")
     public void waitForInvoiceList() {
         WebDriverWait wait = new WebDriverWait(driver, PAGE_TIMEOUT);
-        wait.until(ExpectedConditions.or(
-                ExpectedConditions.visibilityOfElementLocated(GRID_HEADERS),
-                ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[placeholder*='بحث']")),
-                ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".pagination"))
-        ));
+        wait.until(
+                ExpectedConditions.or(
+                        ExpectedConditions.visibilityOfElementLocated(GRID_HEADERS),
+                        ExpectedConditions.visibilityOfElementLocated(
+                                By.cssSelector("input[placeholder*='بحث']")),
+                        ExpectedConditions.visibilityOfElementLocated(
+                                By.cssSelector(".pagination"))));
     }
 
     @Step("التحقق من ظهور جدول الفواتير")
@@ -74,15 +71,18 @@ public class InvoicListPage extends SalesModulePage {
     public void resetInvoiceFilters() {
         driver.navigate().refresh();
         waitForInvoiceList();
-        new WebDriverWait(driver, PAGE_TIMEOUT).until(d -> {
-            try {
-                return isInvoiceTableDisplayed();
-            } catch (org.openqa.selenium.StaleElementReferenceException
-                     | IllegalStateException ignored) {
-                // The page can briefly render without a table while Vue restores the data.
-                return false;
-            }
-        });
+        new WebDriverWait(driver, PAGE_TIMEOUT)
+                .until(
+                        d -> {
+                            try {
+                                return isInvoiceTableDisplayed();
+                            } catch (org.openqa.selenium.StaleElementReferenceException
+                                    | IllegalStateException ignored) {
+                                // The page can briefly render without a table while Vue restores
+                                // the data.
+                                return false;
+                            }
+                        });
     }
 
     @Step("اختيار قيمة فلتر قائمة الفواتير: {label} = {value}")
@@ -196,9 +196,16 @@ public class InvoicListPage extends SalesModulePage {
 
     @Step("قراءة رسائل التحقق الظاهرة في قائمة الفواتير")
     public List<String> getInvoiceValidationMessages() {
-        return driver.findElements(By.cssSelector("[role='alert'], .invalid-feedback, .text-danger, .is-invalid + small"))
-                .stream().filter(InvoicListPage::isDisplayed).map(WebElement::getText).map(String::trim)
-                .filter(text -> !text.isEmpty()).toList();
+        return driver
+                .findElements(
+                        By.cssSelector(
+                                "[role='alert'], .invalid-feedback, .text-danger, .is-invalid + small"))
+                .stream()
+                .filter(InvoicListPage::isDisplayed)
+                .map(WebElement::getText)
+                .map(String::trim)
+                .filter(text -> !text.isEmpty())
+                .toList();
     }
 
     @Step("قراءة كل قيم الصفحات الظاهرة في قائمة الفواتير")
@@ -212,8 +219,13 @@ public class InvoicListPage extends SalesModulePage {
         waitForInvoiceList();
     }
 
-    String filterGridSnapshot() { return gridSnapshot(); }
-    void awaitFilterGridRefresh(String before) { waitForGridRefresh(before); }
+    String filterGridSnapshot() {
+        return gridSnapshot();
+    }
+
+    void awaitFilterGridRefresh(String before) {
+        waitForGridRefresh(before);
+    }
 
     private void waitForGridRefresh() {
         grid.waitForGridRefresh();
@@ -239,5 +251,4 @@ public class InvoicListPage extends SalesModulePage {
     void setCalendarFilter(WebElement hiddenInput, String value) {
         calendar.setDateFilter(hiddenInput, value);
     }
-
 }

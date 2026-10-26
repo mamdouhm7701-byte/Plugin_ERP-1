@@ -3,20 +3,16 @@ package Plugin_ERP.System_Modules.Login.purches;
 import Plugin_ERP.Business.Calculator.InvoiceCalculator;
 import Plugin_ERP.Models.InvoiceRow;
 import Plugin_ERP.Models.InvoiceTotals;
-import Plugin_ERP.Models.ReportTotals;
 import Plugin_ERP.System_Modules.Login.AbstractForPurchases;
 import io.qameta.allure.Step;
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.util.List;
+import java.util.Map;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.math.BigDecimal;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 public class ReturnOrderPage extends AbstractForPurchases {
     private final ReturnOrderRows rowReader;
@@ -161,6 +157,9 @@ public class ReturnOrderPage extends AbstractForPurchases {
                                 && !net.trim().isEmpty();
 
                     } catch (Exception e) {
+                        Plugin_ERP.Bots.LogUtils.debug(
+                                "ReturnOrderPage condition unavailable: "
+                                        + e.getClass().getSimpleName());
                         return false;
                     }
                 });

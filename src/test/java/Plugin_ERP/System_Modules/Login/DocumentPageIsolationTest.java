@@ -6,24 +6,33 @@ import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Protects the architectural boundary that previously made sales depend on three unrelated domains. */
+/**
+ * Protects the architectural boundary that previously made sales depend on three unrelated domains.
+ */
 public class DocumentPageIsolationTest {
     private static WebDriver browser() {
-        return (WebDriver) Proxy.newProxyInstance(DocumentPageIsolationTest.class.getClassLoader(),
-                new Class<?>[] {WebDriver.class}, (proxy, method, args) -> {
-                    if (method.getName().equals("toString")) return "isolated-page";
-                    throw new AssertionError("Construction must not access the browser: " + method.getName());
-                });
+        return (WebDriver)
+                Proxy.newProxyInstance(
+                        DocumentPageIsolationTest.class.getClassLoader(),
+                        new Class<?>[] {WebDriver.class},
+                        (proxy, method, args) -> {
+                            if (method.getName().equals("toString")) return "isolated-page";
+                            throw new AssertionError(
+                                    "Construction must not access the browser: "
+                                            + method.getName());
+                        });
     }
 
-    @Test public void documentsDoNotInheritDealerOrAnotherTransactionDomain() {
+    @Test
+    public void documentsDoNotInheritDealerOrAnotherTransactionDomain() {
         Assert.assertFalse(AbstractForDealer.class.isAssignableFrom(AbstractForStore.class));
         Assert.assertFalse(AbstractForStore.class.isAssignableFrom(AbstractForPurchases.class));
         Assert.assertFalse(AbstractForPurchases.class.isAssignableFrom(AbstractForSales.class));
         Assert.assertEquals(AbstractForSales.class.getSuperclass(), DocumentPage.class);
     }
 
-    @Test public void onePageUsesOneSessionContextAndDoesNotShareStateWithAnother() {
+    @Test
+    public void onePageUsesOneSessionContextAndDoesNotShareStateWithAnother() {
         WebDriver firstDriver = browser(), secondDriver = browser();
         var first = new AbstractForPurchases(firstDriver);
         var second = new AbstractForSales(secondDriver);
@@ -35,18 +44,21 @@ public class DocumentPageIsolationTest {
         Assert.assertEquals(second.normalizeQuantity("2.50"), "2.50");
     }
 
-    @Test public void inheritedSummaryReadersStillDispatchToSalesOverrides() {
-        var page = new AbstractForSales(browser()) {
-            @Override protected BigDecimal getSummaryValue(String label) {
-                return switch (label) {
-                    case "قبل الضريبة" -> new BigDecimal("100");
-                    case "الضريبة" -> new BigDecimal("15");
-                    case "الصافي" -> new BigDecimal("115");
-                    case "خصم" -> new BigDecimal("5");
-                    default -> throw new AssertionError(label);
+    @Test
+    public void inheritedSummaryReadersStillDispatchToSalesOverrides() {
+        var page =
+                new AbstractForSales(browser()) {
+                    @Override
+                    protected BigDecimal getSummaryValue(String label) {
+                        return switch (label) {
+                            case "قبل الضريبة" -> new BigDecimal("100");
+                            case "الضريبة" -> new BigDecimal("15");
+                            case "الصافي" -> new BigDecimal("115");
+                            case "خصم" -> new BigDecimal("5");
+                            default -> throw new AssertionError(label);
+                        };
+                    }
                 };
-            }
-        };
         Assert.assertEquals(page.getBeforeTax(), new BigDecimal("100"));
         Assert.assertEquals(page.getTax(), new BigDecimal("15"));
         Assert.assertEquals(page.getNet(), new BigDecimal("115"));

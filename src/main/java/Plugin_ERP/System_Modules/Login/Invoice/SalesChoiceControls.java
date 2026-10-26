@@ -1,6 +1,6 @@
 package Plugin_ERP.System_Modules.Login.Invoice;
 
-import Plugin_ERP.Utiel.FormInteractions;
+import Plugin_ERP.Util.FormInteractions;
 import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 final class SalesChoiceControls {
     private final SalesModulePage owner;
     private final WebDriver driver;
+
     SalesChoiceControls(SalesModulePage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;

@@ -1,7 +1,7 @@
 package TestSupport;
 
-import java.nio.file.*;
 import java.io.IOException;
+import java.nio.file.*;
 
 public final class FixtureJournals {
     private FixtureJournals() {}

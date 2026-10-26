@@ -1,9 +1,9 @@
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import Plugin_ERP.System_Modules.Login.AbstractForSales;
-import Plugin_ERP.Utiel.PropertyReader;
+import Plugin_ERP.Util.FormInteractions;
+import Plugin_ERP.Util.PropertyReader;
 import io.qameta.allure.Step;
-import Plugin_ERP.Utiel.FormInteractions;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -28,8 +28,13 @@ public class SalesModulePage extends AbstractForSales {
         ready = new WebDriverWait(driver, Duration.ofSeconds(35));
         ready.ignoring(StaleElementReferenceException.class)
                 .ignoring(ElementClickInterceptedException.class);
-        interactions = new FormInteractions(ready,
-                element -> js("arguments[0].scrollIntoView({block:'center',inline:'center'})", element));
+        interactions =
+                new FormInteractions(
+                        ready,
+                        element ->
+                                js(
+                                        "arguments[0].scrollIntoView({block:'center',inline:'center'})",
+                                        element));
         documentList = new SalesDocumentList(this, driver, ready);
         itemSelection = new SalesItemSelection(this, driver, ready);
         lines = new SalesDocumentLines(this, driver, ready);
@@ -52,7 +57,7 @@ public class SalesModulePage extends AbstractForSales {
     }
 
     protected static String navigationPath(String route) {
-        return "/" + route.split("[?#]",2)[0].replaceAll("^/+|/+$","");
+        return "/" + route.split("[?#]", 2)[0].replaceAll("^/+|/+$", "");
     }
 
     protected static boolean reusesFormComponent(String current, String destination) {
@@ -61,19 +66,25 @@ public class SalesModulePage extends AbstractForSales {
 
     @Step("فتح شاشة المبيعات: {route}")
     public void slOpen(String route) {
-        Plugin_ERP.Utiel.Allur.ScreenNames.opening(route);
-        String destination=PropertyReader.getApplicationUrl().replaceAll("/+$","") + "/#/" + route;
+        Plugin_ERP.Util.Allur.ScreenNames.opening(route);
+        String destination =
+                PropertyReader.getApplicationUrl().replaceAll("/+$", "") + "/#/" + route;
         boolean reused = reusesFormComponent(driver.getCurrentUrl(), destination);
         if (!driver.getCurrentUrl().equals(destination)) driver.get(destination);
         // A query-only route change reuses Vue's mounted form and does not load its source.
         if (reused) driver.navigate().refresh();
         slAwaitSession();
-        ready.until(d -> Boolean.TRUE.equals(js("""
+        ready.until(
+                d ->
+                        Boolean.TRUE.equals(
+                                js(
+                                        """
             const route=document.querySelector('#app')?.__vue__?.$router?.currentRoute;
             if(!route||route.path.replace(/\\/+$/g,'')!==arguments[0])return false;
             const view=route.matched[route.matched.length-1]?.instances?.default;
             return !!(view?._isMounted&&!view._isDestroyed&&view.$el?.isConnected&&view.$el.getClientRects?.().length);
-            """,navigationPath(route))));
+            """,
+                                        navigationPath(route))));
         ready.until(
                 d ->
                         d
@@ -390,9 +401,16 @@ public class SalesModulePage extends AbstractForSales {
     public void slVerifyPrintedReport(String main, String item) {
         printing.slVerifyPrintedReport(main, item);
     }
+
     public void slVerifyPrintedReport(String main, String item, Runnable contentAssertions) {
         printing.slVerifyPrintedReport(main, item, contentAssertions);
     }
-    FormInteractions formInteractions() { return interactions; }
-    void selectPaymentMode(String value) { radio(value); }
+
+    FormInteractions formInteractions() {
+        return interactions;
+    }
+
+    void selectPaymentMode(String value) {
+        radio(value);
+    }
 }

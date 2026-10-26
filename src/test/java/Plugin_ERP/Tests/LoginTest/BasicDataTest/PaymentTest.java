@@ -164,8 +164,7 @@ public class PaymentTest extends BasicDataScenarioTest {
         create(p, n, null, basicData().bank(1).name(), false, false);
         p.OpenForEditByName(n);
         Assert.assertEquals(p.GetArabicNameValue(), n);
-        Assert.assertTrue(
-                p.GetEnglishNameValue().isEmpty() || p.GetEnglishNameValue().equals(n));
+        Assert.assertTrue(p.GetEnglishNameValue().isEmpty() || p.GetEnglishNameValue().equals(n));
         Assert.assertEquals(p.GetSelectedBankValue(), basicData().bank(1).name());
         Assert.assertFalse(p.IsPaymentCheckboxChecked("عام"));
         Assert.assertFalse(p.IsPaymentCheckboxChecked("طريقة دفع افتراضية للتكامل"));

@@ -14,10 +14,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 final class StoreProductSearch {
     private final DocumentPage owner;
     private final WebDriver driver;
+
     StoreProductSearch(DocumentPage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
     }
+
     private final By SearchInput = By.cssSelector("input[placeholder='بحث ....']");
 
     By getSuggestionItem(String name) {
@@ -35,7 +37,7 @@ final class StoreProductSearch {
                 // امسح الحقل الأول قبل أي محاولة (حتى الأولى، احتياطًا)
                 SearchInputElement().clear();
 
-                owner.utilites.TaypeTextB(SearchInput, productName);
+                owner.utilites.typeTextAndVerify(SearchInput, productName);
                 owner.utilites.ClickElement(getSuggestionItem(productName));
                 owner.utilites.waits().waitForOverlayToDisappear();
 
@@ -47,12 +49,14 @@ final class StoreProductSearch {
             }
 
             if (!found) {
-                System.out.println("🔁 إعادة المحاولة رقم " + (attempt + 1) + " للصنف: " + productName);
+                System.out.println(
+                        "🔁 إعادة المحاولة رقم " + (attempt + 1) + " للصنف: " + productName);
             }
         }
 
         if (!found) {
-            throw new RuntimeException("❌ فشل إضافة الصنف بعد " + maxRetries + " محاولات: " + productName);
+            throw new RuntimeException(
+                    "❌ فشل إضافة الصنف بعد " + maxRetries + " محاولات: " + productName);
         }
     }
 
@@ -60,27 +64,25 @@ final class StoreProductSearch {
         owner.utilites.waits().waitForOverlayToDisappear();
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement searchInput = wait.until(
-                ExpectedConditions.elementToBeClickable(SearchInput)
-        );
+        WebElement searchInput = wait.until(ExpectedConditions.elementToBeClickable(SearchInput));
         searchInput.click();
         searchInput.sendKeys(Keys.chord(Keys.CONTROL, "a"));
         searchInput.sendKeys(Keys.BACK_SPACE);
         searchInput.sendKeys(productName);
 
         By suggestion = getSuggestionItem(productName);
-        WebElement suggestionElement = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(suggestion)
-        );
+        WebElement suggestionElement =
+                wait.until(ExpectedConditions.visibilityOfElementLocated(suggestion));
         suggestionElement.click();
 
         // Wait until the clicked suggestion is consumed, rather than clicking
         // it again when the grid's row markup differs from other screens.
         wait.until(ExpectedConditions.stalenessOf(suggestionElement));
-        wait.until(d -> {
-            String value = d.findElement(SearchInput).getAttribute("value");
-            return value == null || value.isBlank();
-        });
+        wait.until(
+                d -> {
+                    String value = d.findElement(SearchInput).getAttribute("value");
+                    return value == null || value.isBlank();
+                });
     }
 
     WebElement SearchInputElement() {
@@ -90,15 +92,21 @@ final class StoreProductSearch {
     boolean waitForProductToAppearInTable(String productName, int timeoutSeconds) {
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
-            wait.until(d -> {
-                List<WebElement> matches = d.findElements(
-                        By.xpath("//tbody//tr[@role='row']//td[contains(text(), '" + productName + "')]")
-                );
-                return !matches.isEmpty();
-            });
+            wait.until(
+                    d -> {
+                        List<WebElement> matches =
+                                d.findElements(
+                                        By.xpath(
+                                                "//tbody//tr[@role='row']//td[contains(text(), '"
+                                                        + productName
+                                                        + "')]"));
+                        return !matches.isEmpty();
+                    });
             System.out.println("✅ تم التأكد من إضافة الصنف: " + productName);
             return true;
         } catch (TimeoutException e) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "StoreProductSearch condition unavailable: " + e.getClass().getSimpleName());
             return false;
         }
     }

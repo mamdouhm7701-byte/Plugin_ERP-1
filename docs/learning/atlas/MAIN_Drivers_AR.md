@@ -15,7 +15,7 @@
 
 **يرتبط مباشرة بملفات داخل المشروع:** [PropertyReader.java](MAIN_Utiel_AR.md#file-94d06e1d47d8)
 
-**ملفات تشير إليه مباشرة:** [Chrome.java](MAIN_Drivers_AR.md#file-14889194f9e4)، [Edge.java](MAIN_Drivers_AR.md#file-e957d0c8ef7e)، [Firfox.java](MAIN_Drivers_AR.md#file-cafcec966ff0)
+**ملفات تشير إليه مباشرة:** [Chrome.java](MAIN_Drivers_AR.md#file-14889194f9e4)، [Edge.java](MAIN_Drivers_AR.md#file-e957d0c8ef7e)، [Firefox.java](MAIN_Drivers_AR.md#file-cafcec966ff0)
 
 ### خريطة الميثودات المعلنة
 
@@ -86,9 +86,9 @@
 | `public WebDriver createDriver()` | public | إنشاء القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 
 <a id="file-cafcec966ff0"></a>
-## Firfox.java
+## Firefox.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Drivers/Firfox.java](../../../src/main/java/Plugin_ERP/Drivers/Firfox.java)
+**المصدر:** [src/main/java/Plugin_ERP/Drivers/Firefox.java](../../../src/main/java/Plugin_ERP/Drivers/Firefox.java)
 
 **دوره:** مصنع Firefox بالاسم الإملائي الحالي في المشروع؛ راجع التنفيذ لمعرفة طرق التشغيل المدعومة.
 
@@ -128,4 +128,3 @@
 | `public static WebDriver getDriver()` | public | قراءة أو إرجاع القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 | `public static void quitDriver()` | public | إغلاق القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 | `public static void quitDriver(WebDriver ownedDriver)` | public | إغلاق القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
-

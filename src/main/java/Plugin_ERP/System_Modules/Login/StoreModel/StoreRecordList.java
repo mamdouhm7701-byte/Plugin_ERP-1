@@ -1,10 +1,5 @@
 package Plugin_ERP.System_Modules.Login.StoreModel;
 
-import Plugin_ERP.System_Modules.Login.AbstractForStore;
-import Plugin_ERP.Utiel.FormInteractions;
-import Plugin_ERP.Utiel.PropertyReader;
-import io.qameta.allure.Step;
-import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
@@ -14,6 +9,7 @@ final class StoreRecordList {
     private final StoreModulePage owner;
     private final WebDriver driver;
     private final WebDriverWait ready;
+
     StoreRecordList(StoreModulePage owner, WebDriver driver, WebDriverWait ready) {
         this.owner = owner;
         this.driver = driver;
@@ -23,7 +19,10 @@ final class StoreRecordList {
     private Object ownedId;
     private String ownedMarker;
     private By listSearch;
-    private Object js(String script, Object... args) { return owner.js(script, args); }
+
+    private Object js(String script, Object... args) {
+        return owner.js(script, args);
+    }
 
     void smFind(String route, String marker, Object id, Object code) {
         if (!marker.startsWith("QA-ST-") || id == null)
@@ -36,23 +35,46 @@ final class StoreRecordList {
             listSearch = null;
             // Bootstrap initially renders a 1000-row pagination placeholder. Do not click its
             // last page until real records (with identities) have reached the DOM.
-            ready.until(d -> d.findElements(By.cssSelector(
-                    "tbody tr[data-pk],tbody tr[id*='__row_'],tbody tr:has([id*='invoice-row-'])"))
-                    .stream().anyMatch(WebElement::isDisplayed));
+            ready.until(
+                    d ->
+                            d
+                                    .findElements(
+                                            By.cssSelector(
+                                                    "tbody tr[data-pk],tbody tr[id*='__row_'],tbody tr:has([id*='invoice-row-'])"))
+                                    .stream()
+                                    .anyMatch(WebElement::isDisplayed));
             while (!smHasDocument(marker)) {
-                var previous = driver.findElements(By.cssSelector("tbody tr")).stream()
-                        .map(WebElement::getText).toList();
-                ready.until(d -> {
-                    if (smHasDocument(marker)) return true;
-                    var next = d.findElements(By.cssSelector(".pagination .page-item:last-child button"))
-                            .stream().filter(WebElement::isDisplayed).filter(WebElement::isEnabled)
-                            .findFirst().orElseThrow(() -> new AssertionError("Owned damage document not found: " + id));
-                    next.click();
-                    return true;
-                });
+                var previous =
+                        driver.findElements(By.cssSelector("tbody tr")).stream()
+                                .map(WebElement::getText)
+                                .toList();
+                ready.until(
+                        d -> {
+                            if (smHasDocument(marker)) return true;
+                            var next =
+                                    d
+                                            .findElements(
+                                                    By.cssSelector(
+                                                            ".pagination .page-item:last-child button"))
+                                            .stream()
+                                            .filter(WebElement::isDisplayed)
+                                            .filter(WebElement::isEnabled)
+                                            .findFirst()
+                                            .orElseThrow(
+                                                    () ->
+                                                            new AssertionError(
+                                                                    "Owned damage document not found: "
+                                                                            + id));
+                            next.click();
+                            return true;
+                        });
                 if (smHasDocument(marker)) break;
-                ready.until(d -> !d.findElements(By.cssSelector("tbody tr")).stream()
-                        .map(WebElement::getText).toList().equals(previous));
+                ready.until(
+                        d ->
+                                !d.findElements(By.cssSelector("tbody tr")).stream()
+                                        .map(WebElement::getText)
+                                        .toList()
+                                        .equals(previous));
             }
             return;
         }
@@ -81,11 +103,14 @@ final class StoreRecordList {
     }
 
     void smSearch(String value) {
-        if (listSearch == null) throw new IllegalStateException("This warehouse list has no search control");
+        if (listSearch == null)
+            throw new IllegalStateException("This warehouse list has no search control");
         owner.smType(listSearch, value);
     }
 
-    boolean smHasSearch() { return listSearch != null; }
+    boolean smHasSearch() {
+        return listSearch != null;
+    }
 
     By ownedRow() {
         return By.cssSelector(
@@ -113,7 +138,9 @@ final class StoreRecordList {
                                 row.findElements(
                                         By.cssSelector(
                                                 "[data-action-type='delete'],[id*='-delete-']"))) {
-                            owner.js("arguments[0].scrollIntoView({block:'center',inline:'center'})", b);
+                            owner.js(
+                                    "arguments[0].scrollIntoView({block:'center',inline:'center'})",
+                                    b);
                             if (b.isDisplayed() && b.isEnabled()) {
                                 b.click();
                                 return true;

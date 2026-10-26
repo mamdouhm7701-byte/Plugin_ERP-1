@@ -51,16 +51,16 @@ public class Supplier extends AbstractForDealer {
 
     @Step("اضافه عنوان المورد")
     public void AddAdressForSupplier(String Adress) {
-        utilites.TaypeTextB(SupplierAdress, Adress);
+        utilites.typeTextAndVerify(SupplierAdress, Adress);
     }
 
     @Step("{MobileNumber}:اضافه رقم جوال المورد")
     public void AddMobileNumberForSupplier(String MobileNumber) {
-        utilites.TaypeTextB(SupllierMobileNumer, MobileNumber);
+        utilites.typeTextAndVerify(SupllierMobileNumer, MobileNumber);
     }
 
     @Step("اضافه اسم المندوب للمورد: {AgentName}")
     public void AddAgentNameForSupplier(String AgentName) {
-        utilites.TaypeTextB(AddAgentForSupplier, AgentName);
+        utilites.typeTextAndVerify(AddAgentForSupplier, AgentName);
     }
 }

@@ -1,25 +1,18 @@
 package Plugin_ERP.Tests.LoginTest.BasicDataTest;
 
-import Plugin_ERP.Drivers.WebDriverFactory;
 import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.System_Modules.Login.BasicData.CashPage;
-import Plugin_ERP.System_Modules.Login.Login.LoginPage;
 import TestSupport.BasicDataScenarioTest;
-import Plugin_ERP.Utiel.PropertyReader;
-import Plugin_ERP.Listners.TestNGListeners;
 import io.qameta.allure.*;
-import io.qameta.allure.testng.AllureTestNg;
-import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
-import org.testng.annotations.*;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
-import java.util.List;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import org.testng.Assert;
+import org.testng.annotations.*;
 
 public class CashTest extends BasicDataScenarioTest {
 
@@ -114,7 +107,9 @@ public class CashTest extends BasicDataScenarioTest {
                 cashPage.getSafeAccountValue(),
                 basicData().account("safe").name(),
                 "WH-034: يجب أن يطابق اسم الحساب المختار حساب بيانات الاختبار");
-        Assert.assertEquals(accountInList, basicData().read(basicData().account("safe")).get("code").toString(),
+        Assert.assertEquals(
+                accountInList,
+                basicData().read(basicData().account("safe")).get("code").toString(),
                 "WH-034: يجب أن يطابق كود الحساب في الصف نفس الحساب المختار");
         cashPage.ClickCloseButton();
     }
@@ -159,7 +154,6 @@ public class CashTest extends BasicDataScenarioTest {
             "يتحقق هذا الاختبار من إضافة خزنة جديدة ببيانات صحيحة، ويشمل إدخال الاسم العربي"
                     + " والإنجليزي والملاحظات، واختيار رقم الحساب وتفعيل خانة (عام)، وحفظ البيانات"
                     + " والتحقق من إضافة السجل بنجاح.")
-
     public void ValidCashTest() {
         WH_003_CreateValidSafeAndVerifyFields();
     }
@@ -174,7 +168,6 @@ public class CashTest extends BasicDataScenarioTest {
     @Description(
             "يتحقق هذا الاختبار من تعديل خزنة موجودة ببيانات صحيحة، ويشمل تعديل الاسم العربي"
                     + " وحفظ التعديلات والتحقق من تحديث السجل بنجاح.")
-
     public void EditCash() {
         WH_021_EditOwnedTestSafeAndSave();
     }
@@ -187,7 +180,6 @@ public class CashTest extends BasicDataScenarioTest {
     @Feature("الخزن")
     @Story("حذف خزنة")
     @Description("يتحقق هذا الاختبار من أن المستخدم يستطيع حذف خزنة موجودة بنجاح.")
-
     public void DeleteCash() {
         WH_023_DeleteOnlyOwnedTestSafe();
     }
@@ -201,7 +193,6 @@ public class CashTest extends BasicDataScenarioTest {
     @Description(
             "يتحقق هذا الاختبار من أن النظام يمنع إضافة خزنة بدون إدخال الاسم العربي، ويتحقق"
                     + " من ظهور رسالة خطأ تفيد بأن الاسم العربي حقل إلزامي.")
-
     public void InvalidCashTest() {
         CashPage cashPage = new CashPage(driver);
         String accountName = prepareSafeAccount();
@@ -642,7 +633,13 @@ public class CashTest extends BasicDataScenarioTest {
         String editedName = ownedName("Safes", "edited");
         cashPage.NavigationHelper(Pages.SAFES);
         try {
-            createSafe(cashPage, originalName, "Edit Safe " + suffix, basicData().account("safe").name(), false, "");
+            createSafe(
+                    cashPage,
+                    originalName,
+                    "Edit Safe " + suffix,
+                    basicData().account("safe").name(),
+                    false,
+                    "");
             cashPage.openSafeForEditByName(originalName);
             cashPage.AddArabicName(editedName);
             cashPage.ClickSaveButton();
@@ -914,20 +911,28 @@ public class CashTest extends BasicDataScenarioTest {
     }
 
     private String seedSafe(String key) {
-        String name = basicData().fixture(key, "Safes", TestSupport.BasicDataFixtures.fields(
-                "accountId", basicData().account("safe").id())).name();
+        String name =
+                basicData()
+                        .fixture(
+                                key,
+                                "Safes",
+                                TestSupport.BasicDataFixtures.fields(
+                                        "accountId", basicData().account("safe").id()))
+                        .name();
         driver.navigate().refresh();
         return name;
     }
 
     private Path prepareExportDirectory() throws IOException {
-        Path root = Path.of(System.getProperty("user.dir"), "target", "cash-export-downloads")
-                .toAbsolutePath();
+        Path root =
+                Path.of(System.getProperty("user.dir"), "target", "cash-export-downloads")
+                        .toAbsolutePath();
         Files.createDirectories(root);
         Path directory = Files.createTempDirectory(root, "case-");
         if (driver instanceof org.openqa.selenium.chromium.HasCdp cdp) {
-            cdp.executeCdpCommand("Page.setDownloadBehavior", java.util.Map.of(
-                    "behavior", "allow", "downloadPath", directory.toString()));
+            cdp.executeCdpCommand(
+                    "Page.setDownloadBehavior",
+                    java.util.Map.of("behavior", "allow", "downloadPath", directory.toString()));
         }
         return directory;
     }

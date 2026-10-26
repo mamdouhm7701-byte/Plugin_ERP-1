@@ -1,7 +1,5 @@
 package Plugin_ERP.System_Modules.Login.BasicData;
 
-import Plugin_ERP.System_Modules.Login.AbstractForDealer;
-import io.qameta.allure.Step;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -11,18 +9,32 @@ import org.openqa.selenium.support.ui.*;
 final class BankRecords {
     private final BankPage owner;
     private final WebDriver driver;
+
     BankRecords(BankPage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
     }
+
     private final By rows = By.cssSelector("table tbody tr[role='row']");
     private final By headers = By.cssSelector("table thead th");
     private final By search = By.cssSelector("input[placeholder*='بحث']");
     private final By save = By.cssSelector("button[data-action-type='save']");
-    private boolean visible(By locator) { return owner.recordVisible(locator); }
-    private void waitRows() { owner.recordWaitRows(); }
-    private void waitAlertToDisappear() { owner.recordWaitAlertToDisappear(); }
-    private void dismissSaveSuccessIfPresent() { owner.recordDismissSaveSuccessIfPresent(); }
+
+    private boolean visible(By locator) {
+        return owner.recordVisible(locator);
+    }
+
+    private void waitRows() {
+        owner.recordWaitRows();
+    }
+
+    private void waitAlertToDisappear() {
+        owner.recordWaitAlertToDisappear();
+    }
+
+    private void dismissSaveSuccessIfPresent() {
+        owner.recordDismissSaveSuccessIfPresent();
+    }
 
     void SearchBank(String value) {
         waitRows();
@@ -143,9 +155,16 @@ final class BankRecords {
 
     void OpenBankForEditByName(String name) {
         openEdit(findRow(name));
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(d ->
-                d.findElements(By.cssSelector("input[name='arabicName']")).stream()
-                        .anyMatch(e -> e.isDisplayed() && name.equals(e.getDomProperty("value"))));
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(
+                        d ->
+                                d.findElements(By.cssSelector("input[name='arabicName']")).stream()
+                                        .anyMatch(
+                                                e ->
+                                                        e.isDisplayed()
+                                                                && name.equals(
+                                                                        e.getDomProperty(
+                                                                                "value"))));
     }
 
     void openEdit(WebElement row) {
@@ -184,6 +203,8 @@ final class BankRecords {
                     .until(ExpectedConditions.visibilityOfElementLocated(success));
             dismissSaveSuccessIfPresent();
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "BankRecords fallback: " + ignored.getClass().getSimpleName());
         }
     }
 

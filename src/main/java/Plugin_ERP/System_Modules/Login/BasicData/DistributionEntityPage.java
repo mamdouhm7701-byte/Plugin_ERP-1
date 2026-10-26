@@ -39,6 +39,10 @@ public class DistributionEntityPage extends AbstractForDealer {
                                                     try {
                                                         return e.isDisplayed();
                                                     } catch (Exception ignored) {
+                                                        Plugin_ERP.Bots.LogUtils.debug(
+                                                                "DistributionEntityPage condition unavailable: "
+                                                                        + ignored.getClass()
+                                                                                .getSimpleName());
                                                         return false;
                                                     }
                                                 }));
@@ -82,11 +86,16 @@ public class DistributionEntityPage extends AbstractForDealer {
                                             .executeScript("arguments[0].click();", buttons.get(0));
                                     return true;
                                 } catch (Exception ignored) {
+                                    Plugin_ERP.Bots.LogUtils.debug(
+                                            "DistributionEntityPage condition unavailable: "
+                                                    + ignored.getClass().getSimpleName());
                                     return false;
                                 }
                             });
             waitAlertToDisappear();
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "DistributionEntityPage fallback: " + ignored.getClass().getSimpleName());
         }
         waitLoading();
     }
@@ -115,6 +124,10 @@ public class DistributionEntityPage extends AbstractForDealer {
                                                     try {
                                                         return e.isDisplayed();
                                                     } catch (Exception ignored) {
+                                                        Plugin_ERP.Bots.LogUtils.debug(
+                                                                "DistributionEntityPage condition unavailable: "
+                                                                        + ignored.getClass()
+                                                                                .getSimpleName());
                                                         return false;
                                                     }
                                                 }));
@@ -210,7 +223,16 @@ public class DistributionEntityPage extends AbstractForDealer {
     public void CancelDelete() {
         records.CancelDelete();
     }
-    boolean recordVisible(By locator) { return visible(locator); }
-    void recordWaitLoading() { waitLoading(); }
-    void recordWaitAlertToDisappear() { waitAlertToDisappear(); }
+
+    boolean recordVisible(By locator) {
+        return visible(locator);
+    }
+
+    void recordWaitLoading() {
+        waitLoading();
+    }
+
+    void recordWaitAlertToDisappear() {
+        waitAlertToDisappear();
+    }
 }

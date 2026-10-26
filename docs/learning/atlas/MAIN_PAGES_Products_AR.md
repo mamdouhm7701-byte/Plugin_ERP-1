@@ -13,7 +13,7 @@
 
 **حالته:** مصدر نشط · **عدد أسطره:** 270 · **الأب المباشر:** `ProductsModulePage`
 
-**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [ElmentAction.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitMangment.java](MAIN_Bots_AR.md#file-98afc8ddbc07)، [Abstract.java](MAIN_PAGES_Shared_AR.md#file-f230c0052300)، [ProductsModulePage.java](MAIN_PAGES_Products_AR.md#file-2453b3e5c73a)
+**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [ElementActions.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitManagement.java](MAIN_Bots_AR.md#file-98afc8ddbc07)، [Abstract.java](MAIN_PAGES_Shared_AR.md#file-f230c0052300)، [ProductsModulePage.java](MAIN_PAGES_Products_AR.md#file-2453b3e5c73a)
 
 **إزاي تقرأه؟** اقرأ السلوك المحلي هنا مع واجهة الأب؛ قِصر الملف قد يكون لأنه يرث اختبارات أو يفوض قدرات، وليس لأنه بلا وظيفة.
 
@@ -67,7 +67,7 @@
 
 **حالته:** مصدر نشط · **عدد أسطره:** 46 · **الأب المباشر:** `ProductsModulePage`
 
-**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [BrowserAction.java](MAIN_Bots_AR.md#file-ca0683510b61)، [ElmentAction.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitMangment.java](MAIN_Bots_AR.md#file-98afc8ddbc07)، [Abstract.java](MAIN_PAGES_Shared_AR.md#file-f230c0052300)، [ProductsModulePage.java](MAIN_PAGES_Products_AR.md#file-2453b3e5c73a)
+**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [BrowserAction.java](MAIN_Bots_AR.md#file-ca0683510b61)، [ElementActions.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitManagement.java](MAIN_Bots_AR.md#file-98afc8ddbc07)، [Abstract.java](MAIN_PAGES_Shared_AR.md#file-f230c0052300)، [ProductsModulePage.java](MAIN_PAGES_Products_AR.md#file-2453b3e5c73a)
 
 **إزاي تقرأه؟** اقرأ السلوك المحلي هنا مع واجهة الأب؛ قِصر الملف قد يكون لأنه يرث اختبارات أو يفوض قدرات، وليس لأنه بلا وظيفة.
 
@@ -89,7 +89,7 @@
 
 **حالته:** مصدر نشط · **عدد أسطره:** 62
 
-**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [ElmentAction.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitMangment.java](MAIN_Bots_AR.md#file-98afc8ddbc07)، [Abstract.java](MAIN_PAGES_Shared_AR.md#file-f230c0052300)
+**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [ElementActions.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitManagement.java](MAIN_Bots_AR.md#file-98afc8ddbc07)، [Abstract.java](MAIN_PAGES_Shared_AR.md#file-f230c0052300)
 
 ### خريطة الميثودات المعلنة
 
@@ -114,7 +114,7 @@
 
 **حالته:** مصدر نشط · **عدد أسطره:** 134 · **الأب المباشر:** `ProductsModulePage`
 
-**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [BrowserAction.java](MAIN_Bots_AR.md#file-ca0683510b61)، [ElmentAction.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitMangment.java](MAIN_Bots_AR.md#file-98afc8ddbc07)، [Abstract.java](MAIN_PAGES_Shared_AR.md#file-f230c0052300)، [ProductsModulePage.java](MAIN_PAGES_Products_AR.md#file-2453b3e5c73a)
+**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [BrowserAction.java](MAIN_Bots_AR.md#file-ca0683510b61)، [ElementActions.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitManagement.java](MAIN_Bots_AR.md#file-98afc8ddbc07)، [Abstract.java](MAIN_PAGES_Shared_AR.md#file-f230c0052300)، [ProductsModulePage.java](MAIN_PAGES_Products_AR.md#file-2453b3e5c73a)
 
 **إزاي تقرأه؟** اقرأ السلوك المحلي هنا مع واجهة الأب؛ قِصر الملف قد يكون لأنه يرث اختبارات أو يفوض قدرات، وليس لأنه بلا وظيفة.
 
@@ -261,7 +261,7 @@
 
 **حالته:** مصدر نشط · **عدد أسطره:** 58
 
-**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [ElmentAction.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitMangment.java](MAIN_Bots_AR.md#file-98afc8ddbc07)، [Abstract.java](MAIN_PAGES_Shared_AR.md#file-f230c0052300)
+**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [ElementActions.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitManagement.java](MAIN_Bots_AR.md#file-98afc8ddbc07)، [Abstract.java](MAIN_PAGES_Shared_AR.md#file-f230c0052300)
 
 ### خريطة الميثودات المعلنة
 
@@ -296,4 +296,3 @@
 | `public UnitePage(WebDriver driver)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 | `public void OpenUnitePage()` | public | فتح الصفحة، حسب المدخلات والتخصص. |
 | `public boolean AssertUniteNameRequired()` | public | مقارنة متوقعة الاسم، حسب المدخلات والتخصص. |
-

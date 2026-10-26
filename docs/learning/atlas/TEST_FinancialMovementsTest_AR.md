@@ -642,4 +642,3 @@
 | `private void exact(Object actual,String expected)` | private | تنفيذ جزء متعلق بـ القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 
 **علاقته بالتشغيل:** ابحث عن الاسم الكامل `FinancialMovementsTest.TreasuryLedgerCoverageTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
-

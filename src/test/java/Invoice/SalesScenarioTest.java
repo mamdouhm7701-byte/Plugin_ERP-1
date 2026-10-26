@@ -1,7 +1,7 @@
 package Invoice;
 
-import Plugin_ERP.Tests.LoginTest.BaseTest;
 import Plugin_ERP.System_Modules.Login.Invoice.*;
+import Plugin_ERP.Tests.LoginTest.BaseTest;
 import io.qameta.allure.Allure;
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -22,7 +22,8 @@ public abstract class SalesScenarioTest extends BaseTest {
     protected SalesTestData data;
     protected SalesTestData.Record item, customer, agent, payment, priceList, discountType;
     protected String marker, mainWindow, paymentType;
-    protected java.util.function.Consumer<Map<String,Object>> printContentAssertions = stored -> {};
+    protected java.util.function.Consumer<Map<String, Object>> printContentAssertions =
+            stored -> {};
     protected final Map<Integer, BigDecimal> initialBalances = new LinkedHashMap<>();
     protected final Set<Object> allowedItems = new HashSet<>();
     private final List<SalesTestData> pending = new ArrayList<>();
@@ -68,7 +69,9 @@ public abstract class SalesScenarioTest extends BaseTest {
 
     protected TestSupport.SalesTaxProfile salesTax;
 
-    protected String salesNet(String beforeTax) { return salesTax.net(beforeTax); }
+    protected String salesNet(String beforeTax) {
+        return salesTax.net(beforeTax);
+    }
 
     protected void prepare(String paymentType) {
         prepare(paymentType, false, false);
@@ -78,16 +81,26 @@ public abstract class SalesScenarioTest extends BaseTest {
         prepare(paymentType, usePriceList, useDiscountType, true);
     }
 
-    protected void prepare(String paymentType, boolean usePriceList, boolean useDiscountType, boolean selectCustomer) {
+    protected void prepare(
+            String paymentType,
+            boolean usePriceList,
+            boolean useDiscountType,
+            boolean selectCustomer) {
         this.paymentType = paymentType;
         item = ownItem(1);
         customer = data.customer();
         var customerProfile = data.read(customer);
-        Assert.assertEquals(customerProfile.get("isTaxable"), Boolean.TRUE,
+        Assert.assertEquals(
+                customerProfile.get("isTaxable"),
+                Boolean.TRUE,
                 "Normal scenario customer must be taxable");
-        Assert.assertEquals(customerProfile.get("isOnTheFly"), Boolean.FALSE,
+        Assert.assertEquals(
+                customerProfile.get("isOnTheFly"),
+                Boolean.FALSE,
                 "Normal scenario customer must retain its own ledger");
-        Assert.assertEquals(customerProfile.get("creditNote"), Boolean.TRUE,
+        Assert.assertEquals(
+                customerProfile.get("creditNote"),
+                Boolean.TRUE,
                 "Normal scenario customer must allow collection receipts");
         agent = data.agent();
         String capability =
@@ -149,9 +162,11 @@ public abstract class SalesScenarioTest extends BaseTest {
         data.rememberAttempts(page.slAttempts(), page.slSaves(), marker);
         List<SalesTestData.Record> records = new ArrayList<>();
         for (var saved : page.slSaves()) {
-            String endpoint=(String)saved.get("endpoint");
-            Assert.assertTrue(Arrays.stream(SalesDocumentKind.values()).anyMatch(k->k.endpoint.equals(endpoint)),
-                    "Unexpected captured sales endpoint: "+endpoint);
+            String endpoint = (String) saved.get("endpoint");
+            Assert.assertTrue(
+                    Arrays.stream(SalesDocumentKind.values())
+                            .anyMatch(k -> k.endpoint.equals(endpoint)),
+                    "Unexpected captured sales endpoint: " + endpoint);
             Map<String, Object> values = (Map<String, Object>) saved.get("values");
             String note =
                     values.get("notes") instanceof String text && text.startsWith(marker)
@@ -188,7 +203,10 @@ public abstract class SalesScenarioTest extends BaseTest {
         page.slSettled();
         var records = capture();
         var record = records.get(records.size() - 1);
-        Assert.assertEquals(record.endpoint(),kind().endpoint,"Saved document must match the current journey step");
+        Assert.assertEquals(
+                record.endpoint(),
+                kind().endpoint,
+                "Saved document must match the current journey step");
         Map<String, Object> stored = data.read(record);
         Allure.addAttachment(
                 "Saved sales document",
@@ -202,7 +220,9 @@ public abstract class SalesScenarioTest extends BaseTest {
         Assert.assertEquals(stored.get("storeId"), data.store(1).id(), "مطابقة المخزن");
         Assert.assertEquals(stored.get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
         Assert.assertEquals(stored.get("agentId"), agent.id(), "مطابقة المندوب");
-        Assert.assertTrue(kind().type.equalsIgnoreCase(stored.get("transactionType").toString()), "التحقق من نوع الحركة");
+        Assert.assertTrue(
+                kind().type.equalsIgnoreCase(stored.get("transactionType").toString()),
+                "التحقق من نوع الحركة");
         List<Map<String, Object>> lines = (List<Map<String, Object>>) stored.get("lines");
         Assert.assertFalse(lines.isEmpty());
         Assert.assertTrue(
@@ -220,9 +240,12 @@ public abstract class SalesScenarioTest extends BaseTest {
                             .map(p -> number(p.get("value")))
                             .reduce(BigDecimal.ZERO, BigDecimal::add)
                             .compareTo(number(stored.get("net"))),
-                    0, "مطابقة الصافي");
+                    0,
+                    "مطابقة الصافي");
         }
-        if (print) page.slVerifyPrintedReport(mainWindow, item.name(), () -> printContentAssertions.accept(stored));
+        if (print)
+            page.slVerifyPrintedReport(
+                    mainWindow, item.name(), () -> printContentAssertions.accept(stored));
         else page.slDismiss();
         return record;
     }
@@ -279,7 +302,12 @@ public abstract class SalesScenarioTest extends BaseTest {
         } catch (TimeoutException failure) {
             var evidence =
                     SalesTestData.fields(
-                            "before", before, "after", last.get(), "expectedDelta", expectedWithTax);
+                            "before",
+                            before,
+                            "after",
+                            last.get(),
+                            "expectedDelta",
+                            expectedWithTax);
             Allure.addAttachment(
                     "Owned customer balance evidence",
                     "application/json",

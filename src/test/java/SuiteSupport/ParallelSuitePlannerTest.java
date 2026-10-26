@@ -1,10 +1,9 @@
 package SuiteSupport;
 
-import org.testng.Assert;
-import org.testng.annotations.*;
-
 import java.nio.file.*;
 import java.util.*;
+import org.testng.Assert;
+import org.testng.annotations.*;
 
 public final class ParallelSuitePlannerTest {
     private Set<String> caseIds(Map<String, List<String>> methodsByClass) {

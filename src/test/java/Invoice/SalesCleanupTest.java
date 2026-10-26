@@ -1,5 +1,6 @@
 package Invoice;
 
+import io.qameta.allure.Story;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -7,7 +8,6 @@ import java.util.Map;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import io.qameta.allure.Story;
 
 public class SalesCleanupTest {
     @Test
@@ -16,16 +16,19 @@ public class SalesCleanupTest {
         SalesFixtureApiStub api = new SalesFixtureApiStub();
         SalesTestData data = new SalesTestData(api.driver());
         api.delayMovementCreate = true;
-        Assert.expectThrows(org.openqa.selenium.TimeoutException.class,
+        Assert.expectThrows(
+                org.openqa.selenium.TimeoutException.class,
                 () -> data.seedInvoice(1, "Sales", "2026-01-01", "1", "40"));
         var failure = Assert.expectThrows(AssertionError.class, data::close);
         Assert.assertTrue(failure.getMessage().contains("still unresolved"));
-        Assert.assertTrue(api.deletes.isEmpty(), "A pending create can still reference its parents");
+        Assert.assertTrue(
+                api.deletes.isEmpty(), "A pending create can still reference its parents");
         String marker = api.delayedMovement.get("notes").toString();
         String suffix = marker.substring(marker.length() - 12);
         SalesTestData resumed = SalesTestData.resume(api.driver(), suffix);
         Assert.expectThrows(AssertionError.class, resumed::close);
-        Assert.assertTrue(api.deletes.isEmpty(), "The persisted timeout must also block recovery cleanup");
+        Assert.assertTrue(
+                api.deletes.isEmpty(), "The persisted timeout must also block recovery cleanup");
         String delayedId = api.delayedMovement.get("id").toString();
         api.records.put(delayedId, api.delayedMovement);
         resumed.close();
@@ -34,7 +37,8 @@ public class SalesCleanupTest {
     }
 
     @Test
-    @io.qameta.allure.Description("العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
+    @io.qameta.allure.Description(
+            "العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
     public void normalCustomerIsTaxableAndKeepsItsOwnAccount() {
         SalesFixtureApiStub api = new SalesFixtureApiStub();
         try (var data = new SalesTestData(api.driver())) {
@@ -370,8 +374,6 @@ public class SalesCleanupTest {
         Assert.assertTrue(api.deletes.indexOf(method.id()) < api.deletes.indexOf(bank.id()));
         Assert.assertTrue(api.records.isEmpty());
     }
-
-
 
     @Test
     @Story("حذف الحركة المحددة قبل أصنافها ومخازنها")

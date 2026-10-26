@@ -1,22 +1,9 @@
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
-import Plugin_ERP.Bots.AlertAction;
-import Plugin_ERP.Bots.BrowserAction;
-import Plugin_ERP.Bots.ElmentAction;
-import Plugin_ERP.Bots.WaitMangment;
-import Plugin_ERP.System_Modules.Login.Abstract;
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-
 import javax.swing.*;
-import java.time.Duration;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 
 public class SupplierBillOfExchangePage extends FinancialMovementPage {
 
@@ -58,7 +45,7 @@ public class SupplierBillOfExchangePage extends FinancialMovementPage {
     @Step("Handel Custom Receipt for Row Index: {rowIndex} with Number: {Number}")
     public void HandelCustomReceipt(int rowIndex, String Number) {
         utilites.ClickElement(getAllocationInput(rowIndex));
-        utilites.TaypeTextB(getAllocationInput(rowIndex), Number);
+        utilites.typeTextAndVerify(getAllocationInput(rowIndex), Number);
     }
 
     @Step("Cancel Supplier Receipt")

@@ -1,17 +1,16 @@
 package Plugin_ERP.Drivers;
 
 import Plugin_ERP.Bots.LogUtils;
-import Plugin_ERP.Utiel.PropertyReader;
+import Plugin_ERP.Util.PropertyReader;
+import java.net.URL;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
-
-import java.net.URL;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Chrome extends AbstractDriver {
     private ChromeOptions getOptions() { // options

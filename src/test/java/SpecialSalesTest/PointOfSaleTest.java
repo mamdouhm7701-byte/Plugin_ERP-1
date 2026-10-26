@@ -1,9 +1,7 @@
 package SpecialSalesTest;
 
 import Plugin_ERP.System_Modules.Login.SpecialSales.*;
-
 import io.qameta.allure.*;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -37,16 +35,17 @@ public class PointOfSaleTest extends SpecialSalesScenario {
     @Test
     @Story("إعدادات الشاشة عند الفتح")
     @Description(
-            "التحقق من قناة نقاط البيع والمخزن والعميل المحددين دون الاعتماد على تننت"
-                    + " معينة.")
+            "التحقق من قناة نقاط البيع والمخزن والعميل المحددين دون الاعتماد على تننت" + " معينة.")
     public void ownedDefaultsAndChannel() {
         Assert.assertEquals(
                 page.document()
                         .get("transactionChannel")
                         .toString()
                         .toLowerCase(java.util.Locale.ROOT),
-                "pos", "مطابقة قناة البيع");
-        Assert.assertEquals(page.document().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
+                "pos",
+                "مطابقة قناة البيع");
+        Assert.assertEquals(
+                page.document().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
         Assert.assertEquals(page.document().get("storeId"), data.store(1).id(), "مطابقة المخزن");
     }
 
@@ -121,12 +120,14 @@ public class PointOfSaleTest extends SpecialSalesScenario {
     @Story("حفظ آجل")
     @Description(
             "حفظ فاتورة نقاط بيع آجلة بالبيانات المدخلة والتحقق من قراءة الفاتورة وخصم كمية الصنف من"
-                + " المخزن وزيادة مديونية العميل المسجل فور الحفظ بصافي الفاتورة طبقًا لقاعدة العمل"
-                + " المؤكدة.")
+                    + " المخزن وزيادة مديونية العميل المسجل فور الحفظ بصافي الفاتورة طبقًا لقاعدة العمل"
+                    + " المؤكدة.")
     public void savesCreditAndDeductsStock() {
         customer = data.registeredCustomer();
-        Assert.assertEquals(data.read(customer).get("isTaxable"), Boolean.TRUE, "مطابقة تطبيق الضريبة");
-        Assert.assertEquals(data.read(customer).get("isOnTheFly"), Boolean.FALSE, "مطابقة نوع العميل");
+        Assert.assertEquals(
+                data.read(customer).get("isTaxable"), Boolean.TRUE, "مطابقة تطبيق الضريبة");
+        Assert.assertEquals(
+                data.read(customer).get("isOnTheFly"), Boolean.FALSE, "مطابقة نوع العميل");
         restartPage();
         add();
         var pos = (PointOfSalePage) page;
@@ -139,20 +140,23 @@ public class PointOfSaleTest extends SpecialSalesScenario {
         var invoice = saved();
         var stored = data.read(invoice);
         Assert.assertEquals(stored.get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
-        Allure.addAttachment("فاتورة نقاط البيع الآجلة المحفوظة",
-                "application/json", new org.json.JSONObject(stored).toString(2), ".json");
-        Assert.assertEquals(stored.get("paymentType"), "Credit",
+        Allure.addAttachment(
+                "فاتورة نقاط البيع الآجلة المحفوظة",
+                "application/json",
+                new org.json.JSONObject(stored).toString(2),
+                ".json");
+        Assert.assertEquals(
+                stored.get("paymentType"),
+                "Credit",
                 "The persisted POS invoice must remain a credit sale");
         number(stored.get("discountPercentage"), "0");
         Assert.assertTrue(
                 new java.math.BigDecimal(stored.get("net").toString()).signum() > 0,
                 "Credit fixture must have an unpaid positive amount");
         Assert.assertEquals(
-                stored
-                        .get("transactionChannel")
-                        .toString()
-                        .toLowerCase(java.util.Locale.ROOT),
-                "pos", "مطابقة قناة البيع");
+                stored.get("transactionChannel").toString().toLowerCase(java.util.Locale.ROOT),
+                "pos",
+                "مطابقة قناة البيع");
         number(data.balance(item, 1), "999");
         customerBalance(stored.get("net").toString());
     }
@@ -173,15 +177,18 @@ public class PointOfSaleTest extends SpecialSalesScenario {
         var invoice = saved();
         var stored = data.read(invoice);
         Assert.assertTrue(
-                stored.get("payments").toString().contains(payment.id().toString()), "التحقق من دفعات الفاتورة");
-        Assert.assertEquals(stored.get("storeId"), data.store(1).id(), "مطابقة مخزن الفاتورة المحفوظة");
+                stored.get("payments").toString().contains(payment.id().toString()),
+                "التحقق من دفعات الفاتورة");
+        Assert.assertEquals(
+                stored.get("storeId"), data.store(1).id(), "مطابقة مخزن الفاتورة المحفوظة");
         var storedLines = (java.util.List<?>) stored.get("lines");
         Assert.assertEquals(storedLines.size(), 1, "مطابقة عدد البنود المحفوظة");
         var line = (java.util.Map<?, ?>) storedLines.getFirst();
         Assert.assertEquals(line.get("itemId"), item.id(), "مطابقة الصنف المحفوظ");
         Assert.assertEquals(line.get("unitId"), data.unit(1).id(), "مطابقة الوحدة المحفوظة");
         number(line.get("quantity"), "1");
-        StockBalanceWait.await(() -> data.balance(item, 1), "999", java.time.Duration.ofSeconds(30));
+        StockBalanceWait.await(
+                () -> data.balance(item, 1), "999", java.time.Duration.ofSeconds(30));
         customerBalance("0");
     }
 
@@ -321,7 +328,8 @@ public class PointOfSaleTest extends SpecialSalesScenario {
                 data.read(invoice.get())
                         .get("payments")
                         .toString()
-                        .contains(payment.id().toString()), "التحقق من دفعات الفاتورة");
+                        .contains(payment.id().toString()),
+                "التحقق من دفعات الفاتورة");
         number(data.balance(item, 1), "999");
     }
 }

@@ -27,4 +27,3 @@
 | `private static InvoiceTotals calculateInclusive( List<InvoiceRow> rows, BigDecimal discount, DiscountType discountType, BigDecimal taxPercentage, int precision)` | private | حساب حالة الأسعار الشاملة للضريبة. |
 | `public static InvoiceTotals calculate( List<InvoiceRow> rows, BigDecimal discount, DiscountType discountType, BigDecimal taxPercentage, int precision)` | public | احتساب القيم من البنود والسياسة المعطاة أو الإعدادات. |
 | `public static InvoiceTotals calculate(List<InvoiceRow> rows, BigDecimal discount)` | public | احتساب القيم من البنود والسياسة المعطاة أو الإعدادات. |
-

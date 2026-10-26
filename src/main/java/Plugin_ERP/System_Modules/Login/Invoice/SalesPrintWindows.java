@@ -1,9 +1,5 @@
 package Plugin_ERP.System_Modules.Login.Invoice;
 
-import Plugin_ERP.System_Modules.Login.AbstractForSales;
-import Plugin_ERP.Utiel.FormInteractions;
-import Plugin_ERP.Utiel.PropertyReader;
-import io.qameta.allure.Step;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -13,6 +9,7 @@ import org.openqa.selenium.support.ui.*;
 final class SalesPrintWindows {
     private final SalesModulePage owner;
     private final WebDriver driver;
+
     SalesPrintWindows(SalesModulePage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
@@ -32,7 +29,7 @@ final class SalesPrintWindows {
     }
 
     void slVerifyPrintedReport(String main, String item) {
-        owner.slVerifyPrintedReport(main,item,()->{});
+        owner.slVerifyPrintedReport(main, item, () -> {});
     }
 
     void slVerifyPrintedReport(String main, String item, Runnable contentAssertions) {

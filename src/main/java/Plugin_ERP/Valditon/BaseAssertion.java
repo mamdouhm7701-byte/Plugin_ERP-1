@@ -1,21 +1,21 @@
 package Plugin_ERP.Valditon;
 
-import Plugin_ERP.Bots.ElmentAction;
-import Plugin_ERP.Bots.WaitMangment;
+import Plugin_ERP.Bots.ElementActions;
+import Plugin_ERP.Bots.WaitManagement;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public abstract class BaseAssertion {
     protected final WebDriver driver;
-    protected final WaitMangment waitMangment;
-    protected final ElmentAction elmentAction;
+    protected final WaitManagement waitManagement;
+    protected final ElementActions elmentAction;
 
     public BaseAssertion(WebDriver driver) {
         this.driver = driver;
-        this.waitMangment = new WaitMangment(driver);
-        this.elmentAction = new ElmentAction(driver);
+        this.waitManagement = new WaitManagement(driver);
+        this.elmentAction = new ElementActions(driver);
     }
 
     protected abstract void assertrue(boolean condition, String message);
@@ -31,7 +31,9 @@ public abstract class BaseAssertion {
     protected void Visible(By locator) {
         boolean flag;
         try {
-            waitMangment.fluentWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
+            waitManagement
+                    .fluentWait()
+                    .until(ExpectedConditions.visibilityOfElementLocated(locator));
             flag = true;
         } catch (TimeoutException notVisible) {
             // Keep hard/soft assertion behavior consistent when the bounded wait expires.

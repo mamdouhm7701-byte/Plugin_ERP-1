@@ -12,16 +12,21 @@ import org.testng.Assert;
 final class VoucherLines {
     private final VouchersPage owner;
     private final WebDriver driver;
+
     VoucherLines(VouchersPage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
     }
 
     int getSelectedLineCount() {
-        return (int) driver.findElements(
-                        By.xpath(
-                                "//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!='']"))
-                .stream().filter(WebElement::isDisplayed).count();
+        return (int)
+                driver
+                        .findElements(
+                                By.xpath(
+                                        "//form//table[.//th[normalize-space()='مدين']]//tbody/tr[normalize-space(td[1])!='']"))
+                        .stream()
+                        .filter(WebElement::isDisplayed)
+                        .count();
     }
 
     By lineAmountInput(int lineIndex, int columnIndex) {
@@ -171,6 +176,9 @@ final class VoucherLines {
                                     return new BigDecimal(value).compareTo(new BigDecimal(actual))
                                             == 0;
                                 } catch (Exception ignored) {
+                                    Plugin_ERP.Bots.LogUtils.debug(
+                                            "VoucherLines condition unavailable: "
+                                                    + ignored.getClass().getSimpleName());
                                     return false;
                                 }
                             }
@@ -211,9 +219,13 @@ final class VoucherLines {
 
     void assertTotals(String debit, String credit) {
         Assert.assertEquals(
-                owner.getDebitTotal().compareTo(new BigDecimal(debit)), 0, "إجمالي المدين: المتوقع " + debit + "، الفعلي " + owner.getDebitTotal());
+                owner.getDebitTotal().compareTo(new BigDecimal(debit)),
+                0,
+                "إجمالي المدين: المتوقع " + debit + "، الفعلي " + owner.getDebitTotal());
         Assert.assertEquals(
-                owner.getCreditTotal().compareTo(new BigDecimal(credit)), 0, "إجمالي الدائن: المتوقع " + credit + "، الفعلي " + owner.getCreditTotal());
+                owner.getCreditTotal().compareTo(new BigDecimal(credit)),
+                0,
+                "إجمالي الدائن: المتوقع " + credit + "، الفعلي " + owner.getCreditTotal());
     }
 
     boolean isBalanced() {

@@ -1,17 +1,16 @@
 package SpecialSalesTest;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 @io.qameta.allure.Story("عزل البيانات والتنظيف الآمن")
 public class SpecialSalesCleanupTest {
     @Test
-    @io.qameta.allure.Description("العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
+    @io.qameta.allure.Description(
+            "العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
     public void normalCustomerIsTaxableAndKeepsItsOwnAccount() {
         SpecialSalesFixtureApiStub api = new SpecialSalesFixtureApiStub();
         try (var data = new SpecialSalesTestData(api.driver())) {
@@ -28,8 +27,6 @@ public class SpecialSalesCleanupTest {
         }
         Assert.assertTrue(api.records.isEmpty());
     }
-
-
 
     @Test
     @io.qameta.allure.Description(

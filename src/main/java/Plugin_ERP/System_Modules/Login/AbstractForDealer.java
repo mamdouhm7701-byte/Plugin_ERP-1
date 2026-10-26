@@ -2,15 +2,11 @@ package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.LogUtils;
 import io.qameta.allure.Step;
+import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
-import java.util.List;
 
 public class AbstractForDealer extends Abstract {
     private final DealerFormControls form;
@@ -18,6 +14,7 @@ public class AbstractForDealer extends Abstract {
     private final DealerListQueries listQueries;
 
     private String dealerListUrlBeforeForm;
+
     public AbstractForDealer(WebDriver driver) {
         super(driver);
         recordActions = new DealerRecordActions(this, driver);
@@ -25,7 +22,7 @@ public class AbstractForDealer extends Abstract {
         form = new DealerFormControls(this, driver);
     }
 
-    //Locators
+    // Locators
 
     private By DateInput = By.xpath("//input[@placeholder='YYYY-MM-DD']");
     private By AllowanceDays = By.cssSelector("input[name='allowanceDays']");
@@ -51,17 +48,21 @@ public class AbstractForDealer extends Abstract {
     private By PostalCode = By.cssSelector("input[name='postalCode']");
     private By StreetName = By.cssSelector("input[name='streetName']");
 
-    private By AssertTaxNumber  = By.xpath("//small[contains(text(),'الحقل رقم المبني يجب ان يحتوي على 4 حروف على الأقل')]");
-    private By AssertPostNumber  = By.xpath("//small[contains(text(),'الحقل الرمز البريدي يجب ان يحتوي على 5 حروف على الأقل')]");
+    private By AssertTaxNumber =
+            By.xpath(
+                    "//small[contains(text(),'الحقل رقم المبني يجب ان يحتوي على 4 حروف على الأقل')]");
+    private By AssertPostNumber =
+            By.xpath(
+                    "//small[contains(text(),'الحقل الرمز البريدي يجب ان يحتوي على 5 حروف على الأقل')]");
 
-    private By AssertAdress  = By.xpath("//small[contains(text(),'عنوان العميل مطلوب')]");
+    private By AssertAdress = By.xpath("//small[contains(text(),'عنوان العميل مطلوب')]");
     private By AssertAgentNatural = By.xpath("//small[contains(text(),'طبيعه المندوب مطلوب')]");
     private By AssertClassification = By.xpath("//small[contains(text(),'نوع التصنيف مطلوب')]");
     private By AssertMainDealer = By.xpath("//small[contains(text(),'النوع مطلوب')]");
-    private By AddNoteForStorgTrans =By.xpath("//textarea[@label-text='notes']");
+    private By AddNoteForStorgTrans = By.xpath("//textarea[@label-text='notes']");
 
-    //الميثودات
-//ميثودات الضغط
+    // الميثودات
+    // ميثودات الضغط
     @Step("الضغط على زر جديد")
     public void ClickNewButtonForDealer() {
         form.ClickNewButtonForDealer();
@@ -96,127 +97,128 @@ public class AbstractForDealer extends Abstract {
         form.ClickSupplierControlTab();
     }
 
-    //ميثودات الإضافة
+    // ميثودات الإضافة
     @Step("إضافة التاريخ: {todayDate}")
     public void AddDateForDealer() {
         utilites.waits().waitForOverlayToDisappear();
         String todayDate = utilites.Utility().TypeTodayDate("dd/MM/yyyy");
-        utilites.TaypeTextB(DateInput, todayDate);
+        utilites.typeTextAndVerify(DateInput, todayDate);
         utilites.waits().waitForOverlayToDisappear();
     }
 
     @Step("اضافه ملاحظات :{notes}")
     public void AddNoteForStorgTrans(String notes) {
         utilites.waits().waitForOverlayToDisappear();
-        utilites.TaypeTextB(AddNoteForStorgTrans,notes);
+        utilites.typeTextAndVerify(AddNoteForStorgTrans, notes);
         utilites.waits().waitForOverlayToDisappear();
     }
+
     @Step("إضافة أيام السماح: {allowanceDays}")
     public void AddAllowanceDays(String allowanceDays) {
-        utilites.TaypeTextB(AllowanceDays, allowanceDays);
+        utilites.typeTextAndVerify(AllowanceDays, allowanceDays);
     }
 
     @Step("إضافة رقم السجل التجاري: {commercialRegisterNumber}")
     public void AddCommercialRegisterNumber(String commercialRegisterNumber) {
-        utilites.TaypeTextB(this.commercialRegisterNumber, commercialRegisterNumber);
+        utilites.typeTextAndVerify(this.commercialRegisterNumber, commercialRegisterNumber);
     }
 
     @Step("إضافة قيمة الخصم: {discountValue}")
     public void AddDiscountValue(String discountValue) {
-        utilites.TaypeTextB(DiscountValue, discountValue);
+        utilites.typeTextAndVerify(DiscountValue, discountValue);
     }
 
     @Step("إضافة حد القيمة: {valueLimit}")
     public void AddValueLimit(String valueLimit) {
-        utilites.TaypeTextB(ValueLimit, valueLimit);
+        utilites.typeTextAndVerify(ValueLimit, valueLimit);
     }
 
     @Step("إضافة ملاحظة: {note}")
     public void AddNoteForDealer(String note) {
-        utilites.TaypeTextB(AddNote, note);
+        utilites.typeTextAndVerify(AddNote, note);
     }
 
     @Step("إضافة اسم جهة الاتصال: {contactPersonName}")
     public void AddContactPersonName(String contactPersonName) {
-        utilites.TaypeTextB(ContactPersonName, contactPersonName);
+        utilites.typeTextAndVerify(ContactPersonName, contactPersonName);
     }
 
     @Step("إضافة الخط الأرضي: {landLine}")
     public void AddLandLine(String landLine) {
-        utilites.TaypeTextB(LandLine, landLine);
+        utilites.typeTextAndVerify(LandLine, landLine);
     }
 
     @Step("إضافة البريد الإلكتروني: {email}")
     public void AddEmail(String email) {
-        utilites.TaypeTextB(Email, email);
+        utilites.typeTextAndVerify(Email, email);
     }
 
     @Step("إضافة رقم إضافي: {extraNumber}")
     public void AddExtraNumber(String extraNumber) {
-        utilites.TaypeTextB(ExtraNumber, extraNumber);
+        utilites.typeTextAndVerify(ExtraNumber, extraNumber);
     }
 
     @Step("إضافة رقم تعريفي آخر: {anotherId}")
     public void AddAnotherId(String anotherId) {
-        utilites.TaypeTextB(AnotherId, anotherId);
+        utilites.typeTextAndVerify(AnotherId, anotherId);
     }
 
     @Step("إضافة اسم البنك: {bankName}")
     public void AddBankName(String bankName) {
-        utilites.TaypeTextB(BankName, bankName);
+        utilites.typeTextAndVerify(BankName, bankName);
     }
 
     @Step("إضافة رقم الحساب: {accountNumber}")
     public void AddAccountNumber(String accountNumber) {
-        utilites.TaypeTextB(AccountNumber, accountNumber);
+        utilites.typeTextAndVerify(AccountNumber, accountNumber);
     }
 
     @Step("إضافة رقم هاتف الوكيل: {agentPhone}")
     public void AddAgentPhone(String agentPhone) {
-        utilites.TaypeTextB(AgentPhone, agentPhone);
+        utilites.typeTextAndVerify(AgentPhone, agentPhone);
     }
 
     @Step("إضافة رقم الآيبان: {iban}")
     public void AddIban(String iban) {
-        utilites.TaypeTextB(Iban, iban);
+        utilites.typeTextAndVerify(Iban, iban);
     }
 
     @Step("إضافة الرقم الضريبي: {taxNumber}")
     public void AddTaxNumber(String taxNumber) {
-        utilites.TaypeTextB(TaxNumber, taxNumber);
+        utilites.typeTextAndVerify(TaxNumber, taxNumber);
     }
 
     @Step("إضافة الدولة: {country}")
     public void AddCountry(String country) {
-        utilites.TaypeTextB(Country, country);
+        utilites.typeTextAndVerify(Country, country);
     }
 
     @Step("إضافة المدينة: {city}")
     public void AddCity(String city) {
-        utilites.TaypeTextB(City, city);
+        utilites.typeTextAndVerify(City, city);
     }
 
     @Step("إضافة الحي: {district}")
     public void AddDistrict(String district) {
-        utilites.TaypeTextB(District, district);
+        utilites.typeTextAndVerify(District, district);
     }
 
     @Step("إضافة رقم المبنى: {buildingNumber}")
     public void AddBuildingNumber(String buildingNumber) {
-        utilites.TaypeTextB(BuildingNumber, buildingNumber);
+        utilites.typeTextAndVerify(BuildingNumber, buildingNumber);
     }
 
     @Step("إضافة الرمز البريدي: {postalCode}")
     public void AddPostalCode(String postalCode) {
-        utilites.TaypeTextB(PostalCode, postalCode);
+        utilites.typeTextAndVerify(PostalCode, postalCode);
     }
 
     @Step("إضافة اسم الشارع: {streetName}")
     public void AddStreetName(String streetName) {
-        utilites.TaypeTextB(StreetName, streetName);
+        utilites.typeTextAndVerify(StreetName, streetName);
     }
 
-    //ميثودات الـ Checkbox
+    // ميثودات الـ Checkbox
     @Step("تعيين قيمة الـ Checkbox: {text} إلى {shouldBeChecked}")
     public void SetCheckboxValueForDealer(String text, boolean shouldBeChecked) {
         utilites.checkbox().setCheckboxForDealer(text, shouldBeChecked);
@@ -227,7 +229,7 @@ public class AbstractForDealer extends Abstract {
         utilites.checkbox().setCheckboxForTax(text, shouldBeChecked);
     }
 
-    //ميثودات التحقق
+    // ميثودات التحقق
     @Step("التأكد من أن رقم المبنى يحتوي على 4 أرقام")
     public boolean AssertBuildingNumber() {
         return utilites.isDisplayed(AssertTaxNumber);
@@ -243,37 +245,37 @@ public class AbstractForDealer extends Abstract {
         return utilites.isDisplayed(AssertPostNumber);
     }
 
-@Step("التاكد ان طبيعه المندوب مطلوبه")
-public boolean AssertAgentNatural() {
-    return utilites.isDisplayed(AssertAgentNatural);
-}
+    @Step("التاكد ان طبيعه المندوب مطلوبه")
+    public boolean AssertAgentNatural() {
+        return utilites.isDisplayed(AssertAgentNatural);
+    }
+
     @Step("التاكد اننوع التصنيف مطلوب")
     public boolean AssertClassification() {
         return utilites.isDisplayed(AssertClassification);
     }
+
     @Step("التأكد ان النوع مطلوب")
     public boolean AssertKind() {
         return utilites.isDisplayed(AssertMainDealer);
     }
 
-@Step("الانتظار حتى ظهور البيانات")
-public void waitForTableDataToLoad(){
+    @Step("الانتظار حتى ظهور البيانات")
+    public void waitForTableDataToLoad() {
         utilites.grid().waitForTableDataToLoad(2);
+    }
 
-}
+    @Step("التأكد من أن البيانات موجودة في الجدول")
+    public boolean isDataPresentInTable() {
+        return utilites.grid().isTableDataDisplayed();
+    }
 
-@Step("التأكد من أن البيانات موجودة في الجدول")
-public boolean isDataPresentInTable() {
-    return utilites.grid().isTableDataDisplayed();
-
-}
-
-@Step("التاكد من عدد الصفوف")
-public int getRowCount()
-{int count = utilites.grid().getTableRowsCount();
-    LogUtils.info("عدد الصفوف في الجدول: " + count);
-    return count;
-}
+    @Step("التاكد من عدد الصفوف")
+    public int getRowCount() {
+        int count = utilites.grid().getTableRowsCount();
+        LogUtils.info("عدد الصفوف في الجدول: " + count);
+        return count;
+    }
 
     @Step("التحقق من ظهور قائمة المتعاملين وأعمدتها")
     public boolean isDealerListStructureDisplayed() {
@@ -380,9 +382,23 @@ public int getRowCount()
         utilites.waits().waitForOverlayToDisappear();
     }
 
-    void rememberDealerListLocation() { dealerListUrlBeforeForm = driver.getCurrentUrl(); }
-    boolean dealerElementDisplayed(WebElement element) { return isElementDisplayed(element); }
-    boolean dealerControlVisible(By locator) { return isVisible(locator); }
-    void showDealerBasicData() { showDealerBasicDataIfPresent(); }
-    String dealerListLocation() { return dealerListUrlBeforeForm; }
+    void rememberDealerListLocation() {
+        dealerListUrlBeforeForm = driver.getCurrentUrl();
+    }
+
+    boolean dealerElementDisplayed(WebElement element) {
+        return isElementDisplayed(element);
+    }
+
+    boolean dealerControlVisible(By locator) {
+        return isVisible(locator);
+    }
+
+    void showDealerBasicData() {
+        showDealerBasicDataIfPresent();
+    }
+
+    String dealerListLocation() {
+        return dealerListUrlBeforeForm;
+    }
 }

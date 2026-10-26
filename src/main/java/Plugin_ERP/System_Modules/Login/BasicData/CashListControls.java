@@ -63,8 +63,10 @@ final class CashListControls {
                 .selectByVisibleText(String.valueOf(pageSize));
         waitForCashPageLoading();
         new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(d -> getSelectedSafePageSize() == pageSize
-                        && page.getVisibleSafeRowCount() <= pageSize);
+                .until(
+                        d ->
+                                getSelectedSafePageSize() == pageSize
+                                        && page.getVisibleSafeRowCount() <= pageSize);
     }
 
     private WebElement findSafePageSizeSelect() {
@@ -171,17 +173,19 @@ final class CashListControls {
                 new WebDriverWait(driver, Duration.ofSeconds(15))
                         .ignoring(StaleElementReferenceException.class)
                         .withMessage("No editable safe row is visible after provider completion")
-                        .until(d -> d.findElements(SafeRows).stream()
-                        .filter(WebElement::isDisplayed)
-                        .filter(
-                                candidate ->
-                                        !candidate
-                                                .findElements(
-                                                        By.cssSelector(
-                                                                "button[data-action-type='edit']"))
-                                                .isEmpty())
-                        .findFirst()
-                        .orElse(null));
+                        .until(
+                                d ->
+                                        d.findElements(SafeRows).stream()
+                                                .filter(WebElement::isDisplayed)
+                                                .filter(
+                                                        candidate ->
+                                                                !candidate
+                                                                        .findElements(
+                                                                                By.cssSelector(
+                                                                                        "button[data-action-type='edit']"))
+                                                                        .isEmpty())
+                                                .findFirst()
+                                                .orElse(null));
         List<WebElement> cells = row.findElements(By.cssSelector("td"));
         if (columnIndex >= cells.size()) {
             throw new IllegalStateException(

@@ -7,10 +7,14 @@ import org.openqa.selenium.By;
 /** Observe requests and outcomes for owned purchase documents. */
 final class PurchaseSaveCapture {
     private final PurchaseModulePage owner;
+
     PurchaseSaveCapture(PurchaseModulePage owner) {
         this.owner = owner;
     }
-    private Object js(String script, Object... args) { return owner.js(script, args); }
+
+    private Object js(String script, Object... args) {
+        return owner.js(script, args);
+    }
 
     void puCapture(String marker, Object storeId, Object itemId, String endpoint) {
         owner.js(
@@ -47,7 +51,8 @@ final class PurchaseSaveCapture {
     }
 
     void puSettled() {
-        owner.ready.until(d -> !Boolean.TRUE.equals(owner.js("return (window.__purchaseQA?.pending||0)>0")));
+        owner.ready.until(
+                d -> !Boolean.TRUE.equals(owner.js("return (window.__purchaseQA?.pending||0)>0")));
     }
 
     String puSaveErrors() {
@@ -65,7 +70,8 @@ final class PurchaseSaveCapture {
                 d ->
                         !owner.puSaves().isEmpty()
                                 || Boolean.TRUE.equals(
-                                        owner.js("return (window.__purchaseQA?.errors||[]).length>0"))
+                                        owner.js(
+                                                "return (window.__purchaseQA?.errors||[]).length>0"))
                                 || !d.findElements(
                                                 By.cssSelector(
                                                         "form [aria-invalid='true'],form input:invalid,form select:invalid,form textarea:invalid"))

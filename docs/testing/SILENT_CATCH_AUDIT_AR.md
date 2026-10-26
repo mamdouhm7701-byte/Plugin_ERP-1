@@ -1,0 +1,101 @@
+# مراجعة مسارات الاستثناءات
+
+تم تسجيل نوع الاستثناء في مسارات fallback الصامتة على مستوى DEBUG؛ لا تُسجل قيم الحقول أو DOM. حالات polling المتوقعة تحتفظ بإعادة المحاولة، وInterruptedException يعيد ضبط interrupt ويتوقف. الكتابة لها helper مستقل يحتفظ بسبب الفشل النهائي ويتحقق من القيمة. هذه الدفعة تغطي empty catches وsentinel-only catches في main؛ الكتل المركبة التي تنفذ fallback لها مراجعة مستقلة عند تغيير سلوكها.
+
+- `src/main/java/Plugin_ERP/Bots/CheckboxActions.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/Bots/CheckboxActions.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/Bots/CheckboxActions.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/Bots/DropdownActions.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/Bots/DropdownActions.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/Bots/DropdownActions.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/Bots/ElementActions.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/Bots/ElementActions.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/Bots/GridActions.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/Bots/GridActions.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/Bots/PriceListActions.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/Bots/UtilityActions.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/Bots/ValidationActions.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/Bots/WaitActions.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/Bots/WaitActions.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/Listeners/TestNGListeners.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/Util/Allur/AllureBinaryManger.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/Util/Allur/AllureBinaryManger.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/Util/Allur/ScenarioFailureReport.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/DealerListQueries.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/PageFeedback.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/SalesFormControls.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/SalesSummaryReader.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/StoreProductSearch.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/StoreQuantityEditor.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/AreaRecordActions.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/BankPage.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/BankPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/BankPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/BankPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/BankRecords.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/CashPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/DistributionEntityPage.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/DistributionEntityPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/DistributionEntityPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/DistributionEntityPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/DistributionRecords.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/DistributionRecords.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/DistributionRecords.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/ExpenseRecords.java`: empty `org.openqa.selenium.StaleElementReferenceException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/ExpenseRecords.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/ExpenseRecords.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/ExpensesPage.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/ExpensesPage.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/ExpensesPage.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/ExpensesPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/ExpensesPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/ExpensesPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/GridProviderWait.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/PaymentPage.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/PaymentPage.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/PaymentPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/PaymentPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/PaymentRecords.java`: empty `org.openqa.selenium.StaleElementReferenceException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/PaymentRecords.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/PaymentRecords.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/RevenueRecords.java`: empty `org.openqa.selenium.StaleElementReferenceException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/RevenueRecords.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/RevenueRecords.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/RevenuesPage.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/RevenuesPage.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/RevenuesPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/RevenuesPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/RouteRecords.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/RouteRecords.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/RoutLine.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/RoutLine.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/RoutLine.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/RoutLine.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/StorePage.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/StorePage.java`: empty `Exception ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/StorePage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/StorePage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/TreasuryHandoverPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/WarehouseRecords.java`: empty `org.openqa.selenium.StaleElementReferenceException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/WarehouseRecords.java`: empty `org.openqa.selenium.TimeoutException ignored` now records exception type at DEBUG; fallback behavior retained.
+- `src/main/java/Plugin_ERP/System_Modules/Login/BasicData/WarehouseRecords.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/DealerModel/MainDealerRecords.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/FinancialMovements/FinancialMovementPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/FinancialMovements/FinancialMovementPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/FinancialMovements/FinancialMovementPage.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/GenralAccountant/VoucherLines.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/Invoice/InvoiceListCalendar.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/Invoice/InvoiceListCalendar.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/Invoice/InvoiceListCalendar.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/Invoice/InvoiceListExport.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/Invoice/InvoiceListFilters.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/Invoice/InvoiceListFilters.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/Invoice/InvoiceListFilters.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/Invoice/InvoiceListFilters.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/Invoice/InvoiceListGrid.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/Invoice/InvoiceListPagination.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/purches/PurchaseCalendar.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/purches/PurchaseCalendar.java`: sentinel fallback records exception type at DEBUG.
+- `src/main/java/Plugin_ERP/System_Modules/Login/purches/ReturnOrderPage.java`: sentinel fallback records exception type at DEBUG.
+
+JavaScript resource-URL parsing fallback in GridProviderWait uses browser console.debug, not the Java logger.

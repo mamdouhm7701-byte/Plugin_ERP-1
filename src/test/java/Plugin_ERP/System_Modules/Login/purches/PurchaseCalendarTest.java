@@ -21,8 +21,17 @@ public final class PurchaseCalendarTest {
         for (Month month : Month.values()) {
             int number = month.getValue();
             cases.add(new Object[] {arabic[number - 1] + " 2026", number});
-            cases.add(new Object[] {month.getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " 2026", number});
-            cases.add(new Object[] {month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toLowerCase(Locale.ROOT) + ", 2026", number});
+            cases.add(
+                    new Object[] {
+                        month.getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " 2026", number
+                    });
+            cases.add(
+                    new Object[] {
+                        month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
+                                        .toLowerCase(Locale.ROOT)
+                                + ", 2026",
+                        number
+                    });
             cases.add(new Object[] {number + "/2026", number});
         }
         return cases.toArray(Object[][]::new);
@@ -40,8 +49,9 @@ public final class PurchaseCalendarTest {
 
     @Test(dataProvider = "unknownCaptions")
     public void rejectsUnknownCaptionExplicitly(String caption) {
-        IllegalArgumentException failure = Assert.expectThrows(
-                IllegalArgumentException.class, () -> PurchaseCalendar.parseMonth(caption));
+        IllegalArgumentException failure =
+                Assert.expectThrows(
+                        IllegalArgumentException.class, () -> PurchaseCalendar.parseMonth(caption));
         Assert.assertTrue(failure.getMessage().contains("Calendar month not found"));
     }
 }

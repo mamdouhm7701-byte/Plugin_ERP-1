@@ -5,7 +5,6 @@ import io.qameta.allure.Step;
 import java.time.Duration;
 import java.util.List;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -41,6 +40,10 @@ public class BankPage extends AbstractForDealer {
                                                     try {
                                                         return e.isDisplayed();
                                                     } catch (Exception ignored) {
+                                                        Plugin_ERP.Bots.LogUtils.debug(
+                                                                "BankPage condition unavailable: "
+                                                                        + ignored.getClass()
+                                                                                .getSimpleName());
                                                         return false;
                                                     }
                                                 }));
@@ -105,6 +108,10 @@ public class BankPage extends AbstractForDealer {
                                                     try {
                                                         return e.isDisplayed();
                                                     } catch (Exception ignored) {
+                                                        Plugin_ERP.Bots.LogUtils.debug(
+                                                                "BankPage condition unavailable: "
+                                                                        + ignored.getClass()
+                                                                                .getSimpleName());
                                                         return false;
                                                     }
                                                 }));
@@ -130,11 +137,16 @@ public class BankPage extends AbstractForDealer {
                                             .executeScript("arguments[0].click();", buttons.get(0));
                                     return true;
                                 } catch (Exception ignored) {
+                                    Plugin_ERP.Bots.LogUtils.debug(
+                                            "BankPage condition unavailable: "
+                                                    + ignored.getClass().getSimpleName());
                                     return false;
                                 }
                             });
             waitAlertToDisappear();
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "BankPage fallback: " + ignored.getClass().getSimpleName());
         }
     }
 
@@ -188,9 +200,14 @@ public class BankPage extends AbstractForDealer {
     }
 
     private String value(By locator) {
-        return new WebDriverWait(driver, Duration.ofSeconds(10)).until(d ->
-                d.findElements(locator).stream().filter(WebElement::isDisplayed)
-                        .findFirst().map(e -> e.getDomProperty("value").trim()).orElse(null));
+        return new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(
+                        d ->
+                                d.findElements(locator).stream()
+                                        .filter(WebElement::isDisplayed)
+                                        .findFirst()
+                                        .map(e -> e.getDomProperty("value").trim())
+                                        .orElse(null));
     }
 
     public String GetArabicNameValue() {
@@ -260,8 +277,20 @@ public class BankPage extends AbstractForDealer {
     public void CancelBankDelete() {
         records.CancelBankDelete();
     }
-    boolean recordVisible(By locator) { return visible(locator); }
-    void recordWaitRows() { waitRows(); }
-    void recordWaitAlertToDisappear() { waitAlertToDisappear(); }
-    void recordDismissSaveSuccessIfPresent() { dismissSaveSuccessIfPresent(); }
+
+    boolean recordVisible(By locator) {
+        return visible(locator);
+    }
+
+    void recordWaitRows() {
+        waitRows();
+    }
+
+    void recordWaitAlertToDisappear() {
+        waitAlertToDisappear();
+    }
+
+    void recordDismissSaveSuccessIfPresent() {
+        dismissSaveSuccessIfPresent();
+    }
 }

@@ -1,26 +1,25 @@
 package SpecialSalesTest;
 
-import org.openqa.selenium.JavascriptExecutor;
 import SpecialSalesTest.SpecialSalesFixtureApi.ApiFailure;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /** Per-scenario fixtures. Uses the logged-in application's API client and current branch. */
 final class SpecialSalesTestData implements AutoCloseable {
-
 
     record Record(String endpoint, Object id, String name, Map<String, Object> values) {}
 
     private final WebDriver driver;
     private final SpecialSalesFixtureApi api;
-    private final SpecialSalesFixtureDefinitions definitions = new SpecialSalesFixtureDefinitions(this);
+    private final SpecialSalesFixtureDefinitions definitions =
+            new SpecialSalesFixtureDefinitions(this);
     private final String origin;
     private final String suffix;
     private final TestSupport.FixtureSession session;
@@ -45,7 +44,7 @@ final class SpecialSalesTestData implements AutoCloseable {
                                 ((JavascriptExecutor) d)
                                         .executeScript(
                                                 "return Boolean(document.querySelector('#app')"
-                                                    + "?.__vue__?.$store?.getters['app/currentBranch']?.id)"));
+                                                        + "?.__vue__?.$store?.getters['app/currentBranch']?.id)"));
         Object currentOrigin =
                 ((JavascriptExecutor) driver).executeScript("return location.origin");
         origin = currentOrigin instanceof String value ? value : "offline";
@@ -159,106 +158,107 @@ final class SpecialSalesTestData implements AutoCloseable {
 
     Record store(int index) {
         synchronized (TestSupport.BranchMutationLock.monitor()) {
-        Record store =
-                fixture(
-                        "store-" + index,
-                        "Stores",
-                        fields("accountId", account("store-" + index).id()));
-        String key = "branch-store-" + index;
-        if (!fixtures.containsKey(key)) {
-            Object branchId =
-                    ((JavascriptExecutor) driver)
-                            .executeScript(
-                                    "return"
-                                        + " document.querySelector('#app').__vue__.$store.getters['app/currentBranch'].id");
-            if (!(branchId instanceof String branch) || branch.isBlank())
-                throw new AssertionError("Current branch identity is unavailable");
-            Record link =
-                    new Record(
-                            BRANCH_STORE_LINK,
-                            store.id(),
-                            store.name(),
-                            fields("branchId", branchId, "storeId", store.id()));
-            // Journal before updating: a lost response must still leave a recoverable owned link.
-            created.add(link);
-            fixtures.put(key, link);
-            journal();
-            changeBranchStore(link, true);
-        }
-        return store;
-
+            Record store =
+                    fixture(
+                            "store-" + index,
+                            "Stores",
+                            fields("accountId", account("store-" + index).id()));
+            String key = "branch-store-" + index;
+            if (!fixtures.containsKey(key)) {
+                Object branchId =
+                        ((JavascriptExecutor) driver)
+                                .executeScript(
+                                        "return"
+                                                + " document.querySelector('#app').__vue__.$store.getters['app/currentBranch'].id");
+                if (!(branchId instanceof String branch) || branch.isBlank())
+                    throw new AssertionError("Current branch identity is unavailable");
+                Record link =
+                        new Record(
+                                BRANCH_STORE_LINK,
+                                store.id(),
+                                store.name(),
+                                fields("branchId", branchId, "storeId", store.id()));
+                // Journal before updating: a lost response must still leave a recoverable owned
+                // link.
+                created.add(link);
+                fixtures.put(key, link);
+                journal();
+                changeBranchStore(link, true);
+            }
+            return store;
         }
     }
 
     Record configureOwnedDefaults(Record customer) {
         synchronized (TestSupport.BranchMutationLock.monitor()) {
-        Object branchId = session.branchId;
-        var link =
-                new Record(
-                        DEFAULTS,
-                        branchId,
-                        "QA-SP-defaults-" + suffix,
-                        fields("branchId", branchId));
-        var branch = branchFor(link);
-        var record =
-                new Record(
-                        DEFAULTS,
-                        branchId,
-                        link.name(),
-                        fields(
-                                "branchId",
-                                branchId,
-                                "storeId",
-                                store(1).id(),
-                                "customerId",
-                                customer.id(),
-                                "previousStoreId",
-                                branch.get("defaultStoreId"),
-                                "previousCustomerId",
-                                branch.get("defaultCustomerId")));
-        created.add(record);
-        journal();
-        var update = new LinkedHashMap<>(branch);
-        update.put("defaultStoreId", store(1).id());
-        update.put("defaultCustomerId", customer.id());
-        call("update", "Branches", update);
-        syncBranch(branchFor(record));
-        return record;
-
+            Object branchId = session.branchId;
+            var link =
+                    new Record(
+                            DEFAULTS,
+                            branchId,
+                            "QA-SP-defaults-" + suffix,
+                            fields("branchId", branchId));
+            var branch = branchFor(link);
+            var record =
+                    new Record(
+                            DEFAULTS,
+                            branchId,
+                            link.name(),
+                            fields(
+                                    "branchId",
+                                    branchId,
+                                    "storeId",
+                                    store(1).id(),
+                                    "customerId",
+                                    customer.id(),
+                                    "previousStoreId",
+                                    branch.get("defaultStoreId"),
+                                    "previousCustomerId",
+                                    branch.get("defaultCustomerId")));
+            created.add(record);
+            journal();
+            var update = new LinkedHashMap<>(branch);
+            update.put("defaultStoreId", store(1).id());
+            update.put("defaultCustomerId", customer.id());
+            call("update", "Branches", update);
+            syncBranch(branchFor(record));
+            return record;
         }
     }
 
     void restoreDefaults(Record record) {
         synchronized (TestSupport.BranchMutationLock.monitor()) {
-        var branch = branchFor(record);
-        var update = new LinkedHashMap<>(branch);
-        for (String field : List.of("defaultStoreId", "defaultCustomerId")) {
-            Object
-                    owned =
-                            record.values()
-                                    .get(field.equals("defaultStoreId") ? "storeId" : "customerId"),
-                    previous =
-                            record.values()
-                                    .get(
-                                            field.equals("defaultStoreId")
-                                                    ? "previousStoreId"
-                                                    : "previousCustomerId");
-            if (java.util.Objects.equals(branch.get(field), owned)) update.put(field, previous);
-            else if (!java.util.Objects.equals(branch.get(field), previous))
-                throw new AssertionError(
-                        "Branch defaults changed externally; retaining owned data instead of"
-                                + " overwriting");
-        }
-        if (!update.equals(branch)) call("update", "Branches", update);
-        var refreshed = branchFor(record);
-        if (!java.util.Objects.equals(
-                        refreshed.get("defaultStoreId"), record.values().get("previousStoreId"))
-                || !java.util.Objects.equals(
-                        refreshed.get("defaultCustomerId"),
-                        record.values().get("previousCustomerId")))
-            throw new AssertionError("Branch default restoration failed");
-        syncBranch(refreshed);
-
+            var branch = branchFor(record);
+            var update = new LinkedHashMap<>(branch);
+            for (String field : List.of("defaultStoreId", "defaultCustomerId")) {
+                Object
+                        owned =
+                                record.values()
+                                        .get(
+                                                field.equals("defaultStoreId")
+                                                        ? "storeId"
+                                                        : "customerId"),
+                        previous =
+                                record.values()
+                                        .get(
+                                                field.equals("defaultStoreId")
+                                                        ? "previousStoreId"
+                                                        : "previousCustomerId");
+                if (java.util.Objects.equals(branch.get(field), owned)) update.put(field, previous);
+                else if (!java.util.Objects.equals(branch.get(field), previous))
+                    throw new AssertionError(
+                            "Branch defaults changed externally; retaining owned data instead of"
+                                    + " overwriting");
+            }
+            if (!update.equals(branch)) call("update", "Branches", update);
+            var refreshed = branchFor(record);
+            if (!java.util.Objects.equals(
+                            refreshed.get("defaultStoreId"), record.values().get("previousStoreId"))
+                    || !java.util.Objects.equals(
+                            refreshed.get("defaultCustomerId"),
+                            record.values().get("previousCustomerId")))
+                throw new AssertionError("Branch default restoration failed");
+            syncBranch(refreshed);
         }
     }
 
@@ -266,7 +266,7 @@ final class SpecialSalesTestData implements AutoCloseable {
         ((JavascriptExecutor) driver)
                 .executeScript(
                         "const"
-                            + " root=document.querySelector('#app').__vue__;if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
+                                + " root=document.querySelector('#app').__vue__;if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
                         branch);
     }
 
@@ -293,38 +293,37 @@ final class SpecialSalesTestData implements AutoCloseable {
 
     private void changeBranchStore(Record link, boolean add) {
         synchronized (TestSupport.BranchMutationLock.monitor()) {
-        Map<String, Object> branch = branchFor(link);
-        Object storeId = link.values().get("storeId");
-        if (containsStore(branch, storeId) != add) {
-            List<Object> stores = new ArrayList<>((List<?>) branch.get("stores"));
-            if (add) stores.add(fields("branchId", branch.get("id"), "storeId", storeId));
-            else
-                stores.removeIf(
-                        value ->
-                                value instanceof Map<?, ?> row
-                                        && storeId.equals(row.get("storeId")));
-            Map<String, Object> update = new LinkedHashMap<>(branch);
-            update.put("stores", stores);
-            call("update", "Branches", update);
-            Map<String, Object> refreshed = branchFor(link);
-            if (containsStore(refreshed, storeId) != add)
-                throw new AssertionError("Owned store membership was not updated");
-            for (Object value : (List<?>) branch.get("stores")) {
-                Object previousId = ((Map<?, ?>) value).get("storeId");
-                if (!previousId.equals(storeId) && !containsStore(refreshed, previousId))
-                    throw new AssertionError("Existing branch store was removed");
+            Map<String, Object> branch = branchFor(link);
+            Object storeId = link.values().get("storeId");
+            if (containsStore(branch, storeId) != add) {
+                List<Object> stores = new ArrayList<>((List<?>) branch.get("stores"));
+                if (add) stores.add(fields("branchId", branch.get("id"), "storeId", storeId));
+                else
+                    stores.removeIf(
+                            value ->
+                                    value instanceof Map<?, ?> row
+                                            && storeId.equals(row.get("storeId")));
+                Map<String, Object> update = new LinkedHashMap<>(branch);
+                update.put("stores", stores);
+                call("update", "Branches", update);
+                Map<String, Object> refreshed = branchFor(link);
+                if (containsStore(refreshed, storeId) != add)
+                    throw new AssertionError("Owned store membership was not updated");
+                for (Object value : (List<?>) branch.get("stores")) {
+                    Object previousId = ((Map<?, ?>) value).get("storeId");
+                    if (!previousId.equals(storeId) && !containsStore(refreshed, previousId))
+                        throw new AssertionError("Existing branch store was removed");
+                }
+                if (!java.util.Objects.equals(
+                        branch.get("defaultStoreId"), refreshed.get("defaultStoreId")))
+                    throw new AssertionError("Branch default store changed");
+                branch = refreshed;
             }
-            if (!java.util.Objects.equals(
-                    branch.get("defaultStoreId"), refreshed.get("defaultStoreId")))
-                throw new AssertionError("Branch default store changed");
-            branch = refreshed;
-        }
-        ((JavascriptExecutor) driver)
-                .executeScript(
-                        "const"
-                            + " root=document.querySelector('#app').__vue__;if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
-                        branch);
-
+            ((JavascriptExecutor) driver)
+                    .executeScript(
+                            "const"
+                                    + " root=document.querySelector('#app').__vue__;if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
+                            branch);
         }
     }
 

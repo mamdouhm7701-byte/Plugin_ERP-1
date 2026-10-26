@@ -2,9 +2,9 @@ package ProductsTest;
 
 import Plugin_ERP.System_Modules.Login.Products.*;
 import io.qameta.allure.*;
-import org.testng.annotations.Test;
-import org.testng.Assert;
 import java.util.*;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 @Epic("Web Cloud")
 @Feature("الأصناف")
@@ -347,33 +347,42 @@ public class AddProductsTest extends ProductScenarioTest {
         enterPrices(sale, minimum, maximum);
         Map<String, String> messages = new LinkedHashMap<>(page.prPriceValidationMessages());
         try {
-            new org.openqa.selenium.support.ui.WebDriverWait(driver, java.time.Duration.ofSeconds(10))
-                    .until(d -> {
-                        messages.putAll(page.prPriceValidationMessages());
-                        return !messages.isEmpty();
-                    });
+            new org.openqa.selenium.support.ui.WebDriverWait(
+                            driver, java.time.Duration.ofSeconds(10))
+                    .until(
+                            d -> {
+                                messages.putAll(page.prPriceValidationMessages());
+                                return !messages.isEmpty();
+                            });
         } catch (org.openqa.selenium.TimeoutException missingInlineFeedback) {
             // Still exercise Save so missing feedback cannot conceal a persisted invalid product.
         }
         io.qameta.allure.Allure.addAttachment(
-                "Price fields before save", "image/png",
-                new java.io.ByteArrayInputStream(((org.openqa.selenium.TakesScreenshot) driver)
-                        .getScreenshotAs(org.openqa.selenium.OutputType.BYTES)), ".png");
+                "Price fields before save",
+                "image/png",
+                new java.io.ByteArrayInputStream(
+                        ((org.openqa.selenium.TakesScreenshot) driver)
+                                .getScreenshotAs(org.openqa.selenium.OutputType.BYTES)),
+                ".png");
         if (!page.prSaveDisabled()) page.prSave();
         try {
-            new org.openqa.selenium.support.ui.WebDriverWait(driver, java.time.Duration.ofSeconds(30))
-                    .until(d -> {
-                        messages.putAll(page.prPriceValidationMessages());
-                        return !messages.isEmpty() || !page.prSaves().isEmpty();
-                    });
+            new org.openqa.selenium.support.ui.WebDriverWait(
+                            driver, java.time.Duration.ofSeconds(30))
+                    .until(
+                            d -> {
+                                messages.putAll(page.prPriceValidationMessages());
+                                return !messages.isEmpty() || !page.prSaves().isEmpty();
+                            });
         } catch (org.openqa.selenium.TimeoutException missingOutcome) {
             // Capture requests and any saved entity before reporting missing field feedback.
         }
         page.prSettled();
         var records = capture();
         io.qameta.allure.Allure.addAttachment(
-                "Visible price field validation", "application/json",
-                new org.json.JSONObject(messages).toString(), ".json");
+                "Visible price field validation",
+                "application/json",
+                new org.json.JSONObject(messages).toString(),
+                ".json");
         for (var record : records) {
             var stored = data.read(record);
             io.qameta.allure.Allure.addAttachment(
@@ -411,7 +420,8 @@ public class AddProductsTest extends ProductScenarioTest {
                             + record.id());
         }
         Assert.assertTrue(page.prSaves().isEmpty(), "Invalid price save was accepted");
-        Assert.assertFalse(messages.isEmpty(),
+        Assert.assertFalse(
+                messages.isEmpty(),
                 "Expected a visible validation message under a price field; save errors: "
                         + page.prSaveErrors());
     }
@@ -460,7 +470,8 @@ public class AddProductsTest extends ProductScenarioTest {
         var rows = (List<?>) data.read(updated).get("stores");
         Assert.assertEquals(rows.size(), 2);
         Assert.assertTrue(
-                rows.stream().anyMatch(r -> second.id().equals(((Map<?, ?>) r).get("storeId"))), "التحقق من المخزن");
+                rows.stream().anyMatch(r -> second.id().equals(((Map<?, ?>) r).get("storeId"))),
+                "التحقق من المخزن");
     }
 
     @Test(groups = "products")
@@ -470,7 +481,8 @@ public class AddProductsTest extends ProductScenarioTest {
         fill(null);
         page.prArabic(marker + " صنف اختبار");
         var r = save(false);
-        Assert.assertEquals(data.read(r).get("arabicName"), marker + " صنف اختبار", "مطابقة الاسم العربي");
+        Assert.assertEquals(
+                data.read(r).get("arabicName"), marker + " صنف اختبار", "مطابقة الاسم العربي");
     }
 
     private void stockInvalid(String reason) {

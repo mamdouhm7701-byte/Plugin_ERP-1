@@ -195,4 +195,3 @@
 | `public void closeExtraWindows(String main)` | public | إغلاق القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 | `public abstract void addItem(String name, String barcode, String category);` | public | عقد abstract يحدد ما يجب أن توفره الكلاسات المتخصصة؛ إضافة الصنف، حسب المدخلات والتخصص. |
 | `public abstract void save();` | public | عقد abstract يحدد ما يجب أن توفره الكلاسات المتخصصة؛ تنفيذ/تنسيق الحفظ ومتابعة النتيجة في سياق الملف. |
-

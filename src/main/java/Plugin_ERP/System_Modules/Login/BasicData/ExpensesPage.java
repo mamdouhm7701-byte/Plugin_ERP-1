@@ -39,6 +39,10 @@ public class ExpensesPage extends AbstractForDealer {
                                                     try {
                                                         return e.isDisplayed();
                                                     } catch (Exception ignored) {
+                                                        Plugin_ERP.Bots.LogUtils.debug(
+                                                                "ExpensesPage condition unavailable: "
+                                                                        + ignored.getClass()
+                                                                                .getSimpleName());
                                                         return false;
                                                     }
                                                 }));
@@ -71,6 +75,8 @@ public class ExpensesPage extends AbstractForDealer {
                     .until(ExpectedConditions.visibilityOfElementLocated(success));
             dismissSuccess();
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "ExpensesPage fallback: " + ignored.getClass().getSimpleName());
         }
         waitLoading();
     }
@@ -90,11 +96,16 @@ public class ExpensesPage extends AbstractForDealer {
                                             .executeScript("arguments[0].click();", b.get(0));
                                     return true;
                                 } catch (Exception e) {
+                                    Plugin_ERP.Bots.LogUtils.debug(
+                                            "ExpensesPage condition unavailable: "
+                                                    + e.getClass().getSimpleName());
                                     return false;
                                 }
                             });
             waitAlert();
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "ExpensesPage fallback: " + ignored.getClass().getSimpleName());
         }
     }
 
@@ -112,6 +123,10 @@ public class ExpensesPage extends AbstractForDealer {
                                                     try {
                                                         return e.isDisplayed();
                                                     } catch (Exception ignored) {
+                                                        Plugin_ERP.Bots.LogUtils.debug(
+                                                                "ExpensesPage condition unavailable: "
+                                                                        + ignored.getClass()
+                                                                                .getSimpleName());
                                                         return false;
                                                     }
                                                 }));
@@ -133,6 +148,8 @@ public class ExpensesPage extends AbstractForDealer {
                         .executeScript("arguments[0].click();", b.get(0));
             waitAlert();
         } catch (Exception ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "ExpensesPage fallback: " + ignored.getClass().getSimpleName());
         }
     }
 
@@ -238,7 +255,16 @@ public class ExpensesPage extends AbstractForDealer {
     public void CancelDelete() {
         records.CancelDelete();
     }
-    boolean recordVisible(By by) { return visible(by); }
-    void recordWaitLoading() { waitLoading(); }
-    void recordWaitAlert() { waitAlert(); }
+
+    boolean recordVisible(By by) {
+        return visible(by);
+    }
+
+    void recordWaitLoading() {
+        waitLoading();
+    }
+
+    void recordWaitAlert() {
+        waitAlert();
+    }
 }

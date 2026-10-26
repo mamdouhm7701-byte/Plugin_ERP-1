@@ -105,9 +105,7 @@ final class FinancialFixtureApiStub {
             return records.containsKey(id)
                     ? Map.of("entity", records.get(id))
                     : defaultDeletedMasterDto
-                            ? Map.of(
-                                    "entity",
-                                    Map.of("subUnits", List.of(), "type", "RawMaterial"))
+                            ? Map.of("entity", Map.of("subUnits", List.of(), "type", "RawMaterial"))
                             : defaultDeletedDto
                                     ? Map.of(
                                             "entity",
@@ -119,10 +117,7 @@ final class FinancialFixtureApiStub {
                                     : emptyDeletedResponse
                                             ? Map.of("entity", "")
                                             : Map.of(
-                                                    "error",
-                                                    "Missing owned record",
-                                                    "status",
-                                                    404);
+                                                    "error", "Missing owned record", "status", 404);
         }
         deletes.add(id);
         if (crashAtDelete > 0 && deletes.size() == crashAtDelete)

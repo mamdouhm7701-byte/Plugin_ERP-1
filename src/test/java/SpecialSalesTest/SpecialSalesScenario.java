@@ -2,15 +2,12 @@ package SpecialSalesTest;
 
 import Plugin_ERP.System_Modules.Login.SpecialSales.*;
 import Plugin_ERP.Tests.LoginTest.BaseTest;
-
 import io.qameta.allure.Allure;
-
+import java.math.BigDecimal;
+import java.util.*;
 import org.openqa.selenium.*;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
-
-import java.math.BigDecimal;
-import java.util.*;
 
 /** Page-scoped references, case-scoped mutable data, and unconditional group cleanup. */
 public abstract class SpecialSalesScenario extends BaseTest {
@@ -35,8 +32,10 @@ public abstract class SpecialSalesScenario extends BaseTest {
         requirePreparedSession();
         data.beginScenario();
         customer = data.customer();
-        org.testng.Assert.assertEquals(data.read(customer).get("isTaxable"), Boolean.TRUE, "مطابقة تطبيق الضريبة");
-        org.testng.Assert.assertEquals(data.read(customer).get("isOnTheFly"), Boolean.FALSE, "مطابقة نوع العميل");
+        org.testng.Assert.assertEquals(
+                data.read(customer).get("isTaxable"), Boolean.TRUE, "مطابقة تطبيق الضريبة");
+        org.testng.Assert.assertEquals(
+                data.read(customer).get("isOnTheFly"), Boolean.FALSE, "مطابقة نوع العميل");
         item = data.item(1);
         defaults = data.configureOwnedDefaults(customer);
         restartPage();

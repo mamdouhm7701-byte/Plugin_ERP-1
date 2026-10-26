@@ -1,9 +1,8 @@
 package Invoice;
 
-import java.time.LocalDate;
+import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import io.qameta.allure.Story;
 
 public final class LinkedSalesReturnTest extends SalesScenarioTest {
     private SalesTestData.Record source;
@@ -31,7 +30,8 @@ public final class LinkedSalesReturnTest extends SalesScenarioTest {
                 agent.id(),
                 "Linked return must retain the owned source agent");
         Assert.assertEquals(page.slDocument().get("sourceTransactionId"), source.id());
-        Assert.assertEquals(page.slDocument().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
+        Assert.assertEquals(
+                page.slDocument().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
     }
 
     @Test

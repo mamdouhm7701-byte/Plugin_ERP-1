@@ -6,6 +6,7 @@ import java.util.Map;
 /** Observe requests and outcomes for owned counter invoices. */
 final class CounterSaveCapture {
     private final SpecialSalesPage owner;
+
     CounterSaveCapture(SpecialSalesPage owner) {
         this.owner = owner;
     }
@@ -41,7 +42,9 @@ final class CounterSaveCapture {
 
     void settled() {
         owner.ready.until(
-                d -> !Boolean.TRUE.equals(owner.js("return (window.__specialSalesQA?.pending||0)>0")));
+                d ->
+                        !Boolean.TRUE.equals(
+                                owner.js("return (window.__specialSalesQA?.pending||0)>0")));
     }
 
     void awaitSave() {

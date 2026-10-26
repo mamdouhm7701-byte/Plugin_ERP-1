@@ -1,34 +1,36 @@
 package Plugin_ERP.Bots;
 
+import java.time.Duration;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-import java.util.List;
-
 public class DropdownActions extends BaseAction {
 
-    public DropdownActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment) {
-        super(driver, wait, waitMangment);
+    public DropdownActions(WebDriver driver, WebDriverWait wait, WaitManagement waitManagement) {
+        super(driver, wait, waitManagement);
     }
 
     public void selectUsersByCode(int... codes) {
         for (int code : codes) {
-            By add = By.xpath("//div[contains(@class,'modal') and contains(@class,'show')]"
-                    + "//td[normalize-space()='" + code
-                    + "']/following-sibling::td//button[@data-action-type='save']");
+            By add =
+                    By.xpath(
+                            "//div[contains(@class,'modal') and contains(@class,'show')]"
+                                    + "//td[normalize-space()='"
+                                    + code
+                                    + "']/following-sibling::td//button[@data-action-type='save']");
             wait.ignoring(StaleElementReferenceException.class)
-                    .ignoring(ElementClickInterceptedException.class).until(d -> {
-                        for (WebElement button : d.findElements(add)) {
-                            if (!button.isDisplayed() || !button.isEnabled()) continue;
-                            scrollIntoView(button);
-                            button.click();
-                            return true;
-                        }
-                        return false;
-                    });
+                    .ignoring(ElementClickInterceptedException.class)
+                    .until(
+                            d -> {
+                                for (WebElement button : d.findElements(add)) {
+                                    if (!button.isDisplayed() || !button.isEnabled()) continue;
+                                    scrollIntoView(button);
+                                    button.click();
+                                    return true;
+                                }
+                                return false;
+                            });
         }
     }
 
@@ -141,6 +143,8 @@ public class DropdownActions extends BaseAction {
                     searchInput.sendKeys(Keys.CONTROL + "a");
                     searchInput.sendKeys(Keys.DELETE);
                 } catch (Exception ignored) {
+                    Plugin_ERP.Bots.LogUtils.debug(
+                            "DropdownActions fallback: " + ignored.getClass().getSimpleName());
                 }
 
                 if (attempt < 5) {
@@ -227,6 +231,8 @@ public class DropdownActions extends BaseAction {
                     input.sendKeys(Keys.CONTROL + "a");
                     input.sendKeys(Keys.DELETE);
                 } catch (Exception ignored) {
+                    Plugin_ERP.Bots.LogUtils.debug(
+                            "DropdownActions fallback: " + ignored.getClass().getSimpleName());
                 }
 
                 if (attempt < 5) {
@@ -340,9 +346,19 @@ public class DropdownActions extends BaseAction {
 
             LogUtils.info("Value Typed And Verified : " + cleanValue);
 
-            wait.until(d -> dropdown.findElements(By.cssSelector("[role='option'], .vs__dropdown-option"))
-                    .stream().anyMatch(option -> option.isDisplayed()
-                            && option.getText().trim().replaceAll("\\s+", " ").equals(cleanValue)));
+            wait.until(
+                    d ->
+                            dropdown
+                                    .findElements(
+                                            By.cssSelector("[role='option'], .vs__dropdown-option"))
+                                    .stream()
+                                    .anyMatch(
+                                            option ->
+                                                    option.isDisplayed()
+                                                            && option.getText()
+                                                                    .trim()
+                                                                    .replaceAll("\\s+", " ")
+                                                                    .equals(cleanValue)));
 
             input.sendKeys(Keys.ENTER);
 
@@ -432,6 +448,8 @@ public class DropdownActions extends BaseAction {
                     searchInput.sendKeys(Keys.CONTROL + "a");
                     searchInput.sendKeys(Keys.DELETE);
                 } catch (Exception ignored) {
+                    Plugin_ERP.Bots.LogUtils.debug(
+                            "DropdownActions fallback: " + ignored.getClass().getSimpleName());
                 }
 
                 if (attempt < 5) {

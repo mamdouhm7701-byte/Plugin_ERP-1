@@ -7,7 +7,7 @@
 <a id="file-2851a84e48e3"></a>
 ## AllureAttachment.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/Allur/AllureAttachment.java](../../../src/main/java/Plugin_ERP/Utiel/Allur/AllureAttachment.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/Allur/AllureAttachment.java](../../../src/main/java/Plugin_ERP/Util/Allur/AllureAttachment.java)
 
 **دوره:** هيكل كلاس فارغ؛ الاسم موجود لكن لا توجد وظيفة قراءة منفذة فيه حاليًا.
 
@@ -18,7 +18,7 @@
 <a id="file-d01d270aef86"></a>
 ## AllureBinaryManger.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/Allur/AllureBinaryManger.java](../../../src/main/java/Plugin_ERP/Utiel/Allur/AllureBinaryManger.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/Allur/AllureBinaryManger.java](../../../src/main/java/Plugin_ERP/Util/Allur/AllureBinaryManger.java)
 
 **دوره:** تجهيز بيانات نتائج Allure وأداة بنائه وحفظ التاريخ حسب المسارات الحالية.
 
@@ -48,7 +48,7 @@
 <a id="file-92ef6e0b0e4e"></a>
 ## AllureConstants.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/Allur/AllureConstants.java](../../../src/main/java/Plugin_ERP/Utiel/Allur/AllureConstants.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/Allur/AllureConstants.java](../../../src/main/java/Plugin_ERP/Util/Allur/AllureConstants.java)
 
 **دوره:** مسارات ومواقع نتائج التقرير وتاريخه المستخدمة في خدمات Allure.
 
@@ -65,7 +65,7 @@
 <a id="file-fdcdbfe78f62"></a>
 ## AllureEnvironment.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/Allur/AllureEnvironment.java](../../../src/main/java/Plugin_ERP/Utiel/Allur/AllureEnvironment.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/Allur/AllureEnvironment.java](../../../src/main/java/Plugin_ERP/Util/Allur/AllureEnvironment.java)
 
 **دوره:** كتابة معلومات بيئة التشغيل في التقرير مع تحديث بيانات المتصفح.
 
@@ -88,7 +88,7 @@
 <a id="file-18bdb24878c5"></a>
 ## AllureReportGenerator.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/Allur/AllureReportGenerator.java](../../../src/main/java/Plugin_ERP/Utiel/Allur/AllureReportGenerator.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/Allur/AllureReportGenerator.java](../../../src/main/java/Plugin_ERP/Util/Allur/AllureReportGenerator.java)
 
 **دوره:** هيكل كلاس فارغ؛ الاسم موجود لكن لا توجد وظيفة قراءة منفذة فيه حاليًا.
 
@@ -99,7 +99,7 @@
 <a id="file-4fa275d1cd80"></a>
 ## AllureReportPolicy.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/Allur/AllureReportPolicy.java](../../../src/main/java/Plugin_ERP/Utiel/Allur/AllureReportPolicy.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/Allur/AllureReportPolicy.java](../../../src/main/java/Plugin_ERP/Util/Allur/AllureReportPolicy.java)
 
 **دوره:** تحديد هل يولد HTML ويفتح تلقائيًا؛ النتائج الخام سياسة منفصلة عن الفتح.
 
@@ -118,7 +118,7 @@
 <a id="file-9048c0acaaa9"></a>
 ## AllureUtils.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/Allur/AllureUtils.java](../../../src/main/java/Plugin_ERP/Utiel/Allur/AllureUtils.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/Allur/AllureUtils.java](../../../src/main/java/Plugin_ERP/Util/Allur/AllureUtils.java)
 
 **دوره:** مساعدات عامة مرتبطة بـAllure في الاستدعاءات الحالية.
 
@@ -140,7 +140,7 @@
 <a id="file-803f4a58e3cd"></a>
 ## DriveReportStore.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/Allur/DriveReportStore.java](../../../src/main/java/Plugin_ERP/Utiel/Allur/DriveReportStore.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/Allur/DriveReportStore.java](../../../src/main/java/Plugin_ERP/Util/Allur/DriveReportStore.java)
 
 **دوره:** رفع وحفظ ملف تقرير على Drive باستخدام إعدادات الخدمة المصرح بها.
 
@@ -169,7 +169,7 @@
 <a id="file-0e9145a2b48f"></a>
 ## ReportDelivery.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/Allur/ReportDelivery.java](../../../src/main/java/Plugin_ERP/Utiel/Allur/ReportDelivery.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/Allur/ReportDelivery.java](../../../src/main/java/Plugin_ERP/Util/Allur/ReportDelivery.java)
 
 **دوره:** توزيع ملفات التقرير بين المرفقات وروابط Drive وفق الحجم المتاح.
 
@@ -185,7 +185,7 @@
 <a id="file-511a86fca1ff"></a>
 ## ReportMail.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/Allur/ReportMail.java](../../../src/main/java/Plugin_ERP/Utiel/Allur/ReportMail.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/Allur/ReportMail.java](../../../src/main/java/Plugin_ERP/Util/Allur/ReportMail.java)
 
 **دوره:** قراءة سياسة البريد وبناء وإرسال التقرير؛ لا يحدد نجاح حالة ERP.
 
@@ -206,7 +206,7 @@
 <a id="file-8f38fd7725ed"></a>
 ## ReportMailCommand.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/Allur/ReportMailCommand.java](../../../src/main/java/Plugin_ERP/Utiel/Allur/ReportMailCommand.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/Allur/ReportMailCommand.java](../../../src/main/java/Plugin_ERP/Util/Allur/ReportMailCommand.java)
 
 **دوره:** مدخل أمر إرسال التقارير بصورة مستقلة وفق إعداداته.
 
@@ -225,7 +225,7 @@
 <a id="file-e578590ea497"></a>
 ## ReportMailTemplate.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/Allur/ReportMailTemplate.java](../../../src/main/java/Plugin_ERP/Utiel/Allur/ReportMailTemplate.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/Allur/ReportMailTemplate.java](../../../src/main/java/Plugin_ERP/Util/Allur/ReportMailTemplate.java)
 
 **دوره:** شكل ملخص رسالة نتائج الاختبار.
 
@@ -264,7 +264,7 @@
 <a id="file-be475b81d93d"></a>
 ## ScenarioAccess.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/Allur/ScenarioAccess.java](../../../src/main/java/Plugin_ERP/Utiel/Allur/ScenarioAccess.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/Allur/ScenarioAccess.java](../../../src/main/java/Plugin_ERP/Util/Allur/ScenarioAccess.java)
 
 **دوره:** التقاط سياق وصول أو شاشة لإضافته كدليل في التقرير.
 
@@ -285,7 +285,7 @@
 <a id="file-480625bfa4ad"></a>
 ## ScenarioAssertions.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/Allur/ScenarioAssertions.java](../../../src/main/java/Plugin_ERP/Utiel/Allur/ScenarioAssertions.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/Allur/ScenarioAssertions.java](../../../src/main/java/Plugin_ERP/Util/Allur/ScenarioAssertions.java)
 
 **دوره:** إدارة سياق رحلة التحقق والأدلة أثناء الحالة.
 
@@ -309,7 +309,7 @@
 <a id="file-00bcc88744b4"></a>
 ## ScenarioSoftAssert.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/Allur/ScenarioSoftAssert.java](../../../src/main/java/Plugin_ERP/Utiel/Allur/ScenarioSoftAssert.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/Allur/ScenarioSoftAssert.java](../../../src/main/java/Plugin_ERP/Util/Allur/ScenarioSoftAssert.java)
 
 **دوره:** SoftAssert يدعم تسجيل تفاصيل المقارنات في تقرير السيناريو.
 
@@ -322,7 +322,7 @@
 <a id="file-335d6b9743c2"></a>
 ## ScreenNames.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/Allur/ScreenNames.java](../../../src/main/java/Plugin_ERP/Utiel/Allur/ScreenNames.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/Allur/ScreenNames.java](../../../src/main/java/Plugin_ERP/Util/Allur/ScreenNames.java)
 
 **دوره:** أسماء مقروءة للشاشات عند فتح مساراتها داخل الأدلة.
 
@@ -339,7 +339,7 @@
 <a id="file-c2d822c8a7f2"></a>
 ## ConfigurationProperties.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/ConfigurationProperties.java](../../../src/main/java/Plugin_ERP/Utiel/ConfigurationProperties.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/ConfigurationProperties.java](../../../src/main/java/Plugin_ERP/Util/ConfigurationProperties.java)
 
 **دوره:** قراءة ملفات الإعداد ودمج الملف المحلي ومتغيرات الدخول وخصائص JVM بأولوية محددة.
 
@@ -358,7 +358,7 @@
 <a id="file-46cb2e8c0575"></a>
 ## CSVReader.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/CSVReader.java](../../../src/main/java/Plugin_ERP/Utiel/CSVReader.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/CSVReader.java](../../../src/main/java/Plugin_ERP/Util/CSVReader.java)
 
 **دوره:** هيكل كلاس فارغ؛ الاسم موجود لكن لا توجد وظيفة قراءة منفذة فيه حاليًا.
 
@@ -369,7 +369,7 @@
 <a id="file-fedb3dfc92da"></a>
 ## DocumentDates.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/DocumentDates.java](../../../src/main/java/Plugin_ERP/Utiel/DocumentDates.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/DocumentDates.java](../../../src/main/java/Plugin_ERP/Util/DocumentDates.java)
 
 **دوره:** توحيد التعامل مع تواريخ المستندات المستخدمة في السيناريوهات.
 
@@ -387,7 +387,7 @@
 <a id="file-2bacb4022a8d"></a>
 ## ExcelReader.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/ExcelReader.java](../../../src/main/java/Plugin_ERP/Utiel/ExcelReader.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/ExcelReader.java](../../../src/main/java/Plugin_ERP/Util/ExcelReader.java)
 
 **دوره:** هيكل كلاس فارغ؛ الاسم موجود لكن لا توجد وظيفة قراءة منفذة فيه حاليًا.
 
@@ -398,7 +398,7 @@
 <a id="file-2c6c1e0edde0"></a>
 ## FileUtils.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/FileUtils.java](../../../src/main/java/Plugin_ERP/Utiel/FileUtils.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/FileUtils.java](../../../src/main/java/Plugin_ERP/Util/FileUtils.java)
 
 **دوره:** مساعدات قديمة لإنشاء مجلد وإعادة تسمية ملف؛ ليست مالك fixture journals.
 
@@ -417,7 +417,7 @@
 <a id="file-9b67771be2a9"></a>
 ## FormInteractions.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/FormInteractions.java](../../../src/main/java/Plugin_ERP/Utiel/FormInteractions.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/FormInteractions.java](../../../src/main/java/Plugin_ERP/Util/FormInteractions.java)
 
 **دوره:** سياسات مشتركة للضغط والكتابة واختيار قوائم مع مطابقة وتحقق واضحين.
 
@@ -439,7 +439,7 @@
 <a id="file-ecebb4beb31f"></a>
 ## LoginjsonReader.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/LoginjsonReader.java](../../../src/main/java/Plugin_ERP/Utiel/LoginjsonReader.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/LoginjsonReader.java](../../../src/main/java/Plugin_ERP/Util/LoginjsonReader.java)
 
 **دوره:** قراءة ملف JSON واستخراج قيمة بمسار JSONPath في الاستخدامات القديمة.
 
@@ -457,7 +457,7 @@
 <a id="file-dc7bc0049ac9"></a>
 ## NativeCheckbox.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/NativeCheckbox.java](../../../src/main/java/Plugin_ERP/Utiel/NativeCheckbox.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/NativeCheckbox.java](../../../src/main/java/Plugin_ERP/Util/NativeCheckbox.java)
 
 **دوره:** التعامل مع ضبط Checkbox مع مراجعة الحالة الفعلية.
 
@@ -473,7 +473,7 @@
 <a id="file-5d3abdb5513e"></a>
 ## OSUtils.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/OSUtils.java](../../../src/main/java/Plugin_ERP/Utiel/OSUtils.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/OSUtils.java](../../../src/main/java/Plugin_ERP/Util/OSUtils.java)
 
 **دوره:** تمييز نظام التشغيل للمسارات والأوامر الخاصة به.
 
@@ -488,7 +488,7 @@
 <a id="file-385a7bce6e02"></a>
 ## PrintedInvoiceAssertions.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/PrintedInvoiceAssertions.java](../../../src/main/java/Plugin_ERP/Utiel/PrintedInvoiceAssertions.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/PrintedInvoiceAssertions.java](../../../src/main/java/Plugin_ERP/Util/PrintedInvoiceAssertions.java)
 
 **دوره:** مقارنة محتوى طباعة الفاتورة وبنودها وأرقامها بالقيم المطلوبة في السيناريو.
 
@@ -512,7 +512,7 @@
 <a id="file-94d06e1d47d8"></a>
 ## PropertyReader.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/PropertyReader.java](../../../src/main/java/Plugin_ERP/Utiel/PropertyReader.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/PropertyReader.java](../../../src/main/java/Plugin_ERP/Util/PropertyReader.java)
 
 **دوره:** واجهة طلب الإعدادات واختيار رابط البيئة وبيانات الدخول وسياسة الحسابات.
 
@@ -520,7 +520,7 @@
 
 **يرتبط مباشرة بملفات داخل المشروع:** [DiscountType.java](MAIN_Models_AR.md#file-2a24a7347cbc)، [TaxMode.java](MAIN_Models_AR.md#file-4601a98d3779)
 
-**ملفات تشير إليه مباشرة:** [BrowserAction.java](MAIN_Bots_AR.md#file-ca0683510b61)، [ElmentAction.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitActions.java](MAIN_Bots_AR.md#file-0ea40183d75b)، [WaitMangment.java](MAIN_Bots_AR.md#file-98afc8ddbc07)، [InvoiceCalculator.java](MAIN_Business_AR.md#file-e5f4eb40b205)، [AbstractDriver.java](MAIN_Drivers_AR.md#file-a1539b959b16)، [Chrome.java](MAIN_Drivers_AR.md#file-14889194f9e4)، [Edge.java](MAIN_Drivers_AR.md#file-e957d0c8ef7e)؛ العرض مختصر وليس قائمة كاملة.
+**ملفات تشير إليه مباشرة:** [BrowserAction.java](MAIN_Bots_AR.md#file-ca0683510b61)، [ElementActions.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitActions.java](MAIN_Bots_AR.md#file-0ea40183d75b)، [WaitManagement.java](MAIN_Bots_AR.md#file-98afc8ddbc07)، [InvoiceCalculator.java](MAIN_Business_AR.md#file-e5f4eb40b205)، [AbstractDriver.java](MAIN_Drivers_AR.md#file-a1539b959b16)، [Chrome.java](MAIN_Drivers_AR.md#file-14889194f9e4)، [Edge.java](MAIN_Drivers_AR.md#file-e957d0c8ef7e)؛ العرض مختصر وليس قائمة كاملة.
 
 ### خريطة الميثودات المعلنة
 
@@ -541,7 +541,7 @@
 <a id="file-db7a1ec24b8d"></a>
 ## ScreenShotsUtils.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/ScreenShotsUtils.java](../../../src/main/java/Plugin_ERP/Utiel/ScreenShotsUtils.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/ScreenShotsUtils.java](../../../src/main/java/Plugin_ERP/Util/ScreenShotsUtils.java)
 
 **دوره:** التقاط صور دليل من جلسة المتصفح مع أسماء ومواقع حفظ.
 
@@ -560,7 +560,7 @@
 <a id="file-cf3e0eedcb1e"></a>
 ## TimeManage.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/TimeManage.java](../../../src/main/java/Plugin_ERP/Utiel/TimeManage.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/TimeManage.java](../../../src/main/java/Plugin_ERP/Util/TimeManage.java)
 
 **دوره:** توليد وقت نصي لأسماء الأدلة أو علامة زمنية مختصرة.
 
@@ -577,7 +577,7 @@
 <a id="file-0c52fa4cd7f5"></a>
 ## VideoConverterUtils.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Utiel/VideoConverterUtils.java](../../../src/main/java/Plugin_ERP/Utiel/VideoConverterUtils.java)
+**المصدر:** [src/main/java/Plugin_ERP/Util/VideoConverterUtils.java](../../../src/main/java/Plugin_ERP/Util/VideoConverterUtils.java)
 
 **دوره:** مساعد تحويل فيديو مولد إلى صيغة أخرى وفق أدواته المتاحة؛ ليس دليل تفعيل تسجيل كل حالة.
 
@@ -588,4 +588,3 @@
 | التوقيع كما في المصدر | الإتاحة | كيف تقرأ الغرض؟ |
 |---|---|---|
 | `public static File convertAviToMp4(File aviFile)` | public | تنفيذ جزء متعلق بـ القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
-

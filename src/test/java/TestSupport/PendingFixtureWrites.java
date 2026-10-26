@@ -72,14 +72,23 @@ public final class PendingFixtureWrites {
                                 ? "Aggregates/AccountTreeViewModel?showBalance=false&type=Main&branchId="
                                         + session.branchId
                                 : endpoint.equals("CostCenters")
-                                ? "Aggregates/CostCenterTreeViewModel?showBalance=false&type=Main&branchId=" + session.branchId
-                                : (endpoint.equals("Items") ? "Items/Summary" : endpoint.equals("UnderReviews") ? "SalesTransactions" : endpoint)
-                                        + "?pageNumber="
-                                        + page
-                                        + "&pageSize=500" + (endpoint.equals("UnderReviews") ? "&transactionType=UnderReviewTransaction" : "");
+                                        ? "Aggregates/CostCenterTreeViewModel?showBalance=false&type=Main&branchId="
+                                                + session.branchId
+                                        : (endpoint.equals("Items")
+                                                        ? "Items/Summary"
+                                                        : endpoint.equals("UnderReviews")
+                                                                ? "SalesTransactions"
+                                                                : endpoint)
+                                                + "?pageNumber="
+                                                + page
+                                                + "&pageSize=500"
+                                                + (endpoint.equals("UnderReviews")
+                                                        ? "&transactionType=UnderReviewTransaction"
+                                                        : "");
                 Object entity = api.apply(url, Map.of()).get("entity");
                 find(entity, name, matches);
-                if (entity instanceof List<?> || Set.of("Accounts", "CostCenters").contains(endpoint)) break;
+                if (entity instanceof List<?>
+                        || Set.of("Accounts", "CostCenters").contains(endpoint)) break;
                 if (!(entity instanceof Map<?, ?> result)
                         || !(result.get("pageData") instanceof List<?> rows)
                         || !(result.get("totalRecords") instanceof Number total))
@@ -102,8 +111,10 @@ public final class PendingFixtureWrites {
                 Object id = unique.keySet().iterator().next();
                 Object intendedId = values.get("id");
                 // Some new-form DTOs use zero/empty IDs; those are creates, not updates.
-                boolean identifiedAttempt = intendedId != null
-                        && !intendedId.toString().isBlank() && !intendedId.toString().equals("0");
+                boolean identifiedAttempt =
+                        intendedId != null
+                                && !intendedId.toString().isBlank()
+                                && !intendedId.toString().equals("0");
                 if (identifiedAttempt && !Objects.equals(intendedId, id))
                     throw new AssertionError("Recovered fixture document identity changed");
                 Object raw = api.apply(endpoint, Map.of("id", id)).get("entity");

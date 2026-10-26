@@ -1,10 +1,5 @@
 package Plugin_ERP.System_Modules.Login.Products;
 
-import Plugin_ERP.Bots.AlertAction;
-import Plugin_ERP.Bots.ElmentAction;
-import Plugin_ERP.Bots.WaitMangment;
-import Plugin_ERP.System_Modules.Login.Abstract;
-import io.qameta.allure.Step;
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
@@ -13,12 +8,14 @@ import org.openqa.selenium.support.ui.*;
 final class ProductUnits {
     private final AddProductsPage owner;
     private final WebDriver driver;
-    private final Plugin_ERP.Bots.ElmentAction utilites;
+    private final Plugin_ERP.Bots.ElementActions utilites;
+
     ProductUnits(AddProductsPage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
         this.utilites = owner.context().elements();
     }
+
     private By UnitProduct = By.xpath("//a[contains(.,'وحدات الصنف')]");
     private By TransUnit = By.xpath("//div[@data-title='معامل التحويل']//input[@type='number']");
     private By AddBarcode = By.xpath("(//div[@data-title='الباركود']//input)[3]");
@@ -33,23 +30,23 @@ final class ProductUnits {
     }
 
     void AddTransUnit(String transUnit) {
-        utilites.TaypeTextB(TransUnit, transUnit);
+        utilites.typeTextAndVerify(TransUnit, transUnit);
     }
 
     void AddBarcode_2(String addBarcode) {
-        utilites.TaypeTextB(AddBarcode, addBarcode);
+        utilites.typeTextAndVerify(AddBarcode, addBarcode);
     }
 
     void AddSalePrice_2(String addSalePrice) {
-        utilites.TaypeTextB(AddSalePrice, addSalePrice);
+        utilites.typeTextAndVerify(AddSalePrice, addSalePrice);
     }
 
     void AddMiniSalePrice_2(String addMiniSalePrice) {
-        utilites.TaypeTextB(AddMiniSalePrice, addMiniSalePrice);
+        utilites.typeTextAndVerify(AddMiniSalePrice, addMiniSalePrice);
     }
 
     void AddMaxSalePrice_2(String addMaxSalePrice) {
-        utilites.TaypeTextB(AddMaxSalePrice, addMaxSalePrice);
+        utilites.typeTextAndVerify(AddMaxSalePrice, addMaxSalePrice);
     }
 
     void ClickAddUnit() {

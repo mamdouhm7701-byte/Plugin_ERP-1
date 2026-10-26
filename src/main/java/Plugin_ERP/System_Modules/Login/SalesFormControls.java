@@ -1,14 +1,7 @@
 package Plugin_ERP.System_Modules.Login;
 
-import Plugin_ERP.Business.Calculator.InvoiceCalculator;
-import Plugin_ERP.Models.InvoiceRow;
-import Plugin_ERP.Models.InvoiceTotals;
-import Plugin_ERP.Models.ReportTotals;
-import io.qameta.allure.Step;
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.*;
-import java.util.stream.Collectors;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
@@ -16,12 +9,14 @@ import org.openqa.selenium.support.ui.*;
 final class SalesFormControls {
     private final AbstractForSales owner;
     private final WebDriver driver;
-    private final Plugin_ERP.Bots.ElmentAction utilites;
+    private final Plugin_ERP.Bots.ElementActions utilites;
+
     SalesFormControls(AbstractForSales owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
         this.utilites = owner.context().elements();
     }
+
     private By ArabicNameInput = By.xpath("//input[@name='arabicName']");
     private By SearchInput = By.xpath("//input[@id='barcode' and @name='barcode']");
     private static final By INVOICE_FULLSCREEN_TOGGLE =
@@ -85,6 +80,8 @@ final class SalesFormControls {
                     .until(ExpectedConditions.visibilityOfElementLocated(FORM_DIALOG))
                     .isDisplayed();
         } catch (TimeoutException e) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "SalesFormControls condition unavailable: " + e.getClass().getSimpleName());
             return false;
         }
     }
@@ -111,13 +108,13 @@ final class SalesFormControls {
 
     void SearchBarcodForInv(String searchText) {
         utilites.waits().waitForOverlayToDisappear();
-        utilites.TaypeTextB(SearchInput, searchText);
+        utilites.typeTextAndVerify(SearchInput, searchText);
     }
 
     void ClickOnNameRadioBtnForInv(String searchText) {
         utilites.waits().waitForOverlayToDisappear();
         utilites.ClickElement(ArabicNameInput);
         utilites.waits().waitForOverlayToDisappear();
-        utilites.TaypeTextB(ArabicNameInput, searchText);
+        utilites.typeTextAndVerify(ArabicNameInput, searchText);
     }
 }

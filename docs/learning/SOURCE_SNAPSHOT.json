@@ -11,7 +11,7 @@
       "methods": [
         {
           "name": "AlertAction",
-          "signature": "public AlertAction(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)",
+          "signature": "public AlertAction(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)",
           "visibility": "public",
           "line": 13,
           "test": false,
@@ -101,7 +101,7 @@
       "methods": [
         {
           "name": "BaseAction",
-          "signature": "public BaseAction(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)",
+          "signature": "public BaseAction(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)",
           "visibility": "public",
           "line": 13,
           "test": false,
@@ -265,7 +265,7 @@
         }
       ],
       "imports": [
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "org.openqa.selenium.*",
         "org.openqa.selenium.support.ui.ExpectedConditions",
         "org.openqa.selenium.support.ui.WebDriverWait",
@@ -279,7 +279,7 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/Enums/Pages.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
         "src/main/java/Plugin_ERP/System_Modules/Login/BasicData/TreasuryHandoverPage.java",
@@ -304,7 +304,7 @@
       "methods": [
         {
           "name": "CheckboxActions",
-          "signature": "public CheckboxActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)",
+          "signature": "public CheckboxActions(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)",
           "visibility": "public",
           "line": 13,
           "test": false,
@@ -392,7 +392,7 @@
       "methods": [
         {
           "name": "DropdownActions",
-          "signature": "public DropdownActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)",
+          "signature": "public DropdownActions(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)",
           "visibility": "public",
           "line": 13,
           "test": false,
@@ -488,15 +488,15 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
-      "name": "ElmentAction",
+      "path": "src/main/java/Plugin_ERP/Bots/ElementActions.java",
+      "name": "ElementActions",
       "package": "Plugin_ERP.Bots",
       "parent": "",
       "lines": 494,
       "methods": [
         {
-          "name": "ElmentAction",
-          "signature": "public ElmentAction(WebDriver driver)",
+          "name": "ElementActions",
+          "signature": "public ElementActions(WebDriver driver)",
           "visibility": "public",
           "line": 34,
           "test": false,
@@ -607,8 +607,8 @@
           "purpose": "انتظار عنصر ظاهر ومفعل ثم الضغط عليه بالطريقة المحددة."
         },
         {
-          "name": "TaypeText",
-          "signature": "public void TaypeText(By locator, String value)",
+          "name": "typeText",
+          "signature": "public void typeText(By locator, String value)",
           "visibility": "public",
           "line": 121,
           "test": false,
@@ -663,8 +663,8 @@
           "purpose": "ضغط إجراء النقر / المنطقة، حسب المدخلات والتخصص."
         },
         {
-          "name": "TaypeTextB",
-          "signature": "public void TaypeTextB(By locator, String value)",
+          "name": "typeTextAndVerify",
+          "signature": "public void typeTextAndVerify(By locator, String value)",
           "visibility": "public",
           "line": 265,
           "test": false,
@@ -704,7 +704,7 @@
         }
       ],
       "imports": [
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Allure",
         "io.qameta.allure.Step",
         "org.openqa.selenium.*",
@@ -724,7 +724,7 @@
       "sha256": "af28caa1a30e1e68de89ad0fe574d6ae751e1815414800d0703f96eb9d81569c",
       "status": "مصدر نشط",
       "dependencies": [
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
         "src/main/java/Plugin_ERP/System_Modules/Login/BasicData/CashFormReader.java",
@@ -758,7 +758,7 @@
       "methods": [
         {
           "name": "GridActions",
-          "signature": "public GridActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)",
+          "signature": "public GridActions(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)",
           "visibility": "public",
           "line": 15,
           "test": false,
@@ -1037,9 +1037,9 @@
       "callers": [
         "src/main/java/Plugin_ERP/Drivers/Chrome.java",
         "src/main/java/Plugin_ERP/Drivers/Edge.java",
-        "src/main/java/Plugin_ERP/Drivers/Firfox.java",
+        "src/main/java/Plugin_ERP/Drivers/Firefox.java",
         "src/main/java/Plugin_ERP/Drivers/WebDriverFactory.java",
-        "src/main/java/Plugin_ERP/Listners/TestNGListeners.java",
+        "src/main/java/Plugin_ERP/Listeners/TestNGListeners.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/AbstractForDealer.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/DealerFormControls.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/DealerModel/Agent.java",
@@ -1054,12 +1054,12 @@
         "src/main/java/Plugin_ERP/System_Modules/Login/PurchaseInvoiceSnapshot.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/StoreModel/ExchangeOrderPage.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/StoreQuantityEditor.java",
-        "src/main/java/Plugin_ERP/Utiel/Allur/AllureBinaryManger.java",
-        "src/main/java/Plugin_ERP/Utiel/Allur/AllureEnvironment.java",
-        "src/main/java/Plugin_ERP/Utiel/Allur/AllureUtils.java",
-        "src/main/java/Plugin_ERP/Utiel/FileUtils.java",
-        "src/main/java/Plugin_ERP/Utiel/LoginjsonReader.java",
-        "src/main/java/Plugin_ERP/Utiel/ScreenShotsUtils.java",
+        "src/main/java/Plugin_ERP/Util/Allur/AllureBinaryManger.java",
+        "src/main/java/Plugin_ERP/Util/Allur/AllureEnvironment.java",
+        "src/main/java/Plugin_ERP/Util/Allur/AllureUtils.java",
+        "src/main/java/Plugin_ERP/Util/FileUtils.java",
+        "src/main/java/Plugin_ERP/Util/LoginjsonReader.java",
+        "src/main/java/Plugin_ERP/Util/ScreenShotsUtils.java",
         "src/main/java/Plugin_ERP/Valditon/Validation.java"
       ]
     },
@@ -1072,7 +1072,7 @@
       "methods": [
         {
           "name": "PriceListActions",
-          "signature": "public PriceListActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)",
+          "signature": "public PriceListActions(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)",
           "visibility": "public",
           "line": 14,
           "test": false,
@@ -1169,7 +1169,7 @@
       "methods": [
         {
           "name": "UtilityActions",
-          "signature": "public UtilityActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)",
+          "signature": "public UtilityActions(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)",
           "visibility": "public",
           "line": 22,
           "test": false,
@@ -1274,7 +1274,7 @@
       "methods": [
         {
           "name": "ValidationActions",
-          "signature": "public ValidationActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)",
+          "signature": "public ValidationActions(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)",
           "visibility": "public",
           "line": 16,
           "test": false,
@@ -1397,7 +1397,7 @@
       "methods": [
         {
           "name": "WaitActions",
-          "signature": "public WaitActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment)",
+          "signature": "public WaitActions(WebDriver driver, WebDriverWait wait, WaitManagement waitMangment)",
           "visibility": "public",
           "line": 14,
           "test": false,
@@ -1501,7 +1501,7 @@
         }
       ],
       "imports": [
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "org.openqa.selenium.*",
         "org.openqa.selenium.support.ui.ExpectedConditions",
         "org.openqa.selenium.support.ui.WebDriverWait",
@@ -1514,20 +1514,20 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/BaseAction.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Bots/WaitMangment.java",
-      "name": "WaitMangment",
+      "path": "src/main/java/Plugin_ERP/Bots/WaitManagement.java",
+      "name": "WaitManagement",
       "package": "Plugin_ERP.Bots",
       "parent": "",
       "lines": 35,
       "methods": [
         {
-          "name": "WaitMangment",
-          "signature": "public WaitMangment(WebDriver driver)",
+          "name": "WaitManagement",
+          "signature": "public WaitManagement(WebDriver driver)",
           "visibility": "public",
           "line": 14,
           "test": false,
@@ -1551,7 +1551,7 @@
         }
       ],
       "imports": [
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "org.openqa.selenium.ElementClickInterceptedException",
         "org.openqa.selenium.WebDriver",
         "org.openqa.selenium.support.ui.FluentWait",
@@ -1562,7 +1562,7 @@
       "sha256": "51d5a19c41f5923dde61ce4cb0366a60c5f64e09ee6332f0dccccbb39f09b9e4",
       "status": "مصدر نشط",
       "dependencies": [
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
         "src/main/java/Plugin_ERP/System_Modules/Login/BasicData/TreasuryHandoverPage.java",
@@ -1640,7 +1640,7 @@
       ],
       "imports": [
         "Plugin_ERP.Models.*",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "java.math.BigDecimal",
         "java.math.RoundingMode",
         "java.util.List"
@@ -1649,7 +1649,7 @@
       "sha256": "d29802ec500e8b2b0ebb3e55fbd94af3ed9507d9a8a418e98a2c331ee3f7e6b3",
       "status": "مصدر نشط",
       "dependencies": [
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
         "src/main/java/Plugin_ERP/System_Modules/Login/AbstractForSales.java",
@@ -1688,19 +1688,19 @@
         }
       ],
       "imports": [
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "org.openqa.selenium.WebDriver"
       ],
       "role": "عقد إنشاء المتصفح وقراءة عنوان Selenium Grid عند الاستخدام البعيد.",
       "sha256": "da02899658d5971637c4c18c26b826642a462737eeee746dd41ef23f40a1a10d",
       "status": "مصدر نشط",
       "dependencies": [
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
         "src/main/java/Plugin_ERP/Drivers/Chrome.java",
         "src/main/java/Plugin_ERP/Drivers/Edge.java",
-        "src/main/java/Plugin_ERP/Drivers/Firfox.java"
+        "src/main/java/Plugin_ERP/Drivers/Firefox.java"
       ]
     },
     {
@@ -1778,7 +1778,7 @@
       ],
       "imports": [
         "Plugin_ERP.Bots.LogUtils",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "org.openqa.selenium.PageLoadStrategy",
         "org.openqa.selenium.WebDriver",
         "org.openqa.selenium.chrome.ChromeDriver",
@@ -1795,7 +1795,7 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/LogUtils.java",
         "src/main/java/Plugin_ERP/Drivers/AbstractDriver.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
         "src/test/java/CoverageTest/PermissionsCoverageTest.java",
@@ -1828,7 +1828,7 @@
       ],
       "imports": [
         "Plugin_ERP.Bots.LogUtils",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "org.openqa.selenium.PageLoadStrategy",
         "org.openqa.selenium.WebDriver",
         "org.openqa.selenium.edge.EdgeDriver",
@@ -1842,13 +1842,13 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/LogUtils.java",
         "src/main/java/Plugin_ERP/Drivers/AbstractDriver.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Drivers/Firfox.java",
-      "name": "Firfox",
+      "path": "src/main/java/Plugin_ERP/Drivers/Firefox.java",
+      "name": "Firefox",
       "package": "Plugin_ERP.Drivers",
       "parent": "AbstractDriver",
       "lines": 59,
@@ -1872,7 +1872,7 @@
       ],
       "imports": [
         "Plugin_ERP.Bots.LogUtils",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "org.openqa.selenium.PageLoadStrategy",
         "org.openqa.selenium.WebDriver",
         "org.openqa.selenium.firefox.FirefoxDriver",
@@ -1887,7 +1887,7 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/LogUtils.java",
         "src/main/java/Plugin_ERP/Drivers/AbstractDriver.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -1949,7 +1949,7 @@
       ],
       "imports": [
         "Plugin_ERP.Bots.LogUtils",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "org.openqa.selenium.WebDriver",
         "org.openqa.selenium.support.ThreadGuard"
       ],
@@ -1958,10 +1958,10 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/LogUtils.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
-        "src/main/java/Plugin_ERP/Listners/TestNGListeners.java",
+        "src/main/java/Plugin_ERP/Listeners/TestNGListeners.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/BasicData/CashFormReader.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/BasicData/CashPage.java",
         "src/test/java/Plugin_ERP/Tests/LoginTest/BaseTest.java",
@@ -2049,9 +2049,9 @@
       ]
     },
     {
-      "path": "src/main/java/Plugin_ERP/Listners/TestNGListeners.java",
+      "path": "src/main/java/Plugin_ERP/Listeners/TestNGListeners.java",
       "name": "TestNGListeners",
-      "package": "Plugin_ERP.Listners",
+      "package": "Plugin_ERP.Listeners",
       "parent": "",
       "lines": 224,
       "methods": [
@@ -2147,12 +2147,12 @@
       "imports": [
         "Plugin_ERP.Bots.LogUtils",
         "Plugin_ERP.Drivers.WebDriverFactory",
-        "Plugin_ERP.Utiel.Allur.AllureBinaryManger",
-        "Plugin_ERP.Utiel.Allur.AllureEnvironment",
-        "Plugin_ERP.Utiel.Allur.AllureConstants",
-        "Plugin_ERP.Utiel.Allur.AllureReportPolicy",
-        "Plugin_ERP.Utiel.PropertyReader",
-        "Plugin_ERP.Utiel.ScreenShotsUtils",
+        "Plugin_ERP.Util.Allur.AllureBinaryManger",
+        "Plugin_ERP.Util.Allur.AllureEnvironment",
+        "Plugin_ERP.Util.Allur.AllureConstants",
+        "Plugin_ERP.Util.Allur.AllureReportPolicy",
+        "Plugin_ERP.Util.PropertyReader",
+        "Plugin_ERP.Util.ScreenShotsUtils",
         "org.openqa.selenium.Capabilities",
         "org.openqa.selenium.WebDriver",
         "org.openqa.selenium.remote.RemoteWebDriver",
@@ -2172,12 +2172,12 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/LogUtils.java",
         "src/main/java/Plugin_ERP/Drivers/WebDriverFactory.java",
-        "src/main/java/Plugin_ERP/Utiel/Allur/AllureBinaryManger.java",
-        "src/main/java/Plugin_ERP/Utiel/Allur/AllureConstants.java",
-        "src/main/java/Plugin_ERP/Utiel/Allur/AllureEnvironment.java",
-        "src/main/java/Plugin_ERP/Utiel/Allur/AllureReportPolicy.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java",
-        "src/main/java/Plugin_ERP/Utiel/ScreenShotsUtils.java"
+        "src/main/java/Plugin_ERP/Util/Allur/AllureBinaryManger.java",
+        "src/main/java/Plugin_ERP/Util/Allur/AllureConstants.java",
+        "src/main/java/Plugin_ERP/Util/Allur/AllureEnvironment.java",
+        "src/main/java/Plugin_ERP/Util/Allur/AllureReportPolicy.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java",
+        "src/main/java/Plugin_ERP/Util/ScreenShotsUtils.java"
       ],
       "callers": [
         "src/test/java/Plugin_ERP/Tests/LoginTest/BaseTest.java",
@@ -2199,7 +2199,7 @@
       "status": "مصدر نشط",
       "dependencies": [],
       "callers": [
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ]
     },
     {
@@ -2541,7 +2541,7 @@
         "src/main/java/Plugin_ERP/System_Modules/Login/DocumentSummaryReader.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/InvoiceBusinessValidation.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/PurchaseInvoiceSnapshot.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java",
         "src/test/java/Plugin_ERP/System_Modules/Login/PageComponentDispatchTest.java"
       ]
     },
@@ -5172,11 +5172,11 @@
       ],
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
-        "Plugin_ERP.Bots.ElmentAction",
+        "Plugin_ERP.Bots.ElementActions",
         "Plugin_ERP.Drivers.WebDriverFactory",
         "Plugin_ERP.Enums.Pages",
         "Plugin_ERP.System_Modules.Login.AbstractForDealer",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
         "java.time.Duration",
         "java.util.*",
@@ -5190,11 +5190,11 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
         "src/main/java/Plugin_ERP/Drivers/WebDriverFactory.java",
         "src/main/java/Plugin_ERP/Enums/Pages.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/AbstractForDealer.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -5764,11 +5764,11 @@
       ],
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
-        "Plugin_ERP.Bots.ElmentAction",
+        "Plugin_ERP.Bots.ElementActions",
         "Plugin_ERP.Drivers.WebDriverFactory",
         "Plugin_ERP.Enums.Pages",
         "Plugin_ERP.System_Modules.Login.AbstractForDealer",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
         "junit.framework.Assert",
         "org.openqa.selenium.By",
@@ -5785,11 +5785,11 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
         "src/main/java/Plugin_ERP/Drivers/WebDriverFactory.java",
         "src/main/java/Plugin_ERP/Enums/Pages.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/AbstractForDealer.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
         "src/test/java/Plugin_ERP/Tests/LoginTest/BasicDataTest/CashTest.java"
@@ -6852,7 +6852,7 @@
       ],
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
-        "Plugin_ERP.Bots.ElmentAction",
+        "Plugin_ERP.Bots.ElementActions",
         "org.openqa.selenium.By",
         "org.openqa.selenium.WebDriver"
       ],
@@ -6861,7 +6861,7 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java"
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java"
       ],
       "callers": []
     },
@@ -8338,8 +8338,8 @@
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
         "Plugin_ERP.Bots.BrowserAction",
-        "Plugin_ERP.Bots.ElmentAction",
-        "Plugin_ERP.Bots.WaitMangment",
+        "Plugin_ERP.Bots.ElementActions",
+        "Plugin_ERP.Bots.WaitManagement",
         "Plugin_ERP.System_Modules.Login.AbstractForDealer",
         "io.qameta.allure.Step",
         "org.openqa.selenium.By",
@@ -8358,8 +8358,8 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
         "src/main/java/Plugin_ERP/Bots/BrowserAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
-        "src/main/java/Plugin_ERP/Bots/WaitMangment.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
+        "src/main/java/Plugin_ERP/Bots/WaitManagement.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/AbstractForDealer.java"
       ],
       "callers": [
@@ -8513,7 +8513,7 @@
       ],
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
-        "Plugin_ERP.Bots.ElmentAction",
+        "Plugin_ERP.Bots.ElementActions",
         "Plugin_ERP.System_Modules.Login.AbstractForDealer",
         "io.qameta.allure.Step",
         "org.openqa.selenium.By",
@@ -8528,7 +8528,7 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/AbstractForDealer.java"
       ],
       "callers": [
@@ -8890,8 +8890,8 @@
         }
       ],
       "imports": [
-        "Plugin_ERP.Utiel.FormInteractions",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.FormInteractions",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
         "java.time.Duration",
         "java.util.*",
@@ -8902,8 +8902,8 @@
       "sha256": "9e8f39ae40248059f2927ff38feb40b69b2d5abbecd4a8a3987382d332907161",
       "status": "مصدر نشط",
       "dependencies": [
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
         "src/test/java/CoverageTest/AuditLogCoverageTest.java",
@@ -9848,7 +9848,7 @@
         },
         {
           "name": "chooseOwned",
-          "signature": "private void chooseOwned(Plugin_ERP.Utiel.FormInteractions form, String label, String name)",
+          "signature": "private void chooseOwned(Plugin_ERP.Util.FormInteractions form, String label, String name)",
           "visibility": "private",
           "line": 41,
           "test": false,
@@ -10377,7 +10377,7 @@
         "Plugin_ERP.Models.InvoiceTotals",
         "Plugin_ERP.Models.ReportTotals",
         "Plugin_ERP.Models.TaxMode",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Allure",
         "io.qameta.allure.Step",
         "java.math.BigDecimal",
@@ -10397,7 +10397,7 @@
         "src/main/java/Plugin_ERP/Models/InvoiceTotals.java",
         "src/main/java/Plugin_ERP/Models/ReportTotals.java",
         "src/main/java/Plugin_ERP/Models/TaxMode.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -11087,7 +11087,7 @@
         "Plugin_ERP.Models.ReportTotals",
         "Plugin_ERP.Models.TaxMode",
         "Plugin_ERP.System_Modules.Login.purches.PurchesBillsPage",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Allure",
         "io.qameta.allure.Step",
         "java.math.BigDecimal",
@@ -11113,7 +11113,7 @@
         "src/main/java/Plugin_ERP/Models/TaxMode.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/purches/PurchesBillsPage.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
         "src/main/java/Plugin_ERP/System_Modules/Login/AbstractForBills.java",
@@ -11185,7 +11185,7 @@
         "Plugin_ERP.Models.InvoiceTotals",
         "Plugin_ERP.Models.ReportTotals",
         "Plugin_ERP.Models.TaxMode",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Allure",
         "io.qameta.allure.Step",
         "java.math.BigDecimal",
@@ -11205,7 +11205,7 @@
         "src/main/java/Plugin_ERP/Models/InvoiceTotals.java",
         "src/main/java/Plugin_ERP/Models/ReportTotals.java",
         "src/main/java/Plugin_ERP/Models/TaxMode.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -11256,7 +11256,7 @@
         "Plugin_ERP.Models.InvoiceTotals",
         "Plugin_ERP.Models.ReportTotals",
         "Plugin_ERP.Models.TaxMode",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Allure",
         "io.qameta.allure.Step",
         "java.math.BigDecimal",
@@ -11276,7 +11276,7 @@
         "src/main/java/Plugin_ERP/Models/InvoiceTotals.java",
         "src/main/java/Plugin_ERP/Models/ReportTotals.java",
         "src/main/java/Plugin_ERP/Models/TaxMode.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -11378,7 +11378,7 @@
         "Plugin_ERP.Models.InvoiceTotals",
         "Plugin_ERP.Models.ReportTotals",
         "Plugin_ERP.Models.TaxMode",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Allure",
         "io.qameta.allure.Step",
         "java.math.BigDecimal",
@@ -11398,7 +11398,7 @@
         "src/main/java/Plugin_ERP/Models/InvoiceTotals.java",
         "src/main/java/Plugin_ERP/Models/ReportTotals.java",
         "src/main/java/Plugin_ERP/Models/TaxMode.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -11525,8 +11525,8 @@
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
         "Plugin_ERP.Bots.BrowserAction",
-        "Plugin_ERP.Bots.ElmentAction",
-        "Plugin_ERP.Bots.WaitMangment",
+        "Plugin_ERP.Bots.ElementActions",
+        "Plugin_ERP.Bots.WaitManagement",
         "Plugin_ERP.System_Modules.Login.Abstract",
         "io.qameta.allure.Allure",
         "io.qameta.allure.Step",
@@ -11544,8 +11544,8 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
         "src/main/java/Plugin_ERP/Bots/BrowserAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
-        "src/main/java/Plugin_ERP/Bots/WaitMangment.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
+        "src/main/java/Plugin_ERP/Bots/WaitManagement.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/FinancialMovements/FinancialMovementPage.java"
       ],
@@ -11626,8 +11626,8 @@
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
         "Plugin_ERP.Bots.BrowserAction",
-        "Plugin_ERP.Bots.ElmentAction",
-        "Plugin_ERP.Bots.WaitMangment",
+        "Plugin_ERP.Bots.ElementActions",
+        "Plugin_ERP.Bots.WaitManagement",
         "Plugin_ERP.System_Modules.Login.Abstract",
         "io.qameta.allure.Step",
         "org.openqa.selenium.By",
@@ -11645,8 +11645,8 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
         "src/main/java/Plugin_ERP/Bots/BrowserAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
-        "src/main/java/Plugin_ERP/Bots/WaitMangment.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
+        "src/main/java/Plugin_ERP/Bots/WaitManagement.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/FinancialMovements/FinancialMovementPage.java"
       ],
@@ -11767,8 +11767,8 @@
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
         "Plugin_ERP.Bots.BrowserAction",
-        "Plugin_ERP.Bots.ElmentAction",
-        "Plugin_ERP.Bots.WaitMangment",
+        "Plugin_ERP.Bots.ElementActions",
+        "Plugin_ERP.Bots.WaitManagement",
         "Plugin_ERP.System_Modules.Login.Abstract",
         "io.qameta.allure.Allure",
         "io.qameta.allure.Step",
@@ -11788,8 +11788,8 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
         "src/main/java/Plugin_ERP/Bots/BrowserAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
-        "src/main/java/Plugin_ERP/Bots/WaitMangment.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
+        "src/main/java/Plugin_ERP/Bots/WaitManagement.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/FinancialMovements/FinancialMovementPage.java"
       ],
@@ -12235,9 +12235,9 @@
       "imports": [
         "Plugin_ERP.Enums.Pages",
         "Plugin_ERP.System_Modules.Login.Abstract",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
-        "Plugin_ERP.Utiel.FormInteractions",
+        "Plugin_ERP.Util.FormInteractions",
         "java.time.Duration",
         "java.math.BigDecimal",
         "java.util.*",
@@ -12250,8 +12250,8 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Enums/Pages.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
         "src/main/java/Plugin_ERP/System_Modules/Login/FinancialMovements/CustomerDiscountNoticePage.java",
@@ -12395,8 +12395,8 @@
       "imports": [
         "Plugin_ERP.Enums.Pages",
         "Plugin_ERP.System_Modules.Login.Abstract",
-        "Plugin_ERP.Utiel.FormInteractions",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.FormInteractions",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
         "java.math.BigDecimal",
         "java.time.Duration",
@@ -12410,8 +12410,8 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Enums/Pages.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -12482,8 +12482,8 @@
       "imports": [
         "Plugin_ERP.Enums.Pages",
         "Plugin_ERP.System_Modules.Login.Abstract",
-        "Plugin_ERP.Utiel.FormInteractions",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.FormInteractions",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
         "java.math.BigDecimal",
         "java.time.Duration",
@@ -12497,8 +12497,8 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Enums/Pages.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -12569,8 +12569,8 @@
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
         "Plugin_ERP.Bots.BrowserAction",
-        "Plugin_ERP.Bots.ElmentAction",
-        "Plugin_ERP.Bots.WaitMangment",
+        "Plugin_ERP.Bots.ElementActions",
+        "Plugin_ERP.Bots.WaitManagement",
         "Plugin_ERP.System_Modules.Login.Abstract",
         "io.qameta.allure.Step",
         "org.openqa.selenium.By",
@@ -12587,8 +12587,8 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
         "src/main/java/Plugin_ERP/Bots/BrowserAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
-        "src/main/java/Plugin_ERP/Bots/WaitMangment.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
+        "src/main/java/Plugin_ERP/Bots/WaitManagement.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/FinancialMovements/FinancialMovementPage.java"
       ],
@@ -12677,8 +12677,8 @@
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
         "Plugin_ERP.Bots.BrowserAction",
-        "Plugin_ERP.Bots.ElmentAction",
-        "Plugin_ERP.Bots.WaitMangment",
+        "Plugin_ERP.Bots.ElementActions",
+        "Plugin_ERP.Bots.WaitManagement",
         "Plugin_ERP.System_Modules.Login.Abstract",
         "io.qameta.allure.Step",
         "org.openqa.selenium.By",
@@ -12698,8 +12698,8 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
         "src/main/java/Plugin_ERP/Bots/BrowserAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
-        "src/main/java/Plugin_ERP/Bots/WaitMangment.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
+        "src/main/java/Plugin_ERP/Bots/WaitManagement.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/FinancialMovements/FinancialMovementPage.java"
       ],
@@ -12828,8 +12828,8 @@
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
         "Plugin_ERP.Bots.BrowserAction",
-        "Plugin_ERP.Bots.ElmentAction",
-        "Plugin_ERP.Bots.WaitMangment",
+        "Plugin_ERP.Bots.ElementActions",
+        "Plugin_ERP.Bots.WaitManagement",
         "Plugin_ERP.System_Modules.Login.Abstract",
         "io.qameta.allure.Allure",
         "io.qameta.allure.Step",
@@ -12847,8 +12847,8 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
         "src/main/java/Plugin_ERP/Bots/BrowserAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
-        "src/main/java/Plugin_ERP/Bots/WaitMangment.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
+        "src/main/java/Plugin_ERP/Bots/WaitManagement.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/FinancialMovements/FinancialMovementPage.java"
       ],
@@ -12913,8 +12913,8 @@
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
         "Plugin_ERP.Bots.BrowserAction",
-        "Plugin_ERP.Bots.ElmentAction",
-        "Plugin_ERP.Bots.WaitMangment",
+        "Plugin_ERP.Bots.ElementActions",
+        "Plugin_ERP.Bots.WaitManagement",
         "Plugin_ERP.System_Modules.Login.Abstract",
         "io.qameta.allure.Step",
         "org.openqa.selenium.By",
@@ -12926,8 +12926,8 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
         "src/main/java/Plugin_ERP/Bots/BrowserAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
-        "src/main/java/Plugin_ERP/Bots/WaitMangment.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
+        "src/main/java/Plugin_ERP/Bots/WaitManagement.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/FinancialMovements/FinancialMovementPage.java"
       ],
@@ -12942,7 +12942,7 @@
       "methods": [
         {
           "name": "VoucherAccountPicker",
-          "signature": "VoucherAccountPicker(VouchersPage page, WebDriver driver, Plugin_ERP.Bots.ElmentAction utilites, Plugin_ERP.Bots.WaitMangment waitMangment)",
+          "signature": "VoucherAccountPicker(VouchersPage page, WebDriver driver, Plugin_ERP.Bots.ElementActions utilites, Plugin_ERP.Bots.WaitManagement waitMangment)",
           "visibility": "داخل الحزمة",
           "line": 14,
           "test": false,
@@ -13857,7 +13857,7 @@
         },
         {
           "name": "lineWaits",
-          "signature": "Plugin_ERP.Bots.WaitMangment lineWaits()",
+          "signature": "Plugin_ERP.Bots.WaitManagement lineWaits()",
           "visibility": "داخل الحزمة",
           "line": 351,
           "test": false,
@@ -15123,7 +15123,7 @@
         }
       ],
       "imports": [
-        "Plugin_ERP.Utiel.FormInteractions",
+        "Plugin_ERP.Util.FormInteractions",
         "java.util.List",
         "org.openqa.selenium.By",
         "org.openqa.selenium.WebDriver",
@@ -15133,7 +15133,7 @@
       "sha256": "1f46bb0b0a5e9d2a7e150d0df7dc827a81dd5b282e9551a0b8ec868585610a4f",
       "status": "مصدر نشط",
       "dependencies": [
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java"
       ],
       "callers": []
     },
@@ -15275,8 +15275,8 @@
       ],
       "imports": [
         "Plugin_ERP.System_Modules.Login.AbstractForSales",
-        "Plugin_ERP.Utiel.FormInteractions",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.FormInteractions",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
         "java.time.Duration",
         "java.util.*",
@@ -15288,8 +15288,8 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/System_Modules/Login/AbstractForSales.java",
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -16248,9 +16248,9 @@
       ],
       "imports": [
         "Plugin_ERP.System_Modules.Login.AbstractForSales",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
-        "Plugin_ERP.Utiel.FormInteractions",
+        "Plugin_ERP.Util.FormInteractions",
         "java.time.Duration",
         "java.util.*",
         "org.openqa.selenium.*",
@@ -16261,8 +16261,8 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/System_Modules/Login/AbstractForSales.java",
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
         "src/main/java/Plugin_ERP/System_Modules/Login/Invoice/Invoice.java",
@@ -16272,7 +16272,7 @@
         "src/main/java/Plugin_ERP/System_Modules/Login/Invoice/SalesReturnPage.java",
         "src/test/java/Invoice/SalesWorkflow.java",
         "src/test/java/Invoice/UnderReviewCoverageTest.java",
-        "src/test/java/Plugin_ERP/Utiel/SalesNavigationTest.java",
+        "src/test/java/Plugin_ERP/Util/SalesNavigationTest.java",
         "src/test/java/Purches/PurchaseDiscoveryTest.java"
       ]
     },
@@ -16353,8 +16353,8 @@
       ],
       "imports": [
         "Plugin_ERP.System_Modules.Login.AbstractForSales",
-        "Plugin_ERP.Utiel.FormInteractions",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.FormInteractions",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
         "java.time.Duration",
         "java.util.*",
@@ -16366,8 +16366,8 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/System_Modules/Login/AbstractForSales.java",
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -16575,7 +16575,7 @@
         "Plugin_ERP.Models.InvoiceTotals",
         "Plugin_ERP.Models.ReportTotals",
         "Plugin_ERP.Models.TaxMode",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Allure",
         "java.math.BigDecimal",
         "org.testng.Assert"
@@ -16588,7 +16588,7 @@
         "src/main/java/Plugin_ERP/Models/InvoiceTotals.java",
         "src/main/java/Plugin_ERP/Models/ReportTotals.java",
         "src/main/java/Plugin_ERP/Models/TaxMode.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -16649,7 +16649,7 @@
         }
       ],
       "imports": [
-        "Plugin_ERP.Bots.ElmentAction",
+        "Plugin_ERP.Bots.ElementActions",
         "io.qameta.allure.Step",
         "org.openqa.selenium.By",
         "org.openqa.selenium.WebDriver",
@@ -16663,7 +16663,7 @@
       "sha256": "0ea9efbf1900a33b4da3d2f1703e84edf0a8e20a7cfa2bc8bff8b957fb74dbb1",
       "status": "مصدر نشط",
       "dependencies": [
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java"
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java"
       ],
       "callers": [
         "src/test/java/CoverageTest/PermissionsCoverageTest.java",
@@ -16684,7 +16684,7 @@
       "methods": [
         {
           "name": "PageContext",
-          "signature": "public record PageContext(WebDriver driver, ElmentAction elements, WaitMangment waits, BrowserAction browser, Actions actions)",
+          "signature": "public record PageContext(WebDriver driver, ElementActions elements, WaitManagement waits, BrowserAction browser, Actions actions)",
           "visibility": "public",
           "line": 10,
           "test": false,
@@ -16693,8 +16693,8 @@
       ],
       "imports": [
         "Plugin_ERP.Bots.BrowserAction",
-        "Plugin_ERP.Bots.ElmentAction",
-        "Plugin_ERP.Bots.WaitMangment",
+        "Plugin_ERP.Bots.ElementActions",
+        "Plugin_ERP.Bots.WaitManagement",
         "org.openqa.selenium.WebDriver",
         "org.openqa.selenium.interactions.Actions"
       ],
@@ -16703,8 +16703,8 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/BrowserAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
-        "src/main/java/Plugin_ERP/Bots/WaitMangment.java"
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
+        "src/main/java/Plugin_ERP/Bots/WaitManagement.java"
       ],
       "callers": []
     },
@@ -17568,8 +17568,8 @@
       ],
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
-        "Plugin_ERP.Bots.ElmentAction",
-        "Plugin_ERP.Bots.WaitMangment",
+        "Plugin_ERP.Bots.ElementActions",
+        "Plugin_ERP.Bots.WaitManagement",
         "Plugin_ERP.System_Modules.Login.Abstract",
         "io.qameta.allure.Step",
         "org.openqa.selenium.By",
@@ -17582,8 +17582,8 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
-        "src/main/java/Plugin_ERP/Bots/WaitMangment.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
+        "src/main/java/Plugin_ERP/Bots/WaitManagement.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Products/ProductsModulePage.java"
       ],
@@ -17632,8 +17632,8 @@
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
         "Plugin_ERP.Bots.BrowserAction",
-        "Plugin_ERP.Bots.ElmentAction",
-        "Plugin_ERP.Bots.WaitMangment",
+        "Plugin_ERP.Bots.ElementActions",
+        "Plugin_ERP.Bots.WaitManagement",
         "Plugin_ERP.System_Modules.Login.Abstract",
         "io.qameta.allure.Step",
         "org.openqa.selenium.By",
@@ -17645,8 +17645,8 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
         "src/main/java/Plugin_ERP/Bots/BrowserAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
-        "src/main/java/Plugin_ERP/Bots/WaitMangment.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
+        "src/main/java/Plugin_ERP/Bots/WaitManagement.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Products/ProductsModulePage.java"
       ],
@@ -17734,8 +17734,8 @@
       ],
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
-        "Plugin_ERP.Bots.ElmentAction",
-        "Plugin_ERP.Bots.WaitMangment",
+        "Plugin_ERP.Bots.ElementActions",
+        "Plugin_ERP.Bots.WaitManagement",
         "Plugin_ERP.System_Modules.Login.Abstract",
         "io.qameta.allure.Step",
         "java.util.*",
@@ -17747,8 +17747,8 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
-        "src/main/java/Plugin_ERP/Bots/WaitMangment.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
+        "src/main/java/Plugin_ERP/Bots/WaitManagement.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java"
       ],
       "callers": []
@@ -17884,8 +17884,8 @@
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
         "Plugin_ERP.Bots.BrowserAction",
-        "Plugin_ERP.Bots.ElmentAction",
-        "Plugin_ERP.Bots.WaitMangment",
+        "Plugin_ERP.Bots.ElementActions",
+        "Plugin_ERP.Bots.WaitManagement",
         "Plugin_ERP.System_Modules.Login.Abstract",
         "io.qameta.allure.Step",
         "org.openqa.selenium.By",
@@ -17899,8 +17899,8 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
         "src/main/java/Plugin_ERP/Bots/BrowserAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
-        "src/main/java/Plugin_ERP/Bots/WaitMangment.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
+        "src/main/java/Plugin_ERP/Bots/WaitManagement.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Products/ProductsModulePage.java"
       ],
@@ -17989,8 +17989,8 @@
       "imports": [
         "Plugin_ERP.Enums.Pages",
         "Plugin_ERP.System_Modules.Login.Abstract",
-        "Plugin_ERP.Utiel.FormInteractions",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.FormInteractions",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
         "java.time.Duration",
         "java.util.*",
@@ -18003,8 +18003,8 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Enums/Pages.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -18075,8 +18075,8 @@
       "imports": [
         "Plugin_ERP.Enums.Pages",
         "Plugin_ERP.System_Modules.Login.Abstract",
-        "Plugin_ERP.Utiel.FormInteractions",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.FormInteractions",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
         "java.time.Duration",
         "java.util.*",
@@ -18089,8 +18089,8 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Enums/Pages.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -18473,9 +18473,9 @@
       "imports": [
         "Plugin_ERP.Enums.Pages",
         "Plugin_ERP.System_Modules.Login.Abstract",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
-        "Plugin_ERP.Utiel.FormInteractions",
+        "Plugin_ERP.Util.FormInteractions",
         "java.time.Duration",
         "java.util.*",
         "org.openqa.selenium.*",
@@ -18487,8 +18487,8 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Enums/Pages.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
         "src/main/java/Plugin_ERP/System_Modules/Login/Products/AddProductsPage.java",
@@ -18571,8 +18571,8 @@
       ],
       "imports": [
         "Plugin_ERP.Bots.AlertAction",
-        "Plugin_ERP.Bots.ElmentAction",
-        "Plugin_ERP.Bots.WaitMangment",
+        "Plugin_ERP.Bots.ElementActions",
+        "Plugin_ERP.Bots.WaitManagement",
         "Plugin_ERP.System_Modules.Login.Abstract",
         "io.qameta.allure.Step",
         "java.util.*",
@@ -18584,8 +18584,8 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/AlertAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
-        "src/main/java/Plugin_ERP/Bots/WaitMangment.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
+        "src/main/java/Plugin_ERP/Bots/WaitManagement.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java"
       ],
       "callers": []
@@ -18709,7 +18709,7 @@
         "Plugin_ERP.Models.InvoiceTotals",
         "Plugin_ERP.Models.ReportTotals",
         "Plugin_ERP.Models.TaxMode",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Allure",
         "io.qameta.allure.Step",
         "java.math.BigDecimal",
@@ -18729,7 +18729,7 @@
         "src/main/java/Plugin_ERP/Models/InvoiceTotals.java",
         "src/main/java/Plugin_ERP/Models/ReportTotals.java",
         "src/main/java/Plugin_ERP/Models/TaxMode.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -18854,7 +18854,7 @@
         }
       ],
       "imports": [
-        "Plugin_ERP.Utiel.FormInteractions",
+        "Plugin_ERP.Util.FormInteractions",
         "java.util.List",
         "org.openqa.selenium.By",
         "org.openqa.selenium.WebDriver",
@@ -18864,7 +18864,7 @@
       "sha256": "bd9c92b2f126e45aa978c44cc48774097095f5579f0f6a683b727f949bd1aad7",
       "status": "مصدر نشط",
       "dependencies": [
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java"
       ],
       "callers": []
     },
@@ -19022,8 +19022,8 @@
       ],
       "imports": [
         "Plugin_ERP.System_Modules.Login.AbstractForPurchases",
-        "Plugin_ERP.Utiel.FormInteractions",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.FormInteractions",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
         "java.time.Duration",
         "java.util.*",
@@ -19035,8 +19035,8 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/System_Modules/Login/AbstractForPurchases.java",
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -19336,8 +19336,8 @@
       ],
       "imports": [
         "Plugin_ERP.System_Modules.Login.AbstractForPurchases",
-        "Plugin_ERP.Utiel.FormInteractions",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.FormInteractions",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
         "java.time.Duration",
         "java.util.*",
@@ -19349,8 +19349,8 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/System_Modules/Login/AbstractForPurchases.java",
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -20167,9 +20167,9 @@
       ],
       "imports": [
         "Plugin_ERP.System_Modules.Login.AbstractForPurchases",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
-        "Plugin_ERP.Utiel.FormInteractions",
+        "Plugin_ERP.Util.FormInteractions",
         "java.time.Duration",
         "java.util.*",
         "org.openqa.selenium.*",
@@ -20180,8 +20180,8 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/System_Modules/Login/AbstractForPurchases.java",
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
         "src/test/java/Purches/PurchaseScenarioTest.java"
@@ -20237,8 +20237,8 @@
       ],
       "imports": [
         "Plugin_ERP.System_Modules.Login.AbstractForPurchases",
-        "Plugin_ERP.Utiel.FormInteractions",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.FormInteractions",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
         "java.time.Duration",
         "java.util.*",
@@ -20250,8 +20250,8 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/System_Modules/Login/AbstractForPurchases.java",
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -21249,7 +21249,7 @@
       ],
       "imports": [
         "Plugin_ERP.System_Modules.Login.Abstract",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
         "java.time.Duration",
         "java.util.*",
@@ -21261,7 +21261,7 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -21965,7 +21965,7 @@
       ],
       "imports": [
         "Plugin_ERP.System_Modules.Login.Abstract",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
         "org.openqa.selenium.*",
         "org.openqa.selenium.support.ui.WebDriverWait",
@@ -21977,7 +21977,7 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/System_Modules/Login/Abstract.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
         "src/main/java/Plugin_ERP/System_Modules/Login/SpecialSales/PointOfSalePage.java",
@@ -22602,9 +22602,9 @@
       ],
       "imports": [
         "Plugin_ERP.System_Modules.Login.AbstractForStore",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
-        "Plugin_ERP.Utiel.FormInteractions",
+        "Plugin_ERP.Util.FormInteractions",
         "java.time.Duration",
         "java.util.*",
         "org.openqa.selenium.*",
@@ -22615,8 +22615,8 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/System_Modules/Login/AbstractForStore.java",
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
         "src/main/java/Plugin_ERP/System_Modules/Login/StoreModel/AdditionOrderPage.java",
@@ -22714,8 +22714,8 @@
       ],
       "imports": [
         "Plugin_ERP.System_Modules.Login.AbstractForStore",
-        "Plugin_ERP.Utiel.FormInteractions",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.FormInteractions",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
         "java.time.Duration",
         "java.util.*",
@@ -22727,8 +22727,8 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/System_Modules/Login/AbstractForStore.java",
-        "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/FormInteractions.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
@@ -23004,9 +23004,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/Allur/AllureAttachment.java",
+      "path": "src/main/java/Plugin_ERP/Util/Allur/AllureAttachment.java",
       "name": "AllureAttachment",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 3,
       "methods": [],
@@ -23018,9 +23018,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/Allur/AllureBinaryManger.java",
+      "path": "src/main/java/Plugin_ERP/Util/Allur/AllureBinaryManger.java",
       "name": "AllureBinaryManger",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 319,
       "methods": [
@@ -23146,13 +23146,13 @@
         "src/main/java/Plugin_ERP/Bots/LogUtils.java"
       ],
       "callers": [
-        "src/main/java/Plugin_ERP/Listners/TestNGListeners.java"
+        "src/main/java/Plugin_ERP/Listeners/TestNGListeners.java"
       ]
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/Allur/AllureConstants.java",
+      "path": "src/main/java/Plugin_ERP/Util/Allur/AllureConstants.java",
       "name": "AllureConstants",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 56,
       "methods": [
@@ -23174,13 +23174,13 @@
       "status": "مصدر نشط",
       "dependencies": [],
       "callers": [
-        "src/main/java/Plugin_ERP/Listners/TestNGListeners.java"
+        "src/main/java/Plugin_ERP/Listeners/TestNGListeners.java"
       ]
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/Allur/AllureEnvironment.java",
+      "path": "src/main/java/Plugin_ERP/Util/Allur/AllureEnvironment.java",
       "name": "AllureEnvironment",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 113,
       "methods": [
@@ -23235,7 +23235,7 @@
         "java.time.Instant",
         "java.time.ZoneId",
         "java.time.format.DateTimeFormatter",
-        "Plugin_ERP.Utiel.PropertyReader.getProperty"
+        "Plugin_ERP.Util.PropertyReader.getProperty"
       ],
       "role": "كتابة معلومات بيئة التشغيل في التقرير مع تحديث بيانات المتصفح.",
       "sha256": "57d5f265e113e6bb1da0a68d6fb215cfb07f73171e268458978ec60a85c2a848",
@@ -23244,13 +23244,13 @@
         "src/main/java/Plugin_ERP/Bots/LogUtils.java"
       ],
       "callers": [
-        "src/main/java/Plugin_ERP/Listners/TestNGListeners.java"
+        "src/main/java/Plugin_ERP/Listeners/TestNGListeners.java"
       ]
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/Allur/AllureReportGenerator.java",
+      "path": "src/main/java/Plugin_ERP/Util/Allur/AllureReportGenerator.java",
       "name": "AllureReportGenerator",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 3,
       "methods": [],
@@ -23262,9 +23262,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/Allur/AllureReportPolicy.java",
+      "path": "src/main/java/Plugin_ERP/Util/Allur/AllureReportPolicy.java",
       "name": "AllureReportPolicy",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 19,
       "methods": [
@@ -23301,13 +23301,13 @@
       "status": "مصدر نشط",
       "dependencies": [],
       "callers": [
-        "src/main/java/Plugin_ERP/Listners/TestNGListeners.java"
+        "src/main/java/Plugin_ERP/Listeners/TestNGListeners.java"
       ]
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/Allur/AllureUtils.java",
+      "path": "src/main/java/Plugin_ERP/Util/Allur/AllureUtils.java",
       "name": "AllureUtils",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 57,
       "methods": [
@@ -23358,13 +23358,13 @@
         "src/main/java/Plugin_ERP/Bots/LogUtils.java"
       ],
       "callers": [
-        "src/main/java/Plugin_ERP/Utiel/ScreenShotsUtils.java"
+        "src/main/java/Plugin_ERP/Util/ScreenShotsUtils.java"
       ]
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/Allur/DriveReportStore.java",
+      "path": "src/main/java/Plugin_ERP/Util/Allur/DriveReportStore.java",
       "name": "DriveReportStore",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 178,
       "methods": [
@@ -23508,9 +23508,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/Allur/ReportDelivery.java",
+      "path": "src/main/java/Plugin_ERP/Util/Allur/ReportDelivery.java",
       "name": "ReportDelivery",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 44,
       "methods": [
@@ -23542,9 +23542,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/Allur/ReportMail.java",
+      "path": "src/main/java/Plugin_ERP/Util/Allur/ReportMail.java",
       "name": "ReportMail",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 142,
       "methods": [
@@ -23626,9 +23626,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/Allur/ReportMailCommand.java",
+      "path": "src/main/java/Plugin_ERP/Util/Allur/ReportMailCommand.java",
       "name": "ReportMailCommand",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 108,
       "methods": [
@@ -23691,9 +23691,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/Allur/ReportMailTemplate.java",
+      "path": "src/main/java/Plugin_ERP/Util/Allur/ReportMailTemplate.java",
       "name": "ReportMailTemplate",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 141,
       "methods": [
@@ -23887,20 +23887,20 @@
         "java.time.*",
         "java.time.format.DateTimeFormatter",
         "java.util.*",
-        "Plugin_ERP.Utiel.PropertyReader"
+        "Plugin_ERP.Util.PropertyReader"
       ],
       "role": "شكل ملخص رسالة نتائج الاختبار.",
       "sha256": "6ae9476ad73b38a9af75f3e2b84096eb91029c68a96c1fb220653edfa51a9f50",
       "status": "مصدر نشط",
       "dependencies": [
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/Allur/ScenarioAccess.java",
+      "path": "src/main/java/Plugin_ERP/Util/Allur/ScenarioAccess.java",
       "name": "ScenarioAccess",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 53,
       "methods": [
@@ -23946,7 +23946,7 @@
         }
       ],
       "imports": [
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Allure",
         "io.qameta.allure.model.Link",
         "io.qameta.allure.model.Parameter",
@@ -23959,14 +23959,14 @@
       "sha256": "8cb1951cb63a99fe5d6e789a66a42e00edbe1676d470b5199eec0d5da5340555",
       "status": "مصدر نشط",
       "dependencies": [
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/Allur/ScenarioAssertions.java",
+      "path": "src/main/java/Plugin_ERP/Util/Allur/ScenarioAssertions.java",
       "name": "ScenarioAssertions",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 119,
       "methods": [
@@ -24071,9 +24071,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/Allur/ScenarioSoftAssert.java",
+      "path": "src/main/java/Plugin_ERP/Util/Allur/ScenarioSoftAssert.java",
       "name": "ScenarioSoftAssert",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "SoftAssert",
       "lines": 14,
       "methods": [],
@@ -24088,9 +24088,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/Allur/ScreenNames.java",
+      "path": "src/main/java/Plugin_ERP/Util/Allur/ScreenNames.java",
       "name": "ScreenNames",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 44,
       "methods": [
@@ -24130,9 +24130,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/ConfigurationProperties.java",
+      "path": "src/main/java/Plugin_ERP/Util/ConfigurationProperties.java",
       "name": "ConfigurationProperties",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 76,
       "methods": [
@@ -24195,9 +24195,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/CSVReader.java",
+      "path": "src/main/java/Plugin_ERP/Util/CSVReader.java",
       "name": "CSVReader",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 3,
       "methods": [],
@@ -24209,9 +24209,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/DocumentDates.java",
+      "path": "src/main/java/Plugin_ERP/Util/DocumentDates.java",
       "name": "DocumentDates",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 30,
       "methods": [
@@ -24248,9 +24248,9 @@
       ]
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/ExcelReader.java",
+      "path": "src/main/java/Plugin_ERP/Util/ExcelReader.java",
       "name": "ExcelReader",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 3,
       "methods": [],
@@ -24262,9 +24262,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/FileUtils.java",
+      "path": "src/main/java/Plugin_ERP/Util/FileUtils.java",
       "name": "FileUtils",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 66,
       "methods": [
@@ -24306,9 +24306,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/FormInteractions.java",
+      "path": "src/main/java/Plugin_ERP/Util/FormInteractions.java",
       "name": "FormInteractions",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 109,
       "methods": [
@@ -24394,9 +24394,9 @@
       ]
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/LoginjsonReader.java",
+      "path": "src/main/java/Plugin_ERP/Util/LoginjsonReader.java",
       "name": "LoginjsonReader",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 39,
       "methods": [
@@ -24433,9 +24433,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/NativeCheckbox.java",
+      "path": "src/main/java/Plugin_ERP/Util/NativeCheckbox.java",
       "name": "NativeCheckbox",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 39,
       "methods": [
@@ -24470,9 +24470,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/OSUtils.java",
+      "path": "src/main/java/Plugin_ERP/Util/OSUtils.java",
       "name": "OSUtils",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 23,
       "methods": [
@@ -24493,9 +24493,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/PrintedInvoiceAssertions.java",
+      "path": "src/main/java/Plugin_ERP/Util/PrintedInvoiceAssertions.java",
       "name": "PrintedInvoiceAssertions",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 66,
       "methods": [
@@ -24592,9 +24592,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/PropertyReader.java",
+      "path": "src/main/java/Plugin_ERP/Util/PropertyReader.java",
       "name": "PropertyReader",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 91,
       "methods": [
@@ -24703,16 +24703,16 @@
       ],
       "callers": [
         "src/main/java/Plugin_ERP/Bots/BrowserAction.java",
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
         "src/main/java/Plugin_ERP/Bots/WaitActions.java",
-        "src/main/java/Plugin_ERP/Bots/WaitMangment.java",
+        "src/main/java/Plugin_ERP/Bots/WaitManagement.java",
         "src/main/java/Plugin_ERP/Business/Calculator/InvoiceCalculator.java",
         "src/main/java/Plugin_ERP/Drivers/AbstractDriver.java",
         "src/main/java/Plugin_ERP/Drivers/Chrome.java",
         "src/main/java/Plugin_ERP/Drivers/Edge.java",
-        "src/main/java/Plugin_ERP/Drivers/Firfox.java",
+        "src/main/java/Plugin_ERP/Drivers/Firefox.java",
         "src/main/java/Plugin_ERP/Drivers/WebDriverFactory.java",
-        "src/main/java/Plugin_ERP/Listners/TestNGListeners.java",
+        "src/main/java/Plugin_ERP/Listeners/TestNGListeners.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/BasicData/CashFormReader.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/BasicData/CashPage.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Coverage/ScreenPage.java",
@@ -24740,8 +24740,8 @@
         "src/main/java/Plugin_ERP/System_Modules/Login/SpecialSales/SpecialSalesPage.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/StoreModel/StoreModulePage.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/StoreModel/StoreRecordList.java",
-        "src/main/java/Plugin_ERP/Utiel/Allur/ReportMailTemplate.java",
-        "src/main/java/Plugin_ERP/Utiel/Allur/ScenarioAccess.java",
+        "src/main/java/Plugin_ERP/Util/Allur/ReportMailTemplate.java",
+        "src/main/java/Plugin_ERP/Util/Allur/ScenarioAccess.java",
         "src/test/java/CoverageTest/PermissionsCoverageTest.java",
         "src/test/java/FinancialMovementsTest/TreasuryLedgerCoverageTest.java",
         "src/test/java/Plugin_ERP/Tests/LoginTest/BaseTest.java",
@@ -24752,9 +24752,9 @@
       ]
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/ScreenShotsUtils.java",
+      "path": "src/main/java/Plugin_ERP/Util/ScreenShotsUtils.java",
       "name": "ScreenShotsUtils",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 36,
       "methods": [
@@ -24769,7 +24769,7 @@
       ],
       "imports": [
         "Plugin_ERP.Bots.LogUtils",
-        "Plugin_ERP.Utiel.Allur.AllureUtils",
+        "Plugin_ERP.Util.Allur.AllureUtils",
         "org.apache.commons.io.FileUtils",
         "org.openqa.selenium.OutputType",
         "org.openqa.selenium.TakesScreenshot",
@@ -24781,17 +24781,17 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/Bots/LogUtils.java",
-        "src/main/java/Plugin_ERP/Utiel/Allur/AllureUtils.java"
+        "src/main/java/Plugin_ERP/Util/Allur/AllureUtils.java"
       ],
       "callers": [
-        "src/main/java/Plugin_ERP/Listners/TestNGListeners.java",
+        "src/main/java/Plugin_ERP/Listeners/TestNGListeners.java",
         "src/test/java/Plugin_ERP/Tests/LoginTest/LoginTest.java"
       ]
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/TimeManage.java",
+      "path": "src/main/java/Plugin_ERP/Util/TimeManage.java",
       "name": "TimeManage",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 22,
       "methods": [
@@ -24832,9 +24832,9 @@
       "callers": []
     },
     {
-      "path": "src/main/java/Plugin_ERP/Utiel/VideoConverterUtils.java",
+      "path": "src/main/java/Plugin_ERP/Util/VideoConverterUtils.java",
       "name": "VideoConverterUtils",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 41,
       "methods": [
@@ -24929,8 +24929,8 @@
         }
       ],
       "imports": [
-        "Plugin_ERP.Bots.ElmentAction",
-        "Plugin_ERP.Bots.WaitMangment",
+        "Plugin_ERP.Bots.ElementActions",
+        "Plugin_ERP.Bots.WaitManagement",
         "org.openqa.selenium.By",
         "org.openqa.selenium.WebDriver",
         "org.openqa.selenium.TimeoutException",
@@ -24940,8 +24940,8 @@
       "sha256": "665d975a95f61887926ae072c9b4167100559284e6eb11a0bd6efdbca29ab689",
       "status": "مصدر نشط",
       "dependencies": [
-        "src/main/java/Plugin_ERP/Bots/ElmentAction.java",
-        "src/main/java/Plugin_ERP/Bots/WaitMangment.java"
+        "src/main/java/Plugin_ERP/Bots/ElementActions.java",
+        "src/main/java/Plugin_ERP/Bots/WaitManagement.java"
       ],
       "callers": [
         "src/main/java/Plugin_ERP/Valditon/Validation.java",
@@ -25414,7 +25414,7 @@
       "imports": [
         "Plugin_ERP.Drivers.Chrome",
         "Plugin_ERP.System_Modules.Login.Login.LoginPage",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "TestSupport.BasicDataScenarioTest",
         "TestSupport.FixtureSession",
         "java.time.Duration",
@@ -25432,7 +25432,7 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Drivers/Chrome.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Login/LoginPage.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java",
         "src/test/java/TestSupport/BasicDataScenarioTest.java",
         "src/test/java/TestSupport/FixtureSession.java"
       ],
@@ -30079,7 +30079,7 @@
         "Plugin_ERP.System_Modules.Login.FinancialMovements.*",
         "Plugin_ERP.System_Modules.Login.BasicData.TreasuryHandoverPage",
         "Plugin_ERP.System_Modules.Login.Coverage.ScreenPage",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "TestSupport.*",
         "java.math.BigDecimal",
         "java.time.Duration",
@@ -30098,7 +30098,7 @@
         "src/main/java/Plugin_ERP/System_Modules/Login/BasicData/TreasuryHandoverPage.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Coverage/ScreenPage.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Login/LoginPage.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java",
         "src/test/java/Plugin_ERP/Tests/LoginTest/BaseTest.java"
       ],
       "callers": []
@@ -34617,9 +34617,9 @@
       ],
       "imports": [
         "Plugin_ERP.Drivers.WebDriverFactory",
-        "Plugin_ERP.Listners.TestNGListeners",
+        "Plugin_ERP.Listeners.TestNGListeners",
         "Plugin_ERP.System_Modules.Login.Login.LoginPage",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.Step",
         "io.qameta.allure.testng.AllureTestNg",
         "org.openqa.selenium.*",
@@ -34632,9 +34632,9 @@
       "status": "مصدر نشط",
       "dependencies": [
         "src/main/java/Plugin_ERP/Drivers/WebDriverFactory.java",
-        "src/main/java/Plugin_ERP/Listners/TestNGListeners.java",
+        "src/main/java/Plugin_ERP/Listeners/TestNGListeners.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Login/LoginPage.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java"
       ],
       "callers": [
         "src/test/java/CoverageTest/AuditLogCoverageTest.java",
@@ -35427,8 +35427,8 @@
         "Plugin_ERP.System_Modules.Login.BasicData.CashPage",
         "Plugin_ERP.System_Modules.Login.Login.LoginPage",
         "TestSupport.BasicDataScenarioTest",
-        "Plugin_ERP.Utiel.PropertyReader",
-        "Plugin_ERP.Listners.TestNGListeners",
+        "Plugin_ERP.Util.PropertyReader",
+        "Plugin_ERP.Listeners.TestNGListeners",
         "io.qameta.allure.*",
         "io.qameta.allure.testng.AllureTestNg",
         "org.openqa.selenium.WebDriver",
@@ -35448,10 +35448,10 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Drivers/WebDriverFactory.java",
         "src/main/java/Plugin_ERP/Enums/Pages.java",
-        "src/main/java/Plugin_ERP/Listners/TestNGListeners.java",
+        "src/main/java/Plugin_ERP/Listeners/TestNGListeners.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/BasicData/CashPage.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Login/LoginPage.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java",
         "src/test/java/TestSupport/BasicDataScenarioTest.java"
       ],
       "callers": []
@@ -36399,11 +36399,11 @@
       "imports": [
         "Plugin_ERP.Drivers.WebDriverFactory",
         "Plugin_ERP.Enums.Pages",
-        "Plugin_ERP.Listners.TestNGListeners",
+        "Plugin_ERP.Listeners.TestNGListeners",
         "Plugin_ERP.System_Modules.Login.BasicData.TypesofdiscountsPage",
         "Plugin_ERP.System_Modules.Login.Login.LoginPage",
         "TestSupport.BasicDataScenarioTest",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.*",
         "io.qameta.allure.testng.AllureTestNg",
         "org.openqa.selenium.WebDriver",
@@ -36419,10 +36419,10 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Drivers/WebDriverFactory.java",
         "src/main/java/Plugin_ERP/Enums/Pages.java",
-        "src/main/java/Plugin_ERP/Listners/TestNGListeners.java",
+        "src/main/java/Plugin_ERP/Listeners/TestNGListeners.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/BasicData/TypesofdiscountsPage.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Login/LoginPage.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java",
         "src/test/java/TestSupport/BasicDataScenarioTest.java"
       ],
       "callers": []
@@ -36486,14 +36486,14 @@
       "imports": [
         "Plugin_ERP.Drivers.WebDriverFactory",
         "Plugin_ERP.Enums.Pages",
-        "Plugin_ERP.Listners.TestNGListeners",
+        "Plugin_ERP.Listeners.TestNGListeners",
         "Plugin_ERP.System_Modules.Login.BasicData.TreasuryHandoverPage",
         "Plugin_ERP.System_Modules.Login.Login.LoginPage",
         "TestSupport.BasicDataScenarioTest",
         "TestSupport.BasicDataFixtures",
         "TestSupport.TreasuryFixtures",
         "org.testng.Assert",
-        "Plugin_ERP.Utiel.PropertyReader",
+        "Plugin_ERP.Util.PropertyReader",
         "io.qameta.allure.*",
         "io.qameta.allure.testng.AllureTestNg",
         "org.openqa.selenium.WebDriver",
@@ -36508,10 +36508,10 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Drivers/WebDriverFactory.java",
         "src/main/java/Plugin_ERP/Enums/Pages.java",
-        "src/main/java/Plugin_ERP/Listners/TestNGListeners.java",
+        "src/main/java/Plugin_ERP/Listeners/TestNGListeners.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/BasicData/TreasuryHandoverPage.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Login/LoginPage.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java",
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java",
         "src/test/java/TestSupport/BasicDataFixtures.java",
         "src/test/java/TestSupport/BasicDataScenarioTest.java",
         "src/test/java/TestSupport/TreasuryFixtures.java"
@@ -36561,8 +36561,8 @@
       "imports": [
         "Plugin_ERP.Drivers.Browser",
         "Plugin_ERP.System_Modules.Login.Login.LoginPage",
-        "Plugin_ERP.Utiel.PropertyReader",
-        "Plugin_ERP.Utiel.ScreenShotsUtils",
+        "Plugin_ERP.Util.PropertyReader",
+        "Plugin_ERP.Util.ScreenShotsUtils",
         "io.qameta.allure.*",
         "io.qameta.allure.testng.AllureTestNg",
         "java.time.Duration",
@@ -36578,17 +36578,17 @@
       "dependencies": [
         "src/main/java/Plugin_ERP/Drivers/Browser.java",
         "src/main/java/Plugin_ERP/System_Modules/Login/Login/LoginPage.java",
-        "src/main/java/Plugin_ERP/Utiel/PropertyReader.java",
-        "src/main/java/Plugin_ERP/Utiel/ScreenShotsUtils.java"
+        "src/main/java/Plugin_ERP/Util/PropertyReader.java",
+        "src/main/java/Plugin_ERP/Util/ScreenShotsUtils.java"
       ],
       "callers": [
         "src/test/java/SuiteSupport/CiSuiteContractTest.java"
       ]
     },
     {
-      "path": "src/test/java/Plugin_ERP/Utiel/Allur/AllureReportPolicyTest.java",
+      "path": "src/test/java/Plugin_ERP/Util/Allur/AllureReportPolicyTest.java",
       "name": "AllureReportPolicyTest",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 54,
       "methods": [
@@ -36647,9 +36647,9 @@
       "callers": []
     },
     {
-      "path": "src/test/java/Plugin_ERP/Utiel/Allur/DriveReportStoreTest.java",
+      "path": "src/test/java/Plugin_ERP/Util/Allur/DriveReportStoreTest.java",
       "name": "DriveReportStoreTest",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 146,
       "methods": [],
@@ -36670,9 +36670,9 @@
       "callers": []
     },
     {
-      "path": "src/test/java/Plugin_ERP/Utiel/Allur/ReportMailTemplateTest.java",
+      "path": "src/test/java/Plugin_ERP/Util/Allur/ReportMailTemplateTest.java",
       "name": "ReportMailTemplateTest",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 25,
       "methods": [],
@@ -36688,9 +36688,9 @@
       "callers": []
     },
     {
-      "path": "src/test/java/Plugin_ERP/Utiel/Allur/ReportMailTest.java",
+      "path": "src/test/java/Plugin_ERP/Util/Allur/ReportMailTest.java",
       "name": "ReportMailTest",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 33,
       "methods": [],
@@ -36707,9 +36707,9 @@
       "callers": []
     },
     {
-      "path": "src/test/java/Plugin_ERP/Utiel/Allur/ScenarioAccessTest.java",
+      "path": "src/test/java/Plugin_ERP/Util/Allur/ScenarioAccessTest.java",
       "name": "ScenarioAccessTest",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 63,
       "methods": [],
@@ -36730,9 +36730,9 @@
       "callers": []
     },
     {
-      "path": "src/test/java/Plugin_ERP/Utiel/Allur/ScenarioJourneyReportTest.java",
+      "path": "src/test/java/Plugin_ERP/Util/Allur/ScenarioJourneyReportTest.java",
       "name": "ScenarioJourneyReportTest",
-      "package": "Plugin_ERP.Utiel.Allur",
+      "package": "Plugin_ERP.Util.Allur",
       "parent": "",
       "lines": 90,
       "methods": [
@@ -36760,9 +36760,9 @@
       "callers": []
     },
     {
-      "path": "src/test/java/Plugin_ERP/Utiel/ConfigurationPropertiesTest.java",
+      "path": "src/test/java/Plugin_ERP/Util/ConfigurationPropertiesTest.java",
       "name": "ConfigurationPropertiesTest",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 203,
       "methods": [
@@ -36889,9 +36889,9 @@
       "callers": []
     },
     {
-      "path": "src/test/java/Plugin_ERP/Utiel/DropdownPolicyTest.java",
+      "path": "src/test/java/Plugin_ERP/Util/DropdownPolicyTest.java",
       "name": "DropdownPolicyTest",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 86,
       "methods": [
@@ -36970,9 +36970,9 @@
       "callers": []
     },
     {
-      "path": "src/test/java/Plugin_ERP/Utiel/FormInteractionsTest.java",
+      "path": "src/test/java/Plugin_ERP/Util/FormInteractionsTest.java",
       "name": "FormInteractionsTest",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 109,
       "methods": [
@@ -37059,9 +37059,9 @@
       "callers": []
     },
     {
-      "path": "src/test/java/Plugin_ERP/Utiel/InteractionAccuracyTest.java",
+      "path": "src/test/java/Plugin_ERP/Util/InteractionAccuracyTest.java",
       "name": "InteractionAccuracyTest",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 100,
       "methods": [
@@ -37098,9 +37098,9 @@
       "callers": []
     },
     {
-      "path": "src/test/java/Plugin_ERP/Utiel/PrintedInvoiceAssertionsTest.java",
+      "path": "src/test/java/Plugin_ERP/Util/PrintedInvoiceAssertionsTest.java",
       "name": "PrintedInvoiceAssertionsTest",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "",
       "lines": 35,
       "methods": [
@@ -37134,7 +37134,7 @@
         "java.util.*",
         "org.testng.Assert",
         "org.testng.annotations.Test",
-        "Plugin_ERP.Utiel.PrintedInvoiceAssertions.*"
+        "Plugin_ERP.Util.PrintedInvoiceAssertions.*"
       ],
       "role": "حالات اختبار أو عقود محلية في المجال المحدد بمسار الملف؛ راجع @Test والأب ومرجع XML لمعرفة الاختيار والتنفيذ.",
       "sha256": "93d547e81810fdf76ebd47787d23ff2eee743473b49ddd5108525a91542e404b",
@@ -37143,9 +37143,9 @@
       "callers": []
     },
     {
-      "path": "src/test/java/Plugin_ERP/Utiel/SalesNavigationTest.java",
+      "path": "src/test/java/Plugin_ERP/Util/SalesNavigationTest.java",
       "name": "SalesNavigationTest",
-      "package": "Plugin_ERP.Utiel",
+      "package": "Plugin_ERP.Util",
       "parent": "SalesModulePage",
       "lines": 22,
       "methods": [
@@ -46308,7 +46308,7 @@
         }
       ],
       "imports": [
-        "Plugin_ERP.Utiel.DocumentDates",
+        "Plugin_ERP.Util.DocumentDates",
         "java.time.LocalDate",
         "java.time.format.DateTimeParseException",
         "org.testng.Assert",
@@ -46319,7 +46319,7 @@
       "sha256": "3d1277604180811197bf8631c31ee6a374dc43169200c3b3f2c18dee6951bd61",
       "status": "مصدر نشط",
       "dependencies": [
-        "src/main/java/Plugin_ERP/Utiel/DocumentDates.java"
+        "src/main/java/Plugin_ERP/Util/DocumentDates.java"
       ],
       "callers": []
     },

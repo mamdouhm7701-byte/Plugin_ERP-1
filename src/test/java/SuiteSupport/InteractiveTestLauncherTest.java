@@ -1,10 +1,9 @@
 package SuiteSupport;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
 import java.nio.file.Path;
 import java.util.List;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 public final class InteractiveTestLauncherTest {
     @Test

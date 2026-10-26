@@ -1,0 +1,235 @@
+package Plugin_ERP.Listeners;
+
+import Plugin_ERP.Bots.LogUtils;
+import Plugin_ERP.Drivers.WebDriverFactory;
+import Plugin_ERP.Util.Allur.AllureBinaryManger;
+import Plugin_ERP.Util.Allur.AllureConstants;
+import Plugin_ERP.Util.Allur.AllureEnvironment;
+import Plugin_ERP.Util.Allur.AllureReportPolicy;
+import Plugin_ERP.Util.PropertyReader;
+import Plugin_ERP.Util.ScreenShotsUtils;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Instant;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.IExecutionListener;
+import org.testng.ITestListener;
+import org.testng.ITestResult;
+
+public class TestNGListeners implements IExecutionListener, ITestListener, org.testng.IReporter {
+
+    @Override
+    public void generateReport(
+            java.util.List<org.testng.xml.XmlSuite> xmlSuites,
+            java.util.List<org.testng.ISuite> suites,
+            String outputDirectory) {
+        if (!Plugin_ERP.Util.Allur.ReportMail.enabled() || !hasAllureResults()) return;
+        try {
+            Plugin_ERP.Util.Allur.ReportMail.validateConfiguration();
+            // Regenerate from this run even when CI disables automatic HTML/opening.
+            AllureBinaryManger.generateReportOnly();
+            Path mailReport = Files.createTempDirectory("plugin-erp-testng-");
+            try {
+                new org.testng.reporters.EmailableReporter2()
+                        .generateReport(xmlSuites, suites, mailReport.toString());
+                Plugin_ERP.Util.Allur.ReportMail.send(mailReport);
+                LogUtils.info(
+                        "sent".equals(System.getProperty("report.mail.last.status"))
+                                ? "SMTP accepted summary and Allure/TestNG delivery."
+                                : "SMTP accepted summary; large report delivery incomplete. See target/report-mail/deliveries.");
+            } finally {
+                try (var paths = Files.walk(mailReport)) {
+                    for (Path path : paths.sorted(java.util.Comparator.reverseOrder()).toList())
+                        Files.deleteIfExists(path);
+                }
+            }
+        } catch (Exception failure) {
+            // Keep test outcomes intact and do not leak SMTP authentication diagnostics.
+            System.setProperty("report.mail.last.status", "failed");
+            LogUtils.error(
+                    "Report email failed ("
+                            + failure.getClass().getSimpleName()
+                            + "). Check mail configuration, connectivity and attachment size; reports remain local.");
+        }
+    }
+
+    private static final ThreadLocal<Long> testStartTime = new ThreadLocal<>();
+
+    // ================= Execution =================
+
+    @Override
+    public void onExecutionStart() {
+        System.out.println(">>> Execution Started");
+
+        // 1) تحميل properties
+        PropertyReader.loadProperties();
+        if (System.getProperty("allure.run.id", "").isBlank())
+            System.setProperty("allure.run.id", "run-" + java.util.UUID.randomUUID());
+
+        // Preserve trend history while clearing only raw files from the previous run.
+        AllureBinaryManger.prepareResultsForRun();
+
+        // Add run metadata before tests start.
+        AllureEnvironment.writeBaseEnvironmentOnce();
+        writeExecutorMetadata();
+    }
+
+    private void writeExecutorMetadata() {
+        Path executorPath = AllureConstants.ALLURE_RESULTS_DIR.resolve("executor.json");
+        try {
+            Files.createDirectories(executorPath.getParent());
+            long buildOrder = nextBuildOrder();
+            System.setProperty("allure.build.order", Long.toString(buildOrder));
+            String json =
+                    "{\n"
+                            + "  \"name\": \"Local IntelliJ / Maven\",\n"
+                            + "  \"type\": \"local\",\n"
+                            + "  \"buildName\": \"Plugin_ERP "
+                            + Instant.now().toString()
+                            + "\",\n"
+                            + "  \"buildOrder\": "
+                            + buildOrder
+                            + ",\n"
+                            + "  \"buildUrl\": \"\",\n"
+                            + "  \"reportUrl\": \"\"\n"
+                            + "}\n";
+            Files.writeString(executorPath, json);
+        } catch (Exception e) {
+            LogUtils.error("Failed to write Allure executor metadata: " + e.getMessage());
+        }
+    }
+
+    private long nextBuildOrder() {
+        Path historyTrend = AllureConstants.RESULTS_HISTORY_DIR.resolve("history-trend.json");
+        long previous = 0;
+        try {
+            if (Files.isRegularFile(historyTrend)) {
+                Matcher matcher =
+                        Pattern.compile("\\\"buildOrder\\\"\\s*:\\s*(\\d+)")
+                                .matcher(Files.readString(historyTrend));
+                while (matcher.find())
+                    previous = Math.max(previous, Long.parseLong(matcher.group(1)));
+            }
+        } catch (Exception e) {
+            LogUtils.error("Could not read previous Allure build order: " + e.getMessage());
+        }
+        return previous + 1;
+    }
+
+    @Override
+    public void onExecutionFinish() {
+        System.out.println(">>> Execution Finished");
+
+        try {
+            WebDriverFactory.quitDriver();
+        } catch (Exception ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "TestNGListeners fallback: " + ignored.getClass().getSimpleName());
+        }
+
+        // مهم: ما ترميش RuntimeException هنا
+        if (!AllureReportPolicy.current().generate()) {
+            LogUtils.info("Automatic Allure HTML generation disabled; raw results retained.");
+        } else if (hasAllureResults()) {
+            try {
+                AllureBinaryManger.generateAndOpenDetached();
+            } catch (Exception e) {
+                LogUtils.error(
+                        "Allure report generation failed but tests finished: " + e.getMessage());
+            }
+        } else {
+            LogUtils.info("No Allure test results were produced; report generation skipped.");
+        }
+    }
+
+    private boolean hasAllureResults() {
+        Path resultsDir = AllureConstants.ALLURE_RESULTS_DIR;
+        if (!Files.isDirectory(resultsDir)) return false;
+
+        try (Stream<Path> files = Files.list(resultsDir)) {
+            return files.anyMatch(
+                    path -> {
+                        String name = path.getFileName().toString();
+                        return name.endsWith("-result.json") || name.endsWith("-container.json");
+                    });
+        } catch (Exception e) {
+            LogUtils.error("Could not inspect Allure results: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // ================= Tests =================
+
+    @Override
+    public void onTestStart(ITestResult result) {
+        testStartTime.set(System.currentTimeMillis());
+        var scenarioMethod = result.getMethod().getConstructorOrMethod().getMethod();
+        String scenarioClass = result.getTestClass().getName();
+        io.qameta.allure.Allure.getLifecycle()
+                .updateTestCase(
+                        test ->
+                                Plugin_ERP.Util.Allur.ScenarioReportCatalog.apply(
+                                        test, scenarioClass, scenarioMethod));
+        if (WebDriverFactory.getDriver() != null) {
+            Plugin_ERP.Util.Allur.ScenarioAccess.capture(
+                    WebDriverFactory.getDriver(), "الشاشة عند بدء الحالة");
+            Plugin_ERP.Util.Allur.ScenarioAssertions.begin();
+        } else Plugin_ERP.Util.Allur.ScenarioAssertions.end();
+
+        // Update browser values without dropping the other run metadata.
+        try {
+            WebDriver driver = WebDriverFactory.getDriver();
+            if (driver instanceof RemoteWebDriver rwd) {
+                Capabilities caps = rwd.getCapabilities();
+                AllureEnvironment.updateBrowser(
+                        String.valueOf(caps.getBrowserName()),
+                        String.valueOf(caps.getBrowserVersion()));
+            }
+        } catch (Exception e) {
+            LogUtils.error(
+                    "Failed to update Allure environment with browser capabilities: "
+                            + e.getMessage());
+        }
+    }
+
+    @Override
+    public void onTestSuccess(ITestResult result) {
+        Plugin_ERP.Util.Allur.ScenarioAssertions.end();
+        takeScreenshot(result, "PASS");
+    }
+
+    @Override
+    public void onTestFailure(ITestResult result) {
+        Plugin_ERP.Util.Allur.ScenarioAssertions.end();
+        try {
+            Plugin_ERP.Util.Allur.ScenarioFailureReport.attach(result);
+        } catch (RuntimeException reportFailure) {
+            LogUtils.error(
+                    "Could not attach readable failure summary; original test failure retained.");
+        }
+        takeScreenshot(result, "FAIL");
+    }
+
+    @Override
+    public void onTestSkipped(ITestResult result) {
+        Plugin_ERP.Util.Allur.ScenarioAssertions.end();
+        takeScreenshot(result, "SKIPPED");
+    }
+
+    // ================= Utils =================
+
+    private void takeScreenshot(ITestResult result, String status) {
+        WebDriver driver = WebDriverFactory.getDriver();
+        if (driver == null) return;
+
+        Plugin_ERP.Util.Allur.ScenarioAccess.capture(
+                driver, "FAIL".equals(status) ? "الشاشة وقت الخطأ" : "الشاشة عند انتهاء الحالة");
+
+        ScreenShotsUtils.takeScreenShot(driver, status + "_" + result.getName());
+    }
+}

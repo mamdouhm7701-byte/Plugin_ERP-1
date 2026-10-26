@@ -1,10 +1,5 @@
 package Plugin_ERP.System_Modules.Login.purches;
 
-import Plugin_ERP.System_Modules.Login.AbstractForPurchases;
-import Plugin_ERP.Utiel.FormInteractions;
-import Plugin_ERP.Utiel.PropertyReader;
-import io.qameta.allure.Step;
-import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
@@ -13,8 +8,9 @@ import org.openqa.selenium.support.ui.*;
 final class PurchaseDocumentTransitions {
     private final PurchaseModulePage owner;
     private final WebDriver driver;
-    private final Plugin_ERP.Bots.ElmentAction utilites;
+    private final Plugin_ERP.Bots.ElementActions utilites;
     private final WebDriverWait ready;
+
     PurchaseDocumentTransitions(PurchaseModulePage owner, WebDriver driver, WebDriverWait ready) {
         this.owner = owner;
         this.driver = driver;
@@ -35,22 +31,45 @@ final class PurchaseDocumentTransitions {
         puConvertOwned(supplier, code, null, toInvoice, itemName);
     }
 
-    void puConvertOwned(String supplier, String code, Object expectedSourceId, boolean toInvoice, String itemName) {
+    void puConvertOwned(
+            String supplier,
+            String code,
+            Object expectedSourceId,
+            boolean toInvoice,
+            String itemName) {
         owner.puListScope(supplier);
         owner.puListText("filteredCode", code);
-        var source = ready.until(d -> {
-            var rows = owner.puListRows().stream()
-                    .filter(r -> code.equals(String.valueOf(r.get("code"))))
-                    .filter(r -> expectedSourceId == null || expectedSourceId.equals(r.get("id"))).toList();
-            if (rows.isEmpty()) return null;
-            if (rows.size() != 1) throw new AssertionError("Purchase conversion requires a unique source identity");
-            return rows.get(0);
-        });
+        var source =
+                ready.until(
+                        d -> {
+                            var rows =
+                                    owner.puListRows().stream()
+                                            .filter(r -> code.equals(String.valueOf(r.get("code"))))
+                                            .filter(
+                                                    r ->
+                                                            expectedSourceId == null
+                                                                    || expectedSourceId.equals(
+                                                                            r.get("id")))
+                                            .toList();
+                            if (rows.isEmpty()) return null;
+                            if (rows.size() != 1)
+                                throw new AssertionError(
+                                        "Purchase conversion requires a unique source identity");
+                            return rows.get(0);
+                        });
         Object sourceId = source.get("id");
         String icon = toInvoice ? "repeat" : "refresh-cw";
         owner.puClick(
-                By.cssSelector("tbody tr[data-pk='" + sourceId + "'] button:has([class*='" + icon
-                        + "']),tbody tr[id$='__row_" + sourceId + "'] button:has([class*='" + icon + "'])"));
+                By.cssSelector(
+                        "tbody tr[data-pk='"
+                                + sourceId
+                                + "'] button:has([class*='"
+                                + icon
+                                + "']),tbody tr[id$='__row_"
+                                + sourceId
+                                + "'] button:has([class*='"
+                                + icon
+                                + "'])"));
         ready.until(d -> d.getCurrentUrl().contains(toInvoice ? "purch-invoice" : "return-purch"));
         owner.puFormReady();
         ready.until(
@@ -70,7 +89,8 @@ final class PurchaseDocumentTransitions {
         ready.until(
                 d ->
                         owner.puListRows().size() == 1
-                                && code.equals(String.valueOf(owner.puListRows().get(0).get("code"))));
+                                && code.equals(
+                                        String.valueOf(owner.puListRows().get(0).get("code"))));
         owner.puClick(
                 By.xpath(
                         "//table//tbody/tr[.//td[normalize-space()='"

@@ -171,33 +171,33 @@ final class SalesTestData implements AutoCloseable {
 
     Record store(int index) {
         synchronized (TestSupport.BranchMutationLock.monitor()) {
-        Record store =
-                fixture(
-                        "store-" + index,
-                        "Stores",
-                        fields("accountId", account("store-" + index).id()));
-        String key = "branch-store-" + index;
-        if (!fixtures.containsKey(key)) {
-            Object branchId =
-                    ((JavascriptExecutor) driver)
-                            .executeScript(
-                                    "return document.querySelector('#app').__vue__.$store.getters['app/currentBranch'].id");
-            if (!(branchId instanceof String branch) || branch.isBlank())
-                throw new AssertionError("Current branch identity is unavailable");
-            Record link =
-                    new Record(
-                            BRANCH_STORE_LINK,
-                            store.id(),
-                            store.name(),
-                            fields("branchId", branchId, "storeId", store.id()));
-            // Journal before updating: a lost response must still leave a recoverable owned link.
-            created.add(link);
-            fixtures.put(key, link);
-            journal();
-            changeBranchStore(link, true);
-        }
-        return store;
-
+            Record store =
+                    fixture(
+                            "store-" + index,
+                            "Stores",
+                            fields("accountId", account("store-" + index).id()));
+            String key = "branch-store-" + index;
+            if (!fixtures.containsKey(key)) {
+                Object branchId =
+                        ((JavascriptExecutor) driver)
+                                .executeScript(
+                                        "return document.querySelector('#app').__vue__.$store.getters['app/currentBranch'].id");
+                if (!(branchId instanceof String branch) || branch.isBlank())
+                    throw new AssertionError("Current branch identity is unavailable");
+                Record link =
+                        new Record(
+                                BRANCH_STORE_LINK,
+                                store.id(),
+                                store.name(),
+                                fields("branchId", branchId, "storeId", store.id()));
+                // Journal before updating: a lost response must still leave a recoverable owned
+                // link.
+                created.add(link);
+                fixtures.put(key, link);
+                journal();
+                changeBranchStore(link, true);
+            }
+            return store;
         }
     }
 
@@ -224,37 +224,36 @@ final class SalesTestData implements AutoCloseable {
 
     private void changeBranchStore(Record link, boolean add) {
         synchronized (TestSupport.BranchMutationLock.monitor()) {
-        Map<String, Object> branch = branchFor(link);
-        Object storeId = link.values().get("storeId");
-        if (containsStore(branch, storeId) != add) {
-            List<Object> stores = new ArrayList<>((List<?>) branch.get("stores"));
-            if (add) stores.add(fields("branchId", branch.get("id"), "storeId", storeId));
-            else
-                stores.removeIf(
-                        value ->
-                                value instanceof Map<?, ?> row
-                                        && storeId.equals(row.get("storeId")));
-            Map<String, Object> update = new LinkedHashMap<>(branch);
-            update.put("stores", stores);
-            call("update", "Branches", update);
-            Map<String, Object> refreshed = branchFor(link);
-            if (containsStore(refreshed, storeId) != add)
-                throw new AssertionError("Owned store membership was not updated");
-            for (Object value : (List<?>) branch.get("stores")) {
-                Object previousId = ((Map<?, ?>) value).get("storeId");
-                if (!previousId.equals(storeId) && !containsStore(refreshed, previousId))
-                    throw new AssertionError("Existing branch store was removed");
+            Map<String, Object> branch = branchFor(link);
+            Object storeId = link.values().get("storeId");
+            if (containsStore(branch, storeId) != add) {
+                List<Object> stores = new ArrayList<>((List<?>) branch.get("stores"));
+                if (add) stores.add(fields("branchId", branch.get("id"), "storeId", storeId));
+                else
+                    stores.removeIf(
+                            value ->
+                                    value instanceof Map<?, ?> row
+                                            && storeId.equals(row.get("storeId")));
+                Map<String, Object> update = new LinkedHashMap<>(branch);
+                update.put("stores", stores);
+                call("update", "Branches", update);
+                Map<String, Object> refreshed = branchFor(link);
+                if (containsStore(refreshed, storeId) != add)
+                    throw new AssertionError("Owned store membership was not updated");
+                for (Object value : (List<?>) branch.get("stores")) {
+                    Object previousId = ((Map<?, ?>) value).get("storeId");
+                    if (!previousId.equals(storeId) && !containsStore(refreshed, previousId))
+                        throw new AssertionError("Existing branch store was removed");
+                }
+                if (!java.util.Objects.equals(
+                        branch.get("defaultStoreId"), refreshed.get("defaultStoreId")))
+                    throw new AssertionError("Branch default store changed");
+                branch = refreshed;
             }
-            if (!java.util.Objects.equals(
-                    branch.get("defaultStoreId"), refreshed.get("defaultStoreId")))
-                throw new AssertionError("Branch default store changed");
-            branch = refreshed;
-        }
-        ((JavascriptExecutor) driver)
-                .executeScript(
-                        "const root=document.querySelector('#app').__vue__;if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
-                        branch);
-
+            ((JavascriptExecutor) driver)
+                    .executeScript(
+                            "const root=document.querySelector('#app').__vue__;if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
+                            branch);
         }
     }
 

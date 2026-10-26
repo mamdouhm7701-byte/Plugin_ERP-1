@@ -9,6 +9,8 @@ public final class BasicDataFixturesRecovery extends Plugin_ERP.Tests.LoginTest.
         try {
             runner.setup();
             BasicDataFixtures.resume(runner.driver, args[0]).close();
-        } finally { runner.tearDown(); }
+        } finally {
+            runner.tearDown();
+        }
     }
 }

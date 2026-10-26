@@ -1,14 +1,13 @@
 package Plugin_ERP.Drivers;
 
 import Plugin_ERP.Bots.LogUtils;
-import Plugin_ERP.Utiel.PropertyReader;
+import Plugin_ERP.Util.PropertyReader;
+import java.net.URL;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
-
-import java.net.URL;
 
 public class Edge extends AbstractDriver {
 

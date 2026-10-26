@@ -12,7 +12,8 @@ final class SalesFixtureApi {
     private final Object sessionBranchId;
     private final Runnable contextGuard;
 
-    SalesFixtureApi(WebDriver driver, String origin, Object sessionBranchId, Runnable contextGuard) {
+    SalesFixtureApi(
+            WebDriver driver, String origin, Object sessionBranchId, Runnable contextGuard) {
         this.driver = driver;
         this.origin = origin;
         this.sessionBranchId = sessionBranchId;

@@ -142,8 +142,7 @@ public class DisEntTest extends BasicDataScenarioTest {
         page.OpenForEditByName(name);
         Assert.assertEquals(page.GetArabicNameValue(), name);
         Assert.assertEquals(page.GetEnglishNameValue(), name);
-        Assert.assertTrue(
-                page.GetSelectedAccountValue().isEmpty(), "يجب ألا يكون هناك حساب محدد");
+        Assert.assertTrue(page.GetSelectedAccountValue().isEmpty(), "يجب ألا يكون هناك حساب محدد");
         page.ClickCloseButton();
     }
 

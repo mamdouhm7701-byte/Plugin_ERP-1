@@ -1,14 +1,12 @@
 package SpecialSalesTest;
 
 import io.qameta.allure.Allure;
-
+import java.time.Duration;
+import java.util.Map;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-
-import java.time.Duration;
-import java.util.Map;
 
 /**
  * Observes the real receipt window and delegates to the browser's original print implementation.
@@ -58,7 +56,7 @@ final class SpecialSalesPrintAssertions {
                                     Boolean.TRUE.equals(
                                             js.executeScript(
                                                     "return"
-                                                        + " window.__specialSalesPrint.printed.length>0")));
+                                                            + " window.__specialSalesPrint.printed.length>0")));
         } catch (org.openqa.selenium.TimeoutException failure) {
             throw new AssertionError(
                     "Receipt did not reach native browser printing; errors="

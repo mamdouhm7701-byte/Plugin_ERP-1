@@ -1,9 +1,5 @@
 package Plugin_ERP.System_Modules.Login.purches;
 
-import Plugin_ERP.System_Modules.Login.AbstractForPurchases;
-import Plugin_ERP.Utiel.FormInteractions;
-import Plugin_ERP.Utiel.PropertyReader;
-import io.qameta.allure.Step;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -13,6 +9,7 @@ import org.openqa.selenium.support.ui.*;
 final class PurchasePrintWindows {
     private final PurchaseModulePage owner;
     private final WebDriver driver;
+
     PurchasePrintWindows(PurchaseModulePage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
@@ -32,7 +29,7 @@ final class PurchasePrintWindows {
     }
 
     void puVerifyPrintedReport(String main, String item) {
-        owner.puVerifyPrintedReport(main,item,()->{});
+        owner.puVerifyPrintedReport(main, item, () -> {});
     }
 
     void puVerifyPrintedReport(String main, String item, Runnable contentAssertions) {

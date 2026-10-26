@@ -911,4 +911,3 @@
 | `public void savesUnderReviewWithoutPostingInventory()` | public · @Test | حالة تحقق مرتبطة بـعمليات الحفظ / الجرد؛ تفاصيل الشرط والمتوقع داخل جسم الاختبار. |
 
 **علاقته بالتشغيل:** ابحث عن الاسم الكامل `Invoice.UnderReviewCoverageTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
-

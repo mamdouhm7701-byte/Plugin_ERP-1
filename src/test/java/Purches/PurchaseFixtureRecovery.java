@@ -10,7 +10,8 @@ public final class PurchaseFixtureRecovery extends BaseTest {
         var runner = new PurchaseFixtureRecovery();
         try {
             runner.setup();
-            new Plugin_ERP.System_Modules.Login.purches.PurchaseModulePage(runner.driver).puAwaitSession();
+            new Plugin_ERP.System_Modules.Login.purches.PurchaseModulePage(runner.driver)
+                    .puAwaitSession();
             PurchaseTestData.resume(runner.driver, args[0]).close();
         } finally {
             runner.tearDown();

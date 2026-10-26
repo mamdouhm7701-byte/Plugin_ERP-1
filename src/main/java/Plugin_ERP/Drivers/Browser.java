@@ -17,7 +17,7 @@ public enum Browser {
     FIREFOX {
         @Override
         public AbstractDriver getDriverFactory() {
-            return new Firfox();
+            return new Firefox();
         }
     };
 

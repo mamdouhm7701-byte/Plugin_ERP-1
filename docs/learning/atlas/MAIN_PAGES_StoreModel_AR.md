@@ -252,4 +252,3 @@
 |---|---|---|
 | `public TransBetweenStors(WebDriver driver)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 | `public Boolean AssertToStore()` | public | مقارنة متوقعة المخزن، حسب المدخلات والتخصص. |
-

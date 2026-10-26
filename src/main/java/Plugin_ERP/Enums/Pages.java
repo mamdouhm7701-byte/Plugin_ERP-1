@@ -1,7 +1,5 @@
 package Plugin_ERP.Enums;
 
-import Plugin_ERP.System_Modules.Login.BasicData.AreaPage;
-
 public enum Pages {
     AGENTS("/#/agents/"),
     DEALERROUTELINE("/#/agentItinerary"),

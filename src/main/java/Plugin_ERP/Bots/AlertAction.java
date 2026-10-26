@@ -1,22 +1,21 @@
 package Plugin_ERP.Bots;
 
+import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-
 public class AlertAction extends BaseAction {
 
-    public AlertAction(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment) {
-        super(driver, wait, waitMangment);
+    public AlertAction(WebDriver driver, WebDriverWait wait, WaitManagement waitManagement) {
+        super(driver, wait, waitManagement);
     }
 
     // accept alert
     public void acceptSwalConfirm() {
-        waitMangment
+        waitManagement
                 .fluentWait()
                 .until(
                         d -> {
@@ -35,7 +34,7 @@ public class AlertAction extends BaseAction {
 
     // dismiss alert
     public void dismissAlert() {
-        waitMangment
+        waitManagement
                 .fluentWait()
                 .until(
                         d -> {
@@ -55,7 +54,7 @@ public class AlertAction extends BaseAction {
 
     // get alert text
     public String getAlertText() {
-        return waitMangment
+        return waitManagement
                 .fluentWait()
                 .until(
                         d -> {
@@ -70,7 +69,7 @@ public class AlertAction extends BaseAction {
 
     // send text to alert
     public void sendTextToAlert(String text) {
-        waitMangment
+        waitManagement
                 .fluentWait()
                 .until(
                         d -> {

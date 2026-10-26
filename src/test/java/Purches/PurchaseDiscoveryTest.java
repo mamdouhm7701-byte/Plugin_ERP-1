@@ -1,7 +1,7 @@
 package Purches;
 
-import Plugin_ERP.Tests.LoginTest.BaseTest;
 import Plugin_ERP.System_Modules.Login.Invoice.SalesModulePage;
+import Plugin_ERP.Tests.LoginTest.BaseTest;
 import io.qameta.allure.Story;
 import java.nio.file.*;
 import java.util.*;

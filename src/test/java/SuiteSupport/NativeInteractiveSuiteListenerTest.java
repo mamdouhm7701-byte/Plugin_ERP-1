@@ -1,12 +1,11 @@
 package SuiteSupport;
 
-import org.testng.*;
-import org.testng.annotations.Test;
-import org.testng.xml.*;
-
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import org.testng.*;
+import org.testng.annotations.Test;
+import org.testng.xml.*;
 
 public final class NativeInteractiveSuiteListenerTest {
     @Test

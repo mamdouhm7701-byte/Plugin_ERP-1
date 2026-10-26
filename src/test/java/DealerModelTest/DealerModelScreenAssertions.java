@@ -4,8 +4,8 @@ import Plugin_ERP.System_Modules.Login.AbstractForDealer;
 import java.time.Duration;
 import java.util.function.Consumer;
 import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 final class DealerModelScreenAssertions {
     private DealerModelScreenAssertions() {}

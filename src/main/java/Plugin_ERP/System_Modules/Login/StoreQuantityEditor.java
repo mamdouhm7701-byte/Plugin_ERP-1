@@ -16,6 +16,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 final class StoreQuantityEditor {
     private final DocumentPage owner;
     private final WebDriver driver;
+
     StoreQuantityEditor(DocumentPage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
@@ -24,38 +25,45 @@ final class StoreQuantityEditor {
     void SetQuantityByRow(int rowNumber, int quantity) {
         WebElement quantityInput = owner.utilites.waits().waitForQuantityInputByRow(rowNumber);
 
-        ((JavascriptExecutor) driver).executeScript(
-                "arguments[0].scrollIntoView({block: 'center'});",
-                quantityInput
-        );
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView({block: 'center'});", quantityInput);
 
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(
-                org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(quantityInput));
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(
+                        org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(
+                                quantityInput));
 
         quantityInput.click();
         quantityInput.sendKeys(Keys.chord(Keys.CONTROL, "a"));
         quantityInput.sendKeys(Keys.DELETE);
         quantityInput.sendKeys(String.valueOf(quantity));
-        ((JavascriptExecutor) driver).executeScript(
-                "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));" +
-                        "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));",
-                quantityInput
-        );
+        ((JavascriptExecutor) driver)
+                .executeScript(
+                        "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));"
+                                + "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));",
+                        quantityInput);
 
         // اخرج من الحقل عشان تتفعل أي معالجة تلقائية للرقم (blur)
         quantityInput.sendKeys(Keys.TAB);
 
         // استنى وتأكد إن القيمة فعلاً اتحدثت في الـ DOM (بغض النظر عن شكل الفورمات)
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(d -> {
-            try {
-                WebElement input = owner.utilites.waits().waitForQuantityInputByRow(rowNumber);
-                String actualValue = input.getAttribute("value");
-                return actualValue != null && owner.normalizeQuantity(actualValue).equals(String.valueOf(quantity));
-            } catch (Exception e) {
-                return false;
-            }
-        });
+        wait.until(
+                d -> {
+                    try {
+                        WebElement input =
+                                owner.utilites.waits().waitForQuantityInputByRow(rowNumber);
+                        String actualValue = input.getAttribute("value");
+                        return actualValue != null
+                                && owner.normalizeQuantity(actualValue)
+                                        .equals(String.valueOf(quantity));
+                    } catch (Exception e) {
+                        Plugin_ERP.Bots.LogUtils.debug(
+                                "StoreQuantityEditor condition unavailable: "
+                                        + e.getClass().getSimpleName());
+                        return false;
+                    }
+                });
 
         LogUtils.info("الكمية فى صف " + rowNumber + " التغير الى " + quantity);
     }
@@ -88,28 +96,27 @@ final class StoreQuantityEditor {
     Map<String, String> GetNamesAndQuantities() {
         Map<String, String> data = new LinkedHashMap<>();
 
-        String quantityColIndex = driver.findElement(
-                By.xpath("//th[@role='columnheader'][.//div[normalize-space()='الكمية']]")
-        ).getAttribute("aria-colindex");
+        String quantityColIndex =
+                driver.findElement(
+                                By.xpath(
+                                        "//th[@role='columnheader'][.//div[normalize-space()='الكمية']]"))
+                        .getAttribute("aria-colindex");
 
-        List<WebElement> rows = driver.findElements(
-                By.xpath("//tbody//tr[@role='row']")
-        );
+        List<WebElement> rows = driver.findElements(By.xpath("//tbody//tr[@role='row']"));
 
         for (WebElement row : rows) {
-            String name = row.findElement(
-                    By.xpath(".//td[@aria-colindex='3']")
-            ).getText().trim();
+            String name = row.findElement(By.xpath(".//td[@aria-colindex='3']")).getText().trim();
 
-            String quantity = row.findElement(
-                    By.xpath(".//td[@aria-colindex='" + quantityColIndex + "']//input[not(@type='hidden')]")
-            ).getAttribute("value").trim();
+            String quantity =
+                    row.findElement(
+                                    By.xpath(
+                                            ".//td[@aria-colindex='"
+                                                    + quantityColIndex
+                                                    + "']//input[not(@type='hidden')]"))
+                            .getAttribute("value")
+                            .trim();
 
-            System.out.printf(
-                    "Item=%s , Quantity=%s%n",
-                    name,
-                    quantity
-            );
+            System.out.printf("Item=%s , Quantity=%s%n", name, quantity);
 
             data.put(name, quantity);
         }

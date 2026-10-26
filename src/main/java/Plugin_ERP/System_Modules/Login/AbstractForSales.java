@@ -5,20 +5,10 @@ import Plugin_ERP.Models.InvoiceRow;
 import Plugin_ERP.Models.InvoiceTotals;
 import Plugin_ERP.Models.ReportTotals;
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.math.BigDecimal;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import org.openqa.selenium.WebDriver;
 
 public class AbstractForSales extends DocumentPage {
     private final SalesPrintedTotals printedTotals;
@@ -28,6 +18,7 @@ public class AbstractForSales extends DocumentPage {
     private final SalesItemDialog itemDialog;
     private final SalesDropdownControls dropdownControls;
     private final SalesInvoiceRows invoiceRows;
+
     public AbstractForSales(WebDriver driver) {
         super(driver);
         snapshotReader = new SalesInvoiceSnapshot(driver);
@@ -194,5 +185,8 @@ public class AbstractForSales extends DocumentPage {
     public void ClickOnNameRadioBtnForInv(String searchText) {
         formControls.ClickOnNameRadioBtnForInv(searchText);
     }
-    java.math.BigDecimal readDefaultSummary(String label) { return super.getSummaryValue(label); }
+
+    java.math.BigDecimal readDefaultSummary(String label) {
+        return super.getSummaryValue(label);
+    }
 }

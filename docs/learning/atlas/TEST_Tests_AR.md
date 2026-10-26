@@ -462,4 +462,3 @@
 | `public void InvalidLoginTest()` | public · @Test | حالة تحقق مرتبطة بـتسجيل الدخول؛ تفاصيل الشرط والمتوقع داخل جسم الاختبار. |
 
 **علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Tests.LoginTest.LoginTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
-

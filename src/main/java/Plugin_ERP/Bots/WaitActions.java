@@ -1,31 +1,29 @@
 package Plugin_ERP.Bots;
 
-import Plugin_ERP.Utiel.PropertyReader;
-
+import Plugin_ERP.Util.PropertyReader;
+import java.time.Duration;
+import java.util.List;
+import java.util.Set;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-import java.util.List;
-import java.util.Set;
-
 public class WaitActions extends BaseAction {
 
     public WaitActions(WebDriver driver) {
-        this(driver, new WebDriverWait(driver, Duration.ofSeconds(10)), new WaitMangment(driver));
+        this(driver, new WebDriverWait(driver, Duration.ofSeconds(10)), new WaitManagement(driver));
     }
 
-    public WaitActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment) {
-        super(driver, wait, waitMangment);
+    public WaitActions(WebDriver driver, WebDriverWait wait, WaitManagement waitManagement) {
+        super(driver, wait, waitManagement);
     }
 
     public void waitForUrlContains(String text) {
-        waitMangment.fluentWait().until(ExpectedConditions.urlContains(text));
+        waitManagement.fluentWait().until(ExpectedConditions.urlContains(text));
     }
 
     public void waitForElementVisible(By locator) {
-        waitMangment.fluentWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
+        waitManagement.fluentWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
     public void WaitForElementVisible(By locator) {
@@ -58,6 +56,8 @@ public class WaitActions extends BaseAction {
             try {
                 wait.until(ExpectedConditions.invisibilityOfElementLocated(loader));
             } catch (Exception ignored) {
+                Plugin_ERP.Bots.LogUtils.debug(
+                        "WaitActions fallback: " + ignored.getClass().getSimpleName());
             }
         }
 
@@ -66,7 +66,7 @@ public class WaitActions extends BaseAction {
                 ExpectedConditions.presenceOfElementLocated(
                         By.cssSelector(
                                 "div.e-reportviewer-paragrap div[style*='white-space:"
-                                    + " pre-wrap']")));
+                                        + " pre-wrap']")));
 
         // 4. استنى إن في عنصر فيه نص فعلي مش فاضي
         wait.until(
@@ -76,9 +76,12 @@ public class WaitActions extends BaseAction {
                                 webDriver.findElements(
                                         By.cssSelector(
                                                 "div.e-reportviewer-paragrap"
-                                                    + " div[style*='white-space: pre-wrap']"));
+                                                        + " div[style*='white-space: pre-wrap']"));
                         return elements.stream().anyMatch(el -> !el.getText().trim().isEmpty());
                     } catch (Exception e) {
+                        Plugin_ERP.Bots.LogUtils.debug(
+                                "WaitActions condition unavailable: "
+                                        + e.getClass().getSimpleName());
                         return false;
                     }
                 });
@@ -205,7 +208,7 @@ public class WaitActions extends BaseAction {
                                 targetRow.findElements(
                                         By.xpath(
                                                 ".//input[@type='number' and"
-                                                    + " not(@type='hidden')]"));
+                                                        + " not(@type='hidden')]"));
                     }
 
                     return quantityInputs.isEmpty() || !quantityInputs.get(0).isDisplayed()

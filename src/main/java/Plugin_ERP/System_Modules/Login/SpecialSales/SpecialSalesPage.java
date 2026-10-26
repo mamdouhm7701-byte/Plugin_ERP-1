@@ -1,15 +1,12 @@
 package Plugin_ERP.System_Modules.Login.SpecialSales;
 
 import Plugin_ERP.System_Modules.Login.Abstract;
-import Plugin_ERP.Utiel.PropertyReader;
-
+import Plugin_ERP.Util.PropertyReader;
 import io.qameta.allure.Step;
-
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.Duration;
 import java.util.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /** Native controls shared by the two counter screens; independent of the normal invoice POM. */
 public abstract class SpecialSalesPage extends Abstract {
@@ -40,8 +37,8 @@ public abstract class SpecialSalesPage extends Abstract {
 
     protected String vmScript() {
         return "const queue=[document.querySelector('#app')?.__vue__];let"
-                   + " vm;while(queue.length){const"
-                   + " v=queue.shift();if(!v)continue;queue.push(...(v.$children||[]));if(Array.isArray(v.$data?.selectedItem?.lines)&&v.$options.methods?.save){vm=v;break;}}";
+                + " vm;while(queue.length){const"
+                + " v=queue.shift();if(!v)continue;queue.push(...(v.$children||[]));if(Array.isArray(v.$data?.selectedItem?.lines)&&v.$options.methods?.save){vm=v;break;}}";
     }
 
     public void awaitSession() {
@@ -50,12 +47,12 @@ public abstract class SpecialSalesPage extends Abstract {
                         Boolean.TRUE.equals(
                                 js(
                                         "return"
-                                            + " Boolean(document.querySelector('#app')?.__vue__?.$store?.getters['app/currentBranch']?.id)")));
+                                                + " Boolean(document.querySelector('#app')?.__vue__?.$store?.getters['app/currentBranch']?.id)")));
     }
 
     @Step("فتح شاشة الكاشير")
     public void open() {
-        Plugin_ERP.Utiel.Allur.ScreenNames.opening(route());
+        Plugin_ERP.Util.Allur.ScreenNames.opening(route());
         driver.get(PropertyReader.getApplicationUrl() + "/#/" + route());
         driver.navigate().refresh();
         awaitSession();
@@ -240,13 +237,13 @@ public abstract class SpecialSalesPage extends Abstract {
                 driver.findElements(
                         By.xpath(
                                 "//div[contains(@class,'modal') and"
-                                    + " contains(@class,'show')]//label[normalize-space()='الكل']"))) {
+                                        + " contains(@class,'show')]//label[normalize-space()='الكل']"))) {
             if (label.isDisplayed()) {
                 if (!Arrays.asList(label.getAttribute("class").split("\\s+")).contains("active")) {
                     click(
                             By.xpath(
                                     "//div[contains(@class,'modal') and"
-                                        + " contains(@class,'show')]//label[normalize-space()='الكل']"));
+                                            + " contains(@class,'show')]//label[normalize-space()='الكل']"));
                 }
                 break;
             }
@@ -257,7 +254,7 @@ public abstract class SpecialSalesPage extends Abstract {
         click(
                 By.xpath(
                         "//div[contains(@class,'modal') and"
-                            + " contains(@class,'show')]//button[.//*[local-name()='svg' and @id='"
+                                + " contains(@class,'show')]//button[.//*[local-name()='svg' and @id='"
                                 + actionId
                                 + "' and contains(@class,'feather-"
                                 + icon

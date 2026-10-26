@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -13,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 /** Read the options and selected values of sales form dropdowns. */
 final class SalesDropdownControls {
     private final WebDriver driver;
+
     SalesDropdownControls(WebDriver driver) {
         this.driver = driver;
     }

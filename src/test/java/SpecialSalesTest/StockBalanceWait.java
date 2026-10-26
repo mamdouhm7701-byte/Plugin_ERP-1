@@ -15,11 +15,16 @@ final class StockBalanceWait {
         new FluentWait<>(balance)
                 .withTimeout(timeout)
                 .pollingEvery(Duration.ofMillis(250))
-                .withMessage(() -> "Stock balance did not reach expected=" + expected
-                        + "; last actual=" + last[0])
-                .until(read -> {
-                    last[0] = read.get();
-                    return new BigDecimal(last[0].toString()).compareTo(target) == 0;
-                });
+                .withMessage(
+                        () ->
+                                "Stock balance did not reach expected="
+                                        + expected
+                                        + "; last actual="
+                                        + last[0])
+                .until(
+                        read -> {
+                            last[0] = read.get();
+                            return new BigDecimal(last[0].toString()).compareTo(target) == 0;
+                        });
     }
 }

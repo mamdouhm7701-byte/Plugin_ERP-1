@@ -1,10 +1,5 @@
 package Plugin_ERP.System_Modules.Login.Products;
 
-import Plugin_ERP.Bots.AlertAction;
-import Plugin_ERP.Bots.ElmentAction;
-import Plugin_ERP.Bots.WaitMangment;
-import Plugin_ERP.System_Modules.Login.Abstract;
-import io.qameta.allure.Step;
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
@@ -13,12 +8,14 @@ import org.openqa.selenium.support.ui.*;
 final class ProductComponents {
     private final AddProductsPage owner;
     private final WebDriver driver;
-    private final Plugin_ERP.Bots.ElmentAction utilites;
+    private final Plugin_ERP.Bots.ElementActions utilites;
+
     ProductComponents(AddProductsPage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
         this.utilites = owner.context().elements();
     }
+
     private By CompletedProduct = By.xpath("//input[@value='PerfectlyMade']");
     private By Component = By.xpath("//a[@role='tab' and text()='المكونات']");
     private By AddComponent = By.xpath("//button[contains(text(),'اضافة مكونات')]");
@@ -41,7 +38,7 @@ final class ProductComponents {
     }
 
     void SearchComponent(String searchComponent) {
-        utilites.TaypeTextB(SerchComponent, searchComponent);
+        utilites.typeTextAndVerify(SerchComponent, searchComponent);
     }
 
     void SelectProduct(String productName) {
@@ -53,10 +50,10 @@ final class ProductComponents {
     }
 
     void AddComponentQuantity(String value) {
-        utilites.TaypeTextB(ComponentQuantity, value);
+        utilites.typeTextAndVerify(ComponentQuantity, value);
     }
 
     void AddComponentNotes(String notes) {
-        utilites.TaypeTextB(ComponetNotest, notes);
+        utilites.typeTextAndVerify(ComponetNotest, notes);
     }
 }

@@ -56,12 +56,12 @@ public class Agent extends AbstractForDealer {
 
     @Step("ادخال المبلغ من: {fromAmount}")
     public void EnterFromAmount(String fromAmount) {
-        utilites.TaypeTextB(FromAmountInput, fromAmount);
+        utilites.typeTextAndVerify(FromAmountInput, fromAmount);
     }
 
     @Step("ادخال المبلغ الي: {toAmount}")
     public void EnterToAmount(String toAmount) {
-        utilites.TaypeTextB(ToAmountInput, toAmount);
+        utilites.typeTextAndVerify(ToAmountInput, toAmount);
     }
 
     @Step("الضغط علي زر اضافه عموله")
@@ -72,13 +72,13 @@ public class Agent extends AbstractForDealer {
     @Step("ادخال النسبة: {percentage}")
     public void EnterPercentage(String percentage) {
         utilites.waits().waitForOverlayToDisappear();
-        utilites.TaypeTextB(PercentageInput, percentage);
+        utilites.typeTextAndVerify(PercentageInput, percentage);
     }
 
     @Step("البحث عن منتج: {productName}")
     public void SearchProduct(String productName) {
         utilites.waits().waitForOverlayToDisappear();
-        utilites.TaypeTextB(SearchInput, productName);
+        utilites.typeTextAndVerify(SearchInput, productName);
     }
 
     @Step("انتظار ظهور أصناف السيناريو في جدول العمولة")
@@ -159,7 +159,7 @@ public class Agent extends AbstractForDealer {
 
     @Step("اضافه رقم موباييل المندوب:{}")
     public void AddAgentMobileNumber() {
-        utilites.TaypeTextB(AddAgentNumber, utilites.Utility().generateRandomNumber());
+        utilites.typeTextAndVerify(AddAgentNumber, utilites.Utility().generateRandomNumber());
         LogUtils.info("تم اضافه رقم الموبايل بنجاح");
     }
 

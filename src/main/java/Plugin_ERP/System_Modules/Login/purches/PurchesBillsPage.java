@@ -1,14 +1,12 @@
 package Plugin_ERP.System_Modules.Login.purches;
 
 import Plugin_ERP.System_Modules.Login.AbstractForPurchases;
-import Plugin_ERP.System_Modules.Login.AbstractForStore;
 import io.qameta.allure.Step;
+import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 
 public class PurchesBillsPage extends AbstractForPurchases {
     public PurchesBillsPage(WebDriver driver) {

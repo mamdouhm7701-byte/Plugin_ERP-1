@@ -8,12 +8,12 @@ public abstract class BaseAction {
 
     protected WebDriver driver;
     protected WebDriverWait wait;
-    protected WaitMangment waitMangment;
+    protected WaitManagement waitManagement;
 
-    public BaseAction(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment) {
+    public BaseAction(WebDriver driver, WebDriverWait wait, WaitManagement waitManagement) {
         this.driver = driver;
         this.wait = wait;
-        this.waitMangment = waitMangment;
+        this.waitManagement = waitManagement;
     }
 
     /** Re-read the row on every poll because provider refreshes replace DOM nodes. */

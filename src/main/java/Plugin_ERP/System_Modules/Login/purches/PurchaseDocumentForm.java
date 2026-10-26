@@ -1,9 +1,5 @@
 package Plugin_ERP.System_Modules.Login.purches;
 
-import Plugin_ERP.System_Modules.Login.AbstractForPurchases;
-import Plugin_ERP.Utiel.FormInteractions;
-import Plugin_ERP.Utiel.PropertyReader;
-import io.qameta.allure.Step;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -14,13 +10,16 @@ final class PurchaseDocumentForm {
     private final PurchaseModulePage owner;
     private final WebDriver driver;
     private final WebDriverWait ready;
+
     PurchaseDocumentForm(PurchaseModulePage owner, WebDriver driver, WebDriverWait ready) {
         this.owner = owner;
         this.driver = driver;
         this.ready = ready;
     }
 
-    private Object js(String script, Object... args) { return owner.js(script, args); }
+    private Object js(String script, Object... args) {
+        return owner.js(script, args);
+    }
 
     void puNotes(String note) {
         owner.puType(By.cssSelector("form textarea[label-text='Notes']"), note);
@@ -64,14 +63,16 @@ final class PurchaseDocumentForm {
     void puDismiss() {
         new WebDriverWait(driver, Duration.ofSeconds(90))
                 .ignoring(StaleElementReferenceException.class)
-                .ignoring(ElementClickInterceptedException.class).until(
-                d -> {
-                    if (d.findElements(By.cssSelector(".swal2-container")).stream()
-                            .noneMatch(WebElement::isDisplayed)) return true;
-                    for (WebElement e : d.findElements(By.cssSelector("button.swal2-confirm")))
-                        if (e.isDisplayed()) e.click();
-                    return false;
-                });
+                .ignoring(ElementClickInterceptedException.class)
+                .until(
+                        d -> {
+                            if (d.findElements(By.cssSelector(".swal2-container")).stream()
+                                    .noneMatch(WebElement::isDisplayed)) return true;
+                            for (WebElement e :
+                                    d.findElements(By.cssSelector("button.swal2-confirm")))
+                                if (e.isDisplayed()) e.click();
+                            return false;
+                        });
     }
 
     String puValidation() {
@@ -83,7 +84,8 @@ final class PurchaseDocumentForm {
                                     By.cssSelector(
                                             ".text-danger,.invalid-feedback,.swal2-title,.swal2-html-container,.b-toast-danger .toast-body,.v-toast__item--error .v-toast__text"))) {
                         if (e.getDomProperty("textContent").isBlank()) continue;
-                        owner.js("arguments[0].scrollIntoView({block:'center',inline:'center'})", e);
+                        owner.js(
+                                "arguments[0].scrollIntoView({block:'center',inline:'center'})", e);
                         if (e.isDisplayed() && !e.getText().isBlank()) out.add(e.getText());
                     }
                     return out.isEmpty() ? null : String.join(" | ", new LinkedHashSet<>(out));

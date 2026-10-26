@@ -602,13 +602,13 @@
 
 **حالته:** مصدر نشط · **عدد أسطره:** 11
 
-**يرتبط مباشرة بملفات داخل المشروع:** [BrowserAction.java](MAIN_Bots_AR.md#file-ca0683510b61)، [ElmentAction.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitMangment.java](MAIN_Bots_AR.md#file-98afc8ddbc07)
+**يرتبط مباشرة بملفات داخل المشروع:** [BrowserAction.java](MAIN_Bots_AR.md#file-ca0683510b61)، [ElementActions.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitManagement.java](MAIN_Bots_AR.md#file-98afc8ddbc07)
 
 ### خريطة الميثودات المعلنة
 
 | التوقيع كما في المصدر | الإتاحة | كيف تقرأ الغرض؟ |
 |---|---|---|
-| `public record PageContext(WebDriver driver, ElmentAction elements, WaitMangment waits, BrowserAction browser, Actions actions)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
+| `public record PageContext(WebDriver driver, ElementActions elements, WaitManagement waits, BrowserAction browser, Actions actions)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 
 <a id="file-4299488a700b"></a>
 ## PageFeedback.java
@@ -969,4 +969,3 @@
 | `String normalizeQuantity(String value)` | داخل الحزمة | توحيد صيغة الكمية، حسب المدخلات والتخصص. |
 | `void SetQuantitiesForRows(int... values)` | داخل الحزمة | تعيين الصفوف، حسب المدخلات والتخصص. |
 | `Map<String, String> GetNamesAndQuantities()` | داخل الحزمة | قراءة أو إرجاع القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
-

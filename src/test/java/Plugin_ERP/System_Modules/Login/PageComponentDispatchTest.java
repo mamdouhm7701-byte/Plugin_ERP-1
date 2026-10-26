@@ -15,23 +15,44 @@ import org.testng.annotations.Test;
 /** Extraction must retain overridden readers, assertion policies and rounding tolerance. */
 public class PageComponentDispatchTest {
     private static WebDriver noBrowser() {
-        return (WebDriver) Proxy.newProxyInstance(PageComponentDispatchTest.class.getClassLoader(),
-                new Class<?>[] {WebDriver.class}, (proxy, method, args) -> {
-                    if (method.getName().equals("toString")) return "no-browser";
-                    throw new AssertionError("Unexpected browser access: " + method.getName());
-                });
+        return (WebDriver)
+                Proxy.newProxyInstance(
+                        PageComponentDispatchTest.class.getClassLoader(),
+                        new Class<?>[] {WebDriver.class},
+                        (proxy, method, args) -> {
+                            if (method.getName().equals("toString")) return "no-browser";
+                            throw new AssertionError(
+                                    "Unexpected browser access: " + method.getName());
+                        });
     }
 
     private static final class PurchaseReaders extends AbstractForPurchases {
         int assertions;
         int attachments;
-        PurchaseReaders() { super(noBrowser()); }
-        @Override public List<InvoiceRow> getInvoiceRows() {
+
+        PurchaseReaders() {
+            super(noBrowser());
+        }
+
+        @Override
+        public List<InvoiceRow> getInvoiceRows() {
             return List.of(new InvoiceRow("owned", new BigDecimal("2"), new BigDecimal("73.25")));
         }
-        @Override public BigDecimal getDiscount() { return BigDecimal.ZERO; }
-        @Override public void attachBusinessValidation(InvoiceTotals totals) { attachments++; }
-        @Override public void assertInvoiceTotals(InvoiceTotals totals) { assertions++; }
+
+        @Override
+        public BigDecimal getDiscount() {
+            return BigDecimal.ZERO;
+        }
+
+        @Override
+        public void attachBusinessValidation(InvoiceTotals totals) {
+            attachments++;
+        }
+
+        @Override
+        public void assertInvoiceTotals(InvoiceTotals totals) {
+            assertions++;
+        }
     }
 
     @Test
@@ -45,24 +66,44 @@ public class PageComponentDispatchTest {
 
     @DataProvider
     public Object[][] tolerances() {
-        return new Object[][] {{"100.02", true}, {"99.98", true}, {"100.021", false}, {"99.979", false}};
+        return new Object[][] {
+            {"100.02", true}, {"99.98", true}, {"100.021", false}, {"99.979", false}
+        };
     }
 
     @Test(dataProvider = "tolerances")
     public void invoiceAssertionsRetainRoundingTolerance(String actualNet, boolean accepted) {
-        AbstractForPurchases page = new AbstractForPurchases(noBrowser()) {
-            @Override public BigDecimal getTotal() { return new BigDecimal("100"); }
-            @Override public BigDecimal getBeforeTax() { return new BigDecimal("100"); }
-            @Override public BigDecimal getTax() { return BigDecimal.ZERO; }
-            @Override public BigDecimal getNet() { return new BigDecimal(actualNet); }
-        };
+        AbstractForPurchases page =
+                new AbstractForPurchases(noBrowser()) {
+                    @Override
+                    public BigDecimal getTotal() {
+                        return new BigDecimal("100");
+                    }
+
+                    @Override
+                    public BigDecimal getBeforeTax() {
+                        return new BigDecimal("100");
+                    }
+
+                    @Override
+                    public BigDecimal getTax() {
+                        return BigDecimal.ZERO;
+                    }
+
+                    @Override
+                    public BigDecimal getNet() {
+                        return new BigDecimal(actualNet);
+                    }
+                };
         InvoiceTotals expected = totals();
         if (accepted) page.assertInvoiceTotals(expected);
         else Assert.expectThrows(AssertionError.class, () -> page.assertInvoiceTotals(expected));
     }
 
     @DataProvider
-    public Object[][] taxModes() { return new Object[][] {{TaxMode.INCLUSIVE}, {TaxMode.EXCLUSIVE}}; }
+    public Object[][] taxModes() {
+        return new Object[][] {{TaxMode.INCLUSIVE}, {TaxMode.EXCLUSIVE}};
+    }
 
     @Test(dataProvider = "taxModes")
     public void reportAssertionsRetainTaxModeAndDetectWrongNet(TaxMode mode) {
@@ -77,7 +118,8 @@ public class PageComponentDispatchTest {
         report.setNet(expected.getNet());
         page.assertReportTotals(report, expected, mode);
         report.setNet(new BigDecimal("999"));
-        Assert.expectThrows(AssertionError.class, () -> page.assertReportTotals(report, expected, mode));
+        Assert.expectThrows(
+                AssertionError.class, () -> page.assertReportTotals(report, expected, mode));
     }
 
     private static InvoiceTotals totals() {

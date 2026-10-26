@@ -1,7 +1,7 @@
 package Plugin_ERP.Drivers;
 
 import Plugin_ERP.Bots.LogUtils;
-import Plugin_ERP.Utiel.PropertyReader;
+import Plugin_ERP.Util.PropertyReader;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ThreadGuard;
 
@@ -19,7 +19,8 @@ public class WebDriverFactory {
 
     public static WebDriver initDriver() {
         if (driverThreadLocal.get() != null) {
-            throw new IllegalStateException("A browser is already active on this thread; close its owning class first");
+            throw new IllegalStateException(
+                    "A browser is already active on this thread; close its owning class first");
         }
         String browserType = PropertyReader.getProperty("BrowserType");
         if (browserType == null || browserType.isBlank()) {

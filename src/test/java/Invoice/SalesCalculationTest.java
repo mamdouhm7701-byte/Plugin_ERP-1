@@ -2,11 +2,11 @@ package Invoice;
 
 import Plugin_ERP.Business.Calculator.InvoiceCalculator;
 import Plugin_ERP.Models.*;
+import io.qameta.allure.Story;
 import java.math.BigDecimal;
 import java.util.List;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import io.qameta.allure.Story;
 
 /** Known arithmetic examples; independent of tenant settings and browser totals. */
 public final class SalesCalculationTest {

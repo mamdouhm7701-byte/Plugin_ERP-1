@@ -1,13 +1,11 @@
 package Plugin_ERP.Bots;
 
-import Plugin_ERP.Utiel.PropertyReader;
+import Plugin_ERP.Enums.Pages;
+import Plugin_ERP.Util.PropertyReader;
+import java.time.Duration;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
-import java.util.List;
-import Plugin_ERP.Enums.Pages;
 import org.testng.Assert;
 
 public class BrowserAction {

@@ -1,16 +1,9 @@
 package Plugin_ERP.System_Modules.Login.Products;
 
-import Plugin_ERP.Bots.AlertAction;
-import Plugin_ERP.Bots.BrowserAction;
-import Plugin_ERP.Bots.ElmentAction;
-import Plugin_ERP.Bots.WaitMangment;
-import Plugin_ERP.System_Modules.Login.Abstract;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
-
-import java.util.Map;
 
 public class ProductListPage extends ProductsModulePage {
     @Step("إضافة الصنف {name} إلى قائمة الأسعار بسعر {price}")

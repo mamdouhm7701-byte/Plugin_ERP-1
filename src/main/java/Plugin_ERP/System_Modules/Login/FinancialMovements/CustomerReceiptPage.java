@@ -1,20 +1,8 @@
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
-import Plugin_ERP.Bots.AlertAction;
-import Plugin_ERP.Bots.BrowserAction;
-import Plugin_ERP.Bots.ElmentAction;
-import Plugin_ERP.Bots.WaitMangment;
-import Plugin_ERP.System_Modules.Login.Abstract;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-
-import java.time.Duration;
 
 public class CustomerReceiptPage extends FinancialMovementPage {
     // Constructors
@@ -55,7 +43,7 @@ public class CustomerReceiptPage extends FinancialMovementPage {
     @Step("Handel Custom Receipt for Row Index: {rowIndex} with Number: {Number}")
     public void HandelCustomReceipt(int rowIndex, String Number) {
         utilites.ClickElement(getAllocationInput(rowIndex));
-        utilites.TaypeTextB(getAllocationInput(rowIndex), Number);
+        utilites.typeTextAndVerify(getAllocationInput(rowIndex), Number);
     }
 
     // Assert Required Error

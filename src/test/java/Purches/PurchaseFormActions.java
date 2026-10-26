@@ -22,18 +22,34 @@ public abstract class PurchaseFormActions extends PurchaseScenarioTest {
     }
 
     protected void print() {
-        prepare("Credit");var second=ownItem(2);
-        add(item,"picker");add(second,"picker");
-        page.puQuantity(item.name(),"2");page.puQuantity(second.name(),"3");
-        String column=documentKind()==PurchaseDocumentKind.INVOICE?"سعر الشراء":"السعر";
-        page.puSetLine(item.name(),column,"100");page.puSetLine(second.name(),column,"73.25");page.puWaitNet("419.75");
-        printContentAssertions=stored->{
-            sameNumber(stored.get("net"),"419.75");
-            Plugin_ERP.Utiel.PrintedInvoiceAssertions.invoice(driver,stored.get("code").toString(),supplier.name(),
-                    java.util.List.of(new Plugin_ERP.Utiel.PrintedInvoiceAssertions.Line(item.name(),new java.math.BigDecimal("2"),new java.math.BigDecimal("100")),
-                            new Plugin_ERP.Utiel.PrintedInvoiceAssertions.Line(second.name(),new java.math.BigDecimal("3"),new java.math.BigDecimal("73.25"))),
-                    new java.math.BigDecimal("419.75"));
-        };
+        prepare("Credit");
+        var second = ownItem(2);
+        add(item, "picker");
+        add(second, "picker");
+        page.puQuantity(item.name(), "2");
+        page.puQuantity(second.name(), "3");
+        String column = documentKind() == PurchaseDocumentKind.INVOICE ? "سعر الشراء" : "السعر";
+        page.puSetLine(item.name(), column, "100");
+        page.puSetLine(second.name(), column, "73.25");
+        page.puWaitNet("419.75");
+        printContentAssertions =
+                stored -> {
+                    sameNumber(stored.get("net"), "419.75");
+                    Plugin_ERP.Util.PrintedInvoiceAssertions.invoice(
+                            driver,
+                            stored.get("code").toString(),
+                            supplier.name(),
+                            java.util.List.of(
+                                    new Plugin_ERP.Util.PrintedInvoiceAssertions.Line(
+                                            item.name(),
+                                            new java.math.BigDecimal("2"),
+                                            new java.math.BigDecimal("100")),
+                                    new Plugin_ERP.Util.PrintedInvoiceAssertions.Line(
+                                            second.name(),
+                                            new java.math.BigDecimal("3"),
+                                            new java.math.BigDecimal("73.25"))),
+                            new java.math.BigDecimal("419.75"));
+                };
         save(true);
     }
 
@@ -144,7 +160,8 @@ public abstract class PurchaseFormActions extends PurchaseScenarioTest {
             Assert.assertTrue(
                     documentKind()
                             .type
-                            .equalsIgnoreCase(String.valueOf(stored.get("transactionType"))), "التحقق من نوع الحركة");
+                            .equalsIgnoreCase(String.valueOf(stored.get("transactionType"))),
+                    "التحقق من نوع الحركة");
             Assert.assertEquals(((List<?>) stored.get("lines")).size(), 1, "مطابقة بنود الفاتورة");
             Assert.assertEquals(firstLine(stored).get("itemId"), item.id(), "مطابقة الصنف");
             sameNumber(firstLine(stored).get("quantity"), "3");
@@ -169,7 +186,8 @@ public abstract class PurchaseFormActions extends PurchaseScenarioTest {
         prepare("Credit");
         fill("picker");
         page.puNew();
-        Assert.assertTrue(((List<?>) page.puDocument().get("lines")).isEmpty(), "التحقق من بنود الفاتورة");
+        Assert.assertTrue(
+                ((List<?>) page.puDocument().get("lines")).isEmpty(), "التحقق من بنود الفاتورة");
         Assert.assertTrue(page.puSaves().isEmpty());
         assertStock("0");
     }
@@ -182,7 +200,8 @@ public abstract class PurchaseFormActions extends PurchaseScenarioTest {
         page.puRemoveLine(second.name());
         page.puWaitNet("300");
         var saved = save(false);
-        Assert.assertEquals(((List<?>) data.read(saved).get("lines")).size(), 1, "مطابقة بنود الفاتورة");
+        Assert.assertEquals(
+                ((List<?>) data.read(saved).get("lines")).size(), 1, "مطابقة بنود الفاتورة");
         Assert.assertEquals(firstLine(data.read(saved)).get("itemId"), item.id(), "مطابقة الصنف");
         assertStock("3");
     }
@@ -291,10 +310,17 @@ public abstract class PurchaseFormActions extends PurchaseScenarioTest {
             page.puListText("filteredCode", stored.get("code").toString());
             // Codes are shared by different document kinds; a linked return and its invoice
             // can both match the code filter. Assert identity rather than assuming one row.
-            new org.openqa.selenium.support.ui.WebDriverWait(driver, java.time.Duration.ofSeconds(35))
-                    .until(d -> page.puListRows().stream().anyMatch(r -> record.id().equals(r.get("id"))));
-            var row = page.puListRows().stream().filter(r -> record.id().equals(r.get("id")))
-                    .findFirst().orElseThrow();
+            new org.openqa.selenium.support.ui.WebDriverWait(
+                            driver, java.time.Duration.ofSeconds(35))
+                    .until(
+                            d ->
+                                    page.puListRows().stream()
+                                            .anyMatch(r -> record.id().equals(r.get("id"))));
+            var row =
+                    page.puListRows().stream()
+                            .filter(r -> record.id().equals(r.get("id")))
+                            .findFirst()
+                            .orElseThrow();
             actual = row.get("sourceTransactionId");
             io.qameta.allure.Allure.addAttachment(
                     "Purchase source relationship from list",

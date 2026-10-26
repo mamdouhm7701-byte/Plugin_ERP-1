@@ -1,9 +1,9 @@
 package Plugin_ERP.System_Modules.Login.StoreModel;
 
 import Plugin_ERP.System_Modules.Login.AbstractForStore;
-import Plugin_ERP.Utiel.PropertyReader;
+import Plugin_ERP.Util.FormInteractions;
+import Plugin_ERP.Util.PropertyReader;
 import io.qameta.allure.Step;
-import Plugin_ERP.Utiel.FormInteractions;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -25,8 +25,13 @@ public class StoreModulePage extends AbstractForStore {
         ready = new WebDriverWait(driver, Duration.ofSeconds(35));
         ready.ignoring(StaleElementReferenceException.class)
                 .ignoring(ElementClickInterceptedException.class);
-        interactions = new FormInteractions(ready,
-                element -> js("arguments[0].scrollIntoView({block:'center',inline:'center'})", element));
+        interactions =
+                new FormInteractions(
+                        ready,
+                        element ->
+                                js(
+                                        "arguments[0].scrollIntoView({block:'center',inline:'center'})",
+                                        element));
         lines = new StoreDocumentLines(this, driver, ready);
         records = new StoreRecordList(this, driver, ready);
     }
@@ -47,7 +52,7 @@ public class StoreModulePage extends AbstractForStore {
 
     @Step("فتح شاشة المخازن: {route}")
     public void smOpen(String route) {
-        Plugin_ERP.Utiel.Allur.ScreenNames.opening(route);
+        Plugin_ERP.Util.Allur.ScreenNames.opening(route);
         driver.get(PropertyReader.getApplicationUrl() + "/#/" + route);
         driver.navigate().refresh();
         ready.until(
@@ -124,7 +129,7 @@ public class StoreModulePage extends AbstractForStore {
     }
 
     public java.time.LocalDate smCurrentDate() {
-        return Plugin_ERP.Utiel.DocumentDates.parse(
+        return Plugin_ERP.Util.DocumentDates.parse(
                 driver.findElement(By.cssSelector("form input[placeholder='YYYY-MM-DD']"))
                         .getDomProperty("value")
                         .replace('/', '-'));
@@ -178,16 +183,24 @@ public class StoreModulePage extends AbstractForStore {
         return ready.until(
                 d -> {
                     List<String> out = new ArrayList<>();
-                    for (WebElement input : d.findElements(By.cssSelector("form input.is-invalid,form input[aria-invalid='true']"))) {
+                    for (WebElement input :
+                            d.findElements(
+                                    By.cssSelector(
+                                            "form input.is-invalid,form input[aria-invalid='true']"))) {
                         if (!input.isDisplayed()) continue;
                         js("arguments[0].scrollIntoView({block:'center',inline:'center'})", input);
-                        new org.openqa.selenium.interactions.Actions(d).moveToElement(input).perform();
-                        Object field = js("""
+                        new org.openqa.selenium.interactions.Actions(d)
+                                .moveToElement(input)
+                                .perform();
+                        Object field =
+                                js(
+                                        """
                             const e=arguments[0],cell=e.closest('td'),table=e.closest('table');
                             const col=cell?.getAttribute('aria-colindex');
                             return (col&&table?.querySelector('th[aria-colindex="'+col+'"]')?.innerText)
                                 ||e.getAttribute('placeholder')||e.name||'input';
-                            """, input);
+                            """,
+                                        input);
                         for (WebElement tip : d.findElements(By.cssSelector(".tooltip-inner")))
                             if (tip.isDisplayed() && !tip.getText().isBlank())
                                 out.add(field + ": " + tip.getText());
@@ -196,12 +209,15 @@ public class StoreModulePage extends AbstractForStore {
                         if (!input.isDisplayed()) continue;
                         String nativeMessage = input.getDomProperty("validationMessage");
                         if (nativeMessage != null && !nativeMessage.isBlank()) {
-                            Object label = js("""
+                            Object label =
+                                    js(
+                                            """
                                 const e=arguments[0],cell=e.closest('td'),table=e.closest('table');
                                 const col=cell?.getAttribute('aria-colindex');
                                 const header=col&&table?.querySelector('th[aria-colindex="'+col+'"]');
                                 return header?.innerText||e.getAttribute('placeholder')||e.name||'input';
-                                """, input);
+                                """,
+                                            input);
                             out.add(label + ": " + nativeMessage);
                         }
                     }
@@ -305,7 +321,9 @@ public class StoreModulePage extends AbstractForStore {
         records.smSearch(value);
     }
 
-    public boolean smHasListSearch() { return records.smHasSearch(); }
+    public boolean smHasListSearch() {
+        return records.smHasSearch();
+    }
 
     public boolean smHasDocument(String marker) {
         return records.smHasDocument(marker);

@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/** Fixture payloads and seeding recipes. Ownership, journaling and cleanup stay in SalesTestData. */
+/**
+ * Fixture payloads and seeding recipes. Ownership, journaling and cleanup stay in SalesTestData.
+ */
 final class SalesFixtureDefinitions {
     private final SalesTestData data;
 

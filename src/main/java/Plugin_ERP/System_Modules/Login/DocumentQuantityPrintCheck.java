@@ -1,13 +1,5 @@
 package Plugin_ERP.System_Modules.Login;
 
-import Plugin_ERP.Bots.LogUtils;
-import Plugin_ERP.Models.InvoiceRow;
-import Plugin_ERP.Models.InvoiceTotals;
-import Plugin_ERP.Models.ReportTotals;
-import Plugin_ERP.System_Modules.Login.purches.PurchesBillsPage;
-import io.qameta.allure.Allure;
-import io.qameta.allure.Step;
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -18,7 +10,8 @@ import org.testng.Assert;
 final class DocumentQuantityPrintCheck {
     private final DocumentPage owner;
     private final WebDriver driver;
-    private final Plugin_ERP.Bots.ElmentAction utilites;
+    private final Plugin_ERP.Bots.ElementActions utilites;
+
     DocumentQuantityPrintCheck(DocumentPage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
@@ -35,7 +28,8 @@ final class DocumentQuantityPrintCheck {
             Assert.assertTrue(nameFound, "الاسم غير موجود في التقرير: " + name);
 
             boolean quantityFound = utilites.validation().IsTextDisplayed(quantity);
-            Assert.assertTrue(quantityFound, "الكمية غير موجودة في التقرير للصنف " + name + ": " + quantity);
+            Assert.assertTrue(
+                    quantityFound, "الكمية غير موجودة في التقرير للصنف " + name + ": " + quantity);
 
             System.out.println("✅ تم التأكد من: " + name + " - الكمية: " + quantity);
         }
@@ -51,15 +45,21 @@ final class DocumentQuantityPrintCheck {
             try {
                 WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
-                wait.until(ExpectedConditions.invisibilityOfElementLocated(
-                        By.xpath("//small[contains(text(),'" + messageText + "')]")
-                ));
+                wait.until(
+                        ExpectedConditions.invisibilityOfElementLocated(
+                                By.xpath("//small[contains(text(),'" + messageText + "')]")));
 
                 disappeared = true;
-                System.out.println("✅ الرسالة '" + messageText + "' اختفت في المحاولة رقم " + attempt);
+                System.out.println(
+                        "✅ الرسالة '" + messageText + "' اختفت في المحاولة رقم " + attempt);
 
             } catch (TimeoutException e) {
-                System.out.println("⚠️ المحاولة " + attempt + " فشلت، الرسالة '" + messageText + "' لسه ظاهرة، جاري عمل Refresh...");
+                System.out.println(
+                        "⚠️ المحاولة "
+                                + attempt
+                                + " فشلت، الرسالة '"
+                                + messageText
+                                + "' لسه ظاهرة، جاري عمل Refresh...");
 
                 if (attempt < maxRetries) {
                     driver.navigate().refresh();
@@ -70,8 +70,11 @@ final class DocumentQuantityPrintCheck {
 
         if (!disappeared) {
             throw new AssertionError(
-                    "الرسالة '" + messageText + "' لم تختف خلال الوقت المحدد بعد " + maxRetries + " محاولات."
-            );
+                    "الرسالة '"
+                            + messageText
+                            + "' لم تختف خلال الوقت المحدد بعد "
+                            + maxRetries
+                            + " محاولات.");
         }
     }
 }

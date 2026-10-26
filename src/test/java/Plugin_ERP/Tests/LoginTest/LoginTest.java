@@ -2,8 +2,8 @@ package Plugin_ERP.Tests.LoginTest;
 
 import Plugin_ERP.Drivers.Browser;
 import Plugin_ERP.System_Modules.Login.Login.LoginPage;
-import Plugin_ERP.Utiel.PropertyReader;
-import Plugin_ERP.Utiel.ScreenShotsUtils;
+import Plugin_ERP.Util.PropertyReader;
+import Plugin_ERP.Util.ScreenShotsUtils;
 import io.qameta.allure.*;
 import io.qameta.allure.testng.AllureTestNg;
 import java.time.Duration;
@@ -24,8 +24,13 @@ public class LoginTest {
     @BeforeMethod(alwaysRun = true)
     public void openLogin() {
         PropertyReader.loadProperties();
-        WebDriver driver = Browser.valueOf(PropertyReader.getProperty("BrowserType")
-                .trim().toUpperCase(Locale.ROOT)).getDriverFactory().createDriver();
+        WebDriver driver =
+                Browser.valueOf(
+                                PropertyReader.getProperty("BrowserType")
+                                        .trim()
+                                        .toUpperCase(Locale.ROOT))
+                        .getDriverFactory()
+                        .createDriver();
         browsers.set(driver);
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
         driver.get(PropertyReader.getApplicationUrl().replaceAll("/+$", "") + "/#/login");
@@ -37,7 +42,8 @@ public class LoginTest {
         WebDriver driver = browsers.get();
         try {
             if (driver != null) {
-                if (!result.isSuccess()) ScreenShotsUtils.takeScreenShot(driver, "FAIL_" + result.getName());
+                if (!result.isSuccess())
+                    ScreenShotsUtils.takeScreenShot(driver, "FAIL_" + result.getName());
                 driver.quit();
             }
         } finally {
@@ -53,7 +59,8 @@ public class LoginTest {
         String username = PropertyReader.getValidUsername();
         String password = PropertyReader.getValidPassword();
         if (username == null || username.isBlank() || password == null || password.isBlank()) {
-            throw new IllegalStateException("Login credentials are missing; see config/Login.local.properties or ERP environment variables.");
+            throw new IllegalStateException(
+                    "Login credentials are missing; see config/Login.local.properties or ERP environment variables.");
         }
         LoginPage page = new LoginPage(browsers.get());
         page.Login(username, password);
@@ -63,11 +70,14 @@ public class LoginTest {
     @Test
     @Severity(SeverityLevel.CRITICAL)
     @Story("INVALID LOGIN STORY")
-    @Description("Unknown generated account is rejected with a credential error and stays on login.")
+    @Description(
+            "Unknown generated account is rejected with a credential error and stays on login.")
     public void InvalidLoginTest() {
         LoginPage page = new LoginPage(browsers.get());
         // Avoid failed-password attempts against a real account or saved invalid data.
-        page.Login("qa-login-" + UUID.randomUUID() + "@example.invalid", UUID.randomUUID().toString());
-        page.assertLoginRejected(System.getProperty("Login.UnknownUserMessage", "User.UserNotFound"));
+        page.Login(
+                "qa-login-" + UUID.randomUUID() + "@example.invalid", UUID.randomUUID().toString());
+        page.assertLoginRejected(
+                System.getProperty("Login.UnknownUserMessage", "User.UserNotFound"));
     }
 }

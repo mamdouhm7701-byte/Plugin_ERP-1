@@ -1,14 +1,8 @@
 package Plugin_ERP.System_Modules.Login;
 
-import Plugin_ERP.Business.Calculator.InvoiceCalculator;
-import Plugin_ERP.Models.InvoiceRow;
-import Plugin_ERP.Models.InvoiceTotals;
-import Plugin_ERP.Models.ReportTotals;
-import io.qameta.allure.Step;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.*;
-import java.util.stream.Collectors;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
@@ -16,6 +10,7 @@ import org.openqa.selenium.support.ui.*;
 final class SalesSummaryReader {
     private final AbstractForSales owner;
     private final WebDriver driver;
+
     SalesSummaryReader(AbstractForSales owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
@@ -99,7 +94,9 @@ final class SalesSummaryReader {
                                 && !net.trim().isEmpty();
 
                     } catch (Exception e) {
-
+                        Plugin_ERP.Bots.LogUtils.debug(
+                                "SalesSummaryReader condition unavailable: "
+                                        + e.getClass().getSimpleName());
                         return false;
                     }
                 });

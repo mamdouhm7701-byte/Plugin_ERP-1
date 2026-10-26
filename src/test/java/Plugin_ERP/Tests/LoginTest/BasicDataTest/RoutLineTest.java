@@ -33,7 +33,9 @@ public class RoutLineTest extends BasicDataScenarioTest {
         p.SetRouteLocation(location);
         p.ClickSaveButton();
         var saved = basicData().awaitSaved("AgentItinerariesStatus", n);
-        Assert.assertEquals(basicData().read(saved).get("arabicName"), n,
+        Assert.assertEquals(
+                basicData().read(saved).get("arabicName"),
+                n,
                 "Owned route status must be persisted before checking its row");
         Assert.assertEquals(p.GetExactMatchCount(n), 1, "يجب ظهور حالة خط السير مرة واحدة: " + n);
     }

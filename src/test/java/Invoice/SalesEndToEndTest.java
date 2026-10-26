@@ -8,9 +8,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- * E2E: فاتورة من الواجهة ثم مرتجع مرتبط بنفس الفاتورة والعميل والصنف.
- * فائدته كشف أخطاء الربط والأرصدة بين الشاشات التي لا يكشفها اختبار كل شاشة منفردة.
- * API يجهز المراجع ويقرأ النتيجة وينظفها؛ إنشاء مستندي العمل وحفظهما يتم من الواجهة.
+ * E2E: فاتورة من الواجهة ثم مرتجع مرتبط بنفس الفاتورة والعميل والصنف. فائدته كشف أخطاء الربط
+ * والأرصدة بين الشاشات التي لا يكشفها اختبار كل شاشة منفردة. API يجهز المراجع ويقرأ النتيجة
+ * وينظفها؛ إنشاء مستندي العمل وحفظهما يتم من الواجهة.
  */
 public final class SalesEndToEndTest extends SalesScenarioTest {
     private SalesDocumentKind currentKind = SalesDocumentKind.INVOICE;
@@ -50,7 +50,8 @@ public final class SalesEndToEndTest extends SalesScenarioTest {
         page.slCapture(marker, data.store(1).id(), item.id(), kind().endpoint);
         page.slNotes(marker + "-RETURN");
         Assert.assertEquals(page.slDocument().get("sourceTransactionId"), invoice.id());
-        Assert.assertEquals(page.slDocument().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
+        Assert.assertEquals(
+                page.slDocument().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
         Assert.assertEquals(page.slDocument().get("agentId"), agent.id(), "مطابقة المندوب");
         page.slQuantity(item.name(), "3");
         page.slWaitNet(salesNet("300"));
@@ -66,7 +67,8 @@ public final class SalesEndToEndTest extends SalesScenarioTest {
         assertCustomerDelta(customerBeforeSale, "0");
     }
 
-    private SalesTestData.Record returnPart(SalesTestData.Record invoice, String quantity, String net) {
+    private SalesTestData.Record returnPart(
+            SalesTestData.Record invoice, String quantity, String net) {
         currentKind = SalesDocumentKind.RETURN;
         page = new SalesReturnPage(driver);
         initialBalances.put(1, number(data.balance(item, 1)));
@@ -83,49 +85,84 @@ public final class SalesEndToEndTest extends SalesScenarioTest {
         return returned;
     }
 
-    @Test @Story("E2E بيع ثم مرتجع جزئي ثم باقي الكمية يعيدان الرصيد بالكامل")
+    @Test
+    @Story("E2E بيع ثم مرتجع جزئي ثم باقي الكمية يعيدان الرصيد بالكامل")
     public void saleThenTwoPartialReturnsRestoreOriginalBalances() {
-        prepare("Credit"); var before = data.read(customer); var stock = initialBalances.get(1);
-        fill("picker"); var invoice = save(false); assertStock("3"); assertCustomerDelta(before, "300");
-        returnPart(invoice, "1", "100"); assertCustomerDelta(before, "200");
-        returnPart(invoice, "2", "200"); assertCustomerDelta(before, "0");
+        prepare("Credit");
+        var before = data.read(customer);
+        var stock = initialBalances.get(1);
+        fill("picker");
+        var invoice = save(false);
+        assertStock("3");
+        assertCustomerDelta(before, "300");
+        returnPart(invoice, "1", "100");
+        assertCustomerDelta(before, "200");
+        returnPart(invoice, "2", "200");
+        assertCustomerDelta(before, "0");
         awaitOwnedStock(stock, "Two partial returns must restore the initial stock");
     }
 
-    @Test @Story("E2E بيع ثم مرتجع جزئي ثم رفض تجاوز المتبقي مع ثبات الأرصدة")
+    @Test
+    @Story("E2E بيع ثم مرتجع جزئي ثم رفض تجاوز المتبقي مع ثبات الأرصدة")
     public void partialReturnThenOverReturnIsRejectedWithoutSideEffects() {
-        prepare("Credit"); var before = data.read(customer); fill("picker"); var invoice = save(false);
-        assertStock("3"); assertCustomerDelta(before, "300");
-        returnPart(invoice, "2", "200"); assertCustomerDelta(before, "100");
+        prepare("Credit");
+        var before = data.read(customer);
+        fill("picker");
+        var invoice = save(false);
+        assertStock("3");
+        assertCustomerDelta(before, "300");
+        returnPart(invoice, "2", "200");
+        assertCustomerDelta(before, "100");
         initialBalances.put(1, number(data.balance(item, 1)));
         page.slLinkedReturn(invoice.id(), item.name());
         page.slCapture(marker, data.store(1).id(), item.id(), kind().endpoint);
-        page.slNotes(marker + "-OVER-RETURN"); page.slQuantity(item.name(), "2");
-        rejectSave(); assertCustomerDelta(before, "100"); assertStock("0");
+        page.slNotes(marker + "-OVER-RETURN");
+        page.slQuantity(item.name(), "2");
+        rejectSave();
+        assertCustomerDelta(before, "100");
+        assertStock("0");
     }
 
-    @Test @Story("E2E بيع بكمية كسرية ثم مرتجع كامل يحافظ على الكسور والأرصدة")
+    @Test
+    @Story("E2E بيع بكمية كسرية ثم مرتجع كامل يحافظ على الكسور والأرصدة")
     public void fractionalSaleThenReturnRestoresExactBalances() {
-        prepare("Credit"); var before = data.read(customer); var stock = initialBalances.get(1);
-        add(item, "picker"); page.slQuantity(item.name(), "1.25"); page.slWaitNet(salesNet("125"));
-        var invoice = save(false); assertStock("1.25"); assertCustomerDelta(before, "125");
-        returnPart(invoice, "1.25", "125"); assertCustomerDelta(before, "0");
+        prepare("Credit");
+        var before = data.read(customer);
+        var stock = initialBalances.get(1);
+        add(item, "picker");
+        page.slQuantity(item.name(), "1.25");
+        page.slWaitNet(salesNet("125"));
+        var invoice = save(false);
+        assertStock("1.25");
+        assertCustomerDelta(before, "125");
+        returnPart(invoice, "1.25", "125");
+        assertCustomerDelta(before, "0");
         awaitOwnedStock(stock, "Fractional return must restore the exact opening balance");
     }
 
-    @Test @Story("E2E بيع ثم إلغاء مسودة المرتجع يبقي أثر البيع ثم يحفظ المرتجع الصحيح")
+    @Test
+    @Story("E2E بيع ثم إلغاء مسودة المرتجع يبقي أثر البيع ثم يحفظ المرتجع الصحيح")
     public void cancelledReturnDoesNotPostBeforeTheConfirmedReturn() {
-        prepare("Credit"); var before = data.read(customer); var stock = initialBalances.get(1);
-        fill("picker"); var invoice = save(false); assertStock("3"); assertCustomerDelta(before, "300");
-        currentKind = SalesDocumentKind.RETURN; page = new SalesReturnPage(driver);
+        prepare("Credit");
+        var before = data.read(customer);
+        var stock = initialBalances.get(1);
+        fill("picker");
+        var invoice = save(false);
+        assertStock("3");
+        assertCustomerDelta(before, "300");
+        currentKind = SalesDocumentKind.RETURN;
+        page = new SalesReturnPage(driver);
         var identities = data.documentIdentities();
         page.slLinkedReturn(invoice.id(), item.name());
         page.slCapture(marker, data.store(1).id(), item.id(), kind().endpoint);
-        page.slNotes(marker + "-UNSAVED"); page.slQuantity(item.name(), "1");
-        page.slOpen("invoice-list"); data.verifyNoNewDocuments(identities);
+        page.slNotes(marker + "-UNSAVED");
+        page.slQuantity(item.name(), "1");
+        page.slOpen("invoice-list");
+        data.verifyNoNewDocuments(identities);
         awaitOwnedStock(stock.subtract(number("3")), "Cancelled return must not restore stock");
         assertCustomerDelta(before, "300");
-        returnPart(invoice, "3", "300"); assertCustomerDelta(before, "0");
+        returnPart(invoice, "3", "300");
+        assertCustomerDelta(before, "0");
         awaitOwnedStock(stock, "Confirmed return restores original stock");
     }
 }

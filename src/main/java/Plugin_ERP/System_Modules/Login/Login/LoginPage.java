@@ -4,6 +4,7 @@ import Plugin_ERP.Bots.ElmentAction;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -32,9 +33,13 @@ public class LoginPage {
 
     // Constructors
     public LoginPage(WebDriver driver) {
+        this(driver, Duration.ofSeconds(30));
+    }
+
+    LoginPage(WebDriver driver, Duration timeout) {
         this.driver = driver;
         this.utilites = new ElmentAction(driver);
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        this.wait = new WebDriverWait(driver, timeout);
         this.wait.pollingEvery(Duration.ofMillis(100));
     }
 
@@ -56,6 +61,42 @@ public class LoginPage {
                 .until(ExpectedConditions.visibilityOfElementLocated(WELCOME_MESSAGE));
         Assert.assertFalse(driver.getCurrentUrl().contains("#/login"),
                 "يجب مغادرة شاشة الدخول بعد نجاح المصادقة");
+    }
+
+    @Step("التحقق من اكتمال الجلسة على الفرع المطلوب دون اشتراط صلاحية الصفحة الرئيسية")
+    public void assertAuthenticatedBranch(Object expectedBranchId) {
+        assertAuthenticatedBranch(expectedBranchId, null);
+    }
+
+    @Step("التحقق من جلسة مستخدم الاختبار على فرعه الصحيح")
+    public void assertAuthenticatedBranch(Object expectedBranchId, Object expectedUserId) {
+        if (expectedBranchId == null) throw new IllegalArgumentException("Expected branch is required");
+        var last=new java.util.concurrent.atomic.AtomicReference<Object>();
+        try {
+        wait.withMessage("لم تكتمل جلسة المستخدم على الفرع المطلوب بعد تسجيل الدخول")
+                .until(d -> {
+                    if (d.getCurrentUrl().contains("#/login")) return false;
+                    Object actual = ((JavascriptExecutor) d).executeScript("""
+                            const store=document.querySelector('#app')?.__vue__?.$store;
+                            return {authenticated:Boolean(store?.state?.auth?.token),
+                              branchId:store?.getters['app/currentBranch']?.id??store?.state?.app?.branchId,
+                              userId:store?.state?.auth?.profile?.userId};
+                            """);
+                    last.set(actual);
+                    if(!(actual instanceof java.util.Map<?,?> session)
+                            || !Boolean.TRUE.equals(session.get("authenticated")))return false;
+                    Object branch=session.get("branchId"),user=session.get("userId");
+                    return branch!=null&&expectedBranchId.toString().equals(branch.toString())
+                            &&(expectedUserId==null||(user!=null&&expectedUserId.toString().equals(user.toString())));
+                });
+        } catch (org.openqa.selenium.TimeoutException failure) {
+            var context=new java.util.LinkedHashMap<String,Object>();
+            context.put("url",driver.getCurrentUrl());context.put("expectedBranchId",expectedBranchId);
+            context.put("expectedUserId",expectedUserId);context.put("session",last.get());
+            io.qameta.allure.Allure.addAttachment("حالة جلسة الدخول دون بيانات سرية","application/json",
+                    org.json.simple.JSONValue.toJSONString(context),".json");
+            throw failure;
+        }
     }
 
     public void waitForLoginForm() {

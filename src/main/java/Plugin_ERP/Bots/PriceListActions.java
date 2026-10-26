@@ -76,46 +76,7 @@ public class PriceListActions extends BaseAction {
     }
 
     public By getLastEditButtonForPriceList() {
-
-        int attempts = 0;
-
-        while (attempts < 3) {
-
-            try {
-
-                WebElement firstRow =
-                        wait.until(
-                                ExpectedConditions.presenceOfElementLocated(
-                                        By.xpath("//tr[@role='row' and @aria-rowindex='1']")));
-
-                String pk = firstRow.getAttribute("data-pk");
-
-                if (pk == null || pk.isBlank()) {
-
-                    attempts++;
-                    Thread.sleep(500);
-                    continue;
-                }
-
-                System.out.println("✅ Edit PK = " + pk);
-
-                return By.id("invoice-row-" + pk + "-preview-icon");
-
-            } catch (Exception e) {
-
-                attempts++;
-
-                System.out.println("❌ Attempt Failed : " + attempts);
-                System.out.println("ERROR = " + e.getMessage());
-
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ignored) {
-                }
-            }
-        }
-
-        throw new RuntimeException("❌ ما لقاش أول صف للتعديل بعد 3 محاولات");
+        return By.id("invoice-row-" + getLastRowPk() + "-preview-icon");
     }
 
     public void deleteRowForPriceList() {
@@ -181,30 +142,7 @@ public class PriceListActions extends BaseAction {
     }
 
     public String getLastRowPk() {
-        int attempts = 0;
-        while (attempts < 3) {
-            try {
-                wait.until(
-                        ExpectedConditions.presenceOfElementLocated(
-                                By.xpath("//tr[@role='row' and @aria-rowindex='1']")));
-
-                String pk =
-                        driver.findElement(By.xpath("//tr[@role='row' and @aria-rowindex='1']"))
-                                .getAttribute("data-pk");
-
-                if (pk != null && !pk.isEmpty()) return pk;
-
-                attempts++;
-                Thread.sleep(500);
-            } catch (Exception e) {
-                attempts++;
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ignored) {
-                }
-            }
-        }
-        throw new RuntimeException("❌ ما لقاش أول صف بعد 3 محاولات");
+        return waitForRowPk(By.xpath("//tr[@role='row' and @aria-rowindex='1']"));
     }
 
     public void ClickElement(By locator) {

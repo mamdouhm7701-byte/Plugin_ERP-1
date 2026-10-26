@@ -24,6 +24,31 @@ import org.testng.annotations.Test;
 
 /** Local Allure model tests: no ERP, browser, credentials or network. */
 public final class ScenarioFailureReportTest {
+    @Test public void customerDebtFailureShowsExpectedAndPersistedBalance() {
+        String message = "Owned customer balance did not reach 115; actual DTO="
+                + "{\"currentDebit\":0,\"prevDebit\":0,\"currentCredit\":0,\"prevCredit\":0}";
+        String html = ScenarioFailureReport.render(result(), message);
+        Assert.assertTrue(html.contains("<td><bdi dir=\"auto\">115</bdi></td>"));
+        Assert.assertTrue(html.contains("<td><bdi dir=\"auto\">0</bdi></td>"));
+        Assert.assertTrue(html.contains("الحقول الأربعة المحفوظة لحسابه"));
+    }
+
+    @Test public void recordedCustomerBalanceIncludesOpeningAndCreditAmounts() {
+        String message = "Owned customer balance did not reach 115; actual DTO="
+                + "{\"currentDebit\":\"120.50\",\"prevDebit\":10,\"currentCredit\":3,\"prevCredit\":\"2.25\"}";
+        String html = ScenarioFailureReport.render(result(), message);
+        Assert.assertTrue(html.contains("<td><bdi dir=\"auto\">125.25</bdi></td>"));
+    }
+
+    @Test public void incompleteOrInvalidCustomerBalancesAreNotTreatedAsZero() {
+        for (String json : List.of("{\"currentDebit\":0}", "{broken}",
+                "{\"currentDebit\":\"unknown\",\"prevDebit\":0,\"currentCredit\":0,\"prevCredit\":0}")) {
+            String html = ScenarioFailureReport.render(result(),
+                    "Owned customer balance did not reach 115; actual DTO=" + json);
+            Assert.assertTrue(html.contains("لم يسجل الاختبار قيمة فعلية"));
+        }
+    }
+
     @Test public void parentComparisonShowsBusinessValuesRatherThanNestedCompareToNumbers() {
         StepResult comparison = step("مطابقة القيمة: المتوقع 999، الفعلي 1000", Status.FAILED);
         comparison.getSteps().add(step("التحقق من تطابق القيم: المتوقع 0، الفعلي 1", Status.FAILED));

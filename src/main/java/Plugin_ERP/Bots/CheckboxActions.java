@@ -218,7 +218,7 @@ public class CheckboxActions extends BaseAction {
                                 "arguments[0].scrollIntoView({block:'center', inline:'center'});",
                                 label);
 
-                Thread.sleep(400);
+                wait.until(ExpectedConditions.elementToBeClickable(labelLocator));
 
                 // Check if already active/selected → skip
                 String classes = label.getAttribute("class");
@@ -244,7 +244,9 @@ public class CheckboxActions extends BaseAction {
                 System.out.println("⚠️ Stale element, retry: " + i);
                 try {
                     Thread.sleep(500);
-                } catch (InterruptedException ignored) {
+                } catch (InterruptedException interrupted) {
+                    Thread.currentThread().interrupt();
+                    throw new IllegalStateException("Radio selection retry interrupted", interrupted);
                 }
 
             } catch (TimeoutException e) {
@@ -258,7 +260,9 @@ public class CheckboxActions extends BaseAction {
                 }
                 try {
                     Thread.sleep(500);
-                } catch (InterruptedException ignored) {
+                } catch (InterruptedException interrupted) {
+                    Thread.currentThread().interrupt();
+                    throw new IllegalStateException("Radio selection retry interrupted", interrupted);
                 }
             }
         }

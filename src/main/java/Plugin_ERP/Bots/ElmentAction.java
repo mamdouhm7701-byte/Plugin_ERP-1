@@ -446,11 +446,7 @@ public class ElmentAction {
                         .executeScript(
                                 "arguments[0].scrollIntoView({block: 'center'});", plusButton);
 
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+                wait.until(org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(plusButton));
 
                 plusButton.click();
                 LogUtils.info("✅ صف رقم " + rowIndex + " - ضغطة رقم " + (i + 1));
@@ -480,11 +476,7 @@ public class ElmentAction {
                         .executeScript(
                                 "arguments[0].scrollIntoView({block: 'center'});", minusButton);
 
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+                wait.until(org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(minusButton));
 
                 minusButton.click();
                 LogUtils.info("✅ صف رقم " + rowIndex + " - ضغطة Minus رقم " + (i + 1));

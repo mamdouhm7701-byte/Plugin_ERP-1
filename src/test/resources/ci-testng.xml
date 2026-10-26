@@ -8,8 +8,15 @@
     </listeners>
     <test name="Configuration, arithmetic and owned fixture recovery" preserve-order="true">
         <classes>
+            <class name="Plugin_ERP.Bots.ReadinessWaitTest"/>
             <class name="SuiteSupport.RuntimeCompatibilityTest"/>
             <class name="SuiteSupport.BrowserLifecycleTest"/>
+            <class name="SuiteSupport.ParallelIsolationTest"/>
+            <class name="SuiteSupport.ParallelSuitePlannerTest"/>
+            <class name="SuiteSupport.InteractiveTestLauncherTest"/>
+            <class name="SuiteSupport.NativeInteractiveSuiteListenerTest"/>
+            <class name="Plugin_ERP.System_Modules.Login.Login.LoginSessionContractTest"/>
+            <class name="Plugin_ERP.Utiel.LoginUsernamesTest"/>
             <class name="SuiteSupport.ModuleChoiceTest"/>
             <class name="SuiteSupport.ModuleFixtureContractTest"/>
             <class name="TestSupport.BasicDataFixturesTest"/>

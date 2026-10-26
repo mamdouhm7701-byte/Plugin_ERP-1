@@ -26,11 +26,7 @@ final class PageRecordActions {
     private By CloseButton = By.xpath("//button[normalize-space()='إغلاق']");
 
     void ClickNew() {
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        utilites.waits().waitForScreenReady(ClickNew);
         utilites.waits().waitForOverlayToDisappear();
         utilites.ClickElement(ClickNew);
         utilites.waits().waitForOverlayToDisappear();

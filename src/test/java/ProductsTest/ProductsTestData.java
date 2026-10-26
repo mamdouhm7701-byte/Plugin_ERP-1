@@ -77,6 +77,7 @@ final class ProductsTestData implements AutoCloseable {
     return definitions.category();
   }
   Record store(int index){
+        synchronized (TestSupport.BranchMutationLock.monitor()) {
     Record store=fixture("store-"+index,"Stores",fields("accountId",account("store-"+index).id()));
     String key="branch-store-"+index;
     if(!fixtures.containsKey(key)){
@@ -87,7 +88,9 @@ final class ProductsTestData implements AutoCloseable {
       created.add(link);fixtures.put(key,link);journal();changeBranchStore(link,true);
     }
     return store;
-  }
+
+        }
+    }
   @SuppressWarnings("unchecked") private Map<String,Object> branchFor(Record link){
     Object entity=call("get","Branches",fields("id",link.values().get("branchId"))).get("entity");
     if(!(entity instanceof Map<?,?> branch)||!link.values().get("branchId").equals(branch.get("id"))||!(branch.get("stores") instanceof List<?>))
@@ -99,6 +102,7 @@ final class ProductsTestData implements AutoCloseable {
   }
 
   private void changeBranchStore(Record link,boolean add){
+        synchronized (TestSupport.BranchMutationLock.monitor()) {
     Map<String,Object> branch=branchFor(link);Object storeId=link.values().get("storeId");
     if(containsStore(branch,storeId)!=add){
       List<Object> stores=new ArrayList<>((List<?>)branch.get("stores"));
@@ -116,7 +120,9 @@ final class ProductsTestData implements AutoCloseable {
       branch=refreshed;
     }
     ((JavascriptExecutor)driver).executeScript("const root=document.querySelector('#app').__vue__;if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",branch);
-  }
+
+        }
+    }
   Map<String,Object> itemValues() {
     return definitions.itemValues();
   }

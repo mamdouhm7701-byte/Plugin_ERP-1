@@ -35,12 +35,29 @@ public final class ReportMail {
     }
 
     public static boolean enabled() {
-        try { return Boolean.parseBoolean(configuration().getProperty("enabled", "false")); }
+        try { return enabled(configuration()); }
         catch (Exception failure) { throw new IllegalStateException("Cannot load report mail configuration", failure); }
     }
 
+    static boolean enabled(Properties config) {
+        return Boolean.parseBoolean(config.getProperty("enabled", "false").trim())
+                && !config.getProperty("to", "").isBlank();
+    }
+
+    public static void validateConfiguration() throws Exception {
+        validateConfiguration(configuration());
+    }
+
+    static void validateConfiguration(Properties config) throws Exception {
+        recipients(config.getProperty("to", ""));
+        if (config.getProperty("username", "").isBlank()
+                || config.getProperty("password", "").replace(" ", "").isBlank()) {
+            throw new IllegalStateException("Set REPORT_MAIL_USERNAME and REPORT_MAIL_PASSWORD or local mail settings");
+        }
+    }
+
     static InternetAddress[] recipients(String value) throws Exception {
-        InternetAddress[] addresses = InternetAddress.parse(value, true);
+        InternetAddress[] addresses = InternetAddress.parse(value == null ? "" : value.trim(), true);
         if (addresses.length == 0) throw new IllegalArgumentException("Report recipient required");
         for (InternetAddress address : addresses) address.validate();
         return addresses;
@@ -61,6 +78,7 @@ public final class ReportMail {
     }
 
     public static void send(Path testngDirectory) throws Exception {
+        validateConfiguration();
         Path bundle = AllureConstants.PROJECT_DIR.resolve("target/report-mail/deliveries")
                 .resolve(java.time.Instant.now().toEpochMilli() + "-" + java.util.UUID.randomUUID());
         Files.createDirectories(bundle);
@@ -85,10 +103,9 @@ public final class ReportMail {
     /** Resends a retained snapshot without touching results or running tests. */
     public static void sendPackaged(Path bundle) throws Exception {
         Properties config = configuration();
+        validateConfiguration(config);
         String user = config.getProperty("username", "").trim();
         String password = config.getProperty("password", "").replace(" ", "");
-        if (user.isEmpty() || password.isEmpty())
-            throw new IllegalStateException("Set REPORT_MAIL_USERNAME and REPORT_MAIL_PASSWORD or local mail settings");
         InternetAddress[] to = recipients(config.getProperty("to", ""));
         Path allure = bundle.resolve("allure-report.zip"), testng = bundle.resolve("testng-report.zip");
         // Initialize Drive lazily: small reports do not require OAuth setup.

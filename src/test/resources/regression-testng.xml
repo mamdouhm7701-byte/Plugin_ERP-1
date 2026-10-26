@@ -15,7 +15,9 @@
   حالات الرفض السبع تظل مفعّلة؛ لا نستثنيها بسبب عيوب التطبيق المعروفة.
   coverage-expansion يضم جميع حالات الشاشات الجديدة. الخزينة وExcel والطباعة وخط السير
   تأتي من مداخل موديولاتها، والرحلات الجديدة موجودة بالفعل هناك وفي expansion؛ لا نكرر E2E كاملة.
-  التشغيل: mvn '-Dsurefire.suiteXmlFiles=src/test/resources/regression-testng.xml' test
+  التشغيل المقسم الآمن على Headless: ./scripts/Test-Project.ps1 -Mode Regression -Workers 3
+  المدخل يحافظ على اختيار هذا الملف ويولد جزءًا للكلاسات المستقلة بالتوازي وجزءًا منفردًا للاستثناءات.
+  تشغيل XML مباشرة يظل تسلسليًا: mvn '-Dsurefire.suiteXmlFiles=src/test/resources/regression-testng.xml' test
 -->
 <suite name="Regression - Core modules and workflows" parallel="none" configfailurepolicy="continue">
     <suite-files>

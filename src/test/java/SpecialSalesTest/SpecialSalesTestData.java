@@ -158,6 +158,7 @@ final class SpecialSalesTestData implements AutoCloseable {
     }
 
     Record store(int index) {
+        synchronized (TestSupport.BranchMutationLock.monitor()) {
         Record store =
                 fixture(
                         "store-" + index,
@@ -185,9 +186,12 @@ final class SpecialSalesTestData implements AutoCloseable {
             changeBranchStore(link, true);
         }
         return store;
+
+        }
     }
 
     Record configureOwnedDefaults(Record customer) {
+        synchronized (TestSupport.BranchMutationLock.monitor()) {
         Object branchId = session.branchId;
         var link =
                 new Record(
@@ -220,9 +224,12 @@ final class SpecialSalesTestData implements AutoCloseable {
         call("update", "Branches", update);
         syncBranch(branchFor(record));
         return record;
+
+        }
     }
 
     void restoreDefaults(Record record) {
+        synchronized (TestSupport.BranchMutationLock.monitor()) {
         var branch = branchFor(record);
         var update = new LinkedHashMap<>(branch);
         for (String field : List.of("defaultStoreId", "defaultCustomerId")) {
@@ -251,6 +258,8 @@ final class SpecialSalesTestData implements AutoCloseable {
                         record.values().get("previousCustomerId")))
             throw new AssertionError("Branch default restoration failed");
         syncBranch(refreshed);
+
+        }
     }
 
     private void syncBranch(Map<String, Object> branch) {
@@ -283,6 +292,7 @@ final class SpecialSalesTestData implements AutoCloseable {
     }
 
     private void changeBranchStore(Record link, boolean add) {
+        synchronized (TestSupport.BranchMutationLock.monitor()) {
         Map<String, Object> branch = branchFor(link);
         Object storeId = link.values().get("storeId");
         if (containsStore(branch, storeId) != add) {
@@ -314,6 +324,8 @@ final class SpecialSalesTestData implements AutoCloseable {
                         "const"
                             + " root=document.querySelector('#app').__vue__;if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
                         branch);
+
+        }
     }
 
     Map<String, Object> itemValues() {

@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
+import java.math.BigDecimal;
+import java.util.Map;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.testng.ITestResult;
 
 /** Adds a readable view of recorded evidence; never changes the outcome or original failure. */
@@ -21,6 +25,8 @@ public final class ScenarioFailureReport {
             "(?:المتوقع|المتوقعة)\\s*[:=]?\\s*(.*?)\\s*[،,؛;]\\s*(?:الفعلي|الفعلية)\\s*[:=]?\\s*(.+)");
     private static final Pattern MESSAGE_VALUES = Pattern.compile(
             "Actual\\s*=\\s*([^,\\r\\n]+),\\s*expected\\s*=\\s*([^\\s,;]+)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern CUSTOMER_BALANCE = Pattern.compile(
+            "Owned customer balance did not reach\\s+([-+]?\\d+(?:\\.\\d+)?);\\s*actual DTO=(\\{.*\\})");
     private ScenarioFailureReport() {}
 
     public static void attach(ITestResult result) {
@@ -64,6 +70,7 @@ public final class ScenarioFailureReport {
             var matcher = MESSAGE_VALUES.matcher(text(originalFailureMessage));
             if (matcher.find()) values = new Values(matcher.group(2), matcher.group(1), "رسالة الخطأ المسجلة");
         }
+        if (values == null) values = customerBalanceValues(originalFailureMessage);
         String expected = values == null ? "لم يسجل الاختبار قيمة متوقعة يمكن عرضها بوضوح." : values.expected();
         String actual = values == null ? "لم يسجل الاختبار قيمة فعلية قابلة للمقارنة." : values.actual();
         String explanation = values == null
@@ -111,6 +118,25 @@ public final class ScenarioFailureReport {
 
     private record RecordedStep(List<String> path, Status status) {}
     private record Values(String expected, String actual, String source) {}
+    private static Values customerBalanceValues(String message) {
+        var match = CUSTOMER_BALANCE.matcher(text(message));
+        if (!match.find()) return null;
+        try {
+            if (!(new JSONParser().parse(match.group(2)) instanceof Map<?, ?> row)) return null;
+            BigDecimal actual = amount(row, "currentDebit").add(amount(row, "prevDebit"))
+                    .subtract(amount(row, "currentCredit")).subtract(amount(row, "prevCredit"));
+            return new Values(match.group(1), actual.stripTrailingZeros().toPlainString(),
+                    "رسالة التحقق من رصيد العميل والحقول الأربعة المحفوظة لحسابه");
+        } catch (ParseException | IllegalArgumentException failure) {
+            return null;
+        }
+    }
+    private static BigDecimal amount(Map<?, ?> row, String key) {
+        Object raw = row.get(key);
+        if (!(raw instanceof Number || raw instanceof String))
+            throw new IllegalArgumentException("Missing numeric balance field");
+        return new BigDecimal(raw.toString());
+    }
     private static Values values(String name) {
         var match = ARABIC_VALUES.matcher(name);
         if (!match.find()) return null;

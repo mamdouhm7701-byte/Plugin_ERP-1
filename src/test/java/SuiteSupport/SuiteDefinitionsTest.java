@@ -24,6 +24,8 @@ public final class SuiteDefinitionsTest {
     return new Object[][] {
         {"smoke"}, {"sanity"}, {"regression"}, {"e2e"}, {"login"}, {"ci"}, {"coverage-expansion"}, {"coverage-observations"}, {"coverage-recovery"}, {"coverage-verification"},
         {"additional/standalone/browser-isolation"},
+        {"additional/standalone/parallel-three-pilot"},
+        {"additional/standalone/parallel-three-screens"},
         {"additional/standalone/point-of-sale"}, {"additional/standalone/restaurant"}, {"special-sales"}, {"basic-data"}, {"general-accounting"},
         {"additional/standalone/fixture-lifecycle"}, {"additional/internal/regression-additional"}, {"additional/internal/regression-workflows"},
         {"additional/standalone/fixture-refactor-smoke"},
@@ -37,6 +39,25 @@ public final class SuiteDefinitionsTest {
         {"additional/standalone/products-finance-interactions-smoke"},
         {"additional/standalone/acceptance"}, {"additional/standalone/module-lifecycle-smoke"}, {"additional/standalone/allure-journey-smoke"}
     };
+  }
+
+  @Test public void parallelPilotHasExactlyThreeIsolatedSequentialLanes() throws Exception {
+    var suites = new Parser(RESOURCES.resolve("additional/standalone/parallel-three-pilot-testng.xml")
+        .toString()).parseToList();
+    Assert.assertEquals(suites.size(), 1);
+    var suite = suites.getFirst();
+    Assert.assertEquals(suite.getParallel(), XmlSuite.ParallelMode.TESTS);
+    Assert.assertEquals(suite.getThreadCount(), 3);
+    Assert.assertEquals(suite.getTests().size(), 3);
+    for (var lane : suite.getTests()) {
+      Assert.assertEquals(lane.getParallel(), XmlSuite.ParallelMode.NONE);
+      Assert.assertEquals(lane.getClasses().size(), 1);
+      Assert.assertEquals(lane.getClasses().getFirst().getIncludedMethods().size(), 1);
+    }
+    Assert.assertEquals(new HashSet<>(selectedCases("additional/standalone/parallel-three-pilot")), Set.of(
+        "ProductsTest.UnitTest#AddNewUnite",
+        "Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest#BK_003_CreateBankAndVerifySavedFields",
+        "DealerModelTest.CustomerClassificationTest#CC_005_OwnedClassificationCreateEditDelete"));
   }
 
   @Test(dataProvider = "testLevels")
@@ -162,6 +183,30 @@ public final class SuiteDefinitionsTest {
     }
   }
 
+  @Test public void parallelScreensRetainOnlyTheReviewedClassesAndTheirRegressionCases() throws Exception {
+    var suites = new Parser(RESOURCES.resolve("additional/standalone/parallel-three-screens-testng.xml")
+        .toString()).parseToList();
+    Assert.assertEquals(suites.size(), 1);
+    var suite = suites.getFirst();
+    Assert.assertEquals(suite.getParallel(), XmlSuite.ParallelMode.TESTS);
+    Assert.assertEquals(suite.getThreadCount(), 3);
+    Assert.assertEquals(suite.getTests().size(), 3);
+    var classes = new HashSet<String>();
+    for (var lane : suite.getTests()) {
+      Assert.assertEquals(lane.getParallel(), XmlSuite.ParallelMode.NONE);
+      Assert.assertEquals(lane.getClasses().size(), 1);
+      classes.add(lane.getClasses().getFirst().getName());
+      Assert.assertTrue(lane.getClasses().getFirst().getIncludedMethods().isEmpty());
+      Assert.assertTrue(lane.getClasses().getFirst().getExcludedMethods().isEmpty());
+    }
+    Assert.assertEquals(classes, Set.of("ProductsTest.UnitTest",
+        "Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest", "DealerModelTest.CustomerClassificationTest"));
+    var expected = selectedCases("regression").stream()
+        .filter(key -> classes.contains(key.substring(0, key.indexOf('#')))).toList();
+    Assert.assertEquals(new HashSet<>(selectedCases("additional/standalone/parallel-three-screens")),
+        new HashSet<>(expected));
+  }
+
   private static List<String> selectedCases(String level) throws Exception {
     List<String> selected = new ArrayList<>();
     for (XmlSuite suite : new Parser(RESOURCES.resolve(level + "-testng.xml").toString()).parseToList()) {
@@ -171,7 +216,9 @@ public final class SuiteDefinitionsTest {
   }
 
   private static void collect(XmlSuite suite, List<String> selected) throws Exception {
-    Assert.assertEquals(suite.getParallel(), XmlSuite.ParallelMode.NONE,
+    boolean pilot = Set.of("Parallel pilot - three independent screens",
+        "Parallel screens - three independent screens").contains(suite.getName());
+    Assert.assertEquals(suite.getParallel(), pilot ? XmlSuite.ParallelMode.TESTS : XmlSuite.ParallelMode.NONE,
         "Page fixture lifecycles require sequential suites: " + suite.getName());
     for (XmlTest test : suite.getTests()) {
       Assert.assertEquals(test.getParallel(), XmlSuite.ParallelMode.NONE,

@@ -133,71 +133,14 @@ public class BrowserAction {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
+                    throw new IllegalStateException("Navigation retry interrupted", ex);
                 }
             }
         }
     }
 
     public void waitForOverlayToDisappear() {
-        By overlay = By.cssSelector("div.b-overlay");
-        long timeoutMillis = 30000;
-        long startTime = System.currentTimeMillis();
-
-        try {
-            long hiddenSince = -1;
-
-            while (true) {
-                if (System.currentTimeMillis() - startTime > timeoutMillis) {
-                    throw new RuntimeException("Overlay did not stabilize within timeout.");
-                }
-
-                boolean overlayVisible;
-                try {
-                    List<WebElement> overlays = driver.findElements(overlay);
-                    overlayVisible =
-                            overlays.stream()
-                                    .anyMatch(
-                                            el -> {
-                                                try {
-                                                    return el.isDisplayed();
-                                                } catch (StaleElementReferenceException e) {
-                                                    return false;
-                                                }
-                                            });
-                } catch (StaleElementReferenceException e) {
-                    overlayVisible = false;
-                }
-
-                if (overlayVisible) {
-                    hiddenSince = -1;
-                } else {
-                    if (hiddenSince == -1) {
-                        hiddenSince = System.currentTimeMillis();
-                    }
-                    if (System.currentTimeMillis() - hiddenSince >= 1000) {
-                        break;
-                    }
-                }
-
-                Thread.sleep(200);
-            }
-
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-            wait.until(
-                    d ->
-                            "complete"
-                                    .equals(
-                                            ((JavascriptExecutor) d)
-                                                    .executeScript("return document.readyState")));
-
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Interrupted while waiting for overlay.", e);
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Overlay did not stabilize within timeout.", e);
-        }
+        new WaitActions(driver).waitForOverlayToDisappear();
     }
 
     public void OpenNavigationHelper(Pages page) {
@@ -251,6 +194,7 @@ public class BrowserAction {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
+                    throw new IllegalStateException("Navigation retry interrupted", ex);
                 }
             }
         }

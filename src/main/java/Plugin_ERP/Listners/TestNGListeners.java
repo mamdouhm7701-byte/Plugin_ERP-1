@@ -29,6 +29,7 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
             java.util.List<org.testng.ISuite> suites, String outputDirectory) {
         if (!Plugin_ERP.Utiel.Allur.ReportMail.enabled() || !hasAllureResults()) return;
         try {
+            Plugin_ERP.Utiel.Allur.ReportMail.validateConfiguration();
             // Regenerate from this run even when CI disables automatic HTML/opening.
             AllureBinaryManger.generateReportOnly();
             Path mailReport = Files.createTempDirectory("plugin-erp-testng-");

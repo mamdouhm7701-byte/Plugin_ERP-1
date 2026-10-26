@@ -75,33 +75,8 @@ public class GridActions extends BaseAction {
     }
 
     public By getLastEditButton() {
-        int attempts = 0;
-        while (attempts < 3) {
-            try {
-                wait.until(
-                        ExpectedConditions.presenceOfElementLocated(
-                                By.xpath("//tr[@role='row' and @aria-rowindex='1']")));
-
-                String pk =
-                        driver.findElement(By.xpath("//tr[@role='row' and @aria-rowindex='1']"))
-                                .getAttribute("data-pk");
-
-                if (pk == null || pk.isEmpty()) {
-                    attempts++;
-                    Thread.sleep(500);
-                    continue;
-                }
-
-                return By.xpath("//tr[@data-pk='" + pk + "']//button[@data-action-type='edit']");
-            } catch (Exception e) {
-                attempts++;
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ignored) {
-                }
-            }
-        }
-        throw new RuntimeException("❌ ما لقاش أول صف للتعديل بعد 3 محاولات");
+        String pk = getLastRowPk();
+        return By.xpath("//tr[@data-pk='" + pk + "']//button[@data-action-type='edit']");
     }
 
     public void deleteAllRowsSvg(By confirmDeleteButton) {
@@ -127,116 +102,17 @@ public class GridActions extends BaseAction {
     }
 
     public By getLastDeleteButton() {
-        int attempts = 0;
-        while (attempts < 3) {
-            try {
-                wait.until(
-                        ExpectedConditions.presenceOfElementLocated(
-                                By.xpath("//tr[@role='row' and @aria-rowindex='1']")));
-
-                String pk =
-                        driver.findElement(By.xpath("//tr[@role='row' and @aria-rowindex='1']"))
-                                .getAttribute("data-pk");
-
-                if (pk == null || pk.isEmpty()) {
-                    attempts++;
-                    Thread.sleep(500);
-                    continue;
-                }
-
-                return By.xpath("//tr[@data-pk='" + pk + "']//button[@data-action-type='delete']");
-            } catch (Exception e) {
-                attempts++;
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ignored) {
-                }
-            }
-        }
-        throw new RuntimeException("❌ ما لقاش أول صف للحذف بعد 3 محاولات");
+        String pk = getLastRowPk();
+        return By.xpath("//tr[@data-pk='" + pk + "']//button[@data-action-type='delete']");
     }
 
     public String getLastRowPk() {
-        int attempts = 0;
-        while (attempts < 3) {
-            try {
-                wait.until(
-                        ExpectedConditions.presenceOfElementLocated(
-                                By.xpath("//tr[@role='row' and @aria-rowindex='1']")));
-
-                String pk =
-                        driver.findElement(By.xpath("//tr[@role='row' and @aria-rowindex='1']"))
-                                .getAttribute("data-pk");
-
-                if (pk != null && !pk.isEmpty()) return pk;
-
-                attempts++;
-                Thread.sleep(500);
-            } catch (Exception e) {
-                attempts++;
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ignored) {
-                }
-            }
-        }
-        throw new RuntimeException("❌ ما لقاش أول صف بعد 3 محاولات");
+        return waitForRowPk(By.xpath("//tr[@role='row' and @aria-rowindex='1']"));
     }
 
     public String getPkByText(String text) {
-
-        int attempts = 0;
-
-        while (attempts < 3) {
-
-            try {
-
-                By rowLocator =
-                        By.xpath(
-                                "//tr[@role='row'][.//*[contains(normalize-space(),'"
-                                        + text
-                                        + "')]]");
-
-                WebElement row =
-                        wait.until(ExpectedConditions.presenceOfElementLocated(rowLocator));
-
-                System.out.println("========== ROW FOUND ==========");
-                System.out.println("ROW TEXT = " + row.getText());
-
-                String pk = row.getAttribute("data-pk");
-
-                System.out.println("DATA PK = " + pk);
-
-                System.out.println("OUTER HTML = " + row.getAttribute("outerHTML"));
-
-                if (pk != null && !pk.trim().isEmpty() && !"null".equals(pk)) {
-
-                    System.out.println("✅ PK FOUND = " + pk);
-
-                    return pk.trim();
-                }
-
-                System.out.println("⚠️ PK IS NULL OR EMPTY - RETRYING...");
-
-                attempts++;
-
-                Thread.sleep(1000);
-
-            } catch (Exception e) {
-
-                System.out.println("❌ Attempt Failed : " + (attempts + 1));
-                System.out.println("ERROR = " + e.getMessage());
-
-                attempts++;
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ignored) {
-                }
-            }
-        }
-
-        throw new RuntimeException("❌ لا يوجد الاسم الذى تبحث عنه " + text);
+        By row = By.xpath("//tr[@role='row'][.//*[contains(normalize-space(),'" + text + "')]]");
+        return waitForRowPk(row);
     }
 
     public void clickEditByIndex(int index) {
@@ -336,11 +212,6 @@ public class GridActions extends BaseAction {
 
     public void debugPrintAllRows() {
         waitActions.waitForOverlayToDisappear();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         List<WebElement> rows = driver.findElements(By.xpath("//tbody//tr[@role='row']"));
         System.out.println("=== عدد الصفوف: " + rows.size() + " ===");
         for (int i = 0; i < rows.size(); i++) {

@@ -148,9 +148,8 @@ public class CashTest extends BasicDataScenarioTest {
         cashPage.ClickCloseButton();
     }
 
-    @Test(
-            enabled = false,
-            description = "Replaced by WH-003 using unique data and exact-name cleanup")
+    // Compatibility alias; the WH scenario is the executable TestNG test.
+    @Deprecated
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("Web Cloud")
@@ -165,9 +164,8 @@ public class CashTest extends BasicDataScenarioTest {
         WH_003_CreateValidSafeAndVerifyFields();
     }
 
-    @Test(
-            enabled = false,
-            description = "Unsafe legacy test edited the last existing row; replaced by WH-021")
+    // Compatibility alias; the WH scenario is the executable TestNG test.
+    @Deprecated
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("Web Cloud")
@@ -181,9 +179,8 @@ public class CashTest extends BasicDataScenarioTest {
         WH_021_EditOwnedTestSafeAndSave();
     }
 
-    @Test(
-            enabled = false,
-            description = "Unsafe legacy test deleted the last existing row; replaced by WH-023")
+    // Compatibility alias; the WH scenario is the executable TestNG test.
+    @Deprecated
     @Owner("MAMDOUH")
     @Severity(SeverityLevel.CRITICAL)
     @Epic("Web Cloud")

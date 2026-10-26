@@ -19,14 +19,16 @@ public final class PermissionsCoverageTest extends BasicDataScenarioTest {
     @Test @Story("المستخدم بلا صلاحية لا يصل لرابط الطاولات أو بياناته من الخادم")
     public void restrictedUserCannotOpenProtectedRouteOrReadApi() {
         String username="qa_denied_"+UUID.randomUUID().toString().replace("-", ""), password=UUID.randomUUID()+"Aa1!";
-        basicData().fixture("restricted-permissions","users",fields("userName",username,"passwordHash",password,
+        var restricted=basicData().fixture("restricted-permissions","users",fields("userName",username,"passwordHash",password,
                 "isAdmin",false,"isActive",true,"maxAllowedDiscount",0,"permissions",List.of(),
                 "branches",List.of(fields("branchId",new FixtureSession(driver).branchId)),"defaultOtherPaymentMethods",List.of(),
                 "imageUrl","","phone","","email","","base64Image","","imageExtension",""));
         WebDriver limited=new Chrome().createDriver();
         try {
             limited.get(PropertyReader.getApplicationUrl()+"/#/login");
-            LoginPage login=new LoginPage(limited);login.Login(username,password);login.AssertLoginPageTitle();
+            LoginPage login=new LoginPage(limited);
+            login.Login(Plugin_ERP.Utiel.LoginUsernames.withinSameCompany(PropertyReader.getValidUsername(),username),password);
+            login.assertAuthenticatedBranch(new FixtureSession(driver).branchId,restricted.id());
             limited.get(PropertyReader.getApplicationUrl()+"/#/tables");
             new WebDriverWait(limited,Duration.ofSeconds(20)).until(d->d.getCurrentUrl().contains("error-404"));
             Assert.assertTrue(limited.findElements(By.cssSelector("button[data-action-type='new']")).stream().noneMatch(WebElement::isDisplayed));
@@ -37,6 +39,13 @@ public final class PermissionsCoverageTest extends BasicDataScenarioTest {
                 """);
             Assert.assertTrue(Set.of("401","403").contains(String.valueOf(status)),
                     "Backend must deny a user without viewTables; actual HTTP outcome="+status);
+        } catch (RuntimeException | AssertionError failure) {
+            try {
+                io.qameta.allure.Allure.addAttachment("رابط جلسة المستخدم المحدود عند التوقف", limited.getCurrentUrl());
+                io.qameta.allure.Allure.addAttachment("صورة جلسة المستخدم المحدود", "image/png",
+                        new java.io.ByteArrayInputStream(((TakesScreenshot)limited).getScreenshotAs(OutputType.BYTES)), ".png");
+            } catch (RuntimeException captureFailure) { failure.addSuppressed(captureFailure); }
+            throw failure;
         } finally { limited.quit(); }
     }
     @Test @Story("رابط محمي دون جلسة يعيد المستخدم إلى الدخول")

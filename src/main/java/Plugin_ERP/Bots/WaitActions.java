@@ -11,6 +11,10 @@ import java.util.Set;
 
 public class WaitActions extends BaseAction {
 
+    public WaitActions(WebDriver driver) {
+        this(driver, new WebDriverWait(driver, Duration.ofSeconds(10)), new WaitMangment(driver));
+    }
+
     public WaitActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment) {
         super(driver, wait, waitMangment);
     }
@@ -76,11 +80,6 @@ public class WaitActions extends BaseAction {
                     }
                 });
 
-        // 5. Buffer للـ JS
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ignored) {
-        }
     }
 
     public void switchToNewTab() {
@@ -107,64 +106,23 @@ public class WaitActions extends BaseAction {
 
     public void waitForOverlayToDisappear() {
         By overlay = By.cssSelector("div.b-overlay");
-        long timeoutMillis = 30000;
-        long startTime = System.currentTimeMillis();
-
-        try {
-            long hiddenSince = -1;
-
-            while (true) {
-                if (System.currentTimeMillis() - startTime > timeoutMillis) {
-                    throw new RuntimeException("Overlay did not stabilize within timeout.");
-                }
-
-                boolean overlayVisible;
-                try {
-                    List<WebElement> overlays = driver.findElements(overlay);
-                    overlayVisible =
-                            overlays.stream()
-                                    .anyMatch(
-                                            el -> {
-                                                try {
-                                                    return el.isDisplayed();
-                                                } catch (StaleElementReferenceException e) {
-                                                    return false;
-                                                }
-                                            });
-                } catch (StaleElementReferenceException e) {
-                    overlayVisible = false;
-                }
-
-                if (overlayVisible) {
-                    hiddenSince = -1;
-                } else {
-                    if (hiddenSince == -1) {
-                        hiddenSince = System.currentTimeMillis();
+        final long[] hiddenSince = {-1};
+        new WebDriverWait(driver, Duration.ofSeconds(30))
+                .pollingEvery(Duration.ofMillis(200))
+                .until(d -> {
+                    try {
+                        boolean visible = d.findElements(overlay).stream().anyMatch(WebElement::isDisplayed);
+                        if (visible) { hiddenSince[0] = -1; return false; }
+                        long now = System.nanoTime();
+                        if (hiddenSince[0] < 0) hiddenSince[0] = now;
+                        return now - hiddenSince[0] >= Duration.ofSeconds(1).toNanos();
+                    } catch (StaleElementReferenceException stale) {
+                        hiddenSince[0] = -1;
+                        return false;
                     }
-                    if (System.currentTimeMillis() - hiddenSince >= 1000) {
-                        break;
-                    }
-                }
-
-                Thread.sleep(200);
-            }
-
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-            wait.until(
-                    d ->
-                            "complete"
-                                    .equals(
-                                            ((JavascriptExecutor) d)
-                                                    .executeScript("return document.readyState")));
-
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Interrupted while waiting for overlay.", e);
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Overlay did not stabilize within timeout.", e);
-        }
+                });
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(d ->
+                "complete".equals(((JavascriptExecutor) d).executeScript("return document.readyState")));
     }
 
     public void waitForScreenReady(By locator) {

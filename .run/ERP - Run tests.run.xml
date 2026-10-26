@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ERP - Run tests" type="TestNG" factoryName="TestNG" singleton="true">
+    <module name="POM" />
+    <option name="SUITE_NAME" value="$PROJECT_DIR$/src/test/resources/interactive-testng.xml" />
+    <option name="TEST_OBJECT" value="SUITE" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <shortenClasspath name="ARGS_FILE" />
+    <option name="VM_PARAMETERS" value="-Dfile.encoding=UTF-8" />
+    <envs><env name="REPORT_MAIL_ENABLED" value="false" /></envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

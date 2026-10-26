@@ -41,18 +41,14 @@ public class DropdownActions extends BaseAction {
             input.sendKeys(Keys.CONTROL + "a");
             input.sendKeys(Keys.DELETE);
 
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException ex) {
-                throw new RuntimeException(ex);
-            }
+            wait.until(ExpectedConditions.attributeToBe(input, "value", ""));
 
             input.sendKeys(cleanExpected);
 
             try {
-                Thread.sleep(200);
-            } catch (InterruptedException ex) {
-                throw new RuntimeException(ex);
+                wait.until(ExpectedConditions.attributeToBe(input, "value", cleanExpected));
+            } catch (TimeoutException retry) {
+                // Keep the bounded typing retry for inputs that replace their value.
             }
 
             String actualValue = input.getAttribute("value");
@@ -151,7 +147,8 @@ public class DropdownActions extends BaseAction {
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException ex) {
-                        throw new RuntimeException(ex);
+                        Thread.currentThread().interrupt();
+                        throw new IllegalStateException("Dropdown selection retry interrupted", ex);
                     }
                 }
             }
@@ -236,7 +233,8 @@ public class DropdownActions extends BaseAction {
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException ex) {
-                        throw new RuntimeException(ex);
+                        Thread.currentThread().interrupt();
+                        throw new IllegalStateException("Dropdown selection retry interrupted", ex);
                     }
                 }
             }
@@ -319,7 +317,7 @@ public class DropdownActions extends BaseAction {
             ((JavascriptExecutor) driver)
                     .executeScript("arguments[0].scrollIntoView(true);", dropdown);
 
-            Thread.sleep(500);
+            wait.until(ExpectedConditions.elementToBeClickable(By.xpath(dropdownXpath)));
 
             try {
                 dropdown.click();
@@ -342,7 +340,9 @@ public class DropdownActions extends BaseAction {
 
             LogUtils.info("Value Typed And Verified : " + cleanValue);
 
-            Thread.sleep(1500);
+            wait.until(d -> dropdown.findElements(By.cssSelector("[role='option'], .vs__dropdown-option"))
+                    .stream().anyMatch(option -> option.isDisplayed()
+                            && option.getText().trim().replaceAll("\\s+", " ").equals(cleanValue)));
 
             input.sendKeys(Keys.ENTER);
 
@@ -438,7 +438,8 @@ public class DropdownActions extends BaseAction {
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException ex) {
-                        throw new RuntimeException(ex);
+                        Thread.currentThread().interrupt();
+                        throw new IllegalStateException("Dropdown selection retry interrupted", ex);
                     }
                 }
             }

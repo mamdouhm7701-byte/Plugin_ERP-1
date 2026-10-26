@@ -37,10 +37,6 @@ final class PageNavigation {
         driver.navigate().refresh();
         utilites.waits().waitForOverlayToDisappear();
 
-        try {
-            Thread.sleep(2500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 }

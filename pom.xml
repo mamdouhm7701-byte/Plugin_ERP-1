@@ -14,6 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <allure.results.directory>${project.basedir}/allure-results</allure.results.directory>
         <allure.report.directory>${project.basedir}/allure-report</allure.report.directory>
+        <surefire.reportsDirectory>${project.build.directory}/surefire-reports</surefire.reportsDirectory>
 
         <!-- مهم عشان IntelliJ -->
         <argLine></argLine>
@@ -181,6 +182,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.2</version>
                 <configuration>
+                    <reportsDirectory>${surefire.reportsDirectory}</reportsDirectory>
                     <systemPropertyVariables>
                         <allure.results.directory>${allure.results.directory}</allure.results.directory>
                         <allure.report.directory>${allure.report.directory}</allure.report.directory>

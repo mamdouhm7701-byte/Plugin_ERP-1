@@ -101,11 +101,7 @@ public class AddProductsPage extends ProductsModulePage {
     @Step("الضغط على زر إضافة صنف جديد")
     public void ClickNewProduct() {
         utilites.waits().waitForOverlayToDisappear();
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        utilites.waits().waitForScreenReady(AddProduct);
         utilites.ClickElement(AddProduct);
         utilites.waits().waitForOverlayToDisappear();
     }
@@ -113,11 +109,7 @@ public class AddProductsPage extends ProductsModulePage {
     @Step("إدخال اسم الصنف العربي: {arabicName}")
     public void AddProductName(String arabicName) {
         utilites.waits().waitForOverlayToDisappear();
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        utilites.waits().waitForScreenReady(ProductName);
         utilites.TaypeTextB(ProductName, arabicName);
     }
 

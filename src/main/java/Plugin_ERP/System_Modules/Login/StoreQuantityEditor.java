@@ -29,11 +29,8 @@ final class StoreQuantityEditor {
                 quantityInput
         );
 
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(
+                org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(quantityInput));
 
         quantityInput.click();
         quantityInput.sendKeys(Keys.chord(Keys.CONTROL, "a"));

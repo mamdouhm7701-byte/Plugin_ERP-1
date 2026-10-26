@@ -44,7 +44,9 @@ public final class TreasuryLedgerCoverageTest extends BaseTest {
                     new org.json.JSONObject(fields("handover",treasury.requireSingle(safe,user),
                         "userSafes",openingLookup instanceof Map<?,?> lookup?lookup.get("UserSafes"):openingLookup)).toString(),".json");
             operator=new Chrome().createDriver();operator.get(PropertyReader.getApplicationUrl()+"/#/login");
-            var login=new LoginPage(operator);login.Login(username,password);login.AssertLoginPageTitle();
+              var login=new LoginPage(operator);
+              login.Login(Plugin_ERP.Utiel.LoginUsernames.withinSameCompany(PropertyReader.getValidUsername(),username),password);
+              login.assertAuthenticatedBranch(new FixtureSession(driver).branchId,user.id());
             movement(operator,refs,FinancialMovementKind.RECEIPT,customer,salesAgent,safe,payment,"125.50",false);
             movement(operator,refs,FinancialMovementKind.PAYMENT,supplier,purchaseAgent,safe,payment,"40.25",false);
             movement(operator,refs,FinancialMovementKind.RECEIPT,customer,salesAgent,safe,payment,"55.75",true);
@@ -64,8 +66,15 @@ public final class TreasuryLedgerCoverageTest extends BaseTest {
             try { close.AssertPrintedAmounts(expected.cash(),expected.total(),expected.actual(),expected.deficit()); }
             finally { driver.close();driver.switchTo().window(main); }
             Assert.assertEquals(treasury.requireSingle(safe,user).get("isClosed"),true);
-        } finally {
-            if(operator!=null)operator.quit();
+          } catch (RuntimeException | AssertionError failure) {
+              if(operator!=null) try {
+                  io.qameta.allure.Allure.addAttachment("رابط جلسة موظف الخزينة عند التوقف",operator.getCurrentUrl());
+                  io.qameta.allure.Allure.addAttachment("صورة جلسة موظف الخزينة","image/png",
+                          new java.io.ByteArrayInputStream(((TakesScreenshot)operator).getScreenshotAs(OutputType.BYTES)),".png");
+              } catch (RuntimeException captureFailure) { failure.addSuppressed(captureFailure); }
+              throw failure;
+          } finally {
+              if(operator!=null)operator.quit();
             if(opened) {
                 try { treasury.close(); }
                 finally {

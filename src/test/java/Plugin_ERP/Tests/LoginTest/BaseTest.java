@@ -41,7 +41,7 @@ public class BaseTest {
             wait = new WebDriverWait(driver, Duration.ofSeconds(15));
             driver.get(PropertyReader.getApplicationUrl().replaceAll("/+$", "") + "/#/login");
             login();
-        } catch (Exception | AssertionError failure) {
+        } catch (Exception | AssertionError | LinkageError failure) {
             setupFailure = failure;
             if (driver instanceof TakesScreenshot) {
                 Plugin_ERP.Utiel.ScreenShotsUtils.takeScreenShot(driver, "SETUP_" + getClass().getSimpleName());

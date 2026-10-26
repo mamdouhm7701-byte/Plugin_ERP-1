@@ -13,6 +13,40 @@ import org.testng.annotations.Test;
 /** Local regression checks for browser ownership and setup failure; no ERP connection. */
 public final class BrowserLifecycleTest {
     @Test
+    @SuppressWarnings("unchecked")
+    public void threeWorkerThreadsKeepSeparateBrowsersAndReleaseOnlyTheirOwn() throws Exception {
+        var field = WebDriverFactory.class.getDeclaredField("driverThreadLocal");
+        field.setAccessible(true);
+        ThreadLocal<WebDriver> current = (ThreadLocal<WebDriver>) field.get(null);
+        var pool = java.util.concurrent.Executors.newFixedThreadPool(3);
+        var ready = new java.util.concurrent.CyclicBarrier(3);
+        var browsers = java.util.concurrent.ConcurrentHashMap.<Probe>newKeySet();
+        try {
+            var tasks = new java.util.ArrayList<java.util.concurrent.Future<?>>();
+            for (int i = 0; i < 3; i++) tasks.add(pool.submit(() -> {
+                Probe probe = new Probe(false, false);
+                current.set(probe.fake);
+                try {
+                    browsers.add(probe);
+                    ready.await(10, java.util.concurrent.TimeUnit.SECONDS);
+                    Assert.assertSame(WebDriverFactory.getDriver(), probe.fake);
+                    WebDriverFactory.quitDriver();
+                    Assert.assertEquals(probe.quits.get(), 1);
+                    Assert.assertNull(WebDriverFactory.getDriver());
+                } catch (Exception e) {
+                    throw new IllegalStateException(e);
+                } finally {
+                    current.remove();
+                }
+            }));
+            for (var task : tasks) task.get(15, java.util.concurrent.TimeUnit.SECONDS);
+            Assert.assertEquals(browsers.size(), 3);
+        } finally {
+            pool.shutdownNow();
+        }
+    }
+
+    @Test
     public void headlessSetupKeepsTheDesktopViewportInsteadOfMaximizing() throws Exception {
         String previous = System.getProperty("ExecutionType");
         Probe probe = new Probe(false, false);
@@ -62,6 +96,19 @@ public final class BrowserLifecycleTest {
     }
 
     @Test
+    public void missingLoginClassClosesBrowserAndSkipsDependentPreparationWithOriginalCause() {
+        Probe probe = new Probe(false, false);
+        var original = new NoClassDefFoundError("Plugin_ERP/System_Modules/Login/Login/LoginPage");
+        probe.linkageFailure = original;
+        var failure = Assert.expectThrows(NoClassDefFoundError.class, probe::setup);
+        Assert.assertSame(failure, original);
+        Assert.assertEquals(probe.quits.get(), 1);
+        Assert.assertNull(probe.browser());
+        var skipped = Assert.expectThrows(org.testng.SkipException.class, probe::requireReady);
+        Assert.assertSame(skipped.getCause(), original);
+    }
+
+    @Test
     @SuppressWarnings("unchecked")
     public void quitFailureReleasesFactoryAndDuplicateInitCannotReplaceAnActiveBrowser() throws Exception {
         var field = WebDriverFactory.class.getDeclaredField("driverThreadLocal");
@@ -86,6 +133,7 @@ public final class BrowserLifecycleTest {
         final AtomicInteger quits = new AtomicInteger();
         final WebDriver fake;
         private final boolean failLogin;
+        private LinkageError linkageFailure;
         Dimension viewport;
         boolean maximized;
 
@@ -121,6 +169,7 @@ public final class BrowserLifecycleTest {
 
         @Override protected WebDriver createDriver() { return fake; }
         @Override protected void login() {
+            if (linkageFailure != null) throw linkageFailure;
             if (failLogin) throw new AssertionError("Login failed");
         }
         WebDriver browser() { return driver; }

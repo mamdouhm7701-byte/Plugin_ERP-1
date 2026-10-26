@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- The listener replaces this empty entry with the selected original suite's isolated stages. -->
+<suite name="ERP - Choose level and browsers" parallel="none">
+    <listeners>
+        <listener class-name="SuiteSupport.NativeInteractiveSuiteListener"/>
+        <listener class-name="SuiteSupport.BranchIsolationListener"/>
+    </listeners>
+</suite>

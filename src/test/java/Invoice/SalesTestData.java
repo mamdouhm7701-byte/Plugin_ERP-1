@@ -170,6 +170,7 @@ final class SalesTestData implements AutoCloseable {
     }
 
     Record store(int index) {
+        synchronized (TestSupport.BranchMutationLock.monitor()) {
         Record store =
                 fixture(
                         "store-" + index,
@@ -196,6 +197,8 @@ final class SalesTestData implements AutoCloseable {
             changeBranchStore(link, true);
         }
         return store;
+
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -220,6 +223,7 @@ final class SalesTestData implements AutoCloseable {
     }
 
     private void changeBranchStore(Record link, boolean add) {
+        synchronized (TestSupport.BranchMutationLock.monitor()) {
         Map<String, Object> branch = branchFor(link);
         Object storeId = link.values().get("storeId");
         if (containsStore(branch, storeId) != add) {
@@ -250,6 +254,8 @@ final class SalesTestData implements AutoCloseable {
                 .executeScript(
                         "const root=document.querySelector('#app').__vue__;if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
                         branch);
+
+        }
     }
 
     Map<String, Object> itemValues() {

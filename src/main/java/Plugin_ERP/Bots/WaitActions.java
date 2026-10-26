@@ -1,6 +1,7 @@
 package Plugin_ERP.Bots;
 
 import Plugin_ERP.Utiel.PropertyReader;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -64,7 +65,8 @@ public class WaitActions extends BaseAction {
         wait.until(
                 ExpectedConditions.presenceOfElementLocated(
                         By.cssSelector(
-                                "div.e-reportviewer-paragrap div[style*='white-space: pre-wrap']")));
+                                "div.e-reportviewer-paragrap div[style*='white-space:"
+                                    + " pre-wrap']")));
 
         // 4. استنى إن في عنصر فيه نص فعلي مش فاضي
         wait.until(
@@ -73,13 +75,13 @@ public class WaitActions extends BaseAction {
                         List<WebElement> elements =
                                 webDriver.findElements(
                                         By.cssSelector(
-                                                "div.e-reportviewer-paragrap div[style*='white-space: pre-wrap']"));
+                                                "div.e-reportviewer-paragrap"
+                                                    + " div[style*='white-space: pre-wrap']"));
                         return elements.stream().anyMatch(el -> !el.getText().trim().isEmpty());
                     } catch (Exception e) {
                         return false;
                     }
                 });
-
     }
 
     public void switchToNewTab() {
@@ -91,11 +93,18 @@ public class WaitActions extends BaseAction {
 
         // استنى لحد ما يظهر tab جديد — زودنا الوقت لـ 30 ثانية
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        String created = wait.until(d -> {
-            var candidates = d.getWindowHandles().stream().filter(h -> !baseline.contains(h)).toList();
-            if (candidates.size() > 1) throw new IllegalStateException("Ambiguous new report tabs: " + candidates);
-            return candidates.size() == 1 ? candidates.get(0) : null;
-        });
+        String created =
+                wait.until(
+                        d -> {
+                            var candidates =
+                                    d.getWindowHandles().stream()
+                                            .filter(h -> !baseline.contains(h))
+                                            .toList();
+                            if (candidates.size() > 1)
+                                throw new IllegalStateException(
+                                        "Ambiguous new report tabs: " + candidates);
+                            return candidates.size() == 1 ? candidates.get(0) : null;
+                        });
 
         // انتقل للـ tab الجديد
         driver.switchTo().window(created);
@@ -109,20 +118,32 @@ public class WaitActions extends BaseAction {
         final long[] hiddenSince = {-1};
         new WebDriverWait(driver, Duration.ofSeconds(30))
                 .pollingEvery(Duration.ofMillis(200))
-                .until(d -> {
-                    try {
-                        boolean visible = d.findElements(overlay).stream().anyMatch(WebElement::isDisplayed);
-                        if (visible) { hiddenSince[0] = -1; return false; }
-                        long now = System.nanoTime();
-                        if (hiddenSince[0] < 0) hiddenSince[0] = now;
-                        return now - hiddenSince[0] >= Duration.ofSeconds(1).toNanos();
-                    } catch (StaleElementReferenceException stale) {
-                        hiddenSince[0] = -1;
-                        return false;
-                    }
-                });
-        new WebDriverWait(driver, Duration.ofSeconds(20)).until(d ->
-                "complete".equals(((JavascriptExecutor) d).executeScript("return document.readyState")));
+                .until(
+                        d -> {
+                            try {
+                                boolean visible =
+                                        d.findElements(overlay).stream()
+                                                .anyMatch(WebElement::isDisplayed);
+                                if (visible) {
+                                    hiddenSince[0] = -1;
+                                    return false;
+                                }
+                                long now = System.nanoTime();
+                                if (hiddenSince[0] < 0) hiddenSince[0] = now;
+                                return now - hiddenSince[0] >= Duration.ofSeconds(1).toNanos();
+                            } catch (StaleElementReferenceException stale) {
+                                hiddenSince[0] = -1;
+                                return false;
+                            }
+                        });
+        new WebDriverWait(driver, Duration.ofSeconds(20))
+                .until(
+                        d ->
+                                "complete"
+                                        .equals(
+                                                ((JavascriptExecutor) d)
+                                                        .executeScript(
+                                                                "return document.readyState")));
     }
 
     public void waitForScreenReady(By locator) {
@@ -183,7 +204,8 @@ public class WaitActions extends BaseAction {
                         quantityInputs =
                                 targetRow.findElements(
                                         By.xpath(
-                                                ".//input[@type='number' and not(@type='hidden')]"));
+                                                ".//input[@type='number' and"
+                                                    + " not(@type='hidden')]"));
                     }
 
                     return quantityInputs.isEmpty() || !quantityInputs.get(0).isDisplayed()

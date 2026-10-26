@@ -1,12 +1,8 @@
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.*;
-import Plugin_ERP.Enums.Pages;
-import io.qameta.allure.Step;
-import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
 import org.testng.Assert;
 
@@ -14,12 +10,14 @@ import org.testng.Assert;
 final class PageRecordActions {
     private final Abstract owner;
     private final WebDriver driver;
-    private final Plugin_ERP.Bots.ElmentAction utilites;
+    private final Plugin_ERP.Bots.ElementActions utilites;
+
     PageRecordActions(Abstract owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
         this.utilites = owner.context().elements();
     }
+
     // Locators
     private By ClickNew = By.cssSelector("button[data-action-type='new']");
     private By SaveButton = By.cssSelector("button[data-action-type='save']");

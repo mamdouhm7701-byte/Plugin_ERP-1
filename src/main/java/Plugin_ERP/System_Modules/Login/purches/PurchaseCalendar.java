@@ -71,6 +71,9 @@ final class PurchaseCalendar {
                                         } catch (
                                                 org.openqa.selenium.StaleElementReferenceException
                                                         ignored) {
+                                            Plugin_ERP.Bots.LogUtils.debug(
+                                                    "PurchaseCalendar condition unavailable: "
+                                                            + ignored.getClass().getSimpleName());
                                             return null;
                                         }
                                     });
@@ -120,6 +123,9 @@ final class PurchaseCalendar {
                                 } catch (
                                         org.openqa.selenium.StaleElementReferenceException
                                                 ignored) {
+                                    Plugin_ERP.Bots.LogUtils.debug(
+                                            "PurchaseCalendar condition unavailable: "
+                                                    + ignored.getClass().getSimpleName());
                                     return false;
                                 }
                             });
@@ -163,8 +169,8 @@ final class PurchaseCalendar {
             if (normalized.contains(arabicMonths[i])) return i + 1;
         String english = normalized.replaceAll("[^A-Za-z]", "").toUpperCase(Locale.ROOT);
         for (java.time.Month month : java.time.Month.values()) {
-            if (english.equals(month.name())
-                    || english.equals(month.name().substring(0, 3))) return month.getValue();
+            if (english.equals(month.name()) || english.equals(month.name().substring(0, 3)))
+                return month.getValue();
         }
         throw new IllegalArgumentException("Calendar month not found: " + text);
     }

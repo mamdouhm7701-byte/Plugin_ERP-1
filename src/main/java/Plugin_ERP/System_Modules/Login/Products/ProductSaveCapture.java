@@ -1,11 +1,5 @@
 package Plugin_ERP.System_Modules.Login.Products;
 
-import Plugin_ERP.Enums.Pages;
-import Plugin_ERP.System_Modules.Login.Abstract;
-import Plugin_ERP.Utiel.FormInteractions;
-import Plugin_ERP.Utiel.PropertyReader;
-import io.qameta.allure.Step;
-import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
@@ -15,14 +9,17 @@ final class ProductSaveCapture {
     private final ProductsModulePage owner;
     private final WebDriver driver;
     private final WebDriverWait ready;
+
     ProductSaveCapture(ProductsModulePage owner, WebDriver driver, WebDriverWait ready) {
         this.owner = owner;
         this.driver = driver;
         this.ready = ready;
     }
 
-    void prCapture(String marker){
-    ((JavascriptExecutor)driver).executeScript("""
+    void prCapture(String marker) {
+        ((JavascriptExecutor) driver)
+                .executeScript(
+                        """
       const store=document.querySelector('#app').__vue__.$store;
       window.__productsQA={marker:arguments[0],saves:[],attempts:[],pending:0,errors:[]};
       if(store.__productsCaptureInstalled)return;store.__productsCaptureInstalled=true;
@@ -35,16 +32,40 @@ final class ProductSaveCapture {
         return dispatch(action,payload,...rest).then(result=>{if(owned){cap.pending--;const entity=result?.data||result;
           cap.saves.push({endpoint:payload.url,id:sent.id||entity?.id||(typeof entity==='string'?entity:null),values:sent});}return result;
         }).catch(error=>{if(owned){cap.pending--;cap.errors.push(String(error));}throw error;});};
-      """,marker);
-  }
+      """,
+                        marker);
+    }
 
-    String prCaptureMarker(){return (String)((JavascriptExecutor)driver).executeScript("return window.__productsQA?.marker||null");}
+    String prCaptureMarker() {
+        return (String)
+                ((JavascriptExecutor) driver)
+                        .executeScript("return window.__productsQA?.marker||null");
+    }
 
-    List<Map<String,Object>> prSaves(){return (List<Map<String,Object>>)((JavascriptExecutor)driver).executeScript("return window.__productsQA?.saves||[]");}
+    List<Map<String, Object>> prSaves() {
+        return (List<Map<String, Object>>)
+                ((JavascriptExecutor) driver)
+                        .executeScript("return window.__productsQA?.saves||[]");
+    }
 
-    List<Map<String,Object>> prAttempts(){return (List<Map<String,Object>>)((JavascriptExecutor)driver).executeScript("return window.__productsQA?.attempts||[]");}
+    List<Map<String, Object>> prAttempts() {
+        return (List<Map<String, Object>>)
+                ((JavascriptExecutor) driver)
+                        .executeScript("return window.__productsQA?.attempts||[]");
+    }
 
-    void prSettled(){ready.until(d->!Boolean.TRUE.equals(((JavascriptExecutor)d).executeScript("return (window.__productsQA?.pending||0)>0")));}
+    void prSettled() {
+        ready.until(
+                d ->
+                        !Boolean.TRUE.equals(
+                                ((JavascriptExecutor) d)
+                                        .executeScript(
+                                                "return (window.__productsQA?.pending||0)>0")));
+    }
 
-    String prSaveErrors(){return String.valueOf(((JavascriptExecutor)driver).executeScript("return window.__productsQA?.errors||[]"));}
+    String prSaveErrors() {
+        return String.valueOf(
+                ((JavascriptExecutor) driver)
+                        .executeScript("return window.__productsQA?.errors||[]"));
+    }
 }

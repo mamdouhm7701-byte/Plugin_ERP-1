@@ -226,7 +226,7 @@
 
 **حالته:** مصدر نشط · **عدد أسطره:** 138
 
-**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [ElmentAction.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WebDriverFactory.java](MAIN_Drivers_AR.md#file-933f9d647645)، [Pages.java](MAIN_Enums_AR.md#file-0cf000b33a7e)، [AbstractForDealer.java](MAIN_PAGES_Shared_AR.md#file-0c718cf5399e)، [PropertyReader.java](MAIN_Utiel_AR.md#file-94d06e1d47d8)
+**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [ElementActions.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WebDriverFactory.java](MAIN_Drivers_AR.md#file-933f9d647645)، [Pages.java](MAIN_Enums_AR.md#file-0cf000b33a7e)، [AbstractForDealer.java](MAIN_PAGES_Shared_AR.md#file-0c718cf5399e)، [PropertyReader.java](MAIN_Utiel_AR.md#file-94d06e1d47d8)
 
 ### خريطة الميثودات المعلنة
 
@@ -287,7 +287,7 @@
 
 **حالته:** مصدر نشط · **عدد أسطره:** 386 · **الأب المباشر:** `AbstractForDealer`
 
-**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [ElmentAction.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WebDriverFactory.java](MAIN_Drivers_AR.md#file-933f9d647645)، [Pages.java](MAIN_Enums_AR.md#file-0cf000b33a7e)، [AbstractForDealer.java](MAIN_PAGES_Shared_AR.md#file-0c718cf5399e)، [PropertyReader.java](MAIN_Utiel_AR.md#file-94d06e1d47d8)
+**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [ElementActions.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WebDriverFactory.java](MAIN_Drivers_AR.md#file-933f9d647645)، [Pages.java](MAIN_Enums_AR.md#file-0cf000b33a7e)، [AbstractForDealer.java](MAIN_PAGES_Shared_AR.md#file-0c718cf5399e)، [PropertyReader.java](MAIN_Utiel_AR.md#file-94d06e1d47d8)
 
 **ملفات تشير إليه مباشرة:** [CashTest.java](TEST_Tests_AR.md#file-e758c254da3e)
 
@@ -566,7 +566,7 @@
 
 **حالته:** مصدر نشط · **عدد أسطره:** 25
 
-**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [ElmentAction.java](MAIN_Bots_AR.md#file-11a21e33ca10)
+**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [ElementActions.java](MAIN_Bots_AR.md#file-11a21e33ca10)
 
 ### خريطة الميثودات المعلنة
 
@@ -861,7 +861,7 @@
 
 **حالته:** مصدر نشط · **عدد أسطره:** 111 · **الأب المباشر:** `AbstractForDealer`
 
-**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [BrowserAction.java](MAIN_Bots_AR.md#file-ca0683510b61)، [ElmentAction.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitMangment.java](MAIN_Bots_AR.md#file-98afc8ddbc07)، [AbstractForDealer.java](MAIN_PAGES_Shared_AR.md#file-0c718cf5399e)
+**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [BrowserAction.java](MAIN_Bots_AR.md#file-ca0683510b61)، [ElementActions.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitManagement.java](MAIN_Bots_AR.md#file-98afc8ddbc07)، [AbstractForDealer.java](MAIN_PAGES_Shared_AR.md#file-0c718cf5399e)
 
 **ملفات تشير إليه مباشرة:** [TreasuryLedgerCoverageTest.java](TEST_FinancialMovementsTest_AR.md#file-aaf8d34190e8)، [TreasuryHandoverTest.java](TEST_Tests_AR.md#file-99e7d8e37af9)
 
@@ -890,7 +890,7 @@
 
 **حالته:** مصدر نشط · **عدد أسطره:** 212 · **الأب المباشر:** `AbstractForDealer`
 
-**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [ElmentAction.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [AbstractForDealer.java](MAIN_PAGES_Shared_AR.md#file-0c718cf5399e)
+**يرتبط مباشرة بملفات داخل المشروع:** [AlertAction.java](MAIN_Bots_AR.md#file-741424a4cfd7)، [ElementActions.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [AbstractForDealer.java](MAIN_PAGES_Shared_AR.md#file-0c718cf5399e)
 
 **ملفات تشير إليه مباشرة:** [TaypeOfDiscountTest.java](TEST_Tests_AR.md#file-f61729975a8f)
 
@@ -945,4 +945,3 @@
 | `boolean IsDeleteConfirmationDisplayed()` | داخل الحزمة | السؤال عن حالة القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 | `void ConfirmDelete(String name)` | داخل الحزمة | تأكيد التأكيد، حسب المدخلات والتخصص. |
 | `void CancelDelete()` | داخل الحزمة | إلغاء الإلغاء، حسب المدخلات والتخصص. |
-

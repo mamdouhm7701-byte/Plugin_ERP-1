@@ -49,12 +49,19 @@ public class StoreCleanupTest {
         try (StoreTestData data = new StoreTestData(api.driver())) {
             var item = data.inventoryItem(1);
             var stores = (List<?>) item.values().get("stores");
-            Assert.assertEquals(stores.size(), 1, "Inventory audit must not retain an unused second store");
+            Assert.assertEquals(
+                    stores.size(), 1, "Inventory audit must not retain an unused second store");
             var stock = (Map<?, ?>) stores.getFirst();
             Assert.assertEquals(stock.get("storeId"), data.store(1).id());
             Assert.assertEquals(stock.get("openingBalance"), 1000);
-            Assert.assertEquals(api.records.values().stream()
-                    .filter(row -> String.valueOf(row.get("arabicName")).contains("store-2-")).count(), 0L);
+            Assert.assertEquals(
+                    api.records.values().stream()
+                            .filter(
+                                    row ->
+                                            String.valueOf(row.get("arabicName"))
+                                                    .contains("store-2-"))
+                            .count(),
+                    0L);
         }
         Assert.assertTrue(api.records.isEmpty(), "Unposted fixture must remain fully cleanable");
     }
@@ -66,13 +73,38 @@ public class StoreCleanupTest {
         var store = data.store(1);
         var item = data.item(1);
         var unit = data.unit(1);
-        api.records.put("untracked", new LinkedHashMap<>(Map.of("id", "untracked",
-                "storeId", store.id(), "transactionType", "Manufacturing", "notes", "",
-                "lines", List.of(Map.of("itemId", "foreign-item", "unitId", unit.id())))));
-        data.rememberAttempts(List.of(StoreTestData.fields("endpoint", "ManufacturingOrders",
-                "values", StoreTestData.fields("storeId", store.id(), "notes", "",
-                        "lines", List.of(Map.of("itemId", item.id(), "unitId", unit.id()))))),
-                List.of(), "QA-ST-unresolved-manufacturing");
+        api.records.put(
+                "untracked",
+                new LinkedHashMap<>(
+                        Map.of(
+                                "id",
+                                "untracked",
+                                "storeId",
+                                store.id(),
+                                "transactionType",
+                                "Manufacturing",
+                                "notes",
+                                "",
+                                "lines",
+                                List.of(Map.of("itemId", "foreign-item", "unitId", unit.id())))));
+        data.rememberAttempts(
+                List.of(
+                        StoreTestData.fields(
+                                "endpoint",
+                                "ManufacturingOrders",
+                                "values",
+                                StoreTestData.fields(
+                                        "storeId",
+                                        store.id(),
+                                        "notes",
+                                        "",
+                                        "lines",
+                                        List.of(
+                                                Map.of(
+                                                        "itemId", item.id(), "unitId",
+                                                        unit.id()))))),
+                List.of(),
+                "QA-ST-unresolved-manufacturing");
         Assert.expectThrows(AssertionError.class, data::close);
         Assert.assertTrue(api.deletes.isEmpty());
         api.records.remove("untracked");
@@ -88,21 +120,39 @@ public class StoreCleanupTest {
         var first = data.item(1);
         var second = data.item(2);
         var unit = data.unit(1);
-        var previous = data.fixture("previous-manufacturing", "ManufacturingOrders",
-                StoreTestData.fields("storeId", store.id(), "transactionType", "Manufacturing",
-                        "lines", List.of(Map.of("itemId", first.id(), "unitId", unit.id()))));
-        var values = StoreTestData.fields("notes", "", "storeId", store.id(),
-                "transactionType", "Manufacturing", "lines",
-                List.of(Map.of("itemId", second.id(), "unitId", unit.id())));
-        data.rememberAttempts(List.of(StoreTestData.fields("endpoint", "ManufacturingOrders",
-                "values", values)), List.of(), "QA-ST-uncommitted-manufacturing");
+        var previous =
+                data.fixture(
+                        "previous-manufacturing",
+                        "ManufacturingOrders",
+                        StoreTestData.fields(
+                                "storeId",
+                                store.id(),
+                                "transactionType",
+                                "Manufacturing",
+                                "lines",
+                                List.of(Map.of("itemId", first.id(), "unitId", unit.id()))));
+        var values =
+                StoreTestData.fields(
+                        "notes",
+                        "",
+                        "storeId",
+                        store.id(),
+                        "transactionType",
+                        "Manufacturing",
+                        "lines",
+                        List.of(Map.of("itemId", second.id(), "unitId", unit.id())));
+        data.rememberAttempts(
+                List.of(StoreTestData.fields("endpoint", "ManufacturingOrders", "values", values)),
+                List.of(),
+                "QA-ST-uncommitted-manufacturing");
         data.close();
         Assert.assertTrue(api.records.isEmpty());
         Assert.assertEquals(java.util.Collections.frequency(api.deletes, previous.id()), 1);
     }
 
     @Test
-    @io.qameta.allure.Description("العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
+    @io.qameta.allure.Description(
+            "العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
     public void normalCustomerIsTaxableAndKeepsItsOwnAccount() {
         StoreFixtureApiStub api = new StoreFixtureApiStub();
         try (var data = new StoreTestData(api.driver())) {
@@ -116,8 +166,6 @@ public class StoreCleanupTest {
         }
         Assert.assertTrue(api.records.isEmpty());
     }
-
-
 
     @Test
     public void deletesOwnedMovementBeforeItsItemsAndStores() {

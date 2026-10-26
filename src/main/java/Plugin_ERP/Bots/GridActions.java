@@ -1,20 +1,19 @@
 package Plugin_ERP.Bots;
 
+import java.time.Duration;
+import java.util.List;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import java.time.Duration;
-import java.util.List;
-
 public class GridActions extends BaseAction {
-    private ElmentAction utilites;
+    private ElementActions utilites;
     private WaitActions waitActions;
 
-    public GridActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment) {
-        super(driver, wait, waitMangment);
-        this.waitActions = new WaitActions(driver, wait, waitMangment);
+    public GridActions(WebDriver driver, WebDriverWait wait, WaitManagement waitManagement) {
+        super(driver, wait, waitManagement);
+        this.waitActions = new WaitActions(driver, wait, waitManagement);
     }
 
     public void ClickElement(By locator) {
@@ -26,7 +25,7 @@ public class GridActions extends BaseAction {
             try {
 
                 WebElement element =
-                        waitMangment
+                        waitManagement
                                 .fluentWait()
                                 .until(
                                         driver -> {
@@ -65,6 +64,8 @@ public class GridActions extends BaseAction {
                     return;
 
                 } catch (Exception ignored) {
+                    Plugin_ERP.Bots.LogUtils.debug(
+                            "GridActions fallback: " + ignored.getClass().getSimpleName());
                 }
 
                 attempts++;
@@ -183,6 +184,8 @@ public class GridActions extends BaseAction {
                     driver.findElements(By.xpath("//tr[@role='row' and @aria-rowindex='1']"));
             return !rows.isEmpty();
         } catch (Exception e) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "GridActions condition unavailable: " + e.getClass().getSimpleName());
             return false;
         }
     }

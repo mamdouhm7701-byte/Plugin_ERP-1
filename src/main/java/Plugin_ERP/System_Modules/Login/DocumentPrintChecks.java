@@ -1,16 +1,7 @@
 package Plugin_ERP.System_Modules.Login;
 
-import Plugin_ERP.Bots.LogUtils;
-import Plugin_ERP.Business.Calculator.InvoiceCalculator;
-import Plugin_ERP.Models.InvoiceRow;
-import Plugin_ERP.Models.InvoiceTotals;
 import Plugin_ERP.Models.ReportTotals;
-import Plugin_ERP.Models.TaxMode;
-import Plugin_ERP.Utiel.PropertyReader;
-import io.qameta.allure.Allure;
-import io.qameta.allure.Step;
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
@@ -20,7 +11,8 @@ import org.testng.Assert;
 final class DocumentPrintChecks {
     private final DocumentPage owner;
     private final WebDriver driver;
-    private final Plugin_ERP.Bots.ElmentAction utilites;
+    private final Plugin_ERP.Bots.ElementActions utilites;
+
     DocumentPrintChecks(DocumentPage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;

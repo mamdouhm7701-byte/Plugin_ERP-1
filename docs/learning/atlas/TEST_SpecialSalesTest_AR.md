@@ -318,4 +318,3 @@
 | `private static boolean references(Object value, Object id)` | private | تنفيذ جزء متعلق بـ القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 | `private static void findOwned(Object node, String name, List<Map<String, Object>> matches)` | private | البحث عن المملوك للاختبار، حسب المدخلات والتخصص. |
 | `public void close()` | public | إنهاء نطاق/مورد وتنظيفه حسب مالكه؛ اقرأ سياق الكلاس. |
-

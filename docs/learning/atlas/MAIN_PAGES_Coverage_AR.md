@@ -49,4 +49,3 @@
 | `public void search(String term)` | public | البحث عن القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 | `public void addItem(String name)` | public | إضافة الصنف، حسب المدخلات والتخصص. |
 | `public void tableLine(String name, String heading, String value)` | public | تنفيذ جزء متعلق بـ الجدول / البند، حسب المدخلات والتخصص. |
-

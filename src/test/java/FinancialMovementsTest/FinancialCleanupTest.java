@@ -43,21 +43,38 @@ public class FinancialCleanupTest {
         verifyPendingUpdateRecovery(false, false, true, "0", true);
     }
 
-    private void verifyPendingUpdateRecovery(boolean changedDealer, boolean changedBranch, boolean allowed) {
+    private void verifyPendingUpdateRecovery(
+            boolean changedDealer, boolean changedBranch, boolean allowed) {
         verifyPendingUpdateRecovery(changedDealer, changedBranch, allowed, "receipt-owned");
     }
 
-    private void verifyPendingUpdateRecovery(boolean changedDealer, boolean changedBranch, boolean allowed, String intendedId) {
+    private void verifyPendingUpdateRecovery(
+            boolean changedDealer, boolean changedBranch, boolean allowed, String intendedId) {
         verifyPendingUpdateRecovery(changedDealer, changedBranch, allowed, intendedId, false);
     }
 
-    private void verifyPendingUpdateRecovery(boolean changedDealer, boolean changedBranch, boolean allowed, String intendedId, boolean includeBranch) {
+    private void verifyPendingUpdateRecovery(
+            boolean changedDealer,
+            boolean changedBranch,
+            boolean allowed,
+            String intendedId,
+            boolean includeBranch) {
         FinancialFixtureApiStub api = new FinancialFixtureApiStub();
         String name = "QA-FM-recovery-check";
-        var pending = new TestSupport.PendingFixtureWrites(
-                new TestSupport.FixtureSession(api.driver()), "financial", "local-" + java.util.UUID.randomUUID());
-        var values = new LinkedHashMap<String, Object>(Map.of("branchId", "branch-test",
-                "dealerId", "customer-owned", "notes", name));
+        var pending =
+                new TestSupport.PendingFixtureWrites(
+                        new TestSupport.FixtureSession(api.driver()),
+                        "financial",
+                        "local-" + java.util.UUID.randomUUID());
+        var values =
+                new LinkedHashMap<String, Object>(
+                        Map.of(
+                                "branchId",
+                                "branch-test",
+                                "dealerId",
+                                "customer-owned",
+                                "notes",
+                                name));
         if (intendedId != null) values.put("id", intendedId);
         var stored = new LinkedHashMap<String, Object>(values);
         stored.put("id", "receipt-owned");
@@ -67,9 +84,14 @@ public class FinancialCleanupTest {
         if (changedBranch) stored.put("branchId", "branch-other");
         pending.start("Collections", name, values);
         var recovered = new ArrayList<Object>();
-        Runnable action = () -> pending.recover((endpoint, query) ->
-                Map.of("entity", endpoint.contains("?") ? List.of(stored) : stored),
-                (endpoint, id, marker, fields) -> recovered.add(id));
+        Runnable action =
+                () ->
+                        pending.recover(
+                                (endpoint, query) ->
+                                        Map.of(
+                                                "entity",
+                                                endpoint.contains("?") ? List.of(stored) : stored),
+                                (endpoint, id, marker, fields) -> recovered.add(id));
         try {
             if (allowed) {
                 action.run();
@@ -84,7 +106,8 @@ public class FinancialCleanupTest {
     }
 
     @Test
-    @io.qameta.allure.Description("العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
+    @io.qameta.allure.Description(
+            "العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
     public void normalCustomerIsTaxableAndKeepsItsOwnAccount() {
         FinancialFixtureApiStub api = new FinancialFixtureApiStub();
         try (var data = new FinancialTestData(api.driver())) {
@@ -98,8 +121,6 @@ public class FinancialCleanupTest {
         }
         Assert.assertTrue(api.records.isEmpty());
     }
-
-
 
     @Test
     public void acceptsMissingDeleteOnlyAfterReadConfirmsAbsence() {

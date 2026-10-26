@@ -1,16 +1,12 @@
 package Plugin_ERP.System_Modules.Login.BasicData;
 
-import Plugin_ERP.Bots.AlertAction;
-import Plugin_ERP.Bots.ElmentAction;
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;
 import io.qameta.allure.Step;
+import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-
-import java.sql.Driver;
-import java.time.Duration;
 
 public class TypesofdiscountsPage extends AbstractForDealer {
     // Variables
@@ -70,12 +66,12 @@ public class TypesofdiscountsPage extends AbstractForDealer {
 
     @Step("اضافه قيمه الخصم المطلوب:{discountValue}")
     public void AddDiscount(int discountValue) {
-        utilites.TaypeTextB(Percentage, String.valueOf(discountValue));
+        utilites.typeTextAndVerify(Percentage, String.valueOf(discountValue));
     }
 
     @Step("اضافه الرقم السرى: {secretCode}")
     public void AddSecretCode(String secretCode) {
-        utilites.TaypeTextB(SecrtCode, secretCode);
+        utilites.typeTextAndVerify(SecrtCode, secretCode);
     }
 
     @Step("الضغط على اختيار المستخدمين")
@@ -96,10 +92,10 @@ public class TypesofdiscountsPage extends AbstractForDealer {
     public void AddNewTypesofdiscounts(
             String ArabicName, String EnglishName, int percentage, int secretCode) {
         utilites.ClickElement(AddTypesofdiscounts);
-        utilites.TaypeText(AddArabicTypesofdiscounts, ArabicName);
-        utilites.TaypeText(AddEnglishTypesofdiscounts, EnglishName);
-        utilites.TaypeText(Percentage, String.valueOf(percentage));
-        utilites.TaypeText(SecrtCode, String.valueOf(secretCode));
+        utilites.typeText(AddArabicTypesofdiscounts, ArabicName);
+        utilites.typeText(AddEnglishTypesofdiscounts, EnglishName);
+        utilites.typeText(Percentage, String.valueOf(percentage));
+        utilites.typeText(SecrtCode, String.valueOf(secretCode));
 
         utilites.ClickElement(AddUser);
         utilites.dropdown().selectUsersByCode(1, 2);
@@ -114,10 +110,10 @@ public class TypesofdiscountsPage extends AbstractForDealer {
     public void EditTypesofdiscounts(
             String ArabicName, String EnglishName, int percentage, int secretCode) {
         utilites.ClickElement(utilites.grid().getLastEditButton());
-        utilites.TaypeText(AddArabicTypesofdiscounts, ArabicName);
-        utilites.TaypeText(AddEnglishTypesofdiscounts, EnglishName);
-        utilites.TaypeText(Percentage, String.valueOf(percentage));
-        utilites.TaypeText(SecrtCode, String.valueOf(secretCode));
+        utilites.typeText(AddArabicTypesofdiscounts, ArabicName);
+        utilites.typeText(AddEnglishTypesofdiscounts, EnglishName);
+        utilites.typeText(Percentage, String.valueOf(percentage));
+        utilites.typeText(SecrtCode, String.valueOf(secretCode));
         utilites.checkbox().stableFastSetCheckboxByTextCloude("فعال", false);
         utilites.ClickElement(AddUser);
         utilites.dropdown().selectUsersByCode(1, 2);
@@ -129,8 +125,8 @@ public class TypesofdiscountsPage extends AbstractForDealer {
     @Step("Add Invalid Type Of Discount : ArabicName: {ArabicName},EnglishName: {EnglishName}")
     public void InvalidAddNewTypesofdiscounts(String ArabicName, String EnglishName) {
         utilites.ClickElement(AddTypesofdiscounts);
-        utilites.TaypeText(AddArabicTypesofdiscounts, ArabicName);
-        utilites.TaypeText(AddEnglishTypesofdiscounts, EnglishName);
+        utilites.typeText(AddArabicTypesofdiscounts, ArabicName);
+        utilites.typeText(AddEnglishTypesofdiscounts, EnglishName);
 
         utilites.ClickElement(SaveButton);
     }
@@ -183,21 +179,38 @@ public class TypesofdiscountsPage extends AbstractForDealer {
     }
 
     private org.openqa.selenium.WebElement ownedRow(String name) {
-        return new WebDriverWait(driver, Duration.ofSeconds(15)).until(d -> {
-            java.util.List<org.openqa.selenium.WebElement> matches = d.findElements(
-                    By.cssSelector("tr[data-pk]")).stream().filter(r -> r.isDisplayed())
-                    .filter(r -> r.findElements(By.cssSelector("td")).stream()
-                            .anyMatch(c -> c.getText().trim().equals(name))).toList();
-            if (matches.size() > 1) throw new AssertionError("Ambiguous discount name: " + name);
-            return matches.size() == 1 ? matches.get(0) : null;
-        });
+        return new WebDriverWait(driver, Duration.ofSeconds(15))
+                .until(
+                        d -> {
+                            java.util.List<org.openqa.selenium.WebElement> matches =
+                                    d.findElements(By.cssSelector("tr[data-pk]")).stream()
+                                            .filter(r -> r.isDisplayed())
+                                            .filter(
+                                                    r ->
+                                                            r
+                                                                    .findElements(
+                                                                            By.cssSelector("td"))
+                                                                    .stream()
+                                                                    .anyMatch(
+                                                                            c ->
+                                                                                    c.getText()
+                                                                                            .trim()
+                                                                                            .equals(
+                                                                                                    name)))
+                                            .toList();
+                            if (matches.size() > 1)
+                                throw new AssertionError("Ambiguous discount name: " + name);
+                            return matches.size() == 1 ? matches.get(0) : null;
+                        });
     }
 
     @Step("فتح السجل {name} للتعديل")
     public void OpenOwnedForEdit(String name) {
         ownedRow(name).findElement(By.cssSelector("button[data-action-type='edit']")).click();
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(
-                org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated(SecrtCode));
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(
+                        org.openqa.selenium.support.ui.ExpectedConditions
+                                .visibilityOfElementLocated(SecrtCode));
     }
 
     @Step("حذف السجل {name}")
@@ -206,7 +219,10 @@ public class TypesofdiscountsPage extends AbstractForDealer {
         String pk = row.getAttribute("data-pk");
         row.findElement(By.cssSelector("button[data-action-type='delete']")).click();
         utilites.ClickElement(Clickyestodelet);
-        new WebDriverWait(driver, Duration.ofSeconds(20)).until(d -> d.findElements(
-                By.cssSelector("tr[data-pk]")).stream().noneMatch(r -> pk.equals(r.getAttribute("data-pk"))));
+        new WebDriverWait(driver, Duration.ofSeconds(20))
+                .until(
+                        d ->
+                                d.findElements(By.cssSelector("tr[data-pk]")).stream()
+                                        .noneMatch(r -> pk.equals(r.getAttribute("data-pk"))));
     }
 }

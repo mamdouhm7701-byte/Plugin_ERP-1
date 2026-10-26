@@ -758,4 +758,3 @@
 | `public void cleanPurchasePage()` | public | تنظيف المشتريات / الصفحة، حسب المدخلات والتخصص. |
 
 **علاقته بالتشغيل:** ابحث عن الاسم الكامل `Purches.SupplyChainEndToEndTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
-

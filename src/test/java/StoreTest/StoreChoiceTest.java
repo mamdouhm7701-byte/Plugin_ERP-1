@@ -30,9 +30,10 @@ public final class StoreChoiceTest {
     @Test
     public void ambiguousOwnedOptionsStillStopSelection() {
         Dropdown dropdown = new Dropdown(null, true);
-        AssertionError failure = Assert.expectThrows(
-                AssertionError.class,
-                () -> dropdown.page().smChoose("المخزن", "QA-ST-owned-store"));
+        AssertionError failure =
+                Assert.expectThrows(
+                        AssertionError.class,
+                        () -> dropdown.page().smChoose("المخزن", "QA-ST-owned-store"));
         Assert.assertTrue(failure.getMessage().contains("Ambiguous owned option"));
         Assert.assertEquals(dropdown.selected, 0);
     }
@@ -52,18 +53,23 @@ public final class StoreChoiceTest {
         StoreModulePage page() {
             WebElement input = element(true);
             WebElement option = element(false);
-            WebDriver driver = (WebDriver) Proxy.newProxyInstance(
-                    getClass().getClassLoader(), new Class<?>[] {WebDriver.class},
-                    (proxy, method, args) -> {
-                        if (method.getName().equals("findElements")) {
-                            if (args[0].toString().contains("vs__search")) {
-                                inputReads++;
-                                return List.of(input);
-                            }
-                            return ambiguous ? List.of(option, option) : List.of(option);
-                        }
-                        throw new UnsupportedOperationException(method.getName());
-                    });
+            WebDriver driver =
+                    (WebDriver)
+                            Proxy.newProxyInstance(
+                                    getClass().getClassLoader(),
+                                    new Class<?>[] {WebDriver.class},
+                                    (proxy, method, args) -> {
+                                        if (method.getName().equals("findElements")) {
+                                            if (args[0].toString().contains("vs__search")) {
+                                                inputReads++;
+                                                return List.of(input);
+                                            }
+                                            return ambiguous
+                                                    ? List.of(option, option)
+                                                    : List.of(option);
+                                        }
+                                        throw new UnsupportedOperationException(method.getName());
+                                    });
             return new StoreModulePage(driver) {
                 {
                     ready.pollingEvery(Duration.ofMillis(1));
@@ -78,27 +84,30 @@ public final class StoreChoiceTest {
         }
 
         private WebElement element(boolean input) {
-            return (WebElement) Proxy.newProxyInstance(
-                    getClass().getClassLoader(), new Class<?>[] {WebElement.class},
-                    (proxy, method, args) -> {
-                        String operation = method.getName();
-                        if (input && operation.equals(failingOperation) && !failedOnce) {
-                            failedOnce = true;
-                            throw new ElementNotInteractableException("Dropdown is updating");
-                        }
-                        return switch (operation) {
-                            case "isDisplayed", "isEnabled" -> true;
-                            case "getDomProperty" -> "";
-                            case "getDomAttribute" -> "owned-store-options";
-                            case "getText" -> "QA-ST-owned-store";
-                            case "click" -> {
-                                if (!input) selected++;
-                                yield null;
-                            }
-                            case "sendKeys" -> null;
-                            default -> throw new UnsupportedOperationException(operation);
-                        };
-                    });
+            return (WebElement)
+                    Proxy.newProxyInstance(
+                            getClass().getClassLoader(),
+                            new Class<?>[] {WebElement.class},
+                            (proxy, method, args) -> {
+                                String operation = method.getName();
+                                if (input && operation.equals(failingOperation) && !failedOnce) {
+                                    failedOnce = true;
+                                    throw new ElementNotInteractableException(
+                                            "Dropdown is updating");
+                                }
+                                return switch (operation) {
+                                    case "isDisplayed", "isEnabled" -> true;
+                                    case "getDomProperty" -> "";
+                                    case "getDomAttribute" -> "owned-store-options";
+                                    case "getText" -> "QA-ST-owned-store";
+                                    case "click" -> {
+                                        if (!input) selected++;
+                                        yield null;
+                                    }
+                                    case "sendKeys" -> null;
+                                    default -> throw new UnsupportedOperationException(operation);
+                                };
+                            });
         }
     }
 }

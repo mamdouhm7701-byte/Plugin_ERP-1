@@ -1,16 +1,7 @@
 package Plugin_ERP.System_Modules.Login.BasicData;
 
-import Plugin_ERP.Bots.AlertAction;
-import Plugin_ERP.Bots.ElmentAction;
-import Plugin_ERP.Drivers.WebDriverFactory;
-import Plugin_ERP.Enums.Pages;
-import Plugin_ERP.System_Modules.Login.AbstractForDealer;
-import Plugin_ERP.Utiel.PropertyReader;
-import io.qameta.allure.Step;
 import java.time.Duration;
 import java.util.*;
-import javax.swing.text.Utilities;
-import junit.framework.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
@@ -18,12 +9,15 @@ import org.openqa.selenium.support.ui.*;
 final class CashFormReader {
     private final CashPage owner;
     private final WebDriver driver;
+
     CashFormReader(CashPage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
     }
 
-    private boolean isVisible(By locator) { return owner.recordIsVisible(locator); }
+    private boolean isVisible(By locator) {
+        return owner.recordIsVisible(locator);
+    }
 
     boolean isCashCreationFormDisplayed() {
         return isVisible(By.cssSelector("input[name='arabicName']"));
@@ -92,9 +86,14 @@ final class CashFormReader {
     }
 
     private String visibleValue(By locator) {
-        return new WebDriverWait(driver, Duration.ofSeconds(10)).until(d ->
-                d.findElements(locator).stream().filter(WebElement::isDisplayed)
-                        .findFirst().map(e -> e.getDomProperty("value")).orElse(null));
+        return new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(
+                        d ->
+                                d.findElements(locator).stream()
+                                        .filter(WebElement::isDisplayed)
+                                        .findFirst()
+                                        .map(e -> e.getDomProperty("value"))
+                                        .orElse(null));
     }
 
     String getNotesValue() {
@@ -138,7 +137,10 @@ final class CashFormReader {
                 driver.findElements(
                         By.xpath(
                                 "//label[normalize-space()='رقم الحساب']/following::div[contains(@class,'vs__dropdown-toggle')][1]//div[contains(@class,'vs__selected')]"));
-        return selectedValues.stream().filter(WebElement::isDisplayed)
-                .findFirst().map(e -> e.getText().trim()).orElse("");
+        return selectedValues.stream()
+                .filter(WebElement::isDisplayed)
+                .findFirst()
+                .map(e -> e.getText().trim())
+                .orElse("");
     }
 }

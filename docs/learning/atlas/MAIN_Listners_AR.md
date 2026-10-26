@@ -7,7 +7,7 @@
 <a id="file-010e5aae21a3"></a>
 ## TestNGListeners.java
 
-**المصدر:** [src/main/java/Plugin_ERP/Listners/TestNGListeners.java](../../../src/main/java/Plugin_ERP/Listners/TestNGListeners.java)
+**المصدر:** [src/main/java/Plugin_ERP/Listeners/TestNGListeners.java](../../../src/main/java/Plugin_ERP/Listeners/TestNGListeners.java)
 
 **دوره:** يراقب دورة التنفيذ ونتيجة الحالة، يجمع الأدلة، ويطبق سياسة بناء التقرير وإرساله.
 
@@ -32,4 +32,3 @@
 | `public void onTestFailure(ITestResult result)` | public | تجميع أدلة الفشل من الجلسة الحالية. |
 | `public void onTestSkipped(ITestResult result)` | public | تجميع أدلة التخطي إن توفرت الجلسة. |
 | `private void takeScreenshot(ITestResult result, String status)` | private | تنفيذ جزء متعلق بـ القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
-

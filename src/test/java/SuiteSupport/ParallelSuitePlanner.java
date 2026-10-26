@@ -1,15 +1,14 @@
 package SuiteSupport;
 
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.util.*;
+import java.util.regex.Pattern;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.testng.annotations.Test;
 import org.testng.xml.*;
 import org.testng.xml.internal.Parser;
-
-import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
-import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * Partitions original XML selections; a passed checkpoint is excluded explicitly, never a failure.

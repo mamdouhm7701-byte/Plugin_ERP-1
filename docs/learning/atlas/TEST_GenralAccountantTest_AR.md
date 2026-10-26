@@ -57,4 +57,3 @@
 | `public void RejectDebitAndCreditOnSameLineTest()` | public | تنفيذ جزء متعلق بـ المدين / الدائن / البند، حسب المدخلات والتخصص. |
 
 **علاقته بالتشغيل:** ابحث عن الاسم الكامل `GenralAccountantTest.VouchersTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
-

@@ -129,7 +129,8 @@ public class ExpensesTest extends BasicDataScenarioTest {
             p.OpenForEditByName(n);
             Assert.assertEquals(p.GetArabicNameValue(), n);
             Assert.assertEquals(p.GetEnglishNameValue(), en);
-            Assert.assertEquals(p.GetSelectedAccountValue(), basicData().account("expenses").name());
+            Assert.assertEquals(
+                    p.GetSelectedAccountValue(), basicData().account("expenses").name());
             Assert.assertTrue(p.IsSharedChecked());
             Assert.assertFalse(p.GetCodeValue().isBlank());
             p.ClickCloseButton();

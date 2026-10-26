@@ -15,7 +15,18 @@ import org.testng.annotations.Test;
 public final class ModuleChoiceTest {
     @DataProvider
     public Object[][] redrawStages() {
-        return new Object[][] {{"sales", "click"}, {"sales", "sendKeys"}, {"purchase", "click"}, {"purchase", "sendKeys"}, {"store", "click"}, {"store", "sendKeys"}, {"products", "click"}, {"products", "sendKeys"}, {"financial", "click"}, {"financial", "sendKeys"}};
+        return new Object[][] {
+            {"sales", "click"},
+            {"sales", "sendKeys"},
+            {"purchase", "click"},
+            {"purchase", "sendKeys"},
+            {"store", "click"},
+            {"store", "sendKeys"},
+            {"products", "click"},
+            {"products", "sendKeys"},
+            {"financial", "click"},
+            {"financial", "sendKeys"}
+        };
     }
 
     @Test(dataProvider = "redrawStages")
@@ -28,14 +39,17 @@ public final class ModuleChoiceTest {
     }
 
     @DataProvider
-    public Object[][] modules() {return new Object[][] {{"sales"}, {"purchase"}, {"store"}, {"products"}, {"financial"}};}
+    public Object[][] modules() {
+        return new Object[][] {{"sales"}, {"purchase"}, {"store"}, {"products"}, {"financial"}};
+    }
 
     @Test(dataProvider = "modules")
     public void ambiguousOwnedOptionsStillStopSelection(String module) {
         Dropdown dropdown = new Dropdown(null, true);
-        AssertionError failure = Assert.expectThrows(
-                AssertionError.class,
-                () -> dropdown.page(module).accept("المخزن", "QA-ST-owned-store"));
+        AssertionError failure =
+                Assert.expectThrows(
+                        AssertionError.class,
+                        () -> dropdown.page(module).accept("المخزن", "QA-ST-owned-store"));
         Assert.assertTrue(failure.getMessage().startsWith("Ambiguous "));
         Assert.assertEquals(dropdown.selected, 0);
     }
@@ -55,75 +69,116 @@ public final class ModuleChoiceTest {
         java.util.function.BiConsumer<String, String> page(String module) {
             WebElement input = element(true);
             WebElement option = element(false);
-            WebDriver driver = (WebDriver) Proxy.newProxyInstance(
-                    getClass().getClassLoader(), new Class<?>[] {WebDriver.class, org.openqa.selenium.JavascriptExecutor.class},
-                    (proxy, method, args) -> {
-                        if (method.getName().equals("executeScript")) return null;
-                        if (method.getName().equals("findElements")) {
-                            if (args[0].toString().contains("vs__search")) {
-                                inputReads++;
-                                return List.of(input);
-                            }
-                            return ambiguous ? List.of(option, option) : List.of(option);
-                        }
-                        throw new UnsupportedOperationException(method.getName());
-                    });
+            WebDriver driver =
+                    (WebDriver)
+                            Proxy.newProxyInstance(
+                                    getClass().getClassLoader(),
+                                    new Class<?>[] {
+                                        WebDriver.class,
+                                        org.openqa.selenium.JavascriptExecutor.class
+                                    },
+                                    (proxy, method, args) -> {
+                                        if (method.getName().equals("executeScript")) return null;
+                                        if (method.getName().equals("findElements")) {
+                                            if (args[0].toString().contains("vs__search")) {
+                                                inputReads++;
+                                                return List.of(input);
+                                            }
+                                            return ambiguous
+                                                    ? List.of(option, option)
+                                                    : List.of(option);
+                                        }
+                                        throw new UnsupportedOperationException(method.getName());
+                                    });
             if (module.equals("sales")) {
-                var page = new Plugin_ERP.System_Modules.Login.Invoice.SalesModulePage(driver) {
-                    {ready.pollingEvery(Duration.ofMillis(1)); ready.withTimeout(Duration.ofSeconds(2));}
-                    @Override protected Object js(String script, Object... args) {return null;}
-                };
+                var page =
+                        new Plugin_ERP.System_Modules.Login.Invoice.SalesModulePage(driver) {
+                            {
+                                ready.pollingEvery(Duration.ofMillis(1));
+                                ready.withTimeout(Duration.ofSeconds(2));
+                            }
+
+                            @Override
+                            protected Object js(String script, Object... args) {
+                                return null;
+                            }
+                        };
                 return page::slChoose;
             }
             if (module.equals("purchase")) {
-                var page = new Plugin_ERP.System_Modules.Login.purches.PurchaseModulePage(driver) {
-                    {ready.pollingEvery(Duration.ofMillis(1)); ready.withTimeout(Duration.ofSeconds(2));}
-                    @Override protected Object js(String script, Object... args) {return null;}
-                };
+                var page =
+                        new Plugin_ERP.System_Modules.Login.purches.PurchaseModulePage(driver) {
+                            {
+                                ready.pollingEvery(Duration.ofMillis(1));
+                                ready.withTimeout(Duration.ofSeconds(2));
+                            }
+
+                            @Override
+                            protected Object js(String script, Object... args) {
+                                return null;
+                            }
+                        };
                 return page::puChoose;
             }
             if (module.equals("store")) {
-                var page = new StoreModulePage(driver) {
-                    {ready.pollingEvery(Duration.ofMillis(1)); ready.withTimeout(Duration.ofSeconds(2));}
-                    @Override protected Object js(String script, Object... args) {return null;}
-                };
+                var page =
+                        new StoreModulePage(driver) {
+                            {
+                                ready.pollingEvery(Duration.ofMillis(1));
+                                ready.withTimeout(Duration.ofSeconds(2));
+                            }
+
+                            @Override
+                            protected Object js(String script, Object... args) {
+                                return null;
+                            }
+                        };
                 return page::smChoose;
             }
             if (module.equals("products")) {
-                var page = new Plugin_ERP.System_Modules.Login.Products.ProductsModulePage(driver) {
-                    {ready.pollingEvery(Duration.ofMillis(1)); ready.withTimeout(Duration.ofSeconds(2));}
-                };
+                var page =
+                        new Plugin_ERP.System_Modules.Login.Products.ProductsModulePage(driver) {
+                            {
+                                ready.pollingEvery(Duration.ofMillis(1));
+                                ready.withTimeout(Duration.ofSeconds(2));
+                            }
+                        };
                 return page::prChoose;
             }
             if (module.equals("financial")) {
-                var page = new Plugin_ERP.System_Modules.Login.FinancialMovements.FinancialMovementPage(driver);
+                var page =
+                        new Plugin_ERP.System_Modules.Login.FinancialMovements
+                                .FinancialMovementPage(driver);
                 return page::choose;
             }
             throw new IllegalArgumentException(module);
         }
 
         private WebElement element(boolean input) {
-            return (WebElement) Proxy.newProxyInstance(
-                    getClass().getClassLoader(), new Class<?>[] {WebElement.class},
-                    (proxy, method, args) -> {
-                        String operation = method.getName();
-                        if (input && operation.equals(failingOperation) && !failedOnce) {
-                            failedOnce = true;
-                            throw new ElementNotInteractableException("Dropdown is updating");
-                        }
-                        return switch (operation) {
-                            case "isDisplayed", "isEnabled" -> true;
-                            case "getDomProperty" -> "";
-                            case "getDomAttribute" -> "owned-store-options";
-                            case "getText" -> "QA-ST-owned-store";
-                            case "click" -> {
-                                if (!input) selected++;
-                                yield null;
-                            }
-                            case "sendKeys" -> null;
-                            default -> throw new UnsupportedOperationException(operation);
-                        };
-                    });
+            return (WebElement)
+                    Proxy.newProxyInstance(
+                            getClass().getClassLoader(),
+                            new Class<?>[] {WebElement.class},
+                            (proxy, method, args) -> {
+                                String operation = method.getName();
+                                if (input && operation.equals(failingOperation) && !failedOnce) {
+                                    failedOnce = true;
+                                    throw new ElementNotInteractableException(
+                                            "Dropdown is updating");
+                                }
+                                return switch (operation) {
+                                    case "isDisplayed", "isEnabled" -> true;
+                                    case "getDomProperty" -> "";
+                                    case "getDomAttribute" -> "owned-store-options";
+                                    case "getText" -> "QA-ST-owned-store";
+                                    case "click" -> {
+                                        if (!input) selected++;
+                                        yield null;
+                                    }
+                                    case "sendKeys" -> null;
+                                    default -> throw new UnsupportedOperationException(operation);
+                                };
+                            });
         }
     }
 }

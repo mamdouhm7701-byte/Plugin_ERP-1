@@ -63,9 +63,13 @@ final class StoreFixtureApiStub {
                         (proxy, method, args) -> {
                             if (method.getName().equals("executeScript")) {
                                 String script = (String) args[0];
-                                if (script.startsWith("return location.origin")) return activeOrigin;
+                                if (script.startsWith("return location.origin"))
+                                    return activeOrigin;
                                 if (script.startsWith("return document.querySelector")) {
-                                    if (missingBranchReads > 0) { missingBranchReads--; return null; }
+                                    if (missingBranchReads > 0) {
+                                        missingBranchReads--;
+                                        return null;
+                                    }
                                     return activeBranch;
                                 }
                                 return true;
@@ -81,7 +85,8 @@ final class StoreFixtureApiStub {
 
     @SuppressWarnings("unchecked")
     Object request(Object[] args) {
-        if (missingBranchReads > 0 || !java.util.Objects.equals(args[3], activeOrigin)
+        if (missingBranchReads > 0
+                || !java.util.Objects.equals(args[3], activeOrigin)
                 || !java.util.Objects.equals(args[4], activeBranch))
             return Map.of("error", "ERP origin or branch changed; refusing fixture access");
         String action = (String) args[0], endpoint = (String) args[1];
@@ -138,18 +143,13 @@ final class StoreFixtureApiStub {
             return records.containsKey(id)
                     ? Map.of("entity", records.get(id))
                     : defaultDeletedMasterDto
-                            ? Map.of(
-                                    "entity",
-                                    Map.of("subUnits", List.of(), "type", "RawMaterial"))
+                            ? Map.of("entity", Map.of("subUnits", List.of(), "type", "RawMaterial"))
                             : defaultDeletedDto
                                     ? Map.of("entity", Map.of("conversionRates", List.of()))
                                     : emptyDeletedResponse
                                             ? Map.of("entity", "")
                                             : Map.of(
-                                                    "error",
-                                                    "Missing owned record",
-                                                    "status",
-                                                    404);
+                                                    "error", "Missing owned record", "status", 404);
         }
         deletes.add(id);
         if (crashAtDelete > 0 && deletes.size() == crashAtDelete)

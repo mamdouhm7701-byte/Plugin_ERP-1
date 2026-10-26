@@ -10,7 +10,8 @@ public final class SalesFixtureRecovery extends BaseTest {
         var runner = new SalesFixtureRecovery();
         try {
             runner.setup();
-            new Plugin_ERP.System_Modules.Login.Invoice.SalesModulePage(runner.driver).slAwaitSession();
+            new Plugin_ERP.System_Modules.Login.Invoice.SalesModulePage(runner.driver)
+                    .slAwaitSession();
             SalesTestData.resume(runner.driver, args[0]).close();
         } finally {
             runner.tearDown();

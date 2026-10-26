@@ -1,16 +1,15 @@
 package Plugin_ERP.Tests.LoginTest;
 
 import Plugin_ERP.Drivers.WebDriverFactory;
-import Plugin_ERP.Listners.TestNGListeners;
+import Plugin_ERP.Listeners.TestNGListeners;
 import Plugin_ERP.System_Modules.Login.Login.LoginPage;
-import Plugin_ERP.Utiel.PropertyReader;
+import Plugin_ERP.Util.PropertyReader;
 import io.qameta.allure.Step;
 import io.qameta.allure.testng.AllureTestNg;
+import java.time.Duration;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
-
-import java.time.Duration;
 
 @Listeners({AllureTestNg.class, TestNGListeners.class})
 public class BaseTest {
@@ -20,9 +19,13 @@ public class BaseTest {
     private Throwable setupFailure;
 
     protected final void requirePreparedSession() {
-        if (setupFailure != null) throw new org.testng.SkipException(
-                "Scenario preparation skipped because base login/setup failed; see the setup result", setupFailure);
-        if (driver == null) throw new IllegalStateException("Scenario preparation requires a successfully created browser");
+        if (setupFailure != null)
+            throw new org.testng.SkipException(
+                    "Scenario preparation skipped because base login/setup failed; see the setup result",
+                    setupFailure);
+        if (driver == null)
+            throw new IllegalStateException(
+                    "Scenario preparation requires a successfully created browser");
     }
 
     // ================= SETUP =================
@@ -44,7 +47,8 @@ public class BaseTest {
         } catch (Exception | AssertionError | LinkageError failure) {
             setupFailure = failure;
             if (driver instanceof TakesScreenshot) {
-                Plugin_ERP.Utiel.ScreenShotsUtils.takeScreenShot(driver, "SETUP_" + getClass().getSimpleName());
+                Plugin_ERP.Util.ScreenShotsUtils.takeScreenShot(
+                        driver, "SETUP_" + getClass().getSimpleName());
             }
             try {
                 tearDown();

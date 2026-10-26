@@ -19,7 +19,7 @@
             <class name="SuiteSupport.WorkflowCleanupOrderTest"/>
             <class name="SuiteSupport.RuntimeCompatibilityTest"/>
             <class name="SuiteSupport.BrowserLifecycleTest"/>
-            <class name="Plugin_ERP.Utiel.ConfigurationPropertiesTest"/>
+            <class name="Plugin_ERP.Util.ConfigurationPropertiesTest"/>
         </classes>
     </test>
 </suite>

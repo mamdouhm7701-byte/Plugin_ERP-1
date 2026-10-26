@@ -49,7 +49,9 @@ final class BasicDataFixturesApiStub {
                                 String code = (String) args[0];
                                 if (code.contains("__basicDataQA?.pending")) {
                                     beforeUiPoll.run();
-                                    if(uiPollFailure)throw new TimeoutException("Owned UI request did not settle");
+                                    if (uiPollFailure)
+                                        throw new TimeoutException(
+                                                "Owned UI request did not settle");
                                     return false;
                                 }
                                 if (code.equals("return location.origin")) return "offline";
@@ -105,12 +107,24 @@ final class BasicDataFixturesApiStub {
                             .toList();
             return Map.of("entity", Map.of("pageData", rows, "totalRecords", rows.size()));
         }
-        if (action.equals("get") && (endpoint.contains("?") || endpoint.startsWith("Aggregates/"))) {
-            String type=endpoint.startsWith("Aggregates/")?"Accounts":endpoint.split("\\?")[0];
-            var rows=records.entrySet().stream().filter(e->e.getKey().startsWith(type+"-")).map(Map.Entry::getValue).toList();
-            int page=endpoint.contains("pageNumber=")?Integer.parseInt(endpoint.split("pageNumber=")[1].split("&")[0]):1;
-            int from=Math.min(rows.size(),(page-1)*500),to=Math.min(rows.size(),from+500);
-            return Map.of("entity",Map.of("pageData",rows.subList(from,to),"totalRecords",rows.size()));
+        if (action.equals("get")
+                && (endpoint.contains("?") || endpoint.startsWith("Aggregates/"))) {
+            String type =
+                    endpoint.startsWith("Aggregates/") ? "Accounts" : endpoint.split("\\?")[0];
+            var rows =
+                    records.entrySet().stream()
+                            .filter(e -> e.getKey().startsWith(type + "-"))
+                            .map(Map.Entry::getValue)
+                            .toList();
+            int page =
+                    endpoint.contains("pageNumber=")
+                            ? Integer.parseInt(endpoint.split("pageNumber=")[1].split("&")[0])
+                            : 1;
+            int from = Math.min(rows.size(), (page - 1) * 500),
+                    to = Math.min(rows.size(), from + 500);
+            return Map.of(
+                    "entity",
+                    Map.of("pageData", rows.subList(from, to), "totalRecords", rows.size()));
         }
         String id = values.get("id").toString();
         if (action.equals("get")) {
@@ -119,9 +133,7 @@ final class BasicDataFixturesApiStub {
             return records.containsKey(id)
                     ? Map.of("entity", records.get(id))
                     : defaultDeletedMasterDto
-                            ? Map.of(
-                                    "entity",
-                                    Map.of("subUnits", List.of(), "type", "RawMaterial"))
+                            ? Map.of("entity", Map.of("subUnits", List.of(), "type", "RawMaterial"))
                             : defaultDeletedDto
                                     ? Map.of(
                                             "entity",
@@ -133,10 +145,7 @@ final class BasicDataFixturesApiStub {
                                     : emptyDeletedResponse
                                             ? Map.of("entity", "")
                                             : Map.of(
-                                                    "error",
-                                                    "Missing owned record",
-                                                    "status",
-                                                    404);
+                                                    "error", "Missing owned record", "status", 404);
         }
         deletes.add(id);
         if (crashAtDelete > 0 && deletes.size() == crashAtDelete)
@@ -155,4 +164,3 @@ final class BasicDataFixturesApiStub {
         return Map.of("ok", true);
     }
 }
-

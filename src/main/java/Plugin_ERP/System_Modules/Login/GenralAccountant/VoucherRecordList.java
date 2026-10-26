@@ -1,24 +1,21 @@
 package Plugin_ERP.System_Modules.Login.GenralAccountant;
 
-import Plugin_ERP.System_Modules.Login.Abstract;
-import io.qameta.allure.Step;
-import java.math.BigDecimal;
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
-import org.testng.Assert;
 
 /** Voucher Record List: focused operations used by the original page facade. */
 final class VoucherRecordList {
     private final VouchersPage owner;
     private final WebDriver driver;
-    private final Plugin_ERP.Bots.ElmentAction utilites;
-    private final Plugin_ERP.Bots.WaitMangment waitMangment;
+    private final Plugin_ERP.Bots.ElementActions utilites;
+    private final Plugin_ERP.Bots.WaitManagement waitManagement;
+
     VoucherRecordList(VouchersPage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
         this.utilites = owner.context().elements();
-        this.waitMangment = owner.context().waits();
+        this.waitManagement = owner.context().waits();
     }
 
     boolean hasVoucherMarkerInList(String marker) {
@@ -53,7 +50,7 @@ final class VoucherRecordList {
                                             + pk
                                             + "']//button[@data-action-type='delete']"),
                             owner.Clickyestodelet);
-            waitMangment
+            waitManagement
                     .fluentWait()
                     .until(d -> d.findElements(By.xpath("//tr[@data-pk='" + pk + "']")).isEmpty());
         }
@@ -66,10 +63,10 @@ final class VoucherRecordList {
                                 + marker
                                 + "')]//button[@data-action-type='edit']");
         utilites.ClickElement(editButton);
-        waitMangment
+        waitManagement
                 .fluentWait()
                 .until(d -> !d.findElements(By.cssSelector("form #textarea")).isEmpty());
-        waitMangment
+        waitManagement
                 .fluentWait()
                 .until(
                         d ->
@@ -89,7 +86,7 @@ final class VoucherRecordList {
                         pk,
                         By.xpath("//tr[@data-pk='" + pk + "']//button[@data-action-type='delete']"),
                         owner.Clickyestodelet);
-        waitMangment
+        waitManagement
                 .fluentWait()
                 .until(d -> d.findElements(By.xpath("//tr[@data-pk='" + pk + "']")).isEmpty());
     }

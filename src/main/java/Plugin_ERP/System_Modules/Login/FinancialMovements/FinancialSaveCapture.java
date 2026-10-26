@@ -1,12 +1,5 @@
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
-import Plugin_ERP.Enums.Pages;
-import Plugin_ERP.System_Modules.Login.Abstract;
-import Plugin_ERP.Utiel.FormInteractions;
-import Plugin_ERP.Utiel.PropertyReader;
-import io.qameta.allure.Step;
-import java.math.BigDecimal;
-import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
@@ -14,13 +7,16 @@ import org.openqa.selenium.support.ui.*;
 /** Financial Save Capture: focused operations used by the original page facade. */
 final class FinancialSaveCapture {
     @SuppressWarnings("unchecked")
-    List<Map<String,Object>> capturedAttempts() {
-        return (List<Map<String,Object>>) ((JavascriptExecutor) driver)
-                .executeScript("return window.__financialQA?.attempts||[]");
+    List<Map<String, Object>> capturedAttempts() {
+        return (List<Map<String, Object>>)
+                ((JavascriptExecutor) driver)
+                        .executeScript("return window.__financialQA?.attempts||[]");
     }
+
     private final FinancialMovementPage owner;
     private final WebDriver driver;
     private final WebDriverWait ready;
+
     FinancialSaveCapture(FinancialMovementPage owner, WebDriver driver, WebDriverWait ready) {
         this.owner = owner;
         this.driver = driver;
@@ -28,7 +24,9 @@ final class FinancialSaveCapture {
     }
 
     void captureSaves(String marker) {
-    ((JavascriptExecutor)driver).executeScript("""
+        ((JavascriptExecutor) driver)
+                .executeScript(
+                        """
       const store=document.querySelector('#app').__vue__.$store;
       window.__financialQA={marker:arguments[0],saves:[],attempts:[],pending:0,errors:[]};
       if(store.__financialCaptureInstalled)return;
@@ -45,14 +43,35 @@ final class FinancialSaveCapture {
           return result;
         }).catch(error=>{if(owned){cap.pending--;cap.errors.push(String(error));}throw error;});
       };
-      """,marker);
-  }
+      """,
+                        marker);
+    }
 
-    List<Map<String,Object>> capturedSaves(){return (List<Map<String,Object>>)((JavascriptExecutor)driver).executeScript("return window.__financialQA?.saves||[]");}
+    List<Map<String, Object>> capturedSaves() {
+        return (List<Map<String, Object>>)
+                ((JavascriptExecutor) driver)
+                        .executeScript("return window.__financialQA?.saves||[]");
+    }
 
-    String captureMarker(){return (String)((JavascriptExecutor)driver).executeScript("return window.__financialQA?.marker||null");}
+    String captureMarker() {
+        return (String)
+                ((JavascriptExecutor) driver)
+                        .executeScript("return window.__financialQA?.marker||null");
+    }
 
-    boolean hasSaveStarted(){return Boolean.TRUE.equals(((JavascriptExecutor)driver).executeScript("return !!window.__financialQA && (window.__financialQA.pending>0 || window.__financialQA.saves.length>0)"));}
+    boolean hasSaveStarted() {
+        return Boolean.TRUE.equals(
+                ((JavascriptExecutor) driver)
+                        .executeScript(
+                                "return !!window.__financialQA && (window.__financialQA.pending>0 || window.__financialQA.saves.length>0)"));
+    }
 
-    void awaitSavesSettled(){ready.until(d->!Boolean.TRUE.equals(((JavascriptExecutor)d).executeScript("return (window.__financialQA?.pending||0)>0")));}
+    void awaitSavesSettled() {
+        ready.until(
+                d ->
+                        !Boolean.TRUE.equals(
+                                ((JavascriptExecutor) d)
+                                        .executeScript(
+                                                "return (window.__financialQA?.pending||0)>0")));
+    }
 }

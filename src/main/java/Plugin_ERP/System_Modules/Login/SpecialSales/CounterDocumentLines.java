@@ -12,6 +12,7 @@ import org.openqa.selenium.WebElement;
 final class CounterDocumentLines {
     private final SpecialSalesPage owner;
     private final WebDriver driver;
+
     CounterDocumentLines(SpecialSalesPage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
@@ -45,7 +46,7 @@ final class CounterDocumentLines {
         card.findElement(
                         By.xpath(
                                 ".//div[contains(@class,'quantity-input')]//button[.//*[local-name()='svg'"
-                                    + " and contains(@class,'feather-"
+                                        + " and contains(@class,'feather-"
                                         + (plus ? "plus" : "minus")
                                         + "')]]"))
                 .click();
@@ -62,21 +63,35 @@ final class CounterDocumentLines {
 
     void waitNet(String value) {
         try {
-            owner.ready.until(d -> new java.math.BigDecimal(owner.document().get("net").toString())
-                    .compareTo(new java.math.BigDecimal(value)) == 0);
+            owner.ready.until(
+                    d ->
+                            new java.math.BigDecimal(owner.document().get("net").toString())
+                                            .compareTo(new java.math.BigDecimal(value))
+                                    == 0);
         } catch (TimeoutException failure) {
-            throw new AssertionError("صافي الفاتورة غير مطابق: المتوقع " + value
-                    + "، الفعلي " + owner.document().get("net"), failure);
+            throw new AssertionError(
+                    "صافي الفاتورة غير مطابق: المتوقع "
+                            + value
+                            + "، الفعلي "
+                            + owner.document().get("net"),
+                    failure);
         }
     }
 
     void waitTotal(String value) {
         try {
-            owner.ready.until(d -> new java.math.BigDecimal(owner.document().get("total").toString())
-                    .compareTo(new java.math.BigDecimal(value)) == 0);
+            owner.ready.until(
+                    d ->
+                            new java.math.BigDecimal(owner.document().get("total").toString())
+                                            .compareTo(new java.math.BigDecimal(value))
+                                    == 0);
         } catch (TimeoutException failure) {
-            throw new AssertionError("إجمالي الفاتورة غير مطابق: المتوقع " + value
-                    + "، الفعلي " + owner.document().get("total"), failure);
+            throw new AssertionError(
+                    "إجمالي الفاتورة غير مطابق: المتوقع "
+                            + value
+                            + "، الفعلي "
+                            + owner.document().get("total"),
+                    failure);
         }
     }
 
@@ -102,7 +117,10 @@ final class CounterDocumentLines {
                                                                     .toString()))
                                     .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add);
             throw new AssertionError(
-                    "إجمالي الفاتورة لا يطابق مجموع البنود: المتوقع " + sum + "، الفعلي " + value.get("total"),
+                    "إجمالي الفاتورة لا يطابق مجموع البنود: المتوقع "
+                            + sum
+                            + "، الفعلي "
+                            + value.get("total"),
                     failure);
         }
     }

@@ -1,9 +1,5 @@
 package Plugin_ERP.System_Modules.Login.SpecialSales;
 
-import Plugin_ERP.System_Modules.Login.Abstract;
-import Plugin_ERP.Utiel.PropertyReader;
-import io.qameta.allure.Step;
-import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
@@ -13,6 +9,7 @@ final class CounterPaymentControls {
     private final SpecialSalesPage owner;
     private final WebDriver driver;
     private final WebDriverWait ready;
+
     CounterPaymentControls(SpecialSalesPage owner, WebDriver driver, WebDriverWait ready) {
         this.owner = owner;
         this.driver = driver;
@@ -40,7 +37,8 @@ final class CounterPaymentControls {
                 By.xpath(
                         "//div[@id='sidebar-invoice-add-payment']//button[normalize-space()='حفظ و"
                                 + " طباعة']");
-        if (driver.findElements(sidebar).stream().anyMatch(WebElement::isDisplayed)) owner.click(sidebar);
+        if (driver.findElements(sidebar).stream().anyMatch(WebElement::isDisplayed))
+            owner.click(sidebar);
         else owner.button("حفظ و طباعة");
     }
 

@@ -12,13 +12,17 @@ import org.testng.annotations.Test;
 public final class RuntimeCompatibilityTest {
     @Test
     public void java21RunsWithWorkingAllureStepInstrumentation() {
-        Assert.assertEquals(Runtime.version().feature(), 21,
-                "Tests must use the project's Java 21 toolchain");
+        Assert.assertEquals(
+                Runtime.version().feature(), 21, "Tests must use the project's Java 21 toolchain");
         String parent = Allure.getLifecycle().getCurrentTestCaseOrStep().orElseThrow();
         String step = currentAnnotatedStep();
-        Assert.assertNotEquals(step, parent,
+        Assert.assertNotEquals(
+                step,
+                parent,
                 "@Step must create an Allure step; verify the AspectJ javaagent and JDK compatibility");
-        Assert.assertEquals(Allure.getLifecycle().getCurrentTestCaseOrStep().orElseThrow(), parent,
+        Assert.assertEquals(
+                Allure.getLifecycle().getCurrentTestCaseOrStep().orElseThrow(),
+                parent,
                 "The annotated step must finish and restore its parent");
     }
 

@@ -103,4 +103,3 @@
 **ملفات تشير إليه مباشرة:** [DocumentColumnEditing.java](MAIN_PAGES_Shared_AR.md#file-25745f5f5d3c)، [DocumentPage.java](MAIN_PAGES_Shared_AR.md#file-68b4b1149fce)، [DocumentPaymentControls.java](MAIN_PAGES_Shared_AR.md#file-06066f1bdac6)، [DocumentPrintChecks.java](MAIN_PAGES_Shared_AR.md#file-e15f8897987f)، [DocumentSummaryReader.java](MAIN_PAGES_Shared_AR.md#file-0b7db83fde59)، [InvoiceBusinessValidation.java](MAIN_PAGES_Shared_AR.md#file-79ba3d4eb127)، [PurchaseInvoiceSnapshot.java](MAIN_PAGES_Shared_AR.md#file-09dda0ec1286)، [PropertyReader.java](MAIN_Utiel_AR.md#file-94d06e1d47d8)؛ العرض مختصر وليس قائمة كاملة.
 
 **الميثودات المعلنة:** لا توجد ميثودات عادية استخرجها الحصر. قد يكون الملف enum/record أو واجهة أو كلاسًا يعتمد على الأب أو ملفًا فارغًا/معلقًا؛ راجع حالته والمصدر.
-

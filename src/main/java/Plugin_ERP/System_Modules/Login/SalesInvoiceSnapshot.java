@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 /** Sales row snapshots used before saving or printing. */
 final class SalesInvoiceSnapshot {
     private final WebDriver driver;
+
     SalesInvoiceSnapshot(WebDriver driver) {
         this.driver = driver;
     }

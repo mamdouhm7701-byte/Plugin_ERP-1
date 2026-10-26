@@ -1,19 +1,13 @@
 package Plugin_ERP.System_Modules.Login.Products;
 
-import Plugin_ERP.Bots.AlertAction;
-import Plugin_ERP.Bots.ElmentAction;
-import Plugin_ERP.Bots.WaitMangment;
-import Plugin_ERP.System_Modules.Login.Abstract;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-
-import java.util.List;
 
 public class AddProductsPage extends ProductsModulePage {
     private final ProductComponents components;
     private final ProductUnits units;
+
     @Step("ربط الصنف بالمخزن {store}: رصيد {opening}، حد أدنى {minimum}، تكلفة {cost}")
     public void prStock(String store, String opening, String minimum, String cost) {
         prChoose("مخازن", store);
@@ -110,52 +104,52 @@ public class AddProductsPage extends ProductsModulePage {
     public void AddProductName(String arabicName) {
         utilites.waits().waitForOverlayToDisappear();
         utilites.waits().waitForScreenReady(ProductName);
-        utilites.TaypeTextB(ProductName, arabicName);
+        utilites.typeTextAndVerify(ProductName, arabicName);
     }
 
     @Step("إدخال اسم الصنف الإنجليزي: {englishName}")
     public void AddProductEnglishName(String englishName) {
-        utilites.TaypeTextB(ProductEnglishName, englishName);
+        utilites.typeTextAndVerify(ProductEnglishName, englishName);
     }
 
     @Step("إدخال الباركود: {barcode}")
     public void AddBarcode(String barcode) {
-        utilites.TaypeTextB(Barcode, barcode);
+        utilites.typeTextAndVerify(Barcode, barcode);
     }
 
     @Step("إدخال سعر البيع: {salePrice}")
     public void AddSalesPrice(String salePrice) {
-        utilites.TaypeTextB(SalePrice, salePrice);
+        utilites.typeTextAndVerify(SalePrice, salePrice);
     }
 
     @Step("إدخال أقل سعر بيع: {miniSalePrice}")
     public void AddMiniSalePrice(String miniSalePrice) {
-        utilites.TaypeTextB(MiniSalePrice, miniSalePrice);
+        utilites.typeTextAndVerify(MiniSalePrice, miniSalePrice);
     }
 
     @Step("إدخال أعلى سعر بيع: {maxSalePrice}")
     public void AddMaxSalePrice(String maxSalePrice) {
-        utilites.TaypeTextB(MaxSalePrice, maxSalePrice);
+        utilites.typeTextAndVerify(MaxSalePrice, maxSalePrice);
     }
 
     @Step("إدخال مكان الصنف: {placeOfProduction}")
     public void AddPlace(String placeOfProduction) {
-        utilites.TaypeTextB(PlaceOfProduction, placeOfProduction);
+        utilites.typeTextAndVerify(PlaceOfProduction, placeOfProduction);
     }
 
     @Step("إدخال سعر التكلفة: {costPrice}")
     public void AddCostPrice(String costPrice) {
-        utilites.TaypeTextB(CostPrice, costPrice);
+        utilites.typeTextAndVerify(CostPrice, costPrice);
     }
 
     @Step("إدخال الرصيد الافتتاحي: {OpenAmount}")
     public void AddOpenAmount(String OpenAmount) {
-        utilites.TaypeText(OpenPlaceOfProduction, OpenAmount);
+        utilites.typeText(OpenPlaceOfProduction, OpenAmount);
     }
 
     @Step("إدخال الحد الأدنى للكمية المتاحة: {lowestAvailableQuantity}")
     public void AddLowestAvailableQuantity(String lowestAvailableQuantity) {
-        utilites.TaypeTextB(LowestAvailableQuantity, lowestAvailableQuantity);
+        utilites.typeTextAndVerify(LowestAvailableQuantity, lowestAvailableQuantity);
     }
 
     @Step("إضافة مخزن للصنف")

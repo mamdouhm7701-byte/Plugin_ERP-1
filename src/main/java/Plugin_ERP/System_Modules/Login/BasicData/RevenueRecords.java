@@ -1,7 +1,5 @@
 package Plugin_ERP.System_Modules.Login.BasicData;
 
-import Plugin_ERP.System_Modules.Login.AbstractForDealer;
-import io.qameta.allure.Step;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -11,16 +9,27 @@ import org.openqa.selenium.support.ui.*;
 final class RevenueRecords {
     private final RevenuesPage owner;
     private final WebDriver driver;
+
     RevenueRecords(RevenuesPage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
     }
+
     private final By rows = By.cssSelector("table tbody tr[role='row']"),
             headers = By.cssSelector("table thead th"),
             save = By.cssSelector("button[data-action-type='save']");
-    private boolean visible(By b) { return owner.recordVisible(b); }
-    private void waitLoading() { owner.recordWaitLoading(); }
-    private void waitAlert() { owner.recordWaitAlert(); }
+
+    private boolean visible(By b) {
+        return owner.recordVisible(b);
+    }
+
+    private void waitLoading() {
+        owner.recordWaitLoading();
+    }
+
+    private void waitAlert() {
+        owner.recordWaitAlert();
+    }
 
     boolean IsListStructureDisplayed() {
         List<String> h =
@@ -64,6 +73,8 @@ final class RevenueRecords {
                         break;
                     }
             } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
+                Plugin_ERP.Bots.LogUtils.debug(
+                        "RevenueRecords fallback: " + ignored.getClass().getSimpleName());
             }
         return count;
     }
@@ -127,6 +138,10 @@ final class RevenueRecords {
                                                     try {
                                                         return e.isDisplayed();
                                                     } catch (Exception ignored) {
+                                                        Plugin_ERP.Bots.LogUtils.debug(
+                                                                "RevenueRecords condition unavailable: "
+                                                                        + ignored.getClass()
+                                                                                .getSimpleName());
                                                         return false;
                                                     }
                                                 }));
@@ -139,6 +154,8 @@ final class RevenueRecords {
                     .until(ExpectedConditions.visibilityOfElementLocated(success));
             owner.DismissAlertIfPresent();
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "RevenueRecords fallback: " + ignored.getClass().getSimpleName());
         }
     }
 

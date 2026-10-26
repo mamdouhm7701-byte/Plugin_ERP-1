@@ -123,7 +123,8 @@ public class RevenuesTest extends BasicDataScenarioTest {
             p.OpenForEditByName(n);
             Assert.assertEquals(p.GetArabicNameValue(), n);
             Assert.assertEquals(p.GetEnglishNameValue(), en);
-            Assert.assertEquals(p.GetSelectedAccountValue(), basicData().account("revenues").name());
+            Assert.assertEquals(
+                    p.GetSelectedAccountValue(), basicData().account("revenues").name());
             Assert.assertTrue(p.IsRevenueSharedChecked());
             Assert.assertFalse(p.GetCodeValue().isBlank());
             p.ClickCloseButton();

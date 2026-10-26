@@ -77,8 +77,17 @@ final class DealerFixtureApiStub {
             return Map.of("entity", Map.of("pageData", rows, "totalRecords", rows.size()));
         }
         if (action.equals("get") && endpoint.startsWith("AgentItineraries?")) {
-            return Map.of("entity", Map.of("result", records.values().stream()
-                    .filter(row -> row.get("id").toString().startsWith("AgentItineraries-")).toList()));
+            return Map.of(
+                    "entity",
+                    Map.of(
+                            "result",
+                            records.values().stream()
+                                    .filter(
+                                            row ->
+                                                    row.get("id")
+                                                            .toString()
+                                                            .startsWith("AgentItineraries-"))
+                                    .toList()));
         }
         String listEndpoint = endpoint.split("\\?")[0];
         if (action.equals("get")

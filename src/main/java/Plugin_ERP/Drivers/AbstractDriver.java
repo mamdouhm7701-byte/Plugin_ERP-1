@@ -1,6 +1,6 @@
 package Plugin_ERP.Drivers;
 
-import Plugin_ERP.Utiel.PropertyReader;
+import Plugin_ERP.Util.PropertyReader;
 import org.openqa.selenium.WebDriver;
 
 public abstract class AbstractDriver {

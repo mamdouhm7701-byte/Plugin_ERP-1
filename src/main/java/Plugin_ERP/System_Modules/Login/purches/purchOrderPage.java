@@ -5,18 +5,17 @@ import Plugin_ERP.Models.InvoiceRow;
 import Plugin_ERP.Models.InvoiceTotals;
 import Plugin_ERP.System_Modules.Login.AbstractForPurchases;
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class purchOrderPage extends AbstractForPurchases {
     public purchOrderPage(WebDriver driver) {

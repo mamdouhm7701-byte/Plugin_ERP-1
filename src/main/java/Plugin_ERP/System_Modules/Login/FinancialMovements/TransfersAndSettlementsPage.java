@@ -1,10 +1,5 @@
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
-import Plugin_ERP.Bots.AlertAction;
-import Plugin_ERP.Bots.BrowserAction;
-import Plugin_ERP.Bots.ElmentAction;
-import Plugin_ERP.Bots.WaitMangment;
-import Plugin_ERP.System_Modules.Login.Abstract;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

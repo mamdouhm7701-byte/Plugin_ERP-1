@@ -97,31 +97,43 @@ final class StoreDocumentLines {
                         e.sendKeys(quantity);
                         e.sendKeys(Keys.TAB);
                         return new java.math.BigDecimal(e.getDomProperty("value"))
-                                .compareTo(new java.math.BigDecimal(quantity)) == 0;
+                                        .compareTo(new java.math.BigDecimal(quantity))
+                                == 0;
                     }
                     return false;
                 });
     }
 
     Map<String, String> smAwaitInvalidQuantity(String name) {
-        return ready.until(d -> {
-            for (WebElement row : d.findElements(line(name))) {
-                if (!row.isDisplayed()) continue;
-                for (WebElement input : row.findElements(By.xpath(
-                        "./td[@aria-colindex=ancestor::table/thead/tr/th[normalize-space(.)='الكمية']/@aria-colindex]//input[not(@type='hidden')]"))) {
-                    if (!input.isDisplayed()) continue;
-                    String state = input.getDomAttribute("aria-invalid");
-                    String classes = input.getDomAttribute("class");
-                    if ("true".equals(state) && classes != null
-                            && Arrays.asList(classes.split("\\s+")).contains("is-invalid")) {
-                        return Map.of("quantity", input.getDomProperty("value"),
-                                "aria-invalid", state, "class", classes,
-                                "title", Objects.toString(input.getDomAttribute("title"), ""));
+        return ready.until(
+                d -> {
+                    for (WebElement row : d.findElements(line(name))) {
+                        if (!row.isDisplayed()) continue;
+                        for (WebElement input :
+                                row.findElements(
+                                        By.xpath(
+                                                "./td[@aria-colindex=ancestor::table/thead/tr/th[normalize-space(.)='الكمية']/@aria-colindex]//input[not(@type='hidden')]"))) {
+                            if (!input.isDisplayed()) continue;
+                            String state = input.getDomAttribute("aria-invalid");
+                            String classes = input.getDomAttribute("class");
+                            if ("true".equals(state)
+                                    && classes != null
+                                    && Arrays.asList(classes.split("\\s+"))
+                                            .contains("is-invalid")) {
+                                return Map.of(
+                                        "quantity",
+                                        input.getDomProperty("value"),
+                                        "aria-invalid",
+                                        state,
+                                        "class",
+                                        classes,
+                                        "title",
+                                        Objects.toString(input.getDomAttribute("title"), ""));
+                            }
+                        }
                     }
-                }
-            }
-            return null;
-        });
+                    return null;
+                });
     }
 
     void smRemoveLine(String name) {

@@ -1,27 +1,20 @@
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.LogUtils;
-import Plugin_ERP.Business.Calculator.InvoiceCalculator;
 import Plugin_ERP.Models.InvoiceRow;
 import Plugin_ERP.Models.InvoiceTotals;
 import Plugin_ERP.Models.ReportTotals;
 import Plugin_ERP.Models.TaxMode;
-import Plugin_ERP.System_Modules.Login.purches.PurchesBillsPage;
-import Plugin_ERP.Utiel.PropertyReader;
-import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import java.math.BigDecimal;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 
-/** Shared transaction capabilities. Domain pages coordinate these components without inheriting another domain. */
+/**
+ * Shared transaction capabilities. Domain pages coordinate these components without inheriting
+ * another domain.
+ */
 public abstract class DocumentPage extends Abstract {
     protected DocumentPage(WebDriver driver) {
         super(driver);
@@ -45,40 +38,45 @@ public abstract class DocumentPage extends Abstract {
     private final StoreQuantityEditor quantityEditor;
     private final StoreProductSearch productSearch;
 
-    private By AssertExsistItemTaype  = By.xpath("//small[contains(text(),'نوع البند مطلوب')]");
+    private By AssertExsistItemTaype = By.xpath("//small[contains(text(),'نوع البند مطلوب')]");
 
-    private By AssertExsistCustomre  = By.xpath("//small[contains(text(),'العملاء مطلوب')]");
-    private By AssertExpenditureCategories    = By.xpath("//small[contains(text(),'جهات الصرف مطلوب')]");
-    private By AssertAgnt    = By.xpath("//small[contains(text(),'المندوبين مطلوب')]");
-    private By AssertSupplier    = By.xpath("//small[contains(text(),'الموردين مطلوب')]");
+    private By AssertExsistCustomre = By.xpath("//small[contains(text(),'العملاء مطلوب')]");
+    private By AssertExpenditureCategories =
+            By.xpath("//small[contains(text(),'جهات الصرف مطلوب')]");
+    private By AssertAgnt = By.xpath("//small[contains(text(),'المندوبين مطلوب')]");
+    private By AssertSupplier = By.xpath("//small[contains(text(),'الموردين مطلوب')]");
 
-    //Methods
+    // Methods
     @Step("التأكيد على ان نوع البند مطلوب")
-    public Boolean AssertExsistItemTaype(){
+    public Boolean AssertExsistItemTaype() {
         return itemControls.AssertExsistItemTaype();
     }
+
     @Step("التأكيد على ان العملاء مطلوب")
-    public Boolean AssertExsistCustomre(){
+    public Boolean AssertExsistCustomre() {
         return itemControls.AssertExsistCustomre();
     }
 
     @Step("التأكيد على ان جهات الصرف مطلوب")
-    public Boolean AssertExpenditureCategories(){
+    public Boolean AssertExpenditureCategories() {
         return itemControls.AssertExpenditureCategories();
     }
+
     @Step("التأكيد على ان المندوبي مطلوب")
-    public Boolean AssertAgnt(){
+    public Boolean AssertAgnt() {
         return itemControls.AssertAgnt();
     }
-@Step("التاكيد ان المخزن مطلوب")
-public Boolean AssertSotreRequired(){
+
+    @Step("التاكيد ان المخزن مطلوب")
+    public Boolean AssertSotreRequired() {
         return itemControls.AssertSotreRequired();
     }
 
-@Step("التأكيد ان الموردين مطلوب")
-public Boolean AssertSupplier(){
+    @Step("التأكيد ان الموردين مطلوب")
+    public Boolean AssertSupplier() {
         return itemControls.AssertSupplier();
     }
+
     @Step("الضغط على ايقونه الباركود")
     public void ClickOnBarcodeRadioBtn() {
         itemControls.ClickOnBarcodeRadioBtn();
@@ -88,8 +86,9 @@ public Boolean AssertSupplier(){
     public void ClickOnNameRadioBtn() {
         itemControls.ClickOnNameRadioBtn();
     }
-     @Step("البحث عن : {searchText}")
-     public void Search(String searchText) {
+
+    @Step("البحث عن : {searchText}")
+    public void Search(String searchText) {
         itemControls.Search(searchText);
     }
 
@@ -109,8 +108,8 @@ public Boolean AssertSupplier(){
     }
 
     /**
-     * Invoice-specific selection path. Once the suggestion is clicked, do not
-     * click it again just because the invoice grid updates asynchronously.
+     * Invoice-specific selection path. Once the suggestion is clicked, do not click it again just
+     * because the invoice grid updates asynchronously.
      */
     protected void searchAndSelectInvoiceProduct(String productName) {
         productSearch.searchAndSelectInvoiceProduct(productName);
@@ -118,13 +117,12 @@ public Boolean AssertSupplier(){
 
     @Step("الضغط على زر الزياده لأول عدد أصناف معين")
     public void ClickPlusButtonByRow(int numberOfRows, int timesPerRow) {
-     utilites.ClickPlusButtonByRow(numberOfRows, timesPerRow);
+        utilites.ClickPlusButtonByRow(numberOfRows, timesPerRow);
     }
 
     @Step("الضغط على زر النقصان لأول عدد أصناف معين")
     public void ClickMinusButtonByRow(int numberOfRows, int timesPerRow) {
         utilites.ClickMinusButtonByRow(numberOfRows, timesPerRow);
-
     }
 
     public void debugPrintAllRows() {
@@ -136,7 +134,7 @@ public Boolean AssertSupplier(){
     }
 
     @Step("حذف الصفوف: {rowNumbers}")
-    public void clickDeleteRows(int... rowNumbers){
+    public void clickDeleteRows(int... rowNumbers) {
         gridEditing.clickDeleteRows(rowNumbers);
     }
 
@@ -149,12 +147,12 @@ public Boolean AssertSupplier(){
     }
 
     @Step("التعديل على اخر صف موجود")
-    public void EditForDamage(){
+    public void EditForDamage() {
         gridEditing.EditForDamage();
     }
 
     @Step("حذف سند تسوية التالف")
-    public void DeleteForDamage(){
+    public void DeleteForDamage() {
         gridEditing.DeleteForDamage();
     }
 
@@ -180,12 +178,13 @@ public Boolean AssertSupplier(){
     public void CompareNamesAndQuantitiesWithReport(Map<String, String> expectedData) {
         quantityPrint.CompareNamesAndQuantitiesWithReport(expectedData);
     }
+
     public void waitUntilMessageDisappear(String messageText) {
         quantityPrint.waitUntilMessageDisappear(messageText);
     }
 
     @Step("حذف كل :{Text}")
-    public void DeleteByName(String Text  ) {
+    public void DeleteByName(String Text) {
         gridEditing.DeleteByName(Text);
     }
 
@@ -353,5 +352,4 @@ public Boolean AssertSupplier(){
 
         validateReport(totals);
     }
-
 }

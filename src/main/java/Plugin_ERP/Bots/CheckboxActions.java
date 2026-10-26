@@ -1,17 +1,16 @@
 package Plugin_ERP.Bots;
 
+import java.time.Duration;
+import java.util.List;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import java.time.Duration;
-import java.util.List;
-
 public class CheckboxActions extends BaseAction {
 
-    public CheckboxActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment) {
-        super(driver, wait, waitMangment);
+    public CheckboxActions(WebDriver driver, WebDriverWait wait, WaitManagement waitManagement) {
+        super(driver, wait, waitManagement);
     }
 
     public void stableFastSetCheckboxByText(String text, boolean shouldBeChecked) {
@@ -43,6 +42,8 @@ public class CheckboxActions extends BaseAction {
                 checkbox = driver.findElement(By.xpath(xp));
                 if (checkbox != null) break;
             } catch (Exception ignored) {
+                Plugin_ERP.Bots.LogUtils.debug(
+                        "CheckboxActions fallback: " + ignored.getClass().getSimpleName());
             }
         }
 
@@ -115,6 +116,8 @@ public class CheckboxActions extends BaseAction {
                 inputCheckbox = driver.findElement(By.xpath(xp));
                 if (inputCheckbox != null) break;
             } catch (Exception ignored) {
+                Plugin_ERP.Bots.LogUtils.debug(
+                        "CheckboxActions fallback: " + ignored.getClass().getSimpleName());
             }
         }
 
@@ -134,6 +137,8 @@ public class CheckboxActions extends BaseAction {
                 clickTarget = driver.findElement(By.xpath(xp));
                 if (clickTarget != null) break;
             } catch (Exception ignored) {
+                Plugin_ERP.Bots.LogUtils.debug(
+                        "CheckboxActions fallback: " + ignored.getClass().getSimpleName());
             }
         }
 
@@ -246,7 +251,8 @@ public class CheckboxActions extends BaseAction {
                     Thread.sleep(500);
                 } catch (InterruptedException interrupted) {
                     Thread.currentThread().interrupt();
-                    throw new IllegalStateException("Radio selection retry interrupted", interrupted);
+                    throw new IllegalStateException(
+                            "Radio selection retry interrupted", interrupted);
                 }
 
             } catch (TimeoutException e) {
@@ -262,7 +268,8 @@ public class CheckboxActions extends BaseAction {
                     Thread.sleep(500);
                 } catch (InterruptedException interrupted) {
                     Thread.currentThread().interrupt();
-                    throw new IllegalStateException("Radio selection retry interrupted", interrupted);
+                    throw new IllegalStateException(
+                            "Radio selection retry interrupted", interrupted);
                 }
             }
         }

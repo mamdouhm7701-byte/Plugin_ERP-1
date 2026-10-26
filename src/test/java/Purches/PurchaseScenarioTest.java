@@ -1,15 +1,15 @@
 package Purches;
 
-import Plugin_ERP.Tests.LoginTest.BaseTest;
 import Plugin_ERP.System_Modules.Login.purches.PurchaseModulePage;
+import Plugin_ERP.Tests.LoginTest.BaseTest;
 import io.qameta.allure.Allure;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.*;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 /** Each class owns one page fixture scope; each case owns its supplier and items. */
 public abstract class PurchaseScenarioTest extends BaseTest {
@@ -25,7 +25,8 @@ public abstract class PurchaseScenarioTest extends BaseTest {
     protected PurchaseTestData data;
     protected PurchaseTestData.Record item, supplier, agent, payment;
     protected String marker, mainWindow, paymentType;
-    protected java.util.function.Consumer<Map<String,Object>> printContentAssertions = stored -> {};
+    protected java.util.function.Consumer<Map<String, Object>> printContentAssertions =
+            stored -> {};
     protected final Map<Integer, BigDecimal> initialBalances = new LinkedHashMap<>();
     protected final Set<Object> allowedItems = new HashSet<>();
 
@@ -177,7 +178,9 @@ public abstract class PurchaseScenarioTest extends BaseTest {
             sameNumber(paid, stored.get("net").toString());
             Assert.assertEquals(stored.get("paymentType"), "Cash", "مطابقة نوع السداد");
         }
-        if (print) page.puVerifyPrintedReport(mainWindow, item.name(), () -> printContentAssertions.accept(stored));
+        if (print)
+            page.puVerifyPrintedReport(
+                    mainWindow, item.name(), () -> printContentAssertions.accept(stored));
         else page.puDismiss();
         return record;
     }

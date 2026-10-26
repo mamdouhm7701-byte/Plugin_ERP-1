@@ -39,6 +39,10 @@ public class PaymentPage extends AbstractForDealer {
                                                     try {
                                                         return e.isDisplayed();
                                                     } catch (Exception ignored) {
+                                                        Plugin_ERP.Bots.LogUtils.debug(
+                                                                "PaymentPage condition unavailable: "
+                                                                        + ignored.getClass()
+                                                                                .getSimpleName());
                                                         return false;
                                                     }
                                                 }));
@@ -71,6 +75,8 @@ public class PaymentPage extends AbstractForDealer {
                     .until(ExpectedConditions.visibilityOfElementLocated(success));
             DismissAlertIfPresent();
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "PaymentPage fallback: " + ignored.getClass().getSimpleName());
         }
         waitLoading();
     }
@@ -89,6 +95,10 @@ public class PaymentPage extends AbstractForDealer {
                                                     try {
                                                         return e.isDisplayed();
                                                     } catch (Exception ignored) {
+                                                        Plugin_ERP.Bots.LogUtils.debug(
+                                                                "PaymentPage condition unavailable: "
+                                                                        + ignored.getClass()
+                                                                                .getSimpleName());
                                                         return false;
                                                     }
                                                 }));
@@ -110,6 +120,8 @@ public class PaymentPage extends AbstractForDealer {
                         .executeScript("arguments[0].click();", b.get(0));
             waitAlert();
         } catch (Exception ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "PaymentPage fallback: " + ignored.getClass().getSimpleName());
         }
     }
 
@@ -218,7 +230,16 @@ public class PaymentPage extends AbstractForDealer {
     public void CancelDelete() {
         records.CancelDelete();
     }
-    boolean recordVisible(By b) { return visible(b); }
-    void recordWaitLoading() { waitLoading(); }
-    void recordWaitAlert() { waitAlert(); }
+
+    boolean recordVisible(By b) {
+        return visible(b);
+    }
+
+    void recordWaitLoading() {
+        waitLoading();
+    }
+
+    void recordWaitAlert() {
+        waitAlert();
+    }
 }

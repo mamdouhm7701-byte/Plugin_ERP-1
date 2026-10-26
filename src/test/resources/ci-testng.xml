@@ -4,10 +4,11 @@
 <suite name="CI - local contracts" parallel="none">
     <listeners>
         <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
-        <listener class-name="Plugin_ERP.Listners.TestNGListeners"/>
+        <listener class-name="Plugin_ERP.Listeners.TestNGListeners"/>
     </listeners>
     <test name="Configuration, arithmetic and owned fixture recovery" preserve-order="true">
         <classes>
+            <class name="Plugin_ERP.Bots.TextEntryActionsTest"/>
             <class name="Plugin_ERP.Bots.ReadinessWaitTest"/>
             <class name="SuiteSupport.RuntimeCompatibilityTest"/>
             <class name="SuiteSupport.BrowserLifecycleTest"/>
@@ -16,32 +17,32 @@
             <class name="SuiteSupport.InteractiveTestLauncherTest"/>
             <class name="SuiteSupport.NativeInteractiveSuiteListenerTest"/>
             <class name="Plugin_ERP.System_Modules.Login.Login.LoginSessionContractTest"/>
-            <class name="Plugin_ERP.Utiel.LoginUsernamesTest"/>
+            <class name="Plugin_ERP.Util.LoginUsernamesTest"/>
             <class name="SuiteSupport.ModuleChoiceTest"/>
             <class name="SuiteSupport.ModuleFixtureContractTest"/>
             <class name="TestSupport.BasicDataFixturesTest"/>
             <class name="TestSupport.TreasuryAmountsTest"/>
-            <class name="Plugin_ERP.Utiel.ConfigurationPropertiesTest"/>
-            <class name="Plugin_ERP.Utiel.FormInteractionsTest"/>
-            <class name="Plugin_ERP.Utiel.DropdownPolicyTest"/>
+            <class name="Plugin_ERP.Util.ConfigurationPropertiesTest"/>
+            <class name="Plugin_ERP.Util.FormInteractionsTest"/>
+            <class name="Plugin_ERP.Util.DropdownPolicyTest"/>
             <class name="Plugin_ERP.Valditon.LegacyAssertionsTest"/>
-            <class name="Plugin_ERP.Utiel.Allur.AllureReportPolicyTest"/>
-            <class name="Plugin_ERP.Utiel.Allur.ScenarioJourneyReportTest"/>
-            <class name="Plugin_ERP.Utiel.Allur.ScenarioReportCatalogTest"/>
-            <class name="Plugin_ERP.Utiel.Allur.ScenarioCaseDescriptionTest"/>
-            <class name="Plugin_ERP.Utiel.Allur.ScenarioFailureReportTest"/>
-            <class name="Plugin_ERP.Utiel.Allur.ScenarioAccessTest"/>
-            <class name="Plugin_ERP.Utiel.InteractionAccuracyTest"/>
-            <class name="Plugin_ERP.Utiel.SalesNavigationTest"/>
+            <class name="Plugin_ERP.Util.Allur.AllureReportPolicyTest"/>
+            <class name="Plugin_ERP.Util.Allur.ScenarioJourneyReportTest"/>
+            <class name="Plugin_ERP.Util.Allur.ScenarioReportCatalogTest"/>
+            <class name="Plugin_ERP.Util.Allur.ScenarioCaseDescriptionTest"/>
+            <class name="Plugin_ERP.Util.Allur.ScenarioFailureReportTest"/>
+            <class name="Plugin_ERP.Util.Allur.ScenarioAccessTest"/>
+            <class name="Plugin_ERP.Util.InteractionAccuracyTest"/>
+            <class name="Plugin_ERP.Util.SalesNavigationTest"/>
             <class name="Plugin_ERP.System_Modules.Login.Invoice.InvoiceListExportTest"/>
             <class name="Plugin_ERP.System_Modules.Login.Invoice.SalesListScopeTest"/>
             <class name="Plugin_ERP.System_Modules.Login.BasicData.CashListControlsTest"/>
             <class name="Plugin_ERP.System_Modules.Login.BasicData.GridProviderWaitTest"/>
             <class name="Plugin_ERP.System_Modules.Login.Products.ProductsPriceValidationTest"/>
-            <class name="Plugin_ERP.Utiel.PrintedInvoiceAssertionsTest"/>
-            <class name="Plugin_ERP.Utiel.Allur.ReportMailTest"/>
-            <class name="Plugin_ERP.Utiel.Allur.DriveReportStoreTest"/>
-            <class name="Plugin_ERP.Utiel.Allur.ReportMailTemplateTest"/>
+            <class name="Plugin_ERP.Util.PrintedInvoiceAssertionsTest"/>
+            <class name="Plugin_ERP.Util.Allur.ReportMailTest"/>
+            <class name="Plugin_ERP.Util.Allur.DriveReportStoreTest"/>
+            <class name="Plugin_ERP.Util.Allur.ReportMailTemplateTest"/>
             <class name="Plugin_ERP.System_Modules.Login.PageComponentDispatchTest"/>
             <class name="Plugin_ERP.System_Modules.Login.InvoiceRowReadersTest"/>
             <class name="Plugin_ERP.System_Modules.Login.DocumentPageIsolationTest"/>

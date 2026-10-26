@@ -1,5 +1,8 @@
 package Plugin_ERP.Bots;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -7,14 +10,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
 public class ValidationActions extends BaseAction {
 
-    public ValidationActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment) {
-        super(driver, wait, waitMangment);
+    public ValidationActions(WebDriver driver, WebDriverWait wait, WaitManagement waitManagement) {
+        super(driver, wait, waitManagement);
     }
 
     private String getText(By locator) {
@@ -27,9 +26,12 @@ public class ValidationActions extends BaseAction {
     }
 
     public String normalizePrice(String value) {
-        String clean = value.replaceAll("[\\u200E\\u200F\\u202A-\\u202E\\u2066-\\u2069]", "")
-                .replace(",", "").replace("\u066c", "").replace('\u066b', '.')
-                .replaceAll("[\\s\\u00a0\\u202f]+", "");
+        String clean =
+                value.replaceAll("[\\u200E\\u200F\\u202A-\\u202E\\u2066-\\u2069]", "")
+                        .replace(",", "")
+                        .replace("\u066c", "")
+                        .replace('\u066b', '.')
+                        .replaceAll("[\\s\\u00a0\\u202f]+", "");
         StringBuilder digits = new StringBuilder();
         for (char ch : clean.toCharArray()) {
             int digit = Character.digit(ch, 10);
@@ -57,6 +59,8 @@ public class ValidationActions extends BaseAction {
                 return parsedDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
             } catch (Exception ignored) {
+                Plugin_ERP.Bots.LogUtils.debug(
+                        "ValidationActions fallback: " + ignored.getClass().getSimpleName());
             }
         }
 
@@ -102,7 +106,8 @@ public class ValidationActions extends BaseAction {
         try {
 
             java.math.BigDecimal actualNum = new java.math.BigDecimal(normalizePrice(cleanActual));
-            java.math.BigDecimal expectedNum = new java.math.BigDecimal(normalizePrice(cleanExpected));
+            java.math.BigDecimal expectedNum =
+                    new java.math.BigDecimal(normalizePrice(cleanExpected));
 
             if (actualNum.compareTo(expectedNum) != 0) {
 
@@ -131,8 +136,8 @@ public class ValidationActions extends BaseAction {
                     driver.findElements(
                             By.xpath("//*[contains(normalize-space(),'" + text + "')]"));
 
-            return elements.stream().anyMatch(element -> element.isDisplayed()
-                    && element.getText().contains(text));
+            return elements.stream()
+                    .anyMatch(element -> element.isDisplayed() && element.getText().contains(text));
 
         } catch (Exception e) {
 
@@ -164,11 +169,11 @@ public class ValidationActions extends BaseAction {
             }
 
             try {
-            if (normalizePrice(actualText).equals(normalizedExpected)) {
+                if (normalizePrice(actualText).equals(normalizedExpected)) {
 
-                System.out.println("PRICE FOUND = " + actualText);
-                return true;
-            }
+                    System.out.println("PRICE FOUND = " + actualText);
+                    return true;
+                }
             } catch (NumberFormatException nonNumericLabel) {
                 // A report also contains headings; never match a number inside their text.
             }

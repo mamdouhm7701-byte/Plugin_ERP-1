@@ -25,7 +25,8 @@ public class ExchangeOrderTest extends StoreScenarioTest {
 
     @Test(groups = "stores")
     @Story("إضافة إذن صرف عن طريق البحث بالاسم")
-    @Description("البحث بالاسم عن صنف متاح في مخزن الاختبار غير الافتراضي، وليس صنفًا موجودًا بكاش المخزن الافتراضي.")
+    @Description(
+            "البحث بالاسم عن صنف متاح في مخزن الاختبار غير الافتراضي، وليس صنفًا موجودًا بكاش المخزن الافتراضي.")
     public void AddExchangeByName() {
         create("name", true, "Agents");
     }
@@ -89,10 +90,4 @@ public class ExchangeOrderTest extends StoreScenarioTest {
     public void SM_NotesRoundTrip() {
         notesRoundTrip();
     }
-
-
-
-
-
-
 }

@@ -8,10 +8,14 @@ import org.openqa.selenium.WebElement;
 /** Warehouse item selection by name, barcode or picker. */
 final class StoreItemSelection {
     private final StoreModulePage owner;
+
     StoreItemSelection(StoreModulePage owner) {
         this.owner = owner;
     }
-    private Object js(String script, Object... args) { return owner.js(script, args); }
+
+    private Object js(String script, Object... args) {
+        return owner.js(script, args);
+    }
 
     void radio(String value) {
         owner.ready.until(
@@ -113,10 +117,12 @@ final class StoreItemSelection {
     void smAddPicker(String name) {
         owner.smButton("إضافة أصناف");
         owner.smType(By.cssSelector(".modal.show input[label-text='arabicName']"), name);
-        owner.ready.until(d -> {
-            d.findElement(By.cssSelector(".modal.show input[label-text='arabicName']")).sendKeys(Keys.ENTER);
-            return true;
-        });
+        owner.ready.until(
+                d -> {
+                    d.findElement(By.cssSelector(".modal.show input[label-text='arabicName']"))
+                            .sendKeys(Keys.ENTER);
+                    return true;
+                });
         owner.smClick(
                 By.xpath(
                         "//div[contains(@class,'modal') and contains(@class,'show')]//tr[.//td[contains(normalize-space(),'"

@@ -1,9 +1,9 @@
 package Purches;
 
 import io.qameta.allure.*;
+import java.util.*;
 import org.testng.Assert;
 import org.testng.annotations.*;
-import java.util.*;
 
 @Epic("Web Cloud")
 @Feature("قائمة المشتريات")

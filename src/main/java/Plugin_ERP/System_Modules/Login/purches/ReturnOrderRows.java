@@ -1,13 +1,7 @@
 package Plugin_ERP.System_Modules.Login.purches;
 
-import Plugin_ERP.Business.Calculator.InvoiceCalculator;
 import Plugin_ERP.Models.InvoiceRow;
-import Plugin_ERP.Models.InvoiceTotals;
-import Plugin_ERP.Models.ReportTotals;
-import Plugin_ERP.System_Modules.Login.AbstractForPurchases;
-import io.qameta.allure.Step;
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
@@ -16,6 +10,7 @@ import org.openqa.selenium.support.ui.*;
 final class ReturnOrderRows {
     private final ReturnOrderPage owner;
     private final WebDriver driver;
+
     ReturnOrderRows(ReturnOrderPage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;

@@ -17,7 +17,7 @@
 
 | التوقيع كما في المصدر | الإتاحة | كيف تقرأ الغرض؟ |
 |---|---|---|
-| `VoucherAccountPicker(VouchersPage page, WebDriver driver, Plugin_ERP.Bots.ElmentAction utilites, Plugin_ERP.Bots.WaitMangment waitMangment)` | داخل الحزمة | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
+| `VoucherAccountPicker(VouchersPage page, WebDriver driver, Plugin_ERP.Bots.ElementActions utilites, Plugin_ERP.Bots.WaitManagement waitMangment)` | داخل الحزمة | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 | `void openAccountPicker()` | داخل الحزمة | فتح الحساب / نافذة الاختيار، حسب المدخلات والتخصص. |
 | `void searchAccount(String query)` | داخل الحزمة | البحث عن الحساب، حسب المدخلات والتخصص. |
 | `int getAccountSearchResultCount()` | داخل الحزمة | قراءة أو إرجاع الحساب، حسب المدخلات والتخصص. |
@@ -173,5 +173,4 @@
 | `public void editVoucherListRowByMarker(String marker)` | public | تعديل الصف / علامة الملكية، حسب المدخلات والتخصص. |
 | `public void deleteVoucherListRowByMarker(String marker)` | public | حذف الصف / علامة الملكية، حسب المدخلات والتخصص. |
 | `void clickLineElement(By locator)` | داخل الحزمة | ضغط إجراء النقر / البند / عنصر الشاشة، حسب المدخلات والتخصص. |
-| `Plugin_ERP.Bots.WaitMangment lineWaits()` | داخل الحزمة | تنفيذ جزء متعلق بـ البند، حسب المدخلات والتخصص. |
-
+| `Plugin_ERP.Bots.WaitManagement lineWaits()` | داخل الحزمة | تنفيذ جزء متعلق بـ البند، حسب المدخلات والتخصص. |

@@ -1,22 +1,10 @@
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
-import Plugin_ERP.Bots.AlertAction;
-import Plugin_ERP.Bots.BrowserAction;
-import Plugin_ERP.Bots.ElmentAction;
-import Plugin_ERP.Bots.WaitMangment;
-import Plugin_ERP.System_Modules.Login.Abstract;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-
 import java.math.BigDecimal;
-import java.time.Duration;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 
 public class ExpenseMovementPage extends FinancialMovementPage {
 

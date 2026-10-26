@@ -12,6 +12,7 @@ import org.openqa.selenium.WebElement;
 /** Visible sales invoice rows mapped to calculation models. */
 final class SalesInvoiceRows {
     private final WebDriver driver;
+
     SalesInvoiceRows(WebDriver driver) {
         this.driver = driver;
     }

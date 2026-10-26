@@ -185,7 +185,7 @@
 <a id="file-d2ce0f84bf3e"></a>
 ## AllureReportPolicyTest.java
 
-**المصدر:** [src/test/java/Plugin_ERP/Utiel/Allur/AllureReportPolicyTest.java](../../../src/test/java/Plugin_ERP/Utiel/Allur/AllureReportPolicyTest.java)
+**المصدر:** [src/test/java/Plugin_ERP/Util/Allur/AllureReportPolicyTest.java](../../../src/test/java/Plugin_ERP/Util/Allur/AllureReportPolicyTest.java)
 
 **دوره:** حالات اختبار أو عقود محلية في المجال المحدد بمسار الملف؛ راجع @Test والأب ومرجع XML لمعرفة الاختيار والتنفيذ.
 
@@ -201,12 +201,12 @@
 | `public void refusesCleaningTheProjectSourcesOrAnOutsideDirectory(String path)` | public · @Test | حالة تحقق مرتبطة بـالقدرة التي يحددها اسم الدالة؛ تفاصيل الشرط والمتوقع داخل جسم الاختبار. |
 | `public void dedicatedRunPathsAreResolvedWithinTheProject()` | public · @Test | حالة تحقق مرتبطة بـالقدرة التي يحددها اسم الدالة؛ تفاصيل الشرط والمتوقع داخل جسم الاختبار. |
 
-**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Utiel.Allur.AllureReportPolicyTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
+**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Util.Allur.AllureReportPolicyTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
 
 <a id="file-8a1aa606c293"></a>
 ## DriveReportStoreTest.java
 
-**المصدر:** [src/test/java/Plugin_ERP/Utiel/Allur/DriveReportStoreTest.java](../../../src/test/java/Plugin_ERP/Utiel/Allur/DriveReportStoreTest.java)
+**المصدر:** [src/test/java/Plugin_ERP/Util/Allur/DriveReportStoreTest.java](../../../src/test/java/Plugin_ERP/Util/Allur/DriveReportStoreTest.java)
 
 **دوره:** حالات اختبار أو عقود محلية في المجال المحدد بمسار الملف؛ راجع @Test والأب ومرجع XML لمعرفة الاختيار والتنفيذ.
 
@@ -214,12 +214,12 @@
 
 **الميثودات المعلنة:** لا توجد ميثودات عادية استخرجها الحصر. قد يكون الملف enum/record أو واجهة أو كلاسًا يعتمد على الأب أو ملفًا فارغًا/معلقًا؛ راجع حالته والمصدر.
 
-**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Utiel.Allur.DriveReportStoreTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
+**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Util.Allur.DriveReportStoreTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
 
 <a id="file-21988170bbab"></a>
 ## ReportMailTemplateTest.java
 
-**المصدر:** [src/test/java/Plugin_ERP/Utiel/Allur/ReportMailTemplateTest.java](../../../src/test/java/Plugin_ERP/Utiel/Allur/ReportMailTemplateTest.java)
+**المصدر:** [src/test/java/Plugin_ERP/Util/Allur/ReportMailTemplateTest.java](../../../src/test/java/Plugin_ERP/Util/Allur/ReportMailTemplateTest.java)
 
 **دوره:** حالات اختبار أو عقود محلية في المجال المحدد بمسار الملف؛ راجع @Test والأب ومرجع XML لمعرفة الاختيار والتنفيذ.
 
@@ -227,12 +227,12 @@
 
 **الميثودات المعلنة:** لا توجد ميثودات عادية استخرجها الحصر. قد يكون الملف enum/record أو واجهة أو كلاسًا يعتمد على الأب أو ملفًا فارغًا/معلقًا؛ راجع حالته والمصدر.
 
-**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Utiel.Allur.ReportMailTemplateTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
+**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Util.Allur.ReportMailTemplateTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
 
 <a id="file-1c0ef77c1509"></a>
 ## ReportMailTest.java
 
-**المصدر:** [src/test/java/Plugin_ERP/Utiel/Allur/ReportMailTest.java](../../../src/test/java/Plugin_ERP/Utiel/Allur/ReportMailTest.java)
+**المصدر:** [src/test/java/Plugin_ERP/Util/Allur/ReportMailTest.java](../../../src/test/java/Plugin_ERP/Util/Allur/ReportMailTest.java)
 
 **دوره:** حالات اختبار أو عقود محلية في المجال المحدد بمسار الملف؛ راجع @Test والأب ومرجع XML لمعرفة الاختيار والتنفيذ.
 
@@ -240,12 +240,12 @@
 
 **الميثودات المعلنة:** لا توجد ميثودات عادية استخرجها الحصر. قد يكون الملف enum/record أو واجهة أو كلاسًا يعتمد على الأب أو ملفًا فارغًا/معلقًا؛ راجع حالته والمصدر.
 
-**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Utiel.Allur.ReportMailTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
+**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Util.Allur.ReportMailTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
 
 <a id="file-a47d5925ca66"></a>
 ## ScenarioAccessTest.java
 
-**المصدر:** [src/test/java/Plugin_ERP/Utiel/Allur/ScenarioAccessTest.java](../../../src/test/java/Plugin_ERP/Utiel/Allur/ScenarioAccessTest.java)
+**المصدر:** [src/test/java/Plugin_ERP/Util/Allur/ScenarioAccessTest.java](../../../src/test/java/Plugin_ERP/Util/Allur/ScenarioAccessTest.java)
 
 **دوره:** حالات اختبار أو عقود محلية في المجال المحدد بمسار الملف؛ راجع @Test والأب ومرجع XML لمعرفة الاختيار والتنفيذ.
 
@@ -253,12 +253,12 @@
 
 **الميثودات المعلنة:** لا توجد ميثودات عادية استخرجها الحصر. قد يكون الملف enum/record أو واجهة أو كلاسًا يعتمد على الأب أو ملفًا فارغًا/معلقًا؛ راجع حالته والمصدر.
 
-**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Utiel.Allur.ScenarioAccessTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
+**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Util.Allur.ScenarioAccessTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
 
 <a id="file-cb14841e9765"></a>
 ## ScenarioJourneyReportTest.java
 
-**المصدر:** [src/test/java/Plugin_ERP/Utiel/Allur/ScenarioJourneyReportTest.java](../../../src/test/java/Plugin_ERP/Utiel/Allur/ScenarioJourneyReportTest.java)
+**المصدر:** [src/test/java/Plugin_ERP/Util/Allur/ScenarioJourneyReportTest.java](../../../src/test/java/Plugin_ERP/Util/Allur/ScenarioJourneyReportTest.java)
 
 **دوره:** حالات اختبار أو عقود محلية في المجال المحدد بمسار الملف؛ راجع @Test والأب ومرجع XML لمعرفة الاختيار والتنفيذ.
 
@@ -270,12 +270,12 @@
 |---|---|---|
 | `private List<io.qameta.allure.model.StepResult> report(Runnable scenario, boolean reporting)` | private | تنفيذ جزء متعلق بـ التقرير، حسب المدخلات والتخصص. |
 
-**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Utiel.Allur.ScenarioJourneyReportTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
+**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Util.Allur.ScenarioJourneyReportTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
 
 <a id="file-a3f7cd12cb7b"></a>
 ## ConfigurationPropertiesTest.java
 
-**المصدر:** [src/test/java/Plugin_ERP/Utiel/ConfigurationPropertiesTest.java](../../../src/test/java/Plugin_ERP/Utiel/ConfigurationPropertiesTest.java)
+**المصدر:** [src/test/java/Plugin_ERP/Util/ConfigurationPropertiesTest.java](../../../src/test/java/Plugin_ERP/Util/ConfigurationPropertiesTest.java)
 
 **دوره:** حالات اختبار أو عقود محلية في المجال المحدد بمسار الملف؛ راجع @Test والأب ومرجع XML لمعرفة الاختيار والتنفيذ.
 
@@ -299,12 +299,12 @@
 | `Path resource(String relative, String text) throws IOException` | داخل الحزمة | تنفيذ جزء متعلق بـ القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 | `void local(String text) throws IOException` | داخل الحزمة | تنفيذ جزء متعلق بـ القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 
-**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Utiel.ConfigurationPropertiesTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
+**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Util.ConfigurationPropertiesTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
 
 <a id="file-e1dfe823fa6e"></a>
 ## DropdownPolicyTest.java
 
-**المصدر:** [src/test/java/Plugin_ERP/Utiel/DropdownPolicyTest.java](../../../src/test/java/Plugin_ERP/Utiel/DropdownPolicyTest.java)
+**المصدر:** [src/test/java/Plugin_ERP/Util/DropdownPolicyTest.java](../../../src/test/java/Plugin_ERP/Util/DropdownPolicyTest.java)
 
 **دوره:** حالات اختبار أو عقود محلية في المجال المحدد بمسار الملف؛ راجع @Test والأب ومرجع XML لمعرفة الاختيار والتنفيذ.
 
@@ -322,12 +322,12 @@
 | `FormInteractions actions()` | داخل الحزمة | تنفيذ جزء متعلق بـ القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 | `WebElement element(String label)` | داخل الحزمة | تنفيذ جزء متعلق بـ عنصر الشاشة، حسب المدخلات والتخصص. |
 
-**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Utiel.DropdownPolicyTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
+**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Util.DropdownPolicyTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
 
 <a id="file-4c5b29f46561"></a>
 ## FormInteractionsTest.java
 
-**المصدر:** [src/test/java/Plugin_ERP/Utiel/FormInteractionsTest.java](../../../src/test/java/Plugin_ERP/Utiel/FormInteractionsTest.java)
+**المصدر:** [src/test/java/Plugin_ERP/Util/FormInteractionsTest.java](../../../src/test/java/Plugin_ERP/Util/FormInteractionsTest.java)
 
 **دوره:** حالات اختبار أو عقود محلية في المجال المحدد بمسار الملف؛ راجع @Test والأب ومرجع XML لمعرفة الاختيار والتنفيذ.
 
@@ -346,12 +346,12 @@
 | `FormInteractions actions()` | داخل الحزمة | تنفيذ جزء متعلق بـ القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 | `WebElement element(boolean shown, boolean enabled)` | داخل الحزمة | تنفيذ جزء متعلق بـ عنصر الشاشة، حسب المدخلات والتخصص. |
 
-**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Utiel.FormInteractionsTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
+**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Util.FormInteractionsTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
 
 <a id="file-755f5d74c592"></a>
 ## InteractionAccuracyTest.java
 
-**المصدر:** [src/test/java/Plugin_ERP/Utiel/InteractionAccuracyTest.java](../../../src/test/java/Plugin_ERP/Utiel/InteractionAccuracyTest.java)
+**المصدر:** [src/test/java/Plugin_ERP/Util/InteractionAccuracyTest.java](../../../src/test/java/Plugin_ERP/Util/InteractionAccuracyTest.java)
 
 **دوره:** حالات اختبار أو عقود محلية في المجال المحدد بمسار الملف؛ راجع @Test والأب ومرجع XML لمعرفة الاختيار والتنفيذ.
 
@@ -364,12 +364,12 @@
 | `private WebDriver browser(Call call)` | private | تنفيذ جزء متعلق بـ القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 | `private WebElement element(String text, boolean enabled, boolean blocked, AtomicInteger clicks)` | private | تنفيذ جزء متعلق بـ عنصر الشاشة، حسب المدخلات والتخصص. |
 
-**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Utiel.InteractionAccuracyTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
+**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Util.InteractionAccuracyTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
 
 <a id="file-3c58e9522f19"></a>
 ## PrintedInvoiceAssertionsTest.java
 
-**المصدر:** [src/test/java/Plugin_ERP/Utiel/PrintedInvoiceAssertionsTest.java](../../../src/test/java/Plugin_ERP/Utiel/PrintedInvoiceAssertionsTest.java)
+**المصدر:** [src/test/java/Plugin_ERP/Util/PrintedInvoiceAssertionsTest.java](../../../src/test/java/Plugin_ERP/Util/PrintedInvoiceAssertionsTest.java)
 
 **دوره:** حالات اختبار أو عقود محلية في المجال المحدد بمسار الملف؛ راجع @Test والأب ومرجع XML لمعرفة الاختيار والتنفيذ.
 
@@ -383,12 +383,12 @@
 | `private List<Cell> report()` | private | تنفيذ جزء متعلق بـ التقرير، حسب المدخلات والتخصص. |
 | `private void verify(List<Cell> cells)` | private | مراجعة سياق أو عقد حسب الكلاس، مثل ثبات الفرع والعنوان. |
 
-**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Utiel.PrintedInvoiceAssertionsTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
+**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Util.PrintedInvoiceAssertionsTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
 
 <a id="file-d52ac859077b"></a>
 ## SalesNavigationTest.java
 
-**المصدر:** [src/test/java/Plugin_ERP/Utiel/SalesNavigationTest.java](../../../src/test/java/Plugin_ERP/Utiel/SalesNavigationTest.java)
+**المصدر:** [src/test/java/Plugin_ERP/Util/SalesNavigationTest.java](../../../src/test/java/Plugin_ERP/Util/SalesNavigationTest.java)
 
 **دوره:** حالات اختبار أو عقود محلية في المجال المحدد بمسار الملف؛ راجع @Test والأب ومرجع XML لمعرفة الاختيار والتنفيذ.
 
@@ -404,7 +404,7 @@
 |---|---|---|
 | `static String path(String route)` | داخل الحزمة | تنفيذ جزء متعلق بـ القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 
-**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Utiel.SalesNavigationTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
+**علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Util.SalesNavigationTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
 
 <a id="file-d14a7d3cbf66"></a>
 ## LegacyAssertionsTest.java
@@ -448,4 +448,3 @@
 | `void equal(Object actual, Object expected, String message)` | داخل الحزمة | تنفيذ جزء متعلق بـ القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
 
 **علاقته بالتشغيل:** ابحث عن الاسم الكامل `Plugin_ERP.Valditon.LegacyAssertionsTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
-

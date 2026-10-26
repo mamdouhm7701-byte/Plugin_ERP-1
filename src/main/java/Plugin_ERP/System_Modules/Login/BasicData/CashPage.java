@@ -1,27 +1,22 @@
 package Plugin_ERP.System_Modules.Login.BasicData;
 
-import Plugin_ERP.Bots.AlertAction;
-import Plugin_ERP.Bots.ElmentAction;
-import Plugin_ERP.Drivers.WebDriverFactory;
 import Plugin_ERP.Enums.Pages;
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;
-import Plugin_ERP.Utiel.PropertyReader;
+import Plugin_ERP.Util.PropertyReader;
 import io.qameta.allure.Step;
-import junit.framework.Assert;
+import java.time.Duration;
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import javax.swing.text.Utilities;
-import java.time.Duration;
-import java.util.List;
-
 public class CashPage extends AbstractForDealer {
     private final CashFormReader formReader;
     private final CashRecordActions records;
     private final CashListControls listControls;
+
     // Constructors
     public CashPage(WebDriver driver) {
         super(driver);
@@ -161,9 +156,12 @@ public class CashPage extends AbstractForDealer {
     public void ClickCloseButton() {
         waitForCashPageLoading();
         if (isCashCreationFormDisplayed()) {
-            By close = By.cssSelector(".modal.show .modal-header button.close,.modal.show .modal-header button[aria-label='Close']");
+            By close =
+                    By.cssSelector(
+                            ".modal.show .modal-header button.close,.modal.show .modal-header button[aria-label='Close']");
             new WebDriverWait(driver, Duration.ofSeconds(15))
-                    .until(ExpectedConditions.elementToBeClickable(close)).click();
+                    .until(ExpectedConditions.elementToBeClickable(close))
+                    .click();
             new WebDriverWait(driver, Duration.ofSeconds(15))
                     .until(d -> !isCashCreationFormDisplayed());
             waitForCashPageLoading();
@@ -215,6 +213,10 @@ public class CashPage extends AbstractForDealer {
                                                             org.openqa.selenium
                                                                             .StaleElementReferenceException
                                                                     ignored) {
+                                                        Plugin_ERP.Bots.LogUtils.debug(
+                                                                "CashPage condition unavailable: "
+                                                                        + ignored.getClass()
+                                                                                .getSimpleName());
                                                         return false;
                                                     }
                                                 }));
@@ -388,9 +390,24 @@ public class CashPage extends AbstractForDealer {
     public void exportSafes(String format) {
         listControls.exportSafes(format);
     }
-    void awaitCashLoading() { waitForCashPageLoading(); }
-    void awaitCashAlert() { waitForCashAlertToDisappear(); }
-    boolean recordIsVisible(By locator) { return isVisible(locator); }
-    void recordWaitForCashPageLoading() { waitForCashPageLoading(); }
-    void recordWaitForCashAlertToDisappear() { waitForCashAlertToDisappear(); }
+
+    void awaitCashLoading() {
+        waitForCashPageLoading();
+    }
+
+    void awaitCashAlert() {
+        waitForCashAlertToDisappear();
+    }
+
+    boolean recordIsVisible(By locator) {
+        return isVisible(locator);
+    }
+
+    void recordWaitForCashPageLoading() {
+        waitForCashPageLoading();
+    }
+
+    void recordWaitForCashAlertToDisappear() {
+        waitForCashAlertToDisappear();
+    }
 }

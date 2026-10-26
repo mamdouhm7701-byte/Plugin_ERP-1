@@ -219,7 +219,8 @@ public class CustomerClassificationTest extends DealerScenarioTest {
         customerClassification.NavigationHelper(Pages.CUSTOMERCLASS);
         customerClassification.ClickNew();
         customerClassification.SelectFromDropDawn("المندوبين", "نوع التصنيف");
-        customerClassification.AddEnglishName(ownedName(customerClassification, Pages.CUSTOMERCLASS, "INVALID-ARABIC-NAME"));
+        customerClassification.AddEnglishName(
+                ownedName(customerClassification, Pages.CUSTOMERCLASS, "INVALID-ARABIC-NAME"));
         customerClassification.ClickSaveButton();
         org.testng.Assert.assertTrue(
                 customerClassification.IsArabicNameRequiredErrorDisplayed(),

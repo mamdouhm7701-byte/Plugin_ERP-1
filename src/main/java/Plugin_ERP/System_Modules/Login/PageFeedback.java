@@ -1,25 +1,23 @@
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.*;
-import Plugin_ERP.Enums.Pages;
-import io.qameta.allure.Step;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
-import org.testng.Assert;
 
 /** Page Feedback: focused operations used by the original page facade. */
 final class PageFeedback {
     private final Abstract owner;
     private final WebDriver driver;
-    private final Plugin_ERP.Bots.ElmentAction utilites;
+    private final Plugin_ERP.Bots.ElementActions utilites;
+
     PageFeedback(Abstract owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
         this.utilites = owner.context().elements();
     }
+
     private By SaveButton = By.cssSelector("button[data-action-type='save']");
     private By AssertExsistArabicName = By.xpath("//small[contains(text(),'الاسم العربي مطلوب')]");
     private By AssertRightEmail =
@@ -61,6 +59,8 @@ final class PageFeedback {
                                     By.cssSelector(".swal2-container.swal2-backdrop-show")));
             return true;
         } catch (Exception e) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "PageFeedback condition unavailable: " + e.getClass().getSimpleName());
             return false;
         }
     }

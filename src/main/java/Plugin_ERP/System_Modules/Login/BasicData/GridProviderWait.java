@@ -20,8 +20,12 @@ final class GridProviderWait {
         final String[] previous = {null};
         new WebDriverWait(driver, Duration.ofSeconds(20))
                 .withMessage(resource + " list provider has not completed loading")
-                .until(d -> {
-                    Object signature = ((JavascriptExecutor) d).executeScript("""
+                .until(
+                        d -> {
+                            Object signature =
+                                    ((JavascriptExecutor) d)
+                                            .executeScript(
+"""
                     const root=document.querySelector('#app')?.__vue__;
                     if(!root)return false;
                     const grid=document.getElementById('mainTable'),endpoint=arguments[0];
@@ -33,24 +37,35 @@ final class GridProviderWait {
                     }
                     const loaded=performance.getEntriesByType('resource').some(r=>{
                         try{return new URL(r.name).pathname.split('/').filter(Boolean).pop()?.toLowerCase()===endpoint;}
-                        catch(e){return false;}
+                        catch (e) { console.debug("Provider resource URL could not be parsed");
+ return false;
+}
                     });
                     if(!(table&&loaded&&!table.computedBusy&&Array.isArray(table.localItems)))return null;
                     return JSON.stringify(table.localItems);
-                    """, resource);
-                    if (!(signature instanceof String current)) { previous[0] = null; return false; }
-                    boolean stable = current.equals(previous[0]);
-                    previous[0] = current;
-                    return stable;
-                });
+                    """,
+                                                    resource);
+                            if (!(signature instanceof String current)) {
+                                previous[0] = null;
+                                return false;
+                            }
+                            boolean stable = current.equals(previous[0]);
+                            previous[0] = current;
+                            return stable;
+                        });
     }
 
     int exactMatches(String name) {
         awaitReady();
-        return ((Number) ((JavascriptExecutor) driver).executeScript("""
+        return ((Number)
+                        ((JavascriptExecutor) driver)
+                                .executeScript(
+                                        """
             return [...document.querySelectorAll('#mainTable tbody tr[role="row"]')]
               .filter(r=>r.getClientRects().length&&[...r.querySelectorAll('td')]
                 .some(c=>c.innerText.trim()===arguments[0])).length;
-            """, name)).intValue();
+            """,
+                                        name))
+                .intValue();
     }
 }

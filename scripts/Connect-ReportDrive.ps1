@@ -9,6 +9,6 @@ try {
     $classpath = (Join-Path $projectRoot 'target/classes') + [IO.Path]::PathSeparator + [IO.File]::ReadAllText((Join-Path $projectRoot 'target/report-mail-classpath.txt')).Trim()
     $java = Get-ChildItem "$env:USERPROFILE/.jdks" -Directory -Filter '*21*' -ErrorAction SilentlyContinue | Where-Object { Test-Path (Join-Path $_.FullName 'bin/java.exe') } | Select-Object -First 1
     $javaExecutable = if ($java) { Join-Path $java.FullName 'bin/java.exe' } else { 'java' }
-    & $javaExecutable -cp $classpath Plugin_ERP.Utiel.Allur.ReportMailCommand authorize $clientFile
+    & $javaExecutable -cp $classpath Plugin_ERP.Util.Allur.ReportMailCommand authorize $clientFile
     if ($LASTEXITCODE -ne 0) { throw 'Drive authorization did not complete' }
 } finally { Pop-Location }

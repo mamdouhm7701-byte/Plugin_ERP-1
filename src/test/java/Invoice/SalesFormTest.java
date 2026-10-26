@@ -1,7 +1,7 @@
 package Invoice;
 
-import org.testng.annotations.Test;
 import io.qameta.allure.Story;
+import org.testng.annotations.Test;
 
 /** Shared contracts inherited by the four concrete forms. */
 public abstract class SalesFormTest extends SalesFormActions {

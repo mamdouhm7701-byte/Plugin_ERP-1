@@ -1,5 +1,6 @@
 package Purches;
 
+import io.qameta.allure.Story;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -8,11 +9,11 @@ import java.util.Map;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import io.qameta.allure.Story;
 
 public class PurchaseCleanupTest {
     @Test
-    @io.qameta.allure.Description("العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
+    @io.qameta.allure.Description(
+            "العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
     public void normalCustomerIsTaxableAndKeepsItsOwnAccount() {
         PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         try (var data = new PurchaseTestData(api.driver())) {
@@ -215,7 +216,8 @@ public class PurchaseCleanupTest {
     }
 
     @Test
-    @Story("إعادة محاولة إنشاء البيانات المدخلة بعد إلغاء المعاملة بسبب تعارض أقفال دون تكرار السجل")
+    @Story(
+            "إعادة محاولة إنشاء البيانات المدخلة بعد إلغاء المعاملة بسبب تعارض أقفال دون تكرار السجل")
     public void retriesRolledBackDeadlockWithoutDuplicateFixture() {
         PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         api.deadlockCreates = 1;
@@ -561,8 +563,6 @@ public class PurchaseCleanupTest {
         Assert.assertTrue(api.deletes.indexOf(method.id()) < api.deletes.indexOf(bank.id()));
         Assert.assertTrue(api.records.isEmpty());
     }
-
-
 
     @Test
     @Story("حذف الحركة المحددة قبل أصنافها ومخازنها")

@@ -4,7 +4,7 @@ import Plugin_ERP.Business.Calculator.InvoiceCalculator;
 import Plugin_ERP.Models.InvoiceTotals;
 import Plugin_ERP.Models.ReportTotals;
 import Plugin_ERP.Models.TaxMode;
-import Plugin_ERP.Utiel.PropertyReader;
+import Plugin_ERP.Util.PropertyReader;
 import io.qameta.allure.Allure;
 import java.math.BigDecimal;
 import org.testng.Assert;
@@ -12,9 +12,11 @@ import org.testng.Assert;
 /** Invoice calculation validation and Allure evidence, using the page's overridden readers. */
 final class InvoiceBusinessValidation {
     private final DocumentPage owner;
+
     InvoiceBusinessValidation(DocumentPage owner) {
         this.owner = owner;
     }
+
     private static final BigDecimal TOLERANCE = new BigDecimal("0.02");
 
     void assertBigDecimalEquals(BigDecimal expected, BigDecimal actual) {
@@ -120,7 +122,8 @@ final class InvoiceBusinessValidation {
 
     void attachReportValidation(ReportTotals reportTotals, InvoiceTotals totals) {
 
-        owner.attachReportValidation(reportTotals, totals, PropertyReader.PolicyManager.isExclusive());
+        owner.attachReportValidation(
+                reportTotals, totals, PropertyReader.PolicyManager.isExclusive());
     }
 
     void assertReportTotals(ReportTotals report, InvoiceTotals expected) {
@@ -130,7 +133,8 @@ final class InvoiceBusinessValidation {
 
     InvoiceTotals validateBusinessTotals() {
 
-        InvoiceTotals totals = InvoiceCalculator.calculate(owner.getInvoiceRows(), owner.getDiscount());
+        InvoiceTotals totals =
+                InvoiceCalculator.calculate(owner.getInvoiceRows(), owner.getDiscount());
 
         owner.attachBusinessValidation(totals);
 

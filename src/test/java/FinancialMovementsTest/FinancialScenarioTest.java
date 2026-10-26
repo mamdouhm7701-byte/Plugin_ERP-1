@@ -1,7 +1,7 @@
 package FinancialMovementsTest;
 
-import Plugin_ERP.Tests.LoginTest.BaseTest;
 import Plugin_ERP.System_Modules.Login.FinancialMovements.*;
+import Plugin_ERP.Tests.LoginTest.BaseTest;
 import io.qameta.allure.*;
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -223,7 +223,8 @@ public abstract class FinancialScenarioTest extends BaseTest {
                     data.agent(
                                     kind() == FinancialMovementKind.PAYMENT
                                             || kind() == FinancialMovementKind.SUPPLIER_DISCOUNT)
-                            .id(), "مطابقة المندوب");
+                            .id(),
+                    "مطابقة المندوب");
         }
         if (!kind().discount() && kind() != FinancialMovementKind.TRANSFER) {
             Assert.assertEquals(stored.get("paymentMethodId"), data.payment().id());
@@ -417,8 +418,13 @@ public abstract class FinancialScenarioTest extends BaseTest {
         fill("100", false, false);
         var saved = persist(false, "100");
         page.waitForRow(marker);
-        FinancialExportAssertions.assertExportDownloaded(driver, () -> page.export(format), format,
-                data.read(saved).get("code").toString(), party == null ? data.party(fromType,1).name() : party.name(), new BigDecimal("100"));
+        FinancialExportAssertions.assertExportDownloaded(
+                driver,
+                () -> page.export(format),
+                format,
+                data.read(saved).get("code").toString(),
+                party == null ? data.party(fromType, 1).name() : party.name(),
+                new BigDecimal("100"));
     }
 
     @AfterMethod(alwaysRun = true)

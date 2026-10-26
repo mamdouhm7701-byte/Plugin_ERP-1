@@ -2,21 +2,21 @@ package Plugin_ERP.System_Modules.Login.DealerModel;
 
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;
 import io.qameta.allure.Step;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RoutLineForDealer extends AbstractForDealer {
     public RoutLineForDealer(WebDriver driver) {
         super(driver);
     }
 
-    private static final String OWNED_CALENDAR = """
+    private static final String OWNED_CALENDAR =
+            """
         const queue=[document.querySelector('#app')?.__vue__];
         let calendar;
         while(queue.length){const vm=queue.shift(); if(!vm)continue;
@@ -26,11 +26,17 @@ public class RoutLineForDealer extends AbstractForDealer {
         """;
 
     /** Select references through the visible form; component state is read only. */
-    public void PrepareOwnedRoute(String agentName, String customerName, String statusName, String areaName) {
+    public void PrepareOwnedRoute(
+            String agentName, String customerName, String statusName, String areaName) {
         var ready = new WebDriverWait(driver, Duration.ofSeconds(30));
-        var form = new Plugin_ERP.Utiel.FormInteractions(ready, element ->
-                ((org.openqa.selenium.JavascriptExecutor)driver).executeScript(
-                        "arguments[0].scrollIntoView({block:'center'})", element));
+        var form =
+                new Plugin_ERP.Util.FormInteractions(
+                        ready,
+                        element ->
+                                ((org.openqa.selenium.JavascriptExecutor) driver)
+                                        .executeScript(
+                                                "arguments[0].scrollIntoView({block:'center'})",
+                                                element));
         chooseOwned(form, "مندوب", agentName);
         chooseOwned(form, "المناطق", areaName);
         chooseOwned(form, "العملاء", customerName);
@@ -38,29 +44,44 @@ public class RoutLineForDealer extends AbstractForDealer {
         chooseOwned(form, "الحالة", statusName);
     }
 
-    private void chooseOwned(Plugin_ERP.Utiel.FormInteractions form, String label, String name) {
-        form.choose(By.xpath("//*[@id='sidebar-add-new-event']//*[self::label or self::legend][normalize-space(.)='"
-                + label + "']/following::input[contains(@class,'vs__search') and ancestor::*[@id='sidebar-add-new-event']][1]"), name,
-                Plugin_ERP.Utiel.FormInteractions.OptionMatch.EXACT_THEN_CONTAINS);
+    private void chooseOwned(Plugin_ERP.Util.FormInteractions form, String label, String name) {
+        form.choose(
+                By.xpath(
+                        "//*[@id='sidebar-add-new-event']//*[self::label or self::legend][normalize-space(.)='"
+                                + label
+                                + "']/following::input[contains(@class,'vs__search') and ancestor::*[@id='sidebar-add-new-event']][1]"),
+                name,
+                Plugin_ERP.Util.FormInteractions.OptionMatch.EXACT_THEN_CONTAINS);
     }
 
     @Step("التحقق من اختيار العميل {customerId} في خط السير")
     public void AssertOnlyOwnedCustomerSelected(Object customerId) {
-        Object valid=((org.openqa.selenium.JavascriptExecutor)driver).executeScript(OWNED_CALENDAR + """
+        Object valid =
+                ((org.openqa.selenium.JavascriptExecutor) driver)
+                        .executeScript(
+                                OWNED_CALENDAR
+                                        + """
             const selected=calendar.selectedItem.extendedProps.customers;
             return selected.length===1 && selected[0].id===arguments[0];
-            """, customerId);
-        if(!Boolean.TRUE.equals(valid))throw new AssertionError("Route must only contain the owned customer");
+            """,
+                                customerId);
+        if (!Boolean.TRUE.equals(valid))
+            throw new AssertionError("Route must only contain the owned customer");
     }
 
     public java.util.List<String> OwnedEventTitles(String marker) {
         @SuppressWarnings("unchecked")
-        java.util.List<String> titles=(java.util.List<String>)((org.openqa.selenium.JavascriptExecutor)driver)
-                .executeScript(OWNED_CALENDAR + """
+        java.util.List<String> titles =
+                (java.util.List<String>)
+                        ((org.openqa.selenium.JavascriptExecutor) driver)
+                                .executeScript(
+                                        OWNED_CALENDAR
+                                                + """
                     return calendar.calendarOptions.events
                         .filter(event=>event.extendedProps?.title===arguments[0])
                         .map(event=>event.title);
-                    """,marker);
+                    """,
+                                        marker);
         return titles;
     }
 
@@ -118,19 +139,19 @@ public class RoutLineForDealer extends AbstractForDealer {
 
     @Step("ادخال اسم خط السير")
     public void AddArabicRoutLine(String Title) {
-        utilites.TaypeTextB(TitleInput, Title);
+        utilites.typeTextAndVerify(TitleInput, Title);
     }
 
     @Step("ادخال عدد الزيارات")
     public void AddVisitCount(String VisitCount) {
         utilites.waits().waitForOverlayToDisappear();
-        utilites.TaypeTextB(VisitCountFieldset, VisitCount);
+        utilites.typeTextAndVerify(VisitCountFieldset, VisitCount);
     }
 
     @Step("ادخال عدد ايام الزيارات")
     public void AddDayCount(String DayCount) {
         utilites.waits().waitForOverlayToDisappear();
-        utilites.TaypeTextB(DayCountInput, DayCount);
+        utilites.typeTextAndVerify(DayCountInput, DayCount);
     }
 
     @Step("ادخال من تاريخ")
@@ -142,7 +163,7 @@ public class RoutLineForDealer extends AbstractForDealer {
 
     @Step("ادخال الى تاريخ")
     public void AddToDate(String ToDate) {
-        utilites.TaypeTextB(ToDateBtn, ToDate);
+        utilites.typeTextAndVerify(ToDateBtn, ToDate);
     }
 
     @Step("الضغط على حفظ")
@@ -157,7 +178,7 @@ public class RoutLineForDealer extends AbstractForDealer {
 
     @Step("ادخال الملاحظات")
     public void AddNotesForRoutLine(String Notes) {
-        utilites.TaypeTextB(EventDescriptionTextarea, Notes);
+        utilites.typeTextAndVerify(EventDescriptionTextarea, Notes);
     }
 
     @Step("الضغط على اضافه الجميع")

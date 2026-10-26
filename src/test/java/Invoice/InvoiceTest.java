@@ -1,7 +1,7 @@
 package Invoice;
 
-import org.testng.annotations.Test;
 import io.qameta.allure.Story;
+import org.testng.annotations.Test;
 
 /** Legacy entry points preserved with owned fixtures and actual persistence checks. */
 public class InvoiceTest extends SalesFormActions {

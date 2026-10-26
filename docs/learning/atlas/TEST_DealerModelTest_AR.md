@@ -494,4 +494,3 @@
 | `public void ExportSuppliersToExcel() throws IOException` | public · @Test | حالة تحقق مرتبطة بـالتصدير؛ تفاصيل الشرط والمتوقع داخل جسم الاختبار. |
 
 **علاقته بالتشغيل:** ابحث عن الاسم الكامل `DealerModelTest.SupplierTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
-

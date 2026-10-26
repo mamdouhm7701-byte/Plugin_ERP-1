@@ -22,9 +22,11 @@ public class SalesTaxProfileTest {
     }
 
     @Test(dataProvider = "examples")
-    public void expectedTaxUsesPolicyAndConfiguredRates(String policy, List<BigDecimal> rates,
-            String base, String expected) {
-        Assert.assertEquals(new BigDecimal(new SalesTaxProfile(policy, rates).net(base))
-                .compareTo(new BigDecimal(expected)), 0);
+    public void expectedTaxUsesPolicyAndConfiguredRates(
+            String policy, List<BigDecimal> rates, String base, String expected) {
+        Assert.assertEquals(
+                new BigDecimal(new SalesTaxProfile(policy, rates).net(base))
+                        .compareTo(new BigDecimal(expected)),
+                0);
     }
 }

@@ -1,12 +1,8 @@
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.*;
-import Plugin_ERP.Enums.Pages;
-import io.qameta.allure.Step;
-import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
 import org.testng.Assert;
 
@@ -14,14 +10,16 @@ import org.testng.Assert;
 final class PrintedDocumentControls {
     private final Abstract owner;
     private final WebDriver driver;
-    private final Plugin_ERP.Bots.ElmentAction utilites;
+    private final Plugin_ERP.Bots.ElementActions utilites;
     private final Plugin_ERP.Bots.BrowserAction browserAction;
+
     PrintedDocumentControls(Abstract owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
         this.utilites = owner.context().elements();
         this.browserAction = owner.context().browser();
     }
+
     private By SaveAndPrintButton = By.cssSelector("button[data-action-type='saveAndPrint']");
 
     void ClickSaveAndPrintButton() {

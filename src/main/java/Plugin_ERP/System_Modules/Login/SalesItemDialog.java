@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -14,6 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 final class SalesItemDialog {
     private final AbstractForSales owner;
     private final WebDriver driver;
+
     SalesItemDialog(AbstractForSales owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
@@ -64,6 +64,8 @@ final class SalesItemDialog {
     }
 
     void setShowSelectedItems(boolean shouldBeChecked) {
-        owner.utilites.checkbox().stableFastSetCheckboxByText("عرض الأصناف المختارة", shouldBeChecked);
+        owner.utilites
+                .checkbox()
+                .stableFastSetCheckboxByText("عرض الأصناف المختارة", shouldBeChecked);
     }
 }

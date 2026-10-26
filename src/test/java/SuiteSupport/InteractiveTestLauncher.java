@@ -3,7 +3,6 @@ package SuiteSupport;
 import java.awt.GridLayout;
 import java.nio.file.*;
 import java.util.*;
-
 import javax.swing.*;
 
 /**
@@ -101,7 +100,7 @@ public final class InteractiveTestLauncher {
                                 () ->
                                         new IllegalStateException(
                                                 "Maven (mvn.cmd) was not found. Check IntelliJ's"
-                                                    + " inherited PATH or MAVEN_HOME."));
+                                                        + " inherited PATH or MAVEN_HOME."));
         environment.put(pathKey, bin + java.io.File.pathSeparator + current);
     }
 
@@ -126,7 +125,7 @@ public final class InteractiveTestLauncher {
                     panel.add(
                             new JLabel(
                                     "Available memory may reduce the actual number; see the Run"
-                                        + " console."));
+                                            + " console."));
                     JButton start = new JButton("Start tests");
                     JButton cancel = new JButton("Cancel");
                     JPanel buttons = new JPanel();

@@ -158,9 +158,12 @@ public abstract class ProductScenarioTest extends BaseTest {
         Object expectedEnglish = record.values().get("englishName");
         if (expectedEnglish == null || expectedEnglish.toString().isBlank())
             assertOptionalEnglish(stored);
-        else Assert.assertEquals(stored.get("englishName"), expectedEnglish, "مطابقة الاسم الإنجليزي");
+        else
+            Assert.assertEquals(
+                    stored.get("englishName"), expectedEnglish, "مطابقة الاسم الإنجليزي");
         if (record.values().containsKey("notes"))
-            Assert.assertEquals(stored.get("notes"), record.values().get("notes"), "مطابقة الملاحظات");
+            Assert.assertEquals(
+                    stored.get("notes"), record.values().get("notes"), "مطابقة الملاحظات");
         if (print) verifyReport(record);
         page.prWaitList();
         return record;
@@ -261,7 +264,8 @@ public abstract class ProductScenarioTest extends BaseTest {
                 assertNumber(stored.get("salesPrice"), "100.25");
                 List<Map<String, Object>> stores = (List<Map<String, Object>>) stored.get("stores");
                 Assert.assertEquals(stores.size(), 1);
-                Assert.assertEquals(stores.get(0).get("storeId"), data.store(1).id(), "مطابقة المخزن");
+                Assert.assertEquals(
+                        stores.get(0).get("storeId"), data.store(1).id(), "مطابقة المخزن");
                 assertNumber(stores.get(0).get("costPrice"), "80");
             }
             case CATEGORY -> Assert.assertEquals(stored.get("isMain"), true);
@@ -269,7 +273,8 @@ public abstract class ProductScenarioTest extends BaseTest {
                 List<Map<String, Object>> items = (List<Map<String, Object>>) stored.get("items");
                 Assert.assertEquals(items.size(), 1);
                 Assert.assertEquals(items.get(0).get("itemId"), data.item(1).id(), "مطابقة الصنف");
-                Assert.assertEquals(items.get(0).get("unitId"), data.unit(1).id(), "مطابقة وحدة القياس");
+                Assert.assertEquals(
+                        items.get(0).get("unitId"), data.unit(1).id(), "مطابقة وحدة القياس");
                 assertNumber(items.get(0).get("salesPrice"), "125.50");
             }
             case UNIT -> Assert.assertTrue(stored.get("id") != null, "التحقق من هوية السجل");
@@ -286,7 +291,8 @@ public abstract class ProductScenarioTest extends BaseTest {
             ((ProductListPage) page).prItemPrice(data.item(1).name(), "250.75");
         ProductsTestData.Record updated = save(print);
         Assert.assertEquals(updated.id(), initial.id());
-        Assert.assertEquals(data.read(updated).get("arabicName"), marker + " EDIT", "مطابقة الاسم العربي");
+        Assert.assertEquals(
+                data.read(updated).get("arabicName"), marker + " EDIT", "مطابقة الاسم العربي");
     }
 
     protected void deleteOwn() {
@@ -376,7 +382,8 @@ public abstract class ProductScenarioTest extends BaseTest {
         openNew();
         fill(null);
         page.prEnglish("");
-        Assert.assertEquals(page.prEnglishValue(), "", "English input must actually be cleared before saving");
+        Assert.assertEquals(
+                page.prEnglishValue(), "", "English input must actually be cleared before saving");
         ProductsTestData.Record record = save(false);
         assertOptionalEnglish(data.read(record));
     }

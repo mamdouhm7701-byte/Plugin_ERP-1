@@ -697,4 +697,3 @@
 | `public void fractionalRoundTripPreservesBothStoreBalances()` | public · @Test | حالة تحقق مرتبطة بـالمخزن؛ تفاصيل الشرط والمتوقع داخل جسم الاختبار. |
 
 **علاقته بالتشغيل:** ابحث عن الاسم الكامل `StoreTest.WarehouseEndToEndTest` في [مرجع suites](../SUITE_REFERENCE_AR.md). وجوده في المصدر أو وجود @Test لا يعني أن كل XML يختاره.
-

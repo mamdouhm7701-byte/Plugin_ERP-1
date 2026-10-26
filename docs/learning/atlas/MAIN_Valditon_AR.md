@@ -13,7 +13,7 @@
 
 **حالته:** مصدر نشط · **عدد أسطره:** 60
 
-**يرتبط مباشرة بملفات داخل المشروع:** [ElmentAction.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitMangment.java](MAIN_Bots_AR.md#file-98afc8ddbc07)
+**يرتبط مباشرة بملفات داخل المشروع:** [ElementActions.java](MAIN_Bots_AR.md#file-11a21e33ca10)، [WaitManagement.java](MAIN_Bots_AR.md#file-98afc8ddbc07)
 
 **ملفات تشير إليه مباشرة:** [Validation.java](MAIN_Valditon_AR.md#file-ab3310891667)، [LegacyAssertionsTest.java](TEST_FrameworkContracts_AR.md#file-d14a7d3cbf66)
 
@@ -64,4 +64,3 @@
 **حالته:** تعليقات فقط · **عدد أسطره:** 32
 
 **الميثودات المعلنة:** لا توجد ميثودات عادية استخرجها الحصر. قد يكون الملف enum/record أو واجهة أو كلاسًا يعتمد على الأب أو ملفًا فارغًا/معلقًا؛ راجع حالته والمصدر.
-

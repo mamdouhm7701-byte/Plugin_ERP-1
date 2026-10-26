@@ -15,8 +15,11 @@ final class AreaGridControls {
     private static final By areaRows = By.cssSelector("table tbody tr[role='row']");
     private static final By areaHeaders = By.cssSelector("table thead th");
 
-    AreaGridControls(AreaPage page, WebDriver driver, Runnable awaitRows,
-                     java.util.function.Function<String, WebElement> rowFinder) {
+    AreaGridControls(
+            AreaPage page,
+            WebDriver driver,
+            Runnable awaitRows,
+            java.util.function.Function<String, WebElement> rowFinder) {
         this.page = page;
         this.driver = driver;
         this.awaitRows = awaitRows;
@@ -24,8 +27,14 @@ final class AreaGridControls {
         this.provider = new GridProviderWait(driver, "areas");
     }
 
-    private void waitForAreaRows() { awaitRows.run(); provider.awaitReady(); }
-    private WebElement findAreaRow(String name) { return rowFinder.apply(name); }
+    private void waitForAreaRows() {
+        awaitRows.run();
+        provider.awaitReady();
+    }
+
+    private WebElement findAreaRow(String name) {
+        return rowFinder.apply(name);
+    }
 
     int GetVisibleAreaRowCount() {
         provider.awaitReady();
@@ -66,8 +75,11 @@ final class AreaGridControls {
     }
 
     String GetAreaCellByName(String name, String headerName) {
-        return findAreaRow(name).findElements(By.cssSelector("td"))
-                .get(getColumnIndex(headerName)).getText().trim();
+        return findAreaRow(name)
+                .findElements(By.cssSelector("td"))
+                .get(getColumnIndex(headerName))
+                .getText()
+                .trim();
     }
 
     java.util.List<String> GetAreaColumnValues(String headerName) {

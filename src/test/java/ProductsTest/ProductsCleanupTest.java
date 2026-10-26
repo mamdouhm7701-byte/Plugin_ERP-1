@@ -9,7 +9,6 @@ import org.testng.annotations.Test;
 
 public class ProductsCleanupTest {
 
-
     @Test
     public void acceptsMissingDeleteOnlyAfterReadConfirmsAbsence() {
         ProductsFixtureApiStub api = new ProductsFixtureApiStub();

@@ -1,10 +1,8 @@
 package Invoice;
 
+import Plugin_ERP.System_Modules.Login.Invoice.InvoicListPage;
 import java.util.*;
 import org.testng.Assert;
-import org.testng.annotations.Test;
-import org.testng.annotations.DataProvider;
-import Plugin_ERP.System_Modules.Login.Invoice.InvoicListPage;
 
 /** Every list expectation is scoped to documents created by this scenario. */
 public abstract class SalesListActions extends SalesScenarioTest {
@@ -135,13 +133,26 @@ public abstract class SalesListActions extends SalesScenarioTest {
         var unpaidStored = data.read(unpaid);
         var paidStored = data.read(paid);
         var partialStored = data.read(partial);
-        io.qameta.allure.Allure.addAttachment("Owned payment status fixtures", "application/json",
-                new org.json.JSONObject(SalesTestData.fields("unpaid", unpaidStored,
-                        "paid", paidStored, "partial", partialStored)).toString(), ".json");
+        io.qameta.allure.Allure.addAttachment(
+                "Owned payment status fixtures",
+                "application/json",
+                new org.json.JSONObject(
+                                SalesTestData.fields(
+                                        "unpaid",
+                                        unpaidStored,
+                                        "paid",
+                                        paidStored,
+                                        "partial",
+                                        partialStored))
+                        .toString(),
+                ".json");
         sameNumber(unpaidStored.get("paid"), "0");
         sameNumber(paidStored.get("paid"), paidStored.get("net").toString());
-        Assert.assertTrue(number(partialStored.get("paid")).signum() > 0
-                        && number(partialStored.get("paid")).compareTo(number(partialStored.get("net"))) < 0,
+        Assert.assertTrue(
+                number(partialStored.get("paid")).signum() > 0
+                        && number(partialStored.get("paid"))
+                                        .compareTo(number(partialStored.get("net")))
+                                < 0,
                 "Partial-payment fixture must actually be partially paid");
         page.slListScope(data.customer().name());
         var all = Set.of(unpaid.id(), paid.id(), partial.id());

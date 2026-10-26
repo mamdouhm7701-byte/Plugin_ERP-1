@@ -6,10 +6,14 @@ import java.util.Map;
 /** Observe requests and outcomes for owned sales documents. */
 final class SalesSaveCapture {
     private final SalesModulePage owner;
+
     SalesSaveCapture(SalesModulePage owner) {
         this.owner = owner;
     }
-    private Object js(String script, Object... args) { return owner.js(script, args); }
+
+    private Object js(String script, Object... args) {
+        return owner.js(script, args);
+    }
 
     void slCapture(String marker, Object storeId, Object itemId, String endpoint) {
         owner.js(
@@ -46,7 +50,8 @@ final class SalesSaveCapture {
     }
 
     void slSettled() {
-        owner.ready.until(d -> !Boolean.TRUE.equals(owner.js("return (window.__salesQA?.pending||0)>0")));
+        owner.ready.until(
+                d -> !Boolean.TRUE.equals(owner.js("return (window.__salesQA?.pending||0)>0")));
     }
 
     String slSaveErrors() {

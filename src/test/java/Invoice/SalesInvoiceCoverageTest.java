@@ -1,7 +1,7 @@
 package Invoice;
 
-import org.testng.annotations.Test;
 import io.qameta.allure.Story;
+import org.testng.annotations.Test;
 
 public final class SalesInvoiceCoverageTest extends SalesFormTest {
     @Test
@@ -24,7 +24,8 @@ public final class SalesInvoiceCoverageTest extends SalesFormTest {
                 second.values().get("mainUnitBarcode").toString(), second.name());
         page.slWaitNet("100");
         var saved = save(false);
-        org.testng.Assert.assertEquals(firstLine(data.read(saved)).get("itemId"), second.id(), "مطابقة الصنف");
+        org.testng.Assert.assertEquals(
+                firstLine(data.read(saved)).get("itemId"), second.id(), "مطابقة الصنف");
         assertStock("0");
         sameNumber(data.balance(second, 1), "999");
     }
@@ -32,18 +33,35 @@ public final class SalesInvoiceCoverageTest extends SalesFormTest {
     @Test
     @Story("حفظ فاتورة الاختبار وفتح طباعتها")
     public void savesAndPrintsOwnedInvoice() {
-        prepare("Credit");var second=ownItem(2);
-        add(item,"picker");add(second,"picker");
-        page.slQuantity(item.name(),"2");page.slQuantity(second.name(),"3");
-        page.slSetLine(second.name(),"السعر","73.25");
-        String expectedNet=salesNet("419.75");page.slWaitNet(expectedNet);
-        printContentAssertions=stored->{
-            sameNumber(stored.get("net"),expectedNet);
-            Plugin_ERP.Utiel.PrintedInvoiceAssertions.invoice(driver,stored.get("code").toString(),customer.name(),
-                    java.util.List.of(new Plugin_ERP.Utiel.PrintedInvoiceAssertions.Line(item.name(),new java.math.BigDecimal("2"),new java.math.BigDecimal("100")),
-                            new Plugin_ERP.Utiel.PrintedInvoiceAssertions.Line(second.name(),new java.math.BigDecimal("3"),new java.math.BigDecimal("73.25"))),
-                    new java.math.BigDecimal(expectedNet));
-        };
-        save(true);assertStock("2");sameNumber(data.balance(second,1),"997");
+        prepare("Credit");
+        var second = ownItem(2);
+        add(item, "picker");
+        add(second, "picker");
+        page.slQuantity(item.name(), "2");
+        page.slQuantity(second.name(), "3");
+        page.slSetLine(second.name(), "السعر", "73.25");
+        String expectedNet = salesNet("419.75");
+        page.slWaitNet(expectedNet);
+        printContentAssertions =
+                stored -> {
+                    sameNumber(stored.get("net"), expectedNet);
+                    Plugin_ERP.Util.PrintedInvoiceAssertions.invoice(
+                            driver,
+                            stored.get("code").toString(),
+                            customer.name(),
+                            java.util.List.of(
+                                    new Plugin_ERP.Util.PrintedInvoiceAssertions.Line(
+                                            item.name(),
+                                            new java.math.BigDecimal("2"),
+                                            new java.math.BigDecimal("100")),
+                                    new Plugin_ERP.Util.PrintedInvoiceAssertions.Line(
+                                            second.name(),
+                                            new java.math.BigDecimal("3"),
+                                            new java.math.BigDecimal("73.25"))),
+                            new java.math.BigDecimal(expectedNet));
+                };
+        save(true);
+        assertStock("2");
+        sameNumber(data.balance(second, 1), "997");
     }
 }

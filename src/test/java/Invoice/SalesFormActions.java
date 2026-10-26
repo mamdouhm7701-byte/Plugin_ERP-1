@@ -44,7 +44,8 @@ public abstract class SalesFormActions extends SalesScenarioTest {
         add(second, "picker");
         page.slWaitNet(salesNet("200"));
         var saved = save(false);
-        Assert.assertEquals(((List<?>) data.read(saved).get("lines")).size(), 2, "مطابقة بنود الفاتورة");
+        Assert.assertEquals(
+                ((List<?>) data.read(saved).get("lines")).size(), 2, "مطابقة بنود الفاتورة");
         assertStock("1");
         sameNumber(
                 data.balance(second, 1),
@@ -66,7 +67,8 @@ public abstract class SalesFormActions extends SalesScenarioTest {
         page.slRemoveLine(second.name());
         page.slWaitNet(salesNet("100"));
         var saved = save(false);
-        Assert.assertEquals(((List<?>) data.read(saved).get("lines")).size(), 1, "مطابقة بنود الفاتورة");
+        Assert.assertEquals(
+                ((List<?>) data.read(saved).get("lines")).size(), 1, "مطابقة بنود الفاتورة");
         Assert.assertEquals(firstLine(data.read(saved)).get("itemId"), item.id(), "مطابقة الصنف");
         assertStock("1");
     }
@@ -138,7 +140,8 @@ public abstract class SalesFormActions extends SalesScenarioTest {
     protected void missingCustomerCannotSave() {
         prepare("Credit");
         if (!page.slCanClearChoice("العميل")) {
-            Assert.assertEquals(page.slDocument().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
+            Assert.assertEquals(
+                    page.slDocument().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
             Assert.assertFalse(page.slChoiceEmpty("العميل"));
             Assert.assertTrue(page.slSaves().isEmpty());
             return;
@@ -154,7 +157,8 @@ public abstract class SalesFormActions extends SalesScenarioTest {
         prepare("Credit");
         fill("picker");
         if (!page.slCanClearChoice("المخزن")) {
-            Assert.assertEquals(page.slDocument().get("storeId"), data.store(1).id(), "مطابقة المخزن");
+            Assert.assertEquals(
+                    page.slDocument().get("storeId"), data.store(1).id(), "مطابقة المخزن");
             Assert.assertFalse(page.slChoiceEmpty("المخزن"));
             Assert.assertTrue(page.slSaves().isEmpty());
             assertStock("0");
@@ -186,7 +190,8 @@ public abstract class SalesFormActions extends SalesScenarioTest {
         prepare("Credit");
         fill("picker");
         page.slNew();
-        Assert.assertTrue(((List<?>) page.slDocument().get("lines")).isEmpty(), "التحقق من بنود الفاتورة");
+        Assert.assertTrue(
+                ((List<?>) page.slDocument().get("lines")).isEmpty(), "التحقق من بنود الفاتورة");
         Assert.assertTrue(page.slSaves().isEmpty());
         assertStock("0");
     }

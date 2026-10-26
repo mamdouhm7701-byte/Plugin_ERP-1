@@ -1,9 +1,9 @@
 package Invoice;
 
 import Plugin_ERP.System_Modules.Login.Invoice.Invoice;
+import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import io.qameta.allure.Story;
 
 /** Original case IDs retained; all inputs now come from this scenario's fixtures. */
 public class SalesInvoiceTestCases extends SalesFormActions {
@@ -79,7 +79,8 @@ public class SalesInvoiceTestCases extends SalesFormActions {
         invoice.toggleInvoiceFullscreen();
         try {
             Assert.assertEquals(invoice.isInvoiceSideMenuDisplayed(), !before);
-            Assert.assertEquals(page.slDocument().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
+            Assert.assertEquals(
+                    page.slDocument().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
         } finally {
             if (invoice.isInvoiceSideMenuDisplayed() != before) invoice.toggleInvoiceFullscreen();
         }
@@ -104,7 +105,8 @@ public class SalesInvoiceTestCases extends SalesFormActions {
     @Story("اختيار العميل الذي أنشأه الاختبار")
     public void TC_SI_007_CustomerOptionsAreAvailable() {
         prepare("Credit");
-        Assert.assertEquals(page.slDocument().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
+        Assert.assertEquals(
+                page.slDocument().get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
     }
 
     @Test

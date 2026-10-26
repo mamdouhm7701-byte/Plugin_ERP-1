@@ -1,8 +1,8 @@
 package Invoice;
 
-import org.testng.annotations.Test;
 import io.qameta.allure.Story;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 public final class SalesListCoverageTest extends SalesListActions {
     @DataProvider

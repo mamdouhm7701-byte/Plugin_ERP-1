@@ -11,6 +11,7 @@ import org.openqa.selenium.WebElement;
 /** Purchase invoice rows mapped using the purchase-price column. */
 final class PurchaseInvoiceRows {
     private final WebDriver driver;
+
     PurchaseInvoiceRows(WebDriver driver) {
         this.driver = driver;
     }

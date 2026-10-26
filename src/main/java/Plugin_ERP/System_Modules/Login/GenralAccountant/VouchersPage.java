@@ -2,14 +2,11 @@ package Plugin_ERP.System_Modules.Login.GenralAccountant;
 
 import Plugin_ERP.System_Modules.Login.Abstract;
 import io.qameta.allure.Step;
+import java.math.BigDecimal;
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.JavascriptExecutor;
-import org.testng.Assert;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 /** Page object for the general journal vouchers list and entry form. */
 public class VouchersPage extends Abstract {
@@ -25,7 +22,7 @@ public class VouchersPage extends Abstract {
     public VouchersPage(WebDriver driver) {
         super(driver);
         lines = new VoucherLines(this, driver);
-        accounts = new VoucherAccountPicker(this, driver, utilites, waitMangment);
+        accounts = new VoucherAccountPicker(this, driver, utilites, waitManagement);
         recordControls = new VoucherRecordList(this, driver);
     }
 
@@ -158,7 +155,7 @@ public class VouchersPage extends Abstract {
                         "(//li[contains(@class,'vs__dropdown-option') and contains(normalize-space(),\""
                                 + accountText
                                 + "\")])[1]");
-        waitMangment.fluentWait().until(d -> d.findElement(option).isDisplayed());
+        waitManagement.fluentWait().until(d -> d.findElement(option).isDisplayed());
         utilites.ClickElement(option);
     }
 
@@ -194,7 +191,7 @@ public class VouchersPage extends Abstract {
 
     public void waitForFormReady() {
         utilites.waits().waitForOverlayToDisappear();
-        waitMangment.fluentWait().until(d -> !d.findElements(SAVE_BUTTON).isEmpty());
+        waitManagement.fluentWait().until(d -> !d.findElements(SAVE_BUTTON).isEmpty());
     }
 
     @Step("هل البحث داخل بنود الحسابات متاح")
@@ -203,7 +200,7 @@ public class VouchersPage extends Abstract {
     }
 
     @Step("التحقق من بحث خيارات الحساب داخل البند دون حذف البنود")
-    public void assertLineAccountSearch(String matchingCode,String otherCode) {
+    public void assertLineAccountSearch(String matchingCode, String otherCode) {
         accounts.assertLineAccountSearch(matchingCode, otherCode);
     }
 
@@ -216,7 +213,7 @@ public class VouchersPage extends Abstract {
         input.click();
         input.clear();
         input.sendKeys(query);
-        waitMangment
+        waitManagement
                 .fluentWait()
                 .until(d -> query.equals(d.findElement(lineSearch).getDomProperty("value")));
     }
@@ -254,7 +251,7 @@ public class VouchersPage extends Abstract {
 
     @Step("إدخال الملاحظات العامة: {notes}")
     public void setNotes(String notes) {
-        utilites.TaypeTextB(By.id("textarea"), notes);
+        utilites.typeTextAndVerify(By.id("textarea"), notes);
     }
 
     @Step("قراءة تاريخ القيد في النموذج")
@@ -347,6 +344,12 @@ public class VouchersPage extends Abstract {
     public void deleteVoucherListRowByMarker(String marker) {
         recordControls.deleteVoucherListRowByMarker(marker);
     }
-    void clickLineElement(By locator) { utilites.ClickElement(locator); }
-    Plugin_ERP.Bots.WaitMangment lineWaits() { return waitMangment; }
+
+    void clickLineElement(By locator) {
+        utilites.ClickElement(locator);
+    }
+
+    Plugin_ERP.Bots.WaitManagement lineWaits() {
+        return waitManagement;
+    }
 }

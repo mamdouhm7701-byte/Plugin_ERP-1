@@ -1,10 +1,5 @@
 package Plugin_ERP.System_Modules.Login.Products;
 
-import Plugin_ERP.Bots.AlertAction;
-import Plugin_ERP.Bots.BrowserAction;
-import Plugin_ERP.Bots.ElmentAction;
-import Plugin_ERP.Bots.WaitMangment;
-import Plugin_ERP.System_Modules.Login.Abstract;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -36,7 +31,7 @@ public class ProductCategories extends ProductsModulePage {
 
     @Step("Add note for product category")
     public void AddNoteForProductCategory(String Notes) {
-        utilites.TaypeText(AddNote, Notes);
+        utilites.typeText(AddNote, Notes);
     }
 
     @Step("التحقق من ظهور رسالة الحقل المطلوب")

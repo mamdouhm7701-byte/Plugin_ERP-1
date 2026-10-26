@@ -22,11 +22,17 @@ public class FinancialFixtureTest extends BaseTest {
                     contains(collection.get("paymentMethods"), payment.id()),
                     "Created payment absent from lookup");
             Assert.assertEquals(
-                    data.read(supplier).get("accountId"), supplier.values().get("accountId"), "مطابقة الحساب");
+                    data.read(supplier).get("accountId"),
+                    supplier.values().get("accountId"),
+                    "مطابقة الحساب");
             Assert.assertEquals(
-                    data.read(expense).get("accountId"), expense.values().get("accountId"), "مطابقة الحساب");
+                    data.read(expense).get("accountId"),
+                    expense.values().get("accountId"),
+                    "مطابقة الحساب");
             Assert.assertEquals(
-                    data.read(income).get("accountId"), income.values().get("accountId"), "مطابقة الحساب");
+                    data.read(income).get("accountId"),
+                    income.values().get("accountId"),
+                    "مطابقة الحساب");
         }
     }
 

@@ -1,13 +1,12 @@
 package SuiteSupport;
 
-import org.testng.IClassListener;
-import org.testng.ITestClass;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import org.testng.IClassListener;
+import org.testng.ITestClass;
 
 /** Owned-data classes may overlap; unreviewed or branch-default classes stay exclusive. */
 public final class BranchIsolationListener implements IClassListener {

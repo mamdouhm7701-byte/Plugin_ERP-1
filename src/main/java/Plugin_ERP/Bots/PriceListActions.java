@@ -1,18 +1,17 @@
 package Plugin_ERP.Bots;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-
 public class PriceListActions extends BaseAction {
 
-    public PriceListActions(WebDriver driver, WebDriverWait wait, WaitMangment waitMangment) {
-        super(driver, wait, waitMangment);
+    public PriceListActions(WebDriver driver, WebDriverWait wait, WaitManagement waitManagement) {
+        super(driver, wait, waitManagement);
     }
 
     private List<String> selectedProducts = new ArrayList<>();
@@ -154,7 +153,7 @@ public class PriceListActions extends BaseAction {
             try {
 
                 WebElement element =
-                        waitMangment
+                        waitManagement
                                 .fluentWait()
                                 .until(
                                         driver -> {
@@ -193,6 +192,8 @@ public class PriceListActions extends BaseAction {
                     return;
 
                 } catch (Exception ignored) {
+                    Plugin_ERP.Bots.LogUtils.debug(
+                            "PriceListActions fallback: " + ignored.getClass().getSimpleName());
                 }
 
                 attempts++;

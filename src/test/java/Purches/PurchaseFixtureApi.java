@@ -7,28 +7,38 @@ import org.openqa.selenium.WebDriver;
 
 /** Browser transport; ownership, recovery and retry policy remain with PurchaseTestData. */
 final class PurchaseFixtureApi {
-  private final WebDriver driver;
-  private final String origin;
-  private final Object sessionBranchId;
-  private final Runnable contextGuard;
+    private final WebDriver driver;
+    private final String origin;
+    private final Object sessionBranchId;
+    private final Runnable contextGuard;
 
-  PurchaseFixtureApi(WebDriver driver, String origin, Object sessionBranchId, Runnable contextGuard) {
-    this.driver = driver;
-    this.origin = origin;
-    this.sessionBranchId = sessionBranchId;
-    this.contextGuard = contextGuard;
-  }
+    PurchaseFixtureApi(
+            WebDriver driver, String origin, Object sessionBranchId, Runnable contextGuard) {
+        this.driver = driver;
+        this.origin = origin;
+        this.sessionBranchId = sessionBranchId;
+        this.contextGuard = contextGuard;
+    }
 
-  static final class ApiFailure extends AssertionError {
-    final int status;
-    ApiFailure(int status, String message) { super(message); this.status = status; }
-  }
+    static final class ApiFailure extends AssertionError {
+        final int status;
 
-  @SuppressWarnings("unchecked")
-  Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
-    contextGuard.run();
-    driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(action.equals("delete") ? 60 : 30));
-    Object result = ((JavascriptExecutor) driver).executeAsyncScript("""
+        ApiFailure(int status, String message) {
+            super(message);
+            this.status = status;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
+        contextGuard.run();
+        driver.manage()
+                .timeouts()
+                .scriptTimeout(Duration.ofSeconds(action.equals("delete") ? 60 : 30));
+        Object result =
+                ((JavascriptExecutor) driver)
+                        .executeAsyncScript(
+                                """
         const [action, endpoint, values, expectedOrigin, expectedBranch, done] = arguments;
         const root = document.querySelector('#app')?.__vue__;
         if (!root?.$store) { done({error:'Authenticated ERP session is not ready'}); return; }
@@ -52,12 +62,18 @@ final class PurchaseFixtureApi {
             entity: action === 'get' ? JSON.parse(JSON.stringify(entity)) : null});
         }).catch(error => done({status: error?.response?.status || error?.status || error?.data?.status || 0,
           error: JSON.stringify(error?.response?.data || error?.data || {status:error?.status, message:String(error)})}));
-        """, action, endpoint, values,origin,sessionBranchId);
-    Map<String, Object> response = (Map<String, Object>) result;
-    if (response.get("error") != null) {
-      int status = response.get("status") instanceof Number number ? number.intValue() : 0;
-      throw new ApiFailure(status, "Fixture " + action + " " + endpoint + ": " + response.get("error"));
+        """,
+                                action,
+                                endpoint,
+                                values,
+                                origin,
+                                sessionBranchId);
+        Map<String, Object> response = (Map<String, Object>) result;
+        if (response.get("error") != null) {
+            int status = response.get("status") instanceof Number number ? number.intValue() : 0;
+            throw new ApiFailure(
+                    status, "Fixture " + action + " " + endpoint + ": " + response.get("error"));
+        }
+        return response;
     }
-    return response;
-  }
 }

@@ -1,21 +1,14 @@
 package Plugin_ERP.System_Modules.Login.BasicData;
 
-import Plugin_ERP.Bots.AlertAction;
-import Plugin_ERP.Bots.BrowserAction;
-import Plugin_ERP.Bots.ElmentAction;
-import Plugin_ERP.Bots.WaitMangment;
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;
 import io.qameta.allure.Step;
+import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-
-import java.time.Duration;
-import java.util.List;
 
 public class TreasuryHandoverPage extends AbstractForDealer {
 
@@ -55,28 +48,35 @@ public class TreasuryHandoverPage extends AbstractForDealer {
 
     @Step("اضافه الرصيد الافتتاحى :{balnce}")
     public void AddOpenBalance(double balnce) {
-        utilites.TaypeText(OpenBalnce, String.valueOf(balnce));
+        utilites.typeText(OpenBalnce, String.valueOf(balnce));
     }
 
     @Override
     public boolean isErrorPopupDisplayed() {
         try {
-            new WebDriverWait(driver, Duration.ofSeconds(10)).until(
-                    ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".swal2-icon.swal2-error")));
+            new WebDriverWait(driver, Duration.ofSeconds(10))
+                    .until(
+                            ExpectedConditions.visibilityOfElementLocated(
+                                    By.cssSelector(".swal2-icon.swal2-error")));
             return true;
-        } catch (org.openqa.selenium.TimeoutException missingError) { return false; }
+        } catch (org.openqa.selenium.TimeoutException missingError) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "TreasuryHandoverPage condition unavailable: "
+                            + missingError.getClass().getSimpleName());
+            return false;
+        }
     }
 
     @Step("فتح تسليم الاختبار بالهوية المحددة")
     public void OpenTreasuryForReview(Object id) {
         if (id == null || !id.toString().matches("[A-Za-z0-9-]+"))
             throw new IllegalArgumentException("Invalid treasury transaction identity");
-        String origin = ((JavascriptExecutor)driver).executeScript("return location.origin").toString();
+        String origin =
+                ((JavascriptExecutor) driver).executeScript("return location.origin").toString();
         driver.get(origin + "/#/safe-transaction/close/" + id);
-        new WebDriverWait(driver, Duration.ofSeconds(20)).until(
-                ExpectedConditions.visibilityOfElementLocated(TotalCloseBalnce));
+        new WebDriverWait(driver, Duration.ofSeconds(20))
+                .until(ExpectedConditions.visibilityOfElementLocated(TotalCloseBalnce));
     }
-
 
     @Step("حفظ وطباعة التقرير")
     public void SaveAndPrint() {
@@ -87,8 +87,11 @@ public class TreasuryHandoverPage extends AbstractForDealer {
     }
 
     @Step("مطابقة رصيد الإغلاق: نقدي {cash}، إجمالي {total}، فعلي {actual}، عجز {deficit}")
-    public void AssertClosingAmounts(java.math.BigDecimal cash, java.math.BigDecimal total,
-            java.math.BigDecimal actual, java.math.BigDecimal deficit) {
+    public void AssertClosingAmounts(
+            java.math.BigDecimal cash,
+            java.math.BigDecimal total,
+            java.math.BigDecimal actual,
+            java.math.BigDecimal deficit) {
         assertNumber(driver.findElement(CashCloseBalnce).getDomProperty("value"), cash);
         assertNumber(driver.findElement(TotalCloseBalnce).getDomProperty("value"), total);
         assertNumber(driver.findElement(CloseBalnce).getDomProperty("value"), actual);
@@ -96,8 +99,11 @@ public class TreasuryHandoverPage extends AbstractForDealer {
     }
 
     @Step("مطابقة التقرير المطبوع: نقدي {cash}، إجمالي {total}، فعلي {actual}، عجز {deficit}")
-    public void AssertPrintedAmounts(java.math.BigDecimal cash, java.math.BigDecimal total,
-            java.math.BigDecimal actual, java.math.BigDecimal deficit) {
+    public void AssertPrintedAmounts(
+            java.math.BigDecimal cash,
+            java.math.BigDecimal total,
+            java.math.BigDecimal actual,
+            java.math.BigDecimal deficit) {
         assertNumber(driver.findElement(CashBalnce).getText(), cash);
         assertNumber(driver.findElement(TotalBalnce).getText(), total);
         assertNumber(driver.findElement(ActualBalnce).getText(), actual);
@@ -105,7 +111,12 @@ public class TreasuryHandoverPage extends AbstractForDealer {
     }
 
     private void assertNumber(String text, java.math.BigDecimal expected) {
-        Assert.assertEquals(new java.math.BigDecimal(text.replace(",", "").trim()).compareTo(expected), 0,
-                "Treasury amount differs from its transaction ledger: " + text + " expected " + expected);
+        Assert.assertEquals(
+                new java.math.BigDecimal(text.replace(",", "").trim()).compareTo(expected),
+                0,
+                "Treasury amount differs from its transaction ledger: "
+                        + text
+                        + " expected "
+                        + expected);
     }
 }

@@ -4,12 +4,10 @@ import Plugin_ERP.System_Modules.Login.AbstractForDealer;
 import io.qameta.allure.Step;
 import java.time.Duration;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class AreaPage extends AbstractForDealer {
@@ -287,6 +285,12 @@ public class AreaPage extends AbstractForDealer {
                                         .stream()
                                         .noneMatch(WebElement::isDisplayed));
     }
-    void recordWaitForAreaSaveSuccessPopupToDisappear() { waitForAreaSaveSuccessPopupToDisappear(); }
-    void recordWaitForAreaRows() { waitForAreaRows(); }
+
+    void recordWaitForAreaSaveSuccessPopupToDisappear() {
+        waitForAreaSaveSuccessPopupToDisappear();
+    }
+
+    void recordWaitForAreaRows() {
+        waitForAreaRows();
+    }
 }

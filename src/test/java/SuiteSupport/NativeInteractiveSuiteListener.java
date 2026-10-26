@@ -1,15 +1,14 @@
 package SuiteSupport;
 
-import org.testng.IAlterSuiteListener;
-import org.testng.IExecutionListener;
-import org.testng.xml.XmlSuite;
-import org.testng.xml.internal.Parser;
-
 import java.lang.management.ManagementFactory;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.file.*;
 import java.util.*;
+import org.testng.IAlterSuiteListener;
+import org.testng.IExecutionListener;
+import org.testng.xml.XmlSuite;
+import org.testng.xml.internal.Parser;
 
 /** Keeps IntelliJ's native TestNG events while choosing the existing isolated execution plan. */
 public class NativeInteractiveSuiteListener implements IAlterSuiteListener, IExecutionListener {

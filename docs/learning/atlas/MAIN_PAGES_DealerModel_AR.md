@@ -188,7 +188,7 @@
 |---|---|---|
 | `public RoutLineForDealer(WebDriver driver)` | public | منشئ الكلاس: يستقبل الاعتماديات ويجهز الكائن عند إنشائه؛ ليس حالة اختبار. |
 | `public void PrepareOwnedRoute(String agentName, String customerName, String statusName, String areaName)` | public | تجهيز المملوك للاختبار، حسب المدخلات والتخصص. |
-| `private void chooseOwned(Plugin_ERP.Utiel.FormInteractions form, String label, String name)` | private | اختيار المملوك للاختبار، حسب المدخلات والتخصص. |
+| `private void chooseOwned(Plugin_ERP.Util.FormInteractions form, String label, String name)` | private | اختيار المملوك للاختبار، حسب المدخلات والتخصص. |
 | `public void AssertOnlyOwnedCustomerSelected(Object customerId)` | public | مقارنة متوقعة المملوك للاختبار / العميل / القيمة المختارة، حسب المدخلات والتخصص. |
 | `public java.util.List<String> OwnedEventTitles(String marker)` | public | تنفيذ جزء متعلق بـ المملوك للاختبار، حسب المدخلات والتخصص. |
 | `private By getDayCell(String date)` | private | قراءة أو إرجاع القدرة التي يحددها اسم الدالة، حسب المدخلات والتخصص. |
@@ -246,4 +246,3 @@
 | `public void AddAdressForSupplier(String Adress)` | public | إضافة المورد، حسب المدخلات والتخصص. |
 | `public void AddMobileNumberForSupplier(String MobileNumber)` | public | إضافة المورد، حسب المدخلات والتخصص. |
 | `public void AddAgentNameForSupplier(String AgentName)` | public | إضافة الاسم / المورد، حسب المدخلات والتخصص. |
-

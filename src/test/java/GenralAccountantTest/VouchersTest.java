@@ -491,7 +491,8 @@ public class VouchersTest extends BasicDataScenarioTest {
 
         Assert.assertTrue(page.isAccountDropdownSearchPresent());
         page.selectAccountByCode(accountCode("credit"));
-        page.assertLineAccountSearch(basicData().account("debit").name(),basicData().account("credit").name());
+        page.assertLineAccountSearch(
+                basicData().account("debit").name(), basicData().account("credit").name());
         Assert.assertEquals(
                 page.getSelectedLineCount(),
                 2,
@@ -537,8 +538,7 @@ public class VouchersTest extends BasicDataScenarioTest {
         basicData().account("debit");
         basicData().account("credit");
 
-        String marker =
-                ownedName("Vouchers", "unbalanced");
+        String marker = ownedName("Vouchers", "unbalanced");
         VouchersPage page = openNewVoucher();
         boolean markerExists = false;
         boolean unexpectedlySaved = false;
@@ -674,8 +674,7 @@ public class VouchersTest extends BasicDataScenarioTest {
         basicData().account("credit");
         basicData().account("extra");
 
-        String marker =
-                ownedName("Vouchers", "saved-entry");
+        String marker = ownedName("Vouchers", "saved-entry");
         VouchersPage page = new VouchersPage(driver);
         boolean saved = false;
         try {

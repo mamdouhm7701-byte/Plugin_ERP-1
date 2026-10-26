@@ -12,8 +12,13 @@ import org.testng.Assert;
 final class FinancialExportAssertions {
     private FinancialExportAssertions() {}
 
-    static void assertExportDownloaded(WebDriver driver, Runnable exportAction, String format,
-            String code, String party, java.math.BigDecimal amount) {
+    static void assertExportDownloaded(
+            WebDriver driver,
+            Runnable exportAction,
+            String format,
+            String code,
+            String party,
+            java.math.BigDecimal amount) {
         String normalizedFormat = format.toLowerCase(Locale.ROOT);
         Assert.assertTrue(
                 normalizedFormat.equals("pdf") || normalizedFormat.equals("excel"),
@@ -58,9 +63,13 @@ final class FinancialExportAssertions {
         Assert.assertTrue(separator > 0, "محتوى الملف الناتج غير صالح");
         byte[] contents = Base64.getDecoder().decode(dataUrl.substring(separator + 1));
         Assert.assertTrue(contents.length > 0, "ملف التصدير فارغ");
-        io.qameta.allure.Allure.addAttachment("Actual exported " + normalizedFormat,
-                normalizedFormat.equals("pdf") ? "application/pdf" : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                new java.io.ByteArrayInputStream(contents), normalizedFormat.equals("pdf") ? ".pdf" : ".xlsx");
+        io.qameta.allure.Allure.addAttachment(
+                "Actual exported " + normalizedFormat,
+                normalizedFormat.equals("pdf")
+                        ? "application/pdf"
+                        : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                new java.io.ByteArrayInputStream(contents),
+                normalizedFormat.equals("pdf") ? ".pdf" : ".xlsx");
 
         if (normalizedFormat.equals("pdf")) {
             String signature =

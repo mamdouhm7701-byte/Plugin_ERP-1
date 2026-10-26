@@ -205,17 +205,20 @@ final class PurchaseDocumentLines {
     void puWaitNet(String value) {
         try {
             ready.until(
-                d -> {
-                    String actual = page.puTotals().get("الصافي");
-                    return actual != null
-                            && new java.math.BigDecimal(actual.replace(",", ""))
-                                            .compareTo(new java.math.BigDecimal(value))
-                                    == 0;
-                });
+                    d -> {
+                        String actual = page.puTotals().get("الصافي");
+                        return actual != null
+                                && new java.math.BigDecimal(actual.replace(",", ""))
+                                                .compareTo(new java.math.BigDecimal(value))
+                                        == 0;
+                    });
         } catch (org.openqa.selenium.TimeoutException failure) {
-            throw new AssertionError("صافي السند غير مطابق: المتوقع " + value
-                    + "، الفعلي " + page.puTotals().get("الصافي"), failure);
+            throw new AssertionError(
+                    "صافي السند غير مطابق: المتوقع "
+                            + value
+                            + "، الفعلي "
+                            + page.puTotals().get("الصافي"),
+                    failure);
         }
-
     }
 }

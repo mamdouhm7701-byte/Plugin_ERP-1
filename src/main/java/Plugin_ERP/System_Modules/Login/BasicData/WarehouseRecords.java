@@ -1,8 +1,5 @@
 package Plugin_ERP.System_Modules.Login.BasicData;
 
-import Plugin_ERP.Enums.Pages;
-import Plugin_ERP.System_Modules.Login.AbstractForDealer;
-import io.qameta.allure.Step;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -12,16 +9,27 @@ import org.openqa.selenium.support.ui.*;
 final class WarehouseRecords {
     private final StorePage owner;
     private final WebDriver driver;
+
     WarehouseRecords(StorePage owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
     }
+
     private final By rows = By.cssSelector("table tbody tr[role='row']"),
             headers = By.cssSelector("table thead th"),
             save = By.cssSelector("button[data-action-type='save']");
-    private boolean visible(By b) { return owner.recordVisible(b); }
-    private void waitLoading() { owner.recordWaitLoading(); }
-    private void waitAlert() { owner.recordWaitAlert(); }
+
+    private boolean visible(By b) {
+        return owner.recordVisible(b);
+    }
+
+    private void waitLoading() {
+        owner.recordWaitLoading();
+    }
+
+    private void waitAlert() {
+        owner.recordWaitAlert();
+    }
 
     boolean IsListStructureDisplayed() {
         List<String> h =
@@ -45,6 +53,8 @@ final class WarehouseRecords {
                         break;
                     }
             } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
+                Plugin_ERP.Bots.LogUtils.debug(
+                        "WarehouseRecords fallback: " + ignored.getClass().getSimpleName());
             }
         return c;
     }
@@ -108,6 +118,10 @@ final class WarehouseRecords {
                                                     try {
                                                         return e.isDisplayed();
                                                     } catch (Exception ignored) {
+                                                        Plugin_ERP.Bots.LogUtils.debug(
+                                                                "WarehouseRecords condition unavailable: "
+                                                                        + ignored.getClass()
+                                                                                .getSimpleName());
                                                         return false;
                                                     }
                                                 }));
@@ -120,8 +134,11 @@ final class WarehouseRecords {
                     .until(ExpectedConditions.visibilityOfElementLocated(success));
             owner.DismissAlertIfPresent();
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "WarehouseRecords fallback: " + ignored.getClass().getSimpleName());
         }
-        new WebDriverWait(driver, Duration.ofSeconds(20)).until(d -> owner.GetExactMatchCount(name) == 0);
+        new WebDriverWait(driver, Duration.ofSeconds(20))
+                .until(d -> owner.GetExactMatchCount(name) == 0);
     }
 
     void CancelDelete() {

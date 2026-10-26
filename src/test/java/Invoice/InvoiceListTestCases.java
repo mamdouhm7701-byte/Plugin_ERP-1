@@ -1,8 +1,7 @@
 package Invoice;
 
-import io.qameta.allure.Story;
-
 import Plugin_ERP.System_Modules.Login.Invoice.InvoicListPage;
+import io.qameta.allure.Story;
 import java.util.*;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -303,7 +302,9 @@ public class InvoiceListTestCases extends SalesListActions {
     @Story("فلتر حالة الدفع يعرض المستند المطابق للمبلغ المدفوع")
     public void PaymentStatusFilterShowsOnlySelectedStatus(String status, String testCaseId) {
         var unpaid = seed(1);
-        var paid = data.seedInvoice(2, "Sales", seedDate, "1", data.read(unpaid).get("net").toString());
+        var paid =
+                data.seedInvoice(
+                        2, "Sales", seedDate, "1", data.read(unpaid).get("net").toString());
         var partial = data.seedInvoice(3, "Sales", seedDate, "1", "40");
         scoped(unpaid, paid, partial);
         String value = status.equals("مدفوع") ? "2" : status.equals("غير مدفوع") ? "0" : "1";

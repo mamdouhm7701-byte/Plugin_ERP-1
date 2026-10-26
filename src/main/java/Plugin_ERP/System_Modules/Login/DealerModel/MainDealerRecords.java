@@ -1,8 +1,5 @@
 package Plugin_ERP.System_Modules.Login.DealerModel;
 
-import Plugin_ERP.Enums.Pages;
-import Plugin_ERP.System_Modules.Login.AbstractForDealer;
-import io.qameta.allure.Step;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
@@ -12,10 +9,12 @@ import org.openqa.selenium.support.ui.*;
 final class MainDealerRecords {
     private final MainDealer owner;
     private final WebDriver driver;
+
     MainDealerRecords(MainDealer owner, WebDriver driver) {
         this.owner = owner;
         this.driver = driver;
     }
+
     private static final By TABLE_ROWS = By.cssSelector("table tbody tr[role='row']");
     private static final By TABLE_HEADERS = By.cssSelector("table thead th");
     private static final By SAVE_BUTTON = By.cssSelector("button[data-action-type='save']");
@@ -141,6 +140,9 @@ final class MainDealerRecords {
         try {
             return element.isDisplayed();
         } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "MainDealerRecords condition unavailable: "
+                            + ignored.getClass().getSimpleName());
             return false;
         }
     }

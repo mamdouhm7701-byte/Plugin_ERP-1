@@ -115,7 +115,8 @@ final class SalesItemSelection {
     void slAddPicker(String name) {
         page.slButton("إضافة أصناف");
         page.slType(By.cssSelector(".modal.show input[label-text='arabicName']"), name);
-        driver.findElement(By.cssSelector(".modal.show input[label-text='arabicName']")).sendKeys(Keys.ENTER);
+        driver.findElement(By.cssSelector(".modal.show input[label-text='arabicName']"))
+                .sendKeys(Keys.ENTER);
         page.slClick(
                 By.xpath(
                         "//div[contains(@class,'modal') and contains(@class,'show')]//tr[.//td[contains(normalize-space(),'"

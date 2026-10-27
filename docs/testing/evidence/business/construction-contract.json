@@ -1,0 +1,27 @@
+{
+  "activity": "Construction",
+  "route": "#/contracts/new",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "62231440fd527d8b",
+  "profileFingerprint": "4deddccd2e880404e853229e71b3d0c49d74e3d5f009f48ce284a2ec373ab936",
+  "profile": "demo-construction-reference",
+  "policies": {
+    "stocktakingMethod": "Periodic",
+    "branchId": "62231440fd527d8b",
+    "discountLevel": "Transaction",
+    "activityType": "Construction",
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "taxPolicy": "NetBased"
+  },
+  "caseClass": "Invoice.ConstructionContractTest",
+  "journeys": [
+    "Create/read Contract100 + VAT15 =115; stock and customer balance unchanged"
+  ],
+  "evidenceLog": "target/construction-contract-no-impact-live.log",
+  "cleanupJournal": "target/sales-fixtures/5341e7a7-6cc.json",
+  "resultFiles": 1,
+  "capturedFromVerifiedRun": true
+}

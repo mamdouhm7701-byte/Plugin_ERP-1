@@ -1,0 +1,27 @@
+{
+  "activity": "Restaurant",
+  "route": "#/restaurant-menu",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "7a7303436465e4b5",
+  "profileFingerprint": "58abaaafa91d6f7ccf9d821e72ec3436764cf7ed42b1f12aae6cc24a541d8792",
+  "profile": "business-852cf55f40675c7a",
+  "policies": {
+    "stocktakingMethod": "Periodic",
+    "branchId": "7a7303436465e4b5",
+    "discountLevel": "Transaction",
+    "activityType": "Restaurant",
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "taxPolicy": "NetBased"
+  },
+  "caseClass": "SpecialSalesTest.SelectedRestaurantPolicyTest",
+  "journeys": [
+    "NetBased / Transaction / Periodic, no additional tax: save/pay/read restaurant invoice, VAT30 and net230, stock"
+  ],
+  "evidenceLog": "target/native-business-restaurant-net-live.log",
+  "cleanupJournal": "target/special-sales-fixtures/8aefadf1-412.json",
+  "resultFiles": 5,
+  "capturedFromVerifiedRun": true
+}

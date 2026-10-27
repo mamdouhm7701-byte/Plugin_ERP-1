@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Activity owned master lifecycle" parallel="none"><test name="Concrete or car-showroom master"><classes>
+<class name="CoverageTest.ActivityMasterLifecycleTest"/>
+</classes></test></suite>

@@ -68,3 +68,6 @@ config/*.local.json
 
 # macOS
 .DS_Store
+
+# Durable local owned-branch creation state; must survive build cleanup.
+/config/business-branch-state/

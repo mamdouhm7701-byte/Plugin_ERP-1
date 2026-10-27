@@ -37,6 +37,9 @@ public final class SuiteDefinitionsTest {
             {"additional/standalone/parallel-three-screens"},
             {"additional/standalone/point-of-sale"},
             {"additional/standalone/restaurant"},
+            {"additional/standalone/car-showroom-business"},
+            {"additional/standalone/construction-contract"},
+            {"additional/standalone/activity-master-lifecycle"},
             {"special-sales"},
             {"basic-data"},
             {"general-accounting"},
@@ -378,5 +381,57 @@ public final class SuiteDefinitionsTest {
             }
         }
         for (XmlSuite child : suite.getChildSuites()) collect(child, selected);
+    }
+
+    @Test
+    public void restaurantAdditionalSmokeRetainsSubjectMixedAndDiscountContracts()
+            throws Exception {
+        var suites =
+                new Parser(
+                                RESOURCES
+                                        .resolve(
+                                                "additional/standalone/smoke-restaurant-additional-testng.xml")
+                                        .toString())
+                        .parseToList();
+        var classes = new HashSet<String>();
+        for (var suite : suites)
+            for (var test : suite.getTests())
+                for (var entry : test.getXmlClasses())
+                    Assert.assertTrue(
+                            classes.add(entry.getName()), "Duplicate additional-tax smoke class");
+        Assert.assertEquals(classes, Set.of("SpecialSalesTest.RestaurantAdditionalTaxSmokeTest"));
+        var cases = new HashSet<String>();
+        for (var method : Class.forName(classes.iterator().next()).getDeclaredMethods())
+            if (method.isAnnotationPresent(Test.class)) cases.add(method.getName());
+        Assert.assertEquals(
+                cases,
+                Set.of(
+                        "subjectItemAdditionalTaxMatchesIndependentOracle",
+                        "mixedItemsExcludeNonSubjectItemFromAdditionalTax",
+                        "discountPrecedesAdditionalTax"));
+    }
+
+    @Test
+    public void itemBasedAdditionalSmokeIncludesExemptMixedContract() throws Exception {
+        var suites =
+                new Parser(
+                                RESOURCES
+                                        .resolve(
+                                                "additional/standalone/smoke-restaurant-item-tax-testng.xml")
+                                        .toString())
+                        .parseToList();
+        var classes = new HashSet<String>();
+        for (var suite : suites)
+            for (var test : suite.getTests())
+                for (var entry : test.getXmlClasses())
+                    Assert.assertTrue(
+                            classes.add(entry.getName()), "Duplicate ItemBased smoke class");
+        Assert.assertEquals(
+                classes, Set.of("SpecialSalesTest.RestaurantItemBasedAdditionalTaxTest"));
+        var cases = new HashSet<String>();
+        for (var method : Class.forName(classes.iterator().next()).getDeclaredMethods())
+            if (method.isAnnotationPresent(Test.class)) cases.add(method.getName());
+        Assert.assertEquals(
+                cases, Set.of("additionalSubjectPaysVatWhileOtherExemptItemRemainsExempt"));
     }
 }

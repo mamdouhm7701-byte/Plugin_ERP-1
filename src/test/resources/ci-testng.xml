@@ -8,6 +8,17 @@
     </listeners>
     <test name="Configuration, arithmetic and owned fixture recovery" preserve-order="true">
         <classes>
+            <class name="TestSupport.PolicyItemRecipeTest"/>
+            <class name="Plugin_ERP.BranchProfiles.BusinessRunRequestTest"/>
+            <class name="SuiteSupport.BusinessRunListenerTest"/>
+            <class name="Plugin_ERP.BranchProfiles.RestaurantAdditionalTaxTest"/>
+            <class name="Plugin_ERP.BranchProfiles.BranchInvoiceCalculatorTest"/>
+            <class name="Plugin_ERP.BranchProfiles.BranchConfigurationWorkflowTest"/>
+            <class name="Plugin_ERP.BranchProfiles.BranchProfileRuntimeTest"/>
+            <class name="TestSupport.ProfiledFixtureJournalsTest"/>
+            <class name="Plugin_ERP.BranchProfiles.BranchProfileTest"/>
+            <class name="Plugin_ERP.BranchProfiles.BranchProfileReaderTest"/>
+            <class name="Plugin_ERP.Util.FailureVideoRecorderTest"/>
             <class name="Plugin_ERP.Util.VueComponentAccessTest"/>
             <class name="Plugin_ERP.Util.Allur.ReportingContractsTest"/>
             <class name="Plugin_ERP.Bots.TextEntryActionsTest"/>

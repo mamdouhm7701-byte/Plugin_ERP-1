@@ -17,6 +17,8 @@ public class BaseTest {
     protected WebDriver driver;
     protected WebDriverWait wait;
     private Throwable setupFailure;
+    private Plugin_ERP.BranchProfiles.BranchProfile branchProfile;
+    private Plugin_ERP.BranchProfiles.BranchProfileScope profileScope;
 
     protected final void requirePreparedSession() {
         if (setupFailure != null)
@@ -32,8 +34,12 @@ public class BaseTest {
     @BeforeClass(alwaysRun = true)
     public void setup() throws Exception {
         setupFailure = null;
+        branchProfile = null;
         try {
             PropertyReader.loadProperties();
+            branchProfile = Plugin_ERP.BranchProfiles.BranchProfiles.selected().orElse(null);
+            if (branchProfile != null)
+                profileScope = Plugin_ERP.BranchProfiles.BranchProfileScope.bind(branchProfile);
             driver = createDriver();
             if ("LocalHeadless".equalsIgnoreCase(PropertyReader.getProperty("ExecutionType"))) {
                 driver.manage().window().setSize(new Dimension(1920, 1080));
@@ -44,6 +50,11 @@ public class BaseTest {
             wait = new WebDriverWait(driver, Duration.ofSeconds(15));
             driver.get(PropertyReader.getApplicationUrl().replaceAll("/+$", "") + "/#/login");
             login();
+            if (branchProfile != null) {
+                if (Boolean.parseBoolean(PropertyReader.getProperty("branch.profile.select")))
+                    Plugin_ERP.BranchProfiles.BranchSessionSelector.select(driver, branchProfile);
+                verifySelectedBranchProfile();
+            }
         } catch (Exception | AssertionError | LinkageError failure) {
             setupFailure = failure;
             if (driver instanceof TakesScreenshot) {
@@ -57,6 +68,38 @@ public class BaseTest {
             }
             throw failure;
         }
+    }
+
+    @BeforeMethod(alwaysRun = true)
+    public final void verifyProfileBeforeScenario() {
+        if (branchProfile != null) {
+            requirePreparedSession();
+            verifySelectedBranchProfile();
+        }
+    }
+
+    @AfterMethod(alwaysRun = true)
+    public final void verifyProfileAfterScenario() {
+        if (branchProfile != null && setupFailure == null && driver != null) {
+            verifySelectedBranchProfile();
+        }
+    }
+
+    @Step("التحقق من إعداد الفرع المختار دون تغييره")
+    private void verifySelectedBranchProfile() {
+        if (branchProfile == null) return;
+        var actual =
+                Plugin_ERP.BranchProfiles.BranchProfileReader.capture(
+                        driver, Duration.ofSeconds(30));
+        var evidence = new org.json.JSONObject();
+        evidence.put("profile", branchProfile.name());
+        evidence.put("fingerprint", branchProfile.fingerprint());
+        evidence.put("expected", branchProfile.expected().fields());
+        evidence.put("actual", actual.fields());
+        io.qameta.allure.Allure.addAttachment(
+                "Branch profile preflight", "application/json", evidence.toString(2), ".json");
+        branchProfile.verify(actual);
+        Plugin_ERP.BranchProfiles.AdditionalTaxExpectation.capture().verify(driver);
     }
 
     protected WebDriver createDriver() {
@@ -82,6 +125,10 @@ public class BaseTest {
         } finally {
             driver = null;
             wait = null;
+            if (profileScope != null) {
+                profileScope.close();
+                profileScope = null;
+            }
         }
     }
 }

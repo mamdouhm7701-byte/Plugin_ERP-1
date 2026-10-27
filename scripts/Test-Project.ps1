@@ -3,10 +3,17 @@ param(
     [ValidateSet('Local', 'Acceptance', 'Regression', 'ParallelPilot', 'ParallelScreens', 'Smoke', 'Sanity', 'E2E', 'Qualification')]
     [string]$Mode = 'Local',
     [ValidateRange(1,6)][int]$Workers = 6,
-    [ValidateSet('LocalHeadless','Local')][string]$ExecutionType = 'LocalHeadless'
+    [ValidateSet('LocalHeadless','Local')][string]$ExecutionType = 'LocalHeadless',
+    [ValidatePattern('^$|^[a-z0-9][a-z0-9_-]{0,63}$')][string]$BranchProfile = '',
+    [switch]$ApplyBranchProfile,
+    [switch]$SelectBranchProfile,
+    [switch]$IncludeRestaurantAdditionalTaxSmoke
 )
 
 $ErrorActionPreference = 'Stop'
+if($IncludeRestaurantAdditionalTaxSmoke -and (-not $BranchProfile -or $Mode -notin @('Smoke','Qualification'))) {throw 'Restaurant additional-tax smoke requires an explicit profile and Smoke or Qualification mode.'}
+if($SelectBranchProfile -and -not $BranchProfile){throw 'Selecting a branch requires an explicit profile.'}
+if($ApplyBranchProfile -and (-not $BranchProfile -or $Mode -eq 'Local')) {throw 'Applying settings requires an explicit branch profile and a live mode.'}
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $runId = [Guid]::NewGuid().ToString('N')
 $runRoot = Join-Path $projectRoot "target/validation/$runId"
@@ -35,7 +42,7 @@ try {
     Write-Host "Validation mode: $Mode"
     Write-Host "Run output: $runRoot"
     # Never clean target: it can contain journals for unfinished ERP cleanup.
-    $localArgs = @('--batch-mode', '--no-transfer-progress', '-Pci',
+    $localArgs = @('--batch-mode', '--no-transfer-progress', '-Pci', '-Dbranch.profile=', '-Dbranch.profile.fingerprint=',
         "-Dallure.results.directory=$runRoot/local/allure-results",
         "-Dallure.report.directory=$runRoot/local/allure-report", 'verify')
     & mvn @localArgs *> (Join-Path $runRoot 'local.log')
@@ -48,7 +55,7 @@ try {
         throw 'Local validation failed; live tests were not started.'
     }
     Write-Host 'Local validation passed.'
-    if($Mode -in @('Qualification','Smoke','Sanity','E2E','Regression')) {
+    if($Mode -in @('Qualification','Smoke','Sanity','E2E','Regression') -or ($Mode -ne 'Local' -and $BranchProfile)) {
         $freeGB=if(Get-Command Get-CimInstance -ErrorAction SilentlyContinue) {
             (Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory/1MB
         } else {3.0}
@@ -62,11 +69,34 @@ try {
         if($LASTEXITCODE -ne 0){throw 'Could not resolve the Maven test runtime classpath.'}
         $runtimeClasspath=(Get-Content -LiteralPath (Join-Path $runRoot 'test-classpath.txt') -Raw).Trim()
     }
+    $profileArguments=@('-Dbranch.profile=', '-Dbranch.profile.fingerprint=')
+    $profileFingerprint=''
+    if($Mode -ne 'Local' -and $BranchProfile) {
+        $java=if($env:JAVA_HOME){Join-Path $env:JAVA_HOME 'bin/java.exe'}else{'java'}
+        $manifest=Join-Path $runRoot 'branch-profile.json'
+        & $java -cp "$projectRoot/target/classes;$runtimeClasspath" Plugin_ERP.BranchProfiles.BranchProfileCommand $BranchProfile $manifest
+        if($LASTEXITCODE -ne 0){throw 'Could not pin the selected branch profile.'}
+        $profileFingerprint=(Get-Content -LiteralPath $manifest -Raw | ConvertFrom-Json).fingerprint
+        $profileArguments=@("-Dbranch.profile=$BranchProfile", "-Dbranch.profile.fingerprint=$profileFingerprint")
+    }
+    $profileArguments += "-Dbranch.profile.select=$($SelectBranchProfile.IsPresent.ToString().ToLowerInvariant())"
+    if($ApplyBranchProfile) {
+        & $java @profileArguments "-DExecutionType=$ExecutionType" -cp "$projectRoot/target/test-classes;$projectRoot/target/classes;$runtimeClasspath" SuiteSupport.BranchSettingsCommand $BranchProfile (Join-Path $runRoot 'branch-settings') apply
+        if($LASTEXITCODE -ne 0){throw 'Branch settings were not verified; no live tests were started. Preserve the branch-settings evidence.'}
+    }
     if ($Mode -ne 'Local') {
         $levels = if ($Mode -eq 'Qualification') { @('Smoke', 'Sanity', 'E2E') } else { @($Mode) }
+        if($IncludeRestaurantAdditionalTaxSmoke){$levels += 'RestaurantAdditionalTaxSmoke'}
         $outcomes = @()
         foreach ($level in $levels) {
             $suite = switch ($level) {
+                'RestaurantAdditionalTaxSmoke' {
+                    if((Get-Content -LiteralPath $manifest -Raw | ConvertFrom-Json).expected.taxPolicy -eq 'ItemBased') {
+                        'src/test/resources/additional/standalone/smoke-restaurant-item-tax-testng.xml'
+                    } else {
+                        'src/test/resources/additional/standalone/smoke-restaurant-additional-testng.xml'
+                    }
+                }
                 'Acceptance' { 'src/test/resources/additional/standalone/acceptance-testng.xml' }
                 'ParallelPilot' { 'src/test/resources/additional/standalone/parallel-three-pilot-testng.xml' }
                 'ParallelScreens' { 'src/test/resources/additional/standalone/parallel-three-screens-testng.xml' }
@@ -85,8 +115,9 @@ try {
                 "-Dallure.report.directory=$levelRoot/allure-report",
                 "-Dsurefire.reportsDirectory=$levelRoot/surefire-reports",
                 "-Dsurefire.suiteXmlFiles=$suite", 'test')
+            $liveArgs=$profileArguments+$liveArgs
             if($level -in @('Smoke','Sanity','E2E','Regression')) {
-                & (Join-Path $PSScriptRoot 'Invoke-QualificationLevel.ps1') -Suite $suite -OutputRoot $levelRoot -Classpath $runtimeClasspath -Workers $effectiveWorkers -ExecutionType $ExecutionType
+                & (Join-Path $PSScriptRoot 'Invoke-QualificationLevel.ps1') -Suite $suite -OutputRoot $levelRoot -Classpath $runtimeClasspath -Workers $effectiveWorkers -ExecutionType $ExecutionType -BranchProfile $BranchProfile -BranchProfileFingerprint $profileFingerprint -SelectBranchProfile:$SelectBranchProfile
             } else {
                 & mvn @liveArgs *> (Join-Path $levelRoot 'live.log')
             }

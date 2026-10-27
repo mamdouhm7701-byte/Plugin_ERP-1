@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Explicit selected-branch validation. Existing regression and smoke selections stay unchanged. -->
+<suite name="Selected branch owned sales contracts" parallel="none"><test name="Owned sales document save and cleanup"><classes>
+<class name="Invoice.SalesInvoiceCoverageTest"><methods><include name="savesOwnedItemFromPicker"/></methods></class>
+<class name="Invoice.QuotationTest"><methods><include name="savesOwnedItemFromPicker"/></methods></class>
+<class name="Invoice.SalesOrderTest"><methods><include name="savesOwnedItemFromPicker"/></methods></class>
+<class name="Invoice.SalesReturnTest"><methods><include name="savesOwnedItemFromPicker"/></methods></class>
+</classes></test></suite>

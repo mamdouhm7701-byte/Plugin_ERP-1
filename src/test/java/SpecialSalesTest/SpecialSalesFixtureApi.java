@@ -6,6 +6,8 @@ import org.openqa.selenium.WebDriver;
 
 /** Browser transport with the existing session checks, timeouts and error responses. */
 final class SpecialSalesFixtureApi {
+    private final Plugin_ERP.BranchProfiles.BranchProfileGuard profileGuard =
+            Plugin_ERP.BranchProfiles.BranchProfileGuard.capture();
     private final WebDriver driver;
     private final Runnable contextGuard;
 
@@ -25,6 +27,7 @@ final class SpecialSalesFixtureApi {
 
     @SuppressWarnings("unchecked")
     Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
+        profileGuard.verify(driver);
         contextGuard.run();
         driver.manage()
                 .timeouts()

@@ -71,6 +71,19 @@ public final class RestaurantInvoicePage extends SpecialSalesPage {
         awaitTotals();
     }
 
+    @Step("اختيار نوع خصم حركة المطعم: {name}")
+    public void chooseMovementDiscountType(String name) {
+        var actions =
+                new Plugin_ERP.Util.FormInteractions(
+                        ready,
+                        element -> js("arguments[0].scrollIntoView({block:'center'})", element));
+        actions.choose(
+                By.xpath(
+                        "//div[@id='sidebar-invoice-add-payment']//span[normalize-space()='نوع الخصم']/parent::div/following-sibling::div[1]//input[@type='search']"),
+                name,
+                Plugin_ERP.Util.FormInteractions.OptionMatch.EXACT);
+    }
+
     @Step("فتح شاشة سداد الفاتورة")
     public void openPayment() {
         button("دفع");

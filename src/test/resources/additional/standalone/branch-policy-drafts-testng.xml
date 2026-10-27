@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Opt-in live, unsaved drafts. Requires current NetBased / Transaction and at least two items. -->
+<suite name="Branch policy unsaved sales drafts" parallel="none">
+    <test name="Current branch movement discount and VAT">
+        <classes><class name="Invoice.SalesNetBasedDraftTest"/><class name="Purches.PurchaseNetBasedDraftTest"/></classes>
+    </test>
+</suite>

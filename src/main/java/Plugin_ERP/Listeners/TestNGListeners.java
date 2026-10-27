@@ -166,6 +166,8 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
     @Override
     public void onTestStart(ITestResult result) {
         testStartTime.set(System.currentTimeMillis());
+        Plugin_ERP.Util.FailureVideoRecorder.begin(
+                result.getTestClass().getName() + "." + result.getName());
         var scenarioMethod = result.getMethod().getConstructorOrMethod().getMethod();
         String scenarioClass = result.getTestClass().getName();
         io.qameta.allure.Allure.getLifecycle()
@@ -196,11 +198,21 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
 
     @Override
     public void onTestSuccess(ITestResult result) {
+        Plugin_ERP.Util.FailureVideoRecorder.complete(false);
         Plugin_ERP.Util.Allur.ScenarioAssertions.end();
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
+        Path recording = Plugin_ERP.Util.FailureVideoRecorder.complete(true);
+        if (recording != null) {
+            try (var video = Files.newInputStream(recording)) {
+                io.qameta.allure.Allure.addAttachment(
+                        "Failed test browser recording", "video/mp4", video, ".mp4");
+            } catch (java.io.IOException failure) {
+                LogUtils.warn("Could not attach failure video; file retained locally");
+            }
+        }
         Plugin_ERP.Util.Allur.ScenarioAssertions.end();
         try {
             Plugin_ERP.Util.Allur.ScenarioFailureReport.attach(result);
@@ -213,6 +225,7 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
 
     @Override
     public void onTestSkipped(ITestResult result) {
+        Plugin_ERP.Util.FailureVideoRecorder.complete(false);
         Plugin_ERP.Util.Allur.ScenarioAssertions.end();
     }
 

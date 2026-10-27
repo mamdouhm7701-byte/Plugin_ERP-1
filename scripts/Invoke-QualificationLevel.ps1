@@ -4,14 +4,26 @@ param(
     [Parameter(Mandatory)][string]$OutputRoot,
     [Parameter(Mandatory)][string]$Classpath,
     [ValidateRange(1,6)][int]$Workers=3,
-    [ValidateSet('LocalHeadless','Local')][string]$ExecutionType='LocalHeadless'
+    [ValidateSet('LocalHeadless','Local')][string]$ExecutionType='LocalHeadless',
+    [ValidatePattern('^$|^[a-z0-9][a-z0-9_-]{0,63}$')][string]$BranchProfile='',
+    [string]$BranchProfileFingerprint='',
+    [switch]$SelectBranchProfile
 )
 $ErrorActionPreference='Stop'
 $projectRoot=Split-Path -Parent $PSScriptRoot
 $java=if($env:JAVA_HOME){Join-Path $env:JAVA_HOME 'bin/java.exe'}else{'java'}
 $planRoot=Join-Path $OutputRoot 'plan'
 $runtimeClasspath="$projectRoot/target/test-classes;$projectRoot/target/classes;$Classpath"
-& $java -cp $runtimeClasspath SuiteSupport.ParallelSuitePlanner $Suite $planRoot $Workers
+$profileArguments=@('-Dbranch.profile=', '-Dbranch.profile.fingerprint=')
+if($BranchProfile) {
+    $manifest=Join-Path $OutputRoot 'branch-profile.json'
+    & $java -cp $runtimeClasspath Plugin_ERP.BranchProfiles.BranchProfileCommand $BranchProfile $manifest $BranchProfileFingerprint
+    if($LASTEXITCODE -ne 0){throw 'Selected branch profile changed or could not be pinned.'}
+    $BranchProfileFingerprint=(Get-Content -LiteralPath $manifest -Raw | ConvertFrom-Json).fingerprint
+    $profileArguments=@("-Dbranch.profile=$BranchProfile", "-Dbranch.profile.fingerprint=$BranchProfileFingerprint")
+} elseif($BranchProfileFingerprint -or (Test-Path -LiteralPath (Join-Path $OutputRoot 'branch-profile.json'))) {throw 'This run requires its original branch profile name and fingerprint.'}
+$profileArguments += "-Dbranch.profile.select=$($SelectBranchProfile.IsPresent.ToString().ToLowerInvariant())"
+& $java @profileArguments -cp $runtimeClasspath SuiteSupport.ParallelSuitePlanner $Suite $planRoot $Workers
 if($LASTEXITCODE -ne 0){throw 'Could not prepare a coverage-preserving parallel plan.'}
 $plan=Get-Content -LiteralPath (Join-Path $planRoot 'plan.json') -Raw | ConvertFrom-Json
 $outcomes=@()
@@ -25,10 +37,11 @@ foreach($stage in @(
     Write-Host "Stage $($stage.Name): $($stage.Count) classes; parallel worker limit $Workers."
     $started=[DateTimeOffset]::UtcNow
     $arguments=@('--batch-mode','--no-transfer-progress',"-DExecutionType=$ExecutionType",
-        '-Dvideo.enabled=false','-Dallure.report.generate=false','-Dallure.report.open=false',
+        '-Dallure.report.generate=false','-Dallure.report.open=false',
         '-DforkCount=1','-DreuseForks=true',"-Dallure.results.directory=$folder/allure-results",
         "-Dallure.report.directory=$folder/allure-report","-Dsurefire.reportsDirectory=$folder/surefire-reports",
         "-Dsurefire.suiteXmlFiles=$(Join-Path $planRoot ($stage.Name+'.xml'))",'test')
+    $arguments=$profileArguments+$arguments
     & mvn @arguments *> (Join-Path $folder 'live.log')
     $code=$LASTEXITCODE
     $outcomes += [pscustomobject]@{Stage=$stage.Name;ExitCode=$code;StartedUtc=$started.ToString('o');FinishedUtc=[DateTimeOffset]::UtcNow.ToString('o')}

@@ -117,7 +117,7 @@ final class PurchaseTestData implements AutoCloseable {
             var path = java.nio.file.Path.of("target", folder, suffix + ".json");
             if (!java.nio.file.Files.exists(path)) continue;
             for (Object value :
-                    new org.json.JSONArray(java.nio.file.Files.readString(path)).toList()) {
+                    new org.json.JSONArray(TestSupport.FixtureJournals.read(path)).toList()) {
                 Map<String, Object> row = (Map<String, Object>) value;
                 if (!data.origin.equals(row.get("origin"))
                         || !java.util.Objects.equals(data.sessionBranchId, row.get("branchId")))

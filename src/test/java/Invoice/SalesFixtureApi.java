@@ -6,6 +6,8 @@ import org.openqa.selenium.WebDriver;
 
 /** Authenticated browser transport; the owner supplies the origin/branch guard before each call. */
 final class SalesFixtureApi {
+    private final Plugin_ERP.BranchProfiles.BranchProfileGuard profileGuard =
+            Plugin_ERP.BranchProfiles.BranchProfileGuard.capture();
     private final WebDriver driver;
     private final String origin;
     private final Object sessionBranchId;
@@ -30,6 +32,7 @@ final class SalesFixtureApi {
 
     @SuppressWarnings("unchecked")
     Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
+        profileGuard.verify(driver);
         contextGuard.run();
         driver.manage()
                 .timeouts()

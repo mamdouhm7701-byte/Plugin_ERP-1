@@ -6,6 +6,8 @@ import org.openqa.selenium.WebDriver;
 
 /** Browser transport; ownership, recovery and retry policy remain with PurchaseTestData. */
 final class PurchaseFixtureApi {
+    private final Plugin_ERP.BranchProfiles.BranchProfileGuard profileGuard =
+            Plugin_ERP.BranchProfiles.BranchProfileGuard.capture();
     private final WebDriver driver;
     private final String origin;
     private final Object sessionBranchId;
@@ -30,6 +32,7 @@ final class PurchaseFixtureApi {
 
     @SuppressWarnings("unchecked")
     Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
+        profileGuard.verify(driver);
         contextGuard.run();
         driver.manage()
                 .timeouts()

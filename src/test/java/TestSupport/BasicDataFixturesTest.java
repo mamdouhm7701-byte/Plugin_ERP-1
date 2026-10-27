@@ -5,6 +5,20 @@ import org.testng.annotations.Test;
 
 public class BasicDataFixturesTest {
     @Test
+    public void activitySpecificMastersKeepForeignRowsDuringCleanup() {
+        var api = new BasicDataFixturesApiStub();
+        api.records.put(
+                "foreign-casting",
+                BasicDataFixtures.fields(
+                        "id", "foreign-casting", "arabicName", "Existing business casting type"));
+        try (var data = new BasicDataFixtures(api.driver())) {
+            data.fixture("owned-casting", "CastingTypes", BasicDataFixtures.fields());
+            data.fixture("owned-color", "CarColors", BasicDataFixtures.fields());
+        }
+        Assert.assertEquals(api.records.keySet(), java.util.Set.of("foreign-casting"));
+    }
+
+    @Test
     public void separateCasesAndCleanOnlyOwned() {
         var stub = new BasicDataFixturesApiStub();
         var data = new BasicDataFixtures(stub.driver());

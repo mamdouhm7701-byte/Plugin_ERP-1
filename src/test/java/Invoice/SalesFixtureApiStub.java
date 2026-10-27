@@ -15,6 +15,7 @@ final class SalesFixtureApiStub {
     int branchUnavailableReads;
     boolean usedAccountTree;
     boolean omitMovementListNotes;
+    boolean rejectConcreteInvoiceWhileDeliveryExists;
     boolean customerGetAlways500, customerGet500WhenMissing;
     final Map<String, Map<String, Object>> records = new LinkedHashMap<>();
     final List<String> deletes = new ArrayList<>();
@@ -198,6 +199,12 @@ final class SalesFixtureApiStub {
                                                     "error", "Missing owned record", "status", 404);
         }
         deletes.add(id);
+        if (rejectConcreteInvoiceWhileDeliveryExists
+                && endpoint.equals("ItemTransactions-ConcreteSales")
+                && records.get(id).get("concreteDeliveryOrderIdsList") instanceof List<?> links
+                && links.stream().anyMatch(link -> records.containsKey(String.valueOf(link)))) {
+            return Map.of("error", "Concrete invoice is used by its delivery", "status", 400);
+        }
         if (crashAtDelete > 0 && deletes.size() == crashAtDelete)
             throw new Error("Simulated process interruption");
         if (endpoint.equals("ItemTransactions-Sales") && rejectMovement)

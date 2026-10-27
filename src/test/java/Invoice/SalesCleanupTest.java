@@ -11,6 +11,65 @@ import org.testng.annotations.Test;
 
 public class SalesCleanupTest {
     @Test
+    public void concreteDeliveryIsRemovedBeforeItsLinkedInvoiceAndReservation() {
+        var api = new SalesFixtureApiStub();
+        api.rejectConcreteInvoiceWhileDeliveryExists = true;
+        var data = new SalesTestData(api.driver());
+        var item = data.item(1);
+        var reservation =
+                SalesTestData.fields(
+                        "notes",
+                        "QA-SL-owned-reservation",
+                        "storeId",
+                        data.store(1).id(),
+                        "lines",
+                        List.of(Map.of("itemId", item.id())));
+        var delivery =
+                SalesTestData.fields(
+                        "notes",
+                        "QA-SL-owned-delivery",
+                        "storeId",
+                        data.store(1).id(),
+                        "sourceTransactionId",
+                        "owned-reservation",
+                        "lines",
+                        List.of(Map.of("itemId", item.id())));
+        var invoice =
+                SalesTestData.fields(
+                        "notes",
+                        "QA-SL-owned-concrete-invoice",
+                        "storeId",
+                        data.store(1).id(),
+                        "concreteDeliveryOrderIdsList",
+                        List.of("owned-delivery"),
+                        "lines",
+                        List.of(Map.of("itemId", item.id())));
+        api.records.put("owned-reservation", reservation);
+        data.track(
+                "ItemTransactions-Reservations",
+                "owned-reservation",
+                "QA-SL-owned-reservation",
+                reservation);
+        api.records.put("owned-delivery", delivery);
+        data.track("ConcreteDelivery", "owned-delivery", "QA-SL-owned-delivery", delivery);
+        api.records.put("owned-concrete-invoice", invoice);
+        data.track(
+                "ItemTransactions-ConcreteSales",
+                "owned-concrete-invoice",
+                "QA-SL-owned-concrete-invoice",
+                invoice);
+        api.records.put("foreign-delivery", Map.of("notes", "Historical delivery"));
+        data.close();
+        Assert.assertTrue(
+                api.deletes.indexOf("owned-delivery")
+                        < api.deletes.indexOf("owned-concrete-invoice"));
+        Assert.assertTrue(
+                api.deletes.indexOf("owned-concrete-invoice")
+                        < api.deletes.indexOf("owned-reservation"));
+        Assert.assertEquals(api.records.keySet(), java.util.Set.of("foreign-delivery"));
+    }
+
+    @Test
     public void ownedConcreteReservationKeepsMarkerAndRecoveryIdentity() {
         var api = new SalesFixtureApiStub();
         try (var data = new SalesTestData(api.driver())) {

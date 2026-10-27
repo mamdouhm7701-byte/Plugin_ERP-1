@@ -26,6 +26,23 @@ try {
         if($existing.Count){throw 'A live Maven run is already active for this project.'}
     }
     $env:REPORT_MAIL_ENABLED='false'
+    $profileArguments=@('-Dbranch.profile=', '-Dbranch.profile.fingerprint=')
+    $manifest=Join-Path $RunRoot 'branch-profile.json'
+    if($plan.branchProfile -and -not (Test-Path -LiteralPath $manifest)) {throw 'Profiled plan is missing its original manifest.'}
+    if(Test-Path -LiteralPath $manifest) {
+        $profile=Get-Content -LiteralPath $manifest -Raw | ConvertFrom-Json
+        if($plan.branchProfile -and ($plan.branchProfile.name -ne $profile.name -or $plan.branchProfile.fingerprint -ne $profile.fingerprint)) {throw 'Plan and branch profile manifest differ.'}
+        if(-not $profile.name -or $profile.fingerprint -notmatch '^[a-f0-9]{64}$') {throw 'Invalid branch profile manifest; preserve the run evidence.'}
+        & mvn '--batch-mode' '--no-transfer-progress' 'compile' 'dependency:build-classpath' "-Dmdep.outputFile=$RunRoot/resume-classpath.txt" *> (Join-Path $RunRoot 'resume-prepare.log')
+        if($LASTEXITCODE -ne 0){throw 'Could not prepare profile validation for recovery.'}
+        $dependencies=(Get-Content -LiteralPath (Join-Path $RunRoot 'resume-classpath.txt') -Raw).Trim()
+        $java=if($env:JAVA_HOME){Join-Path $env:JAVA_HOME 'bin/java.exe'}else{'java'}
+        & $java -cp "$projectRoot/target/classes;$dependencies" Plugin_ERP.BranchProfiles.BranchProfileCommand $profile.name $manifest $profile.fingerprint
+        if($LASTEXITCODE -ne 0){throw 'Profile changed since the original run; recovery was not started.'}
+        $profileArguments=@("-Dbranch.profile=$($profile.name)", "-Dbranch.profile.fingerprint=$($profile.fingerprint)")
+    }
+    $selectBranch=[bool]($plan.branchProfile -and $plan.branchProfile.selectBranch)
+    $profileArguments += "-Dbranch.profile.select=$($selectBranch.ToString().ToLowerInvariant())"
     foreach($stage in $stages) {
         if($stage.Count -eq 0){continue}
         $folder=Join-Path $RunRoot $stage.Name
@@ -33,10 +50,11 @@ try {
         $started=[DateTimeOffset]::UtcNow
         Write-Host "Starting $($stage.Name); configured parallel workers: $($plan.workers)."
         $arguments=@('-o','--batch-mode','--no-transfer-progress','-DExecutionType=LocalHeadless',
-            '-Dvideo.enabled=false','-Dallure.report.generate=false','-Dallure.report.open=false',
+            '-Dallure.report.generate=false','-Dallure.report.open=false',
             '-DforkCount=1','-DreuseForks=true',"-Dallure.results.directory=$folder/allure-results",
             "-Dallure.report.directory=$folder/allure-report","-Dsurefire.reportsDirectory=$folder/surefire-reports",
             "-Dsurefire.suiteXmlFiles=$(Join-Path $RunRoot $stage.Suite)",'test')
+        $arguments=$profileArguments+$arguments
         & mvn @arguments *> (Join-Path $folder 'live.log')
         $code=$LASTEXITCODE
         $outcomes += [pscustomobject]@{Stage=$stage.Name;ExitCode=$code;StartedUtc=$started.ToString('o');FinishedUtc=[DateTimeOffset]::UtcNow.ToString('o')}

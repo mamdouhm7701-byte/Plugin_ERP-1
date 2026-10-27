@@ -26,6 +26,10 @@ final class SalesTestData implements AutoCloseable {
     private static final java.util.Set<String> MOVEMENTS =
             java.util.Set.of(
                     "ItemTransactions-Sales",
+                    "ItemTransactions-Contract",
+                    "ConcreteDelivery",
+                    "ItemTransactions-ConcreteSales",
+                    "ItemTransactions-Reservations",
                     "ItemTransactions-quotation",
                     "ItemTransactions-SalesOrder",
                     "ItemTransactions-ReturnSales");
@@ -120,7 +124,7 @@ final class SalesTestData implements AutoCloseable {
             var path = java.nio.file.Path.of("target", folder, suffix + ".json");
             if (!java.nio.file.Files.exists(path)) continue;
             for (Object value :
-                    new org.json.JSONArray(java.nio.file.Files.readString(path)).toList()) {
+                    new org.json.JSONArray(TestSupport.FixtureJournals.read(path)).toList()) {
                 Map<String, Object> row = (Map<String, Object>) value;
                 if (!data.origin.equals(row.get("origin"))
                         || !java.util.Objects.equals(data.sessionBranchId, row.get("branchId")))
@@ -855,8 +859,16 @@ final class SalesTestData implements AutoCloseable {
                     matches.add(candidate);
                 }
             } else {
-                String list = "SalesTransactions";
-                String type = endpoint.substring("ItemTransactions-".length());
+                String list =
+                        endpoint.equals("ConcreteDelivery")
+                                ? "ConcreteDelivery"
+                                : "SalesTransactions";
+                String type =
+                        endpoint.equals("ConcreteDelivery")
+                                ? "ConcreteDelivery"
+                                : endpoint.equals("ItemTransactions-ConcreteSales")
+                                        ? "Sales"
+                                        : endpoint.substring("ItemTransactions-".length());
                 java.util.Set<Object> seen = new java.util.HashSet<>();
                 for (int page = 1; ; page++) {
                     Object entity =

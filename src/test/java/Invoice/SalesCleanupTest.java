@@ -11,6 +11,147 @@ import org.testng.annotations.Test;
 
 public class SalesCleanupTest {
     @Test
+    public void ownedConcreteReservationKeepsMarkerAndRecoveryIdentity() {
+        var api = new SalesFixtureApiStub();
+        try (var data = new SalesTestData(api.driver())) {
+            String marker = "QA-SL-owned-concrete-reservation";
+            var record =
+                    data.fixture(
+                            marker,
+                            "ItemTransactions-Reservations",
+                            SalesTestData.fields(
+                                    "storeId",
+                                    data.store(1).id(),
+                                    "transactionType",
+                                    "Reservations",
+                                    "lines",
+                                    List.of()));
+            Assert.assertEquals(data.read(record).get("notes"), marker);
+            Assert.assertTrue(
+                    data.documentIdentities().contains(record.endpoint() + "/" + record.id()));
+        }
+        Assert.assertTrue(api.records.isEmpty());
+    }
+
+    @Test
+    public void concreteSalesAliasRecoversThroughSalesListWithoutSummaryNotes() {
+        var api = new SalesFixtureApiStub();
+        api.omitMovementListNotes = true;
+        var data = new SalesTestData(api.driver());
+        String marker = "QA-SL-concrete-sales-recovery";
+        var item = data.item(1);
+        var values =
+                SalesTestData.fields(
+                        "notes",
+                        marker,
+                        "storeId",
+                        data.store(1).id(),
+                        "transactionType",
+                        "Sales",
+                        "isConcrete",
+                        true,
+                        "lines",
+                        List.of(
+                                SalesTestData.fields(
+                                        "itemId",
+                                        item.id(),
+                                        "unitId",
+                                        data.unit(1).id(),
+                                        "quantity",
+                                        1)));
+        var stored = new LinkedHashMap<>(values);
+        stored.put("id", "concrete-invoice-ui");
+        api.records.put("concrete-invoice-ui", stored);
+        data.rememberAttempts(
+                List.of(
+                        SalesTestData.fields(
+                                "endpoint", "ItemTransactions-ConcreteSales", "values", values)),
+                List.of(),
+                marker);
+        data.close();
+        Assert.assertTrue(api.records.isEmpty());
+    }
+
+    @Test
+    public void nativeConcreteDeliveryUncertainCreateIsRecoveredBeforeParentsAreRemoved() {
+        var api = new SalesFixtureApiStub();
+        var data = new SalesTestData(api.driver());
+        String marker = "QA-SL-concrete-native-recovery";
+        var item = data.item(1);
+        var values =
+                SalesTestData.fields(
+                        "notes",
+                        marker,
+                        "storeId",
+                        data.store(1).id(),
+                        "transactionType",
+                        "ConcreteDelivery",
+                        "lines",
+                        List.of(
+                                SalesTestData.fields(
+                                        "itemId",
+                                        item.id(),
+                                        "unitId",
+                                        data.unit(1).id(),
+                                        "quantity",
+                                        1)));
+        var stored = new LinkedHashMap<>(values);
+        stored.put("id", "delivery-ui");
+        api.records.put("delivery-ui", stored);
+        api.records.put(
+                "foreign-delivery",
+                SalesTestData.fields(
+                        "id",
+                        "foreign-delivery",
+                        "notes",
+                        "Existing delivery",
+                        "transactionType",
+                        "ConcreteDelivery",
+                        "storeId",
+                        "foreign-store",
+                        "lines",
+                        List.of()));
+        data.rememberAttempts(
+                List.of(SalesTestData.fields("endpoint", "ConcreteDelivery", "values", values)),
+                List.of(),
+                marker);
+        data.close();
+        Assert.assertEquals(api.records.keySet(), java.util.Set.of("foreign-delivery"));
+    }
+
+    @Test
+    public void ownedConstructionContractKeepsItsMarkerAndRecoveryIdentity() {
+        var api = new SalesFixtureApiStub();
+        try (var data = new SalesTestData(api.driver())) {
+            String marker = "QA-SL-owned-contract-recovery";
+            var contract =
+                    data.fixture(
+                            marker,
+                            "ItemTransactions-Contract",
+                            SalesTestData.fields(
+                                    "storeId", data.store(1).id(), "lines", List.of()));
+            Assert.assertEquals(data.read(contract).get("notes"), marker);
+            Assert.assertTrue(
+                    data.documentIdentities()
+                            .contains("ItemTransactions-Contract/" + contract.id()));
+            data.rememberAttempts(
+                    List.of(
+                            SalesTestData.fields(
+                                    "endpoint", contract.endpoint(), "values", contract.values())),
+                    List.of(
+                            SalesTestData.fields(
+                                    "endpoint",
+                                    contract.endpoint(),
+                                    "id",
+                                    contract.id(),
+                                    "values",
+                                    contract.values())),
+                    marker);
+        }
+        Assert.assertTrue(api.records.isEmpty());
+    }
+
+    @Test
     @Story("احتفاظ التنظيف بمحاولة الإنشاء المتأخرة وتبعياتها حتى ظهور المستند")
     public void delayedSeedCreateRetainsParentsUntilItsDocumentCanBeRecovered() throws Exception {
         SalesFixtureApiStub api = new SalesFixtureApiStub();

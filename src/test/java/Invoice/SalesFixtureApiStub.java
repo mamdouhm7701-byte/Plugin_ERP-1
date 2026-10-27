@@ -14,6 +14,7 @@ final class SalesFixtureApiStub {
     String origin = "offline", activeBranch = "branch-test";
     int branchUnavailableReads;
     boolean usedAccountTree;
+    boolean omitMovementListNotes;
     boolean customerGetAlways500, customerGet500WhenMissing;
     final Map<String, Map<String, Object>> records = new LinkedHashMap<>();
     final List<String> deletes = new ArrayList<>();
@@ -134,9 +135,25 @@ final class SalesFixtureApiStub {
                             "AccountsTree",
                             new ArrayList<>(records.values())));
         }
-        if (action.equals("get") && endpoint.startsWith("SalesTransactions?")) {
+        if (action.equals("get")
+                && (endpoint.startsWith("SalesTransactions?")
+                        || endpoint.startsWith("ConcreteDelivery?"))) {
             if (failMovementLookup) return Map.of("error", "Lookup unavailable", "status", 503);
-            var rows = records.values().stream().filter(r -> r.containsKey("lines")).toList();
+            var rows =
+                    records.values().stream()
+                            .filter(r -> r.containsKey("lines"))
+                            .filter(
+                                    r ->
+                                            !endpoint.startsWith("ConcreteDelivery?")
+                                                    || "ConcreteDelivery"
+                                                            .equals(r.get("transactionType")))
+                            .map(
+                                    r -> {
+                                        var summary = new LinkedHashMap<>(r);
+                                        if (omitMovementListNotes) summary.remove("notes");
+                                        return summary;
+                                    })
+                            .toList();
             return Map.of("entity", Map.of("pageData", rows, "totalRecords", rows.size()));
         }
         if (action.equals("get") && endpoint.contains("?")) {

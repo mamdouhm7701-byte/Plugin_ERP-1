@@ -14,10 +14,12 @@ import org.testng.xml.internal.Parser;
 public class NativeInteractiveSuiteListener implements IAlterSuiteListener, IExecutionListener {
     private FileChannel channel;
     private FileLock lease;
+    private String previousProfileFingerprint;
+    private boolean profilePinned;
 
     static int safeWorkers(int requested, double freeGb, int cpus) {
         if (requested < 1 || requested > 6)
-            throw new IllegalArgumentException("Choose 1–6 browsers");
+            throw new IllegalArgumentException("Choose 1â€“6 browsers");
         int memory = freeGb >= 6 ? 6 : freeGb >= 4.5 ? 4 : freeGb >= 2.75 ? 3 : freeGb >= 2 ? 2 : 1;
         return Math.min(requested, Math.min(memory, Math.max(1, cpus / 2)));
     }
@@ -124,9 +126,20 @@ public class NativeInteractiveSuiteListener implements IAlterSuiteListener, IExe
             int workers =
                     safeWorkers(requested, freeGb, Runtime.getRuntime().availableProcessors());
             Path output = project.resolve("target/validation/native-" + UUID.randomUUID());
+            var profile = Plugin_ERP.BranchProfiles.BranchProfiles.selected();
+            if (profile.isPresent()) {
+                var selected = profile.orElseThrow();
+                Plugin_ERP.BranchProfiles.BranchProfileCommand.write(
+                        selected.name(),
+                        project.resolve("config/branch-profiles"),
+                        output.resolve("branch-profile.json"),
+                        selected.fingerprint());
+                previousProfileFingerprint = System.getProperty("branch.profile.fingerprint");
+                System.setProperty("branch.profile.fingerprint", selected.fingerprint());
+                profilePinned = true;
+            }
             List<XmlSuite> planned = selectedSuites(project, choice[0], workers, output);
             System.setProperty("ExecutionType", InteractiveTestLauncher.executionType(choice[2]));
-            System.setProperty("video.enabled", "false");
             suites.clear();
             suites.addAll(planned);
             System.out.printf(
@@ -146,6 +159,12 @@ public class NativeInteractiveSuiteListener implements IAlterSuiteListener, IExe
     }
 
     private synchronized void release() {
+        if (profilePinned) {
+            if (previousProfileFingerprint == null)
+                System.clearProperty("branch.profile.fingerprint");
+            else System.setProperty("branch.profile.fingerprint", previousProfileFingerprint);
+            profilePinned = false;
+        }
         try {
             if (lease != null && lease.isValid()) lease.release();
         } catch (java.io.IOException failure) {

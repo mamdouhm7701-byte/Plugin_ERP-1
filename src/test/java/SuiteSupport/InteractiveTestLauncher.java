@@ -44,6 +44,22 @@ public final class InteractiveTestLauncher {
         return arguments;
     }
 
+    static List<String> command(
+            Path powershell,
+            Path project,
+            String level,
+            int workers,
+            String displayMode,
+            String profile) {
+        var arguments = new ArrayList<>(command(powershell, project, level, workers, displayMode));
+        if (profile != null && !profile.isBlank()) {
+            if (!profile.matches("[a-z0-9][a-z0-9_-]{0,63}"))
+                throw new IllegalArgumentException("Invalid branch profile name");
+            arguments.addAll(List.of("-BranchProfile", profile));
+        }
+        return arguments;
+    }
+
     private static Path powershell() {
         List<Path> candidates = new ArrayList<>();
         for (String directory :
@@ -117,7 +133,7 @@ public final class InteractiveTestLauncher {
                     JPanel panel = new JPanel(new GridLayout(0, 1, 6, 6));
                     panel.add(new JLabel("Test level"));
                     panel.add(level);
-                    panel.add(new JLabel("Maximum parallel browsers (1–6)"));
+                    panel.add(new JLabel("Maximum parallel browsers (1â€“6)"));
                     panel.add(workers);
                     panel.add(new JLabel("Browser display"));
                     panel.add(displayMode);
@@ -191,7 +207,8 @@ public final class InteractiveTestLauncher {
                                         project,
                                         selected[0],
                                         Integer.parseInt(selected[1]),
-                                        selected[2]))
+                                        selected[2],
+                                        System.getProperty("branch.profile")))
                         .directory(project.toFile())
                         .inheritIO();
         builder.environment().put("JAVA_HOME", System.getProperty("java.home"));

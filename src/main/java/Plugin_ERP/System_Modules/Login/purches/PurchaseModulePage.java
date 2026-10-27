@@ -165,6 +165,12 @@ public class PurchaseModulePage extends PurchaseListPage {
         return itemSelection.puOwnedItemCached(name);
     }
 
+    @Step("إضافة صنفين موجودين إلى مسودة المشتريات دون حفظ المستند")
+    public List<String> puAddFirstTwoExistingItems() {
+        return Plugin_ERP.System_Modules.Login.DraftItemSelection.selectTwo(
+                driver, ready, () -> puButton("إضافة أصناف"));
+    }
+
     @Step("إضافة الصنف من قائمة الأصناف: {name}")
     public void puAddPicker(String name) {
         itemSelection.puAddPicker(name);

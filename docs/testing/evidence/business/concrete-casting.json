@@ -1,0 +1,27 @@
+{
+  "activity": "Concrete",
+  "route": "#/castingTypes",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "977d08a950ba7e5d",
+  "profileFingerprint": "df67c274ab907e71e03bd7b56280f7025062f29a2becd768d09c297e9f5f7165",
+  "profile": "demo-concrete-reference",
+  "policies": {
+    "stocktakingMethod": "Periodic",
+    "branchId": "977d08a950ba7e5d",
+    "discountLevel": "Transaction",
+    "activityType": "Concrete",
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "taxPolicy": "NetBased"
+  },
+  "caseClass": "CoverageTest.ActivityMasterLifecycleTest",
+  "journeys": [
+    "Server-code master: create/read/reopen/update with same ID/code; cancel delete then confirm delete"
+  ],
+  "evidenceLog": "target/concrete-master-live.log",
+  "cleanupJournal": "target/basic-data-fixtures/3f8e45b9-3e3.json",
+  "resultFiles": 1,
+  "capturedFromVerifiedRun": true
+}

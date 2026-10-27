@@ -1,0 +1,28 @@
+{
+  "activity": "Public",
+  "route": "#/invoice/new",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "0936a120f7983b52",
+  "profileFingerprint": "69bd22deaeaf049ac75b34f2e7c8ea9e79b78337cb94460d6eef31840c26d9f3",
+  "profile": "business-2550e18b21c80bee",
+  "policies": {
+    "stocktakingMethod": "Periodic",
+    "branchId": "0936a120f7983b52",
+    "discountLevel": "Transaction",
+    "activityType": "Public",
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "taxPolicy": "ItemBased"
+  },
+  "caseClass": "Invoice.SelectedBranchSalesPolicyTest",
+  "journeys": [
+    "ItemBased: taxable100 + exempt100, VAT15 and net215, saved/read/stock",
+    "Single-item movement discount10: VAT13.5 and net103.5, saved/read/stock"
+  ],
+  "evidenceLog": "target/native-business-public-itembased-live.log",
+  "cleanupJournal": "target/sales-fixtures/b2c04899-1af.json",
+  "resultFiles": 3,
+  "capturedFromVerifiedRun": true
+}

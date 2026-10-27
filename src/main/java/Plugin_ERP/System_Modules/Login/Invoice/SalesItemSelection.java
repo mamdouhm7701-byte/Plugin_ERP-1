@@ -164,4 +164,9 @@ final class SalesItemSelection {
                         d.findElements(By.cssSelector(".modal.show")).stream()
                                 .noneMatch(WebElement::isDisplayed));
     }
+
+    List<String> slAddFirstTwoExistingItems() {
+        return Plugin_ERP.System_Modules.Login.DraftItemSelection.selectTwo(
+                driver, ready, () -> page.slButton("إضافة أصناف"));
+    }
 }

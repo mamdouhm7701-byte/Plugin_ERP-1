@@ -138,6 +138,20 @@ public final class ParallelSuitePlanner {
                 exclusiveSuite.toXml(),
                 StandardCharsets.UTF_8);
         var manifest = new LinkedHashMap<String, Object>();
+        Plugin_ERP.BranchProfiles.BranchProfiles.selected()
+                .ifPresent(
+                        profile ->
+                                manifest.put(
+                                        "branchProfile",
+                                        Map.of(
+                                                "name",
+                                                profile.name(),
+                                                "fingerprint",
+                                                profile.fingerprint(),
+                                                "selectBranch",
+                                                Boolean.parseBoolean(
+                                                        Plugin_ERP.Util.PropertyReader.getProperty(
+                                                                "branch.profile.select")))));
         manifest.put("source", sourceSuite.toString());
         manifest.put("workers", workers);
         manifest.put("originalCases", originalCases);

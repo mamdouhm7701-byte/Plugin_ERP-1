@@ -79,7 +79,7 @@ final class SpecialSalesTestData implements AutoCloseable {
         var path = java.nio.file.Path.of("target", "special-sales-fixtures", suffix + ".json");
         if (java.nio.file.Files.exists(path))
             for (Object value :
-                    new org.json.JSONArray(java.nio.file.Files.readString(path)).toList()) {
+                    new org.json.JSONArray(TestSupport.FixtureJournals.read(path)).toList()) {
                 var row = (Map<String, Object>) value;
                 data.session.verify(row);
                 String endpoint = (String) row.get("endpoint"), name = (String) row.get("name");
@@ -92,6 +92,7 @@ final class SpecialSalesTestData implements AutoCloseable {
                                         "Stores",
                                         "Items",
                                         "PriceLists",
+                                        "DiscountTypes",
                                         "Customers",
                                         "Banks",
                                         "Safes",
@@ -120,6 +121,7 @@ final class SpecialSalesTestData implements AutoCloseable {
                         "Stores",
                         "Items",
                         "PriceLists",
+                        "DiscountTypes",
                         "Customers",
                         "Banks",
                         "Safes",

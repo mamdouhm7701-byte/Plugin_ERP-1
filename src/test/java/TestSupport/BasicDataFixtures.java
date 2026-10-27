@@ -36,6 +36,8 @@ public final class BasicDataFixtures implements AutoCloseable {
                     "SafeTransactions",
                     "users",
                     "Tables",
+                    "CarColors",
+                    "CastingTypes",
                     "AccountGroups",
                     "CostCenters",
                     "PriceLists",
@@ -142,7 +144,7 @@ public final class BasicDataFixtures implements AutoCloseable {
         var path = java.nio.file.Path.of("target", "basic-data-fixtures", suffix + ".json");
         if (java.nio.file.Files.exists(path))
             for (Object value :
-                    new org.json.JSONArray(java.nio.file.Files.readString(path)).toList()) {
+                    new org.json.JSONArray(TestSupport.FixtureJournals.read(path)).toList()) {
                 var row = (Map<String, Object>) value;
                 data.session.verify(row);
                 String endpoint = (String) row.get("endpoint"), name = (String) row.get("name");
@@ -163,7 +165,7 @@ public final class BasicDataFixtures implements AutoCloseable {
         var attempts = java.nio.file.Path.of("target", "basic-data-attempts", suffix + ".json");
         if (java.nio.file.Files.exists(attempts))
             for (Object value :
-                    new org.json.JSONArray(java.nio.file.Files.readString(attempts)).toList()) {
+                    new org.json.JSONArray(TestSupport.FixtureJournals.read(attempts)).toList()) {
                 if (!(value instanceof Map<?, ?> row)
                         || !(row.get("name") instanceof String name)
                         || !name.endsWith("-" + suffix))

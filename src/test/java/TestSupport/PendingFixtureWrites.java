@@ -45,7 +45,7 @@ public final class PendingFixtureWrites {
     @SuppressWarnings("unchecked")
     public void resume(Set<String> allowed, String prefix) throws java.io.IOException {
         if (!Files.exists(path)) return;
-        for (Object value : new org.json.JSONArray(Files.readString(path)).toList()) {
+        for (Object value : new org.json.JSONArray(FixtureJournals.read(path)).toList()) {
             var row = (Map<String, Object>) value;
             session.verify(row);
             if (!(row.get("name") instanceof String name)

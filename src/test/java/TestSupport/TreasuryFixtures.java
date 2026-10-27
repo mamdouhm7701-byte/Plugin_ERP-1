@@ -36,7 +36,7 @@ public final class TreasuryFixtures implements AutoCloseable {
             throw new IllegalArgumentException("Invalid treasury journal suffix");
         var owner = new TreasuryFixtures(driver, suffix);
         for (Object value :
-                new org.json.JSONArray(java.nio.file.Files.readString(owner.journal)).toList()) {
+                new org.json.JSONArray(TestSupport.FixtureJournals.read(owner.journal)).toList()) {
             var row = (Map<String, Object>) value;
             owner.session.verify(row);
             if (!(row.get("safeName") instanceof String safe)

@@ -6,6 +6,8 @@ import org.openqa.selenium.WebDriver;
 
 /** Browser transport with the existing session checks, timeouts and error responses. */
 final class StoreFixtureApi {
+    private final Plugin_ERP.BranchProfiles.BranchProfileGuard profileGuard =
+            Plugin_ERP.BranchProfiles.BranchProfileGuard.capture();
     private final WebDriver driver;
     private final String origin;
     private final Object sessionBranchId;
@@ -27,6 +29,7 @@ final class StoreFixtureApi {
 
     @SuppressWarnings("unchecked")
     Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
+        profileGuard.verify(driver);
         driver.manage()
                 .timeouts()
                 .scriptTimeout(Duration.ofSeconds(action.equals("delete") ? 60 : 30));

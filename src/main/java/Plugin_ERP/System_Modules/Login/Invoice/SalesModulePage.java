@@ -181,6 +181,11 @@ public class SalesModulePage extends AbstractForSales {
         return itemSelection.slOwnedItemCached(name);
     }
 
+    @Step("إضافة صنفين موجودين إلى المسودة دون حفظ المستند")
+    public List<String> slAddFirstTwoExistingItems() {
+        return itemSelection.slAddFirstTwoExistingItems();
+    }
+
     @Step("إضافة الصنف من قائمة الأصناف: {name}")
     public void slAddPicker(String name) {
         itemSelection.slAddPicker(name);

@@ -7,6 +7,27 @@ import org.testng.annotations.Test;
 
 public final class InteractiveTestLauncherTest {
     @Test
+    public void optionalProfileReachesChildProcessWithoutChangingLegacyCommand() {
+        var shell = Path.of("pwsh.exe");
+        var root = Path.of(".");
+        var original = InteractiveTestLauncher.command(shell, root, "Smoke", 3, "Headless");
+        Assert.assertEquals(
+                InteractiveTestLauncher.command(shell, root, "Smoke", 3, "Headless", null),
+                original);
+        var selected =
+                InteractiveTestLauncher.command(shell, root, "Smoke", 3, "Headless", "reference");
+        Assert.assertEquals(selected.subList(0, original.size()), original);
+        Assert.assertEquals(
+                selected.subList(original.size(), selected.size()),
+                List.of("-BranchProfile", "reference"));
+        Assert.expectThrows(
+                IllegalArgumentException.class,
+                () ->
+                        InteractiveTestLauncher.command(
+                                shell, root, "Smoke", 3, "Headless", "../other"));
+    }
+
+    @Test
     public void selectedBrowserDisplayReachesTheScript() {
         for (String mode : List.of("Headless", "Visible browsers")) {
             var arguments =

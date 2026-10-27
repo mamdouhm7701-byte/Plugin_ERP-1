@@ -78,3 +78,9 @@ mvn '-DExecutionType=LocalHeadless' '-Dsurefire.suiteXmlFiles=src/test/resources
 الكتابة تستخدم `TextEntryActions`: تحقق من القيمة، ثلاث محاولات Selenium، وسبب فشل محفوظ دون تسجيل النص المدخل. اختبار تسليم الخزينة يقارن إجمالي API والشاشة والطباعة بتوقع مستقل من الرصيد الافتتاحي المملوك للاختبار دون حركات؛ لا يدعي تغطية التسوية المختلطة. مراجعة fallback في [سجل الاستثناءات](docs/testing/SILENT_CATCH_AUDIT_AR.md).
 
 حالة تحسينات الصيانة والتغطية ونتائج التحقق الأحدث لهذه الدفعة في [سجل النقاط](docs/testing/ALL_POINTS_STATUS_2026_10_27_AR.md). تشغيل فحص محلي بمخرجات منفصلة عن IntelliJ: `mvn -Derp.build.directory=target/maven-verification -Pci verify`.
+
+تسجيل حالات الفشل اختياري: اضبط `video.enabled=true` في `src/main/resources/video.properties` أو مرر `-Dvideo.enabled=true`؛ القيمة الافتراضية false. يحفظ MP4 للحالات الفاشلة فقط ويرفقه في Allure. [تفاصيل تسجيل المتصفح وحدوده](docs/testing/FAILURE_VIDEO_AR.md).
+
+اختيار إعداد فرع متوقع اختياري عبر `-Dbranch.profile=public-reference` بعد تجهيز ملفه تحت `config/branch-profiles`. بدون الخاصية يبقى المسار الحالي كما هو. [التجهيز وحدود التحقق](docs/testing/BRANCH_PROFILE_SETUP_AR.md). [عقد الحساب وحالة ربط الموديولات](docs/testing/BRANCH_FINANCE_CONTRACT_AR.md). [الشاشات حسب النشاط](docs/testing/ACTIVITY_COVERAGE_AR.md). [تجهيز فروع الاختبار](docs/testing/BRANCH_PROVISIONING_AR.md). [Smoke الإضافية للمطاعم](docs/testing/RESTAURANT_ADDITIONAL_TAX_AR.md).
+
+تشغيل النشاط والسياسات من IntelliJ: [دليل ERP - Business run](docs/testing/BUSINESS_RUNNER_AR.md).

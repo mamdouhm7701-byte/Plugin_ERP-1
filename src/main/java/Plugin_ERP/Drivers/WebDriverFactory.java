@@ -26,7 +26,14 @@ public class WebDriverFactory {
         if (browserType == null || browserType.isBlank()) {
             throw new IllegalArgumentException("BrowserType is missing or blank");
         }
-        WebDriver driver = ThreadGuard.protect(getDriver(browserType.trim()));
+        WebDriver rawDriver = getDriver(browserType.trim());
+        WebDriver driver;
+        try {
+            driver = ThreadGuard.protect(Plugin_ERP.Util.FailureVideoRecorder.decorate(rawDriver));
+        } catch (RuntimeException failure) {
+            rawDriver.quit();
+            throw failure;
+        }
         driverThreadLocal.set(driver);
         LogUtils.info(
                 "Initialized WebDriver for browser: "
@@ -49,7 +56,10 @@ public class WebDriverFactory {
         try {
             if (ownedDriver != null) ownedDriver.quit();
         } finally {
-            if (driverThreadLocal.get() == ownedDriver) driverThreadLocal.remove();
+            if (driverThreadLocal.get() == ownedDriver) {
+                Plugin_ERP.Util.FailureVideoRecorder.release();
+                driverThreadLocal.remove();
+            }
         }
     }
 }

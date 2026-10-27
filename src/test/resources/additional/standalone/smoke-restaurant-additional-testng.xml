@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Mandatory restaurant-specific acceptance when additional tax is enabled; explicit matching profile required. -->
+<suite name="Smoke - Restaurant additional tax" parallel="none"><test name="Additional tax subject and mixed items"><classes>
+<class name="SpecialSalesTest.RestaurantAdditionalTaxSmokeTest"/>
+</classes></test></suite>

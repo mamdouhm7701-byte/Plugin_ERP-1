@@ -1,7 +1,6 @@
 package CoverageTest;
 
 import Plugin_ERP.BranchProfiles.*;
-import Plugin_ERP.BranchProfiles.BranchPolicies.ActivityType;
 import Plugin_ERP.System_Modules.Login.Coverage.ScreenPage;
 import TestSupport.BasicDataScenarioTest;
 import io.qameta.allure.Allure;
@@ -10,6 +9,7 @@ import java.util.Map;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
@@ -18,20 +18,27 @@ import org.testng.annotations.Test;
 public final class ActivityMasterLifecycleTest extends BasicDataScenarioTest {
     private record Master(String endpoint, String route, String title) {}
 
-    private Master master(ActivityType activity) {
-        return switch (activity) {
-            case CONCRETE -> new Master("CastingTypes", "castingTypes", "نوع الصبة");
-            case CAR_SHOWROOM -> new Master("CarColors", "car-colors", "الوان السيارات");
+    @DataProvider
+    public Object[][] activityMasters() {
+        return switch (BranchProfiles.selected().orElseThrow().expected().activityType()) {
+            case CONCRETE ->
+                    new Object[][] {
+                        {"CastingTypes", "castingTypes", "نوع الصبة"},
+                        {"CementTypes", "cementTypes", "نوع الأسمنت"},
+                        {"MaxTemperatures", "maxTemperature", "اقصي درجة حرارة"}
+                    };
+            case CAR_SHOWROOM -> new Object[][] {{"CarColors", "car-colors", "الوان السيارات"}};
             default ->
                     throw new IllegalArgumentException(
                             "This lifecycle is qualified for Concrete and CarShowroom masters only");
         };
     }
 
-    @Test
-    public void ownedMasterCreateReopenUpdateAndDeletePreservesIdentity() {
+    @Test(dataProvider = "activityMasters")
+    public void ownedMasterCreateReopenUpdateAndDeletePreservesIdentity(
+            String endpoint, String route, String title) {
         var profile = BranchProfiles.selected().orElseThrow();
-        var master = master(profile.expected().activityType());
+        var master = new Master(endpoint, route, title);
         var page = new ScreenPage(driver);
         page.open(master.route(), master.title());
         String marker = ownedName(master.endpoint(), "activity-master");

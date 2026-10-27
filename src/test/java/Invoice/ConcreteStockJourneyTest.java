@@ -19,12 +19,186 @@ public final class ConcreteStockJourneyTest extends SalesScenarioTest {
 
     @Test
     public void deliveryConsumesOwnedStockWhenSaved() {
-        check(true);
+        var profile = prepareOwnedData();
+        var reservation = createOwnedReservation(profile);
+        sameNumber(data.balance(item, 1), "1000");
+        openOwnedForm("concrete-exchange-order/new", "ConcreteDelivery");
+        var ready = new WebDriverWait(driver, Duration.ofSeconds(35));
+        ready.until(
+                        org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(
+                                org.openqa.selenium.By.cssSelector(
+                                        ".modal.show tr[data-pk='"
+                                                + reservation.id()
+                                                + "'] button")))
+                .click();
+        var row =
+                ready.until(
+                        d ->
+                                d
+                                        .findElements(
+                                                org.openqa.selenium.By.xpath(
+                                                        "//div[contains(@class,'b-sidebar')]//tr[td[contains(.,'"
+                                                                + item.name()
+                                                                + "')]]"))
+                                        .stream()
+                                        .filter(org.openqa.selenium.WebElement::isDisplayed)
+                                        .findFirst()
+                                        .orElse(null));
+        Allure.addAttachment(
+                "Owned reservation item selection",
+                "text/html",
+                page.slDiagnosticMarkup(),
+                ".html");
+        var selection =
+                row.findElement(org.openqa.selenium.By.cssSelector("input[type='checkbox']"));
+        new org.openqa.selenium.interactions.Actions(driver)
+                .moveToElement(selection)
+                .click()
+                .perform();
+        ready.until(
+                d ->
+                        d.findElements(org.openqa.selenium.By.cssSelector(".modal.show")).stream()
+                                .noneMatch(org.openqa.selenium.WebElement::isDisplayed));
+        Assert.assertEquals(page.slDocument().get("storeId"), data.store(1).id());
+        Assert.assertEquals(page.slDocument().get("agentId"), agent.id());
+        var deliveryQuantity =
+                ready.until(
+                        org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(
+                                org.openqa.selenium.By.xpath(
+                                        "//tr[td[contains(.,'"
+                                                + item.name()
+                                                + "')]]//input[@type='number' and not(@disabled)]")));
+        deliveryQuantity.sendKeys(
+                org.openqa.selenium.Keys.chord(org.openqa.selenium.Keys.CONTROL, "a"),
+                "1",
+                org.openqa.selenium.Keys.TAB);
+        page.slNotes(marker);
+        var delivery = saveActivityDocument();
+        var stored = data.read(delivery);
+        Assert.assertEquals(stored.get("sourceTransactionId"), reservation.id());
+        Assert.assertEquals(stored.get("notes"), marker);
+        Assert.assertEquals(stored.get("dealerId"), customer.id());
+        Assert.assertEquals(stored.get("storeId"), data.store(1).id());
+        var line = firstLine(stored);
+        Assert.assertEquals(line.get("itemId"), item.id());
+        sameNumber(line.get("quantity"), "1");
+        ready.withMessage("Concrete delivery must consume exactly its own quantity")
+                .until(d -> number(data.balance(item, 1)).compareTo(new BigDecimal("999")) == 0);
+        Allure.addAttachment(
+                "Concrete stock after owned delivery",
+                "application/json",
+                new org.json.JSONObject(
+                                Map.of(
+                                        "reservationId",
+                                        reservation.id(),
+                                        "delivery",
+                                        stored,
+                                        "stockBefore",
+                                        1000,
+                                        "stockAfter",
+                                        data.balance(item, 1)))
+                        .toString(2),
+                ".json");
+        page.slDismiss();
+        invoiceOwnedDeliveryWithoutSecondStockDeduction(delivery, profile);
+    }
+
+    private void invoiceOwnedDeliveryWithoutSecondStockDeduction(
+            SalesTestData.Record delivery, BranchProfile profile) {
+        openOwnedForm("concrete-sales-invoice/new", "ItemTransactions-ConcreteSales");
+        page.slChoose("نوع السداد", "آجل");
+        ConcreteInvoiceControls.selectOwnedDelivery(driver, page, delivery, item);
+        var ready = new WebDriverWait(driver, Duration.ofSeconds(35));
+        var expected =
+                BranchInvoiceCalculator.calculate(
+                        List.of(
+                                new PolicyInvoiceLine(
+                                        "concrete-delivery",
+                                        BigDecimal.ONE,
+                                        new BigDecimal("100"),
+                                        BigDecimal.ZERO,
+                                        DiscountType.VALUE,
+                                        false)),
+                        profile.expected().taxPolicy(),
+                        2,
+                        BranchInvoiceCalculator.TaxRounding.INVOICE);
+        page.slWaitNet(expected.getNet().toPlainString());
+        page.slNotes(marker);
+        var invoice = saveActivityDocument();
+        var stored = data.read(invoice);
+        Assert.assertEquals(
+                invoice.values().get("concreteDeliveryOrderIdsList"), List.of(delivery.id()));
+        Assert.assertEquals(stored.get("dealerId"), customer.id());
+        Assert.assertEquals(stored.get("storeId"), data.store(1).id());
+        Assert.assertEquals(stored.get("agentId"), agent.id());
+        Assert.assertEquals(stored.get("notes"), marker);
+        Assert.assertEquals(firstLine(stored).get("itemId"), item.id());
+        Assert.assertEquals(firstLine(stored).get("unitId"), data.unit(1).id());
+        sameNumber(firstLine(stored).get("quantity"), "1");
+        sameNumber(stored.get("net"), expected.getNet().toPlainString());
+        sameNumber(stored.get("totalTaxes"), expected.getTax().toPlainString());
+        sameNumber(data.balance(item, 1), "999");
+        Allure.addAttachment(
+                "Saved delivery billing availability",
+                "application/json",
+                new org.json.JSONObject(
+                                data.lookup(
+                                        "ConcreteDelivery/ConcreteDeliveryOrders?pageNumber=1&pageSize=500&transactionType=ConcreteDelivery&dealerId="
+                                                + customer.id()))
+                        .toString(2),
+                ".json");
+        Allure.addAttachment(
+                "Concrete invoice after delivery keeps stock unchanged",
+                "application/json",
+                new org.json.JSONObject(
+                                Map.of(
+                                        "deliveryId",
+                                        delivery.id(),
+                                        "invoice",
+                                        stored,
+                                        "stockAfterDelivery",
+                                        999,
+                                        "stockAfterInvoice",
+                                        data.balance(item, 1)))
+                        .toString(2),
+                ".json");
+        page.slDismiss();
+        page.slEdit("concrete-sales-invoice", invoice.id(), marker, item.name());
+        Assert.assertEquals(page.slDocument().get("id"), invoice.id());
+        Assert.assertEquals(page.slDocument().get("dealerId"), customer.id());
+        var available =
+                data.lookup(
+                        "ConcreteDelivery/ConcreteDeliveryOrders?pageNumber=1&pageSize=500&transactionType=ConcreteDelivery&dealerId="
+                                + customer.id());
+        Assert.assertTrue(
+                available.get("pageData") instanceof List<?>,
+                "Missing server billing-availability rows");
+        Assert.assertTrue(
+                ((List<?>) available.get("pageData")).isEmpty(),
+                "The owned delivery is still available for billing after invoice save");
+        sameNumber(available.get("totalRecords"), "0");
+        Allure.addAttachment(
+                "Reopened invoice and server billing relationship",
+                "application/json",
+                new org.json.JSONObject(
+                                Map.of(
+                                        "invoiceId",
+                                        invoice.id(),
+                                        "deliveryId",
+                                        delivery.id(),
+                                        "sentDeliveryIds",
+                                        invoice.values().get("concreteDeliveryOrderIdsList"),
+                                        "reopenedInvoice",
+                                        page.slDocument(),
+                                        "serverAvailableDeliveries",
+                                        available))
+                        .toString(2),
+                ".json");
     }
 
     @Test
     public void directConcreteInvoiceDoesNotConsumeStock() {
-        check(false);
+        checkDirectInvoice();
     }
 
     @Test
@@ -34,55 +208,7 @@ public final class ConcreteStockJourneyTest extends SalesScenarioTest {
         var stored = data.read(reservation);
         sameNumber(data.balance(item, 1), "1000");
         openOwnedForm("concrete-exchange-order/new", "ConcreteDelivery");
-        page.slButton("الحجوزات");
-        new WebDriverWait(driver, Duration.ofSeconds(35))
-                .until(
-                        d ->
-                                d
-                                        .findElements(
-                                                org.openqa.selenium.By.cssSelector(".modal.show"))
-                                        .stream()
-                                        .anyMatch(org.openqa.selenium.WebElement::isDisplayed));
-        new WebDriverWait(driver, Duration.ofSeconds(30))
-                .until(
-                        d ->
-                                Boolean.TRUE.equals(
-                                        Plugin_ERP.Util.VueComponentAccess.execute(
-                                                d,
-                                                """
-                    const r=erpVue.root().$router.currentRoute,vm=r.matched.at(-1).instances.default;
-                    return Array.isArray(vm.allData)&&vm.allData.some(row=>String(row.id)===String(arguments[0]));
-                    """,
-                                                reservation.id())));
-        Allure.addAttachment(
-                "Owned reservation in delivery picker",
-                "text/html",
-                page.slDiagnosticMarkup(),
-                ".html");
-        Object source =
-                Plugin_ERP.Util.VueComponentAccess.execute(
-                        driver,
-                        """
-            const r=erpVue.root().$router.currentRoute,vm=r.matched.at(-1).instances.default;
-            return {rows:vm.allData?.filter(row=>String(row.id)===String(arguments[0])),keys:Object.keys(vm.$data||{}),
-              methods:Object.fromEntries(Object.entries(vm.$options.methods||{}).filter(([key])=>/res|row|line|import|add/i.test(key)).map(([key,value])=>[key,String(value)]))};
-            """,
-                        reservation.id());
-        Allure.addAttachment(
-                "Owned reservation source identity",
-                "application/json",
-                new org.json.JSONObject(
-                                Map.of(
-                                        "storedReservation",
-                                        stored,
-                                        "picker",
-                                        source,
-                                        "stockBefore",
-                                        1000,
-                                        "stockAfterReservation",
-                                        data.balance(item, 1)))
-                        .toString(2),
-                ".json");
+        ConcreteReservationEvidence.verify(driver, page, data, item, reservation, stored);
     }
 
     private BranchProfile prepareOwnedData() {
@@ -112,8 +238,10 @@ public final class ConcreteStockJourneyTest extends SalesScenarioTest {
         page.slCapture(marker, data.store(1).id(), item.id(), endpoint);
         page.slChoose("المخزن", data.store(1).name());
         page.slChoose("العميل", customer.name());
-        page.slChoose("مندوب", agent.name());
-        page.slNotes(marker);
+        if (!documentEndpoint.equals("ConcreteDelivery")) {
+            page.slChoose("مندوب", agent.name());
+            page.slNotes(marker);
+        }
     }
 
     private SalesTestData.Record createOwnedReservation(BranchProfile profile) {
@@ -157,10 +285,10 @@ public final class ConcreteStockJourneyTest extends SalesScenarioTest {
         return capture().getLast();
     }
 
-    private void check(boolean delivery) {
+    private void checkDirectInvoice() {
         var profile = BranchProfiles.selected().orElseThrow();
         Assert.assertEquals(profile.expected().activityType(), ActivityType.CONCRETE);
-        endpoint = delivery ? "ConcreteDelivery" : "ItemTransactions-ConcreteSales";
+        endpoint = "ItemTransactions-ConcreteSales";
         item =
                 data.fixture(
                         "concrete-stock-item",
@@ -173,14 +301,14 @@ public final class ConcreteStockJourneyTest extends SalesScenarioTest {
         sameNumber(stockBefore, "1000");
         var customerBefore = data.read(customer);
         page = new SalesModulePage(driver);
-        page.slOpen(delivery ? "concrete-exchange-order/new" : "concrete-sales-invoice/new");
+        page.slOpen("concrete-sales-invoice/new");
         driver.navigate().refresh();
         page.slFormReady();
         page.slCapture(marker, data.store(1).id(), item.id(), endpoint);
         page.slChoose("المخزن", data.store(1).name());
         page.slChoose("العميل", customer.name());
         page.slChoose("مندوب", agent.name());
-        if (!delivery) page.slChoose("نوع السداد", "آجل");
+        page.slChoose("نوع السداد", "آجل");
         page.slNotes(marker);
         add(item, "picker");
         page.slQuantity(item.name(), "1");
@@ -197,7 +325,7 @@ public final class ConcreteStockJourneyTest extends SalesScenarioTest {
                         profile.expected().taxPolicy(),
                         2,
                         BranchInvoiceCalculator.TaxRounding.INVOICE);
-        if (!delivery) page.slWaitNet(expected.getNet().toPlainString());
+        page.slWaitNet(expected.getNet().toPlainString());
         page.slSave(false);
         new WebDriverWait(driver, Duration.ofSeconds(45))
                 .withMessage("Concrete save was not confirmed; attempts retained for recovery")
@@ -217,13 +345,13 @@ public final class ConcreteStockJourneyTest extends SalesScenarioTest {
         Assert.assertEquals(line.get("itemId"), item.id());
         Assert.assertEquals(line.get("unitId"), data.unit(1).id());
         sameNumber(line.get("quantity"), "1");
-        if (!delivery) {
+        {
             Assert.assertEquals(stored.get("dealerId"), customer.id());
             sameNumber(stored.get("netBeforeTaxes"), expected.getBeforeTax().toPlainString());
             sameNumber(stored.get("totalTaxes"), expected.getTax().toPlainString());
             sameNumber(stored.get("net"), expected.getNet().toPlainString());
         }
-        BigDecimal expectedStock = delivery ? stockBefore.subtract(BigDecimal.ONE) : stockBefore;
+        BigDecimal expectedStock = stockBefore;
         new WebDriverWait(driver, Duration.ofSeconds(30))
                 .until(d -> number(data.balance(item, 1)).compareTo(expectedStock) == 0);
         Allure.addAttachment(

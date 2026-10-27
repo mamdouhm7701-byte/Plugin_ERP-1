@@ -39,6 +39,7 @@ public final class RestaurantInvoicePage extends SpecialSalesPage {
 
     @Step("إضافة الصنف {name} بالباركود {barcode}")
     public void addItem(String name, String barcode, String category) {
+        try {
         ready.until(
                 d ->
                         Boolean.TRUE.equals(
@@ -50,6 +51,25 @@ public final class RestaurantInvoicePage extends SpecialSalesPage {
                                         }return false;
                                         """,
                                         name)));
+        } catch (TimeoutException failure) {
+            try {
+                Object catalog = js("""
+                    const queue=[erpVue.root()];
+                    while(queue.length){const vm=queue.shift();queue.push(...(erpVue.children(vm)||[]));
+                      if(Array.isArray(vm.$data?.allItems))return {
+                        expectedName:arguments[0],count:vm.allItems.length,loading:vm.isLoadingItems,
+                        storeId:vm.selectedItem?.storeId,defaultStoreId:vm.currentBranch?.defaultStoreId,
+                        ownItems:vm.allItems.filter(item=>(item.arabicName||'').startsWith('QA-SP-')).map(item=>({id:item.id,name:item.arabicName,categoryId:item.categoryId})),
+                        methods:Object.fromEntries(Object.entries(vm.$options.methods||{}).filter(([key])=>/item|categor|load/i.test(key)).map(([key,value])=>[key,String(value)]))};
+                    }return {error:'Restaurant catalog component is missing'};
+                    """,name);
+                io.qameta.allure.Allure.addAttachment("Restaurant catalog readiness", "application/json",
+                        org.json.simple.JSONValue.toJSONString(catalog), ".json");
+            } catch (RuntimeException diagnosticsFailure) {
+                failure.addSuppressed(diagnosticsFailure);
+            }
+            throw failure;
+        }
         click(
                 By.xpath(
                         "//div[contains(@class,'catalog-tile')]//*[normalize-space(text())='"

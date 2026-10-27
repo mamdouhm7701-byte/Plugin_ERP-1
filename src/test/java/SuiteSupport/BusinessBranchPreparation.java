@@ -11,7 +11,7 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Reuses a verified explicit profile or creates an owned branch from live new-form defaults. */
+/** Creates one API branch per business run, using live new-form defaults and verified policies. */
 public final class BusinessBranchPreparation {
     private BusinessBranchPreparation() {}
 
@@ -32,9 +32,8 @@ public final class BusinessBranchPreparation {
             var original = BranchProfileReader.capture(driver, Duration.ofSeconds(30));
             Path profiles = project.resolve("config/branch-profiles");
             Files.createDirectories(profiles);
-            BranchProfile selected = matching(driver, request, profiles, original.origin());
-            if (selected == null)
-                selected = create(driver, request, project, profiles, output, original.origin());
+            BranchProfile selected =
+                    create(driver, request, project, profiles, output, original.origin());
             // Newly created branches enter the header menu only after session hydration.
             driver.get(original.origin() + "/#/");
             driver.navigate().refresh();
@@ -69,11 +68,6 @@ public final class BusinessBranchPreparation {
         }
     }
 
-    static boolean isProfileFile(Path file) {
-        return Files.isRegularFile(file)
-                && file.getFileName().toString().matches("[a-z0-9][a-z0-9_-]{0,63}\\.properties");
-    }
-
     static Path registryPath(Path project, String key) throws java.io.IOException {
         if (!key.matches("[a-f0-9]{16}"))
             throw new IllegalArgumentException("Invalid owned branch registry key");
@@ -96,27 +90,19 @@ public final class BusinessBranchPreparation {
         }
     }
 
-    private static BranchProfile matching(
-            WebDriver driver, BusinessRunRequest request, Path profiles, String origin)
+    static String creationKey(BusinessRunRequest request, String origin, Path output)
             throws Exception {
-        List<Path> candidates;
-        try (var files = Files.list(profiles)) {
-            candidates = files.filter(BusinessBranchPreparation::isProfileFile).sorted().toList();
-        }
-        for (Path file : candidates) {
-            String name = file.getFileName().toString().replaceFirst("\\.properties$", "");
-            var profile = BranchProfiles.load(name, profiles).orElseThrow();
-            if (!profile.expected().origin().equals(origin) || !request.matches(profile.expected()))
-                continue;
-            var stored = read(driver, profile.expected().branchId());
-            // A different extra-tax variant is a different business branch, never a policy edit.
-            if (Boolean.TRUE.equals(stored.get("enableAdditionalTax")) != request.additionalTax())
-                continue;
-            request.verify(stored, origin);
-            profile.verify(snapshot(stored, origin));
-            return profile;
-        }
-        return null;
+        return HexFormat.of()
+                .formatHex(
+                        java.security.MessageDigest.getInstance("SHA-256")
+                                .digest(
+                                        (origin
+                                                        + "\n"
+                                                        + output.toAbsolutePath().normalize()
+                                                        + "\n"
+                                                        + new TreeMap<>(request.fields()))
+                                                .getBytes(java.nio.charset.StandardCharsets.UTF_8)))
+                .substring(0, 16);
     }
 
     private static BranchProfile create(
@@ -131,16 +117,7 @@ public final class BusinessBranchPreparation {
                 || !"Demo".equals(PropertyReader.getProperty("Tenant")))
             throw new IllegalStateException(
                     "Automatic branch creation is currently qualified on Cloud/Demo only; no existing branch was edited");
-        String key =
-                HexFormat.of()
-                        .formatHex(
-                                java.security.MessageDigest.getInstance("SHA-256")
-                                        .digest(
-                                                (origin + new TreeMap<>(request.fields()))
-                                                        .getBytes(
-                                                                java.nio.charset.StandardCharsets
-                                                                        .UTF_8)))
-                        .substring(0, 16);
+        String key = creationKey(request, origin, output);
         String name = "QA-BUS-" + key;
         String profileName = "business-" + key;
         Path registry = registryPath(project, key);

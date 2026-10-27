@@ -67,6 +67,7 @@ final class BusinessRunSuites {
                 case CONCRETE -> {
                     classes.add(new XmlClass("CoverageTest.ActivitySpecificScreenAccessTest"));
                     classes.add(new XmlClass("CoverageTest.ActivityMasterLifecycleTest"));
+                    classes.add(new XmlClass("Invoice.ConcreteStockJourneyTest"));
                 }
             }
             test.setXmlClasses(classes);
@@ -85,7 +86,7 @@ final class BusinessRunSuites {
                                         false,
                                         "limits",
                                         List.of(
-                                                "Contract creation is covered; contract settlement, concrete and car-sale transaction journeys are not yet qualified",
+                                                "Contract creation and concrete reservation/delivery/billing stock journeys are covered; contract settlement and car-sale journeys are not yet qualified",
                                                 "Periodic/continuous accounting entries are not inferred from stock quantity checks",
                                                 "Mixed-item movement discount allocation and unconfirmed rounding remain outside the confirmed contracts"),
                                         "classes",

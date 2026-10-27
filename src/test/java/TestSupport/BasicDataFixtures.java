@@ -38,6 +38,8 @@ public final class BasicDataFixtures implements AutoCloseable {
                     "Tables",
                     "CarColors",
                     "CastingTypes",
+                    "CementTypes",
+                    "MaxTemperatures",
                     "AccountGroups",
                     "CostCenters",
                     "PriceLists",

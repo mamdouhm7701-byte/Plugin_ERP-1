@@ -9,6 +9,36 @@ import org.testng.annotations.Test;
 import org.testng.xml.*;
 
 public final class BusinessRunListenerTest {
+    @Test
+    public void concreteBusinessPlanIncludesQualifiedStockAndBillingJourney() throws Exception {
+        var request = new BusinessRunRequest(ActivityType.CONCRETE, DiscountLevel.TRANSACTION,
+                TaxPolicy.NET_BASED, StocktakingMethod.PERIODIC, false);
+        var suites = BusinessRunSuites.plan(Path.of(""), request, "Business checks", Files.createTempDirectory("concrete-business-plan-"));
+        var names = suites.stream().flatMap(s -> s.getTests().stream()).flatMap(t -> t.getXmlClasses().stream())
+                .map(XmlClass::getName).toList();
+        Assert.assertTrue(names.contains("Invoice.ConcreteStockJourneyTest"));
+    }
+
+    @Test
+    public void identicalBusinessChoicesCreateDifferentBranchesForDifferentRuns() throws Exception {
+        var request = selection().business();
+        Path output = Files.createTempDirectory("business-run-identity-");
+        String first =
+                BusinessBranchPreparation.creationKey(
+                        request, "https://erp.example", output.resolve("run-a"));
+        String second =
+                BusinessBranchPreparation.creationKey(
+                        request, "https://erp.example", output.resolve("run-b"));
+        Assert.assertNotEquals(
+                first, second, "A new run must not reuse the previous policy branch");
+        Assert.assertEquals(
+                BusinessBranchPreparation.creationKey(
+                        request, "https://erp.example", output.resolve("run-a")),
+                first,
+                "An uncertain retry of the same run must keep its creation identity");
+        Assert.assertTrue(first.matches("[a-f0-9]{16}"));
+    }
+
     private BusinessRunDialog.Selection selection() {
         return new BusinessRunDialog.Selection(
                 new BusinessRunRequest(
@@ -71,14 +101,12 @@ public final class BusinessRunListenerTest {
     }
 
     @Test
-    public void branchSearchExcludesExampleTemplatesAndDirectories() throws Exception {
-        Path directory = Files.createTempDirectory("branch-candidates-");
-        Path profile = Files.writeString(directory.resolve("demo-public.properties"), "");
-        Path example = Files.writeString(directory.resolve("reference.example.properties"), "");
-        Path fake = Files.createDirectory(directory.resolve("fake.properties"));
-        Assert.assertTrue(BusinessBranchPreparation.isProfileFile(profile));
-        Assert.assertFalse(BusinessBranchPreparation.isProfileFile(example));
-        Assert.assertFalse(BusinessBranchPreparation.isProfileFile(fake));
+    public void runIdentityUsesCanonicalOutputAndIsolatesOrigins() throws Exception {
+        Path output = Files.createTempDirectory("business-canonical-run-");
+        var request = selection().business();
+        String key = BusinessBranchPreparation.creationKey(request,"https://erp.example", output.resolve("run-a"));
+        Assert.assertEquals(BusinessBranchPreparation.creationKey(request,"https://erp.example",output.resolve("temporary/../run-a")),key);
+        Assert.assertNotEquals(BusinessBranchPreparation.creationKey(request,"https://other.example",output.resolve("run-a")),key);
     }
 
     @Test

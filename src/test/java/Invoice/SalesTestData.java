@@ -1040,8 +1040,7 @@ final class SalesTestData implements AutoCloseable {
         recoverUncertainDocuments();
         List<String> failures = new ArrayList<>();
         List<Record> pending = new ArrayList<>();
-        for (int index = created.size() - 1; index >= 0; index--) {
-            Record record = created.get(index);
+        for (Record record : SalesCleanupOrder.records(created)) {
             if (pending.stream().anyMatch(child -> references(child.values(), record.id()))) {
                 pending.add(record);
                 failures.add(

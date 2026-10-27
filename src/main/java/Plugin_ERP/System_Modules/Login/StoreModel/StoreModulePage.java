@@ -43,11 +43,11 @@ public class StoreModulePage extends AbstractForStore {
                                 !d.getCurrentUrl().contains("/login")
                                         && Boolean.TRUE.equals(
                                                 js(
-                                                        "return Boolean(document.querySelector('#app')?.__vue__?.$store?.getters['app/currentBranch']?.id)")));
+                                                        "return Boolean(erpVue.root()?.$store?.getters['app/currentBranch']?.id)")));
     }
 
     protected Object js(String script, Object... args) {
-        return ((JavascriptExecutor) driver).executeScript(script, args);
+        return Plugin_ERP.Util.VueComponentAccess.execute(driver, script, args);
     }
 
     @Step("فتح شاشة المخازن: {route}")

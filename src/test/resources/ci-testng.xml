@@ -8,6 +8,8 @@
     </listeners>
     <test name="Configuration, arithmetic and owned fixture recovery" preserve-order="true">
         <classes>
+            <class name="Plugin_ERP.Util.VueComponentAccessTest"/>
+            <class name="Plugin_ERP.Util.Allur.ReportingContractsTest"/>
             <class name="Plugin_ERP.Bots.TextEntryActionsTest"/>
             <class name="Plugin_ERP.Bots.ReadinessWaitTest"/>
             <class name="SuiteSupport.RuntimeCompatibilityTest"/>

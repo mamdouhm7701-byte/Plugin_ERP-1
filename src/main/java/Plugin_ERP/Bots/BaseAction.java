@@ -31,6 +31,21 @@ public abstract class BaseAction {
                         });
     }
 
+    /** Retry transient interaction failures without bypassing overlays or disabled controls. */
+    protected void clickWhenReady(By locator) {
+        waitManagement
+                .fluentWait()
+                .withMessage("Native click unavailable: " + locator)
+                .until(
+                        d -> {
+                            WebElement element = d.findElement(locator);
+                            if (!element.isDisplayed() || !element.isEnabled()) return false;
+                            scrollIntoView(element);
+                            element.click();
+                            return true;
+                        });
+    }
+
     protected void scrollIntoView(WebElement element) {
 
         ((JavascriptExecutor) driver)

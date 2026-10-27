@@ -145,61 +145,6 @@ public class PriceListActions extends BaseAction {
     }
 
     public void ClickElement(By locator) {
-
-        int attempts = 0;
-
-        while (attempts < 3) {
-
-            try {
-
-                WebElement element =
-                        waitManagement
-                                .fluentWait()
-                                .until(
-                                        driver -> {
-                                            WebElement el = driver.findElement(locator);
-
-                                            return (el.isDisplayed() && el.isEnabled()) ? el : null;
-                                        });
-
-                scrollIntoView(element);
-
-                try {
-
-                    element.click();
-
-                } catch (Exception e) {
-
-                    jsClick(element);
-                }
-
-                return;
-
-            } catch (StaleElementReferenceException e) {
-
-                attempts++;
-
-            } catch (Exception e) {
-
-                try {
-
-                    WebElement fallback = driver.findElement(locator);
-
-                    scrollIntoView(fallback);
-
-                    jsClick(fallback);
-
-                    return;
-
-                } catch (Exception ignored) {
-                    Plugin_ERP.Bots.LogUtils.debug(
-                            "PriceListActions fallback: " + ignored.getClass().getSimpleName());
-                }
-
-                attempts++;
-            }
-        }
-
-        throw new RuntimeException("❌ Click failed after retries: " + locator);
+        clickWhenReady(locator);
     }
 }

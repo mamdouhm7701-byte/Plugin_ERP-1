@@ -1,25 +1,21 @@
 package Plugin_ERP.System_Modules.Login.purches;
 
-import Plugin_ERP.System_Modules.Login.AbstractForPurchases;
 import Plugin_ERP.Util.FormInteractions;
-import Plugin_ERP.Util.PropertyReader;
 import io.qameta.allure.Step;
-import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
 /** Purchase UI interactions; scenarios and persisted inventory assertions live in tests. */
-public class PurchaseModulePage extends AbstractForPurchases {
+public class PurchaseModulePage extends PurchaseListPage {
+    private final PurchaseNavigation navigation;
     private final PurchaseDocumentTransitions transitions;
     private final PurchaseDocumentForm form;
     private final PurchasePrintWindows printing;
     private final PurchaseChoiceControls choices;
     private final PurchaseSaveCapture saveCapture;
-    protected final WebDriverWait ready;
     private final FormInteractions interactions;
     private final PurchaseItemSelection itemSelection;
-    private final PurchaseDocumentList documentList;
     private final PurchaseDocumentLines lines;
     private final PurchaseCalendar calendar;
 
@@ -28,9 +24,6 @@ public class PurchaseModulePage extends AbstractForPurchases {
         choices = new PurchaseChoiceControls(this, driver);
         saveCapture = new PurchaseSaveCapture(this);
         calendar = new PurchaseCalendar(driver);
-        ready = new WebDriverWait(driver, Duration.ofSeconds(35));
-        ready.ignoring(StaleElementReferenceException.class)
-                .ignoring(ElementClickInterceptedException.class);
         interactions =
                 new FormInteractions(
                         ready,
@@ -38,43 +31,25 @@ public class PurchaseModulePage extends AbstractForPurchases {
                                 js(
                                         "arguments[0].scrollIntoView({block:'center',inline:'center'})",
                                         element));
-        documentList = new PurchaseDocumentList(this, driver, ready);
         itemSelection = new PurchaseItemSelection(this, driver, ready);
         lines = new PurchaseDocumentLines(this, driver, ready);
         printing = new PurchasePrintWindows(this, driver);
         form = new PurchaseDocumentForm(this, driver, ready);
+        navigation = new PurchaseNavigation(this, driver, ready);
         transitions = new PurchaseDocumentTransitions(this, driver, ready);
     }
 
     public void puAwaitSession() {
-        new WebDriverWait(driver, Duration.ofSeconds(60))
-                .until(
-                        d ->
-                                !d.getCurrentUrl().contains("/login")
-                                        && Boolean.TRUE.equals(
-                                                js(
-                                                        "return Boolean(document.querySelector('#app')?.__vue__?.$store?.getters['app/currentBranch']?.id)")));
+        navigation.puAwaitSession();
     }
 
     protected Object js(String script, Object... args) {
-        return ((JavascriptExecutor) driver).executeScript(script, args);
+        return Plugin_ERP.Util.VueComponentAccess.execute(driver, script, args);
     }
 
     @Step("فتح شاشة المشتريات: {route}")
     public void puOpen(String route) {
-        Plugin_ERP.Util.Allur.ScreenNames.opening(route);
-        driver.get(PropertyReader.getApplicationUrl() + "/#/" + route);
-        driver.navigate().refresh();
-        puAwaitSession();
-        ready.until(
-                d ->
-                        d
-                                .findElements(
-                                        By.cssSelector(
-                                                "form button[data-action-type='save'],button[data-action-type='new'],table thead th"))
-                                .stream()
-                                .anyMatch(WebElement::isDisplayed));
-        puDismiss();
+        navigation.puOpen(route);
     }
 
     public void puType(By by, String value) {
@@ -167,10 +142,6 @@ public class PurchaseModulePage extends AbstractForPurchases {
         return lines.puLineValues(name);
     }
 
-    private void radio(String value) {
-        itemSelection.radio(value);
-    }
-
     public void puWaitOwnedItemLookup(String name) {
         itemSelection.puWaitOwnedItemLookup(name);
     }
@@ -232,12 +203,10 @@ public class PurchaseModulePage extends AbstractForPurchases {
         saveCapture.puCapture(marker, storeId, itemId, endpoint);
     }
 
-    @SuppressWarnings("unchecked")
     public List<Map<String, Object>> puSaves() {
         return saveCapture.puSaves();
     }
 
-    @SuppressWarnings("unchecked")
     public List<Map<String, Object>> puAttempts() {
         return saveCapture.puAttempts();
     }
@@ -264,15 +233,9 @@ public class PurchaseModulePage extends AbstractForPurchases {
 
     @Step("فتح السند للتعديل")
     public void puEdit(String route, Object id, String marker, String itemName) {
-        puOpen(route + "/edit/" + id);
-        ready.until(
-                d ->
-                        d.findElements(By.cssSelector("form textarea[label-text='Notes']")).stream()
-                                        .anyMatch(e -> marker.equals(e.getDomProperty("value")))
-                                && puLineCount(itemName) > 0);
+        transitions.puEdit(route, id, marker, itemName);
     }
 
-    @SuppressWarnings("unchecked")
     public Map<String, Object> puDocument() {
         return form.puDocument();
     }
@@ -346,72 +309,6 @@ public class PurchaseModulePage extends AbstractForPurchases {
         transitions.puDeleteOwned(supplier, code);
     }
 
-    @Step("تصفية القائمة بالمتعامل: {customer}")
-    public void puListScope(String customer) {
-        documentList.puListScope(customer);
-    }
-
-    public void puAwaitListReady() {
-        documentList.puAwaitListReady();
-    }
-
-    @Step("تطبيق فلاتر القائمة")
-    public void puApplyListFilters() {
-        documentList.puApplyListFilters();
-    }
-
-    public String puListFixtureDate() {
-        return documentList.puListFixtureDate();
-    }
-
-    @SuppressWarnings("unchecked")
-    public List<Map<String, Object>> puListRows() {
-        return documentList.puListRows();
-    }
-
-    public void puWaitListIds(Set<Object> expected) {
-        documentList.puWaitListIds(expected);
-    }
-
-    @Step("إدخال فلتر {name}: {text}")
-    public void puListText(String name, String text) {
-        documentList.puListText(name, text);
-    }
-
-    @Step("اختيار {value} من فلتر {group}")
-    public void puListRadio(String group, String value) {
-        documentList.puListRadio(group, value);
-    }
-
-    public List<String> puHeaders() {
-        return documentList.puHeaders();
-    }
-
-    @Step("عرض {size} سجل في الصفحة")
-    public void puPageSize(int size) {
-        documentList.puPageSize(size);
-    }
-
-    @Step("الانتقال للصفحة التالية")
-    public void puNextPage() {
-        documentList.puNextPage();
-    }
-
-    @Step("العودة للصفحة الأولى")
-    public void puFirstPage() {
-        documentList.puFirstPage();
-    }
-
-    @Step("ترتيب القائمة حسب {label}")
-    public void puSort(String label) {
-        documentList.puSort(label);
-    }
-
-    @Step("تصدير القائمة بصيغة {format}")
-    public void puExport(String format) {
-        documentList.puExport(format);
-    }
-
     public String puWindowHandle() {
         return printing.puWindowHandle();
     }
@@ -431,20 +328,7 @@ public class PurchaseModulePage extends AbstractForPurchases {
 
     @Step("اختيار تاريخ فلتر المشتريات من التقويم: {value}")
     public void puDateFilter(String name, String value) {
-        puAwaitListReady();
-        WebElement hidden = driver.findElement(By.cssSelector("input[name='" + name + "']"));
-        if (value.equals(hidden.getDomProperty("value"))) return;
-        setDateFilter(hidden, value);
-        ready.until(
-                d ->
-                        value.equals(
-                                d.findElement(By.cssSelector("input[name='" + name + "']"))
-                                        .getDomProperty("value")));
-        puAwaitListReady();
-    }
-
-    private void setDateFilter(WebElement hiddenInput, String value) {
-        calendar.selectDate(hiddenInput, value);
+        calendar.selectListFilter(name, value, this::puAwaitListReady, ready);
     }
 
     FormInteractions formInteractions() {
@@ -452,6 +336,6 @@ public class PurchaseModulePage extends AbstractForPurchases {
     }
 
     void selectPaymentMode(String value) {
-        radio(value);
+        itemSelection.radio(value);
     }
 }

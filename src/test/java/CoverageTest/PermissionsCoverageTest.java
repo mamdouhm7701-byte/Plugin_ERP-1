@@ -75,11 +75,11 @@ public final class PermissionsCoverageTest extends BasicDataScenarioTest {
                     limited.findElements(By.cssSelector("button[data-action-type='new']")).stream()
                             .noneMatch(WebElement::isDisplayed));
             Object status =
-                    ((JavascriptExecutor) limited)
-                            .executeAsyncScript(
-                                    """
+                    Plugin_ERP.Util.VueComponentAccess.executeAsync(
+                            limited,
+                            """
                 const done=arguments[arguments.length-1];
-                document.querySelector('#app').__vue__.$store.dispatch('app/get',{url:'Tables'})
+                erpVue.root().$store.dispatch('app/get',{url:'Tables'})
                   .then(()=>done(200)).catch(e=>done(e?.response?.status||e?.status||e?.data?.status||0));
                 """);
             Assert.assertTrue(

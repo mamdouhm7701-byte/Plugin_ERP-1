@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Read-only report catalogue coverage" parallel="none">
+    <listeners><listener class-name="Plugin_ERP.Listeners.TestNGListeners"/></listeners>
+    <test name="Report catalogues"><classes><class name="CoverageTest.ReportNavigationCoverageTest"/></classes></test>
+</suite>

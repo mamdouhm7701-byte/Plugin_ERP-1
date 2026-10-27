@@ -165,6 +165,9 @@ final class CashRecordActions {
                             ExpectedConditions.invisibilityOfElementLocated(
                                     By.cssSelector(".swal2-container.swal2-backdrop-show")));
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "CashRecordActions fallback: " + ignored.getClass().getSimpleName());
+
             // Some application versions close the confirmation without a second popup.
         }
     }

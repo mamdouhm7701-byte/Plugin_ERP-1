@@ -6,9 +6,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class DropdownActions extends BaseAction {
+    private final VueDropdownSelection vueSelection;
 
     public DropdownActions(WebDriver driver, WebDriverWait wait, WaitManagement waitManagement) {
         super(driver, wait, waitManagement);
+        vueSelection = new VueDropdownSelection(this, driver, wait);
     }
 
     public void selectUsersByCode(int... codes) {
@@ -50,6 +52,9 @@ public class DropdownActions extends BaseAction {
             try {
                 wait.until(ExpectedConditions.attributeToBe(input, "value", cleanExpected));
             } catch (TimeoutException retry) {
+                Plugin_ERP.Bots.LogUtils.debug(
+                        "DropdownActions fallback: " + retry.getClass().getSimpleName());
+
                 // Keep the bounded typing retry for inputs that replace their value.
             }
 
@@ -76,179 +81,11 @@ public class DropdownActions extends BaseAction {
     }
 
     public void selectVueOptionboth(String labelText, String optionText) {
-
-        String cleanOptionText = optionText.trim().replaceAll("\\s+", " ");
-
-        String base = "//*[self::legend or self::label][normalize-space()='" + labelText + "']";
-
-        By searchInputBy = By.xpath(base + "/following::input[contains(@class,'vs__search')][1]");
-
-        By optionBy =
-                By.xpath(
-                        "//ul[contains(@id,'__listbox')]//li[normalize-space()='"
-                                + cleanOptionText
-                                + "']");
-
-        Exception lastException = null;
-
-        for (int attempt = 1; attempt <= 5; attempt++) {
-
-            System.out.println("Attempt " + attempt + "/5 : Selecting [" + cleanOptionText + "]");
-
-            try {
-
-                clickOnEmptyArea();
-
-                WebElement searchInput =
-                        wait.until(ExpectedConditions.elementToBeClickable(searchInputBy));
-
-                ((JavascriptExecutor) driver)
-                        .executeScript(
-                                "arguments[0].scrollIntoView({block:'center'});", searchInput);
-
-                searchInput.click();
-
-                typeAndVerify(searchInput, cleanOptionText);
-
-                WebDriverWait retryWait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-                WebElement option =
-                        retryWait.until(ExpectedConditions.elementToBeClickable(optionBy));
-
-                try {
-                    option.click();
-                } catch (ElementClickInterceptedException ex) {
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", option);
-                }
-
-                System.out.println("Selected Successfully : " + cleanOptionText);
-
-                return;
-
-            } catch (Exception e) {
-
-                lastException = e;
-
-                System.out.println(
-                        "Attempt "
-                                + attempt
-                                + " Failed : "
-                                + e.getClass().getSimpleName()
-                                + " - "
-                                + e.getMessage());
-
-                try {
-                    clickOnEmptyArea();
-                    WebElement searchInput = driver.findElement(searchInputBy);
-                    searchInput.sendKeys(Keys.CONTROL + "a");
-                    searchInput.sendKeys(Keys.DELETE);
-                } catch (Exception ignored) {
-                    Plugin_ERP.Bots.LogUtils.debug(
-                            "DropdownActions fallback: " + ignored.getClass().getSimpleName());
-                }
-
-                if (attempt < 5) {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                        throw new IllegalStateException("Dropdown selection retry interrupted", ex);
-                    }
-                }
-            }
-        }
-
-        throw new RuntimeException(
-                "Couldn't select option [" + cleanOptionText + "] after 5 attempts.",
-                lastException);
+        vueSelection.selectVueOptionboth(labelText, optionText);
     }
 
     public void selectVueOptionByDataTitle(String title, String optionText) {
-
-        String cleanOptionText = optionText.trim().replaceAll("\\s+", " ");
-
-        By inputBy =
-                By.xpath(
-                        "//div[@data-title='"
-                                + title
-                                + "']//input[contains(@class,'vs__search') and not(@disabled)]");
-
-        By optionBy =
-                By.xpath(
-                        "//ul[contains(@id,'__listbox')]//li[normalize-space()='"
-                                + cleanOptionText
-                                + "']");
-
-        Exception lastException = null;
-
-        for (int attempt = 1; attempt <= 5; attempt++) {
-
-            System.out.println("Attempt " + attempt + "/5 : Selecting [" + cleanOptionText + "]");
-
-            try {
-
-                clickOnEmptyArea();
-
-                WebElement input = wait.until(ExpectedConditions.elementToBeClickable(inputBy));
-
-                ((JavascriptExecutor) driver)
-                        .executeScript("arguments[0].scrollIntoView({block:'center'});", input);
-
-                input.click();
-
-                typeAndVerify(input, cleanOptionText);
-
-                WebDriverWait retryWait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-                WebElement option =
-                        retryWait.until(ExpectedConditions.elementToBeClickable(optionBy));
-
-                try {
-                    option.click();
-                } catch (ElementClickInterceptedException ex) {
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", option);
-                }
-
-                System.out.println("Selected Successfully : " + cleanOptionText);
-
-                return;
-
-            } catch (Exception e) {
-
-                lastException = e;
-
-                System.out.println(
-                        "Attempt "
-                                + attempt
-                                + " Failed : "
-                                + e.getClass().getSimpleName()
-                                + " - "
-                                + e.getMessage());
-
-                try {
-                    clickOnEmptyArea();
-                    WebElement input = driver.findElement(inputBy);
-                    input.sendKeys(Keys.CONTROL + "a");
-                    input.sendKeys(Keys.DELETE);
-                } catch (Exception ignored) {
-                    Plugin_ERP.Bots.LogUtils.debug(
-                            "DropdownActions fallback: " + ignored.getClass().getSimpleName());
-                }
-
-                if (attempt < 5) {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                        throw new IllegalStateException("Dropdown selection retry interrupted", ex);
-                    }
-                }
-            }
-        }
-
-        throw new RuntimeException(
-                "Couldn't select option [" + cleanOptionText + "] after 5 attempts.",
-                lastException);
+        vueSelection.selectVueOptionByDataTitle(title, optionText);
     }
 
     public void selectVueMultiOption(String label, String[] values) {
@@ -328,6 +165,8 @@ public class DropdownActions extends BaseAction {
             try {
                 dropdown.click();
             } catch (Exception e) {
+                Plugin_ERP.Bots.LogUtils.debug(
+                        "DropdownActions fallback: " + e.getClass().getSimpleName());
 
                 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", dropdown);
             }
@@ -374,98 +213,7 @@ public class DropdownActions extends BaseAction {
     }
 
     public void selectVueOptionLeft(String labelText, String optionText) {
-
-        String cleanOptionText = optionText.trim().replaceAll("\\s+", " ");
-
-        By radioLabelBy =
-                By.xpath(
-                        "(//div[@role='radiogroup'])[2]//span[normalize-space()='"
-                                + labelText
-                                + "']");
-
-        By searchInputBy =
-                By.xpath(
-                        "(//div[@role='radiogroup'])[2]/following::input[contains(@class,'vs__search')][1]");
-
-        By optionBy = By.xpath("//li[normalize-space()='" + cleanOptionText + "']");
-
-        Exception lastException = null;
-
-        for (int attempt = 1; attempt <= 5; attempt++) {
-
-            System.out.println("Attempt " + attempt + "/5 : Selecting [" + cleanOptionText + "]");
-
-            try {
-
-                clickOnEmptyArea();
-
-                WebElement radioLabel =
-                        wait.until(ExpectedConditions.elementToBeClickable(radioLabelBy));
-
-                ((JavascriptExecutor) driver)
-                        .executeScript(
-                                "arguments[0].scrollIntoView({block:'center'});", radioLabel);
-
-                radioLabel.click();
-
-                WebElement searchInput =
-                        wait.until(ExpectedConditions.elementToBeClickable(searchInputBy));
-
-                searchInput.click();
-
-                typeAndVerify(searchInput, cleanOptionText);
-
-                WebDriverWait retryWait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-                WebElement option =
-                        retryWait.until(ExpectedConditions.elementToBeClickable(optionBy));
-
-                try {
-                    option.click();
-                } catch (ElementClickInterceptedException ex) {
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", option);
-                }
-
-                System.out.println("Selected Successfully : " + cleanOptionText);
-
-                return;
-
-            } catch (Exception e) {
-
-                lastException = e;
-
-                System.out.println(
-                        "Attempt "
-                                + attempt
-                                + " Failed : "
-                                + e.getClass().getSimpleName()
-                                + " - "
-                                + e.getMessage());
-
-                try {
-                    clickOnEmptyArea();
-                    WebElement searchInput = driver.findElement(searchInputBy);
-                    searchInput.sendKeys(Keys.CONTROL + "a");
-                    searchInput.sendKeys(Keys.DELETE);
-                } catch (Exception ignored) {
-                    Plugin_ERP.Bots.LogUtils.debug(
-                            "DropdownActions fallback: " + ignored.getClass().getSimpleName());
-                }
-
-                if (attempt < 5) {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                        throw new IllegalStateException("Dropdown selection retry interrupted", ex);
-                    }
-                }
-            }
-        }
-
-        throw new RuntimeException(
-                "Couldn't select option [" + cleanOptionText + "] after 5 attempts.",
-                lastException);
+        vueSelection.selectVueOptionLeft(labelText, optionText);
     }
 
     public void selectProductByName(String productName) {

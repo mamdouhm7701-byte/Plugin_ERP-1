@@ -2,7 +2,6 @@ package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.time.Duration;
 import java.util.Locale;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -23,15 +22,15 @@ final class GridProviderWait {
                 .until(
                         d -> {
                             Object signature =
-                                    ((JavascriptExecutor) d)
-                                            .executeScript(
+                                    Plugin_ERP.Util.VueComponentAccess.execute(
+                                            d,
 """
-                    const root=document.querySelector('#app')?.__vue__;
+                    const root=erpVue.root();
                     if(!root)return false;
                     const grid=document.getElementById('mainTable'),endpoint=arguments[0];
                     const queue=[root];let table;
                     while(queue.length){
-                        const vm=queue.shift();queue.push(...(vm.$children||[]));
+                        const vm=queue.shift();queue.push(...(erpVue.children(vm)||[]));
                         if(vm.$options.name==='BTable'&&grid&&grid.getClientRects().length
                             &&(vm.$el===grid||vm.$el?.contains(grid))){table=vm;break;}
                     }
@@ -44,7 +43,7 @@ final class GridProviderWait {
                     if(!(table&&loaded&&!table.computedBusy&&Array.isArray(table.localItems)))return null;
                     return JSON.stringify(table.localItems);
                     """,
-                                                    resource);
+                                            resource);
                             if (!(signature instanceof String current)) {
                                 previous[0] = null;
                                 return false;
@@ -58,14 +57,14 @@ final class GridProviderWait {
     int exactMatches(String name) {
         awaitReady();
         return ((Number)
-                        ((JavascriptExecutor) driver)
-                                .executeScript(
-                                        """
+                        Plugin_ERP.Util.VueComponentAccess.execute(
+                                driver,
+                                """
             return [...document.querySelectorAll('#mainTable tbody tr[role="row"]')]
               .filter(r=>r.getClientRects().length&&[...r.querySelectorAll('td')]
                 .some(c=>c.innerText.trim()===arguments[0])).length;
             """,
-                                        name))
+                                name))
                 .intValue();
     }
 }

@@ -36,7 +36,7 @@ public final class KitchenOrdersCoverageTest extends SpecialSalesScenario {
         Object mechanism =
                 ((org.openqa.selenium.JavascriptExecutor) driver)
                         .executeScript(
-                                "return document.querySelector('#app').__vue__.$store.getters['app/currentBranch'].deliveryMechanism");
+                                "return erpVue.root().$store.getters['app/currentBranch'].deliveryMechanism");
         String checkbox = row + "//input[@type='checkbox']";
         clickVisibleSquare(checkbox);
         if ("PrepareAndDelivery".equals(mechanism)) {

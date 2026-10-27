@@ -6,7 +6,6 @@ import Plugin_ERP.Bots.ElementActions;
 import io.qameta.allure.Step;
 import java.time.Duration;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -27,9 +26,6 @@ public class LoginPage {
     private final By WELCOME_MESSAGE =
             By.xpath(
                     "//h4[contains(@class,'content-header-title') and normalize-space(.)='الصفحة الرئيسية']\n");
-    private By OpenBasicData =
-            By.xpath(
-                    "//span[contains(@class,\"menu-title\") and contains(text(),\"البيانات الأساسية\")]");
 
     // Constructors
     public LoginPage(WebDriver driver) {
@@ -82,10 +78,10 @@ public class LoginPage {
                             d -> {
                                 if (d.getCurrentUrl().contains("#/login")) return false;
                                 Object actual =
-                                        ((JavascriptExecutor) d)
-                                                .executeScript(
-                                                        """
-                            const store=document.querySelector('#app')?.__vue__?.$store;
+                                        Plugin_ERP.Util.VueComponentAccess.execute(
+                                                d,
+                                                """
+                            const store=erpVue.root()?.$store;
                             return {authenticated:Boolean(store?.state?.auth?.token),
                               branchId:store?.getters['app/currentBranch']?.id??store?.state?.app?.branchId,
                               userId:store?.state?.auth?.profile?.userId};

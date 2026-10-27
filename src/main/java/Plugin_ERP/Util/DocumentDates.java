@@ -29,6 +29,9 @@ public final class DocumentDates {
         try {
             return LocalDate.parse(value, iso);
         } catch (DateTimeParseException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "DocumentDates fallback: " + ignored.getClass().getSimpleName());
+
             return LocalDate.parse(
                     value,
                     DateTimeFormatter.ofPattern("d-M-uuuu", Locale.ROOT)

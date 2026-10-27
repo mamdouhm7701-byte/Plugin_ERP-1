@@ -36,6 +36,9 @@ public abstract class BaseAssertion {
                     .until(ExpectedConditions.visibilityOfElementLocated(locator));
             flag = true;
         } catch (TimeoutException notVisible) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "BaseAssertion fallback: " + notVisible.getClass().getSimpleName());
+
             // Keep hard/soft assertion behavior consistent when the bounded wait expires.
             flag = false;
         }

@@ -12,6 +12,7 @@ import org.testng.ITestClass;
 public final class BranchIsolationListener implements IClassListener {
     private static final Set<String> INDEPENDENT =
             Set.of(
+                    "CoverageTest.ReportNavigationCoverageTest",
                     "Invoice.SalesEndToEndTest",
                     "Invoice.SalesSettlementEndToEndTest",
                     "Purches.PurchaseEndToEndTest",

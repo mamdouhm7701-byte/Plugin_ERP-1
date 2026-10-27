@@ -81,6 +81,41 @@ public final class InteractionAccuracyTest {
     }
 
     @Test
+    public void gridAndPriceListMustNotBypassAnInterceptedClick() {
+        String previous = System.getProperty("defultwait");
+        System.setProperty("defultwait", "0");
+        AtomicInteger clicks = new AtomicInteger(), synthetic = new AtomicInteger();
+        WebElement blocked = element("", true, true, clicks);
+        WebDriver driver =
+                browser(
+                        (method, args) -> {
+                            if (method.equals("findElement")) return blocked;
+                            if (method.equals("executeScript")) {
+                                if (args[0].toString().contains(".click("))
+                                    synthetic.incrementAndGet();
+                                return null;
+                            }
+                            throw new UnsupportedOperationException(method);
+                        });
+        try {
+            var waits = new WaitManagement(driver);
+            Assert.expectThrows(
+                    TimeoutException.class,
+                    () -> new GridActions(driver, null, waits).ClickElement(By.id("blocked")));
+            Assert.expectThrows(
+                    TimeoutException.class,
+                    () -> new PriceListActions(driver, null, waits).ClickElement(By.id("blocked")));
+            Assert.expectThrows(
+                    TimeoutException.class,
+                    () -> new CheckboxActions(driver, null, waits).selectRadioButton("blocked"));
+            Assert.assertEquals(synthetic.get(), 0);
+        } finally {
+            if (previous == null) System.clearProperty("defultwait");
+            else System.setProperty("defultwait", previous);
+        }
+    }
+
+    @Test
     public void reportOpenedDuringClickIsSelectedAgainstPreClickHandles() {
         List<String> selected = new ArrayList<>();
         WebDriver.TargetLocator target =
@@ -130,6 +165,7 @@ public final class InteractionAccuracyTest {
                         (p, method, args) ->
                                 switch (method.getName()) {
                                     case "isDisplayed", "isEnabled" -> enabled;
+                                    case "getDomAttribute" -> "btn";
                                     case "getText" -> text;
                                     case "click" -> {
                                         clicks.incrementAndGet();

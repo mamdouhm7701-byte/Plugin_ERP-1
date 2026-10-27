@@ -146,6 +146,9 @@ public final class ReportMailCommand {
                 if (java.awt.Desktop.isDesktopSupported())
                     java.awt.Desktop.getDesktop().browse(auth);
             } catch (Exception ignored) {
+                Plugin_ERP.Bots.LogUtils.debug(
+                        "ReportMailCommand fallback: " + ignored.getClass().getSimpleName());
+
                 /* The printed authorization URL remains usable. */
             }
             String authorizationCode = code.get(5, TimeUnit.MINUTES);

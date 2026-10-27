@@ -18,7 +18,7 @@ final class SalesSaveCapture {
     void slCapture(String marker, Object storeId, Object itemId, String endpoint) {
         owner.js(
                 """
-    const store=document.querySelector('#app').__vue__.$store;
+    const store=erpVue.root().$store;
     window.__salesQA={marker:arguments[0],storeId:arguments[1],itemId:arguments[2],endpoint:arguments[3],saves:[],attempts:[],pending:0,errors:[],lookups:[],uiErrors:[]};
     if(!window.__salesQAErrorsInstalled){window.__salesQAErrorsInstalled=true;
       addEventListener('error',e=>window.__salesQA?.uiErrors.push(e.message));

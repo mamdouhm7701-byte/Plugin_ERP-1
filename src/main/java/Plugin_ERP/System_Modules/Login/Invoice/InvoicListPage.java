@@ -78,6 +78,10 @@ public class InvoicListPage extends SalesModulePage {
                                 return isInvoiceTableDisplayed();
                             } catch (org.openqa.selenium.StaleElementReferenceException
                                     | IllegalStateException ignored) {
+                                Plugin_ERP.Bots.LogUtils.debug(
+                                        "InvoicListPage fallback: "
+                                                + ignored.getClass().getSimpleName());
+
                                 // The page can briefly render without a table while Vue restores
                                 // the data.
                                 return false;

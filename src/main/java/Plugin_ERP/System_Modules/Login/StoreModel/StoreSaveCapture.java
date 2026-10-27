@@ -18,7 +18,7 @@ final class StoreSaveCapture {
     void smCapture(String marker, Object storeId, Object itemId) {
         owner.js(
                 """
-    const store=document.querySelector('#app').__vue__.$store;
+    const store=erpVue.root().$store;
     window.__storeQA={marker:arguments[0],storeId:arguments[1],itemId:arguments[2],saves:[],attempts:[],pending:0,errors:[],lookups:[],uiErrors:[]};
     if(!window.__storeQAErrorsInstalled){window.__storeQAErrorsInstalled=true;
       addEventListener('error',e=>window.__storeQA?.uiErrors.push(e.message));

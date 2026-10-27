@@ -2,7 +2,6 @@ package Plugin_ERP.System_Modules.Login.Invoice;
 
 import Plugin_ERP.System_Modules.Login.AbstractForSales;
 import Plugin_ERP.Util.FormInteractions;
-import Plugin_ERP.Util.PropertyReader;
 import io.qameta.allure.Step;
 import java.time.Duration;
 import java.util.*;
@@ -11,6 +10,7 @@ import org.openqa.selenium.support.ui.*;
 
 /** Sales UI interactions; scenarios and persisted inventory assertions live in tests. */
 public class SalesModulePage extends AbstractForSales {
+    private final SalesNavigation navigation;
     private final SalesDocumentForm form;
     private final SalesPrintWindows printing;
     private final SalesChoiceControls choices;
@@ -40,60 +40,28 @@ public class SalesModulePage extends AbstractForSales {
         lines = new SalesDocumentLines(this, driver, ready);
         printing = new SalesPrintWindows(this, driver);
         form = new SalesDocumentForm(this, driver, ready);
+        navigation = new SalesNavigation(this, driver, ready);
     }
 
     public void slAwaitSession() {
-        new WebDriverWait(driver, Duration.ofSeconds(60))
-                .until(
-                        d ->
-                                !d.getCurrentUrl().contains("/login")
-                                        && Boolean.TRUE.equals(
-                                                js(
-                                                        "return Boolean(document.querySelector('#app')?.__vue__?.$store?.getters['app/currentBranch']?.id)")));
+        navigation.slAwaitSession();
     }
 
     protected Object js(String script, Object... args) {
-        return ((JavascriptExecutor) driver).executeScript(script, args);
+        return Plugin_ERP.Util.VueComponentAccess.execute(driver, script, args);
     }
 
     protected static String navigationPath(String route) {
-        return "/" + route.split("[?#]", 2)[0].replaceAll("^/+|/+$", "");
+        return SalesNavigation.navigationPath(route);
     }
 
     protected static boolean reusesFormComponent(String current, String destination) {
-        return current.split("\\?", 2)[0].equals(destination.split("\\?", 2)[0]);
+        return SalesNavigation.reusesFormComponent(current, destination);
     }
 
     @Step("فتح شاشة المبيعات: {route}")
     public void slOpen(String route) {
-        Plugin_ERP.Util.Allur.ScreenNames.opening(route);
-        String destination =
-                PropertyReader.getApplicationUrl().replaceAll("/+$", "") + "/#/" + route;
-        boolean reused = reusesFormComponent(driver.getCurrentUrl(), destination);
-        if (!driver.getCurrentUrl().equals(destination)) driver.get(destination);
-        // A query-only route change reuses Vue's mounted form and does not load its source.
-        if (reused) driver.navigate().refresh();
-        slAwaitSession();
-        ready.until(
-                d ->
-                        Boolean.TRUE.equals(
-                                js(
-                                        """
-            const route=document.querySelector('#app')?.__vue__?.$router?.currentRoute;
-            if(!route||route.path.replace(/\\/+$/g,'')!==arguments[0])return false;
-            const view=route.matched[route.matched.length-1]?.instances?.default;
-            return !!(view?._isMounted&&!view._isDestroyed&&view.$el?.isConnected&&view.$el.getClientRects?.().length);
-            """,
-                                        navigationPath(route))));
-        ready.until(
-                d ->
-                        d
-                                .findElements(
-                                        By.cssSelector(
-                                                "form button[data-action-type='save'],button[data-action-type='new'],table thead th"))
-                                .stream()
-                                .anyMatch(WebElement::isDisplayed));
-        slDismiss();
+        navigation.slOpen(route);
     }
 
     public void slType(By by, String value) {

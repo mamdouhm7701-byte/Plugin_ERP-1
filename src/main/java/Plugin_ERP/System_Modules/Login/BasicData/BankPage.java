@@ -79,6 +79,9 @@ public class BankPage extends AbstractForDealer {
                             ExpectedConditions.invisibilityOfElementLocated(
                                     By.cssSelector(".swal2-container.swal2-backdrop-show")));
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "BankPage fallback: " + ignored.getClass().getSimpleName());
+
             /* Validation errors do not show success. */
         }
         waitRows();

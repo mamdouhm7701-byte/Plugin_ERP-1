@@ -58,6 +58,10 @@ public final class ScenarioFailureReport {
                         "الخطأ الأصلي للمراجعة الفنية", "text/plain", trace.toString(), ".txt");
             }
         } catch (RuntimeException reportingFailure) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "ScenarioFailureReport fallback: "
+                            + reportingFailure.getClass().getSimpleName());
+
             // Reporting is supplementary; never replace the test's original exception.
         }
     }

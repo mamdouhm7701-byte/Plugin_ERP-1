@@ -2,7 +2,6 @@ package TestSupport;
 
 import java.util.Map;
 import java.util.Objects;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 /** Recovery identities are valid only in the origin and branch that created them. */
@@ -21,12 +20,12 @@ public final class FixtureSession {
                         .until(
                                 d ->
                                         script(
-                                                "return document.querySelector('#app')?.__vue__?.$store?.getters['app/currentBranch']?.id"));
+                                                "return erpVue.root()?.$store?.getters['app/currentBranch']?.id"));
         if (branchId == null) throw new AssertionError("Fixture branch is unavailable");
     }
 
     private Object script(String code) {
-        return ((JavascriptExecutor) driver).executeScript(code);
+        return Plugin_ERP.Util.VueComponentAccess.execute(driver, code);
     }
 
     public void verify() {
@@ -37,7 +36,7 @@ public final class FixtureSession {
                             String actual = location instanceof String text ? text : "offline";
                             Object branch =
                                     script(
-                                            "return document.querySelector('#app')?.__vue__?.$store?.getters['app/currentBranch']?.id");
+                                            "return erpVue.root()?.$store?.getters['app/currentBranch']?.id");
                             if (!origin.equals(actual)
                                     || (branch != null && !Objects.equals(branchId, branch)))
                                 throw new AssertionError(

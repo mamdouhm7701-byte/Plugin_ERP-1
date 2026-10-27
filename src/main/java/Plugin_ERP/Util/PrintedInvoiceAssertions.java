@@ -100,6 +100,9 @@ public final class PrintedInvoiceAssertions {
                             new Plugin_ERP.Bots.ValidationActions(null, null, null)
                                     .normalizePrice(cell.text())));
         } catch (NumberFormatException e) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "PrintedInvoiceAssertions fallback: " + e.getClass().getSimpleName());
+
             return Optional.empty();
         }
     }

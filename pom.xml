@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <erp.build.directory>${project.basedir}/target</erp.build.directory>
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <allure.results.directory>${project.basedir}/allure-results</allure.results.directory>
@@ -146,6 +147,7 @@
     </dependencies>
 
     <build>
+        <directory>${erp.build.directory}</directory>
         <plugins>
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>

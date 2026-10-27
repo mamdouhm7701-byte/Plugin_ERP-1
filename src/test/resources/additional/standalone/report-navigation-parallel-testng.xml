@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Isolation pilot only. Deliberately repeats read-only coverage in separate browser sessions. -->
+<suite name="Read-only report isolation pilot" parallel="tests" thread-count="2">
+    <listeners><listener class-name="Plugin_ERP.Listeners.TestNGListeners"/></listeners>
+    <test name="Report reader one"><classes><class name="CoverageTest.ReportNavigationCoverageTest"/></classes></test>
+    <test name="Report reader two"><classes><class name="CoverageTest.ReportNavigationCoverageTest"/></classes></test>
+</suite>

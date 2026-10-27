@@ -95,7 +95,7 @@ final class PurchaseDocumentForm {
     Map<String, Object> puDocument() {
         return (Map<String, Object>)
                 owner.js(
-                        "const q=[document.querySelector('#app').__vue__];while(q.length){const v=q.shift();q.push(...(v.$children||[]));if(v.$data?.selectedItem?.lines&&v.$options.methods?.save)return JSON.parse(JSON.stringify(v.$data.selectedItem));}return null");
+                        "const q=[erpVue.root()];while(q.length){const v=q.shift();q.push(...(erpVue.children(v)||[]));if(v.$data?.selectedItem?.lines&&v.$options.methods?.save)return JSON.parse(JSON.stringify(v.$data.selectedItem));}return null");
     }
 
     void puFormReady() {
@@ -114,7 +114,7 @@ final class PurchaseDocumentForm {
                         d ->
                                 Boolean.TRUE.equals(
                                         owner.js(
-                                                "const q=[document.querySelector('#app').__vue__];while(q.length){const v=q.shift();q.push(...(v.$children||[]));if(v.$data?.selectedItem?.lines&&v.$options.methods?.save){const l=v.lookups;return Boolean(l?.stores?.some(x=>x.id===arguments[0])&&l?.suppliers?.some(x=>x.id===arguments[1])&&l?.agents?.some(x=>x.id===arguments[2]));}}return false",
+                                                "const q=[erpVue.root()];while(q.length){const v=q.shift();q.push(...(erpVue.children(v)||[]));if(v.$data?.selectedItem?.lines&&v.$options.methods?.save){const l=v.lookups;return Boolean(l?.stores?.some(x=>x.id===arguments[0])&&l?.suppliers?.some(x=>x.id===arguments[1])&&l?.agents?.some(x=>x.id===arguments[2]));}}return false",
                                                 store,
                                                 supplier,
                                                 agent)));
@@ -137,7 +137,7 @@ final class PurchaseDocumentForm {
     java.math.BigDecimal puUserDiscountLimit() {
         Object value =
                 owner.js(
-                        "const q=[document.querySelector('#app').__vue__];while(q.length){const v=q.shift();q.push(...(v.$children||[]));const user=v.lookups?.CurrentUser||v.lookups?.currentUser;if(user?.maxAllowedDiscount!=null)return user.maxAllowedDiscount;}return null");
+                        "const q=[erpVue.root()];while(q.length){const v=q.shift();q.push(...(erpVue.children(v)||[]));const user=v.lookups?.CurrentUser||v.lookups?.currentUser;if(user?.maxAllowedDiscount!=null)return user.maxAllowedDiscount;}return null");
         return value == null ? null : new java.math.BigDecimal(value.toString());
     }
 

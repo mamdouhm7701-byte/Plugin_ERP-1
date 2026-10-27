@@ -14,9 +14,7 @@ import java.time.Instant;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.IExecutionListener;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -184,11 +182,10 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
         // Update browser values without dropping the other run metadata.
         try {
             WebDriver driver = WebDriverFactory.getDriver();
-            if (driver instanceof RemoteWebDriver rwd) {
-                Capabilities caps = rwd.getCapabilities();
+            var browser = AllureEnvironment.browserDetails(driver);
+            if (!browser.isEmpty()) {
                 AllureEnvironment.updateBrowser(
-                        String.valueOf(caps.getBrowserName()),
-                        String.valueOf(caps.getBrowserVersion()));
+                        browser.get("Browser"), browser.get("Browser Version"));
             }
         } catch (Exception e) {
             LogUtils.error(
@@ -200,7 +197,6 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
     @Override
     public void onTestSuccess(ITestResult result) {
         Plugin_ERP.Util.Allur.ScenarioAssertions.end();
-        takeScreenshot(result, "PASS");
     }
 
     @Override
@@ -218,7 +214,6 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
     @Override
     public void onTestSkipped(ITestResult result) {
         Plugin_ERP.Util.Allur.ScenarioAssertions.end();
-        takeScreenshot(result, "SKIPPED");
     }
 
     // ================= Utils =================

@@ -23,10 +23,10 @@ public class ScreenPage {
                 new FormInteractions(
                         ready,
                         e ->
-                                ((JavascriptExecutor) driver)
-                                        .executeScript(
-                                                "arguments[0].scrollIntoView({block:'center',inline:'nearest'})",
-                                                e));
+                                Plugin_ERP.Util.VueComponentAccess.execute(
+                                        driver,
+                                        "arguments[0].scrollIntoView({block:'center',inline:'nearest'})",
+                                        e));
     }
 
     public static String literal(String value) {
@@ -62,16 +62,16 @@ public class ScreenPage {
                 .until(
                         d ->
                                 Boolean.TRUE.equals(
-                                        ((JavascriptExecutor) d)
-                                                .executeScript(
-                                                        """
-            const root=document.querySelector('#app')?.__vue__,route=root?.$router?.currentRoute;
+                                        Plugin_ERP.Util.VueComponentAccess.execute(
+                                                d,
+                                                """
+            const root=erpVue.root(),route=root?.$router?.currentRoute;
             const expected='/'+arguments[0].replace(/^\\/+|\\/+$/g,'');
             if(!route||route.path.replace(/\\/+$/g,'')!==expected)return false;
             const matched=route.matched[route.matched.length-1],vm=matched?.instances?.default;
             return !!(vm&&vm._isMounted&&!vm._isDestroyed&&vm.$el?.isConnected&&vm.$el.getClientRects?.().length);
             """,
-                                                        route)));
+                                                route)));
         settled();
     }
 
@@ -100,10 +100,10 @@ public class ScreenPage {
                 d -> {
                     WebElement view =
                             (WebElement)
-                                    ((JavascriptExecutor) d)
-                                            .executeScript(
-                                                    """
-                const r=document.querySelector('#app')?.__vue__?.$router?.currentRoute;
+                                    Plugin_ERP.Util.VueComponentAccess.execute(
+                                            d,
+                                            """
+                const r=erpVue.root()?.$router?.currentRoute;
                 return r?.matched[r.matched.length-1]?.instances?.default?.$el||null;
                 """);
                     if (view == null) return false;
@@ -111,10 +111,10 @@ public class ScreenPage {
                         if (element.isDisplayed()
                                 && element.isEnabled()
                                 && element.getText().trim().equals(text)) {
-                            ((JavascriptExecutor) d)
-                                    .executeScript(
-                                            "arguments[0].scrollIntoView({block:'center',behavior:'instant'})",
-                                            element);
+                            Plugin_ERP.Util.VueComponentAccess.execute(
+                                    d,
+                                    "arguments[0].scrollIntoView({block:'center',behavior:'instant'})",
+                                    element);
                             element.click();
                             return true;
                         }
@@ -235,10 +235,10 @@ public class ScreenPage {
                                 .isEmpty()) return true;
                         if (!toggle.findElements(By.xpath("./*[contains(@class,'fa-caret-right')]"))
                                 .isEmpty()) {
-                            ((JavascriptExecutor) d)
-                                    .executeScript(
-                                            "arguments[0].scrollIntoView({block:'center',behavior:'instant'})",
-                                            label);
+                            Plugin_ERP.Util.VueComponentAccess.execute(
+                                    d,
+                                    "arguments[0].scrollIntoView({block:'center',behavior:'instant'})",
+                                    label);
                             label.click();
                         }
                     }
@@ -272,10 +272,10 @@ public class ScreenPage {
                             WebElement label =
                                     parent.findElement(
                                             By.xpath("./label[contains(@class,'tree-text')]"));
-                            ((JavascriptExecutor) d)
-                                    .executeScript(
-                                            "arguments[0].scrollIntoView({block:'center',behavior:'instant'})",
-                                            label);
+                            Plugin_ERP.Util.VueComponentAccess.execute(
+                                    d,
+                                    "arguments[0].scrollIntoView({block:'center',behavior:'instant'})",
+                                    label);
                             label.click();
                             return false;
                         }

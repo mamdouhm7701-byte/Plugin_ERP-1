@@ -24,14 +24,10 @@ public class TypesofdiscountsPage extends AbstractForDealer {
     private By AddTypesofdiscounts = By.xpath("//button[contains(text(),'جديد')]");
     private By AddArabicTypesofdiscounts = By.xpath("//input[@id='arabicName']");
     private By AddEnglishTypesofdiscounts = By.xpath("//input[@name='englishName']");
-    private By AddNotesTypesofdiscounts =
-            By.xpath("//textarea[contains(@class,'form-control') and @label='Notes']\n");
     private By SaveButton =
             By.xpath("//button[@data-action-type='save' and normalize-space(text())='حفظ']\n");
     private By Clickyestodelet =
             By.xpath("//button[contains(@class, \"swal2-confirm\") and contains(text(), \"نعم\")]");
-    private By TypesofdiscountsNameRequiredMsg =
-            By.xpath("//input[@id='arabicName']/following::small[contains(@class,'text-danger')]");
     private By Percentage = By.xpath("//input[@name='discountPercentage']");
     private By SecrtCode = By.xpath("//input[@id='secretCode']");
     private By AddUser = By.xpath("//button[normalize-space()='إضافة مستخدمين']");

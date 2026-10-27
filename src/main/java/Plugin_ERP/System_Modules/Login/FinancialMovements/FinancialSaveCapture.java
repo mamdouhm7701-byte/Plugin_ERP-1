@@ -9,8 +9,8 @@ final class FinancialSaveCapture {
     @SuppressWarnings("unchecked")
     List<Map<String, Object>> capturedAttempts() {
         return (List<Map<String, Object>>)
-                ((JavascriptExecutor) driver)
-                        .executeScript("return window.__financialQA?.attempts||[]");
+                Plugin_ERP.Util.VueComponentAccess.execute(
+                        driver, "return window.__financialQA?.attempts||[]");
     }
 
     private final FinancialMovementPage owner;
@@ -24,10 +24,10 @@ final class FinancialSaveCapture {
     }
 
     void captureSaves(String marker) {
-        ((JavascriptExecutor) driver)
-                .executeScript(
-                        """
-      const store=document.querySelector('#app').__vue__.$store;
+        Plugin_ERP.Util.VueComponentAccess.execute(
+                driver,
+                """
+      const store=erpVue.root().$store;
       window.__financialQA={marker:arguments[0],saves:[],attempts:[],pending:0,errors:[]};
       if(store.__financialCaptureInstalled)return;
       store.__financialCaptureInstalled=true;
@@ -44,34 +44,33 @@ final class FinancialSaveCapture {
         }).catch(error=>{if(owned){cap.pending--;cap.errors.push(String(error));}throw error;});
       };
       """,
-                        marker);
+                marker);
     }
 
     List<Map<String, Object>> capturedSaves() {
         return (List<Map<String, Object>>)
-                ((JavascriptExecutor) driver)
-                        .executeScript("return window.__financialQA?.saves||[]");
+                Plugin_ERP.Util.VueComponentAccess.execute(
+                        driver, "return window.__financialQA?.saves||[]");
     }
 
     String captureMarker() {
         return (String)
-                ((JavascriptExecutor) driver)
-                        .executeScript("return window.__financialQA?.marker||null");
+                Plugin_ERP.Util.VueComponentAccess.execute(
+                        driver, "return window.__financialQA?.marker||null");
     }
 
     boolean hasSaveStarted() {
         return Boolean.TRUE.equals(
-                ((JavascriptExecutor) driver)
-                        .executeScript(
-                                "return !!window.__financialQA && (window.__financialQA.pending>0 || window.__financialQA.saves.length>0)"));
+                Plugin_ERP.Util.VueComponentAccess.execute(
+                        driver,
+                        "return !!window.__financialQA && (window.__financialQA.pending>0 || window.__financialQA.saves.length>0)"));
     }
 
     void awaitSavesSettled() {
         ready.until(
                 d ->
                         !Boolean.TRUE.equals(
-                                ((JavascriptExecutor) d)
-                                        .executeScript(
-                                                "return (window.__financialQA?.pending||0)>0")));
+                                Plugin_ERP.Util.VueComponentAccess.execute(
+                                        d, "return (window.__financialQA?.pending||0)>0")));
     }
 }

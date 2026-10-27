@@ -5,7 +5,6 @@ import Plugin_ERP.Tests.LoginTest.BaseTest;
 import io.qameta.allure.Story;
 import java.nio.file.*;
 import java.util.*;
-import org.openqa.selenium.JavascriptExecutor;
 import org.testng.annotations.Test;
 
 /** Read-only discovery; no documents or fixtures are created. */
@@ -29,16 +28,16 @@ public class PurchaseDiscoveryTest extends BaseTest {
                     .until(
                             d ->
                                     Boolean.TRUE.equals(
-                                            ((JavascriptExecutor) d)
-                                                    .executeScript(
-                                                            "const q=[document.querySelector('#app').__vue__];while(q.length){const v=q.shift();q.push(...(v.$children||[]));if(arguments[0]?v.$options.methods?.invoiceProvider:(v.$data?.selectedItem?.lines&&v.$options.methods?.save))return true;}return false",
-                                                            route.endsWith("list"))));
+                                            Plugin_ERP.Util.VueComponentAccess.execute(
+                                                    d,
+                                                    "const q=[erpVue.root()];while(q.length){const v=q.shift();q.push(...(erpVue.children(v)||[]));if(arguments[0]?v.$options.methods?.invoiceProvider:(v.$data?.selectedItem?.lines&&v.$options.methods?.save))return true;}return false",
+                                                    route.endsWith("list"))));
             Object state =
-                    ((JavascriptExecutor) driver)
-                            .executeScript(
-                                    """
-        const q=[document.querySelector('#app').__vue__],forms=[];
-        while(q.length){const v=q.shift();q.push(...(v.$children||[]));
+                    Plugin_ERP.Util.VueComponentAccess.execute(
+                            driver,
+                            """
+        const q=[erpVue.root()],forms=[];
+        while(q.length){const v=q.shift();q.push(...(erpVue.children(v)||[]));
           if(v.$data?.selectedItem?.lines||v.$options.methods?.invoiceProvider)
             forms.push({name:v.$options.name,selectedItem:v.$data.selectedItem,methods:Object.keys(v.$options.methods||{}),
               sources:Object.fromEntries(['save','getUrl','initObj','invoiceProvider'].filter(k=>v.$options.methods?.[k]).map(k=>[k,String(v.$options.methods[k])]))});}

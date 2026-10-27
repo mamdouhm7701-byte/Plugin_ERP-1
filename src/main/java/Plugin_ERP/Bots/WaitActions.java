@@ -135,6 +135,10 @@ public class WaitActions extends BaseAction {
                                 if (hiddenSince[0] < 0) hiddenSince[0] = now;
                                 return now - hiddenSince[0] >= Duration.ofSeconds(1).toNanos();
                             } catch (StaleElementReferenceException stale) {
+                                Plugin_ERP.Bots.LogUtils.debug(
+                                        "WaitActions fallback: "
+                                                + stale.getClass().getSimpleName());
+
                                 hiddenSince[0] = -1;
                                 return false;
                             }

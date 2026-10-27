@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -67,10 +66,9 @@ public final class BasicDataFixtures implements AutoCloseable {
         new WebDriverWait(driver, Duration.ofSeconds(30))
                 .until(
                         d ->
-                                ((JavascriptExecutor) d)
-                                        .executeScript(
-                                                "return Boolean(document.querySelector('#app')"
-                                                        + "?.__vue__?.$store?.getters['app/currentBranch']?.id)"));
+                                Plugin_ERP.Util.VueComponentAccess.execute(
+                                        d,
+                                        "return Boolean(erpVue.root()?.$store?.getters['app/currentBranch']?.id)"));
     }
 
     /** Closed and reviewed treasury history keeps its linked master records for audit. */
@@ -264,9 +262,9 @@ public final class BasicDataFixtures implements AutoCloseable {
         } catch (org.openqa.selenium.TimeoutException failure) {
             try {
                 Object diagnostics =
-                        ((JavascriptExecutor) driver)
-                                .executeScript(
-                                        "return {attempts:window.__basicDataQA?.attempts||[],errors:window.__basicDataQA?.errors||[],pending:window.__basicDataQA?.pending}");
+                        Plugin_ERP.Util.VueComponentAccess.execute(
+                                driver,
+                                "return {attempts:window.__basicDataQA?.attempts||[],errors:window.__basicDataQA?.errors||[],pending:window.__basicDataQA?.pending}");
                 io.qameta.allure.Allure.addAttachment(
                         "Owned basic data save diagnostics",
                         "application/json",
@@ -460,8 +458,8 @@ public final class BasicDataFixtures implements AutoCloseable {
     @SuppressWarnings("unchecked")
     public void collectUi() {
         Object raw =
-                ((JavascriptExecutor) driver)
-                        .executeScript("return window.__basicDataQA?.saves||[]");
+                Plugin_ERP.Util.VueComponentAccess.execute(
+                        driver, "return window.__basicDataQA?.saves||[]");
         if (!(raw instanceof List<?> rows)) return;
         for (Object value : rows) {
             var row = (Map<String, Object>) value;
@@ -480,10 +478,10 @@ public final class BasicDataFixtures implements AutoCloseable {
     }
 
     public void installCapture() {
-        ((JavascriptExecutor) driver)
-                .executeScript(
-                        """
-      const store=document.querySelector('#app')?.__vue__?.$store;
+        Plugin_ERP.Util.VueComponentAccess.execute(
+                driver,
+                """
+      const store=erpVue.root()?.$store;
       if(!store)return;
       const storageKey='qa-basic-data-'+arguments[1];
       if(window.__basicDataQA?.storageKey!==storageKey){
@@ -515,12 +513,12 @@ public final class BasicDataFixtures implements AutoCloseable {
           persist(cap);}throw error;});
       };
       """,
-                        new ArrayList<>(ALLOWED),
-                        suffix);
-        ((JavascriptExecutor) driver)
-                .executeScript(
-                        "window.__basicDataReservedNames=arguments[0]",
-                        new ArrayList<>(reservedNames));
+                new ArrayList<>(ALLOWED),
+                suffix);
+        Plugin_ERP.Util.VueComponentAccess.execute(
+                driver,
+                "window.__basicDataReservedNames=arguments[0]",
+                new ArrayList<>(reservedNames));
     }
 
     /** Reloaded pages retain unresolved request counters; never delete their prerequisites. */
@@ -530,9 +528,8 @@ public final class BasicDataFixtures implements AutoCloseable {
                 .until(
                         d ->
                                 !Boolean.TRUE.equals(
-                                        ((JavascriptExecutor) d)
-                                                .executeScript(
-                                                        "return (window.__basicDataQA?.pending||0)>0")));
+                                        Plugin_ERP.Util.VueComponentAccess.execute(
+                                                d, "return (window.__basicDataQA?.pending||0)>0")));
     }
 
     private static boolean retryable(ApiFailure failure) {

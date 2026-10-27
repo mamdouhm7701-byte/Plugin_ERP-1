@@ -100,4 +100,13 @@ final class PurchaseDocumentTransitions {
         owner.puDismiss();
         owner.puWaitListIds(Set.of());
     }
+
+    void puEdit(String route, Object id, String marker, String itemName) {
+        owner.puOpen(route + "/edit/" + id);
+        ready.until(
+                d ->
+                        d.findElements(By.cssSelector("form textarea[label-text='Notes']")).stream()
+                                        .anyMatch(e -> marker.equals(e.getDomProperty("value")))
+                                && owner.puLineCount(itemName) > 0);
+    }
 }

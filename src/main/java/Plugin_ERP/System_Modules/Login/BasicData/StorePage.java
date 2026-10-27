@@ -12,10 +12,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class StorePage extends AbstractForDealer {
+    private final By save = By.cssSelector("button[data-action-type='save']");
     private final WarehouseRecords recordControls;
-    private final By rows = By.cssSelector("table tbody tr[role='row']"),
-            headers = By.cssSelector("table thead th"),
-            save = By.cssSelector("button[data-action-type='save']");
 
     public StorePage(WebDriver driver) {
         super(driver);

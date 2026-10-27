@@ -17,11 +17,11 @@ public class RoutLineForDealer extends AbstractForDealer {
 
     private static final String OWNED_CALENDAR =
             """
-        const queue=[document.querySelector('#app')?.__vue__];
+        const queue=[erpVue.root()];
         let calendar;
         while(queue.length){const vm=queue.shift(); if(!vm)continue;
           if(vm.$options.methods?.getCustomersForParams && vm.$options.methods?.getEvents){calendar=vm;break;}
-          queue.push(...(vm.$children||[]));}
+          queue.push(...(erpVue.children(vm)||[]));}
         if(!calendar)throw Error('Route calendar is unavailable');
         """;
 

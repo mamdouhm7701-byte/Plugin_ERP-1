@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CashPage extends AbstractForDealer {
+    private final CashLoadingWaits loadingWaits;
     private final CashFormReader formReader;
     private final CashRecordActions records;
     private final CashListControls listControls;
@@ -20,6 +21,7 @@ public class CashPage extends AbstractForDealer {
     // Constructors
     public CashPage(WebDriver driver) {
         super(driver);
+        loadingWaits = new CashLoadingWaits(driver);
         records = new CashRecordActions(this, driver);
         listControls = new CashListControls(this, driver, this::waitForCashPageLoading);
         formReader = new CashFormReader(this, driver);
@@ -128,6 +130,9 @@ public class CashPage extends AbstractForDealer {
                             ExpectedConditions.invisibilityOfElementLocated(
                                     By.cssSelector(".swal2-container.swal2-backdrop-show")));
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "CashPage fallback: " + ignored.getClass().getSimpleName());
+
             // Negative validation submits do not show a save-success popup.
         }
     }
@@ -199,40 +204,12 @@ public class CashPage extends AbstractForDealer {
 
     @Step("انتظار اكتمال تحميل شاشة الخزن")
     private void waitForCashPageLoading() {
-        By loadingOverlays =
-                By.cssSelector("div.b-overlay, div.position-absolute.bg-light.rounded-lg");
-        new WebDriverWait(driver, Duration.ofSeconds(30))
-                .until(
-                        d ->
-                                d.findElements(loadingOverlays).stream()
-                                        .noneMatch(
-                                                element -> {
-                                                    try {
-                                                        return element.isDisplayed();
-                                                    } catch (
-                                                            org.openqa.selenium
-                                                                            .StaleElementReferenceException
-                                                                    ignored) {
-                                                        Plugin_ERP.Bots.LogUtils.debug(
-                                                                "CashPage condition unavailable: "
-                                                                        + ignored.getClass()
-                                                                                .getSimpleName());
-                                                        return false;
-                                                    }
-                                                }));
+        loadingWaits.waitForCashPageLoading();
     }
 
     @Step("انتظار اختفاء تنبيه الخزنة")
     private void waitForCashAlertToDisappear() {
-        new WebDriverWait(driver, Duration.ofSeconds(12))
-                .until(
-                        d ->
-                                d
-                                        .findElements(
-                                                By.cssSelector(
-                                                        ".swal2-container.swal2-backdrop-show"))
-                                        .stream()
-                                        .noneMatch(WebElement::isDisplayed));
+        loadingWaits.waitForCashAlertToDisappear();
     }
 
     @Step("البحث في قائمة الخزن عن: {searchText}")

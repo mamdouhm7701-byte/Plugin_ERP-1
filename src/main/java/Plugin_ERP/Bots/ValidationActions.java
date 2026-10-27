@@ -175,6 +175,10 @@ public class ValidationActions extends BaseAction {
                     return true;
                 }
             } catch (NumberFormatException nonNumericLabel) {
+                Plugin_ERP.Bots.LogUtils.debug(
+                        "ValidationActions fallback: "
+                                + nonNumericLabel.getClass().getSimpleName());
+
                 // A report also contains headings; never match a number inside their text.
             }
         }

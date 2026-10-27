@@ -260,6 +260,9 @@ final class InvoiceListGrid {
             return new java.math.BigDecimal(normalizedLeft.replace(",", ""))
                     .compareTo(new java.math.BigDecimal(normalizedRight.replace(",", "")));
         } catch (NumberFormatException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "InvoiceListGrid fallback: " + ignored.getClass().getSimpleName());
+
             return normalizedLeft.compareTo(normalizedRight);
         }
     }

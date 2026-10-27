@@ -126,6 +126,9 @@ final class DealerRecordActions {
             new WebDriverWait(driver, Duration.ofSeconds(5))
                     .until(ExpectedConditions.invisibilityOfElementLocated(successPopup));
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "DealerRecordActions fallback: " + ignored.getClass().getSimpleName());
+
             // Successful saves may use a toast or close the dialog automatically.
         }
     }
@@ -219,6 +222,9 @@ final class DealerRecordActions {
                                                     .orElse(null));
             successButton.click();
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "DealerRecordActions fallback: " + ignored.getClass().getSimpleName());
+
             // Some deployments close the confirmation without a separate success dialog.
         }
         new WebDriverWait(driver, Duration.ofSeconds(10))
@@ -240,6 +246,9 @@ final class DealerRecordActions {
         try {
             button.click();
         } catch (org.openqa.selenium.ElementNotInteractableException exception) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "DealerRecordActions fallback: " + exception.getClass().getSimpleName());
+
             ((org.openqa.selenium.JavascriptExecutor) driver)
                     .executeScript("arguments[0].click();", button);
         }

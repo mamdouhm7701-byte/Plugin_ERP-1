@@ -59,9 +59,7 @@ final class ProductsFixtureApiStub {
                             if (method.getName().equals("executeScript")) {
                                 String code = (String) args[0];
                                 if (code.equals("return location.origin")) return "offline";
-                                return code.startsWith("return document.querySelector")
-                                        ? activeBranch
-                                        : true;
+                                return code.contains("return erpVue.root()") ? activeBranch : true;
                             }
                             if (method.getName().equals("manage")) return options;
                             if (method.getName().equals("executeAsyncScript"))

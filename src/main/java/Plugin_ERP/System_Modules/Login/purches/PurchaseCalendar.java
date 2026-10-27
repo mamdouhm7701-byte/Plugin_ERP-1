@@ -174,4 +174,17 @@ final class PurchaseCalendar {
         }
         throw new IllegalArgumentException("Calendar month not found: " + text);
     }
+
+    void selectListFilter(String name, String value, Runnable awaitListReady, WebDriverWait ready) {
+        awaitListReady.run();
+        WebElement hidden = driver.findElement(By.cssSelector("input[name='" + name + "']"));
+        if (value.equals(hidden.getDomProperty("value"))) return;
+        selectDate(hidden, value);
+        ready.until(
+                d ->
+                        value.equals(
+                                d.findElement(By.cssSelector("input[name='" + name + "']"))
+                                        .getDomProperty("value")));
+        awaitListReady.run();
+    }
 }

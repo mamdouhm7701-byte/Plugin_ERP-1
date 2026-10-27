@@ -44,8 +44,8 @@ public final class RestaurantInvoicePage extends SpecialSalesPage {
                         Boolean.TRUE.equals(
                                 js(
                                         """
-                                        const queue=[document.querySelector('#app')?.__vue__];
-                                        while(queue.length){const vm=queue.shift();if(!vm)continue;queue.push(...(vm.$children||[]));
+                                        const queue=[erpVue.root()];
+                                        while(queue.length){const vm=queue.shift();if(!vm)continue;queue.push(...(erpVue.children(vm)||[]));
                                           if(Array.isArray(vm.$data?.allItems))return !vm.isLoadingItems&&vm.allItems.some(item=>item.arabicName===arguments[0]||item.englishName===arguments[0]);
                                         }return false;
                                         """,
@@ -120,8 +120,7 @@ public final class RestaurantInvoicePage extends SpecialSalesPage {
     public void selectTable(String code) {
         click(
                 By.xpath(
-                        "//div[contains(@class,'modal') and"
-                                + " contains(@class,'show')]//h6[normalize-space()='"
+                        "//div[contains(@class,'modal') and contains(@class,'show')]//h6[normalize-space()='"
                                 + code
                                 + "']"));
     }

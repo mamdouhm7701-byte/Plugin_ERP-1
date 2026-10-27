@@ -21,6 +21,7 @@
 -->
 <suite name="Regression - Core modules and workflows" parallel="none" configfailurepolicy="continue">
     <suite-files>
+        <suite-file path="report-navigation-testng.xml"/>
         <suite-file path="coverage-expansion-testng.xml"/>
         <suite-file path="products-testng.xml"/>
         <suite-file path="dealer-model-testng.xml"/>

@@ -63,6 +63,9 @@ public final class ScenarioAccess {
                                 }
                             });
         } catch (org.openqa.selenium.WebDriverException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "ScenarioAccess fallback: " + ignored.getClass().getSimpleName());
+
             // A closed browser must not replace the original test outcome.
         }
     }

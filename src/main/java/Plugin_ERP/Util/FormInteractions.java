@@ -92,6 +92,10 @@ public final class FormInteractions {
                                 input.sendKeys(Keys.CONTROL + "a");
                                 input.sendKeys(name);
                             } catch (ElementNotInteractableException updatingDropdown) {
+                                Plugin_ERP.Bots.LogUtils.debug(
+                                        "FormInteractions fallback: "
+                                                + updatingDropdown.getClass().getSimpleName());
+
                                 // Reacquire the input within the same bounded page wait.
                                 return false;
                             }

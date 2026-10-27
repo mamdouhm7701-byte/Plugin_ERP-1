@@ -65,7 +65,7 @@ final class StoreFixtureApiStub {
                                 String script = (String) args[0];
                                 if (script.startsWith("return location.origin"))
                                     return activeOrigin;
-                                if (script.startsWith("return document.querySelector")) {
+                                if (script.contains("return erpVue.root()")) {
                                     if (missingBranchReads > 0) {
                                         missingBranchReads--;
                                         return null;

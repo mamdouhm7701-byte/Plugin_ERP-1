@@ -56,7 +56,7 @@ public class AllureEnvironment {
             String bName =
                     (browserName != null && !browserName.isBlank())
                             ? browserName
-                            : getProperty("browserType");
+                            : getProperty("BrowserType");
             String bVer =
                     (browserVersion != null && !browserVersion.isBlank())
                             ? browserVersion
@@ -87,6 +87,18 @@ public class AllureEnvironment {
         writeEnvironment(null, null);
     }
 
+    public static java.util.Map<String, String> browserDetails(
+            org.openqa.selenium.WebDriver driver) {
+        if (!(driver instanceof org.openqa.selenium.HasCapabilities browser))
+            return java.util.Map.of();
+        var capabilities = browser.getCapabilities();
+        return java.util.Map.of(
+                "Browser",
+                safe(capabilities.getBrowserName()),
+                "Browser Version",
+                safe(capabilities.getBrowserVersion()));
+    }
+
     public static synchronized void updateBrowser(String browserName, String browserVersion) {
         Properties props = new Properties();
         Path envPath = ALLURE_RESULTS_DIR.resolve("environment.properties");
@@ -96,6 +108,7 @@ public class AllureEnvironment {
                     props.load(input);
                 }
             }
+            Files.createDirectories(ALLURE_RESULTS_DIR);
             props.setProperty("Browser", safe(browserName));
             props.setProperty("Browser Version", safe(browserVersion));
             try (OutputStream output = Files.newOutputStream(envPath)) {

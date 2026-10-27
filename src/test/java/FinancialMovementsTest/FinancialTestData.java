@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -38,10 +37,9 @@ final class FinancialTestData implements AutoCloseable {
         new WebDriverWait(driver, Duration.ofSeconds(30))
                 .until(
                         d ->
-                                ((JavascriptExecutor) d)
-                                        .executeScript(
-                                                "return Boolean(document.querySelector('#app')"
-                                                        + "?.__vue__?.$store?.getters['app/currentBranch']?.id)"));
+                                Plugin_ERP.Util.VueComponentAccess.execute(
+                                        d,
+                                        "return Boolean(erpVue.root()?.$store?.getters['app/currentBranch']?.id)"));
     }
 
     private int scenarioSequence;

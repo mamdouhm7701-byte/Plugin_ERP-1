@@ -177,4 +177,21 @@ final class DealerFormControls {
     boolean isVisible(By locator) {
         return driver.findElements(locator).stream().anyMatch(this::isElementDisplayed);
     }
+
+    private By DateInput = By.xpath("//input[@placeholder='YYYY-MM-DD']");
+
+    private By AddNoteForStorgTrans = By.xpath("//textarea[@label-text='notes']");
+
+    void AddDateForDealer() {
+        utilites.waits().waitForOverlayToDisappear();
+        String todayDate = utilites.Utility().TypeTodayDate("dd/MM/yyyy");
+        utilites.typeTextAndVerify(DateInput, todayDate);
+        utilites.waits().waitForOverlayToDisappear();
+    }
+
+    void AddNoteForStorgTrans(String notes) {
+        utilites.waits().waitForOverlayToDisappear();
+        utilites.typeTextAndVerify(AddNoteForStorgTrans, notes);
+        utilites.waits().waitForOverlayToDisappear();
+    }
 }

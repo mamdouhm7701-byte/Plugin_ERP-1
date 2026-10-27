@@ -207,6 +207,9 @@ final class AreaGridControls {
                     try {
                         comparison = Long.compare(Long.parseLong(left), Long.parseLong(right));
                     } catch (NumberFormatException ignored) {
+                        Plugin_ERP.Bots.LogUtils.debug(
+                                "AreaGridControls fallback: " + ignored.getClass().getSimpleName());
+
                         comparison = left.compareToIgnoreCase(right);
                     }
                     return ascending ? comparison : -comparison;

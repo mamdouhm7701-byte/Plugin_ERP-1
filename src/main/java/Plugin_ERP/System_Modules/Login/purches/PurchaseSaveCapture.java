@@ -19,7 +19,7 @@ final class PurchaseSaveCapture {
     void puCapture(String marker, Object storeId, Object itemId, String endpoint) {
         owner.js(
                 """
-    const store=document.querySelector('#app').__vue__.$store;
+    const store=erpVue.root().$store;
     window.__purchaseQA={marker:arguments[0],storeId:arguments[1],itemId:arguments[2],endpoint:arguments[3],saves:[],attempts:[],pending:0,errors:[],lookups:[],uiErrors:[]};
     if(!window.__purchaseQAErrorsInstalled){window.__purchaseQAErrorsInstalled=true;
       addEventListener('error',e=>window.__purchaseQA?.uiErrors.push(e.message));

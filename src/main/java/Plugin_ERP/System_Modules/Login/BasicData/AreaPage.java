@@ -67,6 +67,9 @@ public class AreaPage extends AbstractForDealer {
                             ExpectedConditions.invisibilityOfElementLocated(
                                     By.cssSelector(".swal2-container.swal2-backdrop-show")));
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "AreaPage fallback: " + ignored.getClass().getSimpleName());
+
             // Validation failures do not show the save confirmation popup.
         }
     }

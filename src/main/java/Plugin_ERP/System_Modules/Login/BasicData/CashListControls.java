@@ -235,6 +235,9 @@ final class CashListControls {
                         int comparison = Long.compare(Long.parseLong(left), Long.parseLong(right));
                         return ascending ? comparison : -comparison;
                     } catch (NumberFormatException ignored) {
+                        Plugin_ERP.Bots.LogUtils.debug(
+                                "CashListControls fallback: " + ignored.getClass().getSimpleName());
+
                         int comparison = left.compareToIgnoreCase(right);
                         return ascending ? comparison : -comparison;
                     }

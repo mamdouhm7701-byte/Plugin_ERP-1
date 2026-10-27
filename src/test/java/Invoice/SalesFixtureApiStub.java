@@ -67,7 +67,7 @@ final class SalesFixtureApiStub {
                             if (method.getName().equals("executeScript")) {
                                 String script = (String) args[0];
                                 if (script.equals("return location.origin")) return origin;
-                                if (script.startsWith("return document.querySelector")) {
+                                if (script.contains("return erpVue.root()")) {
                                     if (branchUnavailableReads > 0) {
                                         branchUnavailableReads--;
                                         return null;

@@ -127,12 +127,7 @@ public class BrowserAction {
                     throw new RuntimeException("Failed to navigate to: " + url, e);
                 }
 
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                    throw new IllegalStateException("Navigation retry interrupted", ex);
-                }
+                waitForOverlayToDisappear();
             }
         }
     }
@@ -188,12 +183,7 @@ public class BrowserAction {
                 }
 
                 // انتظار بسيط قبل إعادة المحاولة
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                    throw new IllegalStateException("Navigation retry interrupted", ex);
-                }
+                waitForOverlayToDisappear();
             }
         }
     }

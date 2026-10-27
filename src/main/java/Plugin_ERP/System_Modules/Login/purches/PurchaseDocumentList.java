@@ -6,11 +6,11 @@ import org.openqa.selenium.support.ui.*;
 
 /** List filters, readiness and owned row checks; form operations stay in the page. */
 final class PurchaseDocumentList {
-    private final PurchaseModulePage page;
+    private final PurchaseListPage page;
     private final WebDriver driver;
     private final WebDriverWait ready;
 
-    PurchaseDocumentList(PurchaseModulePage page, WebDriver driver, WebDriverWait ready) {
+    PurchaseDocumentList(PurchaseListPage page, WebDriver driver, WebDriverWait ready) {
         this.page = page;
         this.driver = driver;
         this.ready = ready;
@@ -31,7 +31,7 @@ final class PurchaseDocumentList {
     private boolean puListReady() {
         return Boolean.TRUE.equals(
                 page.js(
-                        "const q=[document.querySelector('#app').__vue__];let table,owner;while(q.length){const v=q.shift();q.push(...(v.$children||[]));if(v.$options.methods?.invoiceProvider)owner=v;if(v.$options.name==='BTable'&&v.$el?.getClientRects().length&&v.$el.closest('.ps-list-page'))table=v;}return Boolean(table&&owner&&!table.computedBusy&&!owner.isTableBusy&&performance.getEntriesByType('resource').some(r=>{try{return /\\/PurchaseLists$/i.test(new URL(r.name).pathname)}catch(e){return false}}))"));
+                        "const q=[erpVue.root()];let table,owner;while(q.length){const v=q.shift();q.push(...(erpVue.children(v)||[]));if(v.$options.methods?.invoiceProvider)owner=v;if(v.$options.name==='BTable'&&v.$el?.getClientRects().length&&v.$el.closest('.ps-list-page'))table=v;}return Boolean(table&&owner&&!table.computedBusy&&!owner.isTableBusy&&performance.getEntriesByType('resource').some(r=>{try{return /\\/PurchaseLists$/i.test(new URL(r.name).pathname)}catch(e){return false}}))"));
     }
 
     void puApplyListFilters() {
@@ -77,7 +77,7 @@ final class PurchaseDocumentList {
     List<Map<String, Object>> puListRows() {
         return (List<Map<String, Object>>)
                 page.js(
-                        "const q=[document.querySelector('#app').__vue__];while(q.length){const v=q.shift();q.push(...(v.$children||[]));if(v.$options.name==='BTable'&&v.$el?.getClientRects().length&&v.$el.closest('.ps-list-page')&&Array.isArray(v.$data.localItems))return JSON.parse(JSON.stringify(v.$data.localItems));}return []");
+                        "const q=[erpVue.root()];while(q.length){const v=q.shift();q.push(...(erpVue.children(v)||[]));if(v.$options.name==='BTable'&&v.$el?.getClientRects().length&&v.$el.closest('.ps-list-page')&&Array.isArray(v.$data.localItems))return JSON.parse(JSON.stringify(v.$data.localItems));}return []");
     }
 
     void puWaitListIds(Set<Object> expected) {

@@ -269,15 +269,15 @@ public final class TreasuryLedgerCoverageTest extends BaseTest {
                         .until(
                                 d ->
                                         Boolean.TRUE.equals(
-                                                ((JavascriptExecutor) d)
-                                                        .executeScript(
-                                                                """
-                        const q=[document.querySelector('#app')?.__vue__];
+                                                Plugin_ERP.Util.VueComponentAccess.execute(
+                                                        d,
+                                                        """
+                        const q=[erpVue.root()];
                         while(q.length){const vm=q.shift();if(!vm)continue;
                           if(vm.safeTransactions?.safeId===arguments[0])return true;
-                          q.push(...(vm.$children||[]));}return false;
+                          q.push(...(erpVue.children(vm)||[]));}return false;
                         """,
-                                                                safe.id())));
+                                                        safe.id())));
                 page.choose("طريقة الدفع", "خزينة");
             }
             page.amount(amount);
@@ -303,11 +303,11 @@ public final class TreasuryLedgerCoverageTest extends BaseTest {
                         "Cash movement must refer to the owned safe");
         } catch (TimeoutException failure) {
             Object response =
-                    ((JavascriptExecutor) operator)
-                            .executeAsyncScript(
-                                    """
-                const done=arguments[arguments.length-1],root=document.querySelector('#app').__vue__,q=[root];let userId;
-                while(q.length){const vm=q.shift();if(vm?.profile?.userId){userId=vm.profile.userId;break;}q.push(...(vm?.$children||[]));}
+                    Plugin_ERP.Util.VueComponentAccess.executeAsync(
+                            operator,
+                            """
+                const done=arguments[arguments.length-1],root=erpVue.root(),q=[root];let userId;
+                while(q.length){const vm=q.shift();if(vm?.profile?.userId){userId=vm.profile.userId;break;}q.push(...(erpVue.children(vm)||[]));}
                 if(!userId){done({error:'Operator profile identity unavailable'});return;}
                 root.$store.dispatch('app/get',{url:'Aggregates/salesViewModel?userId='+userId+'&isClosed=false&transactionType=sales&dealerType=sales&agentId='})
                   .then(r=>done({userSafes:r?.UserSafes,currentUserId:r?.CurrentUser?.id}))
@@ -317,13 +317,13 @@ public final class TreasuryLedgerCoverageTest extends BaseTest {
                     "Operator treasury aggregate response",
                     new org.json.JSONObject((Map<?, ?>) response).toString());
             Object lookup =
-                    ((JavascriptExecutor) operator)
-                            .executeScript(
-                                    """
-                const q=[document.querySelector('#app')?.__vue__],rows=[];
+                    Plugin_ERP.Util.VueComponentAccess.execute(
+                            operator,
+                            """
+                const q=[erpVue.root()],rows=[];
                 while(q.length){const vm=q.shift();if(!vm)continue;
                   if(vm.lookups?.UserSafes)rows.push({userSafes:vm.lookups.UserSafes,safeTransactions:vm.safeTransactions});
-                  q.push(...(vm.$children||[]));}return JSON.stringify(rows);
+                  q.push(...(erpVue.children(vm)||[]));}return JSON.stringify(rows);
                 """);
             io.qameta.allure.Allure.addAttachment(
                     "Treasury operator lookup", String.valueOf(lookup));

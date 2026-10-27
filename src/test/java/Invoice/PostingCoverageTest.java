@@ -35,10 +35,10 @@ public final class PostingCoverageTest extends SalesScenarioTest {
         screen.type(By.cssSelector("input[label-text='fromCode']"), code);
         screen.type(By.cssSelector("input[label-text='toCode']"), code);
         screen.check("المبيعات", true);
-        ((JavascriptExecutor) driver)
-                .executeScript(
-                        """
-            const store=document.querySelector('#app').__vue__.$store,dispatch=store.dispatch.bind(store),code=String(arguments[0]);
+        Plugin_ERP.Util.VueComponentAccess.execute(
+                driver,
+                """
+            const store=erpVue.root().$store,dispatch=store.dispatch.bind(store),code=String(arguments[0]);
             store.dispatch=function(action,payload,...rest){
               if(action==='app/create'&&['Posting/post','Posting/unPost'].includes(payload?.url)){
                 const d=payload.data;
@@ -49,7 +49,7 @@ public final class PostingCoverageTest extends SalesScenarioTest {
               return dispatch(action,payload,...rest);
             };
             """,
-                        code);
+                code);
         Path recovery = Path.of("target", "posting-recovery", target.id() + ".json");
         var session = new TestSupport.FixtureSession(driver);
         FixtureJournals.write(

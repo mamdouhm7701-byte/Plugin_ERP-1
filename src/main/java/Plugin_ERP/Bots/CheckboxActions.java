@@ -199,80 +199,27 @@ public class CheckboxActions extends BaseAction {
     }
 
     public void selectRadioButton(String optionName) {
-        int retries = 3;
-
-        for (int i = 1; i <= retries; i++) {
-            try {
-                WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-                // ✅ Target the LABEL directly, not the span
-                By labelLocator =
-                        By.xpath(
-                                "//div[contains(@class,'btn-group')]"
-                                        + "//label[contains(@class,'btn')]"
-                                        + "[.//span[normalize-space()='"
-                                        + optionName
-                                        + "']]");
-
-                WebElement label =
-                        wait.until(ExpectedConditions.elementToBeClickable(labelLocator));
-
-                // Scroll into view
-                ((JavascriptExecutor) driver)
-                        .executeScript(
-                                "arguments[0].scrollIntoView({block:'center', inline:'center'});",
-                                label);
-
-                wait.until(ExpectedConditions.elementToBeClickable(labelLocator));
-
-                // Check if already active/selected → skip
-                String classes = label.getAttribute("class");
-                if (classes != null && classes.contains("active")) {
-                    System.out.println("ℹ️ Already selected: " + optionName);
-                    return;
-                }
-
-                // Try normal click on label first
-                try {
-                    label.click();
-                } catch (Exception e) {
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", label);
-                }
-
-                // ✅ Verify selection was applied
-                wait.until(ExpectedConditions.attributeContains(labelLocator, "class", "active"));
-
-                System.out.println("✅ Radio button selected: " + optionName);
-                return;
-
-            } catch (StaleElementReferenceException e) {
-                System.out.println("⚠️ Stale element, retry: " + i);
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException interrupted) {
-                    Thread.currentThread().interrupt();
-                    throw new IllegalStateException(
-                            "Radio selection retry interrupted", interrupted);
-                }
-
-            } catch (TimeoutException e) {
-                throw new RuntimeException(
-                        "❌ Radio button not found or not clickable: " + optionName);
-
-            } catch (Exception e) {
-                System.out.println("⚠️ Retry " + i + ": " + e.getMessage());
-                if (i == retries) {
-                    throw new RuntimeException("❌ Failed selecting radio button: " + optionName, e);
-                }
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException interrupted) {
-                    Thread.currentThread().interrupt();
-                    throw new IllegalStateException(
-                            "Radio selection retry interrupted", interrupted);
-                }
-            }
-        }
+        By labelLocator =
+                By.xpath(
+                        "//div[contains(@class,'btn-group')]"
+                                + "//label[contains(@class,'btn')][.//span[normalize-space()='"
+                                + optionName
+                                + "']]");
+        waitManagement
+                .fluentWait()
+                .withMessage("Radio selection unavailable: " + optionName)
+                .until(
+                        d -> {
+                            WebElement label = d.findElement(labelLocator);
+                            String classes = label.getDomAttribute("class");
+                            if (classes != null
+                                    && java.util.Arrays.asList(classes.split("\\s+"))
+                                            .contains("active")) return true;
+                            if (!label.isDisplayed() || !label.isEnabled()) return false;
+                            scrollIntoView(label);
+                            label.click();
+                            return false;
+                        });
     }
 
     public void setCheckboxForDealer(String title, boolean shouldBeChecked) {

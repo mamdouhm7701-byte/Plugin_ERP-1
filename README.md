@@ -76,3 +76,5 @@ mvn '-DExecutionType=LocalHeadless' '-Dsurefire.suiteXmlFiles=src/test/resources
 الأسماء الحالية: `Plugin_ERP.Util` و`Plugin_ERP.Listeners` و`ElementActions` و`WaitManagement` و`Firefox`، والكتابة عبر `typeText` و`typeTextAndVerify`. حدثت مراجع Java وTestNG والسكربتات؛ إعدادات IDE الشخصية القديمة قد تحتاج اختيار الكلاس باسمه الجديد.
 
 الكتابة تستخدم `TextEntryActions`: تحقق من القيمة، ثلاث محاولات Selenium، وسبب فشل محفوظ دون تسجيل النص المدخل. اختبار تسليم الخزينة يقارن إجمالي API والشاشة والطباعة بتوقع مستقل من الرصيد الافتتاحي المملوك للاختبار دون حركات؛ لا يدعي تغطية التسوية المختلطة. مراجعة fallback في [سجل الاستثناءات](docs/testing/SILENT_CATCH_AUDIT_AR.md).
+
+حالة تحسينات الصيانة والتغطية ونتائج التحقق الأحدث لهذه الدفعة في [سجل النقاط](docs/testing/ALL_POINTS_STATUS_2026_10_27_AR.md). تشغيل فحص محلي بمخرجات منفصلة عن IntelliJ: `mvn -Derp.build.directory=target/maven-verification -Pci verify`.

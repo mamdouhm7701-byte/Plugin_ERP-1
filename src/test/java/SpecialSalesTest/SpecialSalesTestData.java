@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -41,12 +40,11 @@ final class SpecialSalesTestData implements AutoCloseable {
         new WebDriverWait(driver, Duration.ofSeconds(30))
                 .until(
                         d ->
-                                ((JavascriptExecutor) d)
-                                        .executeScript(
-                                                "return Boolean(document.querySelector('#app')"
-                                                        + "?.__vue__?.$store?.getters['app/currentBranch']?.id)"));
+                                Plugin_ERP.Util.VueComponentAccess.execute(
+                                        d,
+                                        "return Boolean(erpVue.root()?.$store?.getters['app/currentBranch']?.id)"));
         Object currentOrigin =
-                ((JavascriptExecutor) driver).executeScript("return location.origin");
+                Plugin_ERP.Util.VueComponentAccess.execute(driver, "return location.origin");
         origin = currentOrigin instanceof String value ? value : "offline";
         api = new SpecialSalesFixtureApi(driver, session::verify);
     }
@@ -166,10 +164,9 @@ final class SpecialSalesTestData implements AutoCloseable {
             String key = "branch-store-" + index;
             if (!fixtures.containsKey(key)) {
                 Object branchId =
-                        ((JavascriptExecutor) driver)
-                                .executeScript(
-                                        "return"
-                                                + " document.querySelector('#app').__vue__.$store.getters['app/currentBranch'].id");
+                        Plugin_ERP.Util.VueComponentAccess.execute(
+                                driver,
+                                "return erpVue.root().$store.getters['app/currentBranch'].id");
                 if (!(branchId instanceof String branch) || branch.isBlank())
                     throw new AssertionError("Current branch identity is unavailable");
                 Record link =
@@ -247,8 +244,7 @@ final class SpecialSalesTestData implements AutoCloseable {
                 if (java.util.Objects.equals(branch.get(field), owned)) update.put(field, previous);
                 else if (!java.util.Objects.equals(branch.get(field), previous))
                     throw new AssertionError(
-                            "Branch defaults changed externally; retaining owned data instead of"
-                                    + " overwriting");
+                            "Branch defaults changed externally; retaining owned data instead of overwriting");
             }
             if (!update.equals(branch)) call("update", "Branches", update);
             var refreshed = branchFor(record);
@@ -263,11 +259,10 @@ final class SpecialSalesTestData implements AutoCloseable {
     }
 
     private void syncBranch(Map<String, Object> branch) {
-        ((JavascriptExecutor) driver)
-                .executeScript(
-                        "const"
-                                + " root=document.querySelector('#app').__vue__;if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
-                        branch);
+        Plugin_ERP.Util.VueComponentAccess.execute(
+                driver,
+                "const root=erpVue.root();if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
+                branch);
     }
 
     @SuppressWarnings("unchecked")
@@ -319,11 +314,10 @@ final class SpecialSalesTestData implements AutoCloseable {
                     throw new AssertionError("Branch default store changed");
                 branch = refreshed;
             }
-            ((JavascriptExecutor) driver)
-                    .executeScript(
-                            "const"
-                                    + " root=document.querySelector('#app').__vue__;if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
-                            branch);
+            Plugin_ERP.Util.VueComponentAccess.execute(
+                    driver,
+                    "const root=erpVue.root();if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
+                    branch);
         }
     }
 

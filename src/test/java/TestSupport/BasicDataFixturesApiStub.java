@@ -55,7 +55,7 @@ final class BasicDataFixturesApiStub {
                                     return false;
                                 }
                                 if (code.equals("return location.origin")) return "offline";
-                                if (code.startsWith("return document.querySelector")) {
+                                if (code.contains("return erpVue.root()")) {
                                     if (branchUnavailableReads > 0) {
                                         branchUnavailableReads--;
                                         return null;

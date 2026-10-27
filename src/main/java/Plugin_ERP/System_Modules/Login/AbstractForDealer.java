@@ -24,7 +24,6 @@ public class AbstractForDealer extends Abstract {
 
     // Locators
 
-    private By DateInput = By.xpath("//input[@placeholder='YYYY-MM-DD']");
     private By AllowanceDays = By.cssSelector("input[name='allowanceDays']");
     private By commercialRegisterNumber = By.cssSelector("input[name='commercialRegisterNumber']");
     private By DiscountValue = By.cssSelector("input[placeholder='قيمة الخصم']");
@@ -59,7 +58,6 @@ public class AbstractForDealer extends Abstract {
     private By AssertAgentNatural = By.xpath("//small[contains(text(),'طبيعه المندوب مطلوب')]");
     private By AssertClassification = By.xpath("//small[contains(text(),'نوع التصنيف مطلوب')]");
     private By AssertMainDealer = By.xpath("//small[contains(text(),'النوع مطلوب')]");
-    private By AddNoteForStorgTrans = By.xpath("//textarea[@label-text='notes']");
 
     // الميثودات
     // ميثودات الضغط
@@ -100,17 +98,12 @@ public class AbstractForDealer extends Abstract {
     // ميثودات الإضافة
     @Step("إضافة التاريخ: {todayDate}")
     public void AddDateForDealer() {
-        utilites.waits().waitForOverlayToDisappear();
-        String todayDate = utilites.Utility().TypeTodayDate("dd/MM/yyyy");
-        utilites.typeTextAndVerify(DateInput, todayDate);
-        utilites.waits().waitForOverlayToDisappear();
+        form.AddDateForDealer();
     }
 
     @Step("اضافه ملاحظات :{notes}")
     public void AddNoteForStorgTrans(String notes) {
-        utilites.waits().waitForOverlayToDisappear();
-        utilites.typeTextAndVerify(AddNoteForStorgTrans, notes);
-        utilites.waits().waitForOverlayToDisappear();
+        form.AddNoteForStorgTrans(notes);
     }
 
     @Step("إضافة أيام السماح: {allowanceDays}")

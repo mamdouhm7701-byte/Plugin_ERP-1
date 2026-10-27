@@ -99,3 +99,7 @@
 - `src/main/java/Plugin_ERP/System_Modules/Login/purches/ReturnOrderPage.java`: sentinel fallback records exception type at DEBUG.
 
 JavaScript resource-URL parsing fallback in GridProviderWait uses browser console.debug, not the Java logger.
+
+## مراجعة الضغط المركب — 27 أكتوبر 2026
+
+`GridActions.ClickElement` و`PriceListActions.ClickElement` كانا يمسكان فشل الضغط ثم ينفذان JavaScript click، ما يخفي وجود overlay. تم توحيدهما على `BaseAction.clickWhenReady` الذي يعيد المحاولة فقط لحالات Selenium العابرة وفق WaitManagement، ويطلق TimeoutException مع السبب عند انتهاء المهلة. اختبار `gridAndPriceListMustNotBypassAnInterceptedClick` فشل قبل الإصلاح لأن المسار القديم رجع نجاحًا، ثم يدخل ضمن CI للفحص بعد الإصلاح. أساليب الضغط الخاصة الأخرى، مثل SVG والقوائم، لم تُحوّل جماعيًا؛ يلزم اختبار سلوكها قبل التغيير.

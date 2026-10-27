@@ -13,6 +13,8 @@ import org.openqa.selenium.support.ui.*;
 
 /** Shared interactions for financial forms; business expectations belong in tests. */
 public class FinancialMovementPage extends Abstract {
+    private final FinancialChoiceControls choiceControls;
+    private final FinancialFieldValues fieldValues;
     private final FinancialRecordList records;
     private final FinancialSaveCapture saveCapture;
     private final WebDriverWait ready;
@@ -28,12 +30,14 @@ public class FinancialMovementPage extends Abstract {
                 new FormInteractions(
                         ready,
                         e ->
-                                ((JavascriptExecutor) driver)
-                                        .executeScript(
-                                                "arguments[0].scrollIntoView({block:'center'})",
-                                                e));
+                                Plugin_ERP.Util.VueComponentAccess.execute(
+                                        driver,
+                                        "arguments[0].scrollIntoView({block:'center'})",
+                                        e));
         saveCapture = new FinancialSaveCapture(this, driver, ready);
         records = new FinancialRecordList(this, driver, ready);
+        choiceControls = new FinancialChoiceControls(this, driver, ready, choices);
+        fieldValues = new FinancialFieldValues(this, driver, ready);
     }
 
     @Step("فتح قائمة الحركة المالية: {route}")
@@ -91,192 +95,59 @@ public class FinancialMovementPage extends Abstract {
 
     @Step("اختيار {name} من {label}")
     public void choose(String label, String name) {
-        By input =
-                By.xpath(
-                        "//*[self::label or self::legend][normalize-space()='"
-                                + label
-                                + "']/following::input[contains(@class,'vs__search')][1]");
-        chooseInput(input, name);
+        choiceControls.choose(label, name);
     }
 
     private void chooseInput(By locator, String name) {
-        try {
-            choices.choose(
-                    locator,
-                    name,
-                    FormInteractions.OptionMatch.EXACT_THEN_CONTAINS,
-                    "Ambiguous owned dropdown option: ");
-        } catch (TimeoutException failure) {
-            Object snapshot =
-                    ((JavascriptExecutor) driver)
-                            .executeScript(
-                                    """
-          const queue=[document.querySelector('#app')?.__vue__], result=[];
-          while(queue.length){const vm=queue.shift();if(!vm)continue;
-            if(Array.isArray(vm.defaultCustomers))result.push({
-              branchId:vm.currentBranch?.id, customerCount:vm.defaultCustomers.length,
-              matches:vm.defaultCustomers.filter(c=>[c.arabicName,c.englishName].includes(arguments[0])),
-              paymentCount:vm.paymentMethods?.length, agentCount:vm.Agents?.length});
-            queue.push(...(vm.$children||[]));}
-          return JSON.stringify(result);
-          """,
-                                    name);
-            io.qameta.allure.Allure.addAttachment(
-                    "Financial dropdown lookup evidence", String.valueOf(snapshot));
-            throw failure;
-        }
+        choiceControls.chooseInput(locator, name);
     }
 
     @Step("اختيار طريقة الدفع المسجلة للاختبار")
     public void payment(String methodName) {
-        choose("طريقة الدفع", "اخري");
-        // The dependent payment-method picker follows the payment-way picker.
-        By input =
-                By.xpath(
-                        "//*[self::label or self::legend][normalize-space()='طريقة الدفع']/following::input[contains(@class,'vs__search')][2]");
-        chooseInput(input, methodName);
+        choiceControls.payment(methodName);
     }
 
     @Step("اختيار طرف التحويل {side}: {type} / {name}")
     public void transferParty(int side, String type, String name) {
-        selectTransferType(side, type);
-        By input =
-                By.xpath(
-                        "(//div[@role='radiogroup'])["
-                                + side
-                                + "]/following::input[contains(@class,'vs__search')][1]");
-        chooseInput(input, name);
+        choiceControls.transferParty(side, type, name);
     }
 
     @Step("اختيار نوع الطرف {side}: {type}")
     public void selectTransferType(int side, String type) {
-        String label =
-                switch (type) {
-                    case "Safe" -> "خزينة";
-                    case "Bank" -> "البنك";
-                    case "Customer" -> "العميل";
-                    case "Supplier" -> "المورد";
-                    default -> throw new IllegalArgumentException(type);
-                };
-        By radio =
-                By.xpath(
-                        "(//div[@role='radiogroup'])["
-                                + side
-                                + "]//span[normalize-space()='"
-                                + label
-                                + "']");
-        click(radio);
+        choiceControls.selectTransferType(side, type);
     }
 
     @Step("اختيار نوع الحركة: {value}")
     public void movementType(String value) {
-        By locator = By.cssSelector("input[type='radio'][value='" + value + "']");
-        WebElement input = driver.findElement(locator);
-        if (!input.isSelected())
-            click(By.xpath("//input[@type='radio' and @value='" + value + "']/ancestor::label[1]"));
-        ready.until(d -> d.findElement(locator).isSelected());
+        choiceControls.movementType(value);
     }
 
     @Step("مسح الحقل {label} في الموضع {index}")
     public void clearField(String label, int index) {
-        By input =
-                By.xpath(
-                        "//*[self::label or self::legend][normalize-space()='"
-                                + label
-                                + "']/following::input[contains(@class,'vs__search')]["
-                                + index
-                                + "]");
-        WebElement e = ready.until(ExpectedConditions.elementToBeClickable(input));
-        WebElement picker =
-                e.findElement(
-                        By.xpath(
-                                "ancestor::div[contains(concat(' ',normalize-space(@class),' '),' v-select ')][1]"));
-        List<WebElement> clear = picker.findElements(By.cssSelector("button.vs__clear"));
-        if (clear.stream().anyMatch(WebElement::isDisplayed))
-            clear.stream().filter(WebElement::isDisplayed).findFirst().orElseThrow().click();
-        else {
-            e.click();
-            e.sendKeys(Keys.BACK_SPACE);
-            e.sendKeys(Keys.ESCAPE);
-        }
+        choiceControls.clearField(label, index);
     }
 
     @Step("مسح وجهة التحويل")
     public void clearTransferDestination() {
-        WebElement input =
-                driver.findElement(
-                        By.xpath(
-                                "(//div[@role='radiogroup'])[2]/following::input[contains(@class,'vs__search')][1]"));
-        input.click();
-        input.sendKeys(Keys.BACK_SPACE);
-        input.sendKeys(Keys.ESCAPE);
+        choiceControls.clearTransferDestination();
     }
 
     @Step("إدخال تاريخ خارج السنة المالية")
     public void outsideFiscalYear() {
-        String date =
-                (String)
-                        ((JavascriptExecutor) driver)
-                                .executeScript(
-                                        """
-      const root=document.querySelector('#app').__vue__, q=[root];
-      while(q.length){const vm=q.shift();q.push(...(vm.$children||[]));if(vm.currentYear?.startDate){
-        return String(vm.currentYear.startDate).slice(0,10);}}
-      throw new Error('Active fiscal year not available');
-      """);
-        WebElement input = driver.findElement(By.cssSelector("input[placeholder='YYYY-MM-DD']"));
-        java.time.LocalDate previous = java.time.LocalDate.parse(date).minusDays(1);
-        String current = input.getDomProperty("value").replaceAll("[\\p{Cf}]", "");
-        String separator = current.contains("/") ? "/" : "-";
-        String pattern =
-                current.split("[/\\-]")[0].length() == 4
-                        ? "yyyy" + separator + "MM" + separator + "dd"
-                        : "dd" + separator + "MM" + separator + "yyyy";
-        type(
-                By.cssSelector("input[placeholder='YYYY-MM-DD']"),
-                previous.format(java.time.format.DateTimeFormatter.ofPattern(pattern)));
+        fieldValues.outsideFiscalYear();
     }
 
     public BigDecimal[] taxValues() {
-        WebElement net =
-                driver.findElement(
-                        By.cssSelector("input[name='netBeforeTax'],input[name='netValue']"));
-        WebElement tax = driver.findElement(By.cssSelector("input[name='tax']"));
-        WebElement total = driver.findElement(By.cssSelector("input[name='value']"));
-        return new BigDecimal[] {
-            new BigDecimal(net.getDomProperty("value")),
-            new BigDecimal(tax.getDomProperty("value")),
-            new BigDecimal(total.getDomProperty("value"))
-        };
+        return fieldValues.taxValues();
     }
 
     public boolean validationFor(String field, String label) {
-        String text = String.join(" ", validationMessages());
-        return switch (field) {
-            case "value", "negative" ->
-                    text.contains("القيمة") || text.contains("قيمة") || text.contains("value");
-            case "party" -> text.contains(label) || text.contains("اختيار");
-            case "payment", "paymentOption" -> text.contains("الدفع") || text.contains("البنك");
-            case "date" ->
-                    text.contains("سنة")
-                            || text.contains("السنة")
-                            || text.contains("عام")
-                            || text.contains("تاريخ");
-            case "sameParty" -> text.contains("نفس");
-            case "toParty" -> text.contains("مطلوب") || text.contains("اختيار");
-            default -> false;
-        };
+        return fieldValues.validationFor(field, label);
     }
 
     @Step("تحديد تطبيق الضريبة: {value}")
     public void taxable(boolean value) {
-        By checkbox = By.cssSelector("input[name='isTaxApplied']");
-        WebElement input = driver.findElement(checkbox);
-        if (input.isSelected() != value) {
-            utilites.waits().waitForOverlayToDisappear();
-            Plugin_ERP.Util.NativeCheckbox.set(driver, input, value);
-        }
-        ready.until(d -> d.findElement(checkbox).isSelected() == value);
+        fieldValues.taxable(value);
     }
 
     @Step("حفظ الحركة المالية")
@@ -352,17 +223,7 @@ public class FinancialMovementPage extends Abstract {
     }
 
     public List<String> validationMessages() {
-        return ready.until(
-                d ->
-                        d
-                                .findElements(
-                                        By.cssSelector(
-                                                "small.text-danger,.invalid-feedback,.swal2-html-container,.swal2-title"))
-                                .stream()
-                                .filter(WebElement::isDisplayed)
-                                .map(WebElement::getText)
-                                .filter(t -> !t.isBlank())
-                                .toList());
+        return fieldValues.validationMessages();
     }
 
     public boolean isFormVisible() {
@@ -468,48 +329,11 @@ public class FinancialMovementPage extends Abstract {
     }
 
     public void type(By locator, String value) {
-        ready.until(
-                d -> {
-                    WebElement e =
-                            d.findElements(locator).stream()
-                                    .filter(WebElement::isDisplayed)
-                                    .filter(WebElement::isEnabled)
-                                    .filter(v -> v.getDomAttribute("readonly") == null)
-                                    .findFirst()
-                                    .orElse(null);
-                    if (e == null) return false;
-                    ((JavascriptExecutor) d)
-                            .executeScript("arguments[0].scrollIntoView({block:'center'})", e);
-                    e.click();
-                    e.sendKeys(Keys.CONTROL + "a");
-                    if (value.isEmpty()) e.sendKeys(Keys.DELETE);
-                    else e.sendKeys(value);
-                    e.sendKeys(Keys.TAB);
-                    String actual = e.getDomProperty("value");
-                    if (value.equals(actual)) return true;
-                    if ("YYYY-MM-DD".equals(e.getDomAttribute("placeholder"))) {
-                        try {
-                            return Plugin_ERP.Util.DocumentDates.parse(value)
-                                    .equals(Plugin_ERP.Util.DocumentDates.parse(actual));
-                        } catch (java.time.DateTimeException invalidDate) {
-                            Plugin_ERP.Bots.LogUtils.debug(
-                                    "FinancialMovementPage condition unavailable: "
-                                            + invalidDate.getClass().getSimpleName());
-                            return false;
-                        }
-                    }
-                    if ("number".equals(e.getDomAttribute("type"))
-                            || "value".equals(e.getDomAttribute("name")))
-                        try {
-                            return new BigDecimal(value).compareTo(new BigDecimal(actual)) == 0;
-                        } catch (NumberFormatException ignored) {
-                            Plugin_ERP.Bots.LogUtils.debug(
-                                    "FinancialMovementPage condition unavailable: "
-                                            + ignored.getClass().getSimpleName());
-                            return false;
-                        }
-                    return false;
-                });
+        fieldValues.type(locator, value);
+    }
+
+    void clickControl(By by) {
+        click(by);
     }
 
     private void click(By by) {
@@ -521,8 +345,8 @@ public class FinancialMovementPage extends Abstract {
                                     .findFirst()
                                     .orElse(null);
                     if (e == null || !e.isEnabled()) return false;
-                    ((JavascriptExecutor) d)
-                            .executeScript("arguments[0].scrollIntoView({block:'center'})", e);
+                    Plugin_ERP.Util.VueComponentAccess.execute(
+                            d, "arguments[0].scrollIntoView({block:'center'})", e);
                     e.click();
                     return true;
                 });

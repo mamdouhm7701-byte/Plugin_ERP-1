@@ -17,7 +17,7 @@ public final class UsersCoverageTest extends BasicDataScenarioTest {
                 (String)
                         ((org.openqa.selenium.JavascriptExecutor) driver)
                                 .executeScript(
-                                        "return document.querySelector('#app').__vue__.$store.getters['app/currentBranch'].arabicName");
+                                        "return erpVue.root().$store.getters['app/currentBranch'].arabicName");
         page.choose("الفروع", branch);
     }
 

@@ -1,7 +1,6 @@
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import Plugin_ERP.Bots.ElementActions;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class MainBage {
@@ -16,8 +15,6 @@ public class MainBage {
     }
 
     // Locators
-
-    private By mainpage = By.xpath("//h4[contains(text(),'الصفحة الرئيسية')]");
 
     // Methods
 

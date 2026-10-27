@@ -92,25 +92,7 @@ final class StoreItemSelection {
 
     Object smItemCacheDiagnostics(String name) {
         return owner.js(
-                "const raw=sessionStorage.getItem('cachedArray');let rows,cacheInvalid=false;"
-                        + "try{rows=JSON.parse(raw)}catch(e){cacheInvalid=true}"
-                        + "const shown=e=>Boolean(e&&e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden');"
-                        + "const input=Array.from(document.querySelectorAll('form input#autosuggest__input')).find(shown);"
-                        + "const labels=Array.from(document.querySelectorAll('form label,form legend'));"
-                        + "const label=labels.find(e=>shown(e)&&['المخزن','من مخزن'].includes(e.textContent.trim()));"
-                        + "let selectedStoreLabel=null;"
-                        + "if(label){const dropdown=document.evaluate(\"following::div[contains(concat(' ',normalize-space(@class),' '),' v-select ')][1]\",label,null,XPathResult.FIRST_ORDERED_NODE_TYPE,null).singleNodeValue;"
-                        + "selectedStoreLabel=dropdown?.querySelector('.vs__selected')?.textContent?.trim()||null}"
-                        + "const root=document.querySelector('#app')?.__vue__;const queue=root?[root]:[];const seen=new Set();let vmStoreId=null;"
-                        + "while(queue.length&&seen.size<2000){const vm=queue.shift();if(!vm||seen.has(vm))continue;seen.add(vm);"
-                        + "const el=vm.$el;const ownsInput=input&&el&&typeof el.contains==='function'&&el.contains(input);"
-                        + "if(ownsInput&&vm.$data?.inputProps?.id==='autosuggest__input'&&vm.$props&&Object.prototype.hasOwnProperty.call(vm.$props,'storeId')){vmStoreId=vm.$props.storeId;break}"
-                        + "queue.push(...(vm.$children||[]))}"
-                        + "return {cachePresent:raw!==null,cacheCount:Array.isArray(rows)?rows.length:null,"
-                        + "ownedItemCached:Array.isArray(rows)&&rows.some(r=>r.arabicName===arguments[0]),"
-                        + "lookups:window.__storeQA?.lookups||[],...(cacheInvalid?{cacheInvalid:true}:{}),"
-                        + "typedName:input?.value||null,defaultStoreId:root?.$store?.getters?.['app/currentBranch']?.defaultStoreId||null,"
-                        + "selectedStoreLabel,vmStoreId}",
+                "const raw=sessionStorage.getItem('cachedArray');let rows,cacheInvalid=false;try{rows=JSON.parse(raw)}catch(e){cacheInvalid=true}const shown=e=>Boolean(e&&e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden');const input=Array.from(document.querySelectorAll('form input#autosuggest__input')).find(shown);const labels=Array.from(document.querySelectorAll('form label,form legend'));const label=labels.find(e=>shown(e)&&['المخزن','من مخزن'].includes(e.textContent.trim()));let selectedStoreLabel=null;if(label){const dropdown=document.evaluate(\"following::div[contains(concat(' ',normalize-space(@class),' '),' v-select ')][1]\",label,null,XPathResult.FIRST_ORDERED_NODE_TYPE,null).singleNodeValue;selectedStoreLabel=dropdown?.querySelector('.vs__selected')?.textContent?.trim()||null}const root=erpVue.root();const queue=root?[root]:[];const seen=new Set();let vmStoreId=null;while(queue.length&&seen.size<2000){const vm=queue.shift();if(!vm||seen.has(vm))continue;seen.add(vm);const el=vm.$el;const ownsInput=input&&el&&typeof el.contains==='function'&&el.contains(input);if(ownsInput&&vm.$data?.inputProps?.id==='autosuggest__input'&&vm.$props&&Object.prototype.hasOwnProperty.call(vm.$props,'storeId')){vmStoreId=vm.$props.storeId;break}queue.push(...(erpVue.children(vm)||[]))}return {cachePresent:raw!==null,cacheCount:Array.isArray(rows)?rows.length:null,ownedItemCached:Array.isArray(rows)&&rows.some(r=>r.arabicName===arguments[0]),lookups:window.__storeQA?.lookups||[],...(cacheInvalid?{cacheInvalid:true}:{}),typedName:input?.value||null,defaultStoreId:root?.$store?.getters?.['app/currentBranch']?.defaultStoreId||null,selectedStoreLabel,vmStoreId}",
                 name);
     }
 

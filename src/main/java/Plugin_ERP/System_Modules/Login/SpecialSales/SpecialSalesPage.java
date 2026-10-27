@@ -32,13 +32,11 @@ public abstract class SpecialSalesPage extends Abstract {
     public abstract String channel();
 
     protected Object js(String script, Object... args) {
-        return ((JavascriptExecutor) driver).executeScript(script, args);
+        return Plugin_ERP.Util.VueComponentAccess.execute(driver, script, args);
     }
 
     protected String vmScript() {
-        return "const queue=[document.querySelector('#app')?.__vue__];let"
-                + " vm;while(queue.length){const"
-                + " v=queue.shift();if(!v)continue;queue.push(...(v.$children||[]));if(Array.isArray(v.$data?.selectedItem?.lines)&&v.$options.methods?.save){vm=v;break;}}";
+        return "const queue=[erpVue.root()];let vm;while(queue.length){const v=queue.shift();if(!v)continue;queue.push(...(erpVue.children(v)||[]));if(Array.isArray(v.$data?.selectedItem?.lines)&&v.$options.methods?.save){vm=v;break;}}";
     }
 
     public void awaitSession() {
@@ -46,8 +44,7 @@ public abstract class SpecialSalesPage extends Abstract {
                 d ->
                         Boolean.TRUE.equals(
                                 js(
-                                        "return"
-                                                + " Boolean(document.querySelector('#app')?.__vue__?.$store?.getters['app/currentBranch']?.id)")));
+                                        "return Boolean(erpVue.root()?.$store?.getters['app/currentBranch']?.id)")));
     }
 
     @Step("فتح شاشة الكاشير")
@@ -61,8 +58,7 @@ public abstract class SpecialSalesPage extends Abstract {
                         Boolean.TRUE.equals(
                                 js(
                                         vmScript()
-                                                + "return"
-                                                + " Boolean(vm&&Array.isArray(vm.selectedItem.lines))")));
+                                                + "return Boolean(vm&&Array.isArray(vm.selectedItem.lines))")));
         dismiss();
     }
 
@@ -171,8 +167,7 @@ public abstract class SpecialSalesPage extends Abstract {
         return (Map<String, Object>)
                 js(
                         vmScript()
-                                + "return"
-                                + " {document:vm?.selectedItem||{},capture:window.__specialSalesQA||{},text:document.body.innerText};");
+                                + "return {document:vm?.selectedItem||{},capture:window.__specialSalesQA||{},text:document.body.innerText};");
     }
 
     public void capture(String marker) {
@@ -236,14 +231,12 @@ public abstract class SpecialSalesPage extends Abstract {
         for (var label :
                 driver.findElements(
                         By.xpath(
-                                "//div[contains(@class,'modal') and"
-                                        + " contains(@class,'show')]//label[normalize-space()='الكل']"))) {
+                                "//div[contains(@class,'modal') and contains(@class,'show')]//label[normalize-space()='الكل']"))) {
             if (label.isDisplayed()) {
                 if (!Arrays.asList(label.getAttribute("class").split("\\s+")).contains("active")) {
                     click(
                             By.xpath(
-                                    "//div[contains(@class,'modal') and"
-                                            + " contains(@class,'show')]//label[normalize-space()='الكل']"));
+                                    "//div[contains(@class,'modal') and contains(@class,'show')]//label[normalize-space()='الكل']"));
                 }
                 break;
             }
@@ -253,8 +246,7 @@ public abstract class SpecialSalesPage extends Abstract {
                 "invoice-row-" + id + (icon.equals("trash") ? "-delete-icon" : "-preview-icon");
         click(
                 By.xpath(
-                        "//div[contains(@class,'modal') and"
-                                + " contains(@class,'show')]//button[.//*[local-name()='svg' and @id='"
+                        "//div[contains(@class,'modal') and contains(@class,'show')]//button[.//*[local-name()='svg' and @id='"
                                 + actionId
                                 + "' and contains(@class,'feather-"
                                 + icon

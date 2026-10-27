@@ -49,6 +49,9 @@ final class MainDealerRecords {
                     matches++;
                 }
             } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
+                Plugin_ERP.Bots.LogUtils.debug(
+                        "MainDealerRecords fallback: " + ignored.getClass().getSimpleName());
+
                 // The table may refresh between reading rows.
             }
         }
@@ -187,6 +190,9 @@ final class MainDealerRecords {
             }
             waitForAlertToDisappear();
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "MainDealerRecords fallback: " + ignored.getClass().getSimpleName());
+
             // Some versions remove the row without showing a success dialog.
         }
     }
@@ -199,6 +205,9 @@ final class MainDealerRecords {
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", confirm);
             waitForAlertToDisappear();
         } catch (org.openqa.selenium.TimeoutException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "MainDealerRecords fallback: " + ignored.getClass().getSimpleName());
+
             // No success confirmation is shown by some tenant versions.
         }
     }

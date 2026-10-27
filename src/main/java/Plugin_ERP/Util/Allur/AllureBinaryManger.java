@@ -47,6 +47,15 @@ public class AllureBinaryManger {
         cleanAllure(true, false);
         try {
             Files.createDirectories(AllureConstants.ALLURE_RESULTS_DIR);
+            try (var categories =
+                    AllureBinaryManger.class.getResourceAsStream("/allure-categories.json")) {
+                if (categories == null)
+                    throw new IOException("Allure category definitions missing");
+                Files.copy(
+                        categories,
+                        AllureConstants.ALLURE_RESULTS_DIR.resolve("categories.json"),
+                        StandardCopyOption.REPLACE_EXISTING);
+            }
             long nextBuildOrder = 1;
             byte[] trend = historyFiles.get("history-trend.json");
             if (trend != null) {

@@ -11,10 +11,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class PaymentPage extends AbstractForDealer {
+    private final By save = By.cssSelector("button[data-action-type='save']");
     private final PaymentRecords records;
-    private final By rows = By.cssSelector("table tbody tr[role='row']"),
-            headers = By.cssSelector("table thead th"),
-            save = By.cssSelector("button[data-action-type='save']");
 
     public PaymentPage(WebDriver driver) {
         super(driver);

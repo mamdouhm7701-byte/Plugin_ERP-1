@@ -14,7 +14,7 @@ final class CounterSaveCapture {
     void capture(String marker) {
         owner.js(
                 """
-                const root=document.querySelector('#app').__vue__,store=root.$store;
+                const root=erpVue.root(),store=root.$store;
                 window.__specialSalesQA={marker:arguments[0],endpoint:arguments[1],attempts:[],saves:[],errors:[],pending:0};
                 if(store.__specialSalesCaptureInstalled)return;store.__specialSalesCaptureInstalled=true;const dispatch=store.dispatch.bind(store);
                 store.dispatch=function(action,payload,...rest){const c=window.__specialSalesQA;

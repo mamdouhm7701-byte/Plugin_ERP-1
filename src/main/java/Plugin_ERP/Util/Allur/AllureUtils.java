@@ -17,6 +17,9 @@ public class AllureUtils {
         try {
             AllureBinaryManger.cleanAllure(true, false);
         } catch (RuntimeException ignored) {
+            Plugin_ERP.Bots.LogUtils.debug(
+                    "AllureUtils fallback: " + ignored.getClass().getSimpleName());
+
             // ignore
         }
     }

@@ -113,6 +113,9 @@ final class DealerListQueries {
                     matches++;
                 }
             } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
+                Plugin_ERP.Bots.LogUtils.debug(
+                        "DealerListQueries fallback: " + ignored.getClass().getSimpleName());
+
                 // The list can rerender while a create/edit/delete request is completing.
             }
         }

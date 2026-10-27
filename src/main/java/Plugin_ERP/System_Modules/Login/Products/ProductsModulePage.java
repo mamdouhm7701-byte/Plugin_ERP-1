@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.*;
 
 /** Product-module interactions shared by the four existing Page Objects. */
 public class ProductsModulePage extends Abstract {
+    private final ProductValidationFeedback validationFeedback;
     private final ProductRecordList records;
     private final ProductSaveCapture saveCapture;
     protected final WebDriverWait ready;
@@ -22,25 +23,26 @@ public class ProductsModulePage extends Abstract {
     public ProductsModulePage(WebDriver driver) {
         super(driver);
         ready = new WebDriverWait(driver, Duration.ofSeconds(30));
+        validationFeedback = new ProductValidationFeedback(driver, ready);
         ready.ignoring(StaleElementReferenceException.class)
                 .ignoring(ElementClickInterceptedException.class);
         choices =
                 new FormInteractions(
                         ready,
                         e ->
-                                ((JavascriptExecutor) driver)
-                                        .executeScript(
-                                                "arguments[0].scrollIntoView({block:'center'})",
-                                                e));
+                                Plugin_ERP.Util.VueComponentAccess.execute(
+                                        driver,
+                                        "arguments[0].scrollIntoView({block:'center'})",
+                                        e));
         inputs =
                 new FormInteractions(
                         ready,
                         e -> {
                             if (e.isEnabled())
-                                ((JavascriptExecutor) driver)
-                                        .executeScript(
-                                                "arguments[0].scrollIntoView({block:'center',inline:'center'})",
-                                                e);
+                                Plugin_ERP.Util.VueComponentAccess.execute(
+                                        driver,
+                                        "arguments[0].scrollIntoView({block:'center',inline:'center'})",
+                                        e);
                         });
         saveCapture = new ProductSaveCapture(this, driver, ready);
         records = new ProductRecordList(this, driver, ready);
@@ -51,9 +53,9 @@ public class ProductsModulePage extends Abstract {
                 d ->
                         !d.getCurrentUrl().contains("/login")
                                 && Boolean.TRUE.equals(
-                                        ((JavascriptExecutor) d)
-                                                .executeScript(
-                                                        "return Boolean(document.querySelector('#app')?.__vue__?.$store?.getters['app/currentBranch']?.id)"));
+                                        Plugin_ERP.Util.VueComponentAccess.execute(
+                                                d,
+                                                "return Boolean(erpVue.root()?.$store?.getters['app/currentBranch']?.id)"));
         try {
             new WebDriverWait(driver, Duration.ofSeconds(45)).until(authenticated);
         } catch (TimeoutException first) {
@@ -186,31 +188,7 @@ public class ProductsModulePage extends Abstract {
 
     /** Snapshot of visible price-field feedback; success dialogs are not validation messages. */
     public Map<String, String> prPriceValidationMessages() {
-        Map<String, String> messages = new LinkedHashMap<>();
-        for (String name : List.of("salesPrice", "minSalesPrice", "maxSalesPrice")) {
-            for (WebElement input :
-                    driver.findElements(By.cssSelector("form input[name='" + name + "']"))) {
-                if (!input.isDisplayed()) continue;
-                List<WebElement> groups =
-                        input.findElements(
-                                By.xpath(
-                                        "ancestor::*[self::fieldset or contains(concat(' ',normalize-space(@class),' '),' form-group ')][1]"));
-                if (groups.isEmpty()) continue;
-                Set<String> feedback = new LinkedHashSet<>();
-                for (WebElement message :
-                        groups.get(0)
-                                .findElements(
-                                        By.cssSelector("small.text-danger,.invalid-feedback"))) {
-                    if (message.isDisplayed()) {
-                        String text = message.getText().trim();
-                        if (!text.isBlank()) feedback.add(text);
-                    }
-                }
-                if (!feedback.isEmpty()) messages.put(name, String.join(" | ", feedback));
-                break;
-            }
-        }
-        return messages;
+        return validationFeedback.prPriceValidationMessages();
     }
 
     @Step("إدخال {title}: {value}")
@@ -243,7 +221,7 @@ public class ProductsModulePage extends Abstract {
                         .findFirst()
                         .orElseThrow(() -> new AssertionError("Checkbox missing: " + label));
         if (input.isSelected() != selected)
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click()", input);
+            Plugin_ERP.Util.VueComponentAccess.execute(driver, "arguments[0].click()", input);
         ready.until(d -> input.isSelected() == selected);
     }
 
@@ -263,20 +241,7 @@ public class ProductsModulePage extends Abstract {
     }
 
     public boolean prSaveDisabled() {
-        List<WebElement> buttons =
-                driver.findElements(By.cssSelector("form button[data-action-type='save']"));
-        if (buttons.stream().noneMatch(WebElement::isDisplayed))
-            buttons =
-                    driver.findElements(
-                            By.xpath(
-                                    "//form//button[@data-action-type='save' or normalize-space()='حفظ']"));
-        WebElement save =
-                buttons.stream()
-                        .filter(WebElement::isDisplayed)
-                        .findFirst()
-                        .orElseThrow(
-                                () -> new AssertionError("Visible product save button missing"));
-        return !save.isEnabled() || "true".equals(save.getDomAttribute("aria-disabled"));
+        return validationFeedback.prSaveDisabled();
     }
 
     @Step("حفظ البيانات وطباعة التقرير")
@@ -309,58 +274,7 @@ public class ProductsModulePage extends Abstract {
     }
 
     public String prValidation() {
-        return ready.until(
-                d -> {
-                    List<String> messages = new ArrayList<>();
-                    for (WebElement e :
-                            d.findElements(
-                                    By.cssSelector(
-                                            "small.text-danger,.invalid-feedback,.swal2-title,.swal2-html-container"))) {
-                        if (e.getDomProperty("textContent").isBlank()) continue;
-                        ((JavascriptExecutor) d)
-                                .executeScript(
-                                        "arguments[0].scrollIntoView({block:'center',inline:'center'})",
-                                        e);
-                        if (e.isDisplayed() && !e.getText().isBlank()) messages.add(e.getText());
-                    }
-                    for (WebElement input :
-                            d.findElements(
-                                    By.cssSelector(
-                                            "form:not([novalidate]) input:invalid,form:not([novalidate]) textarea:invalid"))) {
-                        String message = input.getDomProperty("validationMessage");
-                        if (message == null || message.isBlank()) continue;
-                        String label =
-                                String.valueOf(
-                                        ((JavascriptExecutor) d)
-                                                .executeScript(
-                                                        "const e=arguments[0];return e.closest('[data-title]')?.getAttribute('data-title')||Array.from(e.labels||[]).map(l=>l.textContent).join(' ')||e.name",
-                                                        input));
-                        messages.add(label + ": " + message);
-                    }
-                    // Some controls show a red invalid border while their message remains d-none.
-                    // Read the actual accessibility validation state, without revealing hidden
-                    // text.
-                    for (WebElement input :
-                            d.findElements(
-                                    By.cssSelector(
-                                            "form input[aria-invalid='true'],form textarea[aria-invalid='true']"))) {
-                        ((JavascriptExecutor) d)
-                                .executeScript(
-                                        "arguments[0].scrollIntoView({block:'center',inline:'center'})",
-                                        input);
-                        if (!input.isDisplayed() || !input.isEnabled()) continue;
-                        String label =
-                                String.valueOf(
-                                        ((JavascriptExecutor) d)
-                                                .executeScript(
-                                                        "const e=arguments[0];return e.closest('[data-title]')?.getAttribute('data-title')||Array.from(e.labels||[]).map(l=>l.textContent).join(' ')||e.name",
-                                                        input));
-                        if (!label.isBlank()) messages.add(label + ": aria-invalid=true");
-                    }
-                    return messages.isEmpty()
-                            ? null
-                            : String.join(" | ", new LinkedHashSet<>(messages));
-                });
+        return validationFeedback.prValidation();
     }
 
     @Step("البحث عن سجل الاختبار: {name}")

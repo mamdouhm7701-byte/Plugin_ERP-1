@@ -17,10 +17,10 @@ final class ProductSaveCapture {
     }
 
     void prCapture(String marker) {
-        ((JavascriptExecutor) driver)
-                .executeScript(
-                        """
-      const store=document.querySelector('#app').__vue__.$store;
+        Plugin_ERP.Util.VueComponentAccess.execute(
+                driver,
+                """
+      const store=erpVue.root().$store;
       window.__productsQA={marker:arguments[0],saves:[],attempts:[],pending:0,errors:[]};
       if(store.__productsCaptureInstalled)return;store.__productsCaptureInstalled=true;
       const dispatch=store.dispatch.bind(store);
@@ -33,39 +33,38 @@ final class ProductSaveCapture {
           cap.saves.push({endpoint:payload.url,id:sent.id||entity?.id||(typeof entity==='string'?entity:null),values:sent});}return result;
         }).catch(error=>{if(owned){cap.pending--;cap.errors.push(String(error));}throw error;});};
       """,
-                        marker);
+                marker);
     }
 
     String prCaptureMarker() {
         return (String)
-                ((JavascriptExecutor) driver)
-                        .executeScript("return window.__productsQA?.marker||null");
+                Plugin_ERP.Util.VueComponentAccess.execute(
+                        driver, "return window.__productsQA?.marker||null");
     }
 
     List<Map<String, Object>> prSaves() {
         return (List<Map<String, Object>>)
-                ((JavascriptExecutor) driver)
-                        .executeScript("return window.__productsQA?.saves||[]");
+                Plugin_ERP.Util.VueComponentAccess.execute(
+                        driver, "return window.__productsQA?.saves||[]");
     }
 
     List<Map<String, Object>> prAttempts() {
         return (List<Map<String, Object>>)
-                ((JavascriptExecutor) driver)
-                        .executeScript("return window.__productsQA?.attempts||[]");
+                Plugin_ERP.Util.VueComponentAccess.execute(
+                        driver, "return window.__productsQA?.attempts||[]");
     }
 
     void prSettled() {
         ready.until(
                 d ->
                         !Boolean.TRUE.equals(
-                                ((JavascriptExecutor) d)
-                                        .executeScript(
-                                                "return (window.__productsQA?.pending||0)>0")));
+                                Plugin_ERP.Util.VueComponentAccess.execute(
+                                        d, "return (window.__productsQA?.pending||0)>0")));
     }
 
     String prSaveErrors() {
         return String.valueOf(
-                ((JavascriptExecutor) driver)
-                        .executeScript("return window.__productsQA?.errors||[]"));
+                Plugin_ERP.Util.VueComponentAccess.execute(
+                        driver, "return window.__productsQA?.errors||[]"));
     }
 }

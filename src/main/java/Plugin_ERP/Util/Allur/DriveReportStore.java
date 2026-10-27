@@ -260,6 +260,9 @@ final class DriveReportStore {
                                             .build(),
                                     HttpResponse.BodyHandlers.ofString());
                 } catch (IOException interrupted) {
+                    Plugin_ERP.Bots.LogUtils.debug(
+                            "DriveReportStore fallback: " + interrupted.getClass().getSimpleName());
+
                     response = null;
                 }
                 if (response == null

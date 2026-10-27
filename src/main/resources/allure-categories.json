@@ -1,0 +1,24 @@
+[
+  {
+    "name": "Known bug \u2014 explicit reference",
+    "matchedStatuses": [
+      "failed",
+      "broken"
+    ],
+    "messageRegex": "[\\s\\S]*KNOWN_BUG:[A-Z]+-[0-9]+[\\s\\S]*"
+  },
+  {
+    "name": "New assertion failure",
+    "matchedStatuses": [
+      "failed"
+    ],
+    "messageRegex": "^(?![\\s\\S]*KNOWN_BUG:[A-Z]+-[0-9]+)[\\s\\S]*$"
+  },
+  {
+    "name": "New execution failure",
+    "matchedStatuses": [
+      "broken"
+    ],
+    "messageRegex": "^(?![\\s\\S]*KNOWN_BUG:[A-Z]+-[0-9]+)[\\s\\S]*$"
+  }
+]

@@ -1,0 +1,76 @@
+{
+  "activity": "Restaurant",
+  "discount": "Transaction",
+  "tax": "NetBased",
+  "stocktaking": "Periodic",
+  "additionalTax": false,
+  "workers": 1,
+  "browser": "chrome",
+  "browserVersion": "156.0.8078.48",
+  "verdict": "STABLE_PASS",
+  "rounds": [
+    {
+      "round": "round-1",
+      "statuses": {
+        "passed": 9
+      },
+      "explicitlyExcludedMethods": 3,
+      "selectionProvenance": "RECONSTRUCTED_AFTER_RUN_FROM_PINNED_COMPILED_PLANNER",
+      "cleanupConfirmed": true,
+      "ownedBranchState": "DELETED",
+      "timing": {
+        "setupWorkMs": 94619,
+        "cleanupWorkMs": 249936,
+        "configurationFailures": 0,
+        "unattributedFixtureMs": 0,
+        "invalidTimings": 0,
+        "testWallMs": 90798,
+        "fixtureWallMs": 344555,
+        "recordedSpanMs": 435787
+      }
+    },
+    {
+      "round": "round-2",
+      "statuses": {
+        "passed": 9
+      },
+      "explicitlyExcludedMethods": 3,
+      "selectionProvenance": "RECONSTRUCTED_AFTER_RUN_FROM_PINNED_COMPILED_PLANNER",
+      "cleanupConfirmed": true,
+      "ownedBranchState": "DELETED",
+      "timing": {
+        "setupWorkMs": 89833,
+        "cleanupWorkMs": 253990,
+        "configurationFailures": 0,
+        "unattributedFixtureMs": 0,
+        "invalidTimings": 0,
+        "testWallMs": 72311,
+        "fixtureWallMs": 343823,
+        "recordedSpanMs": 416400
+      }
+    },
+    {
+      "round": "round-3",
+      "statuses": {
+        "passed": 9
+      },
+      "explicitlyExcludedMethods": 3,
+      "selectionProvenance": "RECONSTRUCTED_AFTER_RUN_FROM_PINNED_COMPILED_PLANNER",
+      "cleanupConfirmed": true,
+      "ownedBranchState": "DELETED",
+      "timing": {
+        "setupWorkMs": 80129,
+        "cleanupWorkMs": 252620,
+        "configurationFailures": 0,
+        "unattributedFixtureMs": 0,
+        "invalidTimings": 0,
+        "testWallMs": 77400,
+        "fixtureWallMs": 332749,
+        "recordedSpanMs": 410483
+      }
+    }
+  ],
+  "scope": "Nine selected invocations per round only; not complete restaurant or additional-tax coverage.",
+  "report": "target/restaurant-stability-verified/stability-summary.html",
+  "selectionNote": "Selection manifest reconstructed after these runs from the same pinned compiled planner; future rounds capture it before execution. Original TestNG XML retained."
+}

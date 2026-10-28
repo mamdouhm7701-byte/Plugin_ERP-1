@@ -1,0 +1,257 @@
+[
+  {
+    "workflow": "src/test/java/StoreTest/StorePreparationSteps.java",
+    "method": "baselineMode",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StorePreparationSteps.java",
+    "method": "defaultParty",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StorePreparationSteps.java",
+    "method": "ownItem",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StorePreparationSteps.java",
+    "method": "ownParty",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StorePreparationSteps.java",
+    "method": "partyLabel",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StorePreparationSteps.java",
+    "method": "prepare",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StorePreparationSteps.java",
+    "method": "snapshot",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StorePreparationSteps.java",
+    "method": "initial",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StorePreparationSteps.java",
+    "method": "fill",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StorePreparationSteps.java",
+    "method": "add",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreSaveVerification.java",
+    "method": "capture",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreSaveVerification.java",
+    "method": "save",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreSaveVerification.java",
+    "method": "verifyReport",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreSaveVerification.java",
+    "method": "sameNumber",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreSaveVerification.java",
+    "method": "fixtureBalance",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreSaveVerification.java",
+    "method": "assertEffect",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreSaveVerification.java",
+    "method": "create",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreEditingChecks.java",
+    "method": "partyIdentity",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreEditingChecks.java",
+    "method": "hasId",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreEditingChecks.java",
+    "method": "editOwn",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreEditingChecks.java",
+    "method": "find",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreEditingChecks.java",
+    "method": "deleteOwn",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreEditingChecks.java",
+    "method": "notesRoundTrip",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreEditingChecks.java",
+    "method": "SM_CancelCreation",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreEditingChecks.java",
+    "method": "SM_CancelEdit",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreEditingChecks.java",
+    "method": "SM_CancelDelete",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreInputValidation.java",
+    "method": "required",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreInputValidation.java",
+    "method": "rejectQuantity",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreInputValidation.java",
+    "method": "noItems",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreInputValidation.java",
+    "method": "oldDate",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreInputValidation.java",
+    "method": "pickerWithoutStore",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreInputValidation.java",
+    "method": "sameStore",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreInputValidation.java",
+    "method": "pickerWithoutDestination",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreInputValidation.java",
+    "method": "SM_RequiredStore",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreInputValidation.java",
+    "method": "SM_ZeroQuantity",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreInputValidation.java",
+    "method": "SM_NegativeQuantity",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreInputValidation.java",
+    "method": "SM_DecimalQuantity",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreInputValidation.java",
+    "method": "SM_StockBalanceBoundary",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreInputValidation.java",
+    "method": "SM_LineCalculations",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreInputValidation.java",
+    "method": "SM_RemoveItem",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreInputValidation.java",
+    "method": "SM_DuplicateItem",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreListChecks.java",
+    "method": "SM_ListStructure",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreListChecks.java",
+    "method": "SM_ExportPdf",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreListChecks.java",
+    "method": "SM_ExportExcel",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreListChecks.java",
+    "method": "export",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/StoreTest/StoreListChecks.java",
+    "method": "SM_SearchAndReset",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/Invoice/SalesPersistenceChecks.java",
+    "method": "save",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/FinancialMovementsTest/FinancialPersistenceChecks.java",
+    "method": "persist",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/FinancialMovementsTest/FinancialPersistenceChecks.java",
+    "method": "assertOwnedRelationships",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/ProductsTest/ProductPersistenceChecks.java",
+    "method": "save",
+    "equivalentAfterOwnerQualification": true
+  },
+  {
+    "workflow": "src/test/java/ProductsTest/ProductPersistenceChecks.java",
+    "method": "verifyReport",
+    "equivalentAfterOwnerQualification": true
+  }
+]

@@ -1,0 +1,724 @@
+[
+  {
+    "source": "src/test/java/Plugin_ERP/Tests/LoginTest/BasicDataTest/CashTest.java",
+    "directory": "src/test/java/Plugin_ERP/Tests/LoginTest/BasicDataTest",
+    "originalClass": "Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest",
+    "methods": [
+      {
+        "name": "WH_001_SafeListStructureIsDisplayed",
+        "workflow": "CashListsChecks",
+        "bodySha256": "bec18195030d35cd96f28ca4088c4bd9ce3a170133cc4ab58fdccc62f9953fa0"
+      },
+      {
+        "name": "WH_002_CashCreationFormControlsAreDisplayed",
+        "workflow": "CashFormsChecks",
+        "bodySha256": "0fc020665d6809a1e3fca57fcaf255cc5f270adba3ed42d45b1679071281bab1"
+      },
+      {
+        "name": "WH_014_CloseCreationFormWithoutSaving",
+        "workflow": "CashFormsChecks",
+        "bodySha256": "3496c58afc117ebc87209638703bfc65f708c060fd3264c326c068e9c83cc2f9"
+      },
+      {
+        "name": "WH_020_EditFormLoadsCurrentSafeName",
+        "workflow": "CashFormsChecks",
+        "bodySha256": "6f6530c670d79fdc761103b38fd6fe33f23433c7a45a2f2cb4fe120b5129557c"
+      },
+      {
+        "name": "WH_022_CancelSafeEditWithoutSaving",
+        "workflow": "CashFormsChecks",
+        "bodySha256": "9836825fa5463e717c2eeb932b1dabdcfa8553ceac89227d5b51d4ae2c927513"
+      },
+      {
+        "name": "ValidCashTest",
+        "workflow": "CashSavingChecks",
+        "bodySha256": "17a20c20d4319822b7730622cee63f06f9d6b17553f91b257392ff8fb0b0d956"
+      },
+      {
+        "name": "EditCash",
+        "workflow": "CashSavingChecks",
+        "bodySha256": "5e7eee99b947af151e8a53cba60d7d8073d6bdd0933eae516846436a15702773"
+      },
+      {
+        "name": "DeleteCash",
+        "workflow": "CashSavingChecks",
+        "bodySha256": "7a9915d8410f5f3ec0399a4543ebd8536deb133ba771130c10c435115f182188"
+      },
+      {
+        "name": "InvalidCashTest",
+        "workflow": "CashValidationChecks",
+        "bodySha256": "f131c8e2ed66b3f541f88130a1777d19eb67b84c91036383c205f2f77d4d3c29"
+      },
+      {
+        "name": "EmptyCashFormIsRejected",
+        "workflow": "CashValidationChecks",
+        "bodySha256": "80ec4c0a67222147ed68419c6d0b24b3cc734d2d43da6bc51554019ba96062f9"
+      },
+      {
+        "name": "CashArabicNameWhitespaceIsRejected",
+        "workflow": "CashValidationChecks",
+        "bodySha256": "149a4687504054e8fa5157ad4cc3074d2b145ace47ce990f874727f83e7a4927"
+      },
+      {
+        "name": "CorrectArabicNameAfterValidationError",
+        "workflow": "CashValidationChecks",
+        "bodySha256": "2bcec7441479b7250fbf4c6f435175ba15c0d5b3a3fb0645e0bca973a865c80a"
+      },
+      {
+        "name": "OptionalCashFieldsCanBeEmpty",
+        "workflow": "CashValidationChecks",
+        "bodySha256": "84e5a2df6ca0e9f01fc7f0ba95343ffb9dcb8acd42165343bbb8d611e4be87ca"
+      },
+      {
+        "name": "OpenCashCreationForm",
+        "workflow": "CashFormsChecks",
+        "bodySha256": "ce3f4ff9c2d6b7b101da53ae2f859491ff1905cb37a67ea14d20208868c8a681"
+      },
+      {
+        "name": "CashListDisplaysRecords",
+        "workflow": "CashListsChecks",
+        "bodySha256": "103d62f3dcdf2a09b277957e2df78485b5252f53468a0da01ca042360211de13"
+      },
+      {
+        "name": "SearchSafesByCodeAndName",
+        "workflow": "CashListsChecks",
+        "bodySha256": "46f4d05c7904c1b2351b52b1a752532577cb11068eed6d266b91134be57453da"
+      },
+      {
+        "name": "WH_017_SearchSafesByEnglishName",
+        "workflow": "CashListsChecks",
+        "bodySha256": "5522316619a9b5d3097ed4a3941c0c571b1adfd0dd72593dedbd7c326a61bf82"
+      },
+      {
+        "name": "WH_028_SafeListCanBeSortedByCode",
+        "workflow": "CashListsChecks",
+        "bodySha256": "38dbf623dbb83a2ecd7b611ff4119ea0da578ab08db920b0f78d0c82e462dccf"
+      },
+      {
+        "name": "WH_029_ChangingPageSizeUpdatesVisibleRows",
+        "workflow": "CashListsChecks",
+        "bodySha256": "bd1c51721b8f3f629065d9e6581cec15770c4b04e1fae90e93f42c10e345e325"
+      },
+      {
+        "name": "WH_030_NavigateSafeListPagesWhenAvailable",
+        "workflow": "CashListsChecks",
+        "bodySha256": "ae21d01b31bdc7562f0f8a32d380d2dc68972a0fff12a638c6c393c2ef38869c"
+      },
+      {
+        "name": "WH_003_CreateValidSafeAndVerifyFields",
+        "workflow": "CashSavingChecks",
+        "bodySha256": "dc444f41739652e9c279c4a9e109e83d0d0659bed8f41f86f4fb7d0170358336"
+      },
+      {
+        "name": "WH_007_SaveSafeWithoutAccount",
+        "workflow": "CashSavingChecks",
+        "bodySha256": "2c2fdda086aebdf322895caccbb0739e547d9512b10d779d96c9ee3b61fd13e8"
+      },
+      {
+        "name": "WH_008_SaveSafeWithGeneralUnchecked",
+        "workflow": "CashSavingChecks",
+        "bodySha256": "3dd663783eb7cb51051ac7f2410686ce9e4997b2aceb8b66f91c2c5cff0d41ff"
+      },
+      {
+        "name": "WH_009_SaveSafeWithGeneralChecked",
+        "workflow": "CashSavingChecks",
+        "bodySha256": "2a2fc58f09e1a035ecccf10f203dbef0d729a5ded450a8b0e0cad72c53be97bc"
+      },
+      {
+        "name": "WH_010_SaveSafeWithEmptyNotes",
+        "workflow": "CashValidationChecks",
+        "bodySha256": "84b7861257552c3d876d73e84e15c2f4c90773cba897a41281ec48f8f879b937"
+      },
+      {
+        "name": "WH_012_RapidDoubleSaveCreatesSingleSafe",
+        "workflow": "CashSavingChecks",
+        "bodySha256": "b3d7a9afefb957abe5c317f38dbc56d944ce75e0f5d235a7e6d05d3e1c6dd8f6"
+      },
+      {
+        "name": "WH_021_EditOwnedTestSafeAndSave",
+        "workflow": "CashSavingChecks",
+        "bodySha256": "3ed29922a532728669ce2178d5828784bba2216d954805f560a5edcb588cf0a2"
+      },
+      {
+        "name": "WH_023_DeleteOnlyOwnedTestSafe",
+        "workflow": "CashSavingChecks",
+        "bodySha256": "6adc752f69249d355ef99110402009752ef331726acbfec02f616b2c2ec94ed5"
+      },
+      {
+        "name": "WH_024_CancelDeleteOfOwnedTestSafe",
+        "workflow": "CashFormsChecks",
+        "bodySha256": "74d559e41b80b6d8e31621979a3e2cf6a99c46d3c61f6422470e00dc3a77ffe1"
+      },
+      {
+        "name": "WH_031_NewSafeAppearsAfterListRefresh",
+        "workflow": "CashListsChecks",
+        "bodySha256": "1ee94849b1a8fd8c61b2f0eb80eaee930fec6f188bb57b2304719e0de71f347c"
+      },
+      {
+        "name": "WH_032_SafePersistsAfterBrowserRefresh",
+        "workflow": "CashListsChecks",
+        "bodySha256": "e6120615a2f34c8a4cfcfdf0e7a88f719f9f21021e2b35e4383ca18e249c3a74"
+      },
+      {
+        "name": "WH_035_ReopeningListDoesNotDuplicateSafe",
+        "workflow": "CashValidationChecks",
+        "bodySha256": "96a4e2fb2f0fc4ec96100cbcae1639f1e1f4da9e32577b7026fd6edd8b21dc5e"
+      },
+      {
+        "name": "ExportSafesToPdf",
+        "workflow": "CashExportsChecks",
+        "bodySha256": "211a68621c296455bdbc6f99c82b1344ce568a2ba9755dae3e393493c7afdd0c"
+      },
+      {
+        "name": "ExportSafesToExcel",
+        "workflow": "CashExportsChecks",
+        "bodySha256": "1637a5e8ce9558a8c3a84e5f9f568450419e377c47d34243e7630effcc909032"
+      }
+    ]
+  },
+  {
+    "source": "src/test/java/GenralAccountantTest/VouchersTest.java",
+    "directory": "src/test/java/GenralAccountantTest",
+    "originalClass": "GenralAccountantTest.VouchersTest",
+    "methods": [
+      {
+        "name": "OpenVouchersPageTest",
+        "workflow": "VouchersFormsChecks",
+        "bodySha256": "2019edc7b5746e2c76d8e5b53fc89c15cdabf4626e601b95d2922d851a3aa7d6"
+      },
+      {
+        "name": "VoucherDateIsPrepopulatedTest",
+        "workflow": "VouchersSavingChecks",
+        "bodySha256": "3961347228fd247036605ab5f19ee98a911dedd3a1a584d53b6291f630063711"
+      },
+      {
+        "name": "SaveActionsAvailableTest",
+        "workflow": "VouchersSavingChecks",
+        "bodySha256": "f52be5ae09f96ebb52df9db2ad8e66d27715c2cc6fcf131e9b81576c6ef4af3e"
+      },
+      {
+        "name": "RejectEmptyVoucherTest",
+        "workflow": "VouchersValidationChecks",
+        "bodySha256": "2b763c50dfd07cdd4955669ebd990331cfd64b6e313dd7cfab2d44526dba8bda"
+      },
+      {
+        "name": "NotesAcceptArabicEnglishAndNumbersTest",
+        "workflow": "VouchersSavingChecks",
+        "bodySha256": "b8605f456d8fba24afb869261b45bc98fb4bb314d698e019ccf38eecb7028693"
+      },
+      {
+        "name": "SearchAccountByCodeTest",
+        "workflow": "VouchersListsChecks",
+        "bodySha256": "e5a5c840f694010bc02d3147d6513e69c52306225591864c3df79b8d661d6bb0"
+      },
+      {
+        "name": "SearchAccountByNameTest",
+        "workflow": "VouchersListsChecks",
+        "bodySha256": "c00f9ea29723dbd1046a91b276e5a8e31422a1fd6c7abb579e7f79727fcbaa82"
+      },
+      {
+        "name": "SearchAccountWithoutResultsTest",
+        "workflow": "VouchersListsChecks",
+        "bodySha256": "23c586f99230725bf42ca93f3b406a835879e2a3fa45ad0e06135d6bcbb930bb"
+      },
+      {
+        "name": "SelectAccountFromSearchTest",
+        "workflow": "VouchersListsChecks",
+        "bodySha256": "49a59c27b82db69611c3a1ee905a328bc58f22ed33e3f28194dc9b72e07c11b6"
+      },
+      {
+        "name": "CloseAccountPickerKeepsSelectedLineTest",
+        "workflow": "VouchersFormsChecks",
+        "bodySha256": "fdf6f108802657cbcc425e2202e9518fb4321407e33509780a59b64773fa72df"
+      },
+      {
+        "name": "ZeroAmountsKeepZeroDraftTotalsTest",
+        "workflow": "VouchersValidationChecks",
+        "bodySha256": "b06c40b4f288ad59961bf282349625ea277bdb344d5afba1153575d3b71a68f9"
+      },
+      {
+        "name": "AddingLinePreservesPreviousValuesTest",
+        "workflow": "VouchersSavingChecks",
+        "bodySha256": "46a19a6b9acc0ef956f1d4fffbcd4f70e89499617bf02a81f5dd3bce0c4d2296"
+      },
+      {
+        "name": "BalancedEntryTotalsTest",
+        "workflow": "VouchersSavingChecks",
+        "bodySha256": "c7dab06f41748789deb77f7a1f160ffe1fc420b56e736c5209d526a543077d02"
+      },
+      {
+        "name": "UnbalancedEntryTotalsTest",
+        "workflow": "VouchersValidationChecks",
+        "bodySha256": "00e942d54afe0b4c75227888bf79dc18bbe9c68a08e8178e68763d12ccb88b60"
+      },
+      {
+        "name": "RecalculateBalanceAfterAmountEditTest",
+        "workflow": "VouchersSavingChecks",
+        "bodySha256": "ddc851d8c9c6de7b40a2c4963a9a0e3e99606f54892617e8304c801b2fac32cf"
+      },
+      {
+        "name": "MultiLineDecimalTotalsTest",
+        "workflow": "VouchersSavingChecks",
+        "bodySha256": "3043edf36ad37c5c7c067fbd8bb1837ddd159202d22843b1c20e7808fce2434f"
+      },
+      {
+        "name": "RemoveLineUpdatesDraftTotalsTest",
+        "workflow": "VouchersSavingChecks",
+        "bodySha256": "5c91388b48bd6a7255808224882a157aea5e5e1fc8977113f35735feeaaacca4"
+      },
+      {
+        "name": "AmountFieldsAreNumericTest",
+        "workflow": "VouchersValidationChecks",
+        "bodySha256": "715c2262e1cb9743be2a47d4a0b7ac6ef380d81ad8696f911071c85d54285d69"
+      },
+      {
+        "name": "SameLineDebitCreditDraftTest",
+        "workflow": "VouchersSavingChecks",
+        "bodySha256": "88b13cc94b902b82730c3ca29e5b0c51c01b33a1804e007b761c6f8a51f6a53f"
+      },
+      {
+        "name": "SelectAccountFromLineDropdownTest",
+        "workflow": "VouchersSavingChecks",
+        "bodySha256": "3ef84030581f4a8eafef72c7e0d811ff88bf77a4021281f5a08f9034c0ac7343"
+      },
+      {
+        "name": "VoucherDateFormatTest",
+        "workflow": "VouchersFormsChecks",
+        "bodySha256": "99f5213f34826fb6c6fd250a90bc0ab5a18e875ebeb3d05dfbd2e45d2289906c"
+      },
+      {
+        "name": "LineNotesAcceptMixedTextTest",
+        "workflow": "VouchersSavingChecks",
+        "bodySha256": "c53d97b6871c36a9163911767a906d7d8c50a68e9b819ded67556e710db73fac"
+      },
+      {
+        "name": "AccountSearchAvailableInLinesTest",
+        "workflow": "VouchersListsChecks",
+        "bodySha256": "cebda6028c04ff0f6e6e0e63eaf28343ae442d8230d3a745a6899c1193d63ff5"
+      },
+      {
+        "name": "TaxSettlementTest",
+        "workflow": "VouchersSavingChecks",
+        "bodySha256": "87193bc0d74c3363a5d2fa4075f9f4a0dc267185bd604d8ad067e7bd457f4750"
+      },
+      {
+        "name": "RejectUnbalancedVoucherOnSaveTest",
+        "workflow": "VouchersValidationChecks",
+        "bodySha256": "f76093aae20fcdc264ff3c8e1702401168b98b14a8ac6e8714072da9cfb93aa4"
+      },
+      {
+        "name": "RejectZeroValueVoucherOnSaveTest",
+        "workflow": "VouchersValidationChecks",
+        "bodySha256": "35031b5951f42d135a7e28e9704b228847392ce8ac1f44d64d792fe7b8fc1899"
+      },
+      {
+        "name": "RejectNegativeJournalAmountTest",
+        "workflow": "VouchersValidationChecks",
+        "bodySha256": "521ce3e2c320365fe6eefe6186a4733c167f1f1d111982bac3116c4b1a84e580"
+      },
+      {
+        "name": "NoMarkedValidationVouchersRemainTest",
+        "workflow": "VouchersValidationChecks",
+        "bodySha256": "d83fb3c16a83ecb5d19cb1746bdf065ee3d831b0a14641b49be29f500e7807ac"
+      },
+      {
+        "name": "SavePrintEditAndDeleteTestVoucher",
+        "workflow": "VouchersSaving2Checks",
+        "bodySha256": "bcebf7e95bf75318e57e9c1d2dd64e8c29be6f4b9ba64773a5d0e0b4951b9c95"
+      },
+      {
+        "name": "RejectDebitAndCreditOnSameLineTest",
+        "workflow": "VouchersValidationChecks",
+        "bodySha256": "2611dacc7eb1aab2de6e7d15624e08357c57eb1e6345b01f34b9b9ae6f3867b7"
+      }
+    ]
+  },
+  {
+    "source": "src/test/java/DealerModelTest/CustomersTest.java",
+    "directory": "src/test/java/DealerModelTest",
+    "originalClass": "DealerModelTest.CustomersTest",
+    "methods": [
+      {
+        "name": "CU_001_CustomerListStructure",
+        "workflow": "CustomersListsChecks",
+        "bodySha256": "40e85bdc3955cba1ac5ac3296377876d28797ba5ba53f5899539114a4777768c"
+      },
+      {
+        "name": "CU_002_CloseCustomerFormWithoutSaving",
+        "workflow": "CustomersFormsChecks",
+        "bodySha256": "eb7927e0444db2a9bc447df87842491997d2dccb421c34cfedf7d3ef4c8f9806"
+      },
+      {
+        "name": "CU_003_CancelCustomerEditWithoutSaving",
+        "workflow": "CustomersFormsChecks",
+        "bodySha256": "2159738566e98e9e21d7a9a3a1973feeb4de4bca66684feac71965e33d43dbe7"
+      },
+      {
+        "name": "CU_004_CancelCustomerDelete",
+        "workflow": "CustomersFormsChecks",
+        "bodySha256": "b3c1a131808b4af7a92c538898722e550e2b71f4f08a1f5f4bc9b85b86edd9d0"
+      },
+      {
+        "name": "CU_005_OwnedCustomerCreateEditDelete",
+        "workflow": "CustomersSavingChecks",
+        "bodySha256": "0c5d970608a629747ccf988bf6384551fd6847d8c3f2a01aa26b6b0eb6b67c0d"
+      },
+      {
+        "name": "AddCustomerFirstPage",
+        "workflow": "CustomersSavingChecks",
+        "bodySha256": "5f797597303dc078f7c29d7f9454dfd407cd1598074aba56ca4487dde7582c05"
+      },
+      {
+        "name": "AddCustomerSecondPage",
+        "workflow": "CustomersSavingChecks",
+        "bodySha256": "351b2fb0eb65457c6b8e1b17ba617989b1cd7624bd12985ca91ed982fe314362"
+      },
+      {
+        "name": "AddCustomerThirdPage",
+        "workflow": "CustomersSavingChecks",
+        "bodySha256": "19bf9d92051e4adf1745c6854166870e6511b3e97fedd10bb29e3e1b6bab8d80"
+      },
+      {
+        "name": "AddCustomerFourthPage",
+        "workflow": "CustomersSavingChecks",
+        "bodySha256": "99c468c5bbd87c300e1cb8a2396807d1dabfc41ba2ed719b5092116dd85d34db"
+      },
+      {
+        "name": "Edit",
+        "workflow": "CustomersSavingChecks",
+        "bodySha256": "080f4a6db17635c6af0141867b2a8b66534aec2bbf7a3a71ae298bfb41a3ffaa"
+      },
+      {
+        "name": "Delete",
+        "workflow": "CustomersSaving2Checks",
+        "bodySha256": "2db326caf4af94beb6f988b2842e1bb0d683044aeefab527d272d9f05c700337"
+      },
+      {
+        "name": "SaveWithOutArabicName",
+        "workflow": "CustomersSaving2Checks",
+        "bodySha256": "ea749c08a8638b86392004961c97bdeb014ece701d4234601355b34f60ec497c"
+      },
+      {
+        "name": "EnterWrongEmail",
+        "workflow": "CustomersSaving2Checks",
+        "bodySha256": "ac5dc34fc51811c8f011b0e396ee06e9fe952047a46057bbcb2a817edb6904ce"
+      },
+      {
+        "name": "EnterWrongBankNumber",
+        "workflow": "CustomersSaving2Checks",
+        "bodySha256": "62098739dadf4f98e8b02a5c6479f2b010ceae1b9e6a068ee0e941690e5b0bc4"
+      },
+      {
+        "name": "AssertErrorMessagesInDataTax",
+        "workflow": "CustomersSaving2Checks",
+        "bodySha256": "cb4ef12dfab13e028297b48c4f6a83cd7b6bfc921cd9b9d654035d1a27b385d6"
+      },
+      {
+        "name": "AssertTaxNumberStartNumber3andEndStareNumber3",
+        "workflow": "CustomersSaving2Checks",
+        "bodySha256": "2a9acd5676e7f88642ea1a6e61efb2374381e6b84790a4e3f542888bdb076c2a"
+      },
+      {
+        "name": "AssertBuildingNumber",
+        "workflow": "CustomersSaving2Checks",
+        "bodySha256": "10a2489ce0da73e079098c2b10a2c5b2caf0212e129b63b61bf97df88488d151"
+      },
+      {
+        "name": "AssertPostNumberInclode5number",
+        "workflow": "CustomersSaving2Checks",
+        "bodySha256": "d1aead63d30b84a9505c173ab43d1faf5840764a037b8a275c5f683adfae960f"
+      },
+      {
+        "name": "AssertAdress",
+        "workflow": "CustomersSaving2Checks",
+        "bodySha256": "5dd87c96beb575626068d88358d8ae34333e923724bbdb256ec3e6b4d3caedec"
+      },
+      {
+        "name": "AsserShowErrorPopUpPhoneNumberDubelicateAndClickYes",
+        "workflow": "CustomersSaving2Checks",
+        "bodySha256": "17b943688878ca319fb67239fb55334824b80786c91a9c45fc7ecb169706e289"
+      },
+      {
+        "name": "AsserShowErrorPopUpPhoneNumberDubelicateAndClickCansel",
+        "workflow": "CustomersSaving2Checks",
+        "bodySha256": "b310361a76397a65de16111dea10c5c9276ca46e695aa40f44f6bee006556fb4"
+      },
+      {
+        "name": "ExportCustomersToPdf",
+        "workflow": "CustomersExportsChecks",
+        "bodySha256": "ea770943fb6c51cc059e8ecc4b4e25f4259979aa89ddf0adf77f66de202a97c3"
+      },
+      {
+        "name": "ExportCustomersToExcel",
+        "workflow": "CustomersExportsChecks",
+        "bodySha256": "4876f991876a0527bbc57064b3e524c90f29fa6b0b72b16025ead6a1291ed2d8"
+      }
+    ]
+  },
+  {
+    "source": "src/test/java/Plugin_ERP/Tests/LoginTest/BasicDataTest/AreaTest.java",
+    "directory": "src/test/java/Plugin_ERP/Tests/LoginTest/BasicDataTest",
+    "originalClass": "Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest",
+    "methods": [
+      {
+        "name": "AR_001_AreaListStructureIsDisplayed",
+        "workflow": "AreaListsChecks",
+        "bodySha256": "24e11e359e0c1f02468986e686ed37d0c9701a71bf87cd764d051dbb8116b20b"
+      },
+      {
+        "name": "AR_002_AreaCreationFormControlsAreDisplayed",
+        "workflow": "AreaFormsChecks",
+        "bodySha256": "5baa54fddf1bc9890e7bcba8d198cbe72d4e186e49e04a68c3bf0239f3d4399d"
+      },
+      {
+        "name": "AR_014_CloseCreationFormWithoutSaving",
+        "workflow": "AreaFormsChecks",
+        "bodySha256": "9a525d618a9df5018d3d368b5f14a652419d7fdea5cadaacb7cbc11abf1b2a48"
+      },
+      {
+        "name": "AR_020_EditFormLoadsCurrentAreaValues",
+        "workflow": "AreaFormsChecks",
+        "bodySha256": "137688ba7dbbd6074772ee48d3d25ff87859fd742123df97a507ab94be062aee"
+      },
+      {
+        "name": "AR_022_CancelAreaEditWithoutSaving",
+        "workflow": "AreaFormsChecks",
+        "bodySha256": "94adfbd51e1ad55018c5d172c9e071551a3672d433b1abf09af60adf298b9b78"
+      },
+      {
+        "name": "AR_004_ArabicNameIsRequired",
+        "workflow": "AreaValidationChecks",
+        "bodySha256": "545d62fb7df2d2daa3b2ff75b08e96d6c290af9eafe2e44798916d8add25f0b6"
+      },
+      {
+        "name": "AR_005_WhitespaceNameIsRejected",
+        "workflow": "AreaValidationChecks",
+        "bodySha256": "7150f1b4a0d1fa7542569c874c41235fedac3ca6c2a7c270ebb669a61a8f787f"
+      },
+      {
+        "name": "AR_013_CorrectArabicNameAfterValidationError",
+        "workflow": "AreaValidationChecks",
+        "bodySha256": "4d6a5bd5690ac3eb571735349d337627f6da0581a18e2267a6e2a44d398ad038"
+      },
+      {
+        "name": "AR_003_CreateValidAreaAndVerifyFields",
+        "workflow": "AreaSavingChecks",
+        "bodySha256": "1c7f3cc64221a19958bc298de7cc729f407a203b89d1e87f7fa1a585b5da3ffc"
+      },
+      {
+        "name": "AR_007_OptionalFieldsCanBeEmpty",
+        "workflow": "AreaValidationChecks",
+        "bodySha256": "f33bc42fa1028bd1f93949d0faa8535d2d025b3f6431ae4f7ca4ee608aedc867"
+      },
+      {
+        "name": "AR_015_SearchAreasByCodeAndName",
+        "workflow": "AreaListsChecks",
+        "bodySha256": "5d2c720ab501f157c37d74eccd7c447108141ff8ae88606ace850dc7a0d6b606"
+      },
+      {
+        "name": "AR_017_SearchUsesOnlyDisplayedAreaFields",
+        "workflow": "AreaListsChecks",
+        "bodySha256": "65fdbd369eea22cf665c096c6f25ba69b4188d1bb005304ae045ba61739993c8"
+      },
+      {
+        "name": "AR_028_AreaListCanBeSortedByCode",
+        "workflow": "AreaListsChecks",
+        "bodySha256": "99f0e4312395709016cc16447abb9589591e0bed66997cb72c65c70123f830a5"
+      },
+      {
+        "name": "AR_029_ChangingPageSizeUpdatesVisibleRows",
+        "workflow": "AreaListsChecks",
+        "bodySha256": "af36044e91706a9f7ad04fe9b0a9cd77b81c709307e076f568c7cc9824fa8a42"
+      },
+      {
+        "name": "AR_030_NavigateAreaPagesWhenAvailable",
+        "workflow": "AreaListsChecks",
+        "bodySha256": "bcc042ca81151f0b0c437c65b01759d97c4af209eaf8e5b7ba5776876b1f2ae6"
+      },
+      {
+        "name": "AR_012_RapidDoubleSaveCreatesSingleArea",
+        "workflow": "AreaSavingChecks",
+        "bodySha256": "849100f9dfdf323cfd47feec573864e1e9e38051d4f94c13e32c115a69a6fd01"
+      },
+      {
+        "name": "AR_021_EditOwnedAreaAndSave",
+        "workflow": "AreaSavingChecks",
+        "bodySha256": "b26aac19f7139482d96cc1b167ca59afc75869ff29cab3b0b943fda907de7461"
+      },
+      {
+        "name": "AR_023_DeleteOnlyOwnedArea",
+        "workflow": "AreaSavingChecks",
+        "bodySha256": "33e1d357aa8c98e7f2a18b20ed35e409c4f7e15f38bc14c386776afec2418817"
+      },
+      {
+        "name": "AR_024_CancelDeleteOfOwnedArea",
+        "workflow": "AreaFormsChecks",
+        "bodySha256": "ec036dc4b8a79281eabca0c1a596e3a013e219750332ea32faa5384c348d524b"
+      },
+      {
+        "name": "AR_032_AreaPersistsAfterBrowserRefresh",
+        "workflow": "AreaListsChecks",
+        "bodySha256": "47cd583384746dcf9ef7ac43fd42f60b5d926a83b7b787335c8e3edf2e47af40"
+      },
+      {
+        "name": "AR_035_ReopeningAreaListDoesNotDuplicateRecord",
+        "workflow": "AreaValidationChecks",
+        "bodySha256": "0e234dbf5423c7527eb6897a87fd57a3aed6b6a0403e74bde37e06e2b3cdc6e7"
+      }
+    ]
+  },
+  {
+    "source": "src/test/java/DealerModelTest/AgentTest.java",
+    "directory": "src/test/java/DealerModelTest",
+    "originalClass": "DealerModelTest.AgentTest",
+    "methods": [
+      {
+        "name": "AG_001_AgentListStructure",
+        "workflow": "AgentListsChecks",
+        "bodySha256": "631427d76867c168f3dba4b4a32fa4ce7217aef1c7a24615ff335b568627aec6"
+      },
+      {
+        "name": "AG_002_CloseAgentFormWithoutSaving",
+        "workflow": "AgentFormsChecks",
+        "bodySha256": "ee94111c3082cbf1771ca9457ef9c7a0c749cf01bf268f57fa3ea324713cbb60"
+      },
+      {
+        "name": "AG_003_CancelAgentEditWithoutSaving",
+        "workflow": "AgentFormsChecks",
+        "bodySha256": "8f8511bea8112aa2e672919291467bb8415c900815ee105cc18241d8e59b428f"
+      },
+      {
+        "name": "AG_004_CancelAgentDelete",
+        "workflow": "AgentFormsChecks",
+        "bodySha256": "d79bd9e5fe1361fdcb7349d17668e0b6c006d84c19db93b7771a5d9ed9c98678"
+      },
+      {
+        "name": "AG_005_OwnedAgentCreateEditDelete",
+        "workflow": "AgentSavingChecks",
+        "bodySha256": "d0cad748992cc4c7b865e7a1051a53dce476321d0ef25c35f951a9da4d305691"
+      },
+      {
+        "name": "AddAgentFDAtaFirstPAge",
+        "workflow": "AgentSavingChecks",
+        "bodySha256": "918228f64b9bd68fe3d13eb4be67b84ba477dabe7f2a01c91c17212b5455a756"
+      },
+      {
+        "name": "AddAgentFDAtaSecondPAgeForAgentCommission",
+        "workflow": "AgentSavingChecks",
+        "bodySha256": "dc7431b04e0bcb54c91a12becece9a2a5a2c39de405a8ebc9392b4dd21bf2a08"
+      },
+      {
+        "name": "AddAgentThirdPageProductCommission",
+        "workflow": "AgentSavingChecks",
+        "bodySha256": "fcb80ed068f10a3b2182c27efaf412916748638079f4354723c9acf79f43ebbe"
+      },
+      {
+        "name": "AddAgentByAllProducts",
+        "workflow": "AgentSavingChecks",
+        "bodySha256": "284a73c1dd17bfb8f35e335e35b28573831882588bf7143d763a7cfe1becaabf"
+      },
+      {
+        "name": "AddAgentBySearchProduct",
+        "workflow": "AgentListsChecks",
+        "bodySha256": "23b07982821b1cd3636efc55991ed478bb7c88b074c950788e68815e603c88b5"
+      },
+      {
+        "name": "AddAgentWithChoseItem",
+        "workflow": "AgentSavingChecks",
+        "bodySha256": "bbb9704c3f1ac6e61e035570e13eb19961b1dc04ac2a889143801ca099e9117e"
+      },
+      {
+        "name": "Delete",
+        "workflow": "AgentSavingChecks",
+        "bodySha256": "e140a735837ddb1d8bebc7ed47d3b1bebcebade5c6222460afa41a586081a7a3"
+      },
+      {
+        "name": "AseertArabicNameRequired",
+        "workflow": "AgentValidationChecks",
+        "bodySha256": "da46efd0782af038ebcca92052c4b94a761b12fb906cbe870a219804157b001b"
+      },
+      {
+        "name": "AseertAgentNaturalRequired",
+        "workflow": "AgentValidationChecks",
+        "bodySha256": "801e6d0faaed13b46206df66f22ae53a648e21144f076f574452ff016095a565"
+      },
+      {
+        "name": "AseertErrorMessageWhenAddTheSamePrecentge",
+        "workflow": "AgentSavingChecks",
+        "bodySha256": "9b10aee922fc0dbeb9d9b7a29f8b593d1fc02a681e9cc13f29db58968f581100"
+      },
+      {
+        "name": "ExportAgentsToPdf",
+        "workflow": "AgentExportsChecks",
+        "bodySha256": "88491c98e7eeef91114401bbf03048c8471f7541b1d1004cfe603eab56f448be"
+      },
+      {
+        "name": "ExportAgentsToExcel",
+        "workflow": "AgentExportsChecks",
+        "bodySha256": "677d4da6b26c282bc7b3fc2dc2385f3030f67c4fa8e39cb46b92a08075b9ccf5"
+      }
+    ]
+  },
+  {
+    "source": "src/test/java/Invoice/InvoiceListTestCases.java",
+    "directory": "src/test/java/Invoice",
+    "originalClass": "Invoice.InvoiceListTestCases",
+    "methods": [
+      {
+        "name": "PaginationCanOpenAnExplicitPageNumber",
+        "workflow": "InvoicePaginationChecks",
+        "bodySha256": "9c4f1d585ea1c9989409d3e35329f94d93db3567829116a57294c2f4e3d8d49e"
+      },
+      {
+        "name": "SwitchingPageNumberAndPageSizeFromLaterPageWorks",
+        "workflow": "InvoicePaginationChecks",
+        "bodySha256": "1677f59b88186b1680c946b6c01fb76830f15d857d6c0cf03cf9cb258d4ded80"
+      },
+      {
+        "name": "PreviousIsDisabledOnFirstInvoicePage",
+        "workflow": "InvoicePaginationChecks",
+        "bodySha256": "cbb7664c66efbd8ef9ed39eb9694c3fa5f95651f4b3bdae3620e97b7f34ab65f"
+      },
+      {
+        "name": "PaginationPreservesFilterAndSortAndResetsPageForNewFilter",
+        "workflow": "InvoicePaginationChecks",
+        "bodySha256": "22a41dc0c760a772abe4b4503b2e1ca084667a3b805e89f950a026c1f25fcd56"
+      },
+      {
+        "name": "PaginationMovesForwardAndBack",
+        "workflow": "InvoicePaginationChecks",
+        "bodySha256": "66eecb99d1da600e5133d6f237a37ae476f0f685e0dbc7dd2354c5c2ab86801a"
+      },
+      {
+        "name": "LastInvoicePageDisablesNext",
+        "workflow": "InvoicePaginationChecks",
+        "bodySha256": "4bd2fe49e4594a720e043744942ad2cc891948acb58399f5265b05d0210f5ffd"
+      },
+      {
+        "name": "PageSizeWorksWithFilterAndSortAndSmallResultSet",
+        "workflow": "InvoicePaginationChecks",
+        "bodySha256": "a74e9380d6d10369d0a61b4cadcb5db1bc61d3346fa94286651a96eb5bc77d3c"
+      },
+      {
+        "name": "FilterCanBeAppliedFromAdvancedPage",
+        "workflow": "InvoicePaginationChecks",
+        "bodySha256": "2a30c14dc80e41628001e8deb1235cb0e78a80bbe3da1176eb91f33c3a33638d"
+      },
+      {
+        "name": "SortingByDateColumn",
+        "workflow": "InvoiceSortingChecks",
+        "bodySha256": "486db0f45e29090821572280ac776475fae26a0e3f933a13492af93da2c5f1dd"
+      },
+      {
+        "name": "InvalidInvoiceDateRangeDoesNotReturnMisleadingRows",
+        "workflow": "InvoiceSortingChecks",
+        "bodySha256": "3ef9075047405c44b964373be4de416d794e82e106c1d29b1eb8a3118b71f03f"
+      },
+      {
+        "name": "SortingInvoiceCodeAscendingAndDescending",
+        "workflow": "InvoiceSortingChecks",
+        "bodySha256": "065cc2899608aa54964768ef70591fa77d9e76caff3412a3bc6c6b1ff79ea760"
+      }
+    ]
+  }
+]

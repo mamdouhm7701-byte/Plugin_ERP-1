@@ -14,7 +14,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 final class FinancialTestData implements AutoCloseable {
 
-    record Record(String endpoint, Object id, String name, Map<String, Object> values) {}
+    record Record(String endpoint, Object id, String name, Map<String, Object> values)
+            implements TestSupport.OwnedFixtureRecord {}
 
     private final WebDriver driver;
     private final FinancialFixtureApi api;
@@ -201,69 +202,8 @@ final class FinancialTestData implements AutoCloseable {
         return (Map<String, Object>) call("get", endpoint, fields()).get("entity");
     }
 
-    @SuppressWarnings("unchecked")
     Map<String, Object> read(Record record) {
-        Object entity;
-        try {
-            entity = call("get", record.endpoint(), fields("id", record.id())).get("entity");
-        } catch (ApiFailure failure) {
-            if (failure.status == 404 || failure.status == 410) return null;
-            // This ERP's Customers detail endpoint throws a null-reference error for a
-            // deleted ID. Confirm absence through its complete paged list before accepting it.
-            if (failure.status == 500
-                    && record.endpoint().equals("Customers")
-                    && !existsInList(record)) return null;
-            throw failure;
-        }
-        // The ERP returns HTTP 200 with an empty string for some deleted records.
-        if (entity instanceof String text && text.isBlank()) return null;
-        if (!(entity instanceof Map<?, ?>)) {
-            throw new AssertionError(
-                    "Unexpected fixture read response for "
-                            + record.endpoint()
-                            + "/"
-                            + record.id());
-        }
-        Map<?, ?> dto = (Map<?, ?>) entity;
-        if (dto.get("id") == null
-                && dto.get("arabicName") == null
-                && dto.get("englishName") == null
-                && dto.get("notes") == null
-                && !dto.containsKey("pageData")
-                && !dto.containsKey("totalRecords")
-                && !dto.containsKey("error")
-                && !dto.containsKey("message")) return null;
-        return (Map<String, Object>) entity;
-    }
-
-    private boolean existsInList(Record record) {
-        long seen = 0;
-        java.util.Set<Object> ids = new java.util.HashSet<>();
-        for (int page = 1; ; page++) {
-            Object entity =
-                    call(
-                                    "get",
-                                    record.endpoint() + "?pageNumber=" + page + "&pageSize=500",
-                                    fields())
-                            .get("entity");
-            if (!(entity instanceof Map<?, ?> result)
-                    || !(result.get("pageData") instanceof List<?> rows)
-                    || !(result.get("totalRecords") instanceof Number total))
-                throw new AssertionError(
-                        "Cannot verify missing owned record through its list: "
-                                + record.endpoint());
-            int added = 0;
-            for (Object value : rows) {
-                if (!(value instanceof Map<?, ?> row) || row.get("id") == null)
-                    throw new AssertionError("Invalid lookup identity");
-                if (record.id().equals(row.get("id"))) return true;
-                if (ids.add(row.get("id"))) added++;
-            }
-            seen += added;
-            if (seen >= total.longValue()) return false;
-            if (added == 0)
-                throw new AssertionError("Financial cleanup lookup pagination did not advance");
-        }
+        return new FinancialFixtureReads(api).read(record);
     }
 
     Record fixture(String key, String endpoint, Map<String, Object> values) {
@@ -432,111 +372,8 @@ final class FinancialTestData implements AutoCloseable {
         journal();
     }
 
-    private static boolean retryable(ApiFailure failure) {
-        return failure.status == 0
-                || failure.status == 408
-                || failure.status == 429
-                || failure.status >= 500;
-    }
-
     private void deleteRecord(Record record) {
-        AssertionError lastFailure = null;
-        for (int attempt = 1; attempt <= 3; attempt++) {
-            try {
-                Map<String, Object> owned = cleanupIdentity(record);
-                if (owned == null) return;
-                if (!record.name().equals(owned.get("arabicName"))
-                        && !record.name().equals(owned.get("englishName"))
-                        && !record.name().equals(owned.get("notes")))
-                    throw new AssertionError(
-                            "Refusing cleanup: fixture ownership changed for " + record.id());
-                call("delete", record.endpoint(), fields("id", record.id()));
-                if (read(record) == null) return;
-                lastFailure =
-                        new AssertionError(
-                                "Delete did not remove owned record: "
-                                        + record.endpoint()
-                                        + "/"
-                                        + record.id());
-            } catch (ApiFailure failure) {
-                if (failure.status == 404
-                        || failure.status == 410
-                        || (failure.status == 400
-                                && failure.getMessage().contains("Common.ObjectNotFound"))) {
-                    if (read(record) == null) return;
-                    throw new AssertionError(
-                            "Delete endpoint did not remove existing owned record: "
-                                    + record.endpoint()
-                                    + "/"
-                                    + record.id(),
-                            failure);
-                }
-                if (!retryable(failure)) throw failure;
-                lastFailure = failure;
-            } catch (org.openqa.selenium.TimeoutException failure) {
-                lastFailure =
-                        new AssertionError(
-                                "Delete response timed out for " + record.endpoint(), failure);
-            }
-            // A timed-out DELETE may have committed. Read back before sending another DELETE.
-            try {
-                Map<String, Object> existing = read(record);
-                if (existing == null) {
-                    return;
-                }
-                if (!record.name().equals(existing.get("arabicName"))
-                        && !record.name().equals(existing.get("notes"))) {
-                    throw new AssertionError(
-                            "Refusing cleanup: fixture ownership changed for " + record.id());
-                }
-            } catch (ApiFailure failure) {
-                if (failure.status == 404 || failure.status == 410) return;
-                if (!retryable(failure)) throw failure;
-                lastFailure = failure;
-            } catch (org.openqa.selenium.TimeoutException failure) {
-                lastFailure =
-                        new AssertionError(
-                                "Could not verify timed-out deletion of " + record.endpoint(),
-                                failure);
-            }
-        }
-        throw lastFailure;
-    }
-
-    @SuppressWarnings("unchecked")
-    private Map<String, Object> cleanupIdentity(Record record) {
-        try {
-            return read(record);
-        } catch (ApiFailure failure) {
-            if (failure.status != 500 || !record.endpoint().equals("Customers")) throw failure;
-            java.util.Set<Object> seen = new java.util.HashSet<>();
-            for (int page = 1; ; page++) {
-                Object entity =
-                        call("get", "Customers?pageNumber=" + page + "&pageSize=500", fields())
-                                .get("entity");
-                if (!(entity instanceof Map<?, ?> result)
-                        || !(result.get("pageData") instanceof List<?> rows)
-                        || !(result.get("totalRecords") instanceof Number total)) throw failure;
-                int added = 0;
-                for (Object value : rows) {
-                    if (!(value instanceof Map<?, ?> row) || row.get("id") == null) throw failure;
-                    if (record.id().equals(row.get("id"))) return (Map<String, Object>) row;
-                    if (seen.add(row.get("id"))) added++;
-                }
-                if (seen.size() >= total.longValue()) return null;
-                if (added == 0) throw failure;
-            }
-        }
-    }
-
-    private static boolean references(Object value, Object id) {
-        if (value instanceof Map<?, ?> map)
-            return map.values().stream().anyMatch(child -> references(child, id));
-        if (value instanceof Iterable<?> list) {
-            for (Object child : list) if (references(child, id)) return true;
-            return false;
-        }
-        return id.equals(value);
+        new FinancialFixtureDeletion(this, api).remove(record);
     }
 
     @SuppressWarnings("unchecked")
@@ -552,42 +389,11 @@ final class FinancialTestData implements AutoCloseable {
     @Override
     public void close() {
         recoverPendingFixtures();
-        List<String> failures = new ArrayList<>();
-        List<Record> pending = new ArrayList<>();
-        for (int index = created.size() - 1; index >= 0; index--) {
-            Record record = created.get(index);
-            if (pending.stream().anyMatch(child -> references(child.values(), record.id()))) {
-                pending.add(record);
-                failures.add(
-                        record.name()
-                                + " ["
-                                + record.endpoint()
-                                + "/"
-                                + record.id()
-                                + "]: waiting for dependent fixture cleanup");
-                continue;
-            }
-            try {
-                deleteRecord(record);
-                created.remove(record);
-                fixtures.entrySet().removeIf(entry -> entry.getValue().equals(record));
-                journal();
-            } catch (RuntimeException | AssertionError failure) {
-                pending.add(record);
-                failures.add(
-                        record.name()
-                                + " ["
-                                + record.endpoint()
-                                + "/"
-                                + record.id()
-                                + "]: "
-                                + String.valueOf(failure.getMessage()).split("\\R", 2)[0]);
-            }
-        }
-        created.removeIf(record -> !pending.contains(record));
-        fixtures.entrySet().removeIf(entry -> !pending.contains(entry.getValue()));
-        journal();
-        if (!failures.isEmpty())
-            throw new AssertionError("Fixture cleanup failed: " + String.join("; ", failures));
+        TestSupport.FixtureCleanup.run(
+                created,
+                fixtures,
+                new ArrayList<>(created.reversed()),
+                this::deleteRecord,
+                this::journal);
     }
 }

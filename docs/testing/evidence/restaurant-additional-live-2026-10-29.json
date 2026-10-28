@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-29",
+  "activity": "Restaurant",
+  "discount": "Transaction",
+  "tax": "NetBased",
+  "stocktaking": "Periodic",
+  "additionalTax": true,
+  "workers": 1,
+  "requestedRounds": 3,
+  "completedRounds": 1,
+  "passed": 21,
+  "failed": 5,
+  "status": "BLOCKED",
+  "cleanup": "FAILED_STORE_DELETE_HTTP_500",
+  "retainedJournal": "target/special-sales-fixtures/78f3e590-246.json",
+  "retainedStoreId": "47285c19686c17f2",
+  "stabilityReport": "target/restaurant-additional-stability-2026-10-29/stability-summary.html",
+  "sourceSnapshot": "target/maintenance-live-snapshot",
+  "limits": [
+    "Subsequent rounds were not started",
+    "Branch retained because owned fixture recovery remains pending",
+    "Current source refactors after snapshot are not qualified by this live run",
+    "Later cleanup recovery does not turn the failed original qualification into a stable pass"
+  ],
+  "recovery": {
+    "date": "2026-10-29",
+    "fixtureRecovery": "SUCCEEDED_ON_LATER_RETRY",
+    "remainingOwnedFixtureRows": 0,
+    "remainingPendingAttemptRows": 0,
+    "log": "target/retained-store-retry.log",
+    "branchCleanup": "DELETED",
+    "branchEvidence": "target/restaurant-additional-branch-recovery/branch-cleanup.json"
+  }
+}

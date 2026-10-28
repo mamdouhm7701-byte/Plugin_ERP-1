@@ -19,12 +19,10 @@ final class StoreFixtureApi {
         this.sessionBranchId = sessionBranchId;
     }
 
-    static final class ApiFailure extends AssertionError {
-        final int status;
+    static final class ApiFailure extends TestSupport.FixtureApiFailure {
 
         ApiFailure(int status, String message) {
-            super(message);
-            this.status = status;
+            super(status, message);
         }
     }
 

@@ -1,0 +1,32 @@
+[
+  {
+    "original": "BusinessRunListenerTest",
+    "extracted": "BusinessActivityPlanTest",
+    "methods": [
+      "activitySelectionUsesNativeOptionIdentityInsteadOfGuessedTranslation",
+      "activitySpecificPlansDoNotClaimUnimplementedJourneys",
+      "concreteBusinessPlanIncludesQualifiedStockAndBillingJourney",
+      "constructionSelectionIncludesItsOwnContractJourney",
+      "restaurantBusinessSmokeAddsTaxAcceptanceOnlyWhenEnabled"
+    ],
+    "methodHashes": {
+      "restaurantBusinessSmokeAddsTaxAcceptanceOnlyWhenEnabled": "ffd81ff33c44489243a1cc2eb6f2c4a71330f409b1895dc90452c9dbe6ad278f",
+      "constructionSelectionIncludesItsOwnContractJourney": "5572d4e51e806902f5a1e694cef2dca96d1ee3cc9bf44b805a4c4758d562c455",
+      "activitySpecificPlansDoNotClaimUnimplementedJourneys": "4beeaa916c29e684ce998db005e0126f6fc9f44c83879ad2130765d2a13efbb2",
+      "activitySelectionUsesNativeOptionIdentityInsteadOfGuessedTranslation": "1b00549de8d94eaa1bfacf561fcb9ede75ec07b1b624facead774452fcad67b4",
+      "concreteBusinessPlanIncludesQualifiedStockAndBillingJourney": "f4d1ee5f280051e81df27d5cc6804621852c312cb00b05d6407204d8a54ad2a7"
+    }
+  },
+  {
+    "original": "SuiteDefinitionsTest",
+    "extracted": "AdditionalTaxSuiteDefinitionsTest",
+    "methods": [
+      "itemBasedAdditionalSmokeIncludesExemptMixedContract",
+      "restaurantAdditionalSmokeRetainsSubjectMixedAndDiscountContracts"
+    ],
+    "methodHashes": {
+      "itemBasedAdditionalSmokeIncludesExemptMixedContract": "2642af81f8ae0b6f8574f203a2b286de37d41e3faba3ecc33c121e9d5658397f",
+      "restaurantAdditionalSmokeRetainsSubjectMixedAndDiscountContracts": "c995770078f5383b0c9c2a44046880668171857a8cde19047fbf6143204a21cd"
+    }
+  }
+]

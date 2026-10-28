@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-29",
+  "roots": [
+    {
+      "root": "src/main/java",
+      "files": 251,
+      "over400": 0,
+      "largest": 399
+    },
+    {
+      "root": "src/test/java",
+      "files": 450,
+      "over400": 0,
+      "largest": 399
+    }
+  ],
+  "testNgContractsPreserved": 218,
+  "contractClasses": 8,
+  "movedScenarioMethodsPreserved": 51,
+  "runtimeContractBefore": "target/screen-contracts-before.json",
+  "runtimeContractAfter": "target/screen-contracts-after.json",
+  "javaLocalTests": {
+    "total": 955,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "log": "target/final-complete-maintenance-validation.log"
+  },
+  "pythonLocalTests": 26
+}

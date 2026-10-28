@@ -15,7 +15,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 final class DealerTestData implements AutoCloseable {
 
-    record Record(String endpoint, Object id, String name, Map<String, Object> values) {}
+    record Record(String endpoint, Object id, String name, Map<String, Object> values)
+            implements TestSupport.OwnedFixtureRecord {}
 
     private final WebDriver driver;
     private final DealerFixtureApi api;
@@ -247,13 +248,6 @@ final class DealerTestData implements AutoCloseable {
                 java.nio.file.Path.of("target", "dealer-fixtures", suffix + ".json"), rows);
     }
 
-    private static boolean retryable(ApiFailure failure) {
-        return failure.status == 0
-                || failure.status == 408
-                || failure.status == 429
-                || failure.status >= 500;
-    }
-
     /** Page cleanup must not infer absence from the currently visible table page. */
     @SuppressWarnings("unchecked")
     private List<Map<String, Object>> dealerRows(String endpoint) {
@@ -354,106 +348,23 @@ final class DealerTestData implements AutoCloseable {
             if (remaining.isEmpty()) return;
             if (remaining.stream().anyMatch(row -> !ownsDealer(row, name)))
                 throw new AssertionError("Dealer ownership changed during cleanup");
-            if (rejected != null && !retryable(rejected)) throw rejected;
+            if (rejected != null && !DealerFixtureDeletion.retryable(rejected)) throw rejected;
         }
         throw new AssertionError("Owned dealer still exists after cleanup: " + name);
     }
 
     private void deleteRecord(Record record) {
-        AssertionError lastFailure = null;
-        for (int attempt = 1; attempt <= 3; attempt++) {
-            try {
-                Map<String, Object> owned = read(record);
-                if (owned == null) return;
-                if (!record.name().equals(owned.get("arabicName"))
-                        && !record.name().equals(owned.get("englishName"))
-                        && !record.name().equals(owned.get("notes")))
-                    throw new AssertionError(
-                            "Refusing cleanup: fixture ownership changed for " + record.id());
-                call("delete", record.endpoint(), fields("id", record.id()));
-                return;
-            } catch (ApiFailure failure) {
-                if (failure.status == 404 || failure.status == 410) return;
-                if (!retryable(failure)) throw failure;
-                lastFailure = failure;
-            } catch (org.openqa.selenium.TimeoutException failure) {
-                lastFailure =
-                        new AssertionError(
-                                "Delete response timed out for " + record.endpoint(), failure);
-            }
-            // A timed-out DELETE may have committed. Read back before sending another DELETE.
-            try {
-                Map<String, Object> existing = read(record);
-                if (existing == null) {
-                    return;
-                }
-                if (!record.name().equals(existing.get("arabicName"))) {
-                    throw new AssertionError(
-                            "Refusing cleanup: fixture ownership changed for " + record.id());
-                }
-            } catch (ApiFailure failure) {
-                if (failure.status == 404 || failure.status == 410) return;
-                if (!retryable(failure)) throw failure;
-                lastFailure = failure;
-            } catch (org.openqa.selenium.TimeoutException failure) {
-                lastFailure =
-                        new AssertionError(
-                                "Could not verify timed-out deletion of " + record.endpoint(),
-                                failure);
-            }
-        }
-        throw lastFailure;
-    }
-
-    private static boolean references(Object value, Object id) {
-        if (value instanceof Map<?, ?> map)
-            return map.values().stream().anyMatch(child -> references(child, id));
-        if (value instanceof Iterable<?> list) {
-            for (Object child : list) if (references(child, id)) return true;
-            return false;
-        }
-        return id.equals(value);
+        new DealerFixtureDeletion(this, api).remove(record);
     }
 
     @Override
     public void close() {
         recoverPendingFixtures();
-        List<String> failures = new ArrayList<>();
-        List<Record> pending = new ArrayList<>();
-        for (int index = created.size() - 1; index >= 0; index--) {
-            Record record = created.get(index);
-            if (pending.stream().anyMatch(child -> references(child.values(), record.id()))) {
-                pending.add(record);
-                failures.add(
-                        record.name()
-                                + " ["
-                                + record.endpoint()
-                                + "/"
-                                + record.id()
-                                + "]: waiting for dependent fixture cleanup");
-                continue;
-            }
-            try {
-                deleteRecord(record);
-                created.remove(record);
-                fixtures.entrySet().removeIf(entry -> entry.getValue().equals(record));
-                journal();
-            } catch (RuntimeException | AssertionError failure) {
-                pending.add(record);
-                failures.add(
-                        record.name()
-                                + " ["
-                                + record.endpoint()
-                                + "/"
-                                + record.id()
-                                + "]: "
-                                + String.valueOf(failure.getMessage()).split("\\R", 2)[0]);
-            }
-        }
-        created.removeIf(record -> !pending.contains(record));
-        fixtures.entrySet().removeIf(entry -> !pending.contains(entry.getValue()));
-        journal();
-        if (!failures.isEmpty())
-            throw new AssertionError("Fixture cleanup failed: " + String.join("; ", failures));
+        TestSupport.FixtureCleanup.run(
+                created,
+                fixtures,
+                new ArrayList<>(created.reversed()),
+                this::deleteRecord,
+                this::journal);
     }
 }

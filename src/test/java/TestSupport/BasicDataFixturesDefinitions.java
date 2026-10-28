@@ -5,7 +5,9 @@ package TestSupport;
 import static TestSupport.BasicDataFixtures.fields;
 
 import TestSupport.BasicDataFixtures.Record;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.UUID;
 
 final class BasicDataFixturesDefinitions {
     private final BasicDataFixtures data;
@@ -78,5 +80,43 @@ final class BasicDataFixturesDefinitions {
     Record safe(int index) {
         return data.fixture(
                 "safe-" + index, "Safes", fields("accountId", account("safe-" + index).id()));
+    }
+
+    Record user(String key, Object branchId) {
+        Record saved =
+                data.fixture(
+                        "user-" + key,
+                        "users",
+                        fields(
+                                "userName",
+                                "qa_bd_" + UUID.randomUUID().toString().replace("-", ""),
+                                "passwordHash",
+                                UUID.randomUUID().toString() + "aA1!",
+                                "isAdmin",
+                                false,
+                                "isActive",
+                                true,
+                                "maxAllowedDiscount",
+                                0,
+                                "permissions",
+                                List.of(),
+                                "branches",
+                                List.of(fields("branchId", branchId)),
+                                "defaultOtherPaymentMethods",
+                                List.of(),
+                                "imageUrl",
+                                "",
+                                "phone",
+                                "",
+                                "email",
+                                "",
+                                "base64Image",
+                                "",
+                                "imageExtension",
+                                ""));
+        var stored = data.read(saved);
+        var values = new LinkedHashMap<>(saved.values());
+        if (stored != null && stored.get("code") != null) values.put("code", stored.get("code"));
+        return new Record(saved.endpoint(), saved.id(), saved.name(), values);
     }
 }

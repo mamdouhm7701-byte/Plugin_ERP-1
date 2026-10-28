@@ -42,10 +42,29 @@ def read_round(folder):
     if len(reports) != 1:
         return {"error": "لا توجد نتيجة واحدة مكتملة لهذه الجولة", "cases": {}, "settings": settings}
     root = ET.parse(reports[0]).getroot()
+    if settings and settings.get("activityType"):
+        browsers = {}
+        for metadata in folder.glob("**/environment.properties"):
+            for line in metadata.read_text(encoding="utf-8-sig").splitlines():
+                for name, key in [("Browser", "browser"), ("Browser\\ Version", "browserVersion")]:
+                    if line.startswith(name + "="):
+                        browsers.setdefault(key, set()).add(line.split("=", 1)[1].strip())
+        if any(len(browsers.get(key, set())) != 1 or next(iter(browsers[key])) in ("", "N/A", "unknown")
+               for key in ("browser", "browserVersion")):
+            return {"error": "بيانات المتصفح الفعلية ناقصة أو متعارضة؛ لا يمكن إثبات تكافؤ الجولات", "cases": {}, "settings": settings}
+        settings = {**settings, **{key: next(iter(values)) for key, values in browsers.items()}}
     readable = readable_failures(folder)
     recorded = [m for m in root.iter("test-method") if m.get("is-config", "false").lower() != "true"]
-    if root.get("total") is not None and int(root.get("total")) != len(recorded):
+    ignored = int(root.get("ignored", "0"))
+    if root.get("total") is not None and int(root.get("total")) != len(recorded) + ignored:
         return {"error": "عدد النتائج لا يطابق إجمالي التقرير؛ الدليل غير مكتمل", "cases": {}, "settings": settings}
+    selection_file = folder / "selection-manifest.json"
+    selection = json.loads(selection_file.read_text(encoding="utf-8-sig")) if selection_file.exists() else None
+    actual_methods = {c.get("name", "") + "." + m.get("name", "") for c in root.iter("class")
+                      for m in c.findall("test-method") if m.get("is-config", "false").lower() != "true"}
+    if selection is not None and (set(selection["expectedMethods"]) != actual_methods
+            or len(set(selection["explicitlyExcludedMethods"])) != ignored):
+        return {"error": "الطرق المنفذة أو المستبعدة لا تطابق خطة اختيار الجولة", "cases": {}, "settings": settings}
     cases, configurations = {}, []
     for owner in root.iter("class"):
         for method in owner.findall("test-method"):
@@ -69,9 +88,11 @@ def read_round(folder):
                 cases[key]["attempts"].append(invocation)
             else:
                 cases[key] = {"name": name, "attempts": [invocation]}
-    if int(root.get("ignored", "0")) > 0:
+    if ignored > 0 and selection is None:
         configurations.append("حالات مستبعدة لم تنفذ؛ لا يمكن اعتبار الجولة ناجحة بالكامل")
     return {"settings": settings, "cases": cases, "configurationFailures": sorted(configurations),
+            "explicitlyExcluded": ignored if selection is not None else 0,
+            "selectionProvenance": selection.get("provenance", "UNKNOWN") if selection is not None else "NO_MANIFEST",
             "error": "" if cases else "لم تنفذ أي حالة اختبار"}
 
 
@@ -129,6 +150,9 @@ def write_report(output, report):
     for i, result in enumerate(report["rounds"], 1):
         content.append("<p>جولة " + str(i) + ": <a href='./" + esc(result["folder"], quote=True)
                        + "/'>النتائج والسجل</a> " + esc(result["error"]) + "</p>")
+        if result.get("explicitlyExcluded"):
+            content.append("<p>طرق خارج الاختيار الموثق: " + str(result["explicitlyExcluded"])
+                           + " | مصدر خطة المقارنة: " + esc(result.get("selectionProvenance", "UNKNOWN")) + "</p>")
     (output / "stability-summary.html").write_text("\n".join(content) + "</html>", encoding="utf8")
 
 

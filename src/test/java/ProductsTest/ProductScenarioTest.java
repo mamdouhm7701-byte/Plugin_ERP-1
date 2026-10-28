@@ -14,6 +14,10 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 
 public abstract class ProductScenarioTest extends BaseTest {
+    final org.openqa.selenium.WebDriver caseDriver() {
+        return driver;
+    }
+
     protected enum Kind {
         ITEM(Pages.ADDITEM, "Items"),
         CATEGORY(Pages.CATEGORIES, "ItemCategories"),
@@ -130,78 +134,11 @@ public abstract class ProductScenarioTest extends BaseTest {
     }
 
     protected ProductsTestData.Record save(boolean print) {
-        int before = page.prSaves().size();
-        if (print) page.prSavePrint();
-        else page.prSave();
-        try {
-            new WebDriverWait(driver, Duration.ofSeconds(35))
-                    .until(
-                            d -> {
-                                data.rememberAttempts(page.prAttempts(), marker);
-                                return page.prSaves().size() > before;
-                            });
-        } catch (TimeoutException e) {
-            throw new AssertionError("Product save failed: " + page.prSaveErrors(), e);
-        }
-        page.prSettled();
-        List<ProductsTestData.Record> records = capture();
-        ProductsTestData.Record record = records.get(records.size() - 1);
-        Map<String, Object> stored = data.read(record);
-        io.qameta.allure.Allure.addAttachment(
-                "Saved product entity",
-                "application/json",
-                new org.json.JSONObject(
-                                ProductsTestData.fields("sent", record.values(), "stored", stored))
-                        .toString(),
-                ".json");
-        Assert.assertNotNull(stored);
-        Assert.assertEquals(stored.get("arabicName"), record.name(), "مطابقة الاسم العربي");
-        Object expectedEnglish = record.values().get("englishName");
-        if (expectedEnglish == null || expectedEnglish.toString().isBlank())
-            assertOptionalEnglish(stored);
-        else
-            Assert.assertEquals(
-                    stored.get("englishName"), expectedEnglish, "مطابقة الاسم الإنجليزي");
-        if (record.values().containsKey("notes"))
-            Assert.assertEquals(
-                    stored.get("notes"), record.values().get("notes"), "مطابقة الملاحظات");
-        if (print) verifyReport(record);
-        page.prWaitList();
-        return record;
+        return new ProductPersistenceChecks(this).save(print);
     }
 
     protected void verifyReport(ProductsTestData.Record record) {
-        new WebDriverWait(driver, Duration.ofSeconds(30))
-                .until(d -> d.getWindowHandles().size() > 1);
-        String report =
-                driver.getWindowHandles().stream()
-                        .filter(h -> !h.equals(mainWindow))
-                        .findFirst()
-                        .orElseThrow();
-        driver.switchTo().window(report);
-        try {
-            page.prAwaitReport();
-            page.AssertTextInReport(record.name());
-            page.AssertTextInReport(record.values().get("englishName").toString());
-            if (kind() == Kind.PRICE) {
-                page.AssertTextInReport(data.item(1).name());
-                page.AssertNumberInReport(
-                        record.values().get("items") instanceof List<?> rows
-                                ? ((Map<?, ?>) rows.get(0)).get("salesPrice").toString()
-                                : "125.5");
-            }
-        } catch (RuntimeException | AssertionError e) {
-            io.qameta.allure.Allure.addAttachment(
-                    "Product report",
-                    "image/png",
-                    new java.io.ByteArrayInputStream(
-                            ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)),
-                    "png");
-            throw e;
-        } finally {
-            driver.close();
-            driver.switchTo().window(mainWindow);
-        }
+        new ProductPersistenceChecks(this).verifyReport(record);
     }
 
     protected Map<String, Object> values() {
@@ -370,7 +307,7 @@ public abstract class ProductScenarioTest extends BaseTest {
                 driver, () -> page.prExport(format), format);
     }
 
-    private void assertOptionalEnglish(Map<String, Object> stored) {
+    void assertOptionalEnglish(Map<String, Object> stored) {
         Object english = stored.get("englishName");
         Assert.assertTrue(
                 english == null

@@ -239,23 +239,7 @@ public class AddProductsTest extends ProductScenarioTest {
     }
 
     private void subunitInvalid(String reason) {
-        openNew();
-        fill(null);
-        String barcode = "PR" + UUID.randomUUID().toString().replace("-", "");
-        String unit = reason.equals("same") ? data.unit(1).name() : data.unit(2).name();
-        String rate =
-                reason.equals("rate")
-                        ? "0"
-                        : reason.equals("one") ? "1" : reason.equals("negative") ? "-2" : "10";
-        if (reason.equals("duplicate")) ((AddProductsPage) page).prSubunit(unit, barcode, "10");
-        ((AddProductsPage) page).prSubunit(unit, reason.equals("barcode") ? "" : barcode, rate);
-        String message = page.prValidation();
-        Assert.assertFalse(message.isBlank());
-        Assert.assertEquals(
-                page.prFormRowsContaining(unit),
-                reason.equals("duplicate") ? 1 : 0,
-                "Invalid subunit must not be added");
-        Assert.assertTrue(page.prSaves().isEmpty());
+        new ProductInputValidationChecks(this).subunitInvalid(reason);
     }
 
     @Test(groups = "products")
@@ -325,108 +309,15 @@ public class AddProductsTest extends ProductScenarioTest {
     }
 
     private void enterPrices(String sale, String minimum, String maximum) {
-        page.prField("minSalesPrice", minimum);
-        page.prField("maxSalesPrice", maximum);
-        page.prField("salesPrice", sale);
-        assertNumber(page.prFieldValue("salesPrice"), sale);
-        assertNumber(page.prFieldValue("minSalesPrice"), minimum);
-        assertNumber(page.prFieldValue("maxSalesPrice"), maximum);
+        new ProductInputValidationChecks(this).enterPrices(sale, minimum, maximum);
     }
 
     private void pricesValid(String sale, String minimum, String maximum) {
-        openNew();
-        fill(null);
-        enterPrices(sale, minimum, maximum);
-        var record = save(false);
-        var stored = data.read(record);
-        assertNumber(stored.get("salesPrice"), sale);
-        assertNumber(stored.get("minSalesPrice"), minimum);
-        assertNumber(stored.get("maxSalesPrice"), maximum);
+        new ProductInputValidationChecks(this).pricesValid(sale, minimum, maximum);
     }
 
     private void pricesInvalid(String sale, String minimum, String maximum) {
-        openNew();
-        fill(null);
-        enterPrices(sale, minimum, maximum);
-        Map<String, String> messages = new LinkedHashMap<>(page.prPriceValidationMessages());
-        try {
-            new org.openqa.selenium.support.ui.WebDriverWait(
-                            driver, java.time.Duration.ofSeconds(10))
-                    .until(
-                            d -> {
-                                messages.putAll(page.prPriceValidationMessages());
-                                return !messages.isEmpty();
-                            });
-        } catch (org.openqa.selenium.TimeoutException missingInlineFeedback) {
-            // Still exercise Save so missing feedback cannot conceal a persisted invalid product.
-        }
-        io.qameta.allure.Allure.addAttachment(
-                "Price fields before save",
-                "image/png",
-                new java.io.ByteArrayInputStream(
-                        ((org.openqa.selenium.TakesScreenshot) driver)
-                                .getScreenshotAs(org.openqa.selenium.OutputType.BYTES)),
-                ".png");
-        if (!page.prSaveDisabled()) page.prSave();
-        try {
-            new org.openqa.selenium.support.ui.WebDriverWait(
-                            driver, java.time.Duration.ofSeconds(30))
-                    .until(
-                            d -> {
-                                messages.putAll(page.prPriceValidationMessages());
-                                return !messages.isEmpty() || !page.prSaves().isEmpty();
-                            });
-        } catch (org.openqa.selenium.TimeoutException missingOutcome) {
-            // Capture requests and any saved entity before reporting missing field feedback.
-        }
-        page.prSettled();
-        var records = capture();
-        io.qameta.allure.Allure.addAttachment(
-                "Visible price field validation",
-                "application/json",
-                new org.json.JSONObject(messages).toString(),
-                ".json");
-        for (var record : records) {
-            var stored = data.read(record);
-            io.qameta.allure.Allure.addAttachment(
-                    "Unexpected saved product prices",
-                    "application/json",
-                    new org.json.JSONObject(
-                                    ProductsTestData.fields(
-                                            "id",
-                                            record.id(),
-                                            "expectedRule",
-                                            "minimum <= sale <= maximum; sale >= 0",
-                                            "entered",
-                                            ProductsTestData.fields(
-                                                    "salesPrice",
-                                                    sale,
-                                                    "minSalesPrice",
-                                                    minimum,
-                                                    "maxSalesPrice",
-                                                    maximum),
-                                            "sent",
-                                            record.values(),
-                                            "stored",
-                                            stored))
-                            .toString(),
-                    ".json");
-            Assert.assertTrue(
-                    stored == null,
-                    "Application accepted invalid prices: minimum="
-                            + minimum
-                            + ", sale="
-                            + sale
-                            + ", maximum="
-                            + maximum
-                            + "; owned record="
-                            + record.id());
-        }
-        Assert.assertTrue(page.prSaves().isEmpty(), "Invalid price save was accepted");
-        Assert.assertFalse(
-                messages.isEmpty(),
-                "Expected a visible validation message under a price field; save errors: "
-                        + page.prSaveErrors());
+        new ProductInputValidationChecks(this).pricesInvalid(sale, minimum, maximum);
     }
 
     @Test(groups = "products")
@@ -489,18 +380,6 @@ public class AddProductsTest extends ProductScenarioTest {
     }
 
     private void stockInvalid(String reason) {
-        openNew();
-        fill(reason.equals("duplicate") ? null : "store");
-        ((AddProductsPage) page)
-                .prStock(
-                        data.store(1).name(),
-                        reason.equals("opening") ? "-1" : "0",
-                        reason.equals("minimum") ? "-1" : "0",
-                        reason.equals("cost") ? "-1" : "80");
-        Assert.assertFalse(page.prValidation().isBlank());
-        Assert.assertEquals(
-                page.prFormRowsContaining(data.store(1).name()),
-                reason.equals("duplicate") ? 1 : 0);
-        Assert.assertTrue(page.prSaves().isEmpty());
+        new ProductInputValidationChecks(this).stockInvalid(reason);
     }
 }

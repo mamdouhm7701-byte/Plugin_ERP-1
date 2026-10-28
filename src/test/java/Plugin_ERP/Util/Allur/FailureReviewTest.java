@@ -119,6 +119,16 @@ public final class FailureReviewTest {
     }
 
     @Test
+    public void attachmentNoiseIsFilteredOnlyWhenNoCaseOrStepExists() {
+        String message = "Could not add attachment: no test is running";
+        Assert.assertTrue(AllureContextNoiseFilter.expectedOutsideContext(message, false));
+        Assert.assertFalse(AllureContextNoiseFilter.expectedOutsideContext(message, true));
+        Assert.assertFalse(
+                AllureContextNoiseFilter.expectedOutsideContext(
+                        "Could not add attachment: write failed", false));
+    }
+
+    @Test
     public void repeatedExportDoesNotCountTwiceAndSkippedDoesNotEraseFailure() throws Exception {
         Path root = Files.createTempDirectory("failure-review-history-");
         Path results = Files.createDirectory(root.resolve("results"));

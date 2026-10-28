@@ -37,7 +37,10 @@ def main():
         for issue in violations(path, path.read_text(encoding="utf-8")):
             findings.append(f"{path.relative_to(ROOT).as_posix()}: {issue}")
     for path in (ROOT / "src/test/java").rglob("*.java"):
-        if re.search(r"enabled\s*=\s*false", path.read_text(encoding="utf-8")):
+        source = path.read_text(encoding="utf-8")
+        if len(source.splitlines()) > 400:
+            findings.append(f"{path.relative_to(ROOT).as_posix()}: test Java class exceeds the 400-line review budget")
+        if re.search(r"enabled\s*=\s*false", source):
             findings.append(f"{path.relative_to(ROOT).as_posix()}: disabled test requires explicit removal or repair")
     for finding in findings:
         print(finding)

@@ -22,6 +22,7 @@ public final class BusinessStabilityLauncher {
             return;
         }
         run(repeats, output, choice);
+        System.exit(completionExit(output));
     }
 
     static void run(int repeats, Path output, BusinessRunDialog.Selection choice) throws Exception {
@@ -89,6 +90,29 @@ public final class BusinessStabilityLauncher {
             }
         } finally {
             credentials.clear();
+        }
+    }
+
+    static int completionExit(Path output) {
+        try {
+            var summary = new JSONObject(Files.readString(output.resolve("rounds.json")));
+            int requested = summary.getInt("requested");
+            var rounds = summary.getJSONArray("rounds");
+            if (requested < 3 || requested > 10 || rounds.length() != requested) return 2;
+            int result = 0;
+            for (int index = 0; index < rounds.length(); index++) {
+                var round = rounds.getJSONObject(index);
+                String folder = "round-" + (index + 1);
+                if (!folder.equals(round.getString("folder"))) return 2;
+                int exit = round.getInt("exitCode");
+                if (exit < 0 || exit > 2) return 2;
+                result = Math.max(result, roundExit(output.resolve(folder), exit));
+            }
+            return result;
+        } catch (java.io.IOException | org.json.JSONException failure) {
+            Plugin_ERP.Bots.LogUtils.warn(
+                    "Overall stability completion is missing or invalid; run remains blocked.");
+            return 2;
         }
     }
 

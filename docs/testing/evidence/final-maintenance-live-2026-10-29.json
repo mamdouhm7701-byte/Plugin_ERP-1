@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-29",
+  "activity": "Restaurant",
+  "discount": "Transaction",
+  "tax": "NetBased",
+  "stocktaking": "Periodic",
+  "additionalTax": false,
+  "workers": 1,
+  "requestedRounds": 3,
+  "executedRounds": 1,
+  "testNg": {
+    "passed": 4,
+    "failed": 0,
+    "skipped": 5,
+    "explicitlyExcluded": 3
+  },
+  "status": "BLOCKED",
+  "blockCode": "LICENSE_CAPACITY",
+  "resource": "Stores",
+  "roundCleaned": true,
+  "branchProfile": "business-7460d797a749499f",
+  "branchId": "33d62a7df42fe218",
+  "registryStatus": "DELETED",
+  "completionEvidence": "target/restaurant-final-maintenance-stability/round-1/round-completion.json",
+  "registryEvidence": "config/business-branch-state/7460d797a749499f.json",
+  "report": "target/restaurant-final-maintenance-stability/stability-summary.html",
+  "sourceSnapshot": "target/final-maintenance-live-snapshot",
+  "limits": [
+    "Remaining rounds were not started after environment capacity block",
+    "A configuration failure is recorded in Allure separately from TestNG case counts",
+    "Historical passing rounds do not qualify every later source change",
+    "Later wrapper exit-code correction is verified locally; raw historical process logs are unchanged"
+  ]
+}

@@ -14,7 +14,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 final class SpecialSalesTestData implements AutoCloseable {
 
-    record Record(String endpoint, Object id, String name, Map<String, Object> values) {}
+    record Record(String endpoint, Object id, String name, Map<String, Object> values)
+            implements TestSupport.OwnedFixtureRecord {}
 
     private final WebDriver driver;
     private final SpecialSalesFixtureApi api;
@@ -77,63 +78,7 @@ final class SpecialSalesTestData implements AutoCloseable {
         if (!suffix.matches("[a-f0-9]{8}-[a-f0-9]{3}"))
             throw new IllegalArgumentException("Invalid fixture journal ID");
         var data = new SpecialSalesTestData(driver, suffix);
-        var path = java.nio.file.Path.of("target", "special-sales-fixtures", suffix + ".json");
-        if (java.nio.file.Files.exists(path))
-            for (Object value :
-                    new org.json.JSONArray(TestSupport.FixtureJournals.read(path)).toList()) {
-                var row = (Map<String, Object>) value;
-                data.session.verify(row);
-                String endpoint = (String) row.get("endpoint"), name = (String) row.get("name");
-                if (name == null
-                        || !name.startsWith("QA-SP-")
-                        || !java.util.Set.of(
-                                        "Accounts",
-                                        "Units",
-                                        "ItemCategories",
-                                        "Stores",
-                                        "Items",
-                                        "PriceLists",
-                                        "DiscountTypes",
-                                        "Customers",
-                                        "Banks",
-                                        "Safes",
-                                        "PaymentMethods",
-                                        "Tables",
-                                        "ItemTransactions-PointOfSales",
-                                        "ItemTransactions-RestaurantSales",
-                                        "ItemTransactions-ReturnSales",
-                                        "SpecialSalesBranchStoreMembership",
-                                        "SpecialSalesBranchDefaults")
-                                .contains(endpoint)
-                        || row.get("id") == null
-                        || !(row.get("values") instanceof Map<?, ?>))
-                    throw new AssertionError("Invalid owned fixture journal record");
-                data.created.add(
-                        new Record(
-                                endpoint,
-                                row.get("id"),
-                                name,
-                                (Map<String, Object>) row.get("values")));
-            }
-        data.pendingWrites.resume(
-                java.util.Set.of(
-                        "Accounts",
-                        "Units",
-                        "ItemCategories",
-                        "Stores",
-                        "Items",
-                        "PriceLists",
-                        "DiscountTypes",
-                        "Customers",
-                        "Banks",
-                        "Safes",
-                        "PaymentMethods",
-                        "Tables",
-                        "ItemTransactions-PointOfSales",
-                        "ItemTransactions-RestaurantSales",
-                        "ItemTransactions-ReturnSales",
-                        "SpecialSalesBranchStoreMembership"),
-                "QA-SP-");
+        SpecialSalesRecoveryState.load(suffix, data.session, data.created, data.pendingWrites);
         return data;
     }
 
@@ -160,173 +105,42 @@ final class SpecialSalesTestData implements AutoCloseable {
     }
 
     Record store(int index) {
-        synchronized (TestSupport.BranchMutationLock.monitor()) {
-            Record store =
-                    fixture(
-                            "store-" + index,
-                            "Stores",
-                            fields("accountId", account("store-" + index).id()));
-            String key = "branch-store-" + index;
-            if (!fixtures.containsKey(key)) {
-                Object branchId =
-                        Plugin_ERP.Util.VueComponentAccess.execute(
-                                driver,
-                                "return erpVue.root().$store.getters['app/currentBranch'].id");
-                if (!(branchId instanceof String branch) || branch.isBlank())
-                    throw new AssertionError("Current branch identity is unavailable");
-                Record link =
-                        new Record(
-                                BRANCH_STORE_LINK,
-                                store.id(),
-                                store.name(),
-                                fields("branchId", branchId, "storeId", store.id()));
-                // Journal before updating: a lost response must still leave a recoverable owned
-                // link.
-                created.add(link);
-                fixtures.put(key, link);
-                journal();
-                changeBranchStore(link, true);
-            }
-            return store;
-        }
+        return branchStores().store(index);
+    }
+
+    private SpecialSalesBranchDefaults branchDefaults() {
+        return new SpecialSalesBranchDefaults(this, api, session, created, suffix, this::journal);
     }
 
     Record configureOwnedDefaults(Record customer) {
-        synchronized (TestSupport.BranchMutationLock.monitor()) {
-            Object branchId = session.branchId;
-            var link =
-                    new Record(
-                            DEFAULTS,
-                            branchId,
-                            "QA-SP-defaults-" + suffix,
-                            fields("branchId", branchId));
-            // Store creation links it to the branch. Read the branch only after that
-            // change so the default update cannot erase its newly owned membership.
-            var ownedStore = store(1);
-            var branch = branchFor(link);
-            var record =
-                    new Record(
-                            DEFAULTS,
-                            branchId,
-                            link.name(),
-                            fields(
-                                    "branchId",
-                                    branchId,
-                                    "storeId",
-                                    ownedStore.id(),
-                                    "customerId",
-                                    customer.id(),
-                                    "previousStoreId",
-                                    branch.get("defaultStoreId"),
-                                    "previousCustomerId",
-                                    branch.get("defaultCustomerId")));
-            created.add(record);
-            journal();
-            var update = new LinkedHashMap<>(branch);
-            update.put("defaultStoreId", ownedStore.id());
-            update.put("defaultCustomerId", customer.id());
-            call("update", "Branches", update);
-            syncBranch(branchFor(record));
-            return record;
-        }
+        return branchDefaults().configureOwnedDefaults(customer);
     }
 
     void restoreDefaults(Record record) {
-        synchronized (TestSupport.BranchMutationLock.monitor()) {
-            var branch = branchFor(record);
-            var update = new LinkedHashMap<>(branch);
-            for (String field : List.of("defaultStoreId", "defaultCustomerId")) {
-                Object
-                        owned =
-                                record.values()
-                                        .get(
-                                                field.equals("defaultStoreId")
-                                                        ? "storeId"
-                                                        : "customerId"),
-                        previous =
-                                record.values()
-                                        .get(
-                                                field.equals("defaultStoreId")
-                                                        ? "previousStoreId"
-                                                        : "previousCustomerId");
-                if (java.util.Objects.equals(branch.get(field), owned)) update.put(field, previous);
-                else if (!java.util.Objects.equals(branch.get(field), previous))
-                    throw new AssertionError(
-                            "Branch defaults changed externally; retaining owned data instead of overwriting");
-            }
-            if (!update.equals(branch)) call("update", "Branches", update);
-            var refreshed = branchFor(record);
-            if (!java.util.Objects.equals(
-                            refreshed.get("defaultStoreId"), record.values().get("previousStoreId"))
-                    || !java.util.Objects.equals(
-                            refreshed.get("defaultCustomerId"),
-                            record.values().get("previousCustomerId")))
-                throw new AssertionError("Branch default restoration failed");
-            syncBranch(refreshed);
-        }
+        branchDefaults().restoreDefaults(record);
     }
 
-    private void syncBranch(Map<String, Object> branch) {
+    void syncBranch(Map<String, Object> branch) {
         Plugin_ERP.Util.VueComponentAccess.execute(
                 driver,
                 "const root=erpVue.root();if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
                 branch);
     }
 
-    @SuppressWarnings("unchecked")
-    private Map<String, Object> branchFor(Record link) {
-        Object entity =
-                call("get", "Branches", fields("id", link.values().get("branchId"))).get("entity");
-        if (!(entity instanceof Map<?, ?> branch)
-                || !link.values().get("branchId").equals(branch.get("id"))
-                || !(branch.get("stores") instanceof List<?>))
-            throw new AssertionError(
-                    "Cannot verify branch stores before changing owned membership");
-        return (Map<String, Object>) entity;
+    private SpecialSalesBranchStores branchStores() {
+        return new SpecialSalesBranchStores(this, driver, created, fixtures, this::journal);
+    }
+
+    Map<String, Object> branchFor(Record link) {
+        return branchStores().branchFor(link);
     }
 
     private boolean containsStore(Map<String, Object> branch, Object storeId) {
-        return ((List<?>) branch.get("stores"))
-                .stream()
-                        .anyMatch(
-                                value ->
-                                        value instanceof Map<?, ?> row
-                                                && storeId.equals(row.get("storeId")));
+        return branchStores().containsStore(branch, storeId);
     }
 
     private void changeBranchStore(Record link, boolean add) {
-        synchronized (TestSupport.BranchMutationLock.monitor()) {
-            Map<String, Object> branch = branchFor(link);
-            Object storeId = link.values().get("storeId");
-            if (containsStore(branch, storeId) != add) {
-                List<Object> stores = new ArrayList<>((List<?>) branch.get("stores"));
-                if (add) stores.add(fields("branchId", branch.get("id"), "storeId", storeId));
-                else
-                    stores.removeIf(
-                            value ->
-                                    value instanceof Map<?, ?> row
-                                            && storeId.equals(row.get("storeId")));
-                Map<String, Object> update = new LinkedHashMap<>(branch);
-                update.put("stores", stores);
-                call("update", "Branches", update);
-                Map<String, Object> refreshed = branchFor(link);
-                if (containsStore(refreshed, storeId) != add)
-                    throw new AssertionError("Owned store membership was not updated");
-                for (Object value : (List<?>) branch.get("stores")) {
-                    Object previousId = ((Map<?, ?>) value).get("storeId");
-                    if (!previousId.equals(storeId) && !containsStore(refreshed, previousId))
-                        throw new AssertionError("Existing branch store was removed");
-                }
-                if (!java.util.Objects.equals(
-                        branch.get("defaultStoreId"), refreshed.get("defaultStoreId")))
-                    throw new AssertionError("Branch default store changed");
-                branch = refreshed;
-            }
-            Plugin_ERP.Util.VueComponentAccess.execute(
-                    driver,
-                    "const root=erpVue.root();if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
-                    branch);
-        }
+        branchStores().changeBranchStore(link, add);
     }
 
     Map<String, Object> itemValues() {
@@ -382,62 +196,19 @@ final class SpecialSalesTestData implements AutoCloseable {
         return (Map<String, Object>) call("get", endpoint, fields()).get("entity");
     }
 
-    @SuppressWarnings("unchecked")
     void recoverAttemptedItems(List<Map<String, Object>> attempts) {
-        for (Map<String, Object> attempt : attempts) {
-            if (!"Items".equals(attempt.get("endpoint"))) continue;
-            Map<String, Object> values = (Map<String, Object>) attempt.get("values");
-            String name =
-                    java.util.stream.Stream.of("arabicName", "englishName", "notes")
-                            .map(values::get)
-                            .filter(String.class::isInstance)
-                            .map(String.class::cast)
-                            .filter(v -> v.startsWith("QA-SP-"))
-                            .findFirst()
-                            .orElse(null);
-            if (name == null
-                    || !name.startsWith("QA-SP-")
-                    || created.stream().anyMatch(r -> r.name().equals(name))) continue;
-            List<Map<String, Object>> matches = new ArrayList<>();
-            java.util.Set<Object> seen = new java.util.HashSet<>();
-            for (int page = 1; ; page++) {
-                Object entity =
-                        call("get", "Items/Summary?pageNumber=" + page + "&pageSize=500", fields())
-                                .get("entity");
-                findOwned(entity, name, matches);
-                if (!matches.isEmpty() || entity instanceof List<?>) break;
-                if (!(entity instanceof Map<?, ?> result)
-                        || !(result.get("pageData") instanceof List<?> rows)
-                        || !(result.get("totalRecords") instanceof Number total))
-                    throw new AssertionError("Cannot verify partial item through its summary list");
-                int added = 0;
-                for (Object value : rows) {
-                    if (!(value instanceof Map<?, ?> row) || row.get("id") == null)
-                        throw new AssertionError("Invalid summary identity");
-                    if (seen.add(row.get("id"))) added++;
-                }
-                if (seen.size() >= total.longValue()) break;
-                if (added == 0)
-                    throw new AssertionError("Partial item summary pagination did not advance");
-            }
-            if (matches.size() > 1)
-                throw new AssertionError("Ambiguous partially saved test item: " + name);
-            if (matches.size() == 1) {
-                Record record = new Record("Items", matches.get(0).get("id"), name, values);
-                Map<String, Object> stored = read(record);
-                if (stored == null
-                        || (!name.equals(stored.get("arabicName"))
-                                && !name.equals(stored.get("englishName"))
-                                && !name.equals(stored.get("notes")))
-                        || !java.util.Objects.equals(
-                                values.get("mainUnitId"), stored.get("mainUnitId"))
-                        || !java.util.Objects.equals(
-                                values.get("categoryId"), stored.get("categoryId")))
-                    throw new AssertionError("Partial item ownership cannot be verified");
-                created.add(record);
-                journal();
-            }
-        }
+        TestSupport.PartialItemRecovery.recover(
+                attempts,
+                new TestSupport.PartialItemRecovery.Access<Record>(
+                        "QA-SP-",
+                        created,
+                        (url, query) -> call("get", url, query),
+                        Record::new,
+                        this::read,
+                        record -> {
+                            created.add(record);
+                            journal();
+                        }));
     }
 
     @SuppressWarnings("unchecked")
@@ -458,35 +229,7 @@ final class SpecialSalesTestData implements AutoCloseable {
                 throw new AssertionError("Cannot verify owned store membership identity");
             return store;
         }
-        Object entity;
-        try {
-            entity = call("get", record.endpoint(), fields("id", record.id())).get("entity");
-        } catch (ApiFailure failure) {
-            if (failure.status == 404 || failure.status == 410) return null;
-            if (failure.status == 500
-                    && record.endpoint().equals("Customers")
-                    && !existsInList(record)) return null;
-            throw failure;
-        }
-        // The ERP returns HTTP 200 with an empty string for some deleted records.
-        if (entity instanceof String text && text.isBlank()) return null;
-        if (!(entity instanceof Map<?, ?>)) {
-            throw new AssertionError(
-                    "Unexpected fixture read response for "
-                            + record.endpoint()
-                            + "/"
-                            + record.id());
-        }
-        Map<?, ?> dto = (Map<?, ?>) entity;
-        if (dto.get("id") == null
-                && dto.get("arabicName") == null
-                && dto.get("englishName") == null
-                && dto.get("notes") == null
-                && !dto.containsKey("pageData")
-                && !dto.containsKey("totalRecords")
-                && !dto.containsKey("error")
-                && !dto.containsKey("message")) return null;
-        return (Map<String, Object>) entity;
+        return new SpecialSalesFixtureReads(api).read(record);
     }
 
     Record fixture(String key, String endpoint, Map<String, Object> values) {
@@ -524,7 +267,7 @@ final class SpecialSalesTestData implements AutoCloseable {
         return record;
     }
 
-    private Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
+    Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
         return api.call(action, endpoint, values);
     }
 
@@ -597,176 +340,22 @@ final class SpecialSalesTestData implements AutoCloseable {
                 java.nio.file.Path.of("target", "special-sales-fixtures", suffix + ".json"), rows);
     }
 
-    private static boolean retryable(ApiFailure failure) {
-        return failure.status == 0
-                || failure.status == 408
-                || failure.status == 429
-                || failure.status >= 500;
-    }
-
-    private boolean existsInList(Record record) {
-        long seen = 0;
-        java.util.Set<Object> ids = new java.util.HashSet<>();
-        for (int page = 1; ; page++) {
-            Object entity =
-                    call(
-                                    "get",
-                                    record.endpoint()
-                                            + "?pageNumber="
-                                            + page
-                                            + "&pageSize=500&arabicNamePart="
-                                            + java.net.URLEncoder.encode(
-                                                    record.name(),
-                                                    java.nio.charset.StandardCharsets.UTF_8),
-                                    fields())
-                            .get("entity");
-            if (!(entity instanceof Map<?, ?> result)
-                    || !(result.get("pageData") instanceof List<?> rows)
-                    || !(result.get("totalRecords") instanceof Number total))
-                throw new AssertionError(
-                        "Cannot verify missing owned record through its list: "
-                                + record.endpoint());
-            int added = 0;
-            for (Object value : rows) {
-                if (!(value instanceof Map<?, ?> row) || row.get("id") == null)
-                    throw new AssertionError("Invalid lookup identity");
-                if (record.id().equals(row.get("id"))) return true;
-                if (ids.add(row.get("id"))) added++;
-            }
-            seen += added;
-            if (seen >= total.longValue()) return false;
-            if (added == 0)
-                throw new AssertionError("Store cleanup lookup pagination did not advance");
-        }
-    }
-
     private void deleteRecord(Record record) {
-        Map<String, Object> owned = read(record);
-        if (owned == null) return;
-        if (!record.name().equals(owned.get("arabicName"))
-                && !record.name().equals(owned.get("englishName"))
-                && !record.name().equals(owned.get("notes")))
-            throw new AssertionError(
-                    "Refusing cleanup: fixture ownership changed for " + record.id());
-        AssertionError lastFailure = null;
-        for (int attempt = 1; attempt <= 3; attempt++) {
-            try {
-                if (record.endpoint().equals(BRANCH_STORE_LINK)) changeBranchStore(record, false);
-                else call("delete", record.endpoint(), fields("id", record.id()));
-                if (read(record) == null) return;
-                lastFailure =
-                        new AssertionError(
-                                "Delete did not remove owned record: "
-                                        + record.endpoint()
-                                        + "/"
-                                        + record.id());
-            } catch (ApiFailure failure) {
-                if (failure.status == 404
-                        || failure.status == 410
-                        || (failure.status == 400
-                                && failure.getMessage().contains("Common.ObjectNotFound"))) {
-                    if (read(record) == null) return;
-                    throw new AssertionError(
-                            "Delete endpoint did not remove existing owned record: "
-                                    + record.endpoint()
-                                    + "/"
-                                    + record.id(),
-                            failure);
-                }
-                if (!retryable(failure)) throw failure;
-                lastFailure = failure;
-            } catch (org.openqa.selenium.TimeoutException failure) {
-                lastFailure =
-                        new AssertionError(
-                                "Delete response timed out for " + record.endpoint(), failure);
-            }
-            // A timed-out DELETE may have committed. Read back before sending another DELETE.
-            try {
-                Map<String, Object> existing = read(record);
-                if (existing == null) {
-                    return;
-                }
-                if (!record.name().equals(existing.get("arabicName"))
-                        && !record.name().equals(existing.get("notes"))
-                        && !record.name().equals(existing.get("englishName"))) {
-                    throw new AssertionError(
-                            "Refusing cleanup: fixture ownership changed for " + record.id());
-                }
-            } catch (ApiFailure failure) {
-                if (failure.status == 404 || failure.status == 410) return;
-                if (!retryable(failure)) throw failure;
-                lastFailure = failure;
-            } catch (org.openqa.selenium.TimeoutException failure) {
-                lastFailure =
-                        new AssertionError(
-                                "Could not verify timed-out deletion of " + record.endpoint(),
-                                failure);
-            }
-        }
-        throw lastFailure;
-    }
-
-    private static boolean references(Object value, Object id) {
-        if (value instanceof Map<?, ?> map)
-            return map.values().stream().anyMatch(child -> references(child, id));
-        if (value instanceof Iterable<?> list) {
-            for (Object child : list) if (references(child, id)) return true;
-            return false;
-        }
-        return id.equals(value);
-    }
-
-    @SuppressWarnings("unchecked")
-    private static void findOwned(Object node, String name, List<Map<String, Object>> matches) {
-        if (node instanceof Map<?, ?> row) {
-            if ((name.equals(row.get("arabicName"))
-                            || name.equals(row.get("englishName"))
-                            || name.equals(row.get("notes")))
-                    && row.get("id") != null) matches.add((Map<String, Object>) row);
-            else for (Object value : row.values()) findOwned(value, name, matches);
-        } else if (node instanceof List<?> rows)
-            for (Object row : rows) findOwned(row, name, matches);
+        new SpecialSalesFixtureDeletion(this, api, owned -> changeBranchStore(owned, false))
+                .remove(record);
     }
 
     @Override
     public void close() {
         recoverPendingFixtures();
-        List<String> failures = new ArrayList<>();
-        List<Record> pending = new ArrayList<>();
-        for (Record record : SpecialSalesCleanupOrder.records(created)) {
-            if (pending.stream().anyMatch(child -> references(child.values(), record.id()))) {
-                pending.add(record);
-                failures.add(
-                        record.name()
-                                + " ["
-                                + record.endpoint()
-                                + "/"
-                                + record.id()
-                                + "]: waiting for dependent fixture cleanup");
-                continue;
-            }
-            try {
-                if (record.endpoint().equals(DEFAULTS)) restoreDefaults(record);
-                else deleteRecord(record);
-                created.remove(record);
-                fixtures.entrySet().removeIf(entry -> entry.getValue().equals(record));
-                journal();
-            } catch (RuntimeException | AssertionError failure) {
-                pending.add(record);
-                failures.add(
-                        record.name()
-                                + " ["
-                                + record.endpoint()
-                                + "/"
-                                + record.id()
-                                + "]: "
-                                + String.valueOf(failure.getMessage()).split("\\R", 2)[0]);
-            }
-        }
-        created.removeIf(record -> !pending.contains(record));
-        fixtures.entrySet().removeIf(entry -> !pending.contains(entry.getValue()));
-        journal();
-        if (!failures.isEmpty())
-            throw new AssertionError("Fixture cleanup failed: " + String.join("; ", failures));
+        TestSupport.FixtureCleanup.run(
+                created,
+                fixtures,
+                SpecialSalesCleanupOrder.records(created),
+                record -> {
+                    if (record.endpoint().equals(DEFAULTS)) restoreDefaults(record);
+                    else deleteRecord(record);
+                },
+                this::journal);
     }
 }

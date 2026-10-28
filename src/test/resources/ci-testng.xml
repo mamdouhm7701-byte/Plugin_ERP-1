@@ -9,6 +9,20 @@
     </listeners>
     <test name="Configuration, arithmetic and owned fixture recovery" preserve-order="true">
         <classes>
+            <class name="Invoice.SalesSeedInvoicesTest"/>
+            <class name="Purches.PurchaseSeedInvoicesTest"/>
+            <class name="Invoice.SalesMovementRecoveryTest"/>
+            <class name="Purches.PurchaseMovementRecoveryTest"/>
+            <class name="StoreTest.StoreMovementRecoveryTest"/>
+            <class name="TestSupport.FixtureRecordReaderTest"/>
+            <class name="TestSupport.FixtureRecordDeletionTest"/>
+            <class name="TestSupport.FixtureRecoveryJournalTest"/>
+            <class name="TestSupport.FixtureAttemptCaptureTest"/>
+            <class name="TestSupport.FixtureCleanupTest"/>
+            <class name="TestSupport.PartialItemRecoveryTest"/>
+            <class name="TestSupport.FixtureMasterRecoveryTest"/>
+            <class name="TestSupport.FixtureOwnershipTest"/>
+            <class name="TestSupport.FixtureRecordSearchTest" />
             <class name="TestSupport.OwnedBranchStoreMembershipTest"/>
             <class name="Plugin_ERP.Util.RunEnvironmentGateTest"/>
             <class name="SuiteSupport.CapacityPreflightTest"/>
@@ -21,6 +35,7 @@
             <class name="Invoice.ConcreteInvoiceSelectionTest"/>
             <class name="Plugin_ERP.BranchProfiles.BusinessRunRequestTest"/>
             <class name="SuiteSupport.BusinessRunListenerTest"/>
+            <class name="SuiteSupport.BusinessActivityPlanTest"/>
             <class name="SuiteSupport.BusinessLevelContractsTest"/>
             <class name="SuiteSupport.BusinessRunTargetTest"/>
             <class name="SpecialSalesTest.RestaurantTaxAssertionsTest"/>
@@ -83,6 +98,7 @@
             <class name="SuiteSupport.CiSuiteContractTest"/>
             <class name="SuiteSupport.CoverageExpansionContractTest"/>
             <class name="SuiteSupport.SuiteDefinitionsTest"/>
+            <class name="SuiteSupport.AdditionalTaxSuiteDefinitionsTest"/>
             <class name="SuiteSupport.WorkflowCleanupOrderTest"/>
             <class name="SuiteSupport.SalesTaxProfileTest"/>
             <class name="SuiteSupport.DocumentDatesTest"/>
@@ -106,10 +122,23 @@
 <class name="Purches.PurchaseDependenciesCleanupTest"/>
 <class name="Purches.PurchaseLifecycleCleanupTest"/>
             <class name="ProductsTest.ProductsCleanupTest"/>
+<class name="ProductsTest.ProductsOwnershipCleanupTest"/>
+<class name="ProductsTest.ProductsRecoveryCleanupTest"/>
+<class name="ProductsTest.ProductsDependenciesCleanupTest"/>
+<class name="ProductsTest.ProductsLifecycleCleanupTest"/>
             <class name="StoreTest.StoreCleanupTest"/>
+<class name="StoreTest.StoreOwnershipCleanupTest"/>
+<class name="StoreTest.StoreRecoveryCleanupTest"/>
+<class name="StoreTest.StoreRecovery2CleanupTest"/>
+<class name="StoreTest.StoreDependenciesCleanupTest"/>
+<class name="StoreTest.StoreLifecycleCleanupTest"/>
             <class name="StoreTest.StoreChoiceTest"/>
             <class name="Plugin_ERP.System_Modules.Login.purches.PurchaseCalendarTest"/>
             <class name="FinancialMovementsTest.FinancialCleanupTest"/>
+<class name="FinancialMovementsTest.FinancialOwnershipCleanupTest"/>
+<class name="FinancialMovementsTest.FinancialRecoveryCleanupTest"/>
+<class name="FinancialMovementsTest.FinancialDependenciesCleanupTest"/>
+<class name="FinancialMovementsTest.FinancialLifecycleCleanupTest"/>
             <class name="FinancialMovementsTest.ExportedWorkbookAssertionsTest"/>
             <class name="DealerModelTest.DealerCleanupTest"/>
             <class name="DealerModelTest.DealerMarkerCleanupTest"/>

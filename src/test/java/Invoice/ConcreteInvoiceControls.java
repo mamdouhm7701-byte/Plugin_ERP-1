@@ -47,18 +47,7 @@ final class ConcreteInvoiceControls {
                                         .orElse(null));
         selection.sendKeys(org.openqa.selenium.Keys.SPACE);
         ready.until(d -> selection.isSelected());
-        ready.until(
-                        d ->
-                                d
-                                        .findElements(
-                                                org.openqa.selenium.By.cssSelector(
-                                                        ".modal.show button"))
-                                        .stream()
-                                        .filter(org.openqa.selenium.WebElement::isDisplayed)
-                                        .filter(b -> b.getText().trim().equals("حفظ"))
-                                        .findFirst()
-                                        .orElse(null))
-                .click();
+        confirmSelection(driver, Duration.ofSeconds(35));
         ready.until(
                 d ->
                         d.findElements(org.openqa.selenium.By.cssSelector(".modal.show")).stream()
@@ -73,5 +62,28 @@ final class ConcreteInvoiceControls {
                         delivery.id()),
                 Boolean.TRUE,
                 "Invoice must reference the exact owned delivery");
+    }
+
+    static void confirmSelection(WebDriver driver, Duration timeout) {
+        new WebDriverWait(driver, timeout)
+                .ignoring(org.openqa.selenium.ElementClickInterceptedException.class)
+                .ignoring(org.openqa.selenium.StaleElementReferenceException.class)
+                .until(
+                        d -> {
+                            var button =
+                                    d
+                                            .findElements(
+                                                    org.openqa.selenium.By.cssSelector(
+                                                            ".modal.show button"))
+                                            .stream()
+                                            .filter(org.openqa.selenium.WebElement::isDisplayed)
+                                            .filter(org.openqa.selenium.WebElement::isEnabled)
+                                            .filter(b -> b.getText().trim().equals("حفظ"))
+                                            .findFirst()
+                                            .orElse(null);
+                            if (button == null) return false;
+                            button.click();
+                            return true;
+                        });
     }
 }

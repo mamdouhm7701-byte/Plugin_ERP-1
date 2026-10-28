@@ -60,10 +60,10 @@ final class BusinessRunSuites {
                                         List.of(
                                                 "Selected workflows include owned chassis sales, concrete stock, restaurant tables/kitchen and contract billing; accepted evidence distinguishes passing cases from confirmed product failures",
                                                 "Periodic/continuous accounting entries are not inferred from stock quantity checks",
-                                                "Mixed-item movement discount allocation and unconfirmed rounding remain outside the confirmed contracts",
+                                                "Mixed-item movement discount allocation remains outside the confirmed contracts; final-only rounding checks retain observed product failures",
                                                 "Contract remaining quantities currently fail the confirmed business rule; those checks remain red",
                                                 "Concrete under-review save passes; native edit displays empty UI despite loaded data and remains a failing contract",
-                                                "Rendered reservation row and total reconciliation currently runs only for NetBased tax; other concrete reports verify request generation only"),
+                                                "Rendered reservation values and cars/drivers/customer-project delivery quantities and counts are verified for NetBased tax; other policies retain report-request checks"),
                                         "classes",
                                         result.stream()
                                                 .flatMap(s -> s.getTests().stream())
@@ -95,10 +95,13 @@ final class BusinessRunSuites {
                 if (request.additionalTax()) classes.addAll(additionalTaxContracts(request));
             }
             case PUBLIC -> {
+                classes.add(new XmlClass("Invoice.StocktakingAccountingTest"));
+                classes.add(new XmlClass("Invoice.SalesFinalRoundingTest"));
                 classes.add(new XmlClass("Invoice.SelectedBranchSalesPolicyTest"));
                 classes.add(underReviewContracts());
             }
             case CONSTRUCTION -> {
+                classes.add(new XmlClass("Invoice.SalesFinalRoundingTest"));
                 classes.add(new XmlClass("CoverageTest.ActivitySpecificScreenAccessTest"));
                 classes.add(new XmlClass("Invoice.SelectedBranchSalesPolicyTest"));
                 classes.add(new XmlClass("Invoice.ConstructionContractTest"));
@@ -114,8 +117,10 @@ final class BusinessRunSuites {
                 classes.add(new XmlClass("CoverageTest.ActivityMasterLifecycleTest"));
                 classes.add(new XmlClass("Invoice.ConcreteStockJourneyTest"));
                 classes.add(new XmlClass("CoverageTest.ConcreteReportRequestTest"));
-                if (request.tax() == TaxPolicy.NET_BASED)
+                if (request.tax() == TaxPolicy.NET_BASED) {
                     classes.add(new XmlClass("Invoice.ConcreteReservationReportTest"));
+                    classes.add(new XmlClass("Invoice.ConcreteOperationalReportTest"));
+                }
                 classes.add(underReviewContracts());
             }
         }
@@ -126,6 +131,9 @@ final class BusinessRunSuites {
         var classes = new ArrayList<XmlClass>();
 
         classes.add(new XmlClass("SpecialSalesTest.RestaurantMinimumAdditionalTaxTest"));
+        classes.add(new XmlClass("SpecialSalesTest.RestaurantAdditionalTaxBoundaryTest"));
+        classes.add(new XmlClass("SpecialSalesTest.RestaurantAdditionalTaxOrderTest"));
+        classes.add(new XmlClass("SpecialSalesTest.RestaurantAdditionalTaxReturnTest"));
         if (request.tax() == TaxPolicy.ITEM_BASED)
             classes.add(new XmlClass("SpecialSalesTest.RestaurantItemBasedAdditionalTaxTest"));
         else {

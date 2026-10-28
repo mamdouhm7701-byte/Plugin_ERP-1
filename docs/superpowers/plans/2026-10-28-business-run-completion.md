@@ -52,14 +52,14 @@ Progress: Public fresh branch3/3 passed; Construction fresh branch5/5 passed; Re
 
 ### Task 3: Remaining activity and policy contracts
 
-- [ ] Audit the route matrix against existing business journeys, distinguishing CRUD, financial behavior and navigation-only checks.
+- [x] Audit the route matrix against existing business journeys, distinguishing CRUD, financial behavior and navigation-only checks.
 - [ ] Add missing behavior using observed native contracts; keep unknown business rules explicitly unresolved rather than inventing expectations.
 - [ ] Exercise supported financial policy combinations with independent fixtures; verify inventory and accounting separately.
 - [ ] Qualify activity-specific journeys and expand native suite selection only with live evidence.
 
 ### Task 4: Compatibility and evidence
 
-- [ ] Run the local CI suite, formatting, coverage-matrix tests and appropriate live compatibility suites.
+- [x] Run the local CI suite, formatting, coverage-matrix tests and appropriate targeted live compatibility suites (full levels deferred by user).
 - [x] Request one read-only review of final changes and resolve important findings.
 - [ ] Update verified coverage, remaining external blockers and run instructions without claiming unexecuted coverage.
 
@@ -158,3 +158,30 @@ Post-create fault live proof passed: server branch157b8518e84c7cf6 created, inje
 - Added `BusinessSuiteScheduling`: reviewed independent classes only can overlap; configuration-mutating classes remain exclusive, methods/data-provider rows serial. Existing native plans receive the selected browser budget. Browser count is a maximum constrained by available RAM/CPU and selected independent classes, not a promise that every activity uses all requested browsers.
 - Final local validation: `target/business-target-workers-release-ci.log`,836 tests,0 failures/errors/skips,BUILD SUCCESS,Spotless clean. Tests cover Cloud/custom tenant, alternate Test endpoint, run-only credentials, restoration before/after preparation failure, origin mismatch, preserved case selection and safe parallel partitioning.
 - Read-only configured-catalog/plan probe found5 Cloud tenants and2 Test endpoints; a Smoke plan at maximum3 uses9 reviewed classes in parallel and all unreviewed cases exclusively. Durable local proof: `docs/testing/evidence/business-run-options-local-proof.json`. No live run on other tenants is claimed. Registry audit still shows no active confirmed-created owned branch.
+
+## Completion pass and CI investigation — 2026-10-28 afternoon
+
+- Ruling: Continue the already-approved implementation in this checkout; leave user IDE runs alone. Full level runs remain the user's deferred item2; targeted new-case qualification continues through the shared gate.
+- Confirmed rules: no delivery fees; returns must refund original tax (user reports a defect); round final invoice net to2 decimals, retain intermediate precision. Restaurant calculator now preserves raw intermediate amounts; legacy general calculation remains compatible and a separate final-rounding contract was added.
+- Native restaurant NetBased extended run:4 boundary recipes passed;2 precision recipes failed (57.59 vs57.58,115.18 vs115.17), and partial/full returns lost original minimum additional tax (23 vs40.25,69 vs120.75). Exact evidence and limits recorded in KNOWN_BUSINESS_ISSUES.md; no skipped or weakened expectations. Trial order assertions were corrected to persisted payment identity/value and one stock deduction rather than unrelated isComplete metadata.
+- Public accounting Periodic and Continuous now both reconcile actual persisted source voucher account IDs and amounts against independent cost80×2. Posting requires complete native branch links; all27 observed account fields are populated with owned fixture accounts. Unposting retains canceled vouchers, so cleanup verifies exact source ID+canceled state and deletes only its own voucher before account cleanup. Both accepted runs deleted fixtures and branches; receipts public-periodic-accounting.json and public-continuous-accounting.json.
+- Ruling: Preserve posting recovery if a posted source voucher cannot be identified; do not clear a journal simply because source isPosted became false after cancellation.
+- Added restaurant boundary/order/linked-return cases, showroom linked-return case, general final-rounding case and explicit Public accounting case. Broad-level routing is activity-aware; Smoke keeps short applicable tax checks. New-case live qualification is tracked separately from class assignment.
+- Route assignment audit rebuilt450 entries:326 assigned,64 specialized for another activity,60 outside existing scope. Assignment is not accepted live business coverage. Four new builder guards pass; existing6 activity coverage builder tests pass.
+- PR40 revision9c9b81af66e31a498aba213f4e6d5beb38f8ae7e failed the same3 BusinessRunListenerTest cases on Windows and Ubuntu, caused by implicit dependency on local Demo credentials. Test-only target now uses explicit synthetic credentials.13 listener contracts passed with Demo credentials blank; full suite later853/853 green, Spotless clean in target/business-and-ci-current-validation.log. No commit/push or remote rerun was performed.
+- IDE15:41 run selected configuration methods only in temp-testng-customsuite.xml, with no @Test. Allure summary had0 cases. Added a clear empty-selection diagnostic; regression observed RED then GREEN. Correct entry is Alt+Shift+F10 > ERP - Business run.
+- Additional native restaurant PriceIncluded order run: all3 order types passed exact tax/payment/stock assertions; await group cleanup and branch deletion before exporting acceptance.
+- Concrete operational report probe stopped selecting a global Project in reservations. Observed native render uses customerProjects and Customers/{id}/projects for that form; next inspect the native customer project binding before writing a fixture relationship. Probe fixtures and branch were cleaned; this is setup diagnosis, not a report arithmetic defect.
+- Remaining: qualify showroom return; complete customer-project/car/driver rendered report content; finish corrected restaurant order evidence and additional-policy checks; final local verification and whole-change review. Full Cartesian/suite runs are not claimed.
+
+
+## Final targeted completion checkpoint — 2026-10-28 18:21 Cairo
+
+- Source/code validation:868 local tests,0 failures/errors/skips,BUILD SUCCESS and Spotless clean; target/business-and-ci-final-verification.log. Credential and maintainability checks:0 violations;6 activity coverage +4 completion catalog guards pass. No commit/push.
+- Accepted native receipts now include Public periodic/continuous postings; Restaurant PriceIncluded Internal/External/Delivery; exact showroom linked chassis return;4 Concrete operational rendered reports. All corresponding branches and fixture journals cleared. Original2 reservation content cases passed after shared setup extraction; their combined compatibility run exposed a loading overlay in the new invoice picker, corrected with condition-based native retry and a fault-injection regression. The separate final operational run passed after this fix.
+- One fresh read-only review found no Critical and one Important: report group identity was global. Regression reproduced the false acceptance (RED), then page/group binding and group-total boundaries corrected it (GREEN).13 report/overlay checks and4 actual native report snapshots passed; final native operational case passed. Minor final-status documentation refreshed here. No second reviewer or implementer agents used.
+- Review rulings: full level runs remain the user's deferred item2; no active run interference; ERP product fixes outside this test repository remain recorded failures; additional accounting activity/policy/return combinations are not qualified by the two Public/NetBased receipts; commits/remote reruns/deployment excluded; read-only reviewer did not run tests while root performed verification.
+- Additional true business discrepancy: Public drafts25.036 ->28.80 vs28.79; two items57.59 vs57.58. Recorded separately, stopped before save; cleanup verified.
+- Ruling: history route registered but redirects home on the fresh Public child branch. Access requirements are unresolved, so retain standalone diagnostic but remove its automatic mandatory business routing; regression RED/GREEN protects legacy selection. Do not infer CRUD/business coverage from class existence or route registration.
+- Original user IDE15:15 run was recovered from IDE history: API Network Error in RestaurantMinimumAdditionalTaxTest cleanup, then login setup timeout caused3 RestaurantAdditionalTaxSmokeTest cases to be ignored. Later15:41 rerun selected configuration methods only. Resumed only exact journal ff1a9446-e49 on its original Test origin/profile; all13 retained fixture records and branch e18b414710bc9e33 cleaned. Registry now85 DELETED,1 CREATE_REJECTED,0 confirmed-created active branches.
+- Scope remains explicit:450 route/activity assignments are a code/coverage audit, not450 completed native business validations. Full Cartesian policy runs and all role/screen paths are not claimed; full Smoke/Sanity/E2E/Regression runs remain deferred by the user.

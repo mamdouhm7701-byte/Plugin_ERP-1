@@ -10,6 +10,39 @@ import java.util.Objects;
 
 /** User-confirmed 15% sales arithmetic. Additional restaurant tax is excluded. */
 public final class BranchInvoiceCalculator {
+    /**
+     * Aggregate-precision contract: keep intermediate amounts and round only the final invoice net.
+     */
+    public static InvoiceTotals calculateFinalRounded(
+            List<PolicyInvoiceLine> lines, TaxPolicy policy, int precision) {
+        Objects.requireNonNull(policy);
+        if (precision < 0 || precision > 6)
+            throw new IllegalArgumentException("Precision must be 0–6");
+        BigDecimal total = BigDecimal.ZERO, discount = BigDecimal.ZERO, taxable = BigDecimal.ZERO;
+        for (var line : List.copyOf(lines)) {
+            total = total.add(line.amount());
+            discount = discount.add(line.discountAmount());
+            if (policy != TaxPolicy.ITEM_BASED || !line.taxExempt())
+                taxable = taxable.add(line.amount().subtract(line.discountAmount()));
+        }
+        BigDecimal afterDiscount = total.subtract(discount);
+        BigDecimal base =
+                policy == TaxPolicy.PRICE_INCLUDED
+                        ? afterDiscount.divide(VAT_FACTOR, java.math.MathContext.DECIMAL128)
+                        : afterDiscount;
+        BigDecimal tax =
+                policy == TaxPolicy.PRICE_INCLUDED
+                        ? afterDiscount.subtract(base)
+                        : taxable.multiply(VAT_PERCENTAGE).movePointLeft(2);
+        var result = new InvoiceTotals();
+        result.setTotal(total);
+        result.setDiscount(discount);
+        result.setBeforeTax(base);
+        result.setTax(tax);
+        result.setNet(money(base.add(tax), precision));
+        return result;
+    }
+
     public static final BigDecimal VAT_PERCENTAGE = new BigDecimal("15");
     private static final BigDecimal VAT_FACTOR = new BigDecimal("1.15");
 

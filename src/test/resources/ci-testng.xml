@@ -10,10 +10,15 @@
         <classes>
             <class name="TestSupport.PolicyItemRecipeTest"/>
             <class name="TestSupport.ConcreteReservationReportAssertionsTest"/>
+            <class name="TestSupport.ConcreteOperationalReportAssertionsTest"/>
+            <class name="TestSupport.OwnedPostingReconciliationTest"/>
+            <class name="Invoice.OwnedBranchAccountingBindingsTest"/>
+            <class name="Invoice.ConcreteInvoiceSelectionTest"/>
             <class name="Plugin_ERP.BranchProfiles.BusinessRunRequestTest"/>
             <class name="SuiteSupport.BusinessRunListenerTest"/>
             <class name="SuiteSupport.BusinessLevelContractsTest"/>
             <class name="SuiteSupport.BusinessRunTargetTest"/>
+            <class name="SpecialSalesTest.RestaurantTaxAssertionsTest"/>
             <class name="SuiteSupport.BusinessSuiteSchedulingTest"/>
             <class name="SuiteSupport.BusinessBranchCleanupTest"/>
             <class name="Plugin_ERP.BranchProfiles.RestaurantAdditionalTaxTest"/>

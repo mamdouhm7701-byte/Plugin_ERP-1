@@ -1,0 +1,106 @@
+{
+  "activity": "Restaurant",
+  "route": "#/restaurant-menu",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "5c55673202869b21",
+  "profileFingerprint": "61724f3f84eb207bdfedc5230f976a0f34c0a7d4cb2728d7a665decbc91fd9a2",
+  "profile": "business-ffafbbfcc388091e",
+  "policies": {
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "branchId": "5c55673202869b21",
+    "activityType": "Restaurant",
+    "discountLevel": "Transaction",
+    "taxPolicy": "NetBased",
+    "stocktakingMethod": "Periodic"
+  },
+  "caseClass": "SpecialSalesTest.RestaurantAdditionalTaxBoundaryTest",
+  "journeys": [
+    "Saved/read additional floor at exclusive prices24/25/26 and fractional quantity0.5; exact item quantity, final invoice total and stock"
+  ],
+  "evidenceLog": "target/extended-restaurant-net-live.log",
+  "cleanupJournals": [
+    "target/special-sales-fixtures/ade43cb9-f07.json",
+    "target/special-sales-attempts/ade43cb9-f07.json"
+  ],
+  "branchCleanup": {
+    "branchId": "5c55673202869b21",
+    "status": "DELETED"
+  },
+  "recipes": [
+    {
+      "quantity": "1",
+      "selectedPrice": 24,
+      "additional": 25,
+      "vat": 7.35,
+      "net": 56.35,
+      "items": 1,
+      "beforeVat": 49,
+      "exclusiveUnitPrice": "24"
+    },
+    {
+      "quantity": "3",
+      "selectedPrice": 25,
+      "additional": 75,
+      "vat": 22.5,
+      "net": 172.5,
+      "items": 1,
+      "beforeVat": 150,
+      "exclusiveUnitPrice": "25"
+    },
+    {
+      "quantity": "3",
+      "selectedPrice": 26,
+      "additional": 78,
+      "vat": 23.4,
+      "net": 179.4,
+      "items": 1,
+      "beforeVat": 156,
+      "exclusiveUnitPrice": "26"
+    },
+    {
+      "quantity": "0.5",
+      "selectedPrice": 10,
+      "additional": 12.5,
+      "vat": 2.625,
+      "net": 20.13,
+      "items": 1,
+      "beforeVat": 17.5,
+      "exclusiveUnitPrice": "10"
+    }
+  ],
+  "invoices": [
+    {
+      "id": "f142f87dfab49fa5",
+      "totalAdditionalTaxes": 25,
+      "netBeforeTaxes": 49,
+      "totalTaxes": 7.35,
+      "net": 56.35
+    },
+    {
+      "id": "1ff1fc3d65b75514",
+      "totalAdditionalTaxes": 75,
+      "netBeforeTaxes": 150,
+      "totalTaxes": 22.5,
+      "net": 172.5
+    },
+    {
+      "id": "d61ea906aaecc0b4",
+      "totalAdditionalTaxes": 78,
+      "netBeforeTaxes": 156,
+      "totalTaxes": 23.4,
+      "net": 179.4
+    },
+    {
+      "id": "a02a8edccbeca042",
+      "totalAdditionalTaxes": 12.5,
+      "netBeforeTaxes": 17.5,
+      "totalTaxes": 2.63,
+      "net": 20.13
+    }
+  ],
+  "capturedFromVerifiedRun": true,
+  "evidenceScope": "4 passed boundary cases only.2 precision cases failed and are documented separately; no order-type or linked-return success is claimed by this receipt."
+}

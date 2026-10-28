@@ -1,0 +1,53 @@
+{
+  "status": "PASSED",
+  "activity": "Public",
+  "stocktakingMethod": "Periodic",
+  "profile": {
+    "name": "business-51cf3255bc4cea8c",
+    "fingerprint": "4c7c83fd34a951286d86d7b692141c6f517311cec844890b8d46e17849327ba1",
+    "expected": {
+      "origin": "https://rawdadonia.plugin-erp.com",
+      "branchId": "98a36dbd4f40ddb3",
+      "activityType": "Public",
+      "discountLevel": "Transaction",
+      "taxPolicy": "NetBased",
+      "stocktakingMethod": "Periodic"
+    }
+  },
+  "branchCleanup": {
+    "branchId": "98a36dbd4f40ddb3",
+    "status": "DELETED"
+  },
+  "expected": {
+    "6b6540153df64ee2": 230,
+    "e4de47cdaaffb4ef": -200,
+    "b62ac28374006f21": -30
+  },
+  "voucher": {
+    "id": "4754bb1cfd433fab",
+    "sourceTransactionId": "173eb54ae655e6f1",
+    "sourceTransactionCode": "1",
+    "sourceTransactionType": "Sales",
+    "isCanceled": false,
+    "debentureValue": 230,
+    "lines": [
+      {
+        "accountId": "6b6540153df64ee2",
+        "debit": 230,
+        "credit": 0
+      },
+      {
+        "accountId": "e4de47cdaaffb4ef",
+        "debit": 0,
+        "credit": 200
+      },
+      {
+        "accountId": "b62ac28374006f21",
+        "debit": 0,
+        "credit": 30
+      }
+    ]
+  },
+  "scope": "One owned credit sale, quantity2, independent seeded cost80 each. Exact source, account identities and debits/credits reconciled; canceled generated voucher deleted after unposting. Does not qualify other policies, activities or returns.",
+  "log": "target/public-periodic-accounting-verified-live.log"
+}

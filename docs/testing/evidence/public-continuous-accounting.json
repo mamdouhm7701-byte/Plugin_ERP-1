@@ -1,0 +1,65 @@
+{
+  "status": "PASSED",
+  "activity": "Public",
+  "stocktakingMethod": "Continuous",
+  "profile": {
+    "name": "business-aa05509b27274bf5",
+    "fingerprint": "8cb9e7392e444349180c385b92fc8b94884ee81472072fa4653f7b2029cbd432",
+    "expected": {
+      "origin": "https://rawdadonia.plugin-erp.com",
+      "branchId": "76317a87e32f7d53",
+      "activityType": "Public",
+      "discountLevel": "Transaction",
+      "taxPolicy": "NetBased",
+      "stocktakingMethod": "Continuous"
+    }
+  },
+  "branchCleanup": {
+    "branchId": "76317a87e32f7d53",
+    "status": "DELETED"
+  },
+  "expected": {
+    "92aec18cf71bc51f": -200,
+    "3f47c420a3f61c93": -30,
+    "618af803ddbc0f4a": -160,
+    "da657e611d73590c": 160,
+    "0b1ebe6887452275": 230
+  },
+  "voucher": {
+    "id": "fd12be7598a9b9f8",
+    "sourceTransactionId": "3533c4c1cc4fdc6e",
+    "sourceTransactionCode": "1",
+    "sourceTransactionType": "Sales",
+    "isCanceled": false,
+    "debentureValue": 390,
+    "lines": [
+      {
+        "accountId": "0b1ebe6887452275",
+        "debit": 230,
+        "credit": 0
+      },
+      {
+        "accountId": "92aec18cf71bc51f",
+        "debit": 0,
+        "credit": 200
+      },
+      {
+        "accountId": "3f47c420a3f61c93",
+        "debit": 0,
+        "credit": 30
+      },
+      {
+        "accountId": "da657e611d73590c",
+        "debit": 160,
+        "credit": 0
+      },
+      {
+        "accountId": "618af803ddbc0f4a",
+        "debit": 0,
+        "credit": 160
+      }
+    ]
+  },
+  "scope": "One owned credit sale, quantity2, independent seeded cost80 each. Exact source, account identities and debits/credits reconciled; canceled generated voucher deleted after unposting. Does not qualify other policies, activities or returns.",
+  "log": "target/public-continuous-accounting-all-native-links-live.log"
+}

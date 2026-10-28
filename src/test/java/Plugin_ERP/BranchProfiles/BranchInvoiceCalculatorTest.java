@@ -20,6 +20,38 @@ public final class BranchInvoiceCalculatorTest {
                 exempt);
     }
 
+    @Test
+    public void finalRoundingRetainsIntermediatePrecisionAcrossLines() {
+        var rows =
+                List.of(
+                        line("25.036", "0", DiscountType.VALUE, false),
+                        line("25.036", "0", DiscountType.VALUE, false));
+        var result = BranchInvoiceCalculator.calculateFinalRounded(rows, TaxPolicy.NET_BASED, 2);
+        same(result.getBeforeTax(), "50.072");
+        same(result.getTax(), "7.5108");
+        same(result.getNet(), "57.58");
+    }
+
+    @Test
+    public void finalRoundingPreservesItemExemptionAndIncludedPrice() {
+        var rows =
+                List.of(
+                        line("25.036", "0", DiscountType.VALUE, false),
+                        line("25.036", "0", DiscountType.VALUE, true));
+        var itemBased =
+                BranchInvoiceCalculator.calculateFinalRounded(rows, TaxPolicy.ITEM_BASED, 2);
+        same(itemBased.getTax(), "3.7554");
+        same(itemBased.getNet(), "53.83");
+        var included =
+                BranchInvoiceCalculator.calculateFinalRounded(
+                        List.of(line("28.7914", "0", DiscountType.VALUE, false)),
+                        TaxPolicy.PRICE_INCLUDED,
+                        2);
+        same(included.getBeforeTax(), "25.036");
+        same(included.getTax(), "3.7554");
+        same(included.getNet(), "28.79");
+    }
+
     @DataProvider
     public Object[][] examples() {
         return new Object[][] {

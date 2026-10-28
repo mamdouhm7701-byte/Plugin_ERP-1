@@ -1,0 +1,86 @@
+{
+  "activity": "Restaurant",
+  "route": "#/restaurant-menu",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "c48aeeeeb73bb4c0",
+  "profileFingerprint": "3b3b37f0e5e6503de9f5e0cb3b16d0238d71872f2aede8b26c9e3df3a3328731",
+  "profile": "business-c46fa58624ad02e4",
+  "policies": {
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "branchId": "c48aeeeeb73bb4c0",
+    "activityType": "Restaurant",
+    "discountLevel": "Transaction",
+    "taxPolicy": "PriceIncluded",
+    "stocktakingMethod": "Periodic"
+  },
+  "caseClass": "SpecialSalesTest.RestaurantAdditionalTaxOrderTest",
+  "journeys": [
+    "PriceIncluded Internal hold/reopen/pay, External and Delivery; exact persisted owned payment and tax; stock deducted once"
+  ],
+  "evidenceLog": "target/restaurant-order-types-price-included-live.log",
+  "cleanupJournals": [
+    "target/special-sales-fixtures/d33a2d02-dc3.json",
+    "target/special-sales-attempts/d33a2d02-dc3.json"
+  ],
+  "branchCleanup": {
+    "branchId": "c48aeeeeb73bb4c0",
+    "status": "DELETED"
+  },
+  "recipes": [
+    {
+      "orderType": "External",
+      "deliveryFee": "NOT_APPLICABLE",
+      "quantity": 3,
+      "additional": 75,
+      "vat": 15.75,
+      "net": 120.75
+    },
+    {
+      "orderType": "Delivery",
+      "deliveryFee": "NOT_APPLICABLE",
+      "quantity": 3,
+      "additional": 75,
+      "vat": 15.75,
+      "net": 120.75
+    },
+    {
+      "orderType": "Internal",
+      "deliveryFee": "NOT_APPLICABLE",
+      "quantity": 3,
+      "additional": 75,
+      "vat": 15.75,
+      "net": 120.75
+    }
+  ],
+  "invoices": [
+    {
+      "id": "73773c9330aaf39f",
+      "net": 120.75,
+      "netBeforeTaxes": 105,
+      "totalTaxes": 15.75,
+      "totalAdditionalTaxes": 75,
+      "isOnHold": false
+    },
+    {
+      "id": "8c94f90961fc2c4b",
+      "net": 120.75,
+      "netBeforeTaxes": 105,
+      "totalTaxes": 15.75,
+      "totalAdditionalTaxes": 75,
+      "isOnHold": false
+    },
+    {
+      "id": "41ca7d97f9f2b918",
+      "net": 120.75,
+      "netBeforeTaxes": 105,
+      "totalTaxes": 15.75,
+      "totalAdditionalTaxes": 75,
+      "isOnHold": false
+    }
+  ],
+  "capturedFromVerifiedRun": true,
+  "evidenceScope": "3 order types, price11.5 inclusive, quantity3, floor75, VAT15.75, final120.75. No delivery fees exist. Returns, precision boundaries and NetBased order qualification are not claimed by this receipt. Internal reopen requires restoring owned capture notes through the normal UI before payment; hold-note persistence is not qualified by this receipt."
+}

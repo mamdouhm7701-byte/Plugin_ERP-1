@@ -1,0 +1,44 @@
+{
+  "activity": "CarShowroom",
+  "route": "#/return-sales/new",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "d7b8c0aa8c4e65e8",
+  "profileFingerprint": "1b8652142b721b1035c44281857f371f3a73b7970173e53a771fe3d4ebfed692",
+  "profile": "business-3ee1589e53043cbd",
+  "policies": {
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "branchId": "d7b8c0aa8c4e65e8",
+    "activityType": "CarShowroom",
+    "discountLevel": "Transaction",
+    "taxPolicy": "NetBased",
+    "stocktakingMethod": "Periodic"
+  },
+  "caseClass": "Invoice.CarShowroomSalesTest",
+  "journeys": [
+    "Owned purchase receipt, exact chassis/color credit sale and linked full return; persisted identities/VAT/net and stock1001->1000->1001"
+  ],
+  "evidenceLog": "target/showroom-owned-chassis-return-live.log",
+  "cleanupJournals": [
+    "target/sales-fixtures/a7257790-5b4.json",
+    "target/sales-attempts/a7257790-5b4.json"
+  ],
+  "branchCleanup": {
+    "branchId": "d7b8c0aa8c4e65e8",
+    "status": "DELETED"
+  },
+  "sourceId": "792495ff114adcae",
+  "serial": "QA7e313601ea80463",
+  "colorId": "168ac07ad02c7deb",
+  "returned": {
+    "id": "5cfa34fc6b7bbdcf",
+    "sourceTransactionId": "792495ff114adcae",
+    "totalTaxes": 15,
+    "net": 115
+  },
+  "stockAfterReturn": 1001,
+  "capturedFromVerifiedRun": true,
+  "evidenceScope": "One native NetBased/Transaction full chassis return; other showroom tax policies and partial/multiple chassis returns not qualified here."
+}

@@ -8,6 +8,36 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 
 public final class RestaurantAdditionalTaxTest {
+    @Test
+    public void roundsOnlyFinalTotalAndKeepsIntermediatePrecision() {
+        var line =
+                new RestaurantAdditionalTaxCalculator.Line(
+                        BigDecimal.ONE, new BigDecimal("25.036"), true);
+        var totals =
+                RestaurantAdditionalTaxCalculator.calculate(
+                        List.of(line), TaxPolicy.NET_BASED, true, new BigDecimal("100"), 2);
+        same(totals.originalBeforeVat(), "25.036");
+        same(totals.additionalTax(), "25.036");
+        same(totals.beforeVat(), "50.072");
+        same(totals.vat(), "7.5108");
+        same(totals.net(), "57.58");
+    }
+
+    @Test
+    public void doesNotRoundEachLineBeforeAddingInvoiceTotal() {
+        var lines =
+                List.of(
+                        new RestaurantAdditionalTaxCalculator.Line(
+                                BigDecimal.ONE, new BigDecimal("25.036"), true),
+                        new RestaurantAdditionalTaxCalculator.Line(
+                                BigDecimal.ONE, new BigDecimal("25.036"), true));
+        var totals =
+                RestaurantAdditionalTaxCalculator.calculate(
+                        lines, TaxPolicy.NET_BASED, true, new BigDecimal("100"), 2);
+        same(totals.net(), "115.17");
+        same(totals.beforeVat(), "100.144");
+    }
+
     @DataProvider
     public Object[][] examples() {
         return new Object[][] {
@@ -39,7 +69,7 @@ public final class RestaurantAdditionalTaxTest {
         same(result.beforeVat(), base);
         same(result.vat(), vat);
         same(result.net(), net);
-        Assert.assertEquals(result.beforeVat().add(result.vat()), result.net());
+        Assert.assertEquals(result.beforeVat().add(result.vat()).compareTo(result.net()), 0);
     }
 
     @Test
@@ -70,7 +100,7 @@ public final class RestaurantAdditionalTaxTest {
             {TaxPolicy.NET_BASED, "25", "3", "0", "75", "150", "22.5", "172.5"},
             {TaxPolicy.NET_BASED, "30", "3", "0", "90", "180", "27", "207"},
             {TaxPolicy.NET_BASED, "30", "3", "18", "75", "147", "22.05", "169.05"},
-            {TaxPolicy.NET_BASED, "10", "0.5", "0", "12.5", "17.5", "2.625", "20.125"}
+            {TaxPolicy.NET_BASED, "10", "0.5", "0", "12.5", "17.5", "2.625", "20.13"}
         };
     }
 
@@ -84,7 +114,7 @@ public final class RestaurantAdditionalTaxTest {
             String base,
             String vat,
             String net) {
-        int precision = quantity.equals("0.5") ? 3 : 2;
+        int precision = 2;
         var result =
                 RestaurantAdditionalTaxCalculator.calculate(
                         List.of(

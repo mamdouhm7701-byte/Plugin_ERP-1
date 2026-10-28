@@ -8,6 +8,23 @@ import org.testng.annotations.Test;
 
 public final class ReportingContractsTest {
     @Test
+    public void emptyIdeSelectionExplainsHowToRunActualBusinessTests() {
+        var previous = System.out;
+        var output = new java.io.ByteArrayOutputStream();
+        try {
+            System.setOut(
+                    new java.io.PrintStream(output, true, java.nio.charset.StandardCharsets.UTF_8));
+            new TestNGListeners()
+                    .generateReport(java.util.List.of(), java.util.List.of(), "unused");
+        } finally {
+            System.setOut(previous);
+        }
+        String message = output.toString(java.nio.charset.StandardCharsets.UTF_8);
+        Assert.assertTrue(message.contains("No test cases were selected"));
+        Assert.assertTrue(message.contains("ERP - Business run"));
+    }
+
+    @Test
     public void knownCategoryRequiresExplicitReferenceEvenForMultilineFailures() throws Exception {
         try (var input = getClass().getResourceAsStream("/allure-categories.json")) {
             Assert.assertNotNull(input);

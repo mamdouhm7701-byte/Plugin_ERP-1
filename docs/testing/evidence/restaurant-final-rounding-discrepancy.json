@@ -1,0 +1,61 @@
+{
+  "status": "NATIVE_UI_MISMATCH",
+  "caseId": "REST-ROUNDING-001",
+  "caseClass": "SpecialSalesTest.RestaurantAdditionalTaxBoundaryTest",
+  "rule": "Retain intermediate precision; round final total to two decimals",
+  "observations": [
+    {
+      "expected": {
+        "quantity": "1",
+        "selectedPrice": 25.036,
+        "additional": 50.072,
+        "vat": 15.0216,
+        "net": 115.17,
+        "items": 2,
+        "beforeVat": 100.144,
+        "exclusiveUnitPrice": "25.036"
+      },
+      "actual": {
+        "total": 50.08,
+        "totalAdditionalTaxes": 50.08,
+        "netBeforeTaxes": 100.16,
+        "totalTaxes": 15.02,
+        "net": 115.18
+      },
+      "linePrices": [
+        25.036,
+        25.036
+      ],
+      "attachment": "target/extended-restaurant-net-results/7315cfb8-c29f-49a6-9038-8bc0e28d1d8c-attachment.json"
+    },
+    {
+      "expected": {
+        "quantity": "1",
+        "selectedPrice": 25.036,
+        "additional": 25.036,
+        "vat": 7.5108,
+        "net": 57.58,
+        "items": 1,
+        "beforeVat": 50.072,
+        "exclusiveUnitPrice": "25.036"
+      },
+      "actual": {
+        "total": 25.04,
+        "totalAdditionalTaxes": 25.04,
+        "netBeforeTaxes": 50.08,
+        "totalTaxes": 7.51,
+        "net": 57.59
+      },
+      "linePrices": [
+        25.036
+      ],
+      "attachment": "target/extended-restaurant-net-results/69bb6ad2-06c3-4230-9a15-ae8b034f43d5-attachment.json"
+    }
+  ],
+  "evidenceLog": "target/extended-restaurant-net-live.log",
+  "cleanupAcceptance": "VERIFIED",
+  "branchCleanup": {
+    "branchId": "5c55673202869b21",
+    "status": "DELETED"
+  }
+}

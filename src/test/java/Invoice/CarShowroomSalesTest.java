@@ -21,6 +21,13 @@ import org.testng.annotations.Test;
 /** A showroom sale consumes one exact chassis received through an owned purchase. */
 public final class CarShowroomSalesTest extends SalesScenarioTest {
     private SalesTestData.Record ownedPurchase;
+    private String activeEndpoint = "ItemTransactions-Sales";
+
+    private record ChassisSale(
+            SalesTestData.Record invoice,
+            SalesTestData.Record car,
+            Object colorId,
+            String serial) {}
 
     @DataProvider
     public Object[][] discountModes() {
@@ -29,6 +36,11 @@ public final class CarShowroomSalesTest extends SalesScenarioTest {
 
     @Test(dataProvider = "discountModes")
     public void sellsOwnedChassisAndPreservesItsColorAndStockIdentity(boolean discounted) {
+        sellOwnedChassis(discounted);
+    }
+
+    private ChassisSale sellOwnedChassis(boolean discounted) {
+        activeEndpoint = "ItemTransactions-Sales";
         ownedPurchase = null;
         var profile = BranchProfiles.selected().orElseThrow();
         Assert.assertEquals(profile.expected().activityType(), ActivityType.CAR_SHOWROOM);
@@ -102,10 +114,87 @@ public final class CarShowroomSalesTest extends SalesScenarioTest {
                                         data.balance(car, 1)))
                         .toString(2),
                 ".json");
+        return new ChassisSale(invoice, car, color.id(), serial);
+    }
+
+    @Test
+    public void linkedReturnRestoresExactSoldChassisColorAndStock() {
+        var sold = sellOwnedChassis(false);
+        activeEndpoint = "ItemTransactions-ReturnSales";
+        page.slLinkedReturn(sold.invoice().id(), sold.car().name());
+        page.slCapture(marker, data.store(1).id(), sold.car().id(), activeEndpoint);
+        page.slNotes(marker);
+        Assert.assertEquals(page.slDocument().get("sourceTransactionId"), sold.invoice().id());
+        var sourceLine = firstLine(page.slDocument());
+        Assert.assertEquals(sourceLine.get("serial"), sold.serial());
+        Assert.assertEquals(sourceLine.get("carColorId"), sold.colorId());
+        var expected =
+                BranchInvoiceCalculator.calculate(
+                        List.of(
+                                new PolicyInvoiceLine(
+                                        "returned-chassis",
+                                        BigDecimal.ONE,
+                                        new BigDecimal("100"),
+                                        BigDecimal.ZERO,
+                                        DiscountType.VALUE,
+                                        false)),
+                        BranchProfiles.selected().orElseThrow().expected().taxPolicy(),
+                        2,
+                        BranchInvoiceCalculator.TaxRounding.INVOICE);
+        page.slWaitNet(expected.getNet().toPlainString());
+        data.rememberAttempts(
+                List.of(
+                        SalesTestData.fields(
+                                "endpoint", activeEndpoint, "values", page.slDocument())),
+                List.of(),
+                marker);
+        page.slSave(false);
+        new WebDriverWait(driver, Duration.ofSeconds(45))
+                .until(
+                        d -> {
+                            capture();
+                            return !page.slSaves().isEmpty();
+                        });
+        var returned = capture().getLast();
+        var stored = data.read(returned);
+        var line = firstLine(stored);
+        Assert.assertEquals(stored.get("sourceTransactionId"), sold.invoice().id());
+        Assert.assertEquals(line.get("itemId"), sold.car().id());
+        Assert.assertEquals(line.get("serial"), sold.serial());
+        Assert.assertEquals(line.get("carColorId"), sold.colorId());
+        sameNumber(line.get("quantity"), "1");
+        sameNumber(stored.get("totalTaxes"), expected.getTax().toPlainString());
+        sameNumber(stored.get("net"), expected.getNet().toPlainString());
+        new WebDriverWait(driver, Duration.ofSeconds(30))
+                .until(
+                        d ->
+                                number(data.balance(sold.car(), 1))
+                                                .compareTo(new BigDecimal("1001"))
+                                        == 0);
+        Allure.addAttachment(
+                "Owned showroom linked chassis return",
+                "application/json",
+                new org.json.JSONObject(
+                                Map.of(
+                                        "sourceId",
+                                        sold.invoice().id(),
+                                        "serial",
+                                        sold.serial(),
+                                        "colorId",
+                                        sold.colorId(),
+                                        "return",
+                                        stored,
+                                        "stockAfterReturn",
+                                        data.balance(sold.car(), 1)))
+                        .toString(2),
+                ".json");
+        page.slDismiss();
     }
 
     @Override
     protected List<SalesTestData.Record> capture() {
+        if (activeEndpoint.equals("ItemTransactions-ReturnSales"))
+            return ActivityDocumentCapture.collect(data, page, marker, activeEndpoint);
         var records = super.capture();
         if (ownedPurchase != null)
             for (var record : records) {

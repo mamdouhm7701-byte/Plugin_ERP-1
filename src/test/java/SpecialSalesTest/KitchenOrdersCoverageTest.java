@@ -34,9 +34,9 @@ public final class KitchenOrdersCoverageTest extends SpecialSalesScenario {
         String row =
                 "//tr[.//td[contains(normalize-space(.)," + ScreenPage.literal(item.name()) + ")]]";
         Object mechanism =
-                ((org.openqa.selenium.JavascriptExecutor) driver)
-                        .executeScript(
-                                "return erpVue.root().$store.getters['app/currentBranch'].deliveryMechanism");
+                Plugin_ERP.Util.VueComponentAccess.execute(
+                        driver,
+                        "return erpVue.root().$store.getters['app/currentBranch'].deliveryMechanism");
         String checkbox = row + "//input[@type='checkbox']";
         clickVisibleSquare(checkbox);
         if ("PrepareAndDelivery".equals(mechanism)) {
@@ -54,6 +54,21 @@ public final class KitchenOrdersCoverageTest extends SpecialSalesScenario {
                 .until(d -> Boolean.TRUE.equals(data.read(invoice).get("isComplete")));
         number(data.balance(item, 1), "999");
         number(data.balance(item, 2), "1000");
+        io.qameta.allure.Allure.addAttachment(
+                "Owned kitchen delivery lifecycle",
+                "application/json",
+                new org.json.JSONObject(
+                                Map.of(
+                                        "invoice",
+                                        data.read(invoice),
+                                        "deliveryMechanism",
+                                        mechanism,
+                                        "stockAfter",
+                                        data.balance(item, 1),
+                                        "otherStoreStock",
+                                        data.balance(item, 2)))
+                        .toString(2),
+                ".json");
     }
 
     private void clickVisibleSquare(String checkbox) {

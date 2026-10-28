@@ -15,7 +15,34 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public final class BusinessBranchPreparation {
     private BusinessBranchPreparation() {}
 
+    static void verifyCreationOrigin(String actualOrigin, String requestedUrl) {
+        var actual = java.net.URI.create(actualOrigin).resolve("/");
+        var requested = java.net.URI.create(requestedUrl).resolve("/");
+        if (!actual.equals(requested))
+            throw new IllegalStateException(
+                    "Authenticated origin differs from the selected target; branch creation refused");
+    }
+
+    static String activityLabel(List<? extends Map<String, ?>> options, String activity) {
+        var matches = options.stream().filter(option -> activity.equals(option.get("id"))).toList();
+        if (matches.size() != 1
+                || !(matches.getFirst().get("arabicName") instanceof String name)
+                || name.isBlank())
+            throw new IllegalStateException(
+                    "Native activity option is missing or ambiguous: " + activity);
+        return name;
+    }
+
     public static BranchProfile prepare(BusinessRunRequest request, Path project, Path output)
+            throws Exception {
+        return prepare(request, project, output, profile -> {});
+    }
+
+    static BranchProfile prepare(
+            BusinessRunRequest request,
+            Path project,
+            Path output,
+            java.util.function.Consumer<BranchProfile> confirmedCreation)
             throws Exception {
         Files.createDirectories(output);
         Files.writeString(
@@ -30,10 +57,18 @@ public final class BusinessBranchPreparation {
             login.Login(PropertyReader.getValidUsername(), PropertyReader.getValidPassword());
             login.AssertLoginPageTitle();
             var original = BranchProfileReader.capture(driver, Duration.ofSeconds(30));
+            verifyCreationOrigin(original.origin(), PropertyReader.getApplicationUrl());
             Path profiles = project.resolve("config/branch-profiles");
             Files.createDirectories(profiles);
             BranchProfile selected =
-                    create(driver, request, project, profiles, output, original.origin());
+                    create(
+                            driver,
+                            request,
+                            project,
+                            profiles,
+                            output,
+                            original.origin(),
+                            confirmedCreation);
             // Newly created branches enter the header menu only after session hydration.
             driver.get(original.origin() + "/#/");
             driver.navigate().refresh();
@@ -111,12 +146,9 @@ public final class BusinessBranchPreparation {
             Path project,
             Path profiles,
             Path output,
-            String origin)
+            String origin,
+            java.util.function.Consumer<BranchProfile> confirmedCreation)
             throws Exception {
-        if (!"Cloud".equalsIgnoreCase(PropertyReader.getProperty("Environment"))
-                || !"Demo".equals(PropertyReader.getProperty("Tenant")))
-            throw new IllegalStateException(
-                    "Automatic branch creation is currently qualified on Cloud/Demo only; no existing branch was edited");
         String key = creationKey(request, origin, output);
         String name = "QA-BUS-" + key;
         String profileName = "business-" + key;
@@ -141,16 +173,19 @@ public final class BusinessBranchPreparation {
         }
         var page = new ScreenPage(driver);
         page.open("branches/new", "انشاء فرع");
-        page.choose(
-                "نوع النشاط",
-                switch (request.activity()) {
-                    case PUBLIC -> "عام";
-                    case RESTAURANT -> "مطاعم";
-                    case CONSTRUCTION -> "مقاولات";
-                    case CONCRETE -> "خرسانة";
-                    case CAR_SHOWROOM -> "معرض سيارات";
-                });
         var wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        @SuppressWarnings("unchecked")
+        var activities =
+                (List<Map<String, ?>>)
+                        wait.until(
+                                d ->
+                                        VueComponentAccess.execute(
+                                                d,
+                                                """
+                const vm=erpVue.root()?.$router?.currentRoute?.matched?.at(-1)?.instances?.default;
+                return Array.isArray(vm?.activites)&&vm.activites.length?vm.activites:null;
+                """));
+        page.choose("نوع النشاط", activityLabel(activities, request.activity().code()));
         @SuppressWarnings("unchecked")
         Map<String, Object> defaults =
                 (Map<String, Object>)
@@ -215,6 +250,11 @@ public final class BusinessBranchPreparation {
         String id = response.get("id").toString();
         ownership.put("branchId", id).put("status", "CREATED_AWAITING_READBACK");
         Files.writeString(registry, ownership.toString(2));
+        var expectedFields = new HashMap<String, Object>(request.fields());
+        expectedFields.put("origin", origin);
+        expectedFields.put("branchId", id);
+        confirmedCreation.accept(
+                new BranchProfile(profileName, BranchSnapshot.from(expectedFields)));
         var stored = read(driver, id);
         request.verify(stored, origin);
         if (!name.equals(stored.get("arabicName")))

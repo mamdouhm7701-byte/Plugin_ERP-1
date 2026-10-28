@@ -1,0 +1,156 @@
+{
+  "activity": "Public",
+  "qualifiedConfigurations": 12,
+  "testsPassed": 36,
+  "testsFailed": 0,
+  "testsSkipped": 0,
+  "distinctFreshBranches": 12,
+  "cleanupVerified": true,
+  "scope": "Selected-policy invoice amounts, exemptions, discounts and stock quantities; accounting postings are not inferred",
+  "configurations": [
+    {
+      "policies": {
+        "origin": "https://rawdadonia.plugin-erp.com",
+        "branchId": "7a752169ec898342",
+        "activityType": "Public",
+        "discountLevel": "Transaction",
+        "taxPolicy": "NetBased",
+        "stocktakingMethod": "Periodic"
+      },
+      "profile": "business-516ef54b47325187",
+      "evidenceLog": "target/policy-public-transaction-net_based-periodic-live.log"
+    },
+    {
+      "policies": {
+        "origin": "https://rawdadonia.plugin-erp.com",
+        "branchId": "4eb6dcec07484a8a",
+        "activityType": "Public",
+        "discountLevel": "Transaction",
+        "taxPolicy": "NetBased",
+        "stocktakingMethod": "Continuous"
+      },
+      "profile": "business-323c82458460cd8c",
+      "evidenceLog": "target/policy-public-transaction-net_based-continuous-live.log"
+    },
+    {
+      "policies": {
+        "origin": "https://rawdadonia.plugin-erp.com",
+        "branchId": "e9887d6f288f0b73",
+        "activityType": "Public",
+        "discountLevel": "Transaction",
+        "taxPolicy": "ItemBased",
+        "stocktakingMethod": "Periodic"
+      },
+      "profile": "business-6e614c61910f64b8",
+      "evidenceLog": "target/policy-public-transaction-item_based-periodic-live.log"
+    },
+    {
+      "policies": {
+        "origin": "https://rawdadonia.plugin-erp.com",
+        "branchId": "25356d8429172b13",
+        "activityType": "Public",
+        "discountLevel": "Transaction",
+        "taxPolicy": "ItemBased",
+        "stocktakingMethod": "Continuous"
+      },
+      "profile": "business-68e0350d6057b7ba",
+      "evidenceLog": "target/policy-public-transaction-item_based-continuous-live.log"
+    },
+    {
+      "policies": {
+        "origin": "https://rawdadonia.plugin-erp.com",
+        "branchId": "af1ed337829676e6",
+        "activityType": "Public",
+        "discountLevel": "Transaction",
+        "taxPolicy": "PriceIncluded",
+        "stocktakingMethod": "Periodic"
+      },
+      "profile": "business-5656e394645bcc1f",
+      "evidenceLog": "target/policy-public-transaction-price_included-periodic-live.log"
+    },
+    {
+      "policies": {
+        "origin": "https://rawdadonia.plugin-erp.com",
+        "branchId": "e5b916852b1c97c3",
+        "activityType": "Public",
+        "discountLevel": "Transaction",
+        "taxPolicy": "PriceIncluded",
+        "stocktakingMethod": "Continuous"
+      },
+      "profile": "business-2ad2d83beede7e53",
+      "evidenceLog": "target/policy-public-transaction-price_included-continuous-live.log"
+    },
+    {
+      "policies": {
+        "origin": "https://rawdadonia.plugin-erp.com",
+        "branchId": "3343d85e6f48d93b",
+        "activityType": "Public",
+        "discountLevel": "Items",
+        "taxPolicy": "NetBased",
+        "stocktakingMethod": "Periodic"
+      },
+      "profile": "business-015368ce5306d39d",
+      "evidenceLog": "target/policy-public-items-net_based-periodic-live.log"
+    },
+    {
+      "policies": {
+        "origin": "https://rawdadonia.plugin-erp.com",
+        "branchId": "3ee528402e558d7e",
+        "activityType": "Public",
+        "discountLevel": "Items",
+        "taxPolicy": "NetBased",
+        "stocktakingMethod": "Continuous"
+      },
+      "profile": "business-e079178aa502a757",
+      "evidenceLog": "target/policy-public-items-net_based-continuous-live.log"
+    },
+    {
+      "policies": {
+        "origin": "https://rawdadonia.plugin-erp.com",
+        "branchId": "bb2c7df0a76bc63f",
+        "activityType": "Public",
+        "discountLevel": "Items",
+        "taxPolicy": "ItemBased",
+        "stocktakingMethod": "Periodic"
+      },
+      "profile": "business-b4e6e81a613171b4",
+      "evidenceLog": "target/policy-public-items-item_based-periodic-live.log"
+    },
+    {
+      "policies": {
+        "origin": "https://rawdadonia.plugin-erp.com",
+        "branchId": "6877487629e58ed3",
+        "activityType": "Public",
+        "discountLevel": "Items",
+        "taxPolicy": "ItemBased",
+        "stocktakingMethod": "Continuous"
+      },
+      "profile": "business-201e5c6132cbfa0f",
+      "evidenceLog": "target/policy-public-items-item_based-continuous-live.log"
+    },
+    {
+      "policies": {
+        "origin": "https://rawdadonia.plugin-erp.com",
+        "branchId": "232ea3bd5eefc217",
+        "activityType": "Public",
+        "discountLevel": "Items",
+        "taxPolicy": "PriceIncluded",
+        "stocktakingMethod": "Periodic"
+      },
+      "profile": "business-a6ab15ab60a12caa",
+      "evidenceLog": "target/policy-public-items-price_included-periodic-live.log"
+    },
+    {
+      "policies": {
+        "origin": "https://rawdadonia.plugin-erp.com",
+        "branchId": "a70bac4d3dabb090",
+        "activityType": "Public",
+        "discountLevel": "Items",
+        "taxPolicy": "PriceIncluded",
+        "stocktakingMethod": "Continuous"
+      },
+      "profile": "business-ee465186fc8d9b79",
+      "evidenceLog": "target/policy-public-items-price_included-continuous-live.log"
+    }
+  ]
+}

@@ -16,6 +16,7 @@ public final class UnderReviewCoverageTest extends BaseTest {
     private SalesModulePage page;
     private SalesTestData.Record item, customer;
     private String marker;
+    private String documentRoute;
     private BigDecimal before;
 
     @BeforeClass(alwaysRun = true)
@@ -40,7 +41,15 @@ public final class UnderReviewCoverageTest extends BaseTest {
         var agent = refs.agent();
         before = new BigDecimal(refs.balance(item, 1).toString());
         marker = documents.reserveName("UnderReviews", "under-review");
-        page.slOpen("underReview/new");
+        documentRoute =
+                "Concrete"
+                                .equals(
+                                        Plugin_ERP.Util.VueComponentAccess.execute(
+                                                driver,
+                                                "return erpVue.root().$store.getters['app/currentBranch']?.activityType"))
+                        ? "concrete-under-review"
+                        : "underReview";
+        page.slOpen(documentRoute + "/new");
         page.slFormReady();
         documents.installCapture();
         page.slChoose("المخزن", refs.store(1).name());
@@ -48,7 +57,9 @@ public final class UnderReviewCoverageTest extends BaseTest {
         page.slChoose("العميل", customer.name());
         page.slChoose("مندوب", agent.name());
         page.slNotes(marker);
-        page.slAddPicker(item.name());
+        if (documentRoute.equals("concrete-under-review"))
+            page.slAddBarcode(item.values().get("mainUnitBarcode").toString(), item.name());
+        else page.slAddPicker(item.name());
         page.slQuantity(item.name(), "3");
     }
 
@@ -59,6 +70,24 @@ public final class UnderReviewCoverageTest extends BaseTest {
         Assert.assertEquals(stored.get("notes"), marker);
         Assert.assertEquals(stored.get("dealerId"), customer.id());
         Assert.assertEquals(stored.get("storeId"), refs.store(1).id());
+        if (documentRoute.equals("concrete-under-review"))
+            Assert.assertEquals(
+                    record.values().get("isConcrete"),
+                    Boolean.TRUE,
+                    "The native Concrete save request must retain its document kind");
+        io.qameta.allure.Allure.addAttachment(
+                "Owned under-review document",
+                "application/json",
+                new org.json.JSONObject(
+                                Map.of(
+                                        "route",
+                                        documentRoute,
+                                        "sent",
+                                        record.values(),
+                                        "stored",
+                                        stored))
+                        .toString(2),
+                ".json");
         var lines = (List<?>) stored.get("lines");
         Assert.assertEquals(lines.size(), 1);
         Assert.assertEquals(((Map<?, ?>) lines.get(0)).get("itemId"), item.id());
@@ -86,7 +115,32 @@ public final class UnderReviewCoverageTest extends BaseTest {
         prepare();
         var saved = save();
         page.slDismiss();
-        page.slEdit("underReview", saved.id(), marker, item.name());
+        try {
+            page.slEdit(documentRoute, saved.id(), marker, item.name());
+        } catch (org.openqa.selenium.TimeoutException failure) {
+            var route =
+                    Plugin_ERP.Util.VueComponentAccess.execute(
+                            driver,
+                            """
+                const r=erpVue.root()?.$router?.currentRoute,vm=r?.matched?.at(-1)?.instances?.default;
+                return {path:r?.path,params:r?.params,componentId:vm?.id,selectedItem:vm?.selectedItem,
+                  loaded:vm?._isMounted,bodyText:vm?.$el?.innerText};
+                """);
+            io.qameta.allure.Allure.addAttachment(
+                    "Under-review native reopen diagnostics",
+                    "application/json",
+                    new org.json.JSONObject(
+                                    Map.of(
+                                            "route",
+                                            route,
+                                            "stored",
+                                            documents.read(saved),
+                                            "expectedId",
+                                            saved.id()))
+                            .toString(2),
+                    ".json");
+            throw failure;
+        }
         Assert.assertEquals(page.slDocument().get("id"), saved.id());
         Assert.assertEquals(page.slDocument().get("notes"), marker);
     }

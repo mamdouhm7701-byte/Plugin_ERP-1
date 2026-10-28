@@ -59,6 +59,74 @@ public final class RestaurantAdditionalTaxTest {
         same(result.net(), "460");
     }
 
+    @DataProvider
+    public Object[][] minimumPerUnitExamples() {
+        return new Object[][] {
+            {TaxPolicy.NET_BASED, "10", "1", "0", "25", "35", "5.25", "40.25"},
+            {TaxPolicy.NET_BASED, "10", "3", "0", "75", "105", "15.75", "120.75"},
+            {TaxPolicy.PRICE_INCLUDED, "11.5", "1", "0", "25", "35", "5.25", "40.25"},
+            {TaxPolicy.PRICE_INCLUDED, "11.5", "3", "0", "75", "105", "15.75", "120.75"},
+            {TaxPolicy.ITEM_BASED, "10", "3", "0", "75", "105", "15.75", "120.75"},
+            {TaxPolicy.NET_BASED, "25", "3", "0", "75", "150", "22.5", "172.5"},
+            {TaxPolicy.NET_BASED, "30", "3", "0", "90", "180", "27", "207"},
+            {TaxPolicy.NET_BASED, "30", "3", "18", "75", "147", "22.05", "169.05"},
+            {TaxPolicy.NET_BASED, "10", "0.5", "0", "12.5", "17.5", "2.625", "20.125"}
+        };
+    }
+
+    @Test(dataProvider = "minimumPerUnitExamples")
+    public void minimumAdditionalTaxIsAppliedPerDiscountedUnitBeforeQuantity(
+            TaxPolicy policy,
+            String price,
+            String quantity,
+            String discount,
+            String additional,
+            String base,
+            String vat,
+            String net) {
+        int precision = quantity.equals("0.5") ? 3 : 2;
+        var result =
+                RestaurantAdditionalTaxCalculator.calculate(
+                        List.of(
+                                new RestaurantAdditionalTaxCalculator.Line(
+                                        new BigDecimal(quantity),
+                                        new BigDecimal(price),
+                                        true,
+                                        new BigDecimal(discount))),
+                        policy,
+                        true,
+                        new BigDecimal("100"),
+                        precision);
+        same(result.additionalTax(), additional);
+        same(result.beforeVat(), base);
+        same(result.vat(), vat);
+        same(result.net(), net);
+    }
+
+    @Test
+    public void minimumDoesNotTaxNonSubjectItemsOrDisabledAdditionalTax() {
+        var line =
+                new RestaurantAdditionalTaxCalculator.Line(
+                        new BigDecimal("3"), new BigDecimal("10"), false);
+        var result =
+                RestaurantAdditionalTaxCalculator.calculate(
+                        List.of(line), TaxPolicy.NET_BASED, true, new BigDecimal("100"), 2);
+        same(result.additionalTax(), "0");
+        same(result.net(), "34.5");
+        var subject =
+                new RestaurantAdditionalTaxCalculator.Line(
+                        new BigDecimal("3"), new BigDecimal("10"), true);
+        same(
+                RestaurantAdditionalTaxCalculator.calculate(
+                                List.of(subject),
+                                TaxPolicy.NET_BASED,
+                                false,
+                                new BigDecimal("100"),
+                                2)
+                        .additionalTax(),
+                "0");
+    }
+
     @Test
     public void invalidInputsAreRejected() {
         Assert.expectThrows(

@@ -1,0 +1,12 @@
+{
+  "fault": "EXPECTED_POST_CREATE_VERIFICATION_FAILURE",
+  "branchCreated": true,
+  "testsStarted": false,
+  "cleanupVerified": true,
+  "evidenceLog": "target/failed-preparation-cleanup-proof-live.log",
+  "run": "target/validation/business-5d773c17-1545-40a9-89fd-46db54af3156",
+  "cleanup": {
+    "branchId": "157b8518e84c7cf6",
+    "status": "DELETED"
+  }
+}

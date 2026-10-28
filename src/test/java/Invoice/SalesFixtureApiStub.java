@@ -15,7 +15,9 @@ final class SalesFixtureApiStub {
     int branchUnavailableReads;
     boolean usedAccountTree;
     boolean omitMovementListNotes;
+    boolean omitMovementListStore;
     boolean rejectConcreteInvoiceWhileDeliveryExists;
+    boolean rejectContractWhileInvoiceExists;
     boolean customerGetAlways500, customerGet500WhenMissing;
     final Map<String, Map<String, Object>> records = new LinkedHashMap<>();
     final List<String> deletes = new ArrayList<>();
@@ -138,7 +140,8 @@ final class SalesFixtureApiStub {
         }
         if (action.equals("get")
                 && (endpoint.startsWith("SalesTransactions?")
-                        || endpoint.startsWith("ConcreteDelivery?"))) {
+                        || endpoint.startsWith("ConcreteDelivery?")
+                        || endpoint.startsWith("PurchaseLists?"))) {
             if (failMovementLookup) return Map.of("error", "Lookup unavailable", "status", 503);
             var rows =
                     records.values().stream()
@@ -152,6 +155,7 @@ final class SalesFixtureApiStub {
                                     r -> {
                                         var summary = new LinkedHashMap<>(r);
                                         if (omitMovementListNotes) summary.remove("notes");
+                                        if (omitMovementListStore) summary.remove("storeId");
                                         return summary;
                                     })
                             .toList();
@@ -205,6 +209,17 @@ final class SalesFixtureApiStub {
                 && links.stream().anyMatch(link -> records.containsKey(String.valueOf(link)))) {
             return Map.of("error", "Concrete invoice is used by its delivery", "status", 400);
         }
+        if (rejectContractWhileInvoiceExists
+                && endpoint.equals("ItemTransactions-Contract")
+                && records.values().stream()
+                        .anyMatch(
+                                record ->
+                                        id.equals(record.get("sourceTransactionId"))
+                                                && "Contract"
+                                                        .equals(
+                                                                record.get(
+                                                                        "sourceTransactionType"))))
+            return Map.of("error", "Contract is used by its invoice", "status", 400);
         if (crashAtDelete > 0 && deletes.size() == crashAtDelete)
             throw new Error("Simulated process interruption");
         if (endpoint.equals("ItemTransactions-Sales") && rejectMovement)

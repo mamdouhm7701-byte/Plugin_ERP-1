@@ -1,0 +1,29 @@
+{
+  "activity": "CarShowroom",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "e0f71d0628ef2f01",
+  "profileFingerprint": "a8f3075aa0739edd5082fd8f3e5df446c3c636f4a7799466749248f92cd90752",
+  "profile": "business-340454d019d72969",
+  "policies": {
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "branchId": "e0f71d0628ef2f01",
+    "activityType": "CarShowroom",
+    "discountLevel": "Transaction",
+    "taxPolicy": "NetBased",
+    "stocktakingMethod": "Periodic"
+  },
+  "evidenceLog": "target/verified-business-car_showroom-live.log",
+  "capturedFromVerifiedRun": true,
+  "branchPreparation": "Fresh API branch per run",
+  "route": "#/car-colors",
+  "caseClass": "CoverageTest.ActivityMasterLifecycleTest",
+  "journeys": [
+    "Create/read/reopen/update exact owned CarColors with automatic code; cancel then confirm deletion and verify absence"
+  ],
+  "cleanupJournals": [
+    "target/basic-data-fixtures/c56fa793-d75.json"
+  ]
+}

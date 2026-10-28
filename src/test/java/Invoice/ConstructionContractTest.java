@@ -108,13 +108,6 @@ public final class ConstructionContractTest extends SalesScenarioTest {
         page.slDismiss();
     }
 
-    private static BigDecimal customerBalance(Map<String, Object> value) {
-        return number(value.get("currentDebit"))
-                .add(number(value.get("prevDebit")))
-                .subtract(number(value.get("currentCredit")))
-                .subtract(number(value.get("prevCredit")));
-    }
-
     @Override
     protected List<SalesTestData.Record> capture() {
         return ActivityDocumentCapture.collect(data, page, marker, ENDPOINT);

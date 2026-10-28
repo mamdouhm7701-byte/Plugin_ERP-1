@@ -51,7 +51,9 @@ public final class BranchSessionSelector {
                     if (toggles.size() != 1)
                         throw new IllegalStateException(
                                 "Selected branch menu is missing or ambiguous");
-                    toggles.getFirst().click();
+                    // Native keyboard activation also works while dashboard toasts cover the
+                    // header.
+                    toggles.getFirst().sendKeys(Keys.ENTER);
                     return true;
                 });
         By option =
@@ -68,7 +70,9 @@ public final class BranchSessionSelector {
                     if (options.isEmpty()) return false;
                     if (options.size() != 1)
                         throw new IllegalStateException("Selected branch name is ambiguous");
-                    options.getFirst().click();
+                    // A long native branch menu can extend below the fixed header viewport.
+                    // Activate the exact resolved link using its normal keyboard behavior.
+                    options.getFirst().sendKeys(Keys.ENTER);
                     return true;
                 });
         ready.until(

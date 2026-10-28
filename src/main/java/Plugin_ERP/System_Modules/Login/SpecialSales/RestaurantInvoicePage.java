@@ -40,20 +40,22 @@ public final class RestaurantInvoicePage extends SpecialSalesPage {
     @Step("إضافة الصنف {name} بالباركود {barcode}")
     public void addItem(String name, String barcode, String category) {
         try {
-        ready.until(
-                d ->
-                        Boolean.TRUE.equals(
-                                js(
-                                        """
+            ready.until(
+                    d ->
+                            Boolean.TRUE.equals(
+                                    js(
+                                            """
                                         const queue=[erpVue.root()];
                                         while(queue.length){const vm=queue.shift();if(!vm)continue;queue.push(...(erpVue.children(vm)||[]));
                                           if(Array.isArray(vm.$data?.allItems))return !vm.isLoadingItems&&vm.allItems.some(item=>item.arabicName===arguments[0]||item.englishName===arguments[0]);
                                         }return false;
                                         """,
-                                        name)));
+                                            name)));
         } catch (TimeoutException failure) {
             try {
-                Object catalog = js("""
+                Object catalog =
+                        js(
+                                """
                     const queue=[erpVue.root()];
                     while(queue.length){const vm=queue.shift();queue.push(...(erpVue.children(vm)||[]));
                       if(Array.isArray(vm.$data?.allItems))return {
@@ -62,9 +64,13 @@ public final class RestaurantInvoicePage extends SpecialSalesPage {
                         ownItems:vm.allItems.filter(item=>(item.arabicName||'').startsWith('QA-SP-')).map(item=>({id:item.id,name:item.arabicName,categoryId:item.categoryId})),
                         methods:Object.fromEntries(Object.entries(vm.$options.methods||{}).filter(([key])=>/item|categor|load/i.test(key)).map(([key,value])=>[key,String(value)]))};
                     }return {error:'Restaurant catalog component is missing'};
-                    """,name);
-                io.qameta.allure.Allure.addAttachment("Restaurant catalog readiness", "application/json",
-                        org.json.simple.JSONValue.toJSONString(catalog), ".json");
+                    """,
+                                name);
+                io.qameta.allure.Allure.addAttachment(
+                        "Restaurant catalog readiness",
+                        "application/json",
+                        org.json.simple.JSONValue.toJSONString(catalog),
+                        ".json");
             } catch (RuntimeException diagnosticsFailure) {
                 failure.addSuppressed(diagnosticsFailure);
             }

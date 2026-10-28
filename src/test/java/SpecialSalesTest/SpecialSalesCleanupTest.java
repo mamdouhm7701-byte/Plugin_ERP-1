@@ -62,6 +62,16 @@ public class SpecialSalesCleanupTest {
             data.beginScenario();
             var customer = data.customer();
             var defaults = data.configureOwnedDefaults(customer);
+            Assert.assertTrue(
+                    ((List<?>) api.branch.get("stores"))
+                            .stream()
+                                    .anyMatch(
+                                            value ->
+                                                    value instanceof Map<?, ?> store
+                                                            && defaults.values()
+                                                                    .get("storeId")
+                                                                    .equals(store.get("storeId"))),
+                    "Configuring restaurant defaults must retain the newly owned branch store");
             Assert.assertEquals(api.branch.get("defaultCustomerId"), customer.id());
             data.restoreDefaults(defaults);
             Assert.assertEquals(api.branch.get("defaultCustomerId"), "existing-customer");

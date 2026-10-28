@@ -197,6 +197,9 @@ final class SpecialSalesTestData implements AutoCloseable {
                             branchId,
                             "QA-SP-defaults-" + suffix,
                             fields("branchId", branchId));
+            // Store creation links it to the branch. Read the branch only after that
+            // change so the default update cannot erase its newly owned membership.
+            var ownedStore = store(1);
             var branch = branchFor(link);
             var record =
                     new Record(
@@ -207,7 +210,7 @@ final class SpecialSalesTestData implements AutoCloseable {
                                     "branchId",
                                     branchId,
                                     "storeId",
-                                    store(1).id(),
+                                    ownedStore.id(),
                                     "customerId",
                                     customer.id(),
                                     "previousStoreId",
@@ -217,7 +220,7 @@ final class SpecialSalesTestData implements AutoCloseable {
             created.add(record);
             journal();
             var update = new LinkedHashMap<>(branch);
-            update.put("defaultStoreId", store(1).id());
+            update.put("defaultStoreId", ownedStore.id());
             update.put("defaultCustomerId", customer.id());
             call("update", "Branches", update);
             syncBranch(branchFor(record));

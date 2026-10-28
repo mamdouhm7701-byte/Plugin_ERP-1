@@ -8,7 +8,31 @@ import javax.swing.*;
 
 /** Native IntelliJ entry; selections remain scoped to this JVM run. */
 final class BusinessRunDialog {
-    record Selection(BusinessRunRequest business, String level, String execution, boolean demo) {}
+    record Selection(
+            BusinessRunRequest business,
+            String level,
+            String execution,
+            BusinessRunTarget target,
+            int workers) {
+        Selection {
+            if (workers < 1 || workers > 6)
+                throw new IllegalArgumentException("اختر من1 إلى6 متصفحات");
+            java.util.Objects.requireNonNull(target);
+        }
+
+        Selection(BusinessRunRequest business, String level, String execution, boolean demo) {
+            this(
+                    business,
+                    level,
+                    execution,
+                    demo
+                            ? BusinessRunTarget.configured("Cloud", "Demo")
+                            : BusinessRunTarget.configured(
+                                    Plugin_ERP.Util.PropertyReader.getProperty("Environment"),
+                                    Plugin_ERP.Util.PropertyReader.getProperty("Tenant")),
+                    1);
+        }
+    }
 
     private record Option<T>(String label, T value) {
         public String toString() {
@@ -64,11 +88,43 @@ final class BusinessRunDialog {
                                 additional.setEnabled(restaurant);
                                 if (!restaurant) additional.setSelected(false);
                             });
-                    var environment =
-                            new JComboBox<>(
-                                    new String[] {
-                                        "Demo — Cloud", "إعدادات البيئة الحالية في المشروع"
-                                    });
+                    var properties = Plugin_ERP.Util.PropertyReader.loadProperties();
+                    var environment = new JComboBox<>(new String[] {"Cloud", "Test"});
+                    environment.setSelectedItem(
+                            Plugin_ERP.Util.PropertyReader.getProperty("Environment"));
+                    var tenant = new JComboBox<String>();
+                    tenant.setEditable(true);
+                    var url = new JTextField(40);
+                    var username = new JTextField(25);
+                    var password = new JPasswordField(25);
+                    var workers = new JSpinner(new SpinnerNumberModel(1, 1, 6, 1));
+                    Runnable refreshTenants =
+                            () -> {
+                                String env = environment.getSelectedItem().toString();
+                                tenant.removeAllItems();
+                                BusinessRunTarget.tenants(properties, env).forEach(tenant::addItem);
+                                String preferred =
+                                        env.equals("Test")
+                                                ? "TestURL"
+                                                : Plugin_ERP.Util.PropertyReader.getProperty(
+                                                        "Tenant");
+                                if (preferred != null) tenant.setSelectedItem(preferred);
+                                url.setText(
+                                        java.util.Objects.toString(
+                                                properties.getProperty(
+                                                        java.util.Objects.toString(
+                                                                tenant.getSelectedItem(), "")),
+                                                ""));
+                            };
+                    tenant.addActionListener(
+                            e -> {
+                                String key =
+                                        java.util.Objects.toString(
+                                                tenant.getEditor().getItem(), "");
+                                url.setText(properties.getProperty(key, ""));
+                            });
+                    environment.addActionListener(e -> refreshTenants.run());
+                    refreshTenants.run();
                     var level =
                             new JComboBox<>(
                                     new String[] {
@@ -84,6 +140,20 @@ final class BusinessRunDialog {
                     List.of(
                                     new JLabel("بيئة التشغيل"),
                                     environment,
+                                    new JLabel("التننت — اختار الموجود أو اكتب اسمًا جديدًا"),
+                                    tenant,
+                                    new JLabel("رابط البرنامج — يمكن تعديله لهذا التشغيل"),
+                                    url,
+                                    new JLabel(
+                                            "اسم المستخدم — اتركه فارغًا لاستخدام الإعدادات المحلية"),
+                                    username,
+                                    new JLabel(
+                                            "كلمة المرور — اتركها فارغة لاستخدام الإعدادات المحلية"),
+                                    password,
+                                    new JLabel("أقصى عدد متصفحات متزامنة (1–6)"),
+                                    workers,
+                                    new JLabel(
+                                            "الحالات التي تغيّر إعدادات مشتركة تعمل منفردة؛ العدد الفعلي حسب الحالات والرام."),
                                     new JLabel("النشاط"),
                                     activity,
                                     new JLabel("مستوى الخصم"),
@@ -109,31 +179,53 @@ final class BusinessRunDialog {
                     buttons.add(cancel);
                     start.addActionListener(
                             e -> {
-                                var request =
-                                        new BusinessRunRequest(
-                                                (ActivityType)
-                                                        ((Option<?>) activity.getSelectedItem())
-                                                                .value(),
-                                                (DiscountLevel)
-                                                        ((Option<?>) discount.getSelectedItem())
-                                                                .value(),
-                                                (TaxPolicy)
-                                                        ((Option<?>) tax.getSelectedItem()).value(),
-                                                (StocktakingMethod)
-                                                        ((Option<?>) stock.getSelectedItem())
-                                                                .value(),
-                                                additional.isSelected());
-                                result.complete(
-                                        new Selection(
-                                                request,
-                                                level.getSelectedItem().toString(),
-                                                InteractiveTestLauncher.executionType(
-                                                        display.getSelectedItem().toString()),
-                                                environment.getSelectedIndex() == 0));
-                                frame.dispose();
+                                BusinessRunTarget target = null;
+                                try {
+                                    target =
+                                            new BusinessRunTarget(
+                                                    environment.getSelectedItem().toString(),
+                                                    tenant.getEditor().getItem().toString(),
+                                                    url.getText(),
+                                                    username.getText(),
+                                                    password.getPassword());
+                                    target.settings();
+                                    var request =
+                                            new BusinessRunRequest(
+                                                    (ActivityType)
+                                                            ((Option<?>) activity.getSelectedItem())
+                                                                    .value(),
+                                                    (DiscountLevel)
+                                                            ((Option<?>) discount.getSelectedItem())
+                                                                    .value(),
+                                                    (TaxPolicy)
+                                                            ((Option<?>) tax.getSelectedItem())
+                                                                    .value(),
+                                                    (StocktakingMethod)
+                                                            ((Option<?>) stock.getSelectedItem())
+                                                                    .value(),
+                                                    additional.isSelected());
+                                    result.complete(
+                                            new Selection(
+                                                    request,
+                                                    level.getSelectedItem().toString(),
+                                                    InteractiveTestLauncher.executionType(
+                                                            display.getSelectedItem().toString()),
+                                                    target,
+                                                    ((Number) workers.getValue()).intValue()));
+                                    password.setText("");
+                                    frame.dispose();
+                                } catch (IllegalArgumentException invalid) {
+                                    if (target != null) target.clearSecrets();
+                                    JOptionPane.showMessageDialog(
+                                            frame,
+                                            invalid.getMessage(),
+                                            "راجع إعدادات التشغيل",
+                                            JOptionPane.ERROR_MESSAGE);
+                                }
                             });
                     cancel.addActionListener(
                             e -> {
+                                password.setText("");
                                 result.complete(null);
                                 frame.dispose();
                             });
@@ -141,12 +233,24 @@ final class BusinessRunDialog {
                             new java.awt.event.WindowAdapter() {
                                 @Override
                                 public void windowClosed(java.awt.event.WindowEvent event) {
+                                    password.setText("");
                                     result.complete(null);
                                 }
                             });
                     var content = new JPanel(new java.awt.BorderLayout(0, 12));
                     content.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-                    content.add(panel, java.awt.BorderLayout.CENTER);
+                    var scroll = new JScrollPane(panel);
+                    scroll.setPreferredSize(
+                            new java.awt.Dimension(
+                                    720,
+                                    Math.min(
+                                            780,
+                                            java.awt.Toolkit.getDefaultToolkit()
+                                                            .getScreenSize()
+                                                            .height
+                                                    - 180)));
+                    scroll.getVerticalScrollBar().setUnitIncrement(18);
+                    content.add(scroll, java.awt.BorderLayout.CENTER);
                     content.add(buttons, java.awt.BorderLayout.SOUTH);
                     frame.setContentPane(content);
                     frame.pack();

@@ -280,7 +280,7 @@ public abstract class SalesScenarioTest extends BaseTest {
                 "Expected " + expected + ", actual " + actual);
     }
 
-    private static BigDecimal customerBalance(Map<String, Object> value) {
+    protected static BigDecimal customerBalance(Map<String, Object> value) {
         return number(value.get("currentDebit"))
                 .add(number(value.get("prevDebit")))
                 .subtract(number(value.get("currentCredit")))

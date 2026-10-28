@@ -1,0 +1,21 @@
+{
+  "testsPassed": 3,
+  "cleanup": {
+    "branchId": "7a527f53a53625be",
+    "status": "DELETED"
+  },
+  "profile": {
+    "name": "business-6cc7ae93465d88ed",
+    "fingerprint": "c1ed8c2625ef5e294bc5d28857f44ecebe15ae75ff70ecc6ebeb6d45d5cdeab8",
+    "expected": {
+      "origin": "https://rawdadonia.plugin-erp.com",
+      "branchId": "7a527f53a53625be",
+      "activityType": "Public",
+      "discountLevel": "Transaction",
+      "taxPolicy": "NetBased",
+      "stocktakingMethod": "Periodic"
+    }
+  },
+  "run": "C:/Users/pcx/Desktop/Plugin_ERP/target/validation/business-1f0dbd76-8bbd-4086-9fd1-5f9d6b064810",
+  "status": "DELETED"
+}

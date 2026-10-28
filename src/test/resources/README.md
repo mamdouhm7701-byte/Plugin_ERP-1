@@ -4,6 +4,8 @@
 
 ملفات التشغيل الأساسية موجودة مباشرة في هذا المجلد:
 
+تحديث28 أكتوبر2026: ملفات Smoke/Sanity/E2E/Regression تضيف عقود النشاط حسب profile صريح عبر `BusinessLevelSuitePolicy`. للمطاعم يجب تحديد `business.additionalTax=true` أو `false`؛ مدخل **ERP - Business run** يجهز الفرع ويضبط الاختيارات تلقائيًا. تشمل الإضافية الحد الأدنى25 لكل وحدة والكميات1 و3، مع الفصل بين فحوص المسودة ورحلات الحفظ الفعلية في E2E. دون profile تبقى الحالات الأصلية. تفاصيل التوزيع والحدود في `docs/testing/BUSINESS_RUNNER_AR.md`؛ لا تستخدم profiles فروع التجارب التي حُذفت.
+
 تحديث24 أكتوبر2026: `smoke-testng.xml` يختار13 حالة، و`sanity-testng.xml` يختار57، و`e2e-testng.xml` يختار41 رحلة، و`regression-testng.xml` يختار1124 دالة دون تكرار اختيار الكلاس والدالة داخل المجموعة. يضم Regression الحالات نفسها عبر مداخل الموديولات و`coverage-expansion-testng.xml`؛ لا تضف E2E أو Sanity كاملتين إليه مرة أخرى.
 
 `coverage-expansion-testng.xml` للشاشات الجديدة، و`coverage-observations-testng.xml` لفحوص الملاحظات، و`coverage-verification-testng.xml` يجمعهما في75 حالة. هذه مداخل تحقق مستهدفة، وليست بديلًا عن تشغيل المستويات الأربعة كاملة. `coverage-recovery-testng.xml` يستعيد فقط سجلات المالك المحددة صراحةً؛ ليس تنظيفًا عامًا لبيانات البيئة.

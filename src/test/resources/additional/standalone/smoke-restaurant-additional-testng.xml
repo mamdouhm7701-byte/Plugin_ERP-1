@@ -3,4 +3,5 @@
 <!-- Mandatory restaurant-specific acceptance when additional tax is enabled; explicit matching profile required. -->
 <suite name="Smoke - Restaurant additional tax" parallel="none"><test name="Additional tax subject and mixed items"><classes>
 <class name="SpecialSalesTest.RestaurantAdditionalTaxSmokeTest"/>
+<class name="SpecialSalesTest.RestaurantMinimumAdditionalTaxTest"/>
 </classes></test></suite>

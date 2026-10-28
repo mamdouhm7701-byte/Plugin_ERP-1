@@ -43,6 +43,8 @@ public final class RestaurantAdditionalTaxCalculator {
             BigDecimal vat,
             BigDecimal net) {}
 
+    private static final BigDecimal MINIMUM_ADDITIONAL_TAX_PER_UNIT = new BigDecimal("25");
+
     private RestaurantAdditionalTaxCalculator() {}
 
     public static Totals calculate(
@@ -70,7 +72,9 @@ public final class RestaurantAdditionalTaxCalculator {
                     enabled && line.subjectToAdditionalTax() && additionalPercentage.signum() > 0;
             BigDecimal extra =
                     applied
-                            ? base.multiply(additionalPercentage).movePointLeft(2)
+                            ? base.multiply(additionalPercentage)
+                                    .movePointLeft(2)
+                                    .max(MINIMUM_ADDITIONAL_TAX_PER_UNIT.multiply(line.quantity()))
                             : BigDecimal.ZERO;
             additional = additional.add(extra);
             if (policy != TaxPolicy.ITEM_BASED || !line.vatExempt() || applied)

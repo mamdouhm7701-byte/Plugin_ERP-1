@@ -13,6 +13,13 @@ import org.testng.annotations.*;
 
 /** Explicit activity smoke: mounts restaurant-specific screens without creating transactions. */
 public final class RestaurantScreenAccessTest extends BaseTest {
+    private SpecialSalesTestData prerequisites;
+
+    @AfterClass(alwaysRun = true)
+    public void restoreOwnedScreenPrerequisites() {
+        if (prerequisites != null) prerequisites.close();
+    }
+
     @DataProvider
     public Object[][] screens() {
         return new Object[][] {
@@ -31,8 +38,26 @@ public final class RestaurantScreenAccessTest extends BaseTest {
                 baseline.activityType(),
                 ActivityType.RESTAURANT,
                 "Activity access probe must not change branch settings");
-        if (route.equals("restaurant-menu")) new RestaurantInvoicePage(driver).open();
-        else new ScreenPage(driver).open(route, title);
+        if (route.equals("restaurant-menu")) {
+            prerequisites = new SpecialSalesTestData(driver);
+            prerequisites.beginScenario();
+            var customer = prerequisites.customer();
+            prerequisites.configureOwnedDefaults(customer);
+            new RestaurantInvoicePage(driver).open();
+            io.qameta.allure.Allure.addAttachment(
+                    "Owned restaurant navigation prerequisites",
+                    "application/json",
+                    new org.json.JSONObject(
+                                    Map.of(
+                                            "customer",
+                                            customer.name(),
+                                            "store",
+                                            prerequisites.store(1).name(),
+                                            "branchId",
+                                            baseline.branchId()))
+                            .toString(2),
+                    ".json");
+        } else new ScreenPage(driver).open(route, title);
         new BranchProfile("restaurant-screen-access", baseline)
                 .verify(BranchProfileReader.capture(driver, Duration.ofSeconds(30)));
         Path evidence = Path.of("target/activity-screen-access/Restaurant", route + ".json");

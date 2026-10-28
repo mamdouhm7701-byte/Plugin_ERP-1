@@ -1,0 +1,35 @@
+{
+  "activity": "Concrete",
+  "route": "#/concrete-sales-invoice/new",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "f4dc00c00a958fba",
+  "profileFingerprint": "fa43362cb914c2198cd0bcad0e2e99aac5e210fd12a41b7025ef3aa0e1e4c27a",
+  "profile": "business-0d45524ce12ded12",
+  "policies": {
+    "stocktakingMethod": "Periodic",
+    "branchId": "f4dc00c00a958fba",
+    "discountLevel": "Transaction",
+    "activityType": "Concrete",
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "taxPolicy": "NetBased"
+  },
+  "caseClass": "Invoice.ConcreteStockJourneyTest",
+  "journeys": [
+    "Owned delivery invoice quantity1 net115 VAT15; stock remains999; exact submitted delivery ID; reopened invoice identities; server delivery no longer available for billing",
+    "Direct concrete invoice persists without consuming stock"
+  ],
+  "evidenceLog": "target/final-business-concrete-live.log",
+  "cleanupJournals": [
+    "target/basic-data-fixtures/f9cbb27b-020.json",
+    "target/basic-data-attempts/f9cbb27b-020.json",
+    "target/sales-fixtures/5b1d36d7-d32.json",
+    "target/sales-attempts/5b1d36d7-d32.json"
+  ],
+  "resultFiles": 3,
+  "capturedFromVerifiedRun": true,
+  "evidenceScope": "Complete original native Business suite: 21 passed; all owned journals empty",
+  "branchPreparation": "Fresh API branch per run"
+}

@@ -1,0 +1,38 @@
+{
+  "activity": "Restaurant",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "53b58e5dbf79fa39",
+  "profileFingerprint": "0cc64442550d821b9666e546637ec4fcff9279e914130ac95a55caa378b06756",
+  "profile": "business-a3662fca9d722442",
+  "policies": {
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "branchId": "53b58e5dbf79fa39",
+    "activityType": "Restaurant",
+    "discountLevel": "Transaction",
+    "taxPolicy": "NetBased",
+    "stocktakingMethod": "Periodic"
+  },
+  "additionalTax": false,
+  "evidenceLog": "target/final-expanded-restaurant-live.log",
+  "cleanupJournals": [
+    "target/special-sales-fixtures/60c1495c-29a.json",
+    "target/special-sales-attempts/60c1495c-29a.json",
+    "target/special-sales-fixtures/20818ff8-930.json",
+    "target/special-sales-attempts/20818ff8-930.json",
+    "target/special-sales-fixtures/80e4b0c6-a0f.json",
+    "target/special-sales-attempts/80e4b0c6-a0f.json",
+    "target/basic-data-fixtures/174e451b-a52.json",
+    "target/basic-data-attempts/174e451b-a52.json"
+  ],
+  "capturedFromVerifiedRun": true,
+  "branchPreparation": "Fresh API branch per run",
+  "evidenceScope": "Complete original native Business suite: 9 passed; all owned journals empty",
+  "route": "#/restaurant-orders",
+  "caseClass": "SpecialSalesTest.KitchenOrdersCoverageTest",
+  "journeys": [
+    "Hold owned internal table order; DirectDelivery kitchen completion and close; persisted line/order status; stock decreases once only"
+  ]
+}

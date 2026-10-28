@@ -1,0 +1,64 @@
+{
+  "testEndpoints": [
+    "NewTestURL",
+    "TestURL"
+  ],
+  "suites": [
+    {
+      "name": "Smoke / parallel",
+      "parallel": "classes",
+      "workers": 3,
+      "classes": [
+        "CoverageTest.TablesCoverageTest",
+        "Invoice.UnderReviewCoverageTest",
+        "StoreTest.StocktakingCoverageTest",
+        "ProductsTest.UnitTest",
+        "ProductsTest.AddProductsTest",
+        "Invoice.SalesInvoiceCoverageTest",
+        "Purches.PurchaseInvoiceCoverageTest",
+        "StoreTest.TransBetweenStoreTest",
+        "FinancialMovementsTest.CustomerReceiptTest"
+      ]
+    },
+    {
+      "name": "Smoke / exclusive",
+      "parallel": "none",
+      "workers": 1,
+      "classes": [
+        "CoverageTest.PermissionsCoverageTest",
+        "DealerModelTest.CustomersTest",
+        "SpecialSalesTest.PointOfSaleTest",
+        "SpecialSalesTest.RestaurantInvoiceTest"
+      ]
+    },
+    {
+      "name": "Selected Restaurant business / Smoke / verify",
+      "parallel": "none",
+      "workers": 1,
+      "classes": [
+        "SuiteSupport.BusinessProfileVerificationTest"
+      ]
+    },
+    {
+      "name": "Selected Restaurant business / Smoke / exclusive",
+      "parallel": "none",
+      "workers": 1,
+      "classes": [
+        "SpecialSalesTest.SelectedRestaurantPolicyTest",
+        "SpecialSalesTest.RestaurantMinimumAdditionalTaxTest",
+        "SpecialSalesTest.RestaurantAdditionalTaxSmokeTest"
+      ]
+    }
+  ],
+  "requestedMaximum": 3,
+  "liveExecution": false,
+  "cloudTenants": [
+    "Binfares",
+    "Demo",
+    "Edu",
+    "Hesba",
+    "Hotfix"
+  ],
+  "validationLog": "target/business-target-workers-release-ci.log",
+  "localTestsPassed": 836
+}

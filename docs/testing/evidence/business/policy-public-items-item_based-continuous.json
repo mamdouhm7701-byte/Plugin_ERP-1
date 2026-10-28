@@ -1,0 +1,31 @@
+{
+  "activity": "Public",
+  "route": "#/invoice/new",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "6877487629e58ed3",
+  "profileFingerprint": "01d9c0168d9e2ccb94b5be34e2259127025b61f359e8aa8cb890cf4dc6e63e3b",
+  "profile": "business-201e5c6132cbfa0f",
+  "policies": {
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "branchId": "6877487629e58ed3",
+    "activityType": "Public",
+    "discountLevel": "Items",
+    "taxPolicy": "ItemBased",
+    "stocktakingMethod": "Continuous"
+  },
+  "caseClass": "Invoice.SelectedBranchSalesPolicyTest",
+  "journeys": [
+    "Save/read taxable items and supported exemptions; selected discount level before VAT; independent totals and stock"
+  ],
+  "evidenceLog": "target/policy-public-items-item_based-continuous-live.log",
+  "cleanupJournals": [
+    "target/sales-fixtures/ad181f9c-b23.json",
+    "target/sales-attempts/ad181f9c-b23.json"
+  ],
+  "capturedFromVerifiedRun": true,
+  "branchPreparation": "Fresh API branch per run",
+  "evidenceScope": "Original native Business suite: 3/3 passed; accounting entries not inferred from quantity checks"
+}

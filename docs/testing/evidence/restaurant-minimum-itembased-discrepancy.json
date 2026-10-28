@@ -1,0 +1,33 @@
+{
+  "status": "CONFIRMED_BUSINESS_FAILURE",
+  "policy": "ItemBased",
+  "itemTaxPersisted": 15,
+  "subjectToAdditional": true,
+  "evidenceLog": "target/minimum-additional-item_based-live.log",
+  "cases": [
+    {
+      "quantity": 3,
+      "price": "10",
+      "expectedAdditional": 75,
+      "actualAdditional": 75,
+      "expectedVat": 15.75,
+      "actualVat": 9,
+      "expectedNet": 120.75,
+      "actualNet": 114
+    },
+    {
+      "quantity": 1,
+      "price": "10",
+      "expectedAdditional": 25,
+      "actualAdditional": 25,
+      "expectedVat": 5.25,
+      "actualVat": 3,
+      "expectedNet": 40.25,
+      "actualNet": 38
+    }
+  ],
+  "branchCleanup": {
+    "branchId": "851e49c57a618ba5",
+    "status": "DELETED"
+  }
+}

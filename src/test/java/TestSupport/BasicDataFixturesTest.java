@@ -16,6 +16,9 @@ public class BasicDataFixturesTest {
             data.fixture("owned-color", "CarColors", BasicDataFixtures.fields());
             data.fixture("owned-cement", "CementTypes", BasicDataFixtures.fields());
             data.fixture("owned-temperature", "MaxTemperatures", BasicDataFixtures.fields());
+            data.fixture("owned-concrete-car", "Cars", BasicDataFixtures.fields());
+            data.fixture("owned-driver", "Drivers", BasicDataFixtures.fields());
+            data.fixture("owned-project", "Projects", BasicDataFixtures.fields());
         }
         Assert.assertEquals(api.records.keySet(), java.util.Set.of("foreign-casting"));
     }

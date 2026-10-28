@@ -11,6 +11,9 @@
   التشغيل: mvn '-Dsurefire.suiteXmlFiles=src/test/resources/smoke-testng.xml' test
 -->
 <suite name="Smoke - Core ERP availability" parallel="none" configfailurepolicy="continue">
+    <!-- Explicit branch profile adds matching business contracts; ERP - Business run prepares a fresh branch. -->
+    <parameter name="business.level" value="Smoke"/>
+    <listeners><listener class-name="SuiteSupport.BusinessLevelSuitePolicy"/></listeners>
     <test name="Core happy paths" preserve-order="true">
         <classes>
             <class name="CoverageTest.TablesCoverageTest"><methods>

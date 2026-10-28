@@ -399,9 +399,15 @@ public final class SuiteDefinitionsTest {
                 for (var entry : test.getXmlClasses())
                     Assert.assertTrue(
                             classes.add(entry.getName()), "Duplicate additional-tax smoke class");
-        Assert.assertEquals(classes, Set.of("SpecialSalesTest.RestaurantAdditionalTaxSmokeTest"));
+        Assert.assertEquals(
+                classes,
+                Set.of(
+                        "SpecialSalesTest.RestaurantAdditionalTaxSmokeTest",
+                        "SpecialSalesTest.RestaurantMinimumAdditionalTaxTest"));
         var cases = new HashSet<String>();
-        for (var method : Class.forName(classes.iterator().next()).getDeclaredMethods())
+        for (var method :
+                Class.forName("SpecialSalesTest.RestaurantAdditionalTaxSmokeTest")
+                        .getDeclaredMethods())
             if (method.isAnnotationPresent(Test.class)) cases.add(method.getName());
         Assert.assertEquals(
                 cases,
@@ -427,9 +433,14 @@ public final class SuiteDefinitionsTest {
                     Assert.assertTrue(
                             classes.add(entry.getName()), "Duplicate ItemBased smoke class");
         Assert.assertEquals(
-                classes, Set.of("SpecialSalesTest.RestaurantItemBasedAdditionalTaxTest"));
+                classes,
+                Set.of(
+                        "SpecialSalesTest.RestaurantItemBasedAdditionalTaxTest",
+                        "SpecialSalesTest.RestaurantMinimumAdditionalTaxTest"));
         var cases = new HashSet<String>();
-        for (var method : Class.forName(classes.iterator().next()).getDeclaredMethods())
+        for (var method :
+                Class.forName("SpecialSalesTest.RestaurantItemBasedAdditionalTaxTest")
+                        .getDeclaredMethods())
             if (method.isAnnotationPresent(Test.class)) cases.add(method.getName());
         Assert.assertEquals(
                 cases, Set.of("additionalSubjectPaysVatWhileOtherExemptItemRemainsExempt"));

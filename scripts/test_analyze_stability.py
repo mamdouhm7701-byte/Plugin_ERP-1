@@ -114,6 +114,32 @@ class StabilityAnalysisTest(unittest.TestCase):
         self.assertIn("الضريبة", attempt["reason"])
         self.assertEqual(report["verdict"], "REPEATED_FAILURE")
 
+    def test_live_comparison_requires_same_recorded_browser_and_version(self):
+        for i in range(3):
+            self.round(i)
+            folder = self.root / f"round-{i}"
+            (folder / "effective-settings.json").write_text(json.dumps({"activityType": "Restaurant", "workers": 1}), encoding="utf8")
+            (folder / "environment.properties").write_text("Browser=chrome\nBrowser\\ Version=" + ("156" if i != 1 else "155") + "\n", encoding="utf8")
+        self.assertEqual(self.verdict(), "NOT_COMPARABLE")
+        for i in range(3):
+            (self.root / f"round-{i}" / "environment.properties").unlink()
+        self.assertEqual(self.verdict(), "BLOCKED")
+
+    def test_explicit_plan_exclusions_are_not_failed_or_skipped_selected_cases(self):
+        for i in range(3):
+            self.round(i)
+            folder = self.root / f"round-{i}"
+            path = folder / "testng-results.xml"
+            tree = ET.parse(path)
+            tree.getroot().attrib.update(total="2", ignored="1", passed="1", failed="0", skipped="0")
+            tree.write(path, encoding="utf8")
+            (folder / "selection-manifest.json").write_text(json.dumps({"expectedMethods": ["Invoice.sales"],
+                "explicitlyExcludedMethods": ["Invoice.unselected"], "provenance": "CAPTURED_BEFORE_RUN"}), encoding="utf8")
+        self.assertEqual(self.verdict(), "STABLE_PASS")
+        (self.root / "round-1" / "selection-manifest.json").write_text(json.dumps({"expectedMethods": ["Invoice.sales", "Invoice.requiredButMissing"],
+                "explicitlyExcludedMethods": ["Invoice.unselected"]}), encoding="utf8")
+        self.assertEqual(self.verdict(), "BLOCKED")
+
 
 if __name__ == "__main__":
     unittest.main()

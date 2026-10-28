@@ -1,0 +1,226 @@
+[
+  {
+    "source": "src/test/java/Invoice/SalesScenarioTest.java",
+    "methods": [
+      {
+        "name": "save",
+        "workflow": "SalesPersistenceChecks"
+      }
+    ]
+  },
+  {
+    "source": "src/test/java/ProductsTest/ProductScenarioTest.java",
+    "methods": [
+      {
+        "name": "save",
+        "workflow": "ProductPersistenceChecks"
+      },
+      {
+        "name": "verifyReport",
+        "workflow": "ProductPersistenceChecks"
+      }
+    ]
+  },
+  {
+    "source": "src/test/java/FinancialMovementsTest/FinancialScenarioTest.java",
+    "methods": [
+      {
+        "name": "persist",
+        "workflow": "FinancialPersistenceChecks"
+      },
+      {
+        "name": "assertOwnedRelationships",
+        "workflow": "FinancialPersistenceChecks"
+      }
+    ]
+  },
+  {
+    "source": "src/test/java/StoreTest/StoreScenarioTest.java",
+    "methods": [
+      {
+        "name": "baselineMode",
+        "workflow": "StorePreparationSteps"
+      },
+      {
+        "name": "defaultParty",
+        "workflow": "StorePreparationSteps"
+      },
+      {
+        "name": "ownItem",
+        "workflow": "StorePreparationSteps"
+      },
+      {
+        "name": "ownParty",
+        "workflow": "StorePreparationSteps"
+      },
+      {
+        "name": "partyLabel",
+        "workflow": "StorePreparationSteps"
+      },
+      {
+        "name": "prepare",
+        "workflow": "StorePreparationSteps"
+      },
+      {
+        "name": "snapshot",
+        "workflow": "StorePreparationSteps"
+      },
+      {
+        "name": "initial",
+        "workflow": "StorePreparationSteps"
+      },
+      {
+        "name": "fill",
+        "workflow": "StorePreparationSteps"
+      },
+      {
+        "name": "add",
+        "workflow": "StorePreparationSteps"
+      },
+      {
+        "name": "capture",
+        "workflow": "StoreSaveVerification"
+      },
+      {
+        "name": "save",
+        "workflow": "StoreSaveVerification"
+      },
+      {
+        "name": "verifyReport",
+        "workflow": "StoreSaveVerification"
+      },
+      {
+        "name": "sameNumber",
+        "workflow": "StoreSaveVerification"
+      },
+      {
+        "name": "balance",
+        "workflow": "StoreSaveVerification"
+      },
+      {
+        "name": "assertEffect",
+        "workflow": "StoreSaveVerification"
+      },
+      {
+        "name": "create",
+        "workflow": "StoreSaveVerification"
+      },
+      {
+        "name": "partyIdentity",
+        "workflow": "StoreEditingChecks"
+      },
+      {
+        "name": "hasId",
+        "workflow": "StoreEditingChecks"
+      },
+      {
+        "name": "editOwn",
+        "workflow": "StoreEditingChecks"
+      },
+      {
+        "name": "find",
+        "workflow": "StoreEditingChecks"
+      },
+      {
+        "name": "deleteOwn",
+        "workflow": "StoreEditingChecks"
+      },
+      {
+        "name": "required",
+        "workflow": "StoreInputValidation"
+      },
+      {
+        "name": "rejectQuantity",
+        "workflow": "StoreInputValidation"
+      },
+      {
+        "name": "noItems",
+        "workflow": "StoreInputValidation"
+      },
+      {
+        "name": "oldDate",
+        "workflow": "StoreInputValidation"
+      },
+      {
+        "name": "pickerWithoutStore",
+        "workflow": "StoreInputValidation"
+      },
+      {
+        "name": "sameStore",
+        "workflow": "StoreInputValidation"
+      },
+      {
+        "name": "pickerWithoutDestination",
+        "workflow": "StoreInputValidation"
+      },
+      {
+        "name": "SM_CancelCreation",
+        "workflow": "StoreEditingChecks"
+      },
+      {
+        "name": "SM_CancelEdit",
+        "workflow": "StoreEditingChecks"
+      },
+      {
+        "name": "SM_CancelDelete",
+        "workflow": "StoreEditingChecks"
+      },
+      {
+        "name": "SM_RequiredStore",
+        "workflow": "StoreInputValidation"
+      },
+      {
+        "name": "SM_ZeroQuantity",
+        "workflow": "StoreInputValidation"
+      },
+      {
+        "name": "SM_NegativeQuantity",
+        "workflow": "StoreInputValidation"
+      },
+      {
+        "name": "SM_DecimalQuantity",
+        "workflow": "StoreInputValidation"
+      },
+      {
+        "name": "SM_StockBalanceBoundary",
+        "workflow": "StoreInputValidation"
+      },
+      {
+        "name": "SM_LineCalculations",
+        "workflow": "StoreInputValidation"
+      },
+      {
+        "name": "SM_RemoveItem",
+        "workflow": "StoreInputValidation"
+      },
+      {
+        "name": "SM_DuplicateItem",
+        "workflow": "StoreInputValidation"
+      },
+      {
+        "name": "notesRoundTrip",
+        "workflow": "StoreEditingChecks"
+      },
+      {
+        "name": "SM_ListStructure",
+        "workflow": "StoreListChecks"
+      },
+      {
+        "name": "SM_ExportPdf",
+        "workflow": "StoreListChecks"
+      },
+      {
+        "name": "SM_ExportExcel",
+        "workflow": "StoreListChecks"
+      },
+      {
+        "name": "export",
+        "workflow": "StoreListChecks"
+      },
+      {
+        "name": "SM_SearchAndReset",
+        "workflow": "StoreListChecks"
+      }
+    ]
+  }
+]

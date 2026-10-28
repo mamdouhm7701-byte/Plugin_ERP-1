@@ -15,6 +15,10 @@ import org.testng.ITestResult;
 import org.testng.annotations.*;
 
 public abstract class SalesScenarioTest extends BaseTest {
+    final org.openqa.selenium.WebDriver caseDriver() {
+        return driver;
+    }
+
     protected SalesDocumentKind kind() {
         return SalesDocumentKind.INVOICE;
     }
@@ -184,71 +188,7 @@ public abstract class SalesScenarioTest extends BaseTest {
 
     @SuppressWarnings("unchecked")
     protected SalesTestData.Record save(boolean print) {
-        Map<String, Object> before = page.slDocument();
-        if (paymentType.equals("Cash")
-                && kind() != SalesDocumentKind.QUOTATION
-                && ((List<?>) before.get("payments")).isEmpty())
-            page.slAddOtherPayment(payment.name(), page.slTotals().get("الصافي"));
-        int count = page.slSaves().size();
-        page.slSave(print);
-        try {
-            new WebDriverWait(driver, Duration.ofSeconds(45))
-                    .until(
-                            d -> {
-                                data.rememberAttempts(page.slAttempts(), page.slSaves(), marker);
-                                return page.slSaves().size() > count;
-                            });
-        } catch (TimeoutException e) {
-            throw new AssertionError("Sales document was not saved: " + page.slSaveErrors(), e);
-        }
-        page.slSettled();
-        var records = capture();
-        var record = records.get(records.size() - 1);
-        Assert.assertEquals(
-                record.endpoint(),
-                kind().endpoint,
-                "Saved document must match the current journey step");
-        Map<String, Object> stored = data.read(record);
-        Allure.addAttachment(
-                "Saved sales document",
-                "application/json",
-                new org.json.JSONObject(
-                                SalesTestData.fields("sent", record.values(), "stored", stored))
-                        .toString(),
-                ".json");
-        Assert.assertNotNull(stored);
-        Assert.assertEquals(stored.get("notes"), record.name(), "مطابقة الملاحظات");
-        Assert.assertEquals(stored.get("storeId"), data.store(1).id(), "مطابقة المخزن");
-        Assert.assertEquals(stored.get("dealerId"), customer.id(), "مطابقة العميل أو المورد");
-        Assert.assertEquals(stored.get("agentId"), agent.id(), "مطابقة المندوب");
-        Assert.assertTrue(
-                kind().type.equalsIgnoreCase(stored.get("transactionType").toString()),
-                "التحقق من نوع الحركة");
-        List<Map<String, Object>> lines = (List<Map<String, Object>>) stored.get("lines");
-        Assert.assertFalse(lines.isEmpty());
-        Assert.assertTrue(
-                lines.stream().allMatch(l -> allowedItems.contains(l.get("itemId"))),
-                "Saved document contains an item outside this test");
-        if (paymentType.equals("Cash") && kind() != SalesDocumentKind.QUOTATION) {
-            var payments = (List<Map<String, Object>>) stored.get("payments");
-            Assert.assertFalse(payments.isEmpty());
-            Assert.assertTrue(
-                    payments.stream()
-                            .allMatch(p -> payment.id().equals(p.get("otherPaymentMethodId"))),
-                    "Unexpected payment method on owned document");
-            Assert.assertEquals(
-                    payments.stream()
-                            .map(p -> number(p.get("value")))
-                            .reduce(BigDecimal.ZERO, BigDecimal::add)
-                            .compareTo(number(stored.get("net"))),
-                    0,
-                    "مطابقة الصافي");
-        }
-        if (print)
-            page.slVerifyPrintedReport(
-                    mainWindow, item.name(), () -> printContentAssertions.accept(stored));
-        else page.slDismiss();
-        return record;
+        return new SalesPersistenceChecks(this).save(print);
     }
 
     protected SalesTestData.Record create(String mode, String paymentType, boolean print) {

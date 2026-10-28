@@ -22,12 +22,10 @@ final class SalesFixtureApi {
         this.contextGuard = contextGuard;
     }
 
-    static final class ApiFailure extends AssertionError {
-        final int status;
+    static final class ApiFailure extends TestSupport.FixtureApiFailure {
 
         ApiFailure(int status, String message) {
-            super(message);
-            this.status = status;
+            super(status, message);
         }
     }
 

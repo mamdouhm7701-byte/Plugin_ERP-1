@@ -1,8 +1,9 @@
-/* شرح الملف: تجهيز سجلات مستقلة للتجربة ومراجعتها وحذفها بعد الانتهاء، ضمن المبيعات.
+/* شرح الملف: إدارة بيانات تجربة البيع: إنشاء سجلات مستقلة لكل حالة، تتبع ما حُفظ، ثم استرجاع الطلبات غير المحسومة وتنظيف السجلات المملوكة فقط.
  */
 package Invoice;
 
-import Invoice.SalesFixtureApi.ApiFailure;
+import static Invoice.SalesFixtureEndpoints.*;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -13,7 +14,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 final class SalesTestData implements AutoCloseable {
-    record Record(String endpoint, Object id, String name, Map<String, Object> values) {}
+    record Record(String endpoint, Object id, String name, Map<String, Object> values)
+            implements TestSupport.OwnedFixtureRecord {}
 
     private final WebDriver driver;
     private final SalesFixtureApi api;
@@ -24,36 +26,8 @@ final class SalesTestData implements AutoCloseable {
     private final List<Record> created = new ArrayList<>();
     private final Map<String, Record> fixtures = new LinkedHashMap<>();
     private static final String BRANCH_STORE_LINK = "SalesBranchStoreMembership";
-    private static final java.util.Set<String> MOVEMENTS =
-            java.util.Set.of(
-                    "ItemTransactions-Sales",
-                    "ItemTransactions-Contract",
-                    "ConcreteDelivery",
-                    "ItemTransactions-ConcreteSales",
-                    "ItemTransactions-Reservations",
-                    "Purchases",
-                    "ItemTransactions-quotation",
-                    "ItemTransactions-SalesOrder",
-                    "ItemTransactions-ReturnSales");
-    private static final java.util.Set<String> MASTERS =
-            java.util.Set.of(
-                    "Accounts",
-                    "Units",
-                    "ItemCategories",
-                    "Stores",
-                    "Items",
-                    "Agents",
-                    "Customers",
-                    "Suppliers",
-                    "ExchangeDestinations",
-                    "Banks",
-                    "Safes",
-                    "PaymentMethods",
-                    "PriceLists",
-                    "DiscountTypes",
-                    "CarColors");
     private final List<Map<String, Object>> uncertainDocuments = new ArrayList<>();
-    private String lastAttemptJournal = "";
+    private final TestSupport.OwnedFixtureState<Record> state;
     private int scenarioSequence;
     private String scenarioScope = "";
 
@@ -65,24 +39,7 @@ final class SalesTestData implements AutoCloseable {
     }
 
     private void awaitContext() {
-        new WebDriverWait(driver, Duration.ofSeconds(30))
-                .until(
-                        d -> {
-                            Object activeOrigin =
-                                    Plugin_ERP.Util.VueComponentAccess.execute(
-                                            d, "return location.origin");
-                            Object activeBranch =
-                                    Plugin_ERP.Util.VueComponentAccess.execute(
-                                            d,
-                                            "return erpVue.root()?.$store?.getters['app/currentBranch']?.id");
-                            if (!origin.equals(activeOrigin)
-                                    || (activeBranch != null
-                                            && !java.util.Objects.equals(
-                                                    sessionBranchId, activeBranch)))
-                                throw new AssertionError(
-                                        "ERP origin or branch changed; refusing fixture access");
-                            return java.util.Objects.equals(sessionBranchId, activeBranch);
-                        });
+        new TestSupport.FixtureContextGuard(driver, origin, sessionBranchId).verify();
     }
 
     private String fixtureKey(String key) {
@@ -115,6 +72,21 @@ final class SalesTestData implements AutoCloseable {
                 Plugin_ERP.Util.VueComponentAccess.execute(
                         driver, "return erpVue.root().$store.getters['app/currentBranch'].id");
         api = new SalesFixtureApi(driver, origin, sessionBranchId, this::awaitContext);
+        state =
+                new TestSupport.OwnedFixtureState<>(
+                        new TestSupport.FixtureRecoveryJournal.Location(
+                                java.nio.file.Path.of("target"),
+                                "sales",
+                                suffix,
+                                origin,
+                                sessionBranchId,
+                                "QA-SL-"),
+                        created,
+                        uncertainDocuments,
+                        Record::new,
+                        MOVEMENTS,
+                        MASTERS,
+                        TestSupport.FixtureAttemptCapture.Policy.SCENARIO_MOVEMENTS);
     }
 
     /** Resume only an explicitly chosen journal, in its original tenant and branch. */
@@ -123,38 +95,12 @@ final class SalesTestData implements AutoCloseable {
         if (!suffix.matches("[a-f0-9]{8}-[a-f0-9]{3}"))
             throw new IllegalArgumentException("Invalid sales journal ID");
         SalesTestData data = new SalesTestData(driver, suffix);
-        for (String folder : List.of("sales-fixtures", "sales-attempts")) {
-            var path = java.nio.file.Path.of("target", folder, suffix + ".json");
-            if (!java.nio.file.Files.exists(path)) continue;
-            for (Object value :
-                    new org.json.JSONArray(TestSupport.FixtureJournals.read(path)).toList()) {
-                Map<String, Object> row = (Map<String, Object>) value;
-                if (!data.origin.equals(row.get("origin"))
-                        || !java.util.Objects.equals(data.sessionBranchId, row.get("branchId")))
-                    throw new AssertionError("Sales journal belongs to another origin or branch");
-                String endpoint = (String) row.get("endpoint"), name = (String) row.get("name");
-                if (name == null
-                        || !name.startsWith("QA-SL-")
-                        || endpoint == null
-                        || !(row.get("values") instanceof Map<?, ?>))
-                    throw new AssertionError("Invalid sales journal record");
-                if (folder.equals("sales-fixtures"))
-                    data.created.add(
-                            new Record(
-                                    endpoint,
-                                    row.get("id"),
-                                    name,
-                                    (Map<String, Object>) row.get("values")));
-                else data.uncertainDocuments.add(row);
-            }
-        }
+        data.state.resume();
         return data;
     }
 
     static Map<String, Object> fields(Object... pairs) {
-        Map<String, Object> values = new LinkedHashMap<>();
-        for (int i = 0; i < pairs.length; i += 2) values.put((String) pairs[i], pairs[i + 1]);
-        return values;
+        return TestSupport.FixtureFields.of(pairs);
     }
 
     Record account(String key) {
@@ -173,63 +119,24 @@ final class SalesTestData implements AutoCloseable {
         return definitions.category();
     }
 
-    Record store(int index) {
-        synchronized (TestSupport.BranchMutationLock.monitor()) {
-            Record store =
-                    fixture(
-                            "store-" + index,
-                            "Stores",
-                            fields("accountId", account("store-" + index).id()));
-            String key = "branch-store-" + index;
-            if (!fixtures.containsKey(key)) {
-                Object branchId =
-                        Plugin_ERP.Util.VueComponentAccess.execute(
-                                driver,
-                                "return erpVue.root().$store.getters['app/currentBranch'].id");
-                if (!(branchId instanceof String branch) || branch.isBlank())
-                    throw new AssertionError("Current branch identity is unavailable");
-                Record link =
-                        new Record(
-                                BRANCH_STORE_LINK,
-                                store.id(),
-                                store.name(),
-                                fields("branchId", branchId, "storeId", store.id()));
-                // Journal before updating: a lost response must still leave a recoverable owned
-                // link.
-                created.add(link);
-                fixtures.put(key, link);
-                journal();
-                changeBranchStore(link, true);
-            }
-            return store;
-        }
+    private SalesBranchStores branchStores() {
+        return new SalesBranchStores(this, driver, created, fixtures, this::journal);
     }
 
-    @SuppressWarnings("unchecked")
-    private TestSupport.OwnedBranchStoreMembership branchMembership() {
-        return new TestSupport.OwnedBranchStoreMembership(
-                id -> {
-                    Object entity = call("get", "Branches", fields("id", id)).get("entity");
-                    return entity instanceof Map<?, ?> ? (Map<String, Object>) entity : null;
-                },
-                update -> call("update", "Branches", update),
-                branch ->
-                        Plugin_ERP.Util.VueComponentAccess.execute(
-                                driver,
-                                "const root=erpVue.root();if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
-                                branch));
+    Record store(int index) {
+        return branchStores().store(index);
     }
 
     private Map<String, Object> branchFor(Record link) {
-        return branchMembership().read(link.values().get("branchId"));
+        return branchStores().branchFor(link);
     }
 
     private boolean containsStore(Map<String, Object> branch, Object storeId) {
-        return branchMembership().contains(branch, storeId);
+        return branchStores().containsStore(branch, storeId);
     }
 
     private void changeBranchStore(Record link, boolean add) {
-        branchMembership().change(link.values().get("branchId"), link.values().get("storeId"), add);
+        branchStores().changeBranchStore(link, add);
     }
 
     Map<String, Object> itemValues() {
@@ -269,33 +176,12 @@ final class SalesTestData implements AutoCloseable {
     }
 
     Object balance(Record item, int index) {
-        Map<String, Object> dto = read(item);
-        for (Object value : (List<?>) dto.get("stores")) {
-            Map<?, ?> row = (Map<?, ?>) value;
-            if (store(index).id().equals(row.get("storeId"))) return row.get("currentBalance");
-        }
-        throw new AssertionError("Owned store balance missing");
+        return TestSupport.FixtureStockBalance.read(read(item), () -> store(index).id());
     }
 
-    private Map<String, Object> rememberSeedAttempt(
+    Map<String, Object> rememberSeedAttempt(
             String endpoint, String name, Map<String, Object> values) {
-        Map<String, Object> attempt =
-                fields(
-                        "origin",
-                        origin,
-                        "branchId",
-                        sessionBranchId,
-                        "fixture",
-                        true,
-                        "endpoint",
-                        endpoint,
-                        "name",
-                        name,
-                        "values",
-                        new LinkedHashMap<>(values));
-        uncertainDocuments.add(attempt);
-        journalAttempts();
-        return attempt;
+        return state.capture().rememberSeed(endpoint, name, values);
     }
 
     Record bank() {
@@ -319,12 +205,12 @@ final class SalesTestData implements AutoCloseable {
     }
 
     Record seedInvoice(int index, String type, String date, String quantity, String paid) {
-        return definitions.seedInvoice(index, type, date, quantity, paid);
+        return new SalesSeedInvoices(this).create(index, type, date, quantity, paid, agent());
     }
 
     Record seedInvoice(
             int index, String type, String date, String quantity, String paid, Record salesAgent) {
-        return definitions.seedInvoice(index, type, date, quantity, paid, salesAgent);
+        return new SalesSeedInvoices(this).create(index, type, date, quantity, paid, salesAgent);
     }
 
     void deleteOwned(Record record) {
@@ -351,62 +237,19 @@ final class SalesTestData implements AutoCloseable {
         return (Map<String, Object>) call("get", endpoint, fields()).get("entity");
     }
 
-    @SuppressWarnings("unchecked")
     void recoverAttemptedItems(List<Map<String, Object>> attempts) {
-        for (Map<String, Object> attempt : attempts) {
-            if (!"Items".equals(attempt.get("endpoint"))) continue;
-            Map<String, Object> values = (Map<String, Object>) attempt.get("values");
-            String name =
-                    java.util.stream.Stream.of("arabicName", "englishName", "notes")
-                            .map(values::get)
-                            .filter(String.class::isInstance)
-                            .map(String.class::cast)
-                            .filter(v -> v.startsWith("QA-SL-"))
-                            .findFirst()
-                            .orElse(null);
-            if (name == null
-                    || !name.startsWith("QA-SL-")
-                    || created.stream().anyMatch(r -> r.name().equals(name))) continue;
-            List<Map<String, Object>> matches = new ArrayList<>();
-            java.util.Set<Object> seen = new java.util.HashSet<>();
-            for (int page = 1; ; page++) {
-                Object entity =
-                        call("get", "Items/Summary?pageNumber=" + page + "&pageSize=500", fields())
-                                .get("entity");
-                findOwned(entity, name, matches);
-                if (!matches.isEmpty() || entity instanceof List<?>) break;
-                if (!(entity instanceof Map<?, ?> result)
-                        || !(result.get("pageData") instanceof List<?> rows)
-                        || !(result.get("totalRecords") instanceof Number total))
-                    throw new AssertionError("Cannot verify partial item through its summary list");
-                int added = 0;
-                for (Object value : rows) {
-                    if (!(value instanceof Map<?, ?> row) || row.get("id") == null)
-                        throw new AssertionError("Invalid summary identity");
-                    if (seen.add(row.get("id"))) added++;
-                }
-                if (seen.size() >= total.longValue()) break;
-                if (added == 0)
-                    throw new AssertionError("Partial item summary pagination did not advance");
-            }
-            if (matches.size() > 1)
-                throw new AssertionError("Ambiguous partially saved test item: " + name);
-            if (matches.size() == 1) {
-                Record record = new Record("Items", matches.get(0).get("id"), name, values);
-                Map<String, Object> stored = read(record);
-                if (stored == null
-                        || (!name.equals(stored.get("arabicName"))
-                                && !name.equals(stored.get("englishName"))
-                                && !name.equals(stored.get("notes")))
-                        || !java.util.Objects.equals(
-                                values.get("mainUnitId"), stored.get("mainUnitId"))
-                        || !java.util.Objects.equals(
-                                values.get("categoryId"), stored.get("categoryId")))
-                    throw new AssertionError("Partial item ownership cannot be verified");
-                created.add(record);
-                journal();
-            }
-        }
+        TestSupport.PartialItemRecovery.recover(
+                attempts,
+                new TestSupport.PartialItemRecovery.Access<Record>(
+                        "QA-SL-",
+                        created,
+                        (url, query) -> call("get", url, query),
+                        Record::new,
+                        this::read,
+                        record -> {
+                            created.add(record);
+                            journal();
+                        }));
     }
 
     @SuppressWarnings("unchecked")
@@ -426,369 +269,65 @@ final class SalesTestData implements AutoCloseable {
                 throw new AssertionError("Cannot verify owned store membership identity");
             return store;
         }
-        Object entity;
-        try {
-            entity = call("get", record.endpoint(), fields("id", record.id())).get("entity");
-        } catch (ApiFailure failure) {
-            if (failure.status == 404 || failure.status == 410) return null;
-            if (failure.status == 500
-                    && record.endpoint().equals("Customers")
-                    && !existsInList(record)) return null;
-            throw failure;
-        }
-        // The ERP returns HTTP 200 with an empty string for some deleted records.
-        if (entity instanceof String text && text.isBlank()) return null;
-        if (!(entity instanceof Map<?, ?>)) {
-            throw new AssertionError(
-                    "Unexpected fixture read response for "
-                            + record.endpoint()
-                            + "/"
-                            + record.id());
-        }
-        Map<?, ?> dto = (Map<?, ?>) entity;
-        if (dto.get("id") == null
-                && dto.get("arabicName") == null
-                && dto.get("englishName") == null
-                && dto.get("notes") == null
-                && !dto.containsKey("pageData")
-                && !dto.containsKey("totalRecords")
-                && !dto.containsKey("error")
-                && !dto.containsKey("message")) return null;
-        return (Map<String, Object>) entity;
-    }
-
-    private boolean existsInList(Record record) {
-        long seen = 0;
-        java.util.Set<Object> ids = new java.util.HashSet<>();
-        for (int page = 1; ; page++) {
-            Object entity =
-                    call(
-                                    "get",
-                                    record.endpoint()
-                                            + "?pageNumber="
-                                            + page
-                                            + "&pageSize=500&arabicNamePart="
-                                            + java.net.URLEncoder.encode(
-                                                    record.name(),
-                                                    java.nio.charset.StandardCharsets.UTF_8),
-                                    fields())
-                            .get("entity");
-            if (!(entity instanceof Map<?, ?> result)
-                    || !(result.get("pageData") instanceof List<?> rows)
-                    || !(result.get("totalRecords") instanceof Number total))
-                throw new AssertionError(
-                        "Cannot verify missing owned record through its list: "
-                                + record.endpoint());
-            int added = 0;
-            for (Object value : rows) {
-                if (!(value instanceof Map<?, ?> row) || row.get("id") == null)
-                    throw new AssertionError("Invalid lookup identity");
-                if (record.id().equals(row.get("id"))) return true;
-                if (ids.add(row.get("id"))) added++;
-            }
-            seen += added;
-            if (seen >= total.longValue()) return false;
-            if (added == 0)
-                throw new AssertionError("Store cleanup lookup pagination did not advance");
-        }
+        return new TestSupport.FixtureRecordReader(
+                        (url, query) -> call("get", url, query), java.util.Set.of("Customers"))
+                .read(record);
     }
 
     Record fixture(String key, String endpoint, Map<String, Object> values) {
-        key = fixtureKey(key);
-        if (fixtures.containsKey(key)) return fixtures.get(key);
-        String name = key.startsWith("QA-SL-") ? key : "QA-SL-" + key + "-" + suffix;
-        values.put("arabicName", name);
-        values.put("englishName", name);
-        values.put("notes", MOVEMENTS.contains(endpoint) ? name : "Owned Sales test fixture");
-        Map<String, Object> attempt =
-                MASTERS.contains(endpoint)
-                        ? rememberFixtureAttempt(endpoint, name, values)
-                        : MOVEMENTS.contains(endpoint)
-                                ? rememberSeedAttempt(endpoint, name, values)
-                                : null;
-        Map<String, Object> response;
-        try {
-            response = call("create", endpoint, values);
-        } catch (ApiFailure | org.openqa.selenium.TimeoutException failure) {
-            if (attempt != null && failure instanceof org.openqa.selenium.TimeoutException) {
-                attempt.put("creationTimedOut", true);
-                journalAttempts();
-            }
-            // Retain a partial commit for cleanup; the original creation still fails.
-            if (endpoint.equals("Items"))
-                try {
-                    recoverAttemptedItems(List.of(fields("endpoint", endpoint, "values", values)));
-                } catch (RuntimeException | AssertionError recovery) {
-                    failure.addSuppressed(recovery);
-                }
-            throw failure;
-        }
-        Object id = response.get("id");
-        if (id == null) throw new AssertionError("Fixture API did not return an ID: " + endpoint);
-        Record record = new Record(endpoint, id, name, values);
-        created.add(record);
-        journal();
-        if (attempt != null) {
-            uncertainDocuments.remove(attempt);
-            journalAttempts();
-        }
-        fixtures.put(key, record);
-        return record;
+        return new SalesFixtureCreation(this, created, fixtures, uncertainDocuments, suffix)
+                .create(fixtureKey(key), endpoint, values);
     }
 
-    private Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
+    Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
         return api.call(action, endpoint, values);
     }
 
     void track(String endpoint, Object id, String note, Map<String, Object> values) {
-        if (note == null || !note.startsWith("QA-SL-"))
-            throw new AssertionError("Refusing unrelated sales record");
-        if (id == null) throw new AssertionError("Saved movement did not return an ID");
-        for (int i = 0; i < created.size(); i++)
-            if (created.get(i).endpoint().equals(endpoint) && created.get(i).id().equals(id)) {
-                created.remove(i);
-                created.add(new Record(endpoint, id, note, new LinkedHashMap<>(values)));
-                journal();
-                return;
-            }
-        created.add(new Record(endpoint, id, note, new LinkedHashMap<>(values)));
-        journal();
+        state.track("Refusing unrelated sales record", endpoint, id, note, values);
     }
 
-    private void journal() {
-        List<Map<String, Object>> rows =
-                created.stream()
-                        .map(
-                                r ->
-                                        fields(
-                                                "origin",
-                                                origin,
-                                                "branchId",
-                                                sessionBranchId,
-                                                "endpoint",
-                                                r.endpoint(),
-                                                "id",
-                                                r.id(),
-                                                "name",
-                                                r.name(),
-                                                "values",
-                                                r.values()))
-                        .toList();
-        TestSupport.FixtureJournals.write(
-                java.nio.file.Path.of("target", "sales-fixtures", suffix + ".json"), rows);
-    }
-
-    private static boolean retryable(ApiFailure failure) {
-        return failure.status == 0
-                || failure.status == 408
-                || failure.status == 429
-                || failure.status >= 500;
+    void journal() {
+        state.persistRecords();
     }
 
     boolean owns(Record record, Map<String, Object> stored) {
-        if (!record.name().startsWith("QA-SL-")) return false;
-        if (record.name().equals(stored.get("arabicName"))
-                || record.name().equals(stored.get("englishName"))
-                || record.name().equals(stored.get("notes"))) return true;
-        if (!MOVEMENTS.contains(record.endpoint())
-                || !java.util.Objects.equals(record.values().get("storeId"), stored.get("storeId")))
-            return false;
-        if (created.stream()
-                .noneMatch(
-                        r ->
-                                r.endpoint().equals("Stores")
-                                        && r.id().equals(stored.get("storeId"))
-                                        && r.name().startsWith("QA-SL-"))) return false;
-        if (!(stored.get("lines") instanceof List<?> lines)
-                || lines.isEmpty()
-                || !(record.values().get("lines") instanceof List<?> expected)) return false;
-        for (Object value : lines) {
-            if (!(value instanceof Map<?, ?> line)) return false;
-            if (expected.stream()
-                    .noneMatch(
-                            e ->
-                                    e instanceof Map<?, ?> row
-                                            && java.util.Objects.equals(
-                                                    row.get("itemId"), line.get("itemId"))
-                                            && java.util.Objects.equals(
-                                                    row.get("unitId"), line.get("unitId"))))
-                return false;
-            if (created.stream()
-                    .noneMatch(
-                            r ->
-                                    r.endpoint().equals("Items")
-                                            && r.id().equals(line.get("itemId"))
-                                            && r.name().startsWith("QA-SL-"))) return false;
-        }
-        return true;
+        return TestSupport.FixtureOwnership.owns("QA-SL-", MOVEMENTS, record, stored, created);
     }
 
     @SuppressWarnings("unchecked")
     void rememberAttempts(
             List<Map<String, Object>> attempts, List<Map<String, Object>> saves, String marker) {
-        if (!marker.startsWith("QA-SL-"))
-            throw new AssertionError("Refuse unrelated sales attempt");
-        List<Map<String, Object>> available = new ArrayList<>(saves);
-        uncertainDocuments.removeIf(
-                row ->
-                        !Boolean.TRUE.equals(row.get("factory"))
-                                && !Boolean.TRUE.equals(row.get("fixture"))
-                                && row.get("name") instanceof String name
-                                && name.startsWith(marker));
-        for (var attempt : attempts) {
-            String endpoint = (String) attempt.get("endpoint");
-            if (!MOVEMENTS.contains(endpoint))
-                throw new AssertionError("Unexpected sales attempt endpoint");
-            Map<String, Object> values = (Map<String, Object>) attempt.get("values");
-            Object id = values.get("id");
-            boolean successful = false;
-            for (var saved : new ArrayList<>(available))
-                if (endpoint.equals(saved.get("endpoint")) && values.equals(saved.get("values"))) {
-                    id = saved.get("id");
-                    successful = true;
-                    available.remove(saved);
-                    break;
-                }
-            final Object knownId = id;
-            if (successful
-                    && id != null
-                    && created.stream()
-                            .anyMatch(r -> r.endpoint().equals(endpoint) && r.id().equals(knownId)))
-                continue;
-            String name =
-                    values.get("notes") instanceof String note && note.startsWith(marker)
-                            ? note
-                            : marker;
-            uncertainDocuments.add(
-                    fields(
-                            "origin",
-                            origin,
-                            "branchId",
-                            sessionBranchId,
-                            "endpoint",
-                            endpoint,
-                            "id",
-                            id,
-                            "name",
-                            name,
-                            "values",
-                            new LinkedHashMap<>(values)));
-        }
-        journalAttempts();
+        state.capture().remember(attempts, saves, marker);
     }
 
-    private void journalAttempts() {
-        String json = new org.json.JSONArray(uncertainDocuments).toString(2);
-        if (json.equals(lastAttemptJournal)) return;
-        TestSupport.FixtureJournals.write(
-                java.nio.file.Path.of("target", "sales-attempts", suffix + ".json"),
-                uncertainDocuments);
-        lastAttemptJournal = json;
+    void journalAttempts() {
+        state.persistAttempts();
     }
 
     Map<String, Object> rememberFixtureAttempt(
             String endpoint, String name, Map<String, Object> values) {
-        if (!MASTERS.contains(endpoint) || !name.startsWith("QA-SL-"))
-            throw new AssertionError("Refuse unrelated fixture recovery");
-        Map<String, Object> attempt =
-                fields(
-                        "origin",
-                        origin,
-                        "branchId",
-                        sessionBranchId,
-                        "factory",
-                        true,
-                        "fixture",
-                        true,
-                        "endpoint",
-                        endpoint,
-                        "name",
-                        name,
-                        "values",
-                        new LinkedHashMap<>(values));
-        uncertainDocuments.add(attempt);
-        journalAttempts();
-        return attempt;
+        return state.capture().rememberMaster(endpoint, name, values);
     }
 
     @SuppressWarnings("unchecked")
     private void recoverFixtureAttempt(Map<String, Object> attempt) {
         String endpoint = (String) attempt.get("endpoint"), name = (String) attempt.get("name");
         Map<String, Object> values = (Map<String, Object>) attempt.get("values");
-        if (!MASTERS.contains(endpoint) || !name.startsWith("QA-SL-"))
-            throw new AssertionError("Invalid fixture recovery endpoint or name");
-        List<Record> matches = new ArrayList<>();
-        java.util.Set<Object> seen = new java.util.HashSet<>();
-        for (int page = 1; ; page++) {
-            Object entity =
-                    call(
-                                    "get",
-                                    endpoint.equals("Accounts")
-                                            ? "Aggregates/AccountTreeViewModel?showBalance=false&type=Main&branchId="
-                                                    + sessionBranchId
-                                            : endpoint + "?pageNumber=" + page + "&pageSize=500",
-                                    fields())
-                            .get("entity");
-            List<?> rows;
-            long total;
-            if (endpoint.equals("Accounts")) {
-                if (!(entity instanceof Map<?, ?> tree)
-                        || (!(tree.get("Accounts") instanceof List<?>)
-                                && !(tree.get("AccountsTree") instanceof List<?>)))
-                    throw new AssertionError("Cannot verify uncertain account through its tree");
-                List<Map<String, Object>> found = new ArrayList<>();
-                findOwned(entity, name, found);
-                Map<Object, Map<String, Object>> unique = new LinkedHashMap<>();
-                for (var row : found) unique.put(row.get("id"), row);
-                rows = new ArrayList<>(unique.values());
-                total = rows.size();
-            } else if (entity instanceof List<?> list) {
-                rows = list;
-                total = list.size();
-            } else if (entity instanceof Map<?, ?> result
-                    && result.get("pageData") instanceof List<?> list
-                    && result.get("totalRecords") instanceof Number count) {
-                rows = list;
-                total = count.longValue();
-            } else
-                throw new AssertionError(
-                        "Cannot verify uncertain fixture through its list: " + endpoint);
-            int added = 0;
-            for (Object value : rows) {
-                if (!(value instanceof Map<?, ?> row)
-                        || row.get("id") == null
-                        || (!row.containsKey("arabicName") && !row.containsKey("englishName")))
-                    throw new AssertionError("Fixture list omits ownership fields: " + endpoint);
-                if (!seen.add(row.get("id"))) continue;
-                added++;
-                if (!name.equals(row.get("arabicName")) && !name.equals(row.get("englishName")))
-                    continue;
-                Record candidate = new Record(endpoint, row.get("id"), name, values);
-                Map<String, Object> stored = read(candidate);
-                if (stored == null) continue;
-                if (!owns(candidate, stored))
-                    throw new AssertionError("Uncertain fixture ownership changed");
-                for (String reference :
-                        List.of(
-                                "accountId",
-                                "parentId",
-                                "parentCategoryId",
-                                "categoryId",
-                                "mainUnitId"))
-                    if (values.containsKey(reference)
-                            && !java.util.Objects.equals(
-                                    values.get(reference), stored.get(reference)))
-                        throw new AssertionError(
-                                "Uncertain fixture reference changed: " + reference);
-                matches.add(candidate);
-            }
-            if (seen.size() >= total) break;
-            if (added == 0)
-                throw new AssertionError("Uncertain fixture pagination did not advance");
-        }
-        if (matches.size() > 1) throw new AssertionError("Ambiguous uncertain fixture: " + name);
-        if (matches.size() == 1) {
-            Record found = matches.get(0);
+        var recovered =
+                TestSupport.FixtureMasterRecovery.find(
+                        attempt,
+                        new TestSupport.FixtureMasterRecovery.Access<Record>(
+                                "QA-SL-",
+                                MASTERS,
+                                sessionBranchId,
+                                (url, query) -> call("get", url, query),
+                                Record::new,
+                                this::read,
+                                this::owns,
+                                true));
+        if (recovered.isPresent()) {
+            Record found = recovered.orElseThrow();
             track(endpoint, found.id(), name, values);
             if (endpoint.equals("Stores")) {
                 Record link =
@@ -805,121 +344,15 @@ final class SalesTestData implements AutoCloseable {
         journalAttempts();
     }
 
-    @SuppressWarnings("unchecked")
     private void recoverUncertainDocuments() {
+        var movements =
+                new SalesMovementRecovery(this, created, (url, values) -> call("get", url, values));
         for (var attempt : new ArrayList<>(uncertainDocuments)) {
             if (Boolean.TRUE.equals(attempt.get("factory"))) {
                 recoverFixtureAttempt(attempt);
                 continue;
             }
-            String endpoint = (String) attempt.get("endpoint"), name = (String) attempt.get("name");
-            Map<String, Object> values = (Map<String, Object>) attempt.get("values");
-            List<Record> matches = new ArrayList<>();
-            Object id = attempt.get("id");
-            if (id != null) {
-                Record candidate = new Record(endpoint, id, name, values);
-                Map<String, Object> stored = read(candidate);
-                if (stored != null) {
-                    boolean verified =
-                            owns(candidate, stored)
-                                    || created.stream()
-                                            .anyMatch(
-                                                    r ->
-                                                            r.endpoint().equals(endpoint)
-                                                                    && r.id().equals(id)
-                                                                    && owns(r, stored));
-                    if (!verified)
-                        throw new AssertionError("Cannot verify uncertain sales update ownership");
-                    matches.add(candidate);
-                }
-            } else {
-                String list =
-                        endpoint.equals("ConcreteDelivery")
-                                ? "ConcreteDelivery"
-                                : endpoint.equals("Purchases")
-                                        ? "PurchaseLists"
-                                        : "SalesTransactions";
-                String type =
-                        endpoint.equals("ConcreteDelivery")
-                                ? "ConcreteDelivery"
-                                : endpoint.equals("Purchases")
-                                        ? "Purch"
-                                        : endpoint.equals("ItemTransactions-ConcreteSales")
-                                                ? "Sales"
-                                                : endpoint.substring("ItemTransactions-".length());
-                java.util.Set<Object> seen = new java.util.HashSet<>();
-                for (int page = 1; ; page++) {
-                    String query = list + "?pageNumber=" + page + "&pageSize=500";
-                    if (endpoint.equals("Purchases")) {
-                        query += "&transactionType=Purch";
-                        if (values.get("dealerId") != null)
-                            query += "&dealerId=" + values.get("dealerId");
-                    }
-                    Object entity = call("get", query, fields()).get("entity");
-                    if (!(entity instanceof Map<?, ?> result)
-                            || !(result.get("pageData") instanceof List<?> rows)
-                            || !(result.get("totalRecords") instanceof Number total))
-                        throw new AssertionError(
-                                "Cannot verify uncertain sales create through its list");
-                    int added = 0;
-                    for (Object value : rows) {
-                        if (!(value instanceof Map<?, ?> row) || row.get("id") == null)
-                            throw new AssertionError("Sales list has no record identity");
-                        if (!seen.add(row.get("id"))) continue;
-                        added++;
-                        boolean summaryOnly =
-                                !row.containsKey("notes") && !row.containsKey("storeId");
-                        if (summaryOnly && !endpoint.equals("Purchases"))
-                            throw new AssertionError(
-                                    "Sales list omits fields needed to verify an uncertain create");
-                        if (created.stream()
-                                .anyMatch(
-                                        r ->
-                                                r.endpoint().equals(endpoint)
-                                                        && java.util.Objects.equals(
-                                                                r.id(), row.get("id")))) continue;
-                        if ((summaryOnly && endpoint.equals("Purchases"))
-                                || name.equals(row.get("notes"))
-                                || (java.util.Objects.equals(
-                                                values.get("storeId"), row.get("storeId"))
-                                        && type.equalsIgnoreCase(
-                                                String.valueOf(row.get("transactionType"))))) {
-                            Record candidate = new Record(endpoint, row.get("id"), name, values);
-                            Map<String, Object> stored = read(candidate);
-                            if (stored != null) {
-                                if (!owns(candidate, stored)) {
-                                    if (endpoint.equals("Purchases") && summaryOnly) continue;
-                                    throw new AssertionError(
-                                            "Cannot verify uncertain sales candidate ownership");
-                                }
-                                matches.add(candidate);
-                            }
-                        }
-                    }
-                    if (seen.size() >= total.longValue()) break;
-                    if (added == 0)
-                        throw new AssertionError(
-                                "Uncertain sales lookup pagination did not advance");
-                }
-            }
-            if (matches.size() > 1)
-                throw new AssertionError("Ambiguous uncertain sales create: " + name);
-            if (matches.isEmpty() && Boolean.TRUE.equals(attempt.get("creationTimedOut")))
-                throw new AssertionError(
-                        "Timed-out sales create is still unresolved; retaining its journal and parent fixtures: "
-                                + name);
-            if (matches.size() == 1) {
-                Record found = matches.get(0);
-                Map<String, Object> stored = read(found);
-                if (stored == null)
-                    throw new AssertionError(
-                            "Recovered sales document disappeared before tracking");
-                String actualName =
-                        stored.get("notes") instanceof String note && note.startsWith("QA-SL-")
-                                ? note
-                                : name;
-                track(endpoint, found.id(), actualName, stored);
-            }
+            movements.recover(attempt);
             uncertainDocuments.remove(attempt);
             journalAttempts();
         }
@@ -938,128 +371,24 @@ final class SalesTestData implements AutoCloseable {
             changeBranchStore(record, false);
             return;
         }
-        Map<String, Object> identity = read(record);
-        if (identity == null) return;
-        if (!owns(record, identity))
-            throw new AssertionError(
-                    "Refusing cleanup: fixture ownership changed for " + record.id());
-        AssertionError lastFailure = null;
-        for (int attempt = 1; attempt <= 3; attempt++) {
-            try {
-                if (record.endpoint().equals(BRANCH_STORE_LINK)) changeBranchStore(record, false);
-                else call("delete", record.endpoint(), fields("id", record.id()));
-                if (read(record) == null) return;
-                lastFailure =
-                        new AssertionError(
-                                "Delete did not remove owned record: "
-                                        + record.endpoint()
-                                        + "/"
-                                        + record.id());
-            } catch (ApiFailure failure) {
-                if (failure.status == 404
-                        || failure.status == 410
-                        || (failure.status == 400
-                                && failure.getMessage().contains("Common.ObjectNotFound"))) {
-                    if (read(record) == null) return;
-                    throw new AssertionError(
-                            "Delete endpoint did not remove existing owned record: "
-                                    + record.endpoint()
-                                    + "/"
-                                    + record.id(),
-                            failure);
-                }
-                if (!retryable(failure)) throw failure;
-                lastFailure = failure;
-            } catch (org.openqa.selenium.TimeoutException failure) {
-                lastFailure =
-                        new AssertionError(
-                                "Delete response timed out for " + record.endpoint(), failure);
-            }
-            // A timed-out DELETE may have committed. Read back before sending another DELETE.
-            try {
-                Map<String, Object> existing = read(record);
-                if (existing == null) {
-                    return;
-                }
-                if (!owns(record, existing)) {
-                    throw new AssertionError(
-                            "Refusing cleanup: fixture ownership changed for " + record.id());
-                }
-            } catch (ApiFailure failure) {
-                if (failure.status == 404 || failure.status == 410) return;
-                if (!retryable(failure)) throw failure;
-                lastFailure = failure;
-            } catch (org.openqa.selenium.TimeoutException failure) {
-                lastFailure =
-                        new AssertionError(
-                                "Could not verify timed-out deletion of " + record.endpoint(),
-                                failure);
-            }
-        }
-        throw lastFailure;
-    }
-
-    private static boolean references(Object value, Object id) {
-        if (value instanceof Map<?, ?> map)
-            return map.values().stream().anyMatch(child -> references(child, id));
-        if (value instanceof Iterable<?> list) {
-            for (Object child : list) if (references(child, id)) return true;
-            return false;
-        }
-        return id.equals(value);
-    }
-
-    @SuppressWarnings("unchecked")
-    private static void findOwned(Object node, String name, List<Map<String, Object>> matches) {
-        if (node instanceof Map<?, ?> row) {
-            if ((name.equals(row.get("arabicName"))
-                            || name.equals(row.get("englishName"))
-                            || name.equals(row.get("notes")))
-                    && row.get("id") != null) matches.add((Map<String, Object>) row);
-            else for (Object value : row.values()) findOwned(value, name, matches);
-        } else if (node instanceof List<?> rows)
-            for (Object row : rows) findOwned(row, name, matches);
+        TestSupport.FixtureRecordDeletion.delete(
+                record,
+                this::read,
+                this::owns,
+                owned -> {
+                    if (owned.endpoint().equals(BRANCH_STORE_LINK)) changeBranchStore(owned, false);
+                    else call("delete", owned.endpoint(), fields("id", owned.id()));
+                });
     }
 
     @Override
     public void close() {
-        // Resolve lost create/update responses before any parent item or sales can be removed.
         recoverUncertainDocuments();
-        List<String> failures = new ArrayList<>();
-        List<Record> pending = new ArrayList<>();
-        for (Record record : SalesCleanupOrder.records(created)) {
-            if (pending.stream().anyMatch(child -> references(child.values(), record.id()))) {
-                pending.add(record);
-                failures.add(
-                        record.name()
-                                + " ["
-                                + record.endpoint()
-                                + "/"
-                                + record.id()
-                                + "]: waiting for dependent fixture cleanup");
-                continue;
-            }
-            try {
-                deleteRecord(record);
-                created.remove(record);
-                fixtures.entrySet().removeIf(entry -> entry.getValue().equals(record));
-                journal();
-            } catch (RuntimeException | AssertionError failure) {
-                pending.add(record);
-                failures.add(
-                        record.name()
-                                + " ["
-                                + record.endpoint()
-                                + "/"
-                                + record.id()
-                                + "]: "
-                                + String.valueOf(failure.getMessage()).split("\\R", 2)[0]);
-            }
-        }
-        created.removeIf(record -> !pending.contains(record));
-        fixtures.entrySet().removeIf(entry -> !pending.contains(entry.getValue()));
-        journal();
-        if (!failures.isEmpty())
-            throw new AssertionError("Fixture cleanup failed: " + String.join("; ", failures));
+        TestSupport.FixtureCleanup.run(
+                created,
+                fixtures,
+                SalesCleanupOrder.records(created),
+                this::deleteRecord,
+                this::journal);
     }
 }

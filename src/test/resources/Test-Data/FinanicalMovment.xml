@@ -14,6 +14,10 @@
             <class name="FinancialMovementsTest.TransfersAndSettlementsTest"/>
             <class name="FinancialMovementsTest.FinancialFixtureTest"/>
             <class name="FinancialMovementsTest.FinancialCleanupTest"/>
+<class name="FinancialMovementsTest.FinancialOwnershipCleanupTest"/>
+<class name="FinancialMovementsTest.FinancialRecoveryCleanupTest"/>
+<class name="FinancialMovementsTest.FinancialDependenciesCleanupTest"/>
+<class name="FinancialMovementsTest.FinancialLifecycleCleanupTest"/>
 
 
 

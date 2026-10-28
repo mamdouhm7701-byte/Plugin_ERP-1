@@ -103,6 +103,7 @@ public final class BusinessStabilityChild {
         List<XmlSuite> plan(Path project, BusinessRunDialog.Selection selection, Path folder)
                 throws Exception {
             var suites = super.plan(project, selection, folder);
+            StabilitySelectionEvidence.write(output, suites, "CAPTURED_BEFORE_RUN");
             var fields = new LinkedHashMap<String, Object>(selection.business().fields());
             fields.putAll(selection.target().description());
             fields.put("workers", selection.workers());

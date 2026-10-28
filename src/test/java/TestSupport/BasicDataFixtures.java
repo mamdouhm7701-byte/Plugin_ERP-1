@@ -14,43 +14,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public final class BasicDataFixtures implements AutoCloseable {
 
-    public record Record(String endpoint, Object id, String name, Map<String, Object> values) {
+    public record Record(String endpoint, Object id, String name, Map<String, Object> values)
+            implements OwnedFixtureRecord {
         public Record {
             values = java.util.Collections.unmodifiableMap(new LinkedHashMap<>(values));
         }
     }
 
-    public static final java.util.Set<String> ALLOWED =
-            java.util.Set.of(
-                    "Accounts",
-                    "Banks",
-                    "Safes",
-                    "PaymentMethods",
-                    "Stores",
-                    "Areas",
-                    "ExchangeDestinations",
-                    "Incomes",
-                    "Expenses",
-                    "DiscountTypes",
-                    "AgentItinerariesStatus",
-                    "Vouchers",
-                    "SafeTransactions",
-                    "users",
-                    "Tables",
-                    "CarColors",
-                    "CastingTypes",
-                    "CementTypes",
-                    "MaxTemperatures",
-                    "Cars",
-                    "Drivers",
-                    "Projects",
-                    "AccountGroups",
-                    "CostCenters",
-                    "PriceLists",
-                    "Stocktakings",
-                    "ShortageAdjustments",
-                    "OverflowAdjustments",
-                    "UnderReviews");
+    public static final java.util.Set<String> ALLOWED = BasicDataFixtureEndpoints.ALLOWED;
     private final java.util.Set<String> reservedNames = new java.util.HashSet<>();
     private final WebDriver driver;
     private final BasicDataFixturesApi api;
@@ -201,41 +172,7 @@ public final class BasicDataFixtures implements AutoCloseable {
     }
 
     public Record user(String key) {
-        Record saved =
-                fixture(
-                        "user-" + key,
-                        "users",
-                        fields(
-                                "userName",
-                                "qa_bd_" + UUID.randomUUID().toString().replace("-", ""),
-                                "passwordHash",
-                                UUID.randomUUID().toString() + "aA1!",
-                                "isAdmin",
-                                false,
-                                "isActive",
-                                true,
-                                "maxAllowedDiscount",
-                                0,
-                                "permissions",
-                                List.of(),
-                                "branches",
-                                List.of(fields("branchId", session.branchId)),
-                                "defaultOtherPaymentMethods",
-                                List.of(),
-                                "imageUrl",
-                                "",
-                                "phone",
-                                "",
-                                "email",
-                                "",
-                                "base64Image",
-                                "",
-                                "imageExtension",
-                                ""));
-        var stored = read(saved);
-        var values = new LinkedHashMap<>(saved.values());
-        if (stored != null && stored.get("code") != null) values.put("code", stored.get("code"));
-        return new Record(saved.endpoint(), saved.id(), saved.name(), values);
+        return definitions.user(key, session.branchId);
     }
 
     @SuppressWarnings("unchecked")
@@ -285,66 +222,8 @@ public final class BasicDataFixtures implements AutoCloseable {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public Map<String, Object> read(Record record) {
-        Object entity;
-        try {
-            entity = call("get", record.endpoint(), fields("id", record.id())).get("entity");
-        } catch (ApiFailure failure) {
-            if (failure.status == 404 || failure.status == 410) return null;
-            if (failure.status == 500
-                    && record.endpoint().equals("UnderReviews")
-                    && !underReviewExistsInList(record.id())) return null;
-            throw failure;
-        }
-        // The ERP returns HTTP 200 with an empty string for some deleted records.
-        if (entity instanceof String text && text.isBlank()) return null;
-        if (!(entity instanceof Map<?, ?>)) {
-            throw new AssertionError(
-                    "Unexpected fixture read response for "
-                            + record.endpoint()
-                            + "/"
-                            + record.id());
-        }
-        Map<?, ?> dto = (Map<?, ?>) entity;
-        if (dto.get("id") == null
-                && dto.get("arabicName") == null
-                && dto.get("englishName") == null
-                && dto.get("notes") == null
-                && dto.get("fullName") == null
-                && !dto.containsKey("pageData")
-                && !dto.containsKey("totalRecords")
-                && !dto.containsKey("error")
-                && !dto.containsKey("message")) return null;
-        return (Map<String, Object>) entity;
-    }
-
-    private boolean underReviewExistsInList(Object id) {
-        java.util.Set<Object> seen = new java.util.HashSet<>();
-        for (int page = 1; ; page++) {
-            Object entity =
-                    call(
-                                    "get",
-                                    "SalesTransactions?transactionType=UnderReviewTransaction&pageNumber="
-                                            + page
-                                            + "&pageSize=500",
-                                    fields())
-                            .get("entity");
-            if (!(entity instanceof Map<?, ?> result)
-                    || !(result.get("pageData") instanceof List<?> rows)
-                    || !(result.get("totalRecords") instanceof Number total))
-                throw new AssertionError(
-                        "Cannot confirm missing under-review document through its list");
-            int added = 0;
-            for (Object value : rows) {
-                if (!(value instanceof Map<?, ?> row) || row.get("id") == null)
-                    throw new AssertionError("Missing under-review list identity");
-                if (id.equals(row.get("id"))) return true;
-                if (seen.add(row.get("id"))) added++;
-            }
-            if (seen.size() >= total.longValue()) return false;
-            if (added == 0) throw new AssertionError("Under-review pagination did not advance");
-        }
+        return new BasicDataFixtureReads(api).read(record);
     }
 
     public Record fixture(String key, String endpoint, Map<String, Object> values) {
@@ -463,172 +342,21 @@ public final class BasicDataFixtures implements AutoCloseable {
         return name;
     }
 
-    @SuppressWarnings("unchecked")
     public void collectUi() {
-        Object raw =
-                Plugin_ERP.Util.VueComponentAccess.execute(
-                        driver, "return window.__basicDataQA?.saves||[]");
-        if (!(raw instanceof List<?> rows)) return;
-        for (Object value : rows) {
-            var row = (Map<String, Object>) value;
-            var values = (Map<String, Object>) row.get("values");
-            String name =
-                    java.util.stream.Stream.of("arabicName", "englishName", "notes", "fullName")
-                            .map(values::get)
-                            .filter(String.class::isInstance)
-                            .map(String.class::cast)
-                            .filter(reservedNames::contains)
-                            .findFirst()
-                            .orElse(null);
-            if (name == null) throw new AssertionError("Unreserved basic data save");
-            track((String) row.get("endpoint"), row.get("id"), name, values);
-        }
+        new BasicDataUiCapture(this, driver, suffix, reservedNames).collectUi();
     }
 
     public void installCapture() {
-        Plugin_ERP.Util.VueComponentAccess.execute(
-                driver,
-                """
-      const store=erpVue.root()?.$store;
-      if(!store)return;
-      const storageKey='qa-basic-data-'+arguments[1];
-      if(window.__basicDataQA?.storageKey!==storageKey){
-        const previous=sessionStorage.getItem(storageKey);
-        window.__basicDataQA=previous?JSON.parse(previous):{saves:[],pending:0,storageKey};
-      }
-      if(store.__basicDataCaptureInstalled)return;
-      store.__basicDataCaptureInstalled=true;
-      const dispatch=store.dispatch.bind(store), allowed=new Set(arguments[0]);
-      const persist=cap=>sessionStorage.setItem(cap.storageKey,JSON.stringify(cap));
-      store.dispatch=function(action,payload,...rest){
-        const data=payload?.data, names=window.__basicDataReservedNames||[],cap=window.__basicDataQA;
-        const owned=['app/create','app/update'].includes(action)&&allowed.has(payload?.url)&&
-          ['arabicName','englishName','notes','fullName'].some(key=>names.includes(data?.[key]));
-        const sent=owned?JSON.parse(JSON.stringify(data)):null;
-        if(owned){delete sent.passwordHash;delete sent.password;cap.pending++;
-          (cap.attempts||=[]).push({endpoint:payload.url,values:sent});persist(cap);}
-        let response;
-        try{response=dispatch(action,payload,...rest);}
-        catch(error){if(owned){cap.pending--;persist(cap);}throw error;}
-        return Promise.resolve(response).then(result=>{
-          if(owned){cap.pending--;const entity=result?.data||result;
-            cap.saves.push({endpoint:payload.url,id:sent.id||entity?.id||
-              (typeof entity==='string'||typeof entity==='number'?entity:null),values:sent});persist(cap);}
-          return result;
-        },error=>{if(owned){cap.pending--;
-          (cap.errors||=[]).push({endpoint:payload.url,status:error?.response?.status,
-            detail:error?.response?.data??error?.data??{message:error?.message,errors:error?.errors}});
-          persist(cap);}throw error;});
-      };
-      """,
-                new ArrayList<>(ALLOWED),
-                suffix);
-        Plugin_ERP.Util.VueComponentAccess.execute(
-                driver,
-                "window.__basicDataReservedNames=arguments[0]",
-                new ArrayList<>(reservedNames));
+        new BasicDataUiCapture(this, driver, suffix, reservedNames).installCapture();
     }
 
     /** Reloaded pages retain unresolved request counters; never delete their prerequisites. */
     public void awaitUiSettled() {
-        installCapture();
-        new WebDriverWait(driver, Duration.ofSeconds(30))
-                .until(
-                        d ->
-                                !Boolean.TRUE.equals(
-                                        Plugin_ERP.Util.VueComponentAccess.execute(
-                                                d, "return (window.__basicDataQA?.pending||0)>0")));
-    }
-
-    private static boolean retryable(ApiFailure failure) {
-        return failure.status == 0
-                || failure.status == 408
-                || failure.status == 429
-                || failure.status >= 500;
+        new BasicDataUiCapture(this, driver, suffix, reservedNames).awaitUiSettled();
     }
 
     private void deleteRecord(Record record) {
-        AssertionError lastFailure = null;
-        for (int attempt = 1; attempt <= 3; attempt++) {
-            try {
-                Map<String, Object> owned = cleanupIdentity(record);
-                if (owned == null) return;
-                if (!record.name().equals(owned.get("arabicName"))
-                        && !record.name().equals(owned.get("englishName"))
-                        && !record.name().equals(owned.get("notes"))
-                        && !record.name().equals(owned.get("fullName")))
-                    throw new AssertionError(
-                            "Refusing cleanup: fixture ownership changed for " + record.id());
-                call("delete", record.endpoint(), fields("id", record.id()));
-                if (read(record) == null) return;
-                lastFailure =
-                        new AssertionError(
-                                "Delete did not remove owned record: "
-                                        + record.endpoint()
-                                        + "/"
-                                        + record.id());
-            } catch (ApiFailure failure) {
-                if (failure.status == 404
-                        || failure.status == 410
-                        || (failure.status == 400
-                                && failure.getMessage().contains("Common.ObjectNotFound"))) {
-                    if (read(record) == null) return;
-                    throw new AssertionError(
-                            "Delete endpoint did not remove existing owned record: "
-                                    + record.endpoint()
-                                    + "/"
-                                    + record.id(),
-                            failure);
-                }
-                if (!retryable(failure)) throw failure;
-                lastFailure = failure;
-            } catch (org.openqa.selenium.TimeoutException failure) {
-                lastFailure =
-                        new AssertionError(
-                                "Delete response timed out for " + record.endpoint(), failure);
-            }
-            // A timed-out DELETE may have committed. Read back before sending another DELETE.
-            try {
-                Map<String, Object> existing = read(record);
-                if (existing == null) {
-                    return;
-                }
-                if (!record.name().equals(existing.get("arabicName"))
-                        && !record.name().equals(existing.get("englishName"))
-                        && !record.name().equals(existing.get("notes"))
-                        && !record.name().equals(existing.get("fullName"))) {
-                    throw new AssertionError(
-                            "Refusing cleanup: fixture ownership changed for " + record.id());
-                }
-            } catch (ApiFailure failure) {
-                if (failure.status == 404 || failure.status == 410) return;
-                if (!retryable(failure)) throw failure;
-                lastFailure = failure;
-            } catch (org.openqa.selenium.TimeoutException failure) {
-                lastFailure =
-                        new AssertionError(
-                                "Could not verify timed-out deletion of " + record.endpoint(),
-                                failure);
-            }
-        }
-        throw lastFailure;
-    }
-
-    private Map<String, Object> cleanupIdentity(Record record) {
-        Map<String, Object> stored = read(record);
-        if (stored != null && !java.util.Objects.equals(record.id(), stored.get("id")))
-            throw new AssertionError("Owned fixture identity changed");
-        return stored;
-    }
-
-    private static boolean references(Object value, Object id) {
-        if (value instanceof Map<?, ?> map)
-            return map.values().stream().anyMatch(child -> references(child, id));
-        if (value instanceof Iterable<?> list) {
-            for (Object child : list) if (references(child, id)) return true;
-            return false;
-        }
-        return id.equals(value);
+        new BasicDataFixtureDeletion(this, api).remove(record);
     }
 
     @Override
@@ -640,42 +368,11 @@ public final class BasicDataFixtures implements AutoCloseable {
         awaitUiSettled();
         collectUi();
         recoverPendingFixtures();
-        List<String> failures = new ArrayList<>();
-        List<Record> pending = new ArrayList<>();
-        for (int index = created.size() - 1; index >= 0; index--) {
-            Record record = created.get(index);
-            if (pending.stream().anyMatch(child -> references(child.values(), record.id()))) {
-                pending.add(record);
-                failures.add(
-                        record.name()
-                                + " ["
-                                + record.endpoint()
-                                + "/"
-                                + record.id()
-                                + "]: waiting for dependent fixture cleanup");
-                continue;
-            }
-            try {
-                deleteRecord(record);
-                created.remove(record);
-                fixtures.entrySet().removeIf(entry -> entry.getValue().equals(record));
-                journal();
-            } catch (RuntimeException | AssertionError failure) {
-                pending.add(record);
-                failures.add(
-                        record.name()
-                                + " ["
-                                + record.endpoint()
-                                + "/"
-                                + record.id()
-                                + "]: "
-                                + String.valueOf(failure.getMessage()).split("\\R", 2)[0]);
-            }
-        }
-        created.removeIf(record -> !pending.contains(record));
-        fixtures.entrySet().removeIf(entry -> !pending.contains(entry.getValue()));
-        journal();
-        if (!failures.isEmpty())
-            throw new AssertionError("Fixture cleanup failed: " + String.join("; ", failures));
+        FixtureCleanup.run(
+                created,
+                fixtures,
+                new ArrayList<>(created.reversed()),
+                this::deleteRecord,
+                this::journal);
     }
 }

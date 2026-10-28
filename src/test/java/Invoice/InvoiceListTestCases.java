@@ -9,20 +9,20 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 
 public class InvoiceListTestCases extends SalesListActions {
-    private InvoicListPage list() {
+    InvoicListPage list() {
         return new InvoicListPage(driver);
     }
 
-    private Set<Object> first, remaining, all;
+    Set<Object> first, remaining, all;
 
-    private void scoped(SalesTestData.Record... records) {
+    void scoped(SalesTestData.Record... records) {
         page.slListScope(data.customer().name());
         Set<Object> expected = new HashSet<>();
         for (var r : records) expected.add(r.id());
         page.slWaitListIds(expected);
     }
 
-    private void paged() {
+    void paged() {
         all = new HashSet<>();
         for (int i = 0; i < 26; i++) all.add(seed(i).id());
         page.slListScope(data.customer().name());
@@ -146,56 +146,34 @@ public class InvoiceListTestCases extends SalesListActions {
     @Test
     @Story("الانتقال للصفحة التالية ثم السابقة يعيد نفس السجلات")
     public void PaginationMovesForwardAndBack() {
-        paged();
-        list().goToNextInvoicePage();
-        page.slWaitListIds(remaining);
-        list().goToPreviousInvoicePage();
-        page.slWaitListIds(first);
+        new InvoicePaginationChecks(this).PaginationMovesForwardAndBack();
     }
 
     @Test
     @Story("فتح صفحة برقمها ثم العودة للصفحة الأولى")
     public void PaginationCanOpenAnExplicitPageNumber() {
-        paged();
-        list().goToInvoicePage(2);
-        page.slWaitListIds(remaining);
-        Assert.assertEquals(list().getCurrentInvoicePageNumber(), 2);
-        list().goToInvoicePage(1);
-        page.slWaitListIds(first);
+        new InvoicePaginationChecks(this).PaginationCanOpenAnExplicitPageNumber();
     }
 
     @Test
     @Story("تعطيل زر السابق في أول صفحة")
     public void PreviousIsDisabledOnFirstInvoicePage() {
-        var a = seed(1);
-        scoped(a);
-        Assert.assertEquals(list().getCurrentInvoicePageNumber(), 1);
-        Assert.assertFalse(list().isPreviousInvoicePageEnabled());
+        new InvoicePaginationChecks(this).PreviousIsDisabledOnFirstInvoicePage();
     }
 
     @Test
     @Story("تعطيل زر التالي في آخر صفحة")
     public void LastInvoicePageDisablesNext() {
-        paged();
-        list().goToLastInvoicePage();
-        page.slWaitListIds(remaining);
-        Assert.assertFalse(list().isNextInvoicePageEnabled());
+        new InvoicePaginationChecks(this).LastInvoicePageDisablesNext();
     }
 
     @Test
     @Story("تطبيق فلتر من صفحة متقدمة يعيد النتائج للصفحة الأولى")
     public void FilterCanBeAppliedFromAdvancedPage() {
-        paged();
-        list().goToNextInvoicePage();
-        page.slWaitListIds(remaining);
-        Object id = first.iterator().next();
-        String code = codeFor(id);
-        page.slListText("filteredCode", code);
-        page.slWaitListIds(Set.of(id));
-        Assert.assertEquals(list().getCurrentInvoicePageNumber(), 1);
+        new InvoicePaginationChecks(this).FilterCanBeAppliedFromAdvancedPage();
     }
 
-    private String codeFor(Object id) {
+    String codeFor(Object id) {
         return data.read(
                         new SalesTestData.Record(
                                 "ItemTransactions-Sales", id, "QA-SL-reference", Map.of()))
@@ -238,37 +216,13 @@ public class InvoiceListTestCases extends SalesListActions {
     @Test
     @Story("ترتيب كود الفاتورة تصاعدياً وتنازلياً")
     public void SortingInvoiceCodeAscendingAndDescending() {
-        sortingCodeKeepsOwnedRecords();
+        new InvoiceSortingChecks(this).SortingInvoiceCodeAscendingAndDescending();
     }
 
     @Test
     @Story("ترتيب تاريخ الفاتورة تصاعدياً وتنازلياً")
     public void SortingByDateColumn() {
-        var a = seed(1);
-        String other =
-                java.time.LocalDate.parse(seedDate)
-                        .plusDays(java.time.LocalDate.parse(seedDate).getDayOfMonth() == 1 ? 1 : -1)
-                        .toString();
-        var b = data.seedInvoice(2, "Sales", other, "1", "0");
-        page.slListScope(data.customer().name());
-        list().setInvoiceTextFilter(
-                        "من تاريخ",
-                        java.time.LocalDate.parse(seedDate)
-                                        .isBefore(java.time.LocalDate.parse(other))
-                                ? seedDate
-                                : other);
-        list().setInvoiceTextFilter(
-                        "الي تاريخ",
-                        java.time.LocalDate.parse(seedDate)
-                                        .isAfter(java.time.LocalDate.parse(other))
-                                ? seedDate
-                                : other);
-        page.slWaitListIds(Set.of(a.id(), b.id()));
-        list().sortInvoiceColumn("التاريخ", true);
-        Assert.assertTrue(list().isInvoiceColumnSorted("التاريخ", true));
-        list().sortInvoiceColumn("التاريخ", false);
-        Assert.assertTrue(list().isInvoiceColumnSorted("التاريخ", false));
-        page.slWaitListIds(Set.of(a.id(), b.id()));
+        new InvoiceSortingChecks(this).SortingByDateColumn();
     }
 
     @DataProvider
@@ -349,16 +303,7 @@ public class InvoiceListTestCases extends SalesListActions {
     @Test
     @Story("نطاق تاريخ معكوس يعرض تحققاً أو قائمة فارغة دون نتائج مضللة")
     public void InvalidInvoiceDateRangeDoesNotReturnMisleadingRows() {
-        var a = seed(1);
-        scoped(a);
-        list().setInvoiceTextFilter(
-                        "من تاريخ", java.time.LocalDate.parse(seedDate).plusDays(1).toString());
-        list().setInvoiceTextFilter("الي تاريخ", seedDate);
-        new org.openqa.selenium.support.ui.WebDriverWait(driver, java.time.Duration.ofSeconds(35))
-                .until(
-                        d ->
-                                page.slListRows().isEmpty()
-                                        || !list().getInvoiceValidationMessages().isEmpty());
+        new InvoiceSortingChecks(this).InvalidInvoiceDateRangeDoesNotReturnMisleadingRows();
     }
 
     @Test
@@ -405,41 +350,20 @@ public class InvoiceListTestCases extends SalesListActions {
     @Test
     @Story("التنقل يحافظ على الفلتر والترتيب والفلتر الجديد يعيد الصفحة الأولى")
     public void PaginationPreservesFilterAndSortAndResetsPageForNewFilter() {
-        paged();
-        list().sortInvoiceColumn("الكود", false);
-        first = ids();
-        remaining = new HashSet<>(all);
-        remaining.removeAll(first);
-        list().goToNextInvoicePage();
-        page.slWaitListIds(remaining);
-        Assert.assertTrue(list().isInvoiceColumnSorted("الكود", false));
-        Object id = first.iterator().next();
-        page.slListText("filteredCode", codeFor(id));
-        page.slWaitListIds(Set.of(id));
-        Assert.assertEquals(list().getCurrentInvoicePageNumber(), 1);
+        new InvoicePaginationChecks(this)
+                .PaginationPreservesFilterAndSortAndResetsPageForNewFilter();
     }
 
     @Test
     @Story("تغيير حجم الصفحة من صفحة متقدمة يعيد الصفحة الأولى")
     public void SwitchingPageNumberAndPageSizeFromLaterPageWorks() {
-        paged();
-        list().goToInvoicePage(2);
-        page.slWaitListIds(remaining);
-        list().setInvoicePageSize(50);
-        page.slWaitListIds(all);
-        Assert.assertEquals(list().getCurrentInvoicePageNumber(), 1);
+        new InvoicePaginationChecks(this).SwitchingPageNumberAndPageSizeFromLaterPageWorks();
     }
 
     @Test
     @Story("حجم صفحة كبير يحافظ على الفلتر والترتيب والنتائج الصغيرة")
     public void PageSizeWorksWithFilterAndSortAndSmallResultSet() {
-        var a = seed(1);
-        var b = seed(2);
-        scoped(a, b);
-        list().sortInvoiceColumn("الكود", true);
-        list().setInvoicePageSize(100);
-        page.slWaitListIds(Set.of(a.id(), b.id()));
-        Assert.assertTrue(list().isInvoiceColumnSorted("الكود", true));
+        new InvoicePaginationChecks(this).PageSizeWorksWithFilterAndSortAndSmallResultSet();
     }
 
     @Test

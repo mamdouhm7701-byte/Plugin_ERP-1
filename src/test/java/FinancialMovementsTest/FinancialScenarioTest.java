@@ -14,6 +14,10 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 
 public abstract class FinancialScenarioTest extends BaseTest {
+    final org.openqa.selenium.WebDriver caseDriver() {
+        return driver;
+    }
+
     protected abstract FinancialMovementKind kind();
 
     protected abstract FinancialMovementPage movementPage();
@@ -22,9 +26,9 @@ public abstract class FinancialScenarioTest extends BaseTest {
     protected FinancialMovementPage page;
     protected String marker, mainWindow;
     private final List<FinancialTestData> pending = new ArrayList<>();
-    private FinancialTestData.Record party;
-    private String fromType = "Safe", toType = "Bank";
-    private boolean directAccountMode;
+    FinancialTestData.Record party;
+    String fromType = "Safe", toType = "Bank";
+    boolean directAccountMode;
 
     @BeforeMethod(alwaysRun = true)
     public void newFinancialScenario() {
@@ -43,7 +47,7 @@ public abstract class FinancialScenarioTest extends BaseTest {
         allocationInvoice = null;
     }
 
-    private void prepare(boolean accountMode) {
+    void prepare(boolean accountMode) {
         directAccountMode = accountMode;
         switch (kind()) {
             case RECEIPT, CUSTOMER_DISCOUNT -> {
@@ -68,11 +72,11 @@ public abstract class FinancialScenarioTest extends BaseTest {
         if (accountMode) page.movementType("Accounts");
     }
 
-    private void fill(String amount, boolean accountMode, boolean tax) {
+    void fill(String amount, boolean accountMode, boolean tax) {
         fill(amount, accountMode, tax, null);
     }
 
-    private void fill(String amount, boolean accountMode, boolean tax, String omitted) {
+    void fill(String amount, boolean accountMode, boolean tax, String omitted) {
         if (kind() == FinancialMovementKind.TRANSFER) {
             page.transferParty(1, fromType, data.party(fromType, 1).name());
             if ("toParty".equals(omitted)) page.selectTransferType(2, toType);
@@ -101,7 +105,7 @@ public abstract class FinancialScenarioTest extends BaseTest {
     }
 
     @SuppressWarnings("unchecked")
-    private List<FinancialTestData.Record> capture() {
+    List<FinancialTestData.Record> capture() {
         List<FinancialTestData.Record> out = new ArrayList<>();
         if (page == null || !marker.equals(page.captureMarker())) return out;
         data.rememberAttempts(page.capturedAttempts(), marker);
@@ -118,119 +122,12 @@ public abstract class FinancialScenarioTest extends BaseTest {
         return out;
     }
 
-    private FinancialTestData.Record persist(boolean print, String amount) {
-        if (!page.hasSaveStarted()) {
-            if (print) page.saveAndPrintMovement();
-            else page.saveMovement();
-        }
-        try {
-            new WebDriverWait(driver, Duration.ofSeconds(30))
-                    .until(
-                            d -> {
-                                data.rememberAttempts(page.capturedAttempts(), marker);
-                                return !page.capturedSaves().isEmpty();
-                            });
-        } catch (TimeoutException e) {
-            throw new AssertionError(
-                    "Movement save did not complete. Validation: " + page.validationMessages(), e);
-        }
-        List<FinancialTestData.Record> saves = capture();
-        FinancialTestData.Record record = saves.get(saves.size() - 1);
-        Map<String, Object> stored = data.read(record);
-        Assert.assertNotNull(stored, "Movement was not persisted");
-        page.identifyMovement(marker, stored.get("code"));
-        Assert.assertEquals(stored.get("notes"), marker, "مطابقة الملاحظات");
-        Assert.assertEquals(
-                new BigDecimal(stored.get("value").toString()).compareTo(new BigDecimal(amount)),
-                0,
-                "Persisted amount differs");
-        assertOwnedRelationships(stored);
-        if (allocationInvoice != null) {
-            Object allocations =
-                    stored.get(
-                            kind().discount()
-                                    ? "discountTransactionAllocations"
-                                    : "financialTransactionAllocations");
-            Assert.assertTrue(
-                    allocations instanceof List<?> rows && rows.size() == 1,
-                    "Expected one owned invoice allocation");
-            Map<?, ?> allocated = (Map<?, ?>) ((List<?>) allocations).get(0);
-            Assert.assertEquals(allocated.get("itemTransactionId"), allocationInvoice.id());
-            Object allocatedAmount = allocated.get(kind().discount() ? "allocatedValue" : "value");
-            Assert.assertNotNull(
-                    allocatedAmount, "Persisted allocation amount missing: " + allocated);
-            Assert.assertEquals(
-                    new BigDecimal(allocatedAmount.toString()).compareTo(new BigDecimal(amount)),
-                    0);
-        }
-        if (print) {
-            new WebDriverWait(driver, Duration.ofSeconds(30))
-                    .until(d -> d.getWindowHandles().size() > 1);
-            String report =
-                    driver.getWindowHandles().stream()
-                            .filter(h -> !h.equals(mainWindow))
-                            .findFirst()
-                            .orElseThrow();
-            driver.switchTo().window(report);
-            try {
-                page.awaitReport();
-                page.AssertTextInReport(marker);
-                page.AssertNumberInReport(amount);
-                page.AssertDateInReport(
-                        java.time.LocalDate.parse(
-                                        stored.get("transactionDate").toString().substring(0, 10))
-                                .format(
-                                        java.time.format.DateTimeFormatter.ofPattern(
-                                                "dd/MM/yyyy")));
-                if (party != null) page.AssertTextInReport(party.name());
-                if (kind() == FinancialMovementKind.TRANSFER) {
-                    page.AssertTextInReport(data.party(fromType, 1).name());
-                    page.AssertTextInReport(data.party(toType, 2).name());
-                } else if (!kind().discount()) {
-                    page.AssertTextInReport("اخري");
-                    page.AssertTextInReport(data.bank(1).name());
-                }
-            } catch (RuntimeException | AssertionError failure) {
-                page.attachReportEvidence();
-                throw failure;
-            } finally {
-                driver.close();
-                driver.switchTo().window(mainWindow);
-            }
-        }
-        page.waitForList();
-        return record;
+    FinancialTestData.Record persist(boolean print, String amount) {
+        return new FinancialPersistenceChecks(this).persist(print, amount);
     }
 
-    private void assertOwnedRelationships(Map<String, Object> stored) {
-        if (kind() == FinancialMovementKind.TRANSFER) {
-            Assert.assertEquals(stored.get("fromType"), fromType);
-            Assert.assertEquals(stored.get("toType"), toType);
-            Assert.assertEquals(stored.get("from" + fromType + "Id"), data.party(fromType, 1).id());
-            Assert.assertEquals(stored.get("to" + toType + "Id"), data.party(toType, 2).id());
-        } else if (kind() == FinancialMovementKind.EXPENSE
-                || kind() == FinancialMovementKind.INCOME) {
-            String key =
-                    directAccountMode
-                            ? "accountId"
-                            : kind() == FinancialMovementKind.EXPENSE ? "expenseId" : "incomeId";
-            Assert.assertEquals(
-                    stored.get(key), party.id(), "Movement must use its own account/type");
-        } else {
-            Assert.assertEquals(
-                    stored.get("dealerId"), party.id(), "Movement must use its own dealer");
-            Assert.assertEquals(
-                    stored.get("agentId"),
-                    data.agent(
-                                    kind() == FinancialMovementKind.PAYMENT
-                                            || kind() == FinancialMovementKind.SUPPLIER_DISCOUNT)
-                            .id(),
-                    "مطابقة المندوب");
-        }
-        if (!kind().discount() && kind() != FinancialMovementKind.TRANSFER) {
-            Assert.assertEquals(stored.get("paymentMethodId"), data.payment().id());
-            Assert.assertEquals(stored.get("bankId"), data.bank(1).id(), "مطابقة البنك");
-        }
+    void assertOwnedRelationships(Map<String, Object> stored) {
+        new FinancialPersistenceChecks(this).assertOwnedRelationships(stored);
     }
 
     protected void create(
@@ -315,7 +212,7 @@ public abstract class FinancialScenarioTest extends BaseTest {
                 "Expected validation for " + field + ": " + page.validationMessages());
     }
 
-    private FinancialTestData.Record allocationInvoice;
+    FinancialTestData.Record allocationInvoice;
 
     protected void allocateOwnInvoice(String amount) {
         allocationInvoice =
@@ -414,7 +311,7 @@ public abstract class FinancialScenarioTest extends BaseTest {
         export("excel");
     }
 
-    private void export(String format) {
+    void export(String format) {
         prepare(false);
         fill("100", false, false);
         var saved = persist(false, "100");

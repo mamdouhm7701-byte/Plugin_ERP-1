@@ -33,6 +33,7 @@ public final class AllureContextNoiseFilter extends AbstractFilter {
     public static boolean expectedOutsideContext(String message, boolean hasContext) {
         if (hasContext || message == null) return false;
         return message.equals("Could not start step: no test case running")
+                || message.equals("Could not add attachment: no test is running")
                 || message.equals("Could not update step: no step running")
                 || message.equals("Could not stop step: no step running")
                 || message.matches(

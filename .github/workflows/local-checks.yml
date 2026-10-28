@@ -38,10 +38,12 @@ jobs:
         run: |
           python scripts/test_check_secrets.py
           python scripts/check_secrets.py
+          python scripts/test_check_maintainability.py
           python scripts/check_maintainability.py
           python scripts/test_analyze_stability.py
           python scripts/test_run_evidence.py
           python scripts/test_cleanup_layout.py
+          python scripts/test_case_delegation.py
       - name: Build and run local contracts
         env:
           REPORT_MAIL_ENABLED: ${{ secrets.REPORT_MAIL_ENABLED }}

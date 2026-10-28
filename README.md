@@ -107,3 +107,6 @@ mvn '-DExecutionType=LocalHeadless' '-Dsurefire.suiteXmlFiles=src/test/resources
 لربط نتائج محفوظة بالشاشات ومعرفة أبطأ المجموعات وأوقات تجهيزها وتنظيفها:
 `python -X utf8 scripts/build_run_evidence.py allure-results target/run-evidence`.
 [قراءة أدلة التغطية والوقت وحدودها](docs/testing/RUN_EVIDENCE_AR.md).
+
+
+تقرير الصيانة والتحقق الحالي: [حالة الصيانة وحدود التأهيل الحي](docs/testing/FINAL_MAINTENANCE_STATUS_AR.md).

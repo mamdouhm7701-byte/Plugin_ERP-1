@@ -41,6 +41,7 @@ public class BaseTest implements Plugin_ERP.Util.RunEnvironmentGate.ProtectedSce
     // ================= SETUP =================
     @BeforeClass(alwaysRun = true)
     public void setup() throws Exception {
+        Plugin_ERP.Util.Allur.AllureContextNoiseFilter.install();
         setupFailure = null;
         branchProfile = null;
         try {

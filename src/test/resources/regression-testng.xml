@@ -20,6 +20,9 @@
   تشغيل XML مباشرة يظل تسلسليًا: mvn '-Dsurefire.suiteXmlFiles=src/test/resources/regression-testng.xml' test
 -->
 <suite name="Regression - Core modules and workflows" parallel="none" configfailurepolicy="continue">
+    <!-- Explicit branch profile adds matching business contracts; ERP - Business run prepares a fresh branch. -->
+    <parameter name="business.level" value="Regression"/>
+    <listeners><listener class-name="SuiteSupport.BusinessLevelSuitePolicy"/></listeners>
     <suite-files>
         <suite-file path="report-navigation-testng.xml"/>
         <suite-file path="coverage-expansion-testng.xml"/>

@@ -9,8 +9,13 @@
     <test name="Configuration, arithmetic and owned fixture recovery" preserve-order="true">
         <classes>
             <class name="TestSupport.PolicyItemRecipeTest"/>
+            <class name="TestSupport.ConcreteReservationReportAssertionsTest"/>
             <class name="Plugin_ERP.BranchProfiles.BusinessRunRequestTest"/>
             <class name="SuiteSupport.BusinessRunListenerTest"/>
+            <class name="SuiteSupport.BusinessLevelContractsTest"/>
+            <class name="SuiteSupport.BusinessRunTargetTest"/>
+            <class name="SuiteSupport.BusinessSuiteSchedulingTest"/>
+            <class name="SuiteSupport.BusinessBranchCleanupTest"/>
             <class name="Plugin_ERP.BranchProfiles.RestaurantAdditionalTaxTest"/>
             <class name="Plugin_ERP.BranchProfiles.BranchInvoiceCalculatorTest"/>
             <class name="Plugin_ERP.BranchProfiles.BranchConfigurationWorkflowTest"/>

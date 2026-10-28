@@ -1,0 +1,31 @@
+{
+  "activity": "Concrete",
+  "route": "#/concrete-under-review/new",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "3ef03094aba3bb30",
+  "profileFingerprint": "74e8d1cc7f731f44633886279954a5249b13ca840174213b04ecbad814b2209d",
+  "profile": "business-e96ed331663da1e8",
+  "policies": {
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "branchId": "3ef03094aba3bb30",
+    "activityType": "Concrete",
+    "discountLevel": "Transaction",
+    "taxPolicy": "NetBased",
+    "stocktakingMethod": "Periodic"
+  },
+  "caseClass": "Invoice.UnderReviewCoverageTest",
+  "journeys": [
+    "Save/read owned concrete under-review document with quantity3 and unchanged stock"
+  ],
+  "evidenceLog": "target/native-complete-concrete-live.log",
+  "branchCleanup": {
+    "branchId": "3ef03094aba3bb30",
+    "status": "DELETED"
+  },
+  "capturedFromVerifiedRun": true,
+  "evidenceScope": "Passing save case only: combined run22 passed1 broken. Native edit/reopen remains broken and is not included.",
+  "documentAttachment": "target/native-complete-concrete-results/831c4724-91fe-4fab-8c32-1688c745d089-attachment.json"
+}

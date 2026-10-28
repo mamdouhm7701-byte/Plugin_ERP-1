@@ -30,6 +30,7 @@ final class SalesTestData implements AutoCloseable {
                     "ConcreteDelivery",
                     "ItemTransactions-ConcreteSales",
                     "ItemTransactions-Reservations",
+                    "Purchases",
                     "ItemTransactions-quotation",
                     "ItemTransactions-SalesOrder",
                     "ItemTransactions-ReturnSales");
@@ -48,7 +49,8 @@ final class SalesTestData implements AutoCloseable {
                     "Safes",
                     "PaymentMethods",
                     "PriceLists",
-                    "DiscountTypes");
+                    "DiscountTypes",
+                    "CarColors");
     private final List<Map<String, Object>> uncertainDocuments = new ArrayList<>();
     private String lastAttemptJournal = "";
     private int scenarioSequence;
@@ -862,18 +864,26 @@ final class SalesTestData implements AutoCloseable {
                 String list =
                         endpoint.equals("ConcreteDelivery")
                                 ? "ConcreteDelivery"
-                                : "SalesTransactions";
+                                : endpoint.equals("Purchases")
+                                        ? "PurchaseLists"
+                                        : "SalesTransactions";
                 String type =
                         endpoint.equals("ConcreteDelivery")
                                 ? "ConcreteDelivery"
-                                : endpoint.equals("ItemTransactions-ConcreteSales")
-                                        ? "Sales"
-                                        : endpoint.substring("ItemTransactions-".length());
+                                : endpoint.equals("Purchases")
+                                        ? "Purch"
+                                        : endpoint.equals("ItemTransactions-ConcreteSales")
+                                                ? "Sales"
+                                                : endpoint.substring("ItemTransactions-".length());
                 java.util.Set<Object> seen = new java.util.HashSet<>();
                 for (int page = 1; ; page++) {
-                    Object entity =
-                            call("get", list + "?pageNumber=" + page + "&pageSize=500", fields())
-                                    .get("entity");
+                    String query = list + "?pageNumber=" + page + "&pageSize=500";
+                    if (endpoint.equals("Purchases")) {
+                        query += "&transactionType=Purch";
+                        if (values.get("dealerId") != null)
+                            query += "&dealerId=" + values.get("dealerId");
+                    }
+                    Object entity = call("get", query, fields()).get("entity");
                     if (!(entity instanceof Map<?, ?> result)
                             || !(result.get("pageData") instanceof List<?> rows)
                             || !(result.get("totalRecords") instanceof Number total))
@@ -885,7 +895,9 @@ final class SalesTestData implements AutoCloseable {
                             throw new AssertionError("Sales list has no record identity");
                         if (!seen.add(row.get("id"))) continue;
                         added++;
-                        if (!row.containsKey("notes") && !row.containsKey("storeId"))
+                        boolean summaryOnly =
+                                !row.containsKey("notes") && !row.containsKey("storeId");
+                        if (summaryOnly && !endpoint.equals("Purchases"))
                             throw new AssertionError(
                                     "Sales list omits fields needed to verify an uncertain create");
                         if (created.stream()
@@ -894,7 +906,8 @@ final class SalesTestData implements AutoCloseable {
                                                 r.endpoint().equals(endpoint)
                                                         && java.util.Objects.equals(
                                                                 r.id(), row.get("id")))) continue;
-                        if (name.equals(row.get("notes"))
+                        if ((summaryOnly && endpoint.equals("Purchases"))
+                                || name.equals(row.get("notes"))
                                 || (java.util.Objects.equals(
                                                 values.get("storeId"), row.get("storeId"))
                                         && type.equalsIgnoreCase(
@@ -902,9 +915,11 @@ final class SalesTestData implements AutoCloseable {
                             Record candidate = new Record(endpoint, row.get("id"), name, values);
                             Map<String, Object> stored = read(candidate);
                             if (stored != null) {
-                                if (!owns(candidate, stored))
+                                if (!owns(candidate, stored)) {
+                                    if (endpoint.equals("Purchases") && summaryOnly) continue;
                                     throw new AssertionError(
                                             "Cannot verify uncertain sales candidate ownership");
+                                }
                                 matches.add(candidate);
                             }
                         }

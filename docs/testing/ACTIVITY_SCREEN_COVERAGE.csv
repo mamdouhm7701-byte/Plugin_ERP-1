@@ -42,7 +42,7 @@ Public,حركة الايرادات,#/income-transactions,OBSERVED,false,UNVERIFI
 Public,أنواع الإيرادات,#/income-type,OBSERVED,false,UNVERIFIED,NOT_RUN,Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Public,محضر الجرد,#/inventory,OBSERVED,false,UNVERIFIED,NOT_RUN,StoreTest.StocktakingCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Public,استعراض المبيعات,#/invoice-list,OBSERVED,false,UNVERIFIED,NOT_RUN,Invoice.SalesListCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
-Public,فاتورة مبيعات,#/invoice/new,OBSERVED,false,UNVERIFIED,NOT_RUN,Invoice.SalesInvoiceCoverageTest; Invoice.SelectedBranchSalesPolicyTest,Activity live tests - partial journey,PARTIAL,"ItemBased: taxable100 + exempt100, VAT15 and net215, saved/read/stock; PriceIncluded / Items / Continuous: saved taxable items, VAT and stock; Single-item discount: saved/read totals and stock; Single-item movement discount10: VAT13.5 and net103.5, saved/read/stock"
+Public,فاتورة مبيعات,#/invoice/new,OBSERVED,false,UNVERIFIED,NOT_RUN,Invoice.SalesInvoiceCoverageTest; Invoice.SelectedBranchSalesPolicyTest,Activity live tests - partial journey,PARTIAL,"ItemBased: taxable100 + exempt100, VAT15 and net215, saved/read/stock; PriceIncluded / Items / Continuous: saved taxable items, VAT and stock; Save/read taxable items and supported exemptions; selected discount level before VAT; independent totals and stock; Save/read two taxable items and single-item discount; independent VAT and stock; Single-item discount: saved/read totals and stock; Single-item movement discount10: VAT13.5 and net103.5, saved/read/stock"
 Public,فئات الأصناف,#/items-category,OBSERVED,false,UNVERIFIED,NOT_RUN,ProductsTest.ProductCategoriesTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Public,تقارير الأصناف,#/items-reports,OBSERVED,false,UNVERIFIED,NOT_RUN,CoverageTest.ReportNavigationCoverageTest,اختبارات قراءة فقط — دليل التقارير والمرشحات؛ تحقق حي 2026-10-27,NOT_RUN,
 Public,الملف التاريخي,#/logs,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,CoverageTest.AuditLogCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
@@ -83,7 +83,7 @@ Public,اشعار خصم مورد,#/supplier-discount,OBSERVED,false,UNVERIFIED,
 Public,الموردين,#/suppliers,OBSERVED,false,UNVERIFIED,NOT_RUN,DealerModelTest.SupplierTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Public,الطاولات,#/tables,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,CoverageTest.TablesCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Public,تحويلات وتسويات,#/transfers-and-settlements,OBSERVED,false,UNVERIFIED,NOT_RUN,FinancialMovementsTest.TransfersAndSettlementsTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
-Public,فاتورة تحت الأجراء new,#/underReview/new,OBSERVED,false,UNVERIFIED,NOT_RUN,Invoice.UnderReviewCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
+Public,فاتورة تحت الأجراء new,#/underReview/new,OBSERVED,false,UNVERIFIED,NOT_RUN,Invoice.UnderReviewCoverageTest; Invoice.UnderReviewCoverageTest,Activity live tests - partial journey,PARTIAL,Save/read owned under-review document with quantity3 and unchanged stock; reopen exact saved document identity and notes
 Public,الوحدات,#/units,OBSERVED,false,UNVERIFIED,NOT_RUN,ProductsTest.UnitTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Public,المستخدمين,#/users,OBSERVED,false,UNVERIFIED,NOT_RUN,CoverageTest.UsersCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Public,إحصائيات المستخدمين,#/usersAndAgents-dashboard,OBSERVED,false,UNVERIFIED,NOT_RUN,,خارج النطاق بناء على طلب المستخدم,NOT_RUN,
@@ -156,8 +156,8 @@ Restaurant,تقارير المشتريات,#/purchase-reports,OBSERVED,false,UNV
 Restaurant,عرض سعر,#/quotation/new,OBSERVED,false,UNVERIFIED,NOT_RUN,Invoice.QuotationTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Restaurant,الحجوزات,#/reservations/new,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,,inventory-only,NOT_RUN,
 Restaurant,إحصائيات المطاعم,#/restaurant-dashboard,OBSERVED,false,UNVERIFIED,NOT_RUN,,خارج النطاق بناء على طلب المستخدم,NOT_RUN,
-Restaurant,فاتورة المطعم,#/restaurant-menu,OBSERVED,false,UNVERIFIED,PASSED,SpecialSalesTest.RestaurantInvoiceTest; SpecialSalesTest.SelectedRestaurantPolicyTest,Activity live tests - partial journey,PARTIAL,"NetBased / Transaction / Periodic, no additional tax: save/pay/read restaurant invoice, VAT30 and net230, stock"
-Restaurant,طلبات المطبخ,#/restaurant-orders,OBSERVED,false,UNVERIFIED,PASSED,SpecialSalesTest.KitchenOrdersCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
+Restaurant,فاتورة المطعم,#/restaurant-menu,OBSERVED,false,UNVERIFIED,PASSED,SpecialSalesTest.RestaurantInvoiceTest; SpecialSalesTest.RestaurantMinimumAdditionalTaxTest; SpecialSalesTest.SelectedRestaurantPolicyTest,Activity live tests - partial journey,PARTIAL,"NetBased / Transaction / Periodic, no additional tax: save/pay/read restaurant invoice, VAT30 and net230, stock; Save/pay/read per-unit minimum additional tax25 at quantities1 and3; inclusive price11.5 or exclusive10; independent VAT and stock; Save/pay/read selected-policy taxable items; independent VAT; stock; owned prerequisites restored"
+Restaurant,طلبات المطبخ,#/restaurant-orders,OBSERVED,false,UNVERIFIED,PASSED,SpecialSalesTest.KitchenOrdersCoverageTest; SpecialSalesTest.KitchenOrdersCoverageTest,Activity live tests - partial journey,PARTIAL,Hold owned internal table order; DirectDelivery kitchen completion and close; persisted line/order status; stock decreases once only
 Restaurant,مرتجع مشتريات,#/return-purch/new,OBSERVED,false,UNVERIFIED,NOT_RUN,Purches.PurchaseReturnCoverageTest; Purches.PurchaseLinkedCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Restaurant,مرتجع مبيعات,#/return-sales/new,OBSERVED,false,UNVERIFIED,NOT_RUN,Invoice.SalesReturnTest; Invoice.LinkedSalesReturnTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Restaurant,إستلام الخزينة,#/safe-transaction,OBSERVED,false,UNVERIFIED,NOT_RUN,Plugin_ERP.Tests.LoginTest.BasicDataTest.TreasuryHandoverTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
@@ -171,7 +171,7 @@ Restaurant,التحويل بين المخازن,#/storage-transfer,OBSERVED,fals
 Restaurant,بيانات الإشتراك,#/subscription-data,OBSERVED,true,UNVERIFIED,NOT_RUN,,خارج النطاق بناء على طلب المستخدم,NOT_RUN,
 Restaurant,اشعار خصم مورد,#/supplier-discount,OBSERVED,false,UNVERIFIED,NOT_RUN,FinancialMovementsTest.SupplierDiscountNoticeTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Restaurant,الموردين,#/suppliers,OBSERVED,false,UNVERIFIED,NOT_RUN,DealerModelTest.SupplierTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
-Restaurant,الطاولات,#/tables,OBSERVED,false,UNVERIFIED,PASSED,CoverageTest.TablesCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
+Restaurant,الطاولات,#/tables,OBSERVED,false,UNVERIFIED,PASSED,CoverageTest.TablesCoverageTest; CoverageTest.TablesCoverageTest,Activity live tests - partial journey,PARTIAL,Create/read owned table; edit capacity without changing identity; cancel deletion then confirm deletion
 Restaurant,تحويلات وتسويات,#/transfers-and-settlements,OBSERVED,false,UNVERIFIED,NOT_RUN,FinancialMovementsTest.TransfersAndSettlementsTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Restaurant,فاتورة تحت الأجراء new,#/underReview/new,OBSERVED,false,UNVERIFIED,NOT_RUN,Invoice.UnderReviewCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Restaurant,الوحدات,#/units,OBSERVED,false,UNVERIFIED,NOT_RUN,ProductsTest.UnitTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
@@ -205,7 +205,7 @@ Construction,إذن تسليم خرسانة,#/concrete-exchange-order/new,NOT_OB
 Construction,تقارير الخرسانة,#/concrete-reports,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,,inventory-only,NOT_RUN,
 Construction,فاتورة مبيعات خرسانة,#/concrete-sales-invoice/new,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,,inventory-only,NOT_RUN,
 Construction,تحت الإجراء خرسانة new,#/concrete-under-review/new,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,,inventory-only,NOT_RUN,
-Construction,إنشاء العقود,#/contracts/new,OBSERVED,false,UNVERIFIED,PASSED,Invoice.ConstructionContractTest,Activity live tests - partial journey,PARTIAL,Create/read Contract100 + VAT15 =115; stock and customer balance unchanged
+Construction,إنشاء العقود,#/contracts/new,OBSERVED,false,UNVERIFIED,PASSED,Invoice.ConstructionContractTest,Activity live tests - partial journey,PARTIAL,Create/read Contract100 + VAT15 =115; stock and customer balance unchanged; Save/read owned contract; VAT and unchanged inventory/customer balance
 Construction,مراكز التكلفة,#/cost-center,OBSERVED,false,UNVERIFIED,NOT_RUN,CoverageTest.CostCentersCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Construction,اشعار خصم عميل,#/customer-discount,OBSERVED,false,UNVERIFIED,NOT_RUN,FinancialMovementsTest.CustomerDiscountNoticeTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Construction,العملاء,#/customers,OBSERVED,false,UNVERIFIED,NOT_RUN,DealerModelTest.CustomersTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
@@ -222,7 +222,7 @@ Construction,حركة الايرادات,#/income-transactions,OBSERVED,false,UN
 Construction,أنواع الإيرادات,#/income-type,OBSERVED,false,UNVERIFIED,NOT_RUN,Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Construction,محضر الجرد,#/inventory,OBSERVED,false,UNVERIFIED,NOT_RUN,StoreTest.StocktakingCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Construction,استعراض المبيعات,#/invoice-list,OBSERVED,false,UNVERIFIED,NOT_RUN,Invoice.SalesListCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
-Construction,فاتورة مبيعات,#/invoice/new,OBSERVED,false,UNVERIFIED,NOT_RUN,Invoice.SalesInvoiceCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
+Construction,فاتورة مبيعات,#/invoice/new,OBSERVED,false,UNVERIFIED,NOT_RUN,Invoice.SalesInvoiceCoverageTest; Invoice.SelectedBranchSalesPolicyTest,Activity live tests - partial journey,PARTIAL,Save/read taxable items and discount; independent VAT and stock
 Construction,فئات الأصناف,#/items-category,OBSERVED,false,UNVERIFIED,NOT_RUN,ProductsTest.ProductCategoriesTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Construction,تقارير الأصناف,#/items-reports,OBSERVED,false,UNVERIFIED,NOT_RUN,CoverageTest.ReportNavigationCoverageTest,اختبارات قراءة فقط — دليل التقارير والمرشحات؛ تحقق حي 2026-10-27,NOT_RUN,
 Construction,الملف التاريخي,#/logs,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,CoverageTest.AuditLogCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
@@ -284,17 +284,17 @@ Concrete,الفروع,#/branches,OBSERVED,false,UNVERIFIED,NOT_RUN,,خارج ا�
 Concrete,إحصائيات الفروع,#/branches-dashboard,OBSERVED,false,UNVERIFIED,NOT_RUN,,خارج النطاق بناء على طلب المستخدم,NOT_RUN,
 Concrete,الفواتير المجمعه,#/bulk-invoices,OBSERVED,false,UNVERIFIED,NOT_RUN,,خارج النطاق بناء على طلب المستخدم,NOT_RUN,
 Concrete,الوان السيارات,#/car-colors,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,,inventory-only,NOT_RUN,
-Concrete,السيارات,#/cars,OBSERVED,false,UNVERIFIED,PASSED,,inventory-only,NOT_RUN,
-Concrete,نوع الصبة,#/castingTypes,OBSERVED,false,UNVERIFIED,PASSED,CoverageTest.ActivityMasterLifecycleTest,Activity live tests - partial journey,PARTIAL,Server-code master: create/read/reopen/update with same ID/code; cancel delete then confirm delete
-Concrete,نوع الأسمنت,#/cementTypes,OBSERVED,false,UNVERIFIED,PASSED,,inventory-only,NOT_RUN,
+Concrete,السيارات,#/cars,OBSERVED,false,UNVERIFIED,PASSED,CoverageTest.ActivityMasterLifecycleTest,Activity live tests - partial journey,PARTIAL,Create/read/reopen/update exact owned Cars with server-assigned code; cancel deletion then confirm deletion and verify server absence
+Concrete,نوع الصبة,#/castingTypes,OBSERVED,false,UNVERIFIED,PASSED,CoverageTest.ActivityMasterLifecycleTest,Activity live tests - partial journey,PARTIAL,Create/read/reopen/update exact owned CastingTypes with server-assigned code; cancel deletion then confirm deletion and verify server absence; Server-code master: create/read/reopen/update with same ID/code; cancel delete then confirm delete
+Concrete,نوع الأسمنت,#/cementTypes,OBSERVED,false,UNVERIFIED,PASSED,CoverageTest.ActivityMasterLifecycleTest,Activity live tests - partial journey,PARTIAL,Create/read/reopen/update exact owned CementTypes with server-assigned code; cancel deletion then confirm deletion and verify server absence
 Concrete,دليل الحسابات,#/chart-of-account,OBSERVED,false,UNVERIFIED,NOT_RUN,CoverageTest.ChartOfAccountsCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,سند قبض عميل,#/collection-transactions,OBSERVED,false,UNVERIFIED,NOT_RUN,FinancialMovementsTest.CustomerReceiptTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,اعدادات الشركة,#/company,OBSERVED,false,UNVERIFIED,NOT_RUN,,خارج النطاق بناء على طلب المستخدم,NOT_RUN,
 Concrete,إحصائيات الخرسانه new,#/concrete-dashboard,OBSERVED,false,UNVERIFIED,NOT_RUN,,inventory-only,NOT_RUN,
-Concrete,إذن تسليم خرسانة,#/concrete-exchange-order/new,OBSERVED,false,UNVERIFIED,PASSED,,inventory-only,NOT_RUN,
-Concrete,تقارير الخرسانة,#/concrete-reports,OBSERVED,false,UNVERIFIED,PASSED,,inventory-only,NOT_RUN,
-Concrete,فاتورة مبيعات خرسانة,#/concrete-sales-invoice/new,OBSERVED,false,UNVERIFIED,PASSED,,inventory-only,NOT_RUN,
-Concrete,تحت الإجراء خرسانة new,#/concrete-under-review/new,OBSERVED,false,UNVERIFIED,PASSED,,inventory-only,NOT_RUN,
+Concrete,إذن تسليم خرسانة,#/concrete-exchange-order/new,OBSERVED,false,UNVERIFIED,PASSED,Invoice.ConcreteStockJourneyTest,Activity live tests - partial journey,PARTIAL,Owned partial delivery quantity1 references exact reservation; stock1000 to999
+Concrete,تقارير الخرسانة,#/concrete-reports,OBSERVED,false,UNVERIFIED,PASSED,CoverageTest.ConcreteReportRequestTest; Invoice.ConcreteReservationReportTest,Activity live tests - partial journey,PARTIAL,"Native preview submits cars, drivers, customer-project detail and total reports plus reservation detail/total scoped to current branch and dates; Native preview submits cars, drivers, customer-project detail and total reports scoped to current branch and dates; Rendered reservation detail and total reports reconcile exact owned item and grand total before and after partial delivery: original2/value200; consumed0 then1; remaining2 then1; stock1000 then999"
+Concrete,فاتورة مبيعات خرسانة,#/concrete-sales-invoice/new,OBSERVED,false,UNVERIFIED,PASSED,Invoice.ConcreteStockJourneyTest,Activity live tests - partial journey,PARTIAL,Direct concrete invoice persists without consuming stock; Owned delivery invoice quantity1 net115 VAT15; stock remains999; exact submitted delivery ID; reopened invoice identities; server delivery no longer available for billing
+Concrete,تحت الإجراء خرسانة new,#/concrete-under-review/new,OBSERVED,false,UNVERIFIED,PASSED,Invoice.UnderReviewCoverageTest,Activity live tests - partial journey,PARTIAL,Save/read owned concrete under-review document with quantity3 and unchanged stock
 Concrete,إنشاء العقود,#/contracts/new,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,,inventory-only,NOT_RUN,
 Concrete,مراكز التكلفة,#/cost-center,OBSERVED,false,UNVERIFIED,NOT_RUN,CoverageTest.CostCentersCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,اشعار خصم عميل,#/customer-discount,OBSERVED,false,UNVERIFIED,NOT_RUN,FinancialMovementsTest.CustomerDiscountNoticeTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
@@ -303,7 +303,7 @@ Concrete,تقارير العملاء والموردين,#/customers-and-supplier
 Concrete,تسوية التوالف,#/damage-adjustment,OBSERVED,false,UNVERIFIED,NOT_RUN,StoreTest.DamageAdjustmentTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,تصنيف المتعاملين,#/dealersClassification,OBSERVED,false,UNVERIFIED,NOT_RUN,DealerModelTest.CustomerClassificationTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,انوع الخصومات,#/discount-types,OBSERVED,false,UNVERIFIED,NOT_RUN,Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
-Concrete,السائقين,#/drivers,OBSERVED,false,UNVERIFIED,PASSED,,inventory-only,NOT_RUN,
+Concrete,السائقين,#/drivers,OBSERVED,false,UNVERIFIED,PASSED,CoverageTest.ActivityMasterLifecycleTest,Activity live tests - partial journey,PARTIAL,Create/read/reopen/update owned Drivers; stable identity/code; cancel deletion then confirm deletion and verify server absence
 Concrete,جهات الصرف,#/exchange-destinations,OBSERVED,false,UNVERIFIED,NOT_RUN,Plugin_ERP.Tests.LoginTest.BasicDataTest.DisEntTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,إذن صرف,#/exchange-order/new,OBSERVED,false,UNVERIFIED,NOT_RUN,StoreTest.ExchangeOrderTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,حركة المصروفات,#/expense-transactions,OBSERVED,false,UNVERIFIED,NOT_RUN,FinancialMovementsTest.ExpenseMovementTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
@@ -318,7 +318,7 @@ Concrete,تقارير الأصناف,#/items-reports,OBSERVED,false,UNVERIFIED,N
 Concrete,الملف التاريخي,#/logs,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,CoverageTest.AuditLogCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,المتعامل الرئيسي,#/mainDealer,OBSERVED,false,UNVERIFIED,NOT_RUN,DealerModelTest.MainDealerTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,إذن تصنيع,#/manufacturing-order/new,OBSERVED,false,UNVERIFIED,NOT_RUN,StoreTest.ManufacturingTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
-Concrete,اقصي درجة حرارة,#/maxTemperature,OBSERVED,false,UNVERIFIED,PASSED,,inventory-only,NOT_RUN,
+Concrete,اقصي درجة حرارة,#/maxTemperature,OBSERVED,false,UNVERIFIED,PASSED,CoverageTest.ActivityMasterLifecycleTest,Activity live tests - partial journey,PARTIAL,Create/read/reopen/update exact owned MaxTemperatures with server-assigned code; cancel deletion then confirm deletion and verify server absence
 Concrete,استعراض الأذونات,#/orders,OBSERVED,false,UNVERIFIED,NOT_RUN,StoreTest.AdditionOrderTest; StoreTest.ExchangeOrderTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,تسوية الفائض,#/overflow-adjustment,OBSERVED,false,UNVERIFIED,NOT_RUN,StoreTest.OverflowAdjustmentCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,طرق الدفع,#/payment-methods,OBSERVED,false,UNVERIFIED,NOT_RUN,Plugin_ERP.Tests.LoginTest.BasicDataTest.PaymentTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
@@ -327,14 +327,14 @@ Concrete,فاتورة نقاط بيع,#/point-of-sale,OBSERVED,false,UNVERIFIED,
 Concrete,الربط مع هيئة الزكاة,#/posConfigurations,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,CoverageTest.ZatcaConfigurationCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,الترحيل الي الحسابات,#/post-vouchers,OBSERVED,false,UNVERIFIED,NOT_RUN,Invoice.PostingCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,قوائم الأسعار,#/price-list,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,ProductsTest.ProductListTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
-Concrete,المشاريع,#/projects,OBSERVED,false,UNVERIFIED,PASSED,,inventory-only,NOT_RUN,
+Concrete,المشاريع,#/projects,OBSERVED,false,UNVERIFIED,PASSED,CoverageTest.ActivityMasterLifecycleTest,Activity live tests - partial journey,PARTIAL,Create/read/reopen/update exact owned Projects with server-assigned code; cancel deletion then confirm deletion and verify server absence
 Concrete,استعراض المشتريات,#/purch-invoice-list,OBSERVED,false,UNVERIFIED,NOT_RUN,Purches.PurchaseListCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,فاتورة مشتريات,#/purch-invoice/new,OBSERVED,false,UNVERIFIED,NOT_RUN,Purches.PurchaseInvoiceCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,امر شراء,#/purchOrder/new,OBSERVED,false,UNVERIFIED,NOT_RUN,Purches.PurchaseOrderCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,إحصائيات المشتريات,#/purchase-dashboard,OBSERVED,false,UNVERIFIED,NOT_RUN,,خارج النطاق بناء على طلب المستخدم,NOT_RUN,
 Concrete,تقارير المشتريات,#/purchase-reports,OBSERVED,false,UNVERIFIED,NOT_RUN,CoverageTest.ReportNavigationCoverageTest,اختبارات قراءة فقط — دليل التقارير والمرشحات؛ تحقق حي 2026-10-27,NOT_RUN,
 Concrete,عرض سعر,#/quotation/new,OBSERVED,false,UNVERIFIED,NOT_RUN,Invoice.QuotationTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
-Concrete,الحجوزات,#/reservations/new,OBSERVED,false,UNVERIFIED,PASSED,,inventory-only,NOT_RUN,
+Concrete,الحجوزات,#/reservations/new,OBSERVED,false,UNVERIFIED,PASSED,Invoice.ConcreteStockJourneyTest,Activity live tests - partial journey,PARTIAL,Owned reservation quantity2; net230/VAT30; unchanged stock1000; exact reservation in delivery picker
 Concrete,إحصائيات المطاعم,#/restaurant-dashboard,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,,خارج النطاق بناء على طلب المستخدم,NOT_RUN,
 Concrete,فاتورة المطعم,#/restaurant-menu,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,SpecialSalesTest.RestaurantInvoiceTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 Concrete,طلبات المطبخ,#/restaurant-orders,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,SpecialSalesTest.KitchenOrdersCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
@@ -373,7 +373,7 @@ CarShowroom,البنوك,#/banks,OBSERVED,false,UNVERIFIED,NOT_RUN,Plugin_ERP.Te
 CarShowroom,الفروع,#/branches,OBSERVED,false,UNVERIFIED,NOT_RUN,,خارج النطاق بناء على طلب المستخدم,NOT_RUN,
 CarShowroom,إحصائيات الفروع,#/branches-dashboard,OBSERVED,false,UNVERIFIED,NOT_RUN,,خارج النطاق بناء على طلب المستخدم,NOT_RUN,
 CarShowroom,الفواتير المجمعه,#/bulk-invoices,OBSERVED,false,UNVERIFIED,NOT_RUN,,خارج النطاق بناء على طلب المستخدم,NOT_RUN,
-CarShowroom,الوان السيارات,#/car-colors,OBSERVED,false,UNVERIFIED,PASSED,CoverageTest.ActivityMasterLifecycleTest,Activity live tests - partial journey,PARTIAL,Server-code master: create/read/reopen/update with same ID/code; cancel delete then confirm delete; manual-code behavior not covered
+CarShowroom,الوان السيارات,#/car-colors,OBSERVED,false,UNVERIFIED,PASSED,CoverageTest.ActivityMasterLifecycleTest,Activity live tests - partial journey,PARTIAL,Create/read/reopen/update exact owned CarColors with automatic code; cancel then confirm deletion and verify absence; Server-code master: create/read/reopen/update with same ID/code; cancel delete then confirm delete; manual-code behavior not covered
 CarShowroom,السيارات,#/cars,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,,inventory-only,NOT_RUN,
 CarShowroom,نوع الصبة,#/castingTypes,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,,inventory-only,NOT_RUN,
 CarShowroom,نوع الأسمنت,#/cementTypes,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,,inventory-only,NOT_RUN,
@@ -402,7 +402,7 @@ CarShowroom,حركة الايرادات,#/income-transactions,OBSERVED,false,UNV
 CarShowroom,أنواع الإيرادات,#/income-type,OBSERVED,false,UNVERIFIED,NOT_RUN,Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 CarShowroom,محضر الجرد,#/inventory,OBSERVED,false,UNVERIFIED,NOT_RUN,StoreTest.StocktakingCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 CarShowroom,استعراض المبيعات,#/invoice-list,OBSERVED,false,UNVERIFIED,NOT_RUN,Invoice.SalesListCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
-CarShowroom,فاتورة مبيعات,#/invoice/new,OBSERVED,false,UNVERIFIED,NOT_RUN,Invoice.SalesInvoiceCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
+CarShowroom,فاتورة مبيعات,#/invoice/new,OBSERVED,false,UNVERIFIED,NOT_RUN,Invoice.SalesInvoiceCoverageTest; Invoice.CarShowroomSalesTest,Activity live tests - partial journey,PARTIAL,"Receive own chassis and color; sell same chassis with and without discount; independently verify VAT, persisted serial/color and stock 1000 -> 1001 -> 1000"
 CarShowroom,فئات الأصناف,#/items-category,OBSERVED,false,UNVERIFIED,NOT_RUN,ProductsTest.ProductCategoriesTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,
 CarShowroom,تقارير الأصناف,#/items-reports,OBSERVED,false,UNVERIFIED,NOT_RUN,CoverageTest.ReportNavigationCoverageTest,اختبارات قراءة فقط — دليل التقارير والمرشحات؛ تحقق حي 2026-10-27,NOT_RUN,
 CarShowroom,الملف التاريخي,#/logs,NOT_OBSERVED,UNKNOWN,UNVERIFIED,NOT_RUN,CoverageTest.AuditLogCoverageTest,اختبارات موجودة — تغطية جزئية,NOT_RUN,

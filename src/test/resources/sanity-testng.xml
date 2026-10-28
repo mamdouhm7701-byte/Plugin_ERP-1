@@ -12,6 +12,9 @@
   التشغيل: mvn '-Dsurefire.suiteXmlFiles=src/test/resources/sanity-testng.xml' test
 -->
 <suite name="Sanity - Focused checks by changed module" parallel="none" configfailurepolicy="continue">
+    <!-- Explicit branch profile adds matching business contracts; ERP - Business run prepares a fresh branch. -->
+    <parameter name="business.level" value="Sanity"/>
+    <listeners><listener class-name="SuiteSupport.BusinessLevelSuitePolicy"/></listeners>
     <test name="Sanity Products" preserve-order="true">
         <classes>
             <class name="ProductsTest.AddProductsTest">

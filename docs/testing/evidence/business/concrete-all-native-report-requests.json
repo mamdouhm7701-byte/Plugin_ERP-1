@@ -1,0 +1,74 @@
+{
+  "activity": "Concrete",
+  "route": "#/concrete-reports",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "6e5e3adffc305a6b",
+  "profileFingerprint": "3bbb4090abfb4a08fd84257ccaeca59e0b556b83c34abd1eeb4674f0dc46c59c",
+  "profile": "business-c0d31f0e3f3d7b26",
+  "policies": {
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "branchId": "6e5e3adffc305a6b",
+    "activityType": "Concrete",
+    "discountLevel": "Transaction",
+    "taxPolicy": "NetBased",
+    "stocktakingMethod": "Periodic"
+  },
+  "caseClass": "CoverageTest.ConcreteReportRequestTest",
+  "journeys": [
+    "Native preview submits cars, drivers, customer-project detail and total reports plus reservation detail/total scoped to current branch and dates"
+  ],
+  "evidenceLog": "target/concrete-all-native-report-requests-live.log",
+  "branchCleanup": {
+    "branchId": "6e5e3adffc305a6b",
+    "status": "DELETED"
+  },
+  "requests": [
+    {
+      "dateTo": "2026-12-31",
+      "branchId": "6e5e3adffc305a6b",
+      "isDriversReport": true,
+      "dateFrom": "2026-01-01",
+      "reportName": "DriversTransactions-ar",
+      "isCarsReport": false
+    },
+    {
+      "dateTo": "2026-12-31 23:59:59",
+      "branchId": "6e5e3adffc305a6b",
+      "dateFrom": "2026-01-01 00:00:00",
+      "reportName": "ReservationReportTotal-ar"
+    },
+    {
+      "dateTo": "2026-12-31",
+      "branchId": "6e5e3adffc305a6b",
+      "isDriversReport": false,
+      "dateFrom": "2026-01-01",
+      "reportName": "CarsTransactions-ar",
+      "isCarsReport": true
+    },
+    {
+      "dateTo": "2026-12-31 23:59:59",
+      "branchId": "6e5e3adffc305a6b",
+      "dateFrom": "2026-01-01 00:00:00",
+      "reportName": "CustomersProjectsTotal-ar"
+    },
+    {
+      "dateTo": "2026-12-31 23:59:59",
+      "branchId": "6e5e3adffc305a6b",
+      "dateFrom": "2026-01-01 00:00:00",
+      "reportName": "ReservationReport-ar"
+    },
+    {
+      "dateTo": "2026-12-31 23:59:59",
+      "branchId": "6e5e3adffc305a6b",
+      "dateFrom": "2026-01-01 00:00:00",
+      "reportName": "CustomersProjectsDetails-ar"
+    }
+  ],
+  "capturedFromVerifiedRun": true,
+  "limits": [
+    "Request generation only; report contents and balances are not qualified"
+  ]
+}

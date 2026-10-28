@@ -51,10 +51,7 @@ public final class ConcreteStockJourneyTest extends SalesScenarioTest {
                 ".html");
         var selection =
                 row.findElement(org.openqa.selenium.By.cssSelector("input[type='checkbox']"));
-        new org.openqa.selenium.interactions.Actions(driver)
-                .moveToElement(selection)
-                .click()
-                .perform();
+        selection.sendKeys(org.openqa.selenium.Keys.SPACE);
         ready.until(
                 d ->
                         d.findElements(org.openqa.selenium.By.cssSelector(".modal.show")).stream()
@@ -108,7 +105,6 @@ public final class ConcreteStockJourneyTest extends SalesScenarioTest {
         openOwnedForm("concrete-sales-invoice/new", "ItemTransactions-ConcreteSales");
         page.slChoose("نوع السداد", "آجل");
         ConcreteInvoiceControls.selectOwnedDelivery(driver, page, delivery, item);
-        var ready = new WebDriverWait(driver, Duration.ofSeconds(35));
         var expected =
                 BranchInvoiceCalculator.calculate(
                         List.of(

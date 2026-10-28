@@ -1,0 +1,38 @@
+{
+  "activity": "Public",
+  "route": "#/underReview/new",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "d810e6464dc69d8b",
+  "profileFingerprint": "a8926d9cbbf9baea886c1c760644def73c3afdf4ec12a77747406a99ec1df989",
+  "profile": "business-bb457d8ac2ce3c8c",
+  "policies": {
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "branchId": "d810e6464dc69d8b",
+    "activityType": "Public",
+    "discountLevel": "Transaction",
+    "taxPolicy": "NetBased",
+    "stocktakingMethod": "Periodic"
+  },
+  "caseClass": "Invoice.UnderReviewCoverageTest",
+  "journeys": [
+    "Save/read owned under-review document with quantity3 and unchanged stock; reopen exact saved document identity and notes"
+  ],
+  "evidenceLog": "target/native-complete-public-live.log",
+  "cleanupJournals": [
+    "target/sales-fixtures/86e32a83-891.json",
+    "target/sales-attempts/86e32a83-891.json",
+    "target/basic-data-fixtures/319f83aa-e80.json",
+    "target/basic-data-attempts/319f83aa-e80.json",
+    "target/sales-fixtures/d181ba74-9ee.json",
+    "target/sales-attempts/d181ba74-9ee.json"
+  ],
+  "branchCleanup": {
+    "branchId": "d810e6464dc69d8b",
+    "status": "DELETED"
+  },
+  "capturedFromVerifiedRun": true,
+  "evidenceScope": "Original native expanded Business plan:5/5 passed, including2 under-review cases; branch deleted"
+}

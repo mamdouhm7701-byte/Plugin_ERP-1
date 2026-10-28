@@ -16,6 +16,9 @@
   التشغيل: mvn '-Dsurefire.suiteXmlFiles=src/test/resources/e2e-testng.xml' test
 -->
 <suite name="E2E - Linked business workflows" parallel="none" configfailurepolicy="continue">
+    <!-- Explicit branch profile adds matching business contracts; ERP - Business run prepares a fresh branch. -->
+    <parameter name="business.level" value="E2E"/>
+    <listeners><listener class-name="SuiteSupport.BusinessLevelSuitePolicy"/></listeners>
     <test name="ERP linked business journeys" preserve-order="true">
         <classes>
             <class name="Invoice.SalesEndToEndTest"/>

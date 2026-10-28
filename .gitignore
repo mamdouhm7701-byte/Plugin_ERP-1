@@ -71,3 +71,6 @@ config/*.local.json
 
 # Durable local owned-branch creation state; must survive build cleanup.
 /config/business-branch-state/
+
+# Generated per-run branch profiles remain local diagnostic artifacts.
+/config/branch-profiles/business-*.properties

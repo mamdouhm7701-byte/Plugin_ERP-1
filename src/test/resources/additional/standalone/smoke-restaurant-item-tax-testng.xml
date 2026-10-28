@@ -2,4 +2,5 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Smoke - Restaurant item VAT and additional tax" parallel="none"><test name="Exempt subject and exempt non-subject"><classes>
 <class name="SpecialSalesTest.RestaurantItemBasedAdditionalTaxTest"/>
+<class name="SpecialSalesTest.RestaurantMinimumAdditionalTaxTest"/>
 </classes></test></suite>

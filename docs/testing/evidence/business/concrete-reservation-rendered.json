@@ -1,0 +1,89 @@
+{
+  "activity": "Concrete",
+  "route": "#/concrete-reports",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "63eee9883a0bc376",
+  "profileFingerprint": "2f4ec096eec76232c8aea89e30fb04bc0c7bfbc52cacc09599908c473a1cacb1",
+  "profile": "business-bedb07faaebe7a11",
+  "policies": {
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "branchId": "63eee9883a0bc376",
+    "activityType": "Concrete",
+    "discountLevel": "Transaction",
+    "taxPolicy": "NetBased",
+    "stocktakingMethod": "Periodic"
+  },
+  "caseClass": "Invoice.ConcreteReservationReportTest",
+  "journeys": [
+    "Rendered reservation detail and total reports reconcile exact owned item and grand total before and after partial delivery: original2/value200; consumed0 then1; remaining2 then1; stock1000 then999"
+  ],
+  "evidenceLog": "target/concrete-partial-delivery-reports-v2-live.log",
+  "branchCleanup": {
+    "branchId": "63eee9883a0bc376",
+    "status": "DELETED"
+  },
+  "cleanupJournals": [
+    "target/sales-fixtures/ab2eb891-f44.json",
+    "target/sales-attempts/ab2eb891-f44.json"
+  ],
+  "expectations": [
+    {
+      "remainingQuantity": 2,
+      "preview": "استعراض تفصيلي",
+      "valueBeforeVat": 200,
+      "item": "QA-SL-case-1-concrete-report-item-ab2eb891-f44",
+      "quantity": 2,
+      "reservationId": "f422f1d45bc91801",
+      "price": 100,
+      "consumedQuantity": 0,
+      "customer": "QA-SL-case-1-customer-ab2eb891-f44"
+    },
+    {
+      "remainingQuantity": 1,
+      "preview": "استعراض تفصيلي",
+      "valueBeforeVat": 200,
+      "item": "QA-SL-case-1-concrete-report-item-ab2eb891-f44",
+      "quantity": 2,
+      "reservationId": "f422f1d45bc91801",
+      "price": 100,
+      "consumedQuantity": 1,
+      "customer": "QA-SL-case-1-customer-ab2eb891-f44"
+    },
+    {
+      "remainingQuantity": 2,
+      "preview": "استعراض اجمالي",
+      "valueBeforeVat": 200,
+      "item": "QA-SL-case-2-concrete-report-item-ab2eb891-f44",
+      "quantity": 2,
+      "reservationId": "9e8aac0162303b02",
+      "price": 100,
+      "consumedQuantity": 0,
+      "customer": "QA-SL-case-2-customer-ab2eb891-f44"
+    },
+    {
+      "remainingQuantity": 1,
+      "preview": "استعراض اجمالي",
+      "valueBeforeVat": 200,
+      "item": "QA-SL-case-2-concrete-report-item-ab2eb891-f44",
+      "quantity": 2,
+      "reservationId": "9e8aac0162303b02",
+      "price": 100,
+      "consumedQuantity": 1,
+      "customer": "QA-SL-case-2-customer-ab2eb891-f44"
+    }
+  ],
+  "renderedCellAttachments": [
+    "target/concrete-partial-delivery-reports-v2-results/0e72a7c6-7084-48d4-9b14-628e1d8f5252-attachment.json",
+    "target/concrete-partial-delivery-reports-v2-results/b56fa87f-0544-4e2a-987c-9133d4d044a3-attachment.json",
+    "target/concrete-partial-delivery-reports-v2-results/3f2d55b6-2335-405e-b461-7d6c8a80b9ee-attachment.json",
+    "target/concrete-partial-delivery-reports-v2-results/f447d99f-b923-4faf-9748-1ed8480ce74c-attachment.json"
+  ],
+  "capturedFromVerifiedRun": true,
+  "limits": [
+    "NetBased tax only",
+    "Cars, drivers and customer-project report values are not qualified by this receipt"
+  ]
+}

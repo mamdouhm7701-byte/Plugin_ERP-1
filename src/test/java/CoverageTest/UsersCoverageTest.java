@@ -15,9 +15,9 @@ public final class UsersCoverageTest extends BasicDataScenarioTest {
     private void chooseCurrentBranch() {
         String branch =
                 (String)
-                        ((org.openqa.selenium.JavascriptExecutor) driver)
-                                .executeScript(
-                                        "return erpVue.root().$store.getters['app/currentBranch'].arabicName");
+                        Plugin_ERP.Util.VueComponentAccess.execute(
+                                driver,
+                                "return erpVue.root().$store.getters['app/currentBranch'].arabicName");
         page.choose("الفروع", branch);
     }
 

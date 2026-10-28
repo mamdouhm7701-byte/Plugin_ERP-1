@@ -25,7 +25,10 @@ public final class ActivityMasterLifecycleTest extends BasicDataScenarioTest {
                     new Object[][] {
                         {"CastingTypes", "castingTypes", "نوع الصبة"},
                         {"CementTypes", "cementTypes", "نوع الأسمنت"},
-                        {"MaxTemperatures", "maxTemperature", "اقصي درجة حرارة"}
+                        {"MaxTemperatures", "maxTemperature", "اقصي درجة حرارة"},
+                        {"Cars", "cars/", "السيارات"},
+                        {"Drivers", "drivers/", "السائقين"},
+                        {"Projects", "projects", "المشاريع"}
                     };
             case CAR_SHOWROOM -> new Object[][] {{"CarColors", "car-colors", "الوان السيارات"}};
             default ->
@@ -45,6 +48,26 @@ public final class ActivityMasterLifecycleTest extends BasicDataScenarioTest {
         page.click("جديد");
         page.field("arabicName", marker);
         page.field("englishName", "English " + marker);
+        if (endpoint.equals("Cars")) {
+            page.field("carType", "Mixer");
+            page.field(
+                    "plateNumber",
+                    Integer.toString(
+                            java.util.concurrent.ThreadLocalRandom.current()
+                                    .nextInt(1000000, 9999999)));
+            selectToday(page, "تاريخ انتهاء الاستمارة");
+            selectToday(page, "تاريخ انتهاء التامين");
+        }
+        if (endpoint.equals("Drivers")) {
+            page.type(
+                    By.xpath(
+                            "//*[self::label or self::legend][normalize-space()='رقم الهوية']/following::input[1]"),
+                    Integer.toString(
+                            java.util.concurrent.ThreadLocalRandom.current()
+                                    .nextInt(1000000000, 1999999999)));
+            driver.findElement(By.cssSelector("input[type='radio'][value='PumpDriver']"))
+                    .sendKeys(org.openqa.selenium.Keys.SPACE);
+        }
         page.notes(marker);
         page.click("حفظ");
         var record = basicData().awaitSaved(master.endpoint(), marker);
@@ -55,7 +78,7 @@ public final class ActivityMasterLifecycleTest extends BasicDataScenarioTest {
         String code = stored.get("code").toString();
         Assert.assertFalse(code.isBlank());
         page.dismissSuccess();
-        page.rowAction(marker, "edit");
+        ownedRowAction(page, endpoint, marker, "edit");
         var wait = new WebDriverWait(driver, Duration.ofSeconds(25));
         wait.until(d -> marker.equals(page.value(By.cssSelector("input[name='arabicName']"))));
         Assert.assertEquals(page.value(By.cssSelector("input[name='code']")), code);
@@ -68,10 +91,10 @@ public final class ActivityMasterLifecycleTest extends BasicDataScenarioTest {
         Assert.assertEquals(updated.get("arabicName"), marker);
         Assert.assertEquals(updated.get("code").toString(), code);
         page.dismissSuccess();
-        page.rowAction(marker, "delete");
+        ownedRowAction(page, endpoint, marker, "delete");
         page.confirm(false);
         Assert.assertNotNull(basicData().read(record), "Cancel delete removed an owned master");
-        page.rowAction(marker, "delete");
+        ownedRowAction(page, endpoint, marker, "delete");
         page.confirm(true);
         wait.until(d -> basicData().read(record) == null);
         profile.verify(BranchProfileReader.capture(driver, Duration.ofSeconds(30)));
@@ -96,5 +119,28 @@ public final class ActivityMasterLifecycleTest extends BasicDataScenarioTest {
                                         "NOT_RUN"))
                         .toString(2),
                 ".json");
+    }
+
+    private void ownedRowAction(ScreenPage page, String endpoint, String marker, String action) {
+        if (java.util.Set.of("Projects", "Cars", "Drivers").contains(endpoint)) page.search(marker);
+        if (endpoint.equals("Drivers")) {
+            // The native Drivers view binds its action handler to the SVG itself.
+            page.click(
+                    By.xpath(
+                            "//tr[td[normalize-space(.)="
+                                    + ScreenPage.literal(marker)
+                                    + "]]//*[local-name()='svg' and @data-action-type='"
+                                    + action
+                                    + "']"));
+        } else page.rowAction(marker, action);
+    }
+
+    private void selectToday(ScreenPage page, String label) {
+        page.click(
+                By.xpath(
+                        "//*[self::label or self::legend][normalize-space()='"
+                                + label
+                                + "']/following::button[1]"));
+        page.click(By.cssSelector(".b-calendar [data-date='" + java.time.LocalDate.now() + "']"));
     }
 }

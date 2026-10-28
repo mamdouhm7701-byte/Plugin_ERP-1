@@ -1,0 +1,63 @@
+{
+  "activity": "Concrete",
+  "route": "#/concrete-reports",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "f29347de3e706362",
+  "profileFingerprint": "e6317f30dff70ed4c9dc77814b3191fa7b04ded928a18a3bcf0c2a1cd61d751b",
+  "profile": "business-4600cca1989ee4b6",
+  "policies": {
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "branchId": "f29347de3e706362",
+    "activityType": "Concrete",
+    "discountLevel": "Transaction",
+    "taxPolicy": "NetBased",
+    "stocktakingMethod": "Periodic"
+  },
+  "caseClass": "CoverageTest.ConcreteReportRequestTest",
+  "journeys": [
+    "Native preview submits cars, drivers, customer-project detail and total reports scoped to current branch and dates"
+  ],
+  "evidenceLog": "target/concrete-native-report-requests-live.log",
+  "branchCleanup": {
+    "branchId": "f29347de3e706362",
+    "status": "DELETED"
+  },
+  "requests": [
+    {
+      "dateTo": "2026-12-31 23:59:59",
+      "branchId": "f29347de3e706362",
+      "dateFrom": "2026-01-01 00:00:00",
+      "reportName": "CustomersProjectsDetails-ar"
+    },
+    {
+      "dateTo": "2026-12-31",
+      "branchId": "f29347de3e706362",
+      "isDriversReport": true,
+      "dateFrom": "2026-01-01",
+      "reportName": "DriversTransactions-ar",
+      "isCarsReport": false
+    },
+    {
+      "dateTo": "2026-12-31",
+      "branchId": "f29347de3e706362",
+      "isDriversReport": false,
+      "dateFrom": "2026-01-01",
+      "reportName": "CarsTransactions-ar",
+      "isCarsReport": true
+    },
+    {
+      "dateTo": "2026-12-31 23:59:59",
+      "branchId": "f29347de3e706362",
+      "dateFrom": "2026-01-01 00:00:00",
+      "reportName": "CustomersProjectsTotal-ar"
+    }
+  ],
+  "capturedFromVerifiedRun": true,
+  "limits": [
+    "Request generation only; report contents and balances are not qualified",
+    "Reservation report not yet included"
+  ]
+}

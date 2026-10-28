@@ -1,0 +1,30 @@
+{
+  "activity": "CarShowroom",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "e0f71d0628ef2f01",
+  "profileFingerprint": "a8f3075aa0739edd5082fd8f3e5df446c3c636f4a7799466749248f92cd90752",
+  "profile": "business-340454d019d72969",
+  "policies": {
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "branchId": "e0f71d0628ef2f01",
+    "activityType": "CarShowroom",
+    "discountLevel": "Transaction",
+    "taxPolicy": "NetBased",
+    "stocktakingMethod": "Periodic"
+  },
+  "evidenceLog": "target/verified-business-car_showroom-live.log",
+  "capturedFromVerifiedRun": true,
+  "branchPreparation": "Fresh API branch per run",
+  "route": "#/invoice/new",
+  "caseClass": "Invoice.CarShowroomSalesTest",
+  "journeys": [
+    "Receive own chassis and color; sell same chassis with and without discount; independently verify VAT, persisted serial/color and stock 1000 -> 1001 -> 1000"
+  ],
+  "cleanupJournals": [
+    "target/sales-fixtures/f52c918c-24b.json",
+    "target/sales-attempts/f52c918c-24b.json"
+  ]
+}

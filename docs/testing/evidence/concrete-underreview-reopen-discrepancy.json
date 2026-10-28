@@ -1,0 +1,18 @@
+{
+  "status": "NATIVE_UI_REOPEN_FAILURE",
+  "caseClass": "Invoice.UnderReviewCoverageTest",
+  "case": "reopensSavedDocumentByCapturedId",
+  "expectedId": "f73d7ae4f4182a4e",
+  "route": "/concrete-under-review/edit/f73d7ae4f4182a4e",
+  "routeId": "f73d7ae4f4182a4e",
+  "componentId": "f73d7ae4f4182a4e",
+  "loadedId": "f73d7ae4f4182a4e",
+  "storedId": "f73d7ae4f4182a4e",
+  "loadedLineCount": 1,
+  "storedLineCount": 1,
+  "notesLoadedAndMatch": true,
+  "visibleOwnedLine": false,
+  "visibleNotes": false,
+  "evidenceLog": "target/diagnosed-underreview-concrete-live.log",
+  "diagnosticAttachment": "target/diagnosed-underreview-concrete-results/56fcaa9f-542a-4650-b41f-31c483a5329c-attachment.json"
+}

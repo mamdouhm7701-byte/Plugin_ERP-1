@@ -11,6 +11,163 @@ import org.testng.annotations.Test;
 
 public class SalesCleanupTest {
     @Test
+    public void contractAmendedAfterPartialBillingIsRemovedAfterAllItsInvoices() {
+        var api = new SalesFixtureApiStub();
+        api.rejectContractWhileInvoiceExists = true;
+        var data = new SalesTestData(api.driver());
+        var item = data.item(1);
+        var contract =
+                data.fixture(
+                        "contract",
+                        "ItemTransactions-Contract",
+                        SalesTestData.fields(
+                                "storeId",
+                                data.store(1).id(),
+                                "transactionType",
+                                "Contract",
+                                "lines",
+                                List.of(Map.of("itemId", item.id()))));
+        var invoiceValues =
+                SalesTestData.fields(
+                        "storeId",
+                        data.store(1).id(),
+                        "sourceTransactionId",
+                        contract.id(),
+                        "sourceTransactionType",
+                        "Contract",
+                        "lines",
+                        List.of(Map.of("itemId", item.id())));
+        var first = data.fixture("partial-invoice", "ItemTransactions-Sales", invoiceValues);
+        // Updating the parent moves its latest recovery record after the first child.
+        data.track(contract.endpoint(), contract.id(), contract.name(), contract.values());
+        var remaining = data.fixture("remaining-invoice", "ItemTransactions-Sales", invoiceValues);
+        data.close();
+        Assert.assertTrue(api.deletes.indexOf(first.id()) < api.deletes.indexOf(contract.id()));
+        Assert.assertTrue(api.deletes.indexOf(remaining.id()) < api.deletes.indexOf(contract.id()));
+        Assert.assertTrue(api.records.isEmpty());
+    }
+
+    @Test
+    public void uncertainShowroomPurchaseIsRecoveredThroughItsNativeList() {
+        var api = new SalesFixtureApiStub();
+        api.omitMovementListNotes = true;
+        api.omitMovementListStore = true;
+        var data = new SalesTestData(api.driver());
+        var item = data.item(1);
+        var values =
+                SalesTestData.fields(
+                        "notes",
+                        "QA-SL-uncertain-showroom-receipt",
+                        "storeId",
+                        data.store(1).id(),
+                        "transactionType",
+                        "Purch",
+                        "lines",
+                        List.of(Map.of("itemId", item.id())));
+        var stored = new LinkedHashMap<>(values);
+        stored.put("id", "owned-showroom-purchase");
+        api.records.put("owned-showroom-purchase", stored);
+        api.records.put(
+                "foreign-showroom-receipt",
+                SalesTestData.fields(
+                        "id",
+                        "foreign-showroom-receipt",
+                        "notes",
+                        "Historical purchase",
+                        "storeId",
+                        "foreign-store",
+                        "transactionType",
+                        "Purch",
+                        "lines",
+                        List.of()));
+        data.rememberAttempts(
+                List.of(Map.of("endpoint", "Purchases", "values", values)),
+                List.of(),
+                "QA-SL-uncertain-showroom-receipt");
+        data.close();
+        Assert.assertEquals(api.records.keySet(), java.util.Set.of("foreign-showroom-receipt"));
+        Assert.assertTrue(
+                api.deletes.indexOf("owned-showroom-purchase") < api.deletes.indexOf(item.id()));
+    }
+
+    @Test
+    public void failedChassisSaleCleanupRetainsItsOwnedReceiptAndColor() {
+        var api = new SalesFixtureApiStub();
+        var data = new SalesTestData(api.driver());
+        var color = data.fixture("receipt-color", "CarColors", SalesTestData.fields());
+        var purchase =
+                data.fixture(
+                        "chassis-receipt",
+                        "Purchases",
+                        SalesTestData.fields(
+                                "storeId",
+                                data.store(1).id(),
+                                "transactionType",
+                                "Purch",
+                                "lines",
+                                List.of(Map.of("carColorId", color.id()))));
+        var sale =
+                data.fixture(
+                        "chassis-sale",
+                        "ItemTransactions-Sales",
+                        SalesTestData.fields(
+                                "storeId", data.store(1).id(),
+                                "lines", List.of(Map.of("carColorId", color.id()))));
+        var dependencies = new LinkedHashMap<>(sale.values());
+        dependencies.put("_ownedFixturePurchaseId", purchase.id());
+        data.track(sale.endpoint(), sale.id(), sale.name(), dependencies);
+        api.rejectMovement = true;
+        Assert.expectThrows(AssertionError.class, data::close);
+        Assert.assertTrue(
+                api.records.containsKey(purchase.id()),
+                "The chassis receipt must survive while its sale could not be removed");
+        Assert.assertTrue(api.records.containsKey(color.id()));
+        api.rejectMovement = false;
+        data.close();
+        Assert.assertTrue(api.records.isEmpty());
+    }
+
+    @Test
+    public void ownedShowroomPurchaseAndColorAreCleanedAfterTheirSale() {
+        var api = new SalesFixtureApiStub();
+        api.records.put("foreign-showroom-purchase", Map.of("notes", "Historical purchase"));
+        var data = new SalesTestData(api.driver());
+        var color = data.fixture("showroom-color", "CarColors", SalesTestData.fields());
+        var purchase =
+                data.fixture(
+                        "showroom-purchase",
+                        "Purchases",
+                        SalesTestData.fields(
+                                "storeId",
+                                data.store(1).id(),
+                                "transactionType",
+                                "Purch",
+                                "lines",
+                                List.of(Map.of("carColorId", color.id()))));
+        Assert.assertEquals(
+                purchase.values().get("notes"),
+                purchase.name(),
+                "Purchase must retain its owned movement recovery marker");
+        var values =
+                SalesTestData.fields(
+                        "notes",
+                        "QA-SL-showroom-sale",
+                        "storeId",
+                        data.store(1).id(),
+                        "sourceTransactionId",
+                        purchase.id(),
+                        "lines",
+                        List.of(Map.of("carColorId", color.id())));
+        api.records.put("owned-showroom-sale", values);
+        data.track("ItemTransactions-Sales", "owned-showroom-sale", "QA-SL-showroom-sale", values);
+        data.close();
+        Assert.assertTrue(
+                api.deletes.indexOf("owned-showroom-sale") < api.deletes.indexOf(purchase.id()));
+        Assert.assertTrue(api.deletes.indexOf(purchase.id()) < api.deletes.indexOf(color.id()));
+        Assert.assertEquals(api.records.keySet(), java.util.Set.of("foreign-showroom-purchase"));
+    }
+
+    @Test
     public void concreteDeliveryIsRemovedBeforeItsLinkedInvoiceAndReservation() {
         var api = new SalesFixtureApiStub();
         api.rejectConcreteInvoiceWhileDeliveryExists = true;

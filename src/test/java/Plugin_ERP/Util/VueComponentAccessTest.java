@@ -7,6 +7,26 @@ import org.testng.annotations.Test;
 
 public final class VueComponentAccessTest {
     @Test
+    public void componentNamespaceIsNeverPassedToAnUnpreparedExecutor() throws Exception {
+        var invocation =
+                java.util.regex.Pattern.compile(
+                        "execute(?:Async)?Script\\(\\s*(?:\"[^\"\\r\\n]*erpVue\\.|\"\"\"(?:(?!\"\"\").)*?erpVue\\.)",
+                        java.util.regex.Pattern.DOTALL);
+        var violations = new java.util.ArrayList<String>();
+        for (String root : java.util.List.of("src/main/java", "src/test/java")) {
+            try (var files = java.nio.file.Files.walk(java.nio.file.Path.of(root))) {
+                for (var file : files.filter(p -> p.toString().endsWith(".java")).toList()) {
+                    if (invocation.matcher(java.nio.file.Files.readString(file)).find())
+                        violations.add(file.toString());
+                }
+            }
+        }
+        Assert.assertTrue(
+                violations.isEmpty(),
+                "Use VueComponentAccess so erpVue is defined before execution: " + violations);
+    }
+
+    @Test
     public void componentReadsHaveOneRootBoundaryAndPreserveArguments() {
         WebDriver driver =
                 (WebDriver)

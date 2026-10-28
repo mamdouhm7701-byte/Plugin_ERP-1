@@ -1,0 +1,222 @@
+{
+  "accumulatedBranchesDeleted": 47,
+  "distinctServerIds": 47,
+  "serverReadbackVerified": true,
+  "ownedPendingFixtureRecovered": "1f9209bd-0b8",
+  "automaticLifecycleProof": {
+    "testsPassed": 3,
+    "cleanup": {
+      "branchId": "7a527f53a53625be",
+      "status": "DELETED"
+    },
+    "profile": {
+      "name": "business-6cc7ae93465d88ed",
+      "fingerprint": "c1ed8c2625ef5e294bc5d28857f44ecebe15ae75ff70ecc6ebeb6d45d5cdeab8",
+      "expected": {
+        "origin": "https://rawdadonia.plugin-erp.com",
+        "branchId": "7a527f53a53625be",
+        "activityType": "Public",
+        "discountLevel": "Transaction",
+        "taxPolicy": "NetBased",
+        "stocktakingMethod": "Periodic"
+      }
+    },
+    "run": "C:/Users/pcx/Desktop/Plugin_ERP/target/validation/business-1f0dbd76-8bbd-4086-9fd1-5f9d6b064810",
+    "status": "DELETED"
+  },
+  "sourceEvidence": [
+    "target/owned-branch-cleanup-first39-results.json",
+    "target/owned-branch-cleanup-results.json",
+    "target/owned-branch-reference-cleanup-results.json"
+  ],
+  "branches": [
+    {
+      "id": "3343d85e6f48d93b",
+      "status": "DELETED"
+    },
+    {
+      "id": "1eacdafe42b5ec04",
+      "status": "DELETED"
+    },
+    {
+      "id": "f4dc00c00a958fba",
+      "status": "DELETED"
+    },
+    {
+      "id": "8c3ff5fb98116bd1",
+      "status": "DELETED"
+    },
+    {
+      "id": "6877487629e58ed3",
+      "status": "DELETED"
+    },
+    {
+      "id": "a68fba4f2f20ea80",
+      "status": "DELETED"
+    },
+    {
+      "id": "0936a120f7983b52",
+      "status": "DELETED"
+    },
+    {
+      "id": "f5958fc6c7f75243",
+      "status": "DELETED"
+    },
+    {
+      "id": "e5b916852b1c97c3",
+      "status": "DELETED"
+    },
+    {
+      "id": "ca03441caa463d74",
+      "status": "DELETED"
+    },
+    {
+      "id": "4eb6dcec07484a8a",
+      "status": "DELETED"
+    },
+    {
+      "id": "e0f71d0628ef2f01",
+      "status": "DELETED"
+    },
+    {
+      "id": "26c05df08da88cb6",
+      "status": "DELETED"
+    },
+    {
+      "id": "95b92111dfd8f922",
+      "status": "DELETED"
+    },
+    {
+      "id": "7a752169ec898342",
+      "status": "DELETED"
+    },
+    {
+      "id": "af1ed337829676e6",
+      "status": "DELETED"
+    },
+    {
+      "id": "25356d8429172b13",
+      "status": "DELETED"
+    },
+    {
+      "id": "e9887d6f288f0b73",
+      "status": "DELETED"
+    },
+    {
+      "id": "8ba1bfae9927cb5c",
+      "status": "DELETED"
+    },
+    {
+      "id": "125ba39cc52bee7a",
+      "status": "DELETED"
+    },
+    {
+      "id": "7a7303436465e4b5",
+      "status": "DELETED"
+    },
+    {
+      "id": "fd0af7ebf5741ec5",
+      "status": "DELETED"
+    },
+    {
+      "id": "4a8fe4ddd0cb0df0",
+      "status": "DELETED"
+    },
+    {
+      "id": "69e1d07c046e82bf",
+      "status": "DELETED"
+    },
+    {
+      "id": "53b58e5dbf79fa39",
+      "status": "DELETED"
+    },
+    {
+      "id": "232ea3bd5eefc217",
+      "status": "DELETED"
+    },
+    {
+      "id": "38973aa0148236fe",
+      "status": "DELETED"
+    },
+    {
+      "id": "20b06c4a38cc16be",
+      "status": "DELETED"
+    },
+    {
+      "id": "bb2c7df0a76bc63f",
+      "status": "DELETED"
+    },
+    {
+      "id": "eda1826d0a6525c7",
+      "status": "DELETED"
+    },
+    {
+      "id": "97050e0a2c677194",
+      "status": "DELETED"
+    },
+    {
+      "id": "d24916c2e1130aef",
+      "status": "DELETED"
+    },
+    {
+      "id": "255442da72c32ea2",
+      "status": "DELETED"
+    },
+    {
+      "id": "81eb7ac24b1492f6",
+      "status": "DELETED"
+    },
+    {
+      "id": "5c3b82a1a75593fe",
+      "status": "DELETED"
+    },
+    {
+      "id": "3ee528402e558d7e",
+      "status": "DELETED"
+    },
+    {
+      "id": "32c7eeecfba6db82",
+      "status": "DELETED"
+    },
+    {
+      "id": "a70bac4d3dabb090",
+      "status": "DELETED"
+    },
+    {
+      "id": "c8c73fe53ef5afd8",
+      "status": "DELETED"
+    },
+    {
+      "id": "8a057ab6f823339a",
+      "status": "DELETED"
+    },
+    {
+      "id": "ccb6168de3e9a0e7",
+      "status": "DELETED"
+    },
+    {
+      "id": "977d08a950ba7e5d",
+      "status": "DELETED"
+    },
+    {
+      "id": "62231440fd527d8b",
+      "status": "DELETED"
+    },
+    {
+      "id": "43a29112471ce037",
+      "status": "DELETED"
+    },
+    {
+      "id": "dd6e5964b637a73b",
+      "status": "DELETED"
+    },
+    {
+      "id": "25740c06aef15d5a",
+      "status": "DELETED"
+    },
+    {
+      "id": "0786210522fe3c97",
+      "status": "DELETED"
+    }
+  ]
+}

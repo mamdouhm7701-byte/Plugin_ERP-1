@@ -26,7 +26,10 @@ public final class ParallelSuitePlanner {
 
     private static void collectSelectedMethods(
             XmlSuite suite, Map<String, List<String>> selectedMethodsByClass) throws Exception {
-        if (!suite.getParameters().isEmpty()) {
+        if (suite.getParameters().keySet().stream().anyMatch(key -> !key.equals("business.level"))
+                || (suite.getParameter("business.level") != null
+                        && !Set.of("Smoke", "Sanity", "E2E", "Regression")
+                                .contains(suite.getParameter("business.level")))) {
             throw new IllegalArgumentException("Parameterised suites need an explicit plan");
         }
         for (XmlTest test : suite.getTests()) {

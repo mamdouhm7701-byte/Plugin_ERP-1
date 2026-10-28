@@ -62,6 +62,9 @@ public class NativeInteractiveSuiteListener implements IAlterSuiteListener, IExe
 
     List<XmlSuite> selectedSuites(Path project, String level, int workers, Path output)
             throws Exception {
+        var business = new BusinessLevelSuitePolicy().selectedBusiness();
+        if (business.isPresent())
+            return BusinessRunSuites.plan(project, business.orElseThrow(), level, workers, output);
         return buildSuites(project, level, workers, output);
     }
 

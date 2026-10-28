@@ -1,0 +1,33 @@
+{
+  "activity": "Concrete",
+  "route": "#/drivers/",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "f4dc00c00a958fba",
+  "profileFingerprint": "fa43362cb914c2198cd0bcad0e2e99aac5e210fd12a41b7025ef3aa0e1e4c27a",
+  "profile": "business-0d45524ce12ded12",
+  "policies": {
+    "stocktakingMethod": "Periodic",
+    "branchId": "f4dc00c00a958fba",
+    "discountLevel": "Transaction",
+    "activityType": "Concrete",
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "taxPolicy": "NetBased"
+  },
+  "caseClass": "CoverageTest.ActivityMasterLifecycleTest",
+  "journeys": [
+    "Create/read/reopen/update owned Drivers; stable identity/code; cancel deletion then confirm deletion and verify server absence"
+  ],
+  "evidenceLog": "target/final-business-concrete-live.log",
+  "resultFiles": 1,
+  "capturedFromVerifiedRun": true,
+  "evidenceScope": "Complete original native Business suite: 21 passed; all owned journals empty",
+  "cleanupJournals": [
+    "target/basic-data-fixtures/f9cbb27b-020.json",
+    "target/basic-data-attempts/f9cbb27b-020.json",
+    "target/sales-fixtures/5b1d36d7-d32.json",
+    "target/sales-attempts/5b1d36d7-d32.json"
+  ]
+}

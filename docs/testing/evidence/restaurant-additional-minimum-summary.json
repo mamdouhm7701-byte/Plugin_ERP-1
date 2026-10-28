@@ -1,0 +1,48 @@
+{
+  "testsPassed": 6,
+  "policiesQualified": 2,
+  "savedInvoices": 4,
+  "allBranchesDeleted": true,
+  "runs": [
+    {
+      "policy": "NetBased",
+      "branchId": "924fcdbb47a2288c",
+      "invoices": [
+        {
+          "id": "e740a6504486e3b2",
+          "quantity": 3,
+          "additional": 75,
+          "vat": 15.75,
+          "net": 120.75
+        },
+        {
+          "id": "47656e3d4e4dae87",
+          "quantity": 1,
+          "additional": 25,
+          "vat": 5.25,
+          "net": 40.25
+        }
+      ]
+    },
+    {
+      "policy": "PriceIncluded",
+      "branchId": "48de45957b221626",
+      "invoices": [
+        {
+          "id": "0176a300fd1d5818",
+          "quantity": 3,
+          "additional": 75,
+          "vat": 15.75,
+          "net": 120.75
+        },
+        {
+          "id": "fac6dacb6febb80d",
+          "quantity": 1,
+          "additional": 25,
+          "vat": 5.25,
+          "net": 40.25
+        }
+      ]
+    }
+  ]
+}

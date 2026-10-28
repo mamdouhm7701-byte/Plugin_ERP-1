@@ -1,0 +1,49 @@
+{
+  "activity": "Restaurant",
+  "route": "#/restaurant-menu",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "924fcdbb47a2288c",
+  "profileFingerprint": "a47c80167d2b75e0a8d6dc2f237ef1a325d7eb589f75f40f5717a7cdb6506c89",
+  "profile": "business-e9a4d9122851ee0b",
+  "policies": {
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "branchId": "924fcdbb47a2288c",
+    "activityType": "Restaurant",
+    "discountLevel": "Transaction",
+    "taxPolicy": "NetBased",
+    "stocktakingMethod": "Periodic"
+  },
+  "caseClass": "SpecialSalesTest.RestaurantMinimumAdditionalTaxTest",
+  "journeys": [
+    "Save/pay/read per-unit minimum additional tax25 at quantities1 and3; inclusive price11.5 or exclusive10; independent VAT and stock"
+  ],
+  "evidenceLog": "target/minimum-additional-net_based-live.log",
+  "cleanupJournals": [
+    "target/special-sales-fixtures/604f8ede-393.json",
+    "target/special-sales-attempts/604f8ede-393.json"
+  ],
+  "branchCleanup": {
+    "branchId": "924fcdbb47a2288c",
+    "status": "DELETED"
+  },
+  "invoices": [
+    {
+      "id": "e740a6504486e3b2",
+      "quantity": 3,
+      "additional": 75,
+      "vat": 15.75,
+      "net": 120.75
+    },
+    {
+      "id": "47656e3d4e4dae87",
+      "quantity": 1,
+      "additional": 25,
+      "vat": 5.25,
+      "net": 40.25
+    }
+  ],
+  "capturedFromVerifiedRun": true
+}

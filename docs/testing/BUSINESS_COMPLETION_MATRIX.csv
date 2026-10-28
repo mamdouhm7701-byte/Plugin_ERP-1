@@ -1,0 +1,451 @@
+﻿activity,route,screen,assignment,classes,native_business_evidence,acceptance
+Public,#/,الصفحة الرئيسية,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/Items,قائمة الاصناف,ASSIGNED,ProductsTest.AddProductsTest; ProductsTest.ProductListTest,NOT_RUN,NOT_COMPLETE
+Public,#/accountGroups,مجموعات الحسابات,ASSIGNED,CoverageTest.AccountGroupsCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/accounts-reports,تقارير الحسابات,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/actions,الاجراءات,ASSIGNED,Invoice.ActionsCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/addition-order/new,اذن استلام,ASSIGNED,StoreTest.AdditionOrderTest,NOT_RUN,NOT_COMPLETE
+Public,#/agent-itineraries-status,حالة خط السير new,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.RoutLineTest,NOT_RUN,NOT_COMPLETE
+Public,#/agentItinerary,خط السير,ASSIGNED,DealerModelTest.RoutLineTest,NOT_RUN,NOT_COMPLETE
+Public,#/agents,المناديب,ASSIGNED,DealerModelTest.AgentTest,NOT_RUN,NOT_COMPLETE
+Public,#/areas,المناطق,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest,NOT_RUN,NOT_COMPLETE
+Public,#/banks,البنوك,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest,NOT_RUN,NOT_COMPLETE
+Public,#/branches,الفروع,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/branches-dashboard,إحصائيات الفروع,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/bulk-invoices,الفواتير المجمعه,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/car-colors,الوان السيارات,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/cars,السيارات,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/castingTypes,نوع الصبة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/cementTypes,نوع الأسمنت,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/chart-of-account,دليل الحسابات,ASSIGNED,CoverageTest.ChartOfAccountsCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/collection-transactions,سند قبض عميل,ASSIGNED,FinancialMovementsTest.CustomerReceiptTest,NOT_RUN,NOT_COMPLETE
+Public,#/company,اعدادات الشركة,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/concrete-dashboard,إحصائيات الخرسانه new,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/concrete-exchange-order/new,إذن تسليم خرسانة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/concrete-reports,تقارير الخرسانة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/concrete-sales-invoice/new,فاتورة مبيعات خرسانة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/concrete-under-review/new,تحت الإجراء خرسانة new,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/contracts/new,إنشاء العقود,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/cost-center,مراكز التكلفة,ASSIGNED,CoverageTest.CostCentersCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/customer-discount,اشعار خصم عميل,ASSIGNED,FinancialMovementsTest.CustomerDiscountNoticeTest,NOT_RUN,NOT_COMPLETE
+Public,#/customers,العملاء,ASSIGNED,DealerModelTest.CustomersTest,NOT_RUN,NOT_COMPLETE
+Public,#/customers-and-suppliers,تقارير العملاء والموردين,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/damage-adjustment,تسوية التوالف,ASSIGNED,StoreTest.DamageAdjustmentTest,NOT_RUN,NOT_COMPLETE
+Public,#/dealersClassification,تصنيف المتعاملين,ASSIGNED,DealerModelTest.CustomerClassificationTest,NOT_RUN,NOT_COMPLETE
+Public,#/discount-types,انوع الخصومات,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest,NOT_RUN,NOT_COMPLETE
+Public,#/drivers,السائقين,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/exchange-destinations,جهات الصرف,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.DisEntTest,NOT_RUN,NOT_COMPLETE
+Public,#/exchange-order/new,إذن صرف,ASSIGNED,StoreTest.ExchangeOrderTest,NOT_RUN,NOT_COMPLETE
+Public,#/expense-transactions,حركة المصروفات,ASSIGNED,FinancialMovementsTest.ExpenseMovementTest,NOT_RUN,NOT_COMPLETE
+Public,#/expense-type,أنواع المصروفات,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.ExpensesTest,NOT_RUN,NOT_COMPLETE
+Public,#/income-transactions,حركة الايرادات,ASSIGNED,FinancialMovementsTest.OtherRevenueMovementTest,NOT_RUN,NOT_COMPLETE
+Public,#/income-type,أنواع الإيرادات,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest,NOT_RUN,NOT_COMPLETE
+Public,#/inventory,محضر الجرد,ASSIGNED,StoreTest.StocktakingCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/invoice-list,استعراض المبيعات,ASSIGNED,Invoice.SalesListCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/invoice/new,فاتورة مبيعات,ASSIGNED,Invoice.SalesInvoiceCoverageTest; Invoice.SelectedBranchSalesPolicyTest,PARTIAL,NOT_COMPLETE
+Public,#/items-category,فئات الأصناف,ASSIGNED,ProductsTest.ProductCategoriesTest,NOT_RUN,NOT_COMPLETE
+Public,#/items-reports,تقارير الأصناف,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/logs,الملف التاريخي,ASSIGNED,CoverageTest.AuditLogCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/mainDealer,المتعامل الرئيسي,ASSIGNED,DealerModelTest.MainDealerTest,NOT_RUN,NOT_COMPLETE
+Public,#/manufacturing-order/new,إذن تصنيع,ASSIGNED,StoreTest.ManufacturingTest,NOT_RUN,NOT_COMPLETE
+Public,#/maxTemperature,اقصي درجة حرارة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/orders,استعراض الأذونات,ASSIGNED,StoreTest.AdditionOrderTest; StoreTest.ExchangeOrderTest,NOT_RUN,NOT_COMPLETE
+Public,#/overflow-adjustment,تسوية الفائض,ASSIGNED,StoreTest.OverflowAdjustmentCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/payment-methods,طرق الدفع,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.PaymentTest,NOT_RUN,NOT_COMPLETE
+Public,#/payment-transactions,سند صرف مورد,ASSIGNED,FinancialMovementsTest.SupplierBillOfExchangeTest,NOT_RUN,NOT_COMPLETE
+Public,#/point-of-sale,فاتورة نقاط بيع,ASSIGNED,SpecialSalesTest.PointOfSaleTest,NOT_RUN,NOT_COMPLETE
+Public,#/posConfigurations,الربط مع هيئة الزكاة,ASSIGNED,CoverageTest.ZatcaConfigurationCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/post-vouchers,الترحيل الي الحسابات,ASSIGNED,Invoice.PostingCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/price-list,قوائم الأسعار,ASSIGNED,ProductsTest.ProductListTest,NOT_RUN,NOT_COMPLETE
+Public,#/projects,المشاريع,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/purch-invoice-list,استعراض المشتريات,ASSIGNED,Purches.PurchaseListCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/purch-invoice/new,فاتورة مشتريات,ASSIGNED,Purches.PurchaseInvoiceCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/purchOrder/new,امر شراء,ASSIGNED,Purches.PurchaseOrderCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/purchase-dashboard,إحصائيات المشتريات,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/purchase-reports,تقارير المشتريات,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/quotation/new,عرض سعر,ASSIGNED,Invoice.QuotationTest,NOT_RUN,NOT_COMPLETE
+Public,#/reservations/new,الحجوزات,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/restaurant-dashboard,إحصائيات المطاعم,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/restaurant-menu,فاتورة المطعم,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/restaurant-orders,طلبات المطبخ,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/return-purch/new,مرتجع مشتريات,ASSIGNED,Purches.PurchaseLinkedCoverageTest; Purches.PurchaseReturnCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/return-sales/new,مرتجع مبيعات,ASSIGNED,Invoice.LinkedSalesReturnTest; Invoice.SalesReturnTest,NOT_RUN,NOT_COMPLETE
+Public,#/safe-transaction,إستلام الخزينة,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.TreasuryHandoverTest,NOT_RUN,NOT_COMPLETE
+Public,#/safes,الخزن,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest,NOT_RUN,NOT_COMPLETE
+Public,#/sales-dashboard,إحصائيات المبيعات,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/sales-order/new,امر بيع,ASSIGNED,Invoice.SalesOrderTest,NOT_RUN,NOT_COMPLETE
+Public,#/sales-reports,تقارير المبيعات,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/sendInvoiceToZatca,ترحيل الفواتير للهيئة,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/shortage-adjustment,تسوية العجز,ASSIGNED,StoreTest.ShortageAdjustmentCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/storage-transfer,التحويل بين المخازن,ASSIGNED,StoreTest.TransBetweenStoreTest,NOT_RUN,NOT_COMPLETE
+Public,#/subscription-data,بيانات الإشتراك,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/supplier-discount,اشعار خصم مورد,ASSIGNED,FinancialMovementsTest.SupplierDiscountNoticeTest,NOT_RUN,NOT_COMPLETE
+Public,#/suppliers,الموردين,ASSIGNED,DealerModelTest.SupplierTest,NOT_RUN,NOT_COMPLETE
+Public,#/tables,الطاولات,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/transfers-and-settlements,تحويلات وتسويات,ASSIGNED,FinancialMovementsTest.TransfersAndSettlementsTest,NOT_RUN,NOT_COMPLETE
+Public,#/underReview/new,فاتورة تحت الأجراء new,ASSIGNED,Invoice.UnderReviewCoverageTest,PARTIAL,NOT_COMPLETE
+Public,#/units,الوحدات,ASSIGNED,ProductsTest.UnitTest,NOT_RUN,NOT_COMPLETE
+Public,#/users,المستخدمين,ASSIGNED,CoverageTest.UsersCoverageTest,NOT_RUN,NOT_COMPLETE
+Public,#/usersAndAgents-dashboard,إحصائيات المستخدمين,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Public,#/vouchers,قيود اليومية,ASSIGNED,GenralAccountantTest.VouchersTest,NOT_RUN,NOT_COMPLETE
+Public,#/warehouses,قائمة المخازن,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.StoreTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/,الصفحة الرئيسية,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/Items,قائمة الاصناف,ASSIGNED,ProductsTest.AddProductsTest; ProductsTest.ProductListTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/accountGroups,مجموعات الحسابات,ASSIGNED,CoverageTest.AccountGroupsCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/accounts-reports,تقارير الحسابات,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/actions,الاجراءات,ASSIGNED,Invoice.ActionsCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/addition-order/new,اذن استلام,ASSIGNED,StoreTest.AdditionOrderTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/agent-itineraries-status,حالة خط السير new,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.RoutLineTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/agentItinerary,خط السير,ASSIGNED,DealerModelTest.RoutLineTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/agents,المناديب,ASSIGNED,DealerModelTest.AgentTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/areas,المناطق,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/banks,البنوك,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/branches,الفروع,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/branches-dashboard,إحصائيات الفروع,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/bulk-invoices,الفواتير المجمعه,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/car-colors,الوان السيارات,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/cars,السيارات,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/castingTypes,نوع الصبة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/cementTypes,نوع الأسمنت,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/chart-of-account,دليل الحسابات,ASSIGNED,CoverageTest.ChartOfAccountsCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/collection-transactions,سند قبض عميل,ASSIGNED,FinancialMovementsTest.CustomerReceiptTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/company,اعدادات الشركة,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/concrete-dashboard,إحصائيات الخرسانه new,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/concrete-exchange-order/new,إذن تسليم خرسانة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/concrete-reports,تقارير الخرسانة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/concrete-sales-invoice/new,فاتورة مبيعات خرسانة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/concrete-under-review/new,تحت الإجراء خرسانة new,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/contracts/new,إنشاء العقود,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/cost-center,مراكز التكلفة,ASSIGNED,CoverageTest.CostCentersCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/customer-discount,اشعار خصم عميل,ASSIGNED,FinancialMovementsTest.CustomerDiscountNoticeTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/customers,العملاء,ASSIGNED,DealerModelTest.CustomersTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/customers-and-suppliers,تقارير العملاء والموردين,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/damage-adjustment,تسوية التوالف,ASSIGNED,StoreTest.DamageAdjustmentTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/dealersClassification,تصنيف المتعاملين,ASSIGNED,DealerModelTest.CustomerClassificationTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/discount-types,انوع الخصومات,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/drivers,السائقين,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/exchange-destinations,جهات الصرف,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.DisEntTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/exchange-order/new,إذن صرف,ASSIGNED,StoreTest.ExchangeOrderTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/expense-transactions,حركة المصروفات,ASSIGNED,FinancialMovementsTest.ExpenseMovementTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/expense-type,أنواع المصروفات,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.ExpensesTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/income-transactions,حركة الايرادات,ASSIGNED,FinancialMovementsTest.OtherRevenueMovementTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/income-type,أنواع الإيرادات,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/inventory,محضر الجرد,ASSIGNED,StoreTest.StocktakingCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/invoice-list,استعراض المبيعات,ASSIGNED,Invoice.SalesListCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/invoice/new,فاتورة مبيعات,ASSIGNED,Invoice.SalesInvoiceCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/items-category,فئات الأصناف,ASSIGNED,ProductsTest.ProductCategoriesTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/items-reports,تقارير الأصناف,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/logs,الملف التاريخي,ASSIGNED,CoverageTest.AuditLogCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/mainDealer,المتعامل الرئيسي,ASSIGNED,DealerModelTest.MainDealerTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/manufacturing-order/new,إذن تصنيع,ASSIGNED,StoreTest.ManufacturingTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/maxTemperature,اقصي درجة حرارة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/orders,استعراض الأذونات,ASSIGNED,StoreTest.AdditionOrderTest; StoreTest.ExchangeOrderTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/overflow-adjustment,تسوية الفائض,ASSIGNED,StoreTest.OverflowAdjustmentCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/payment-methods,طرق الدفع,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.PaymentTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/payment-transactions,سند صرف مورد,ASSIGNED,FinancialMovementsTest.SupplierBillOfExchangeTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/point-of-sale,فاتورة نقاط بيع,ASSIGNED,SpecialSalesTest.PointOfSaleTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/posConfigurations,الربط مع هيئة الزكاة,ASSIGNED,CoverageTest.ZatcaConfigurationCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/post-vouchers,الترحيل الي الحسابات,ASSIGNED,Invoice.PostingCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/price-list,قوائم الأسعار,ASSIGNED,ProductsTest.ProductListTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/projects,المشاريع,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/purch-invoice-list,استعراض المشتريات,ASSIGNED,Purches.PurchaseListCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/purch-invoice/new,فاتورة مشتريات,ASSIGNED,Purches.PurchaseInvoiceCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/purchOrder/new,امر شراء,ASSIGNED,Purches.PurchaseOrderCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/purchase-dashboard,إحصائيات المشتريات,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/purchase-reports,تقارير المشتريات,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/quotation/new,عرض سعر,ASSIGNED,Invoice.QuotationTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/reservations/new,الحجوزات,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/restaurant-dashboard,إحصائيات المطاعم,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/restaurant-menu,فاتورة المطعم,ASSIGNED,SpecialSalesTest.RestaurantAdditionalTaxBoundaryTest; SpecialSalesTest.RestaurantAdditionalTaxOrderTest; SpecialSalesTest.RestaurantInvoiceTest; SpecialSalesTest.RestaurantMinimumAdditionalTaxTest; SpecialSalesTest.SelectedRestaurantPolicyTest,PARTIAL,NOT_COMPLETE
+Restaurant,#/restaurant-orders,طلبات المطبخ,ASSIGNED,SpecialSalesTest.KitchenOrdersCoverageTest,PARTIAL,NOT_COMPLETE
+Restaurant,#/return-purch/new,مرتجع مشتريات,ASSIGNED,Purches.PurchaseLinkedCoverageTest; Purches.PurchaseReturnCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/return-sales/new,مرتجع مبيعات,ASSIGNED,Invoice.LinkedSalesReturnTest; Invoice.SalesReturnTest; SpecialSalesTest.RestaurantAdditionalTaxReturnTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/safe-transaction,إستلام الخزينة,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.TreasuryHandoverTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/safes,الخزن,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/sales-dashboard,إحصائيات المبيعات,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/sales-order/new,امر بيع,ASSIGNED,Invoice.SalesOrderTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/sales-reports,تقارير المبيعات,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/sendInvoiceToZatca,ترحيل الفواتير للهيئة,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/shortage-adjustment,تسوية العجز,ASSIGNED,StoreTest.ShortageAdjustmentCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/storage-transfer,التحويل بين المخازن,ASSIGNED,StoreTest.TransBetweenStoreTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/subscription-data,بيانات الإشتراك,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/supplier-discount,اشعار خصم مورد,ASSIGNED,FinancialMovementsTest.SupplierDiscountNoticeTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/suppliers,الموردين,ASSIGNED,DealerModelTest.SupplierTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/tables,الطاولات,ASSIGNED,CoverageTest.TablesCoverageTest,PARTIAL,NOT_COMPLETE
+Restaurant,#/transfers-and-settlements,تحويلات وتسويات,ASSIGNED,FinancialMovementsTest.TransfersAndSettlementsTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/underReview/new,فاتورة تحت الأجراء new,ASSIGNED,Invoice.UnderReviewCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/units,الوحدات,ASSIGNED,ProductsTest.UnitTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/users,المستخدمين,ASSIGNED,CoverageTest.UsersCoverageTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/usersAndAgents-dashboard,إحصائيات المستخدمين,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Restaurant,#/vouchers,قيود اليومية,ASSIGNED,GenralAccountantTest.VouchersTest,NOT_RUN,NOT_COMPLETE
+Restaurant,#/warehouses,قائمة المخازن,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.StoreTest,NOT_RUN,NOT_COMPLETE
+Construction,#/,الصفحة الرئيسية,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/Items,قائمة الاصناف,ASSIGNED,ProductsTest.AddProductsTest; ProductsTest.ProductListTest,NOT_RUN,NOT_COMPLETE
+Construction,#/accountGroups,مجموعات الحسابات,ASSIGNED,CoverageTest.AccountGroupsCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/accounts-reports,تقارير الحسابات,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/actions,الاجراءات,ASSIGNED,Invoice.ActionsCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/addition-order/new,اذن استلام,ASSIGNED,StoreTest.AdditionOrderTest,NOT_RUN,NOT_COMPLETE
+Construction,#/agent-itineraries-status,حالة خط السير new,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.RoutLineTest,NOT_RUN,NOT_COMPLETE
+Construction,#/agentItinerary,خط السير,ASSIGNED,DealerModelTest.RoutLineTest,NOT_RUN,NOT_COMPLETE
+Construction,#/agents,المناديب,ASSIGNED,DealerModelTest.AgentTest,NOT_RUN,NOT_COMPLETE
+Construction,#/areas,المناطق,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest,NOT_RUN,NOT_COMPLETE
+Construction,#/banks,البنوك,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest,NOT_RUN,NOT_COMPLETE
+Construction,#/branches,الفروع,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/branches-dashboard,إحصائيات الفروع,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/bulk-invoices,الفواتير المجمعه,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/car-colors,الوان السيارات,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/cars,السيارات,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/castingTypes,نوع الصبة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/cementTypes,نوع الأسمنت,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/chart-of-account,دليل الحسابات,ASSIGNED,CoverageTest.ChartOfAccountsCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/collection-transactions,سند قبض عميل,ASSIGNED,FinancialMovementsTest.CustomerReceiptTest,NOT_RUN,NOT_COMPLETE
+Construction,#/company,اعدادات الشركة,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/concrete-dashboard,إحصائيات الخرسانه new,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/concrete-exchange-order/new,إذن تسليم خرسانة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/concrete-reports,تقارير الخرسانة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/concrete-sales-invoice/new,فاتورة مبيعات خرسانة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/concrete-under-review/new,تحت الإجراء خرسانة new,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/contracts/new,إنشاء العقود,ASSIGNED,Invoice.ConstructionContractConversionTest; Invoice.ConstructionContractTest,PARTIAL,NOT_COMPLETE
+Construction,#/cost-center,مراكز التكلفة,ASSIGNED,CoverageTest.CostCentersCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/customer-discount,اشعار خصم عميل,ASSIGNED,FinancialMovementsTest.CustomerDiscountNoticeTest,NOT_RUN,NOT_COMPLETE
+Construction,#/customers,العملاء,ASSIGNED,DealerModelTest.CustomersTest,NOT_RUN,NOT_COMPLETE
+Construction,#/customers-and-suppliers,تقارير العملاء والموردين,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/damage-adjustment,تسوية التوالف,ASSIGNED,StoreTest.DamageAdjustmentTest,NOT_RUN,NOT_COMPLETE
+Construction,#/dealersClassification,تصنيف المتعاملين,ASSIGNED,DealerModelTest.CustomerClassificationTest,NOT_RUN,NOT_COMPLETE
+Construction,#/discount-types,انوع الخصومات,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest,NOT_RUN,NOT_COMPLETE
+Construction,#/drivers,السائقين,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/exchange-destinations,جهات الصرف,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.DisEntTest,NOT_RUN,NOT_COMPLETE
+Construction,#/exchange-order/new,إذن صرف,ASSIGNED,StoreTest.ExchangeOrderTest,NOT_RUN,NOT_COMPLETE
+Construction,#/expense-transactions,حركة المصروفات,ASSIGNED,FinancialMovementsTest.ExpenseMovementTest,NOT_RUN,NOT_COMPLETE
+Construction,#/expense-type,أنواع المصروفات,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.ExpensesTest,NOT_RUN,NOT_COMPLETE
+Construction,#/income-transactions,حركة الايرادات,ASSIGNED,FinancialMovementsTest.OtherRevenueMovementTest,NOT_RUN,NOT_COMPLETE
+Construction,#/income-type,أنواع الإيرادات,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest,NOT_RUN,NOT_COMPLETE
+Construction,#/inventory,محضر الجرد,ASSIGNED,StoreTest.StocktakingCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/invoice-list,استعراض المبيعات,ASSIGNED,Invoice.SalesListCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/invoice/new,فاتورة مبيعات,ASSIGNED,Invoice.SalesInvoiceCoverageTest; Invoice.SelectedBranchSalesPolicyTest,PARTIAL,NOT_COMPLETE
+Construction,#/items-category,فئات الأصناف,ASSIGNED,ProductsTest.ProductCategoriesTest,NOT_RUN,NOT_COMPLETE
+Construction,#/items-reports,تقارير الأصناف,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/logs,الملف التاريخي,ASSIGNED,CoverageTest.AuditLogCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/mainDealer,المتعامل الرئيسي,ASSIGNED,DealerModelTest.MainDealerTest,NOT_RUN,NOT_COMPLETE
+Construction,#/manufacturing-order/new,إذن تصنيع,ASSIGNED,StoreTest.ManufacturingTest,NOT_RUN,NOT_COMPLETE
+Construction,#/maxTemperature,اقصي درجة حرارة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/orders,استعراض الأذونات,ASSIGNED,StoreTest.AdditionOrderTest; StoreTest.ExchangeOrderTest,NOT_RUN,NOT_COMPLETE
+Construction,#/overflow-adjustment,تسوية الفائض,ASSIGNED,StoreTest.OverflowAdjustmentCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/payment-methods,طرق الدفع,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.PaymentTest,NOT_RUN,NOT_COMPLETE
+Construction,#/payment-transactions,سند صرف مورد,ASSIGNED,FinancialMovementsTest.SupplierBillOfExchangeTest,NOT_RUN,NOT_COMPLETE
+Construction,#/point-of-sale,فاتورة نقاط بيع,ASSIGNED,SpecialSalesTest.PointOfSaleTest,NOT_RUN,NOT_COMPLETE
+Construction,#/posConfigurations,الربط مع هيئة الزكاة,ASSIGNED,CoverageTest.ZatcaConfigurationCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/post-vouchers,الترحيل الي الحسابات,ASSIGNED,Invoice.PostingCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/price-list,قوائم الأسعار,ASSIGNED,ProductsTest.ProductListTest,NOT_RUN,NOT_COMPLETE
+Construction,#/projects,المشاريع,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/purch-invoice-list,استعراض المشتريات,ASSIGNED,Purches.PurchaseListCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/purch-invoice/new,فاتورة مشتريات,ASSIGNED,Purches.PurchaseInvoiceCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/purchOrder/new,امر شراء,ASSIGNED,Purches.PurchaseOrderCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/purchase-dashboard,إحصائيات المشتريات,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/purchase-reports,تقارير المشتريات,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/quotation/new,عرض سعر,ASSIGNED,Invoice.QuotationTest,NOT_RUN,NOT_COMPLETE
+Construction,#/reservations/new,الحجوزات,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/restaurant-dashboard,إحصائيات المطاعم,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/restaurant-menu,فاتورة المطعم,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/restaurant-orders,طلبات المطبخ,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/return-purch/new,مرتجع مشتريات,ASSIGNED,Purches.PurchaseLinkedCoverageTest; Purches.PurchaseReturnCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/return-sales/new,مرتجع مبيعات,ASSIGNED,Invoice.LinkedSalesReturnTest; Invoice.SalesReturnTest,NOT_RUN,NOT_COMPLETE
+Construction,#/safe-transaction,إستلام الخزينة,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.TreasuryHandoverTest,NOT_RUN,NOT_COMPLETE
+Construction,#/safes,الخزن,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest,NOT_RUN,NOT_COMPLETE
+Construction,#/sales-dashboard,إحصائيات المبيعات,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/sales-order/new,امر بيع,ASSIGNED,Invoice.SalesOrderTest,NOT_RUN,NOT_COMPLETE
+Construction,#/sales-reports,تقارير المبيعات,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/sendInvoiceToZatca,ترحيل الفواتير للهيئة,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/shortage-adjustment,تسوية العجز,ASSIGNED,StoreTest.ShortageAdjustmentCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/storage-transfer,التحويل بين المخازن,ASSIGNED,StoreTest.TransBetweenStoreTest,NOT_RUN,NOT_COMPLETE
+Construction,#/subscription-data,بيانات الإشتراك,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/supplier-discount,اشعار خصم مورد,ASSIGNED,FinancialMovementsTest.SupplierDiscountNoticeTest,NOT_RUN,NOT_COMPLETE
+Construction,#/suppliers,الموردين,ASSIGNED,DealerModelTest.SupplierTest,NOT_RUN,NOT_COMPLETE
+Construction,#/tables,الطاولات,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/transfers-and-settlements,تحويلات وتسويات,ASSIGNED,FinancialMovementsTest.TransfersAndSettlementsTest,NOT_RUN,NOT_COMPLETE
+Construction,#/underReview/new,فاتورة تحت الأجراء new,ASSIGNED,Invoice.UnderReviewCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/units,الوحدات,ASSIGNED,ProductsTest.UnitTest,NOT_RUN,NOT_COMPLETE
+Construction,#/users,المستخدمين,ASSIGNED,CoverageTest.UsersCoverageTest,NOT_RUN,NOT_COMPLETE
+Construction,#/usersAndAgents-dashboard,إحصائيات المستخدمين,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Construction,#/vouchers,قيود اليومية,ASSIGNED,GenralAccountantTest.VouchersTest,NOT_RUN,NOT_COMPLETE
+Construction,#/warehouses,قائمة المخازن,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.StoreTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/,الصفحة الرئيسية,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/Items,قائمة الاصناف,ASSIGNED,ProductsTest.AddProductsTest; ProductsTest.ProductListTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/accountGroups,مجموعات الحسابات,ASSIGNED,CoverageTest.AccountGroupsCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/accounts-reports,تقارير الحسابات,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/actions,الاجراءات,ASSIGNED,Invoice.ActionsCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/addition-order/new,اذن استلام,ASSIGNED,StoreTest.AdditionOrderTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/agent-itineraries-status,حالة خط السير new,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.RoutLineTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/agentItinerary,خط السير,ASSIGNED,DealerModelTest.RoutLineTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/agents,المناديب,ASSIGNED,DealerModelTest.AgentTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/areas,المناطق,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/banks,البنوك,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/branches,الفروع,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/branches-dashboard,إحصائيات الفروع,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/bulk-invoices,الفواتير المجمعه,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/car-colors,الوان السيارات,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/cars,السيارات,ASSIGNED,CoverageTest.ActivityMasterLifecycleTest,PARTIAL,NOT_COMPLETE
+Concrete,#/castingTypes,نوع الصبة,ASSIGNED,CoverageTest.ActivityMasterLifecycleTest,PARTIAL,NOT_COMPLETE
+Concrete,#/cementTypes,نوع الأسمنت,ASSIGNED,CoverageTest.ActivityMasterLifecycleTest,PARTIAL,NOT_COMPLETE
+Concrete,#/chart-of-account,دليل الحسابات,ASSIGNED,CoverageTest.ChartOfAccountsCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/collection-transactions,سند قبض عميل,ASSIGNED,FinancialMovementsTest.CustomerReceiptTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/company,اعدادات الشركة,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/concrete-dashboard,إحصائيات الخرسانه new,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/concrete-exchange-order/new,إذن تسليم خرسانة,ASSIGNED,Invoice.ConcreteStockJourneyTest,PARTIAL,NOT_COMPLETE
+Concrete,#/concrete-reports,تقارير الخرسانة,ASSIGNED,CoverageTest.ConcreteReportRequestTest; Invoice.ConcreteOperationalReportTest; Invoice.ConcreteReservationReportTest,PARTIAL,NOT_COMPLETE
+Concrete,#/concrete-sales-invoice/new,فاتورة مبيعات خرسانة,ASSIGNED,Invoice.ConcreteStockJourneyTest,PARTIAL,NOT_COMPLETE
+Concrete,#/concrete-under-review/new,تحت الإجراء خرسانة new,ASSIGNED,Invoice.UnderReviewCoverageTest,PARTIAL,NOT_COMPLETE
+Concrete,#/contracts/new,إنشاء العقود,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/cost-center,مراكز التكلفة,ASSIGNED,CoverageTest.CostCentersCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/customer-discount,اشعار خصم عميل,ASSIGNED,FinancialMovementsTest.CustomerDiscountNoticeTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/customers,العملاء,ASSIGNED,DealerModelTest.CustomersTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/customers-and-suppliers,تقارير العملاء والموردين,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/damage-adjustment,تسوية التوالف,ASSIGNED,StoreTest.DamageAdjustmentTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/dealersClassification,تصنيف المتعاملين,ASSIGNED,DealerModelTest.CustomerClassificationTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/discount-types,انوع الخصومات,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/drivers,السائقين,ASSIGNED,CoverageTest.ActivityMasterLifecycleTest,PARTIAL,NOT_COMPLETE
+Concrete,#/exchange-destinations,جهات الصرف,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.DisEntTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/exchange-order/new,إذن صرف,ASSIGNED,StoreTest.ExchangeOrderTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/expense-transactions,حركة المصروفات,ASSIGNED,FinancialMovementsTest.ExpenseMovementTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/expense-type,أنواع المصروفات,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.ExpensesTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/income-transactions,حركة الايرادات,ASSIGNED,FinancialMovementsTest.OtherRevenueMovementTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/income-type,أنواع الإيرادات,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/inventory,محضر الجرد,ASSIGNED,StoreTest.StocktakingCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/invoice-list,استعراض المبيعات,ASSIGNED,Invoice.SalesListCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/invoice/new,فاتورة مبيعات,ASSIGNED,Invoice.SalesInvoiceCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/items-category,فئات الأصناف,ASSIGNED,ProductsTest.ProductCategoriesTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/items-reports,تقارير الأصناف,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/logs,الملف التاريخي,ASSIGNED,CoverageTest.AuditLogCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/mainDealer,المتعامل الرئيسي,ASSIGNED,DealerModelTest.MainDealerTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/manufacturing-order/new,إذن تصنيع,ASSIGNED,StoreTest.ManufacturingTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/maxTemperature,اقصي درجة حرارة,ASSIGNED,CoverageTest.ActivityMasterLifecycleTest,PARTIAL,NOT_COMPLETE
+Concrete,#/orders,استعراض الأذونات,ASSIGNED,StoreTest.AdditionOrderTest; StoreTest.ExchangeOrderTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/overflow-adjustment,تسوية الفائض,ASSIGNED,StoreTest.OverflowAdjustmentCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/payment-methods,طرق الدفع,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.PaymentTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/payment-transactions,سند صرف مورد,ASSIGNED,FinancialMovementsTest.SupplierBillOfExchangeTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/point-of-sale,فاتورة نقاط بيع,ASSIGNED,SpecialSalesTest.PointOfSaleTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/posConfigurations,الربط مع هيئة الزكاة,ASSIGNED,CoverageTest.ZatcaConfigurationCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/post-vouchers,الترحيل الي الحسابات,ASSIGNED,Invoice.PostingCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/price-list,قوائم الأسعار,ASSIGNED,ProductsTest.ProductListTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/projects,المشاريع,ASSIGNED,CoverageTest.ActivityMasterLifecycleTest,PARTIAL,NOT_COMPLETE
+Concrete,#/purch-invoice-list,استعراض المشتريات,ASSIGNED,Purches.PurchaseListCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/purch-invoice/new,فاتورة مشتريات,ASSIGNED,Purches.PurchaseInvoiceCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/purchOrder/new,امر شراء,ASSIGNED,Purches.PurchaseOrderCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/purchase-dashboard,إحصائيات المشتريات,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/purchase-reports,تقارير المشتريات,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/quotation/new,عرض سعر,ASSIGNED,Invoice.QuotationTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/reservations/new,الحجوزات,ASSIGNED,Invoice.ConcreteStockJourneyTest,PARTIAL,NOT_COMPLETE
+Concrete,#/restaurant-dashboard,إحصائيات المطاعم,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/restaurant-menu,فاتورة المطعم,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/restaurant-orders,طلبات المطبخ,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/return-purch/new,مرتجع مشتريات,ASSIGNED,Purches.PurchaseLinkedCoverageTest; Purches.PurchaseReturnCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/return-sales/new,مرتجع مبيعات,ASSIGNED,Invoice.LinkedSalesReturnTest; Invoice.SalesReturnTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/safe-transaction,إستلام الخزينة,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.TreasuryHandoverTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/safes,الخزن,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/sales-dashboard,إحصائيات المبيعات,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/sales-order/new,امر بيع,ASSIGNED,Invoice.SalesOrderTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/sales-reports,تقارير المبيعات,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/sendInvoiceToZatca,ترحيل الفواتير للهيئة,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/shortage-adjustment,تسوية العجز,ASSIGNED,StoreTest.ShortageAdjustmentCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/storage-transfer,التحويل بين المخازن,ASSIGNED,StoreTest.TransBetweenStoreTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/subscription-data,بيانات الإشتراك,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/supplier-discount,اشعار خصم مورد,ASSIGNED,FinancialMovementsTest.SupplierDiscountNoticeTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/suppliers,الموردين,ASSIGNED,DealerModelTest.SupplierTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/tables,الطاولات,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/transfers-and-settlements,تحويلات وتسويات,ASSIGNED,FinancialMovementsTest.TransfersAndSettlementsTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/underReview/new,فاتورة تحت الأجراء new,ASSIGNED,Invoice.UnderReviewCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/units,الوحدات,ASSIGNED,ProductsTest.UnitTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/users,المستخدمين,ASSIGNED,CoverageTest.UsersCoverageTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/usersAndAgents-dashboard,إحصائيات المستخدمين,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+Concrete,#/vouchers,قيود اليومية,ASSIGNED,GenralAccountantTest.VouchersTest,NOT_RUN,NOT_COMPLETE
+Concrete,#/warehouses,قائمة المخازن,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.StoreTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/,الصفحة الرئيسية,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/Items,قائمة الاصناف,ASSIGNED,ProductsTest.AddProductsTest; ProductsTest.ProductListTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/accountGroups,مجموعات الحسابات,ASSIGNED,CoverageTest.AccountGroupsCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/accounts-reports,تقارير الحسابات,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/actions,الاجراءات,ASSIGNED,Invoice.ActionsCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/addition-order/new,اذن استلام,ASSIGNED,StoreTest.AdditionOrderTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/agent-itineraries-status,حالة خط السير new,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.RoutLineTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/agentItinerary,خط السير,ASSIGNED,DealerModelTest.RoutLineTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/agents,المناديب,ASSIGNED,DealerModelTest.AgentTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/areas,المناطق,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.AreaTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/banks,البنوك,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.BankTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/branches,الفروع,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/branches-dashboard,إحصائيات الفروع,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/bulk-invoices,الفواتير المجمعه,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/car-colors,الوان السيارات,ASSIGNED,CoverageTest.ActivityMasterLifecycleTest,PARTIAL,NOT_COMPLETE
+CarShowroom,#/cars,السيارات,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/castingTypes,نوع الصبة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/cementTypes,نوع الأسمنت,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/chart-of-account,دليل الحسابات,ASSIGNED,CoverageTest.ChartOfAccountsCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/collection-transactions,سند قبض عميل,ASSIGNED,FinancialMovementsTest.CustomerReceiptTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/company,اعدادات الشركة,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/concrete-dashboard,إحصائيات الخرسانه new,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/concrete-exchange-order/new,إذن تسليم خرسانة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/concrete-reports,تقارير الخرسانة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/concrete-sales-invoice/new,فاتورة مبيعات خرسانة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/concrete-under-review/new,تحت الإجراء خرسانة new,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/contracts/new,إنشاء العقود,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/cost-center,مراكز التكلفة,ASSIGNED,CoverageTest.CostCentersCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/customer-discount,اشعار خصم عميل,ASSIGNED,FinancialMovementsTest.CustomerDiscountNoticeTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/customers,العملاء,ASSIGNED,DealerModelTest.CustomersTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/customers-and-suppliers,تقارير العملاء والموردين,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/damage-adjustment,تسوية التوالف,ASSIGNED,StoreTest.DamageAdjustmentTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/dealersClassification,تصنيف المتعاملين,ASSIGNED,DealerModelTest.CustomerClassificationTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/discount-types,انوع الخصومات,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.TaypeOfDiscountTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/drivers,السائقين,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/exchange-destinations,جهات الصرف,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.DisEntTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/exchange-order/new,إذن صرف,ASSIGNED,StoreTest.ExchangeOrderTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/expense-transactions,حركة المصروفات,ASSIGNED,FinancialMovementsTest.ExpenseMovementTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/expense-type,أنواع المصروفات,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.ExpensesTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/income-transactions,حركة الايرادات,ASSIGNED,FinancialMovementsTest.OtherRevenueMovementTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/income-type,أنواع الإيرادات,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.RevenuesTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/inventory,محضر الجرد,ASSIGNED,StoreTest.StocktakingCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/invoice-list,استعراض المبيعات,ASSIGNED,Invoice.SalesListCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/invoice/new,فاتورة مبيعات,ASSIGNED,Invoice.CarShowroomSalesTest; Invoice.SalesInvoiceCoverageTest,PARTIAL,NOT_COMPLETE
+CarShowroom,#/items-category,فئات الأصناف,ASSIGNED,ProductsTest.ProductCategoriesTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/items-reports,تقارير الأصناف,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/logs,الملف التاريخي,ASSIGNED,CoverageTest.AuditLogCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/mainDealer,المتعامل الرئيسي,ASSIGNED,DealerModelTest.MainDealerTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/manufacturing-order/new,إذن تصنيع,ASSIGNED,StoreTest.ManufacturingTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/maxTemperature,اقصي درجة حرارة,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/orders,استعراض الأذونات,ASSIGNED,StoreTest.AdditionOrderTest; StoreTest.ExchangeOrderTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/overflow-adjustment,تسوية الفائض,ASSIGNED,StoreTest.OverflowAdjustmentCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/payment-methods,طرق الدفع,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.PaymentTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/payment-transactions,سند صرف مورد,ASSIGNED,FinancialMovementsTest.SupplierBillOfExchangeTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/point-of-sale,فاتورة نقاط بيع,ASSIGNED,SpecialSalesTest.PointOfSaleTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/posConfigurations,الربط مع هيئة الزكاة,ASSIGNED,CoverageTest.ZatcaConfigurationCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/post-vouchers,الترحيل الي الحسابات,ASSIGNED,Invoice.PostingCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/price-list,قوائم الأسعار,ASSIGNED,ProductsTest.ProductListTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/projects,المشاريع,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/purch-invoice-list,استعراض المشتريات,ASSIGNED,Purches.PurchaseListCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/purch-invoice/new,فاتورة مشتريات,ASSIGNED,Purches.PurchaseInvoiceCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/purchOrder/new,امر شراء,ASSIGNED,Purches.PurchaseOrderCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/purchase-dashboard,إحصائيات المشتريات,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/purchase-reports,تقارير المشتريات,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/quotation/new,عرض سعر,ASSIGNED,Invoice.QuotationTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/reservations/new,الحجوزات,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/restaurant-dashboard,إحصائيات المطاعم,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/restaurant-menu,فاتورة المطعم,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/restaurant-orders,طلبات المطبخ,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/return-purch/new,مرتجع مشتريات,ASSIGNED,Purches.PurchaseLinkedCoverageTest; Purches.PurchaseReturnCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/return-sales/new,مرتجع مبيعات,ASSIGNED,Invoice.CarShowroomSalesTest; Invoice.LinkedSalesReturnTest; Invoice.SalesReturnTest,PARTIAL,NOT_COMPLETE
+CarShowroom,#/safe-transaction,إستلام الخزينة,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.TreasuryHandoverTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/safes,الخزن,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/sales-dashboard,إحصائيات المبيعات,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/sales-order/new,امر بيع,ASSIGNED,Invoice.SalesOrderTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/sales-reports,تقارير المبيعات,ASSIGNED,CoverageTest.ReportNavigationCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/sendInvoiceToZatca,ترحيل الفواتير للهيئة,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/shortage-adjustment,تسوية العجز,ASSIGNED,StoreTest.ShortageAdjustmentCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/storage-transfer,التحويل بين المخازن,ASSIGNED,StoreTest.TransBetweenStoreTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/subscription-data,بيانات الإشتراك,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/supplier-discount,اشعار خصم مورد,ASSIGNED,FinancialMovementsTest.SupplierDiscountNoticeTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/suppliers,الموردين,ASSIGNED,DealerModelTest.SupplierTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/tables,الطاولات,SPECIALIZED_FOR_OTHER_ACTIVITY,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/transfers-and-settlements,تحويلات وتسويات,ASSIGNED,FinancialMovementsTest.TransfersAndSettlementsTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/underReview/new,فاتورة تحت الأجراء new,ASSIGNED,Invoice.UnderReviewCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/units,الوحدات,ASSIGNED,ProductsTest.UnitTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/users,المستخدمين,ASSIGNED,CoverageTest.UsersCoverageTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/usersAndAgents-dashboard,إحصائيات المستخدمين,EXCLUDED_BY_EXISTING_SCOPE,,NOT_RUN,OUTSIDE_THIS_ACTIVITY_PLAN
+CarShowroom,#/vouchers,قيود اليومية,ASSIGNED,GenralAccountantTest.VouchersTest,NOT_RUN,NOT_COMPLETE
+CarShowroom,#/warehouses,قائمة المخازن,ASSIGNED,Plugin_ERP.Tests.LoginTest.BasicDataTest.StoreTest,NOT_RUN,NOT_COMPLETE

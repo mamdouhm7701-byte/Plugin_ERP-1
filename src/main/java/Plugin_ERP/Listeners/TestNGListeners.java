@@ -26,6 +26,13 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
             java.util.List<org.testng.xml.XmlSuite> xmlSuites,
             java.util.List<org.testng.ISuite> suites,
             String outputDirectory) {
+        if (suites.stream().allMatch(suite -> suite.getAllMethods().isEmpty())) {
+            System.out.println(
+                    "No test cases were selected. IntelliJ may have rerun configuration "
+                            + "methods only (setup/fixtures/cleanup). Use Alt+Shift+F10 > ERP - Business run "
+                            + "or run an actual @Test method; no business checks ran in this selection.");
+            return;
+        }
         if (!Plugin_ERP.Util.Allur.ReportMail.enabled() || !hasAllureResults()) return;
         try {
             Plugin_ERP.Util.Allur.ReportMail.validateConfiguration();

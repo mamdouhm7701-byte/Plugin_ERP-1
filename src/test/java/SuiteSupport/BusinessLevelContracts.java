@@ -24,6 +24,11 @@ final class BusinessLevelContracts {
 
     private static final Set<String> E2E_CLASSES =
             Set.of(
+                    "Invoice.StocktakingAccountingTest",
+                    "Invoice.SalesFinalRoundingTest",
+                    "SpecialSalesTest.RestaurantAdditionalTaxBoundaryTest",
+                    "SpecialSalesTest.RestaurantAdditionalTaxOrderTest",
+                    "SpecialSalesTest.RestaurantAdditionalTaxReturnTest",
                     "SuiteSupport.BusinessProfileVerificationTest",
                     "Invoice.SelectedBranchSalesPolicyTest",
                     "SpecialSalesTest.SelectedRestaurantPolicyTest",
@@ -31,6 +36,7 @@ final class BusinessLevelContracts {
                     "Invoice.CarShowroomSalesTest",
                     "Invoice.ConcreteStockJourneyTest",
                     "Invoice.ConcreteReservationReportTest",
+                    "Invoice.ConcreteOperationalReportTest",
                     "SpecialSalesTest.KitchenOrdersCoverageTest",
                     "SpecialSalesTest.RestaurantMinimumAdditionalTaxTest",
                     "SpecialSalesTest.RestaurantAdditionalTaxSmokeTest",
@@ -41,7 +47,8 @@ final class BusinessLevelContracts {
         var selected = new HashMap<String, Set<String>>();
         for (var suite : originals) collect(suite, selected);
         var additions = new ArrayList<XmlClass>();
-        for (var contract : BusinessRunSuites.businessContracts(request)) {
+        var candidates = new ArrayList<>(BusinessRunSuites.businessContracts(request));
+        for (var contract : candidates) {
             var desired = new LinkedHashSet<>(methods(contract));
             if (level.equals("Smoke")) {
                 if (contract.getName().equals("Invoice.ConcreteStockJourneyTest"))

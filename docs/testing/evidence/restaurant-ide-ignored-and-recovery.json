@@ -1,0 +1,17 @@
+{
+  "source": "IntelliJ testHistory, ERP - Business run 2026-10-28 15:15",
+  "ignoredCases": [
+    "RestaurantAdditionalTaxSmokeTest.discountPrecedesAdditionalTax",
+    "RestaurantAdditionalTaxSmokeTest.mixedItemsExcludeNonSubjectItemFromAdditionalTax",
+    "RestaurantAdditionalTaxSmokeTest.subjectItemAdditionalTaxMatchesIndependentOracle"
+  ],
+  "setupFailure": "RestaurantAdditionalTaxSmokeTest.setup: login landing page was not confirmed within30 seconds",
+  "cleanupFailure": "RestaurantMinimumAdditionalTaxTest.cleanup: API Network Error reading owned fixtures and Branches",
+  "subsequentRerun": "15:41 selected only setup/fixtures/scenario/cleanup, zero @Test cases",
+  "recoveryJournal": "target/special-sales-fixtures/ff1a9446-e49.json",
+  "recoveryLog": "target/user-restaurant-run-recovery.log",
+  "recoveredFixtureCount": 13,
+  "branchId": "e18b414710bc9e33",
+  "branchStatus": "DELETED",
+  "scope": "Observed network/configuration failures; no disabled restaurant @Test or assertion failure caused these3 ignored cases. Network Error does not identify a specific network/backend cause."
+}

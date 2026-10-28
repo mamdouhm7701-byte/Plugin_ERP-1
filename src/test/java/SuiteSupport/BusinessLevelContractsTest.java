@@ -11,6 +11,103 @@ import org.testng.xml.*;
 import org.testng.xml.internal.Parser;
 
 public final class BusinessLevelContractsTest {
+    @Test
+    public void unqualifiedHistoryAccessProbeDoesNotBecomeAMandatoryBusinessCase() {
+        for (var activity : ActivityType.values())
+            for (String level : List.of("Smoke", "Sanity", "E2E", "Regression", "Qualification")) {
+                var request =
+                        new BusinessRunRequest(
+                                activity,
+                                DiscountLevel.TRANSACTION,
+                                TaxPolicy.NET_BASED,
+                                StocktakingMethod.PERIODIC,
+                                false);
+                Assert.assertFalse(
+                        cases(BusinessLevelContracts.missing(request, level, List.of())).stream()
+                                .anyMatch(c -> c.startsWith("CoverageTest.AuditLogCoverageTest#")));
+            }
+    }
+
+    @Test
+    public void renderedOperationalReportsFollowTheQualifiedConcretePolicy() {
+        for (var activity : ActivityType.values())
+            for (var tax : TaxPolicy.values())
+                for (String level :
+                        List.of("Smoke", "Sanity", "E2E", "Regression", "Qualification")) {
+                    var request =
+                            new BusinessRunRequest(
+                                    activity,
+                                    DiscountLevel.TRANSACTION,
+                                    tax,
+                                    StocktakingMethod.PERIODIC,
+                                    false);
+                    var selected = cases(BusinessLevelContracts.missing(request, level, List.of()));
+                    Assert.assertEquals(
+                            selected.stream()
+                                    .anyMatch(
+                                            c ->
+                                                    c.startsWith(
+                                                            "Invoice.ConcreteOperationalReportTest#")),
+                            activity == ActivityType.CONCRETE
+                                    && tax == TaxPolicy.NET_BASED
+                                    && !level.equals("Smoke"));
+                }
+    }
+
+    @Test
+    public void salesPrecisionAndAccountingContractsFollowTheirActivityAndLevel() {
+        for (var activity : ActivityType.values())
+            for (String level : List.of("Smoke", "Sanity", "E2E", "Regression", "Qualification")) {
+                var request =
+                        new BusinessRunRequest(
+                                activity,
+                                DiscountLevel.TRANSACTION,
+                                TaxPolicy.NET_BASED,
+                                StocktakingMethod.PERIODIC,
+                                false);
+                var selected = cases(BusinessLevelContracts.missing(request, level, List.of()));
+                Assert.assertEquals(
+                        selected.stream()
+                                .anyMatch(c -> c.startsWith("Invoice.SalesFinalRoundingTest#")),
+                        !level.equals("Smoke")
+                                && Set.of(ActivityType.PUBLIC, ActivityType.CONSTRUCTION)
+                                        .contains(activity));
+                Assert.assertEquals(
+                        selected.stream()
+                                .anyMatch(c -> c.startsWith("Invoice.StocktakingAccountingTest#")),
+                        !level.equals("Smoke") && activity == ActivityType.PUBLIC);
+            }
+    }
+
+    @Test
+    public void extendedTaxJourneysReachBroadLevelsOnlyWhenAdditionalTaxIsEnabled() {
+        for (String level : List.of("Smoke", "Sanity", "E2E", "Regression", "Qualification"))
+            for (var tax : TaxPolicy.values())
+                for (boolean enabled : List.of(false, true)) {
+                    var request =
+                            new BusinessRunRequest(
+                                    ActivityType.RESTAURANT,
+                                    DiscountLevel.TRANSACTION,
+                                    tax,
+                                    StocktakingMethod.PERIODIC,
+                                    enabled);
+                    var selected = cases(BusinessLevelContracts.missing(request, level, List.of()));
+                    for (String name :
+                            List.of(
+                                    "RestaurantAdditionalTaxBoundaryTest",
+                                    "RestaurantAdditionalTaxOrderTest",
+                                    "RestaurantAdditionalTaxReturnTest"))
+                        Assert.assertEquals(
+                                selected.stream()
+                                        .anyMatch(
+                                                c ->
+                                                        c.startsWith(
+                                                                "SpecialSalesTest." + name + "#")),
+                                enabled && !level.equals("Smoke"),
+                                level + " / " + name);
+                }
+    }
+
     @DataProvider
     public Object[][] restaurantLevels() {
         var rows = new ArrayList<Object[]>();

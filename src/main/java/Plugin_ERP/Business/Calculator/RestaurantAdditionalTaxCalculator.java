@@ -64,8 +64,7 @@ public final class RestaurantAdditionalTaxCalculator {
             BigDecimal amount = line.quantity().multiply(line.price()).subtract(line.discount());
             BigDecimal base =
                     policy == TaxPolicy.PRICE_INCLUDED
-                            ? amount.divide(
-                                    new BigDecimal("1.15"), precision + 8, RoundingMode.HALF_UP)
+                            ? amount.divide(new BigDecimal("1.15"), MathContext.DECIMAL128)
                             : amount;
             original = original.add(base);
             boolean applied =
@@ -80,11 +79,10 @@ public final class RestaurantAdditionalTaxCalculator {
             if (policy != TaxPolicy.ITEM_BASED || !line.vatExempt() || applied)
                 taxable = taxable.add(base).add(extra);
         }
-        original = money(original, precision);
-        additional = money(additional, precision);
         BigDecimal beforeVat = original.add(additional);
-        BigDecimal vat = money(taxable.multiply(new BigDecimal("0.15")), precision);
-        return new Totals(original, additional, beforeVat, vat, beforeVat.add(vat));
+        BigDecimal vat = taxable.multiply(new BigDecimal("0.15"));
+        return new Totals(
+                original, additional, beforeVat, vat, money(beforeVat.add(vat), precision));
     }
 
     private static BigDecimal money(BigDecimal value, int precision) {

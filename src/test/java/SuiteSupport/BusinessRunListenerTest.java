@@ -263,7 +263,13 @@ public final class BusinessRunListenerTest {
                         true),
                 "Business checks",
                 "LocalHeadless",
-                true);
+                new BusinessRunTarget(
+                        "Cloud",
+                        "Demo",
+                        "https://example.test",
+                        "contract-user",
+                        "contract-secret".toCharArray()),
+                1);
     }
 
     @Test

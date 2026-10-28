@@ -209,7 +209,7 @@ public final class SuiteDefinitionsTest {
                 "Cash, credit, held-order totals and non-duplicate stock posting remain in sanity");
         Assert.assertEquals(special.stream().filter(c -> c.startsWith(pos)).count(), 15L);
         Assert.assertEquals(special.stream().filter(c -> c.startsWith(restaurant)).count(), 15L);
-        Assert.assertEquals(special.stream().filter(c -> c.startsWith(cleanup)).count(), 8L);
+        Assert.assertEquals(special.stream().filter(c -> c.startsWith(cleanup)).count(), 9L);
         Assert.assertTrue(
                 regression.containsAll(special),
                 "Regression must retain both complete screens and recovery contracts");

@@ -100,6 +100,7 @@ final class SpecialSalesTestData implements AutoCloseable {
                                         "Tables",
                                         "ItemTransactions-PointOfSales",
                                         "ItemTransactions-RestaurantSales",
+                                        "ItemTransactions-ReturnSales",
                                         "SpecialSalesBranchStoreMembership",
                                         "SpecialSalesBranchDefaults")
                                 .contains(endpoint)
@@ -129,6 +130,7 @@ final class SpecialSalesTestData implements AutoCloseable {
                         "Tables",
                         "ItemTransactions-PointOfSales",
                         "ItemTransactions-RestaurantSales",
+                        "ItemTransactions-ReturnSales",
                         "SpecialSalesBranchStoreMembership"),
                 "QA-SP-");
         return data;
@@ -730,8 +732,7 @@ final class SpecialSalesTestData implements AutoCloseable {
         recoverPendingFixtures();
         List<String> failures = new ArrayList<>();
         List<Record> pending = new ArrayList<>();
-        for (int index = created.size() - 1; index >= 0; index--) {
-            Record record = created.get(index);
+        for (Record record : SpecialSalesCleanupOrder.records(created)) {
             if (pending.stream().anyMatch(child -> references(child.values(), record.id()))) {
                 pending.add(record);
                 failures.add(

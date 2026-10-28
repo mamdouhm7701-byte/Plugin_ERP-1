@@ -1,0 +1,52 @@
+{
+  "activity": "Concrete",
+  "route": "#/concrete-reports",
+  "coverage": "PARTIAL",
+  "status": "PASSED",
+  "cleanupVerified": true,
+  "origin": "https://rawdadonia.plugin-erp.com",
+  "branchId": "de032687230244f9",
+  "profileFingerprint": "b0e60b7e2eff505271f0dc4194126b77994047cec25d6bdafed9a8b415c42d45",
+  "profile": "business-f9b22d19f5e588e2",
+  "policies": {
+    "origin": "https://rawdadonia.plugin-erp.com",
+    "branchId": "de032687230244f9",
+    "activityType": "Concrete",
+    "discountLevel": "Transaction",
+    "taxPolicy": "NetBased",
+    "stocktakingMethod": "Periodic"
+  },
+  "caseClass": "Invoice.ConcreteOperationalReportTest",
+  "journeys": [
+    "Reservation2, owned partial delivery1 with project/mixer/driver, credit billing115 without another stock deduction;4 rendered reports reconcile exact group/page/item/source identity, quantity and applicable counts/totals"
+  ],
+  "evidenceLog": "target/concrete-operational-final-owned-groups-live.log",
+  "cleanupJournals": [
+    "target/sales-fixtures/59471675-089.json",
+    "target/sales-attempts/59471675-089.json",
+    "target/basic-data-fixtures/4fa48512-646.json"
+  ],
+  "branchCleanup": {
+    "branchId": "de032687230244f9",
+    "status": "DELETED"
+  },
+  "expected": {
+    "item": "QA-SL-case-1-concrete-report-item-59471675-089",
+    "deliveryId": "dffc81ace8242c3b",
+    "reservationId": "6f52c50a26756bbc",
+    "deliveredQuantity": 1,
+    "reservedQuantity": 2,
+    "project": "QA-BD-operational-project-4fa48512-646",
+    "deliveryCount": 1,
+    "customer": "QA-SL-case-1-customer-59471675-089",
+    "deliveryCode": "1"
+  },
+  "acceptedReports": [
+    "CARS",
+    "DRIVERS",
+    "PROJECT_DETAIL",
+    "PROJECT_TOTAL"
+  ],
+  "capturedFromVerifiedRun": true,
+  "evidenceScope": "One native owned NetBased journey covering Cars, Drivers, CustomerProjects detail and total. Quantities/counts are independent recipe expectations; no VAT/value columns or other tax policies/roles claimed. Final parser binds group headings to the owned row and page."
+}

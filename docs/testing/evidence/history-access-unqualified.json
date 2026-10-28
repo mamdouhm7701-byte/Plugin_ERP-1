@@ -1,0 +1,28 @@
+{
+  "status": "ACCESS_NOT_QUALIFIED",
+  "profile": {
+    "name": "business-de56cb044208aa19",
+    "fingerprint": "75f9f2e4e9c97cbd7f0c5148ed7331de21a5db16b376f821559b1783ca5dbea4",
+    "expected": {
+      "origin": "https://rawdadonia.plugin-erp.com",
+      "branchId": "a6154835ee6b1048",
+      "activityType": "Public",
+      "discountLevel": "Transaction",
+      "taxPolicy": "NetBased",
+      "stocktakingMethod": "Periodic"
+    }
+  },
+  "requestedRoute": "/logs",
+  "observation": {
+    "actualRoute": "/",
+    "activity": "Public",
+    "requestedRoute": "/logs",
+    "scope": "READ_ONLY_AVAILABILITY_ONLY"
+  },
+  "scope": "Read-only access observation only; not proof of an ERP defect or mandatory availability on child branches. Probe remains explicitly runnable, not automatically added to business levels.",
+  "branchCleanup": {
+    "branchId": "a6154835ee6b1048",
+    "status": "DELETED"
+  },
+  "log": "target/public-final-precision-and-history-live.log"
+}

@@ -9,6 +9,30 @@ import org.testng.annotations.Test;
 @io.qameta.allure.Story("عزل البيانات والتنظيف الآمن")
 public class SpecialSalesCleanupTest {
     @Test
+    public void refreshedRestaurantSourceIsDeletedAfterItsOwnedReturn() {
+        var source =
+                new SpecialSalesTestData.Record(
+                        "ItemTransactions-RestaurantSales",
+                        "source",
+                        "QA-SP-source",
+                        Map.of("notes", "QA-SP-source"));
+        var returned =
+                new SpecialSalesTestData.Record(
+                        "ItemTransactions-ReturnSales",
+                        "returned",
+                        "QA-SP-return",
+                        Map.of("notes", "QA-SP-return", "sourceTransactionId", "source"));
+        Assert.assertEquals(
+                SpecialSalesCleanupOrder.records(List.of(returned, source)),
+                List.of(returned, source));
+        var foreign =
+                new SpecialSalesTestData.Record("Customers", "other", "QA-SP-other", Map.of());
+        Assert.assertEquals(
+                SpecialSalesCleanupOrder.records(List.of(source, foreign, returned)),
+                List.of(returned, foreign, source));
+    }
+
+    @Test
     @io.qameta.allure.Description(
             "العميل المستخدم في البيانات دائم وخاضع للضريبة ويسمح بالبيع الآجل؛ صلاحية البيع النقدي لا تجعله عميلاً نقدياً.")
     public void normalCustomerIsTaxableAndKeepsItsOwnAccount() {

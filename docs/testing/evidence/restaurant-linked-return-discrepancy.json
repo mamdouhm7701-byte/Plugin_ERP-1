@@ -1,0 +1,70 @@
+{
+  "status": "NATIVE_LINKED_RETURN_MISMATCH",
+  "caseIds": [
+    "REST-RETURN-001",
+    "REST-RETURN-002"
+  ],
+  "scope": "Source sale verified; linked return draft totals failed before save",
+  "observations": [
+    {
+      "expected": {
+        "sourceId": "5cc16cb26279cf92",
+        "sourceQuantity": 3,
+        "returnedQuantity": 1,
+        "caseId": "REST-RETURN-001",
+        "additionalRefund": 25,
+        "netRefund": 40.25,
+        "vatRefund": 5.25
+      },
+      "actual": {
+        "total": 10,
+        "totalAdditionalTaxes": 10,
+        "netBeforeTaxes": 20,
+        "totalTaxes": 3,
+        "net": 23
+      },
+      "lineQuantityAndPrice": [
+        {
+          "itemId": "4f71f4fb43f3db5e",
+          "quantity": "1",
+          "price": 10,
+          "isAdditionalTaxable": true
+        }
+      ],
+      "attachment": "target/extended-restaurant-net-results/01571d3b-4b16-41a1-a5ee-181b725f050a-attachment.json"
+    },
+    {
+      "expected": {
+        "sourceId": "20c34a0c9eb373ad",
+        "sourceQuantity": 3,
+        "returnedQuantity": 3,
+        "caseId": "REST-RETURN-002",
+        "additionalRefund": 75,
+        "netRefund": 120.75,
+        "vatRefund": 15.75
+      },
+      "actual": {
+        "total": 30,
+        "totalAdditionalTaxes": 30,
+        "netBeforeTaxes": 60,
+        "totalTaxes": 9,
+        "net": 69
+      },
+      "lineQuantityAndPrice": [
+        {
+          "itemId": "0e0d63ff8d3844cd",
+          "quantity": "3",
+          "price": 10,
+          "isAdditionalTaxable": true
+        }
+      ],
+      "attachment": "target/extended-restaurant-net-results/2fc28fad-4452-48ee-a5bd-7533e1fec4ad-attachment.json"
+    }
+  ],
+  "evidenceLog": "target/extended-restaurant-net-live.log",
+  "cleanupAcceptance": "VERIFIED",
+  "branchCleanup": {
+    "branchId": "5c55673202869b21",
+    "status": "DELETED"
+  }
+}

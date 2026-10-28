@@ -1,0 +1,55 @@
+{
+  "caseId": "SALES-ROUNDING-001",
+  "profile": {
+    "name": "business-de56cb044208aa19",
+    "fingerprint": "75f9f2e4e9c97cbd7f0c5148ed7331de21a5db16b376f821559b1783ca5dbea4",
+    "expected": {
+      "origin": "https://rawdadonia.plugin-erp.com",
+      "branchId": "a6154835ee6b1048",
+      "activityType": "Public",
+      "discountLevel": "Transaction",
+      "taxPolicy": "NetBased",
+      "stocktakingMethod": "Periodic"
+    }
+  },
+  "cases": [
+    {
+      "price": "25.036",
+      "items": 1,
+      "expected": {
+        "beforeTax": 25.036,
+        "vat": 3.7554,
+        "net": 28.79
+      },
+      "actual": {
+        "total": 25.04,
+        "netBeforeTaxes": 25.04,
+        "totalTaxes": 3.76,
+        "net": 28.799999999999997
+      },
+      "scope": "DRAFT_ONLY_STOPPED_BEFORE_SAVE"
+    },
+    {
+      "price": "25.036",
+      "items": 2,
+      "expected": {
+        "beforeTax": 50.072,
+        "vat": 7.5108,
+        "net": 57.58
+      },
+      "actual": {
+        "total": 50.08,
+        "netBeforeTaxes": 50.08,
+        "totalTaxes": 7.51,
+        "net": 57.589999999999996
+      },
+      "scope": "DRAFT_ONLY_STOPPED_BEFORE_SAVE"
+    }
+  ],
+  "branchCleanup": {
+    "branchId": "a6154835ee6b1048",
+    "status": "DELETED"
+  },
+  "cleanupAcceptance": "VERIFIED",
+  "log": "target/public-final-precision-and-history-live.log"
+}

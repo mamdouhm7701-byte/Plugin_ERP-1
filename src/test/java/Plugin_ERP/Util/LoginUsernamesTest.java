@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات تحديد أسماء المستخدمين المستخدمة في تجربة الدخول.
+ */
 package Plugin_ERP.Util;
 
 import org.testng.Assert;

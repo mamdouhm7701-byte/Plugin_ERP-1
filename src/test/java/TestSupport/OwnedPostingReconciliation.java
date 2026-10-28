@@ -1,9 +1,10 @@
+/* شرح الملف: مطابقة القيد المحفوظ مع الحسابات والمبالغ المتوقعة.
+ */
 package TestSupport;
 
 import java.math.BigDecimal;
 import java.util.*;
 
-/** Balance alone is insufficient: every account and source must match the owned recipe. */
 public final class OwnedPostingReconciliation {
     public record Entry(String sourceId, String accountId, BigDecimal debit, BigDecimal credit) {
         public Entry {

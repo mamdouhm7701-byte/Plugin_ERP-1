@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لإدخال تاريخ مستند البيع وملاحظاته وخصمه ومدفوعاته وحفظه. فائدتها استكمال رأس
+ * المستند ومراجعة بياناته المطلوبة.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Sales Document Form: focused operations used by the original page facade. */
 final class SalesDocumentForm {
     private final SalesModulePage owner;
     private final WebDriver driver;

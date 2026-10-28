@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار خطوات فاتورة المبيعات والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package Invoice;
 
 import Plugin_ERP.System_Modules.Login.Invoice.Invoice;
@@ -5,7 +7,6 @@ import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Original case IDs retained; all inputs now come from this scenario's fixtures. */
 public class SalesInvoiceTestCases extends SalesFormActions {
     @Test
     @Story("إنشاء فاتورة بيع نقدية مكتملة وفتح طباعتها")

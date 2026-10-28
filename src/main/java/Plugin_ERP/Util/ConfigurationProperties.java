@@ -1,3 +1,5 @@
+/* شرح الملف: جمع إعدادات التشغيل من ملفات المشروع والإعدادات المحلية.
+ */
 package Plugin_ERP.Util;
 
 import java.io.IOException;
@@ -10,7 +12,6 @@ import java.util.Properties;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-/** File settings are isolated from explicit JVM overrides and published only after a full read. */
 final class ConfigurationProperties {
     private final Path resources;
     private final Path localLogin;

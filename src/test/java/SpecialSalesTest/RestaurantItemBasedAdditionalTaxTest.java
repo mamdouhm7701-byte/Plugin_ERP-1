@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات الصنف الخاضع للإضافية يدفع الضريبة حتى لو معلّم معفى: الصنف الخاضع للإضافية
+ * يدفع الضريبة حتى لو معلّم معفى.
+ */
 package SpecialSalesTest;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -12,7 +15,6 @@ import java.util.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** ItemBased exemption must not suppress VAT on an additional-tax subject item. */
 public final class RestaurantItemBasedAdditionalTaxTest extends SpecialSalesScenario {
     protected SpecialSalesPage createPage() {
         return new RestaurantInvoicePage(driver);

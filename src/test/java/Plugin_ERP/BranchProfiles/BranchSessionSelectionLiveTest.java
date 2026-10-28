@@ -1,3 +1,5 @@
+/* شرح الملف: تجربة اختيار الفرع المطلوب داخل البرنامج الحقيقي بعد الدخول.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import Plugin_ERP.Tests.LoginTest.BaseTest;
@@ -5,7 +7,6 @@ import java.time.Duration;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Opt-in live setup contract; verifies branch selection before any fixture is created. */
 public final class BranchSessionSelectionLiveTest extends BaseTest {
     @Test
     public void selectedProfileMatchesAfterLoginAndRefresh() {

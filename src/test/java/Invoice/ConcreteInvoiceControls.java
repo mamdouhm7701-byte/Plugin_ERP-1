@@ -1,3 +1,5 @@
+/* شرح الملف: اختيار إذن تسليم الخرسانة الصحيح داخل فاتورته.
+ */
 package Invoice;
 
 import Plugin_ERP.System_Modules.Login.Invoice.SalesModulePage;
@@ -7,7 +9,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-/** Native selection of one exact owned delivery, without changing application internals. */
 final class ConcreteInvoiceControls {
     private ConcreteInvoiceControls() {}
 

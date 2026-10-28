@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار ظهور خطوات رحلة البيع وتعليقها واسترجاعها بالترتيب في التقرير.
+ */
 package Plugin_ERP.Util.Allur;
 
 import io.qameta.allure.Allure;
@@ -7,7 +9,6 @@ import java.util.UUID;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Exercises the woven report, not just annotation strings or a title formatter. */
 public final class ScenarioJourneyReportTest {
     @Step("فتح شاشة الفاتورة")
     public void openScreen() {}

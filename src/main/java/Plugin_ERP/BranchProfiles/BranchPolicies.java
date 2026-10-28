@@ -1,6 +1,7 @@
+/* شرح الملف: تجميع اختيارات النشاط والخصم والضريبة والجرد المتاحة للفرع.
+ */
 package Plugin_ERP.BranchProfiles;
 
-/** Persisted codes are kept distinct from labels and from arithmetic percentage/value choices. */
 public final class BranchPolicies {
     private BranchPolicies() {}
 

@@ -1,3 +1,4 @@
+<!-- شرح الملف: يفتح اختيار مستوى الاختبار وطريقة تشغيل المتصفح. -->
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ERP - Run tests" type="TestNG" factoryName="TestNG" singleton="true">
     <module name="POM" />

@@ -1,3 +1,5 @@
+/* شرح الملف: تحديد نوع حركة المخزون التي ستنفذ عليها الحالة، ضمن المخازن.
+ */
 package StoreTest;
 
 enum StoreMovementKind {

@@ -1,3 +1,5 @@
+/* شرح الملف: تحديد البيانات المطلوبة لإنشاء سجلات التجربة، ضمن الأصناف.
+ */
 package ProductsTest;
 
 import static ProductsTest.ProductsTestData.fields;
@@ -7,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/** Payload recipes; the owner retains registration, recovery and cleanup ordering. */
 final class ProductsFixtureDefinitions {
     private final ProductsTestData data;
 

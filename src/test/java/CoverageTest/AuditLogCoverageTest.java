@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار إتاحة شاشة سجل العمليات والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package CoverageTest;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -11,9 +13,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/**
- * Availability contract for the historically redirected history screen; no audit data is changed.
- */
 public final class AuditLogCoverageTest extends BaseTest {
     @Test
     public void historyListOpensForSelectedActivityWithoutRedirectingHome() {

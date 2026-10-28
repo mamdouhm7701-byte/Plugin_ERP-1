@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: يحدد مجموعة مراجعة منفصلة للتأكد من استمرار خطوات الشاشات وتجهيز بياناتها وتنظيفها. -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <!-- Explicit matching activity profile required; no forms submitted. -->
 <suite name="Activity-specific screen access" parallel="none"><test name="Selected activity screens"><classes>

@@ -1,3 +1,4 @@
+# شرح الملف: يرسل تقريرًا محفوظًا إلى المستلمين المحددين.
 param([string]$Bundle, [string]$TestNgDirectory = 'target/surefire-reports')
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path $PSScriptRoot -Parent

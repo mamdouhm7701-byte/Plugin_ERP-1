@@ -1,3 +1,6 @@
+/* شرح الملف: اختبار سلامة تجهيز الخطوات المشتركة للحالات ثم تنظيف بياناتها، ضمن العملاء والموردين
+ * والمناديب.
+ */
 package DealerModelTest;
 
 import Plugin_ERP.Enums.Pages;
@@ -14,7 +17,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-/** Isolated records for the original, fully enabled Dealer scenarios. */
 public class DealerScenarioTest extends BaseTest {
     private record OwnedRecord(AbstractForDealer page, Pages route, String name) {}
 

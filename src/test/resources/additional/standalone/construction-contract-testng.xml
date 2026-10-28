@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: يحدد مجموعة تشغيل منفصلة لمراجعة العقود. -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Construction owned contract" parallel="none"><test name="Create and read owned contract"><classes>
 <class name="Invoice.ConstructionContractTest"/>

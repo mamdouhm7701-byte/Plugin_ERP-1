@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة للبحث عن الصنف وإضافته إلى حركة المخزن أو الفاتورة. فائدتها اختيار الصنف
+ * المقصود والتأكد من ظهوره في البنود.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import java.time.Duration;
@@ -10,7 +13,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Product autocomplete and the legacy store and invoice selection waits. */
 final class StoreProductSearch {
     private final DocumentPage owner;
     private final WebDriver driver;

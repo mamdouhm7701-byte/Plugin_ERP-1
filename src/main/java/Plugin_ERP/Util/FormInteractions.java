@@ -1,3 +1,5 @@
+/* شرح الملف: تنفيذ الضغط والكتابة والاختيار مع مراجعة نجاح الخطوة.
+ */
 package Plugin_ERP.Util;
 
 import java.util.Arrays;
@@ -6,7 +8,6 @@ import java.util.function.Consumer;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Reusable form actions, using the page's existing wait and scrolling behavior. */
 public final class FormInteractions {
     public enum OptionMatch {
         CODE_SEGMENT,

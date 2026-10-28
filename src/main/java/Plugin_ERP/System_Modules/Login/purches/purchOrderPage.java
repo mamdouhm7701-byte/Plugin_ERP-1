@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة أمر الشراء: بنسجل الأصناف المطلوب شراؤها وكمياتها وأسعارها ونراجع الإجماليات.
+ * فائدتها تجهيز طلب الشراء ومتابعة تحويله إلى مستند الشراء التالي.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import Plugin_ERP.Business.Calculator.InvoiceCalculator;

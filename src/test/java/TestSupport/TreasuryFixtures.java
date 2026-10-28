@@ -1,3 +1,5 @@
+/* شرح الملف: تجهيز بيانات تسليم الخزينة ومراجعتها.
+ */
 package TestSupport;
 
 import static TestSupport.BasicDataFixtures.fields;
@@ -7,10 +9,6 @@ import java.time.OffsetDateTime;
 import java.util.*;
 import org.openqa.selenium.WebDriver;
 
-/**
- * Durable linkage for handovers, whose API identity is their owned safe and user rather than a
- * name.
- */
 public final class TreasuryFixtures implements AutoCloseable {
     private final WebDriver driver;
     private final FixtureSession session;

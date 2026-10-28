@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لإدخال مبالغ الحركة المالية وتاريخها وقراءة الضريبة ورسائل النقص. فائدتها
+ * مراجعة القيم وصحة البيانات قبل الحفظ.
+ */
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
 import java.math.BigDecimal;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Numeric/date entry and validation for financial forms. */
 final class FinancialFieldValues {
     private final FinancialMovementPage owner;
     private final WebDriver driver;

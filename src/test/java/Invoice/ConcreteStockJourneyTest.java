@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات إذن تسليم الخرسانة هو الذي يخصم المخزون: إذن تسليم الخرسانة هو الذي يخصم
+ * المخزون؛ فاتورة الخرسانة المباشرة لا تخصم المخزون؛ حجز الخرسانة لا يخصم المخزون ويظهر للتسليم.
+ */
 package Invoice;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -13,7 +16,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Concrete stock moves on delivery; billing alone must not consume stock. */
 public final class ConcreteStockJourneyTest extends SalesScenarioTest {
     private String endpoint;
 

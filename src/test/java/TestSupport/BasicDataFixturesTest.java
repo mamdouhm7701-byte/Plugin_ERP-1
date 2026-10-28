@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة إنشاء بيانات التجربة الأساسية وتسجيلها وتنظيفها بأمان.
+ */
 package TestSupport;
 
 import org.testng.Assert;

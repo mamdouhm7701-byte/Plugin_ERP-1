@@ -1,3 +1,5 @@
+/* شرح الملف: بدء الحزمة المختارة مع منع تشغيلين متداخلين.
+ */
 package SuiteSupport;
 
 import java.lang.management.ManagementFactory;
@@ -10,7 +12,6 @@ import org.testng.IExecutionListener;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.internal.Parser;
 
-/** Keeps IntelliJ's native TestNG events while choosing the existing isolated execution plan. */
 public class NativeInteractiveSuiteListener implements IAlterSuiteListener, IExecutionListener {
     private FileChannel channel;
     private FileLock lease;

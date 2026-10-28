@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة المخازن والبحث عن المخزن وتعديله أو حذفه. فائدتها إدارة أماكن التخزين
+ * المسجلة ومراجعة حساباتها.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Warehouse Records: focused operations used by the original page facade. */
 final class WarehouseRecords {
     private final StorePage owner;
     private final WebDriver driver;

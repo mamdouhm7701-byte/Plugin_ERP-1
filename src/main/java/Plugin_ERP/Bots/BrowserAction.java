@@ -1,3 +1,5 @@
+/* شرح الملف: فتح الصفحات وتحديثها والتنقل بينها وإغلاق المتصفح.
+ */
 package Plugin_ERP.Bots;
 
 import Plugin_ERP.Enums.Pages;

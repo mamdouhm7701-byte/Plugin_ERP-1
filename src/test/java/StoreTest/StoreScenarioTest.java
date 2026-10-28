@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار سلامة تجهيز الخطوات المشتركة للحالات ثم تنظيف بياناتها، ضمن المخازن.
+ */
 package StoreTest;
 
 import Plugin_ERP.System_Modules.Login.StoreModel.*;
@@ -11,7 +13,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-/** Isolated warehouse scenarios. Browser interactions belong to the StoreModel POM. */
 public abstract class StoreScenarioTest extends BaseTest {
     protected abstract StoreMovementKind kind();
 

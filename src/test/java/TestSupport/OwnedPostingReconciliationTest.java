@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات مطابقة القيد المحفوظ مع الحسابات والمبالغ المتوقعة.
+ */
 package TestSupport;
 
 import Plugin_ERP.BranchProfiles.BranchPolicies.StocktakingMethod;

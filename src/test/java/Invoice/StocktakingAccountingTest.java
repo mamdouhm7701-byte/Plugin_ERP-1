@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات قيد المبيعات يطابق المبيعات والضريبة وتكلفة المخزون: قيد المبيعات يطابق
+ * المبيعات والضريبة وتكلفة المخزون.
+ */
 package Invoice;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -16,9 +19,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/**
- * Reconciles one posted source against seeded cost and verified owned account links, then unposts.
- */
 public final class StocktakingAccountingTest extends SalesScenarioTest {
     @Test
     public void postedSaleMatchesIndependentPeriodicOrContinuousJournal() throws Exception {

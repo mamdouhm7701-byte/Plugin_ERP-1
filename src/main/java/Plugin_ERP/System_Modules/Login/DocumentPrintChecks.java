@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لمقارنة الأصناف والكميات والأسعار والإجماليات مع المستند المطبوع. فائدتها كشف
+ * أي اختلاف في النسخة المسلمة للعميل أو المورد.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Models.ReportTotals;
@@ -7,7 +10,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 import org.testng.Assert;
 
-/** Document Print Checks: focused operations used by the original page facade. */
 final class DocumentPrintChecks {
     private final DocumentPage owner;
     private final WebDriver driver;

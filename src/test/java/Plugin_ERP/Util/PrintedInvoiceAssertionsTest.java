@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات مطابقة الأصناف والكميات والمبالغ في الفاتورة المطبوعة.
+ */
 package Plugin_ERP.Util;
 
 import Plugin_ERP.Util.PrintedInvoiceAssertions.*;

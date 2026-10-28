@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة البيانات والعناصر الظاهرة في الشاشة، ضمن العملاء والموردين والمناديب.
+ */
 package DealerModelTest;
 
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;

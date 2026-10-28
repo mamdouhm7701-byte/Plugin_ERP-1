@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة إضافة الأصناف: بنسجل الاسم والباركود والأسعار والمخازن والوحدات والمكونات.
+ * فائدتها تجهيز الصنف للبيع والشراء ومتابعة مخزونه.
+ */
 package Plugin_ERP.System_Modules.Login.Products;
 
 import io.qameta.allure.Step;

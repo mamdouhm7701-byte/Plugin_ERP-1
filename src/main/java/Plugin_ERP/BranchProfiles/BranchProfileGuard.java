@@ -1,10 +1,11 @@
+/* شرح الملف: منع استمرار التجربة على فرع أو إعدادات مختلفة عن المطلوب.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import java.time.Duration;
 import java.util.Optional;
 import org.openqa.selenium.WebDriver;
 
-/** Rechecks core session policies before fixture transport; legacy transport remains unchanged. */
 public final class BranchProfileGuard {
     private final Optional<BranchProfile> expected;
     private final AdditionalTaxExpectation additional = AdditionalTaxExpectation.capture();

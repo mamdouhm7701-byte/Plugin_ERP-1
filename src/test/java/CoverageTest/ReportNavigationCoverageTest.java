@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار قائمة التقارير المتاحة والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package CoverageTest;
 
 import Plugin_ERP.System_Modules.Login.Coverage.ScreenPage;
@@ -9,7 +11,6 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-/** Read-only report catalogue coverage; no export, posting, or financial writes. */
 public final class ReportNavigationCoverageTest extends BaseTest {
     @DataProvider
     public Object[][] reportCatalogues() {

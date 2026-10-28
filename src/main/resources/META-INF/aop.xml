@@ -1,3 +1,4 @@
+<!-- شرح الملف: يفعّل ظهور خطوات التحقق والمقارنات داخل تقرير الحالة. -->
 <aspectj>
     <aspects>
         <aspect name="Plugin_ERP.Util.Allur.ScenarioAssertions"/>

@@ -1,8 +1,9 @@
+/* شرح الملف: استكمال تنظيف بيانات تجربة سابقة من سجلها المحدد، ضمن المشتريات.
+ */
 package Purches;
 
 import Plugin_ERP.Tests.LoginTest.BaseTest;
 
-/** Recover one exact journal in its original origin and branch. */
 public final class PurchaseFixtureRecovery extends BaseTest {
     public static void main(String[] args) throws Exception {
         if (args.length != 1 || !args[0].matches("[a-f0-9-]+"))

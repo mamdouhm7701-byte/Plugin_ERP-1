@@ -1,3 +1,5 @@
+# شرح الملف: يصلح شكل النسخة التنفيذية من تقرير المبيعات.
+# أداة اختيارية لإصلاح شكل النسخة التنفيذية من تقرير المبيعات. ليست مطلوبة لتشغيل الاختبارات اليومية.
 from pathlib import Path
 from copy import deepcopy
 from collections import Counter

@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار ألوان السيارات والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package CoverageTest;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -13,7 +15,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Owned UI lifecycle on an explicitly selected CarShowroom branch. */
 public final class CarColorsBusinessTest extends BasicDataScenarioTest {
     @Test
     public void createReopenEditAndDeleteOwnedColor() throws Exception {

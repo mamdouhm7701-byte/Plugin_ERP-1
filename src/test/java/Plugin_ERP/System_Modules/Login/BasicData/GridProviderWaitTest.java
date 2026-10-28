@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة انتظار ثبات صفوف الجدول قبل قراءة بياناته.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.lang.reflect.Proxy;

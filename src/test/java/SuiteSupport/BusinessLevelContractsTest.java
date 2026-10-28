@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات إضافة حالات البيزنس المناسبة إلى مستوى الاختبار دون تكرار.
+ */
 package SuiteSupport;
 
 import Plugin_ERP.BranchProfiles.*;

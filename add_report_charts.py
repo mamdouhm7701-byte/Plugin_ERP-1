@@ -1,3 +1,5 @@
+# شرح الملف: يضيف رسومًا بيانية إلى تصميم تقرير المبيعات عند الحاجة.
+# أداة اختيارية لإضافة رسوم بيانية إلى تصميم تقرير المبيعات. نحتفظ بها لتعديل شكل التقرير عند الحاجة.
 from pathlib import Path
 import xml.etree.ElementTree as E
 from copy import deepcopy

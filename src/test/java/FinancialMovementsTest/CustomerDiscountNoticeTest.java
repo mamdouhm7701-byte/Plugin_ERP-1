@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات اشعار خصم عميل: تعديل إشعار خصم عميل؛ حذف إشعار خصم عميل؛ رفض مبلغ سالب؛
+ * تصدير قائمة الحركات إلى Excel؛ إغلاق الحركة الجديدة دون حفظ.
+ */
 package FinancialMovementsTest;
 
 import Plugin_ERP.System_Modules.Login.FinancialMovements.*;

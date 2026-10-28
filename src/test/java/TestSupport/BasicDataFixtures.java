@@ -1,3 +1,5 @@
+/* شرح الملف: تجهيز بيانات أساسية مستقلة مثل البنك والمخزن والحساب ثم تنظيفها.
+ */
 package TestSupport;
 
 import TestSupport.BasicDataFixturesApi.ApiFailure;
@@ -10,7 +12,6 @@ import java.util.UUID;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Per-scenario fixtures. Uses the logged-in application's API client and current branch. */
 public final class BasicDataFixtures implements AutoCloseable {
 
     public record Record(String endpoint, Object id, String name, Map<String, Object> values) {

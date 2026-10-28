@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة التحويل بين المخازن: بنحدد المخزن المرسل والمخزن المستلم والأصناف والكميات.
+ * فائدتها توثيق انتقال البضاعة بين أماكن التخزين.
+ */
 package Plugin_ERP.System_Modules.Login.StoreModel;
 
 import io.qameta.allure.Step;

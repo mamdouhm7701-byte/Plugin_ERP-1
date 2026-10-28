@@ -1,3 +1,5 @@
+/* شرح الملف: تشغيل حصر الشاشات المتاحة للنشاط المختار.
+ */
 package SuiteSupport;
 
 import Plugin_ERP.BranchProfiles.ActivityScreenInventory;
@@ -6,7 +8,6 @@ import Plugin_ERP.System_Modules.Login.Login.LoginPage;
 import Plugin_ERP.Util.PropertyReader;
 import java.nio.file.*;
 
-/** Explicit read-only activity inventory; no settings changes or fixture creation. */
 public final class ActivityScreenInventoryCommand {
     private ActivityScreenInventoryCommand() {}
 

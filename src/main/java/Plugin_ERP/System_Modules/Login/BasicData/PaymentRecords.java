@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة طرق الدفع المسجلة وفتحها للتعديل أو طلب حذفها. فائدتها مراجعة وسائل
+ * السداد المتاحة وإدارة بياناتها.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Payment Records: focused operations used by the original page facade. */
 final class PaymentRecords {
     private final PaymentPage owner;
     private final WebDriver driver;

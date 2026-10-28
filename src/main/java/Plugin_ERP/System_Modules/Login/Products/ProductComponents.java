@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة لتحديد مكونات الصنف المصنع وكميات كل مكون وملاحظاته. فائدتها تجهيز تفاصيل تكوين
+ * المنتج من أصناف أخرى.
+ */
 package Plugin_ERP.System_Modules.Login.Products;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Product Components: focused operations used by the original page facade. */
 final class ProductComponents {
     private final AddProductsPage owner;
     private final WebDriver driver;

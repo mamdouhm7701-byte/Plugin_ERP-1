@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لاختيار تاريخ مستند الشراء أو فترة البحث في قائمة المشتريات. فائدتها تسجيل
+ * التاريخ وحصر المستندات في الفترة المطلوبة.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import java.time.Duration;
@@ -9,7 +12,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Datepicker interaction shared by the purchase list filters. */
 final class PurchaseCalendar {
     private final WebDriver driver;
 

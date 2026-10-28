@@ -1,3 +1,5 @@
+/* شرح الملف: تحديد أماكن ملفات النتائج والتقرير.
+ */
 package Plugin_ERP.Util.Allur;
 
 import java.nio.file.Path;

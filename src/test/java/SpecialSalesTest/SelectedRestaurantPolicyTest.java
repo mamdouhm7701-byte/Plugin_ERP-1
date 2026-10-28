@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات فاتورة المطعم تستخدم سياسة الضريبة المختارة: فاتورة المطعم تستخدم سياسة
+ * الضريبة المختارة.
+ */
 package SpecialSalesTest;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -9,10 +12,6 @@ import java.util.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/**
- * VAT/exemption recipe using owned non-additional items, independent of branch additional-tax
- * switch.
- */
 public final class SelectedRestaurantPolicyTest extends SpecialSalesScenario {
     protected SpecialSalesPage createPage() {
         return new RestaurantInvoicePage(driver);

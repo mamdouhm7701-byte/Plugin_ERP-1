@@ -1,3 +1,5 @@
+/* شرح الملف: مساعدة لتصدير قائمة فواتير البيع. فائدتها إتاحة بيانات القائمة للمراجعة خارج الشاشة.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import java.time.Duration;
@@ -5,7 +7,6 @@ import java.util.List;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Chooses an existing invoice-list export control; never creates or saves a document. */
 final class InvoiceListExport {
     private final WebDriver driver;
     private static final String EXPORT_SEARCHABLE_TEXT =

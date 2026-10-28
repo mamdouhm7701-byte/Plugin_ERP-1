@@ -1,3 +1,5 @@
+/* شرح الملف: تجهيز الخطوات المشتركة للحالات ثم تنظيف بياناتها، ضمن المطعم ونقاط البيع.
+ */
 package SpecialSalesTest;
 
 import Plugin_ERP.System_Modules.Login.SpecialSales.*;
@@ -9,7 +11,6 @@ import org.openqa.selenium.*;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
-/** Page-scoped references, case-scoped mutable data, and unconditional group cleanup. */
 public abstract class SpecialSalesScenario extends BaseTest {
     protected SpecialSalesPage page;
     protected SpecialSalesTestData data;
@@ -79,7 +80,7 @@ public abstract class SpecialSalesScenario extends BaseTest {
         return new SpecialSalesTestData.Record(page.endpoint(), save.get("id"), marker, values);
     }
 
-    @io.qameta.allure.Step("مطابقة القيمة: المتوقع {expected}، الفعلي {actual}")
+    @io.qameta.allure.Step("التحقق من المبلغ أو الكمية: المتوقع {expected}، الفعلي {actual}")
     protected void number(Object actual, String expected) {
         org.testng.Assert.assertEquals(
                 new BigDecimal(actual.toString()).compareTo(new BigDecimal(expected)),

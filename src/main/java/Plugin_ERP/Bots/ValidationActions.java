@@ -1,3 +1,5 @@
+/* شرح الملف: مقارنة القيم والرسائل الظاهرة بالنتيجة المطلوبة.
+ */
 package Plugin_ERP.Bots;
 
 import java.time.LocalDate;
@@ -81,6 +83,39 @@ public class ValidationActions extends BaseAction {
     }
 
     public void assertValue(String expected, By locator) {
+        AssertionError failure = null;
+        try {
+            compareValue(expected, locator);
+        } catch (AssertionError mismatch) {
+            failure = mismatch;
+            throw mismatch;
+        } finally {
+            try {
+                WebElement field = driver.findElement(locator);
+                String key = field.getDomAttribute("name");
+                if (!Plugin_ERP.Util.Allur.ReadableChecks.businessField(key))
+                    key = field.getDomAttribute("id");
+                if (!"password".equalsIgnoreCase(field.getDomAttribute("type"))
+                        && Plugin_ERP.Util.Allur.ReadableChecks.businessField(key)) {
+                    String actual =
+                            List.of("input", "textarea").contains(field.getTagName())
+                                    ? field.getDomProperty("value")
+                                    : field.getText();
+                    Plugin_ERP.Util.Allur.ScenarioAssertions.recordComparison(
+                            actual,
+                            expected,
+                            "التحقق من " + Plugin_ERP.Util.Allur.ReadableChecks.field(key),
+                            failure);
+                }
+            } catch (RuntimeException reportingFailure) {
+                LogUtils.debug(
+                        "Field comparison reporting unavailable: "
+                                + reportingFailure.getClass().getSimpleName());
+            }
+        }
+    }
+
+    private void compareValue(String expected, By locator) {
 
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 

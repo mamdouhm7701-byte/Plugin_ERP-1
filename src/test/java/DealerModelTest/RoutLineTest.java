@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات خط السير: إضافة خط سير وربط المندوب بالأحداث اليومية.
+ */
 package DealerModelTest;
 
 import static DealerModelTest.DealerTestData.fields;
@@ -10,7 +12,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** An independently runnable calendar scenario; cleanup also recovers uncertain UI saves. */
 public class RoutLineTest extends DealerScenarioTest {
     @Test
     @Owner("MAMDOUH")

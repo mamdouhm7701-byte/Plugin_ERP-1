@@ -1,3 +1,7 @@
+/* شرح الملف: اختبارات المناطق: إنشاء منطقة ومراجعة البيانات المحفوظة؛ تحميل بيانات المنطقة الحالية
+ * عند التعديل؛ إلغاء حذف سجل المناطق؛ البحث المستقل بكود المنطقة ثم اسمها؛ رفض اسم عربي فارغ في
+ * المناطق.
+ */
 package Plugin_ERP.Tests.LoginTest.BasicDataTest;
 
 import static TestSupport.BasicDataFixtures.fields;

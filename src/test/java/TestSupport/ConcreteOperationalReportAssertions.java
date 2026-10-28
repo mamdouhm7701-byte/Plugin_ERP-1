@@ -1,10 +1,11 @@
+/* شرح الملف: مراجعة مجموعات وصفوف وكميات تقارير السيارات والسائقين والمشاريع.
+ */
 package TestSupport;
 
 import Plugin_ERP.Util.PrintedInvoiceAssertions.Cell;
 import java.math.BigDecimal;
 import java.util.*;
 
-/** Matches owned identities and numeric values to their printed page, row and column. */
 public final class ConcreteOperationalReportAssertions {
     public enum Kind {
         CARS,

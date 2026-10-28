@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة تسجيل الدخول: بندخل اسم المستخدم وكلمة المرور ونراجع الدخول للفرع الصحيح. فائدتها
+ * بدء العمل بالحساب المطلوب ومعرفة سبب رفض الدخول.
+ */
 package Plugin_ERP.System_Modules.Login.Login;
 
 import static org.openqa.selenium.support.locators.RelativeLocator.with;

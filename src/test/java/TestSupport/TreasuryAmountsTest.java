@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات حساب مبالغ الخزينة المتوقعة من بيانات التجربة نفسها.
+ */
 package TestSupport;
 
 import java.math.BigDecimal;

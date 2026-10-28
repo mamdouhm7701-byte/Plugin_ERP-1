@@ -1,3 +1,5 @@
+/* شرح الملف: تحديد البيانات المطلوبة لإنشاء سجلات التجربة، ضمن العملاء والموردين والمناديب.
+ */
 package DealerModelTest;
 
 import static DealerModelTest.DealerTestData.fields;
@@ -6,7 +8,6 @@ import DealerModelTest.DealerTestData.Record;
 import java.util.List;
 import java.util.UUID;
 
-/** Payload recipes; the owner retains registration, recovery and cleanup ordering. */
 final class DealerFixtureDefinitions {
     private final DealerTestData data;
 

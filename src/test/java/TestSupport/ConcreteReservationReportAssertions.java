@@ -1,10 +1,11 @@
+/* شرح الملف: مراجعة أصل الحجز والمنصرف والمتبقي في تقرير الحجوزات.
+ */
 package TestSupport;
 
 import Plugin_ERP.Util.PrintedInvoiceAssertions.Cell;
 import java.math.BigDecimal;
 import java.util.*;
 
-/** Matches the two-level reservation report headings to one exact item row and its grand total. */
 public final class ConcreteReservationReportAssertions {
     private ConcreteReservationReportAssertions() {}
 

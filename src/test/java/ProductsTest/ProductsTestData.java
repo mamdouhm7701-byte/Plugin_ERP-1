@@ -1,3 +1,5 @@
+/* شرح الملف: تجهيز سجلات مستقلة للتجربة ومراجعتها وحذفها بعد الانتهاء، ضمن الأصناف.
+ */
 package ProductsTest;
 
 import ProductsTest.ProductsFixtureApi.ApiFailure;
@@ -10,7 +12,6 @@ import java.util.UUID;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Per-scenario fixtures. Uses the logged-in application's API client and current branch. */
 final class ProductsTestData implements AutoCloseable {
 
     record Record(String endpoint, Object id, String name, Map<String, Object> values) {}

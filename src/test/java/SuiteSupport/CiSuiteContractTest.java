@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة صحة حزمة الفحص المحلي.
+ */
 package SuiteSupport;
 
 import Plugin_ERP.Tests.LoginTest.BaseTest;
@@ -10,7 +12,6 @@ import org.testng.annotations.Test;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.internal.Parser;
 
-/** Reject accidental inclusion of the existing live browser tests in the automatic CI gate. */
 public final class CiSuiteContractTest {
     @Test
     public void ciDoesNotSelectLiveErpSessions() throws Exception {

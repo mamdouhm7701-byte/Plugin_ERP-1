@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: يحدد الحالات المختارة لتشغيل الأصناف. -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <!-- AddProductsTest includes all 11 price contracts, including all-zero prices.
      Keep the seven invalid-price cases enabled so Regression exposes application defects. -->

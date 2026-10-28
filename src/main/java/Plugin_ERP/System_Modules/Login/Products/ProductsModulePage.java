@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة مشتركة لتسجيل بيانات الأصناف ومجموعاتها ووحداتها وقوائم أسعارها ومراجعتها.
+ * فائدتها استكمال بيانات المنتجات وإدارة سجلاتها.
+ */
 package Plugin_ERP.System_Modules.Login.Products;
 
 import Plugin_ERP.Enums.Pages;
@@ -10,7 +13,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Product-module interactions shared by the four existing Page Objects. */
 public class ProductsModulePage extends Abstract {
     private final ProductValidationFeedback validationFeedback;
     private final ProductRecordList records;

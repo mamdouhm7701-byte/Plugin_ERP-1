@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: يحدد مجموعة تشغيل منفصلة لمراجعة الخرسانة. -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Concrete delivery and billing stock" parallel="none"><test name="Owned concrete stock contracts"><classes>
 <class name="Invoice.ConcreteStockJourneyTest"/>

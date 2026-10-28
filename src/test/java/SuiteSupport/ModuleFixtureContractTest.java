@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة إمكانية تنظيف بيانات كل قسم.
+ */
 package SuiteSupport;
 
 import TestSupport.BasicDataScenarioTest;
@@ -8,7 +10,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.xml.internal.Parser;
 
-/** Offline gate: every basic screen keeps the lifecycle even when a single method is selected. */
 public final class ModuleFixtureContractTest {
     @Test
     public void everyBasicAndAccountingScreenOwnsItsLifecycle() throws Exception {

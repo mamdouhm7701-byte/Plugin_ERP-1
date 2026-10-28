@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة خطوط السير: بنسجل اسم الخط ونوع المستند وخيار تحديد الموقع. فائدتها تنظيم خطوط
+ * العمل التي ترتبط بالمتعاملين.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;

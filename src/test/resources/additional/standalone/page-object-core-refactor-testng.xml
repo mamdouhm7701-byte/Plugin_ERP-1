@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: يحدد مجموعة مراجعة منفصلة للتأكد من استمرار خطوات الشاشات وتجهيز بياناتها وتنظيفها. -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <!-- Serial Demo verification for shared base-page components. Owned fixtures retain their cleanup. -->
 <suite name="Shared page responsibilities regression" parallel="none" configfailurepolicy="continue">

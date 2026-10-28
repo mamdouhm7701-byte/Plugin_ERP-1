@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة تأكيد حذف البنك قبل انتظار اختفاء رسالة التأكيد.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.lang.reflect.Proxy;

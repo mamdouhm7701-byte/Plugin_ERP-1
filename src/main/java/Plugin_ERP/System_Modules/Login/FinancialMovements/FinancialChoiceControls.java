@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لاختيار طرف الحركة المالية وطريقة السداد ونوع التحويل. فائدتها توجيه المبلغ إلى
+ * الطرف والحساب المناسبين.
+ */
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
 import Plugin_ERP.Util.FormInteractions;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Focused FinancialChoiceControls operations extracted from FinancialMovementPage. */
 final class FinancialChoiceControls {
     private final FinancialMovementPage owner;
     private final WebDriver driver;

@@ -1,9 +1,11 @@
+/* شرح الملف: شاشة نقطة البيع: بنضيف الأصناف ونحدد الكميات والدفع النقدي أو الآجل ونعلق الفاتورة أو
+ * نسترجعها. فائدتها إتمام البيع السريع ومتابعة فواتير الكاشير.
+ */
 package Plugin_ERP.System_Modules.Login.SpecialSales;
 
 import io.qameta.allure.Step;
 import org.openqa.selenium.*;
 
-/** The point-of-sale page has its own route, save API and controls. */
 public final class PointOfSalePage extends SpecialSalesPage {
     public PointOfSalePage(WebDriver driver) {
         super(driver);

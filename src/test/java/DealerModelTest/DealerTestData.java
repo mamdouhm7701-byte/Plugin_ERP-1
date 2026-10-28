@@ -1,3 +1,6 @@
+/* شرح الملف: تجهيز سجلات مستقلة للتجربة ومراجعتها وحذفها بعد الانتهاء، ضمن العملاء والموردين
+ * والمناديب.
+ */
 package DealerModelTest;
 
 import DealerModelTest.DealerFixtureApi.ApiFailure;
@@ -10,7 +13,6 @@ import java.util.UUID;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Per-scenario fixtures. Uses the logged-in application's API client and current branch. */
 final class DealerTestData implements AutoCloseable {
 
     record Record(String endpoint, Object id, String name, Map<String, Object> values) {}

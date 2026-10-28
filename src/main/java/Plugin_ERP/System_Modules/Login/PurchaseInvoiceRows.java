@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة بنود فاتورة الشراء. فائدتها مراجعة بيانات الأصناف والمبالغ المسجلة بكل
+ * بند.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Models.InvoiceRow;
@@ -8,7 +11,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-/** Purchase invoice rows mapped using the purchase-price column. */
 final class PurchaseInvoiceRows {
     private final WebDriver driver;
 

@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لتطبيق شروط البحث على فواتير البيع بالبيانات والتواريخ والاختيارات. فائدتها
+ * تضييق النتائج للوصول للفواتير المطلوبة.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import java.time.Duration;
@@ -10,7 +13,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Invoice-list filters, selected values and the pending filter baseline. */
 final class InvoiceListFilters {
     private final InvoiceFilterControls filterControls;
     private final InvoicListPage owner;

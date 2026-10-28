@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار سلامة تجهيز الخطوات المشتركة للحالات ثم تنظيف بياناتها، ضمن الحركات المالية.
+ */
 package FinancialMovementsTest;
 
 import Plugin_ERP.System_Modules.Login.FinancialMovements.*;
@@ -11,7 +13,6 @@ import org.openqa.selenium.support.ui.*;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-/** Isolated scenario orchestration. Locators and browser interactions live in the POM. */
 public abstract class FinancialScenarioTest extends BaseTest {
     protected abstract FinancialMovementKind kind();
 

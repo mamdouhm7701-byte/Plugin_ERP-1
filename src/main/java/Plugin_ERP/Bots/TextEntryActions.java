@@ -1,10 +1,11 @@
+/* شرح الملف: كتابة النص في الحقل والتأكد من ظهور نفس النص.
+ */
 package Plugin_ERP.Bots;
 
 import java.util.Objects;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-/** Native text entry with bounded retries and no value-bearing diagnostics. */
 final class TextEntryActions {
     private static final int MAX_ATTEMPTS = 3;
     private final WebDriver driver;
@@ -40,6 +41,17 @@ final class TextEntryActions {
                                 });
                 input.sendKeys(expected);
                 waits.fluentWait().until(d -> expected.equals(input.getDomProperty("value")));
+                if (!password && Plugin_ERP.Util.Allur.ScenarioAssertions.isRecording()) {
+                    String field = input.getDomAttribute("name");
+                    if (!Plugin_ERP.Util.Allur.ReadableChecks.businessField(field))
+                        field = input.getDomAttribute("id");
+                    if (!password && Plugin_ERP.Util.Allur.ReadableChecks.businessField(field))
+                        Plugin_ERP.Util.Allur.ScenarioAssertions.recordComparison(
+                                input.getDomProperty("value"),
+                                expected,
+                                "التحقق من " + Plugin_ERP.Util.Allur.ReadableChecks.field(field),
+                                null);
+                }
                 return;
             } catch (WebDriverException failure) {
                 lastFailure = failure;

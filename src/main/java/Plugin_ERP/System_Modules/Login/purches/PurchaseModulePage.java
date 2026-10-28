@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة مشتركة لمستندات الشراء من اختيار الأصناف إلى الحفظ والطباعة والتحويل. فائدتها
+ * تنظيم خطوات الفواتير والأوامر والمرتجعات ومراجعتها.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import Plugin_ERP.Util.FormInteractions;
@@ -6,7 +9,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Purchase UI interactions; scenarios and persisted inventory assertions live in tests. */
 public class PurchaseModulePage extends PurchaseListPage {
     private final PurchaseNavigation navigation;
     private final PurchaseDocumentTransitions transitions;

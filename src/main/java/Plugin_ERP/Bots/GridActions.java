@@ -1,3 +1,5 @@
+/* شرح الملف: قراءة صفوف الجداول والتعامل مع السجل المطلوب.
+ */
 package Plugin_ERP.Bots;
 
 import java.time.Duration;

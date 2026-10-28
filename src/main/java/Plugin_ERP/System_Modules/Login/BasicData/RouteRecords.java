@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة خطوط السير وفتح الخط المطلوب للتعديل أو الحذف. فائدتها إدارة خطوط السير
+ * المسجلة ومراجعة بياناتها.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Route Records: focused operations used by the original page facade. */
 final class RouteRecords {
     private final RoutLine owner;
     private final WebDriver driver;

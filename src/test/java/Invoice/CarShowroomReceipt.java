@@ -1,8 +1,9 @@
+/* شرح الملف: تجهيز استلام سيارة برقم شاسيه ولون خاصين بالتجربة.
+ */
 package Invoice;
 
 import java.util.List;
 
-/** Owned purchase recipe needed to make one exact chassis available in the native sale picker. */
 final class CarShowroomReceipt {
     private CarShowroomReceipt() {}
 

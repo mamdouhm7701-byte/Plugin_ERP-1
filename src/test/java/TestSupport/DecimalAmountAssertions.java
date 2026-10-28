@@ -1,9 +1,10 @@
+/* شرح الملف: مراجعة المبالغ بدقتها الظاهرة والصافي بدقته المطلوبة.
+ */
 package TestSupport;
 
 import java.math.*;
 import org.testng.Assert;
 
-/** Compare at the actual field precision, tolerating only insignificant browser floating noise. */
 public final class DecimalAmountAssertions {
     private DecimalAmountAssertions() {}
 

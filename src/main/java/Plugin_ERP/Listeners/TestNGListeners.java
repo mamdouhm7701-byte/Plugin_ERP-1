@@ -1,3 +1,5 @@
+/* شرح الملف: متابعة بداية الحالات ونتائجها وجمع الصور والتقارير عند الانتهاء.
+ */
 package Plugin_ERP.Listeners;
 
 import Plugin_ERP.Bots.LogUtils;
@@ -19,7 +21,23 @@ import org.testng.IExecutionListener;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
-public class TestNGListeners implements IExecutionListener, ITestListener, org.testng.IReporter {
+public class TestNGListeners
+        implements IExecutionListener,
+                ITestListener,
+                org.testng.IReporter,
+                org.testng.IInvokedMethodListener {
+
+    @Override
+    public void beforeInvocation(org.testng.IInvokedMethod method, ITestResult result) {
+        if (result == null
+                || !(result.getInstance()
+                        instanceof Plugin_ERP.Util.RunEnvironmentGate.ProtectedScenario)) return;
+        var scenario = method.getTestMethod();
+        if (method.isTestMethod()
+                || scenario.isBeforeClassConfiguration()
+                || scenario.isBeforeMethodConfiguration())
+            Plugin_ERP.Util.RunEnvironmentGate.current().beforeScenario();
+    }
 
     @Override
     public void generateReport(
@@ -69,6 +87,7 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
 
     @Override
     public void onExecutionStart() {
+        Plugin_ERP.Util.Allur.AllureContextNoiseFilter.install();
         System.out.println(">>> Execution Started");
 
         // 1) تحميل properties
@@ -129,6 +148,7 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
     @Override
     public void onExecutionFinish() {
         System.out.println(">>> Execution Finished");
+        Plugin_ERP.Util.Allur.RunFailureOverview.generate();
 
         try {
             WebDriverFactory.quitDriver();
@@ -182,6 +202,14 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
                         test ->
                                 Plugin_ERP.Util.Allur.ScenarioReportCatalog.apply(
                                         test, scenarioClass, scenarioMethod));
+        io.qameta.allure.Allure.getLifecycle()
+                .getCurrentTestCase()
+                .ifPresent(
+                        id ->
+                                io.qameta.allure.Allure.getLifecycle()
+                                        .updateTestCase(
+                                                id,
+                                                Plugin_ERP.Util.Allur.FailureReviewScope::apply));
         if (WebDriverFactory.getDriver() != null) {
             Plugin_ERP.Util.Allur.ScenarioAccess.capture(
                     WebDriverFactory.getDriver(), "الشاشة عند بدء الحالة");
@@ -221,6 +249,11 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
             }
         }
         Plugin_ERP.Util.Allur.ScenarioAssertions.end();
+        io.qameta.allure.Allure.getLifecycle()
+                .updateTestCase(
+                        test ->
+                                Plugin_ERP.Util.Allur.FailureClassification.apply(
+                                        test, result == null ? null : result.getThrowable()));
         try {
             Plugin_ERP.Util.Allur.ScenarioFailureReport.attach(result);
         } catch (RuntimeException reportFailure) {
@@ -232,6 +265,12 @@ public class TestNGListeners implements IExecutionListener, ITestListener, org.t
 
     @Override
     public void onTestSkipped(ITestResult result) {
+        io.qameta.allure.Allure.getLifecycle()
+                .updateTestCase(
+                        test ->
+                                Plugin_ERP.Util.Allur.FailureClassification.apply(
+                                        test.setStatus(io.qameta.allure.model.Status.SKIPPED),
+                                        result == null ? null : result.getThrowable()));
         Plugin_ERP.Util.FailureVideoRecorder.complete(false);
         Plugin_ERP.Util.Allur.ScenarioAssertions.end();
     }

@@ -1,3 +1,5 @@
+/* شرح الملف: تجربة تجهيز وقراءة البيانات دون الاتصال بالبرنامج الحقيقي، ضمن المبيعات.
+ */
 package Invoice;
 
 import java.lang.reflect.Proxy;
@@ -9,7 +11,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 
-/** In-memory fixture API with explicit fault injection; never connects to ERP. */
 final class SalesFixtureApiStub {
     String origin = "offline", activeBranch = "branch-test";
     int branchUnavailableReads;
@@ -25,6 +26,8 @@ final class SalesFixtureApiStub {
     boolean timeOutStore;
     boolean commitBeforeTimeout;
     boolean rejectStore;
+    boolean capacityExceeded;
+    int createAttempts;
     boolean emptyDeletedResponse;
     boolean failAfterItemInsert;
     boolean failAfterStoreInsert;
@@ -110,6 +113,10 @@ final class SalesFixtureApiStub {
             return Map.of("id", "branch-test");
         }
         if (action.equals("create")) {
+            createAttempts++;
+            if (capacityExceeded)
+                return Map.of(
+                        "error", "Common.LicenseLimitationExceededErrorMessage", "status", 400);
             String id = endpoint + "-" + (records.size() + 1);
             Map<String, Object> saved = new LinkedHashMap<>(values);
             saved.put("id", id);

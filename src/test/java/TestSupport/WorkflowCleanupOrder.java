@@ -1,9 +1,10 @@
+/* شرح الملف: ترتيب حذف مستندات التجربة قبل البيانات التي تعتمد عليها.
+ */
 package TestSupport;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/** Cross-module children must be removed before the fixture owner of their source documents. */
 public final class WorkflowCleanupOrder {
     private WorkflowCleanupOrder() {}
 

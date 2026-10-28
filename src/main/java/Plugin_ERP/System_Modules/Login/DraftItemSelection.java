@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة لاختيار صنفين من الأصناف الموجودة أثناء تجهيز مستند. فائدتها تكوين بنود المستند
+ * من الخيارات المتاحة.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import java.util.List;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Shared UI-only item selection for unsaved sales and purchase contract probes. */
 public final class DraftItemSelection {
     private DraftItemSelection() {}
 

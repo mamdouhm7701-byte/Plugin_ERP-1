@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة لقراءة رسائل نقص بيانات الصنف ومشكلات الأسعار وحالة الحفظ. فائدتها معرفة
+ * البيانات المطلوب تصحيحها قبل تسجيل الصنف.
+ */
 package Plugin_ERP.System_Modules.Login.Products;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Focused ProductValidationFeedback operations extracted from ProductsModulePage. */
 final class ProductValidationFeedback {
     private final WebDriver driver;
     private final WebDriverWait ready;

@@ -1,3 +1,5 @@
+/* شرح الملف: تحديد وقت الانتظار المناسب للصفحات والحقول.
+ */
 package Plugin_ERP.Bots;
 
 import Plugin_ERP.Util.PropertyReader;

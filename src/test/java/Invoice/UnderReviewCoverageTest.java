@@ -1,3 +1,7 @@
+/* شرح الملف: اختبارات فاتورة تحت الإجراء: رفض الكمية الصفرية في فاتورة تحت الإجراء؛ حفظ فاتورة تحت
+ * الإجراء بالعميل والصنف الصحيحين دون صرف المخزون؛ إلغاء فاتورة تحت الإجراء دون حفظ؛ إعادة فتح
+ * فاتورة تحت الإجراء المحفوظة.
+ */
 package Invoice;
 
 import Plugin_ERP.System_Modules.Login.Invoice.SalesModulePage;
@@ -9,7 +13,6 @@ import java.util.*;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-/** Under-review documents have a distinct owner and endpoint; no normal invoice is substituted. */
 public final class UnderReviewCoverageTest extends BaseTest {
     private SalesTestData refs;
     private BasicDataFixtures documents;

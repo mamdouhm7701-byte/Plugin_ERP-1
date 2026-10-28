@@ -1,3 +1,5 @@
+/* شرح الملف: ترتيب الحالات في التقرير حسب القسم والشاشة.
+ */
 package Plugin_ERP.Util.Allur;
 
 import io.qameta.allure.Description;
@@ -8,7 +10,6 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import org.testng.annotations.Test;
 
-/** Presentation-only business grouping. Test identities and original Java labels remain intact. */
 public final class ScenarioReportCatalog {
     private ScenarioReportCatalog() {}
 
@@ -16,6 +17,54 @@ public final class ScenarioReportCatalog {
 
     private static final Map<String, Entry> SCREENS =
             Map.ofEntries(
+                    Map.entry(
+                            "Invoice.CarShowroomSalesTest",
+                            new Entry("اختبارات النشاط", "بيع السيارات")),
+                    Map.entry(
+                            "Invoice.SalesFinalRoundingTest",
+                            new Entry("اختبارات النشاط", "فاتورة المبيعات")),
+                    Map.entry(
+                            "Invoice.StocktakingAccountingTest",
+                            new Entry("اختبارات النشاط", "الترحيل للحسابات")),
+                    Map.entry(
+                            "Invoice.SelectedBranchSalesPolicyTest",
+                            new Entry("اختبارات النشاط", "فاتورة المبيعات")),
+                    Map.entry(
+                            "Invoice.ConstructionContractTest",
+                            new Entry("اختبارات النشاط", "العقود")),
+                    Map.entry(
+                            "Invoice.ConstructionContractConversionTest",
+                            new Entry("اختبارات النشاط", "العقود")),
+                    Map.entry(
+                            "Invoice.ConcreteStockJourneyTest",
+                            new Entry("اختبارات النشاط", "الخرسانة")),
+                    Map.entry(
+                            "Invoice.ConcreteReservationReportTest",
+                            new Entry("اختبارات النشاط", "تقارير الخرسانة")),
+                    Map.entry(
+                            "Invoice.ConcreteOperationalReportTest",
+                            new Entry("اختبارات النشاط", "تقارير الخرسانة")),
+                    Map.entry(
+                            "SpecialSalesTest.RestaurantAdditionalTaxBoundaryTest",
+                            new Entry("المطاعم", "فاتورة المطعم")),
+                    Map.entry(
+                            "SpecialSalesTest.RestaurantAdditionalTaxOrderTest",
+                            new Entry("المطاعم", "فاتورة المطعم")),
+                    Map.entry(
+                            "SpecialSalesTest.RestaurantAdditionalTaxReturnTest",
+                            new Entry("المطاعم", "مرتجع المطعم")),
+                    Map.entry(
+                            "SpecialSalesTest.RestaurantMinimumAdditionalTaxTest",
+                            new Entry("المطاعم", "فاتورة المطعم")),
+                    Map.entry(
+                            "SpecialSalesTest.RestaurantAdditionalTaxSmokeTest",
+                            new Entry("المطاعم", "فاتورة المطعم")),
+                    Map.entry(
+                            "SpecialSalesTest.RestaurantItemBasedAdditionalTaxTest",
+                            new Entry("المطاعم", "فاتورة المطعم")),
+                    Map.entry(
+                            "SpecialSalesTest.SelectedRestaurantPolicyTest",
+                            new Entry("المطاعم", "فاتورة المطعم")),
                     Map.entry(
                             "CoverageTest.AccountGroupsCoverageTest",
                             new Entry("الحسابات العامة", "مجموعات الحسابات")),

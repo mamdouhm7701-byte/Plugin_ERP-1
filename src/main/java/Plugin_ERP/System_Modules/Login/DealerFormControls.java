@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لفتح ملف المتعامل والتنقل بين بيانات الاتصال والبيانات الأساسية وشروط التعامل.
+ * فائدتها الوصول إلى المعلومات المطلوبة عند التسجيل أو التعديل.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Dealer Form Controls: focused operations used by the original page facade. */
 final class DealerFormControls {
     private final AbstractForDealer owner;
     private final WebDriver driver;

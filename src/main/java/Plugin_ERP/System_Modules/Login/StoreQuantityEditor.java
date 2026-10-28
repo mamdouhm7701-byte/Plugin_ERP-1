@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لتعديل كميات الأصناف وقراءة الكميات المسجلة. فائدتها ضبط كمية كل صنف في حركة
+ * المخزون.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.LogUtils;
@@ -12,7 +15,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Quantity entry and quantity snapshots for legacy warehouse forms. */
 final class StoreQuantityEditor {
     private final DocumentPage owner;
     private final WebDriver driver;

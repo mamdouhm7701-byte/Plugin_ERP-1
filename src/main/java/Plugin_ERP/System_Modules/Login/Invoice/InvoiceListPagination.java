@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة للتنقل بين صفحات فواتير البيع وتحديد عدد الفواتير المعروضة. فائدتها تصفح
+ * القوائم الطويلة والوصول إلى بقية النتائج.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import java.time.Duration;
@@ -7,7 +10,6 @@ import java.util.function.Supplier;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Invoice-list page size and navigation; grid refresh policy remains owned by the page. */
 final class InvoiceListPagination {
     private final InvoicListPage owner;
     private final WebDriver driver;

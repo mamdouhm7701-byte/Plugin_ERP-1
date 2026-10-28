@@ -1,6 +1,7 @@
+/* شرح الملف: استكمال تنظيف بيانات تجربة سابقة من سجلها المحدد، ضمن العملاء والموردين والمناديب.
+ */
 package DealerModelTest;
 
-/** Explicit recovery: page records first, then their fixture identities and pending writes. */
 public final class DealerFixtureRecovery extends DealerScenarioTest {
     public static void main(String[] args) throws Exception {
         if (args.length != 2

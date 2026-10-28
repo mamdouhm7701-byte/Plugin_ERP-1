@@ -1,3 +1,4 @@
+# شرح الملف: يصلح عناصر تنسيق تقرير Word السابق.
 from docx import Document
 from docx.oxml.ns import qn
 p=r'C:\Users\pcx\Desktop\تقرير إجمالي المبيعات - منسق.docx'

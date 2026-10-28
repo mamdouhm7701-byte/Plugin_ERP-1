@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة العملاء: بنسجل بيانات العميل ووسائل التواصل وشروط التعامل معه. فائدتها تجهيز ملف
+ * العميل لاستخدامه في البيع والتحصيل.
+ */
 package Plugin_ERP.System_Modules.Login.DealerModel;
 
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;

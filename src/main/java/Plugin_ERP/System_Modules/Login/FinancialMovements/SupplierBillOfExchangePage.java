@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة سند صرف لمورد: بنحدد المورد والمبلغ وطريقة الدفع ونوزع السداد على مستنداته.
+ * فائدتها توثيق المدفوع للمورد وتسوية مستحقاته.
+ */
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
 import io.qameta.allure.Step;

@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة أنواع الإيرادات: بنسجل اسم نوع الإيراد وحسابه ونحدد إذا كان مشتركا. فائدتها تصنيف
+ * المبالغ الواردة قبل تسجيل الحركات المالية.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;

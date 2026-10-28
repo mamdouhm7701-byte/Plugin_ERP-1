@@ -1,3 +1,5 @@
+/* شرح الملف: إظهار معلومات بيئة التشغيل والمتصفح داخل التقرير.
+ */
 package Plugin_ERP.Util.Allur;
 
 import static Plugin_ERP.Util.PropertyReader.getProperty;

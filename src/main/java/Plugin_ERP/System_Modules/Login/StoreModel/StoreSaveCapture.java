@@ -1,9 +1,11 @@
+/* شرح الملف: مساعدة لمتابعة محاولات حفظ الحركة المخزنية ونتائجها وأخطائها. فائدتها معرفة نجاح تسجيل
+ * الحركة واكتشاف التكرار أو التعثر.
+ */
 package Plugin_ERP.System_Modules.Login.StoreModel;
 
 import java.util.List;
 import java.util.Map;
 
-/** Observe requests and outcomes for owned warehouse documents. */
 final class StoreSaveCapture {
     private final StoreModulePage owner;
 

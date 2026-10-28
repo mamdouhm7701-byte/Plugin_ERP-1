@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة للبحث في نافذة إضافة أصناف البيع وعرض الأصناف المختارة. فائدتها الوصول للأصناف
+ * المطلوبة ومراجعتها قبل إضافتها.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import java.time.Duration;
@@ -9,7 +12,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Search and visible results inside the sales item dialog. */
 final class SalesItemDialog {
     private final AbstractForSales owner;
     private final WebDriver driver;

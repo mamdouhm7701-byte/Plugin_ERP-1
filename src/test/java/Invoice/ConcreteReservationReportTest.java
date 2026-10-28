@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات تقرير الحجز يعرض الأصل والمنصرف والمتبقي: تقرير الحجز يعرض الأصل والمنصرف
+ * والمتبقي.
+ */
 package Invoice;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -14,7 +17,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-/** Reconciles the rendered reservation row and grand total against an owned native transaction. */
 public final class ConcreteReservationReportTest extends ConcreteOwnedReportScenario {
 
     @DataProvider

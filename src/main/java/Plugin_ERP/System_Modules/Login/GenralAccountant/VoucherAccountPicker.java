@@ -1,10 +1,11 @@
+/* شرح الملف: مساعدة للبحث عن الحساب واختياره داخل القيد. فائدتها توجيه مبلغ القيد للحساب الصحيح.
+ */
 package Plugin_ERP.System_Modules.Login.GenralAccountant;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Focused UI component; public page entry points and their Allure steps stay on the page. */
 final class VoucherAccountPicker {
     private final VouchersPage page;
     private final WebDriver driver;

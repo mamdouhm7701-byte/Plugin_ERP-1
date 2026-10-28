@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة التحويلات والتسويات: بنحدد الطرف المدين والطرف الدائن لكل حركة. فائدتها نقل
+ * المبالغ وتسوية الأرصدة بين الأطراف المختارة.
+ */
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
 import io.qameta.allure.Step;

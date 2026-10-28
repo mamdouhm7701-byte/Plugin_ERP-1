@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة لتعديل بنود الشراء وكمياتها وقيمها وحذف البنود ومراجعة الإجماليات. فائدتها ضبط
+ * تفاصيل الشراء وصافي المستند.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Line editing and displayed totals for this document form; the page retains its public API. */
 final class PurchaseDocumentLines {
     private final PurchaseModulePage page;
     private final WebDriver driver;

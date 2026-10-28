@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لفواتير المبيعات: إضافة الأصناف ومراجعة الكميات والأسعار والإجماليات والطباعة.
+ * فائدتها متابعة صحة الفاتورة قبل اعتمادها.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Business.Calculator.InvoiceCalculator;

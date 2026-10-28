@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لإدخال تاريخ مستند الشراء وملاحظاته والخصم والمدفوعات وحفظه. فائدتها استكمال
+ * المستند ومراجعة البيانات المطلوبة وحدود الخصم.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Purchase Document Form: focused operations used by the original page facade. */
 final class PurchaseDocumentForm {
     private final PurchaseModulePage owner;
     private final WebDriver driver;

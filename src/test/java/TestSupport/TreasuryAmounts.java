@@ -1,9 +1,10 @@
+/* شرح الملف: حساب مبالغ الخزينة المتوقعة من بيانات التجربة نفسها.
+ */
 package TestSupport;
 
 import java.math.BigDecimal;
 import java.util.Map;
 
-/** Reconciles the cash and all-payment ledgers independently of the browser's computed fields. */
 public record TreasuryAmounts(BigDecimal cash, BigDecimal total, BigDecimal actual) {
     /** Only valid for an owned handover with no sales, receipts, payments or expenses. */
     public static TreasuryAmounts openingOnly(BigDecimal openingBalance, BigDecimal actual) {

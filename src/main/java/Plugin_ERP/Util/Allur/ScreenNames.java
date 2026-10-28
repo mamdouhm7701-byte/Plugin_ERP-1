@@ -1,9 +1,10 @@
+/* شرح الملف: عرض أسماء الشاشات بالعربي في التقرير.
+ */
 package Plugin_ERP.Util.Allur;
 
 import io.qameta.allure.Allure;
 import java.util.Map;
 
-/** Business screen labels for navigation steps; routing itself is unchanged. */
 public final class ScreenNames {
     private ScreenNames() {}
 

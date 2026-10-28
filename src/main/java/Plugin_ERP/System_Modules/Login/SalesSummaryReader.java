@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة ملخص فاتورة البيع بعد اكتمال الحساب. فائدتها مراجعة الإجمالي والخصم
+ * والضريبة والصافي.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import java.math.BigDecimal;
@@ -6,7 +9,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Sales Summary Reader: focused operations used by the original page facade. */
 final class SalesSummaryReader {
     private final AbstractForSales owner;
     private final WebDriver driver;

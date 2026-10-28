@@ -1,0 +1,34 @@
+{
+  "scope": "Local CI contracts only; not live ERP stability",
+  "verdict": "STABLE_PASS",
+  "rounds": [
+    {
+      "round": 1,
+      "total": 888,
+      "passed": 888,
+      "failed": 0,
+      "skipped": 0,
+      "ignored": 0
+    },
+    {
+      "round": 2,
+      "total": 888,
+      "passed": 888,
+      "failed": 0,
+      "skipped": 0,
+      "ignored": 0
+    },
+    {
+      "round": 3,
+      "total": 888,
+      "passed": 888,
+      "failed": 0,
+      "skipped": 0,
+      "ignored": 0
+    }
+  ],
+  "sameSelectionAndSettings": true,
+  "report": "target/stability/21f54a0095964dc1921cdee635d7d418/stability-summary.html",
+  "liveQualification": "Not run: existing IntelliJ ERP process 5908 retained",
+  "note": "Three additional cleanup-completion contract tests were added after these repetitions and are checked separately in the final validation."
+}

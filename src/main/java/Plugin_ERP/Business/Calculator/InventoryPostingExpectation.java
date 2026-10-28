@@ -1,10 +1,11 @@
+/* شرح الملف: تحديد حسابات ومبالغ القيد المتوقع للدوري والمستمر.
+ */
 package Plugin_ERP.Business.Calculator;
 
 import Plugin_ERP.BranchProfiles.BranchPolicies.StocktakingMethod;
 import java.math.BigDecimal;
 import java.util.*;
 
-/** Independent amounts; callers must supply the branch's explicitly verified account bindings. */
 public final class InventoryPostingExpectation {
     public record Accounts(
             String counterparty,

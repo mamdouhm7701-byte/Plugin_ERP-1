@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات ترتيب حذف مستندات التجربة قبل البيانات التي تعتمد عليها.
+ */
 package SuiteSupport;
 
 import TestSupport.WorkflowCleanupOrder;
@@ -6,7 +8,6 @@ import java.util.List;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Local regressions for the financial-child / invoice-parent cleanup boundary. */
 public final class WorkflowCleanupOrderTest {
     @Test
     public void failedFinancialChildBlocksSourceAndRetainsOnlyUnresolvedChildren() {

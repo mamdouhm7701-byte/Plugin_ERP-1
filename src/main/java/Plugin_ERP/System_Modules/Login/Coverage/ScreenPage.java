@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة للتعامل مع الشاشات المختلفة: فتحها وإدخال بياناتها واختيار السجلات والبنود
+ * ومراجعة الرسائل. فائدتها تسهيل مراجعة الأعمال المشتركة عبر أقسام النظام.
+ */
 package Plugin_ERP.System_Modules.Login.Coverage;
 
 import Plugin_ERP.Util.FormInteractions;
@@ -8,7 +11,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Native UI primitives for the newly covered screens. No component-state writes. */
 public class ScreenPage {
     protected final WebDriver driver;
     protected final WebDriverWait ready;

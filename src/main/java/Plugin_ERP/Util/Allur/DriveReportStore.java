@@ -1,3 +1,5 @@
+/* شرح الملف: رفع التقرير إلى مساحة الحفظ ومراجعته عند تفعيل الإرسال.
+ */
 package Plugin_ERP.Util.Allur;
 
 import java.io.*;
@@ -11,7 +13,6 @@ import java.util.*;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 
-/** Drive API with restricted sharing. Access and refresh tokens never enter the journal/log. */
 final class DriveReportStore {
     private final Properties config;
     private final URI testBase;

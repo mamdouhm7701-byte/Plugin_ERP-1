@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: يحدد الحالات المختارة لتشغيل الشاشات المضافة إلى التغطية. -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Previously uncovered screens - owned data" parallel="none" configfailurepolicy="continue">
   <test name="Master screen persistence and validation" preserve-order="true">

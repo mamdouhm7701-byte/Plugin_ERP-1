@@ -1,3 +1,6 @@
+/* شرح الملف: اختبار سلامة تحديد البيانات المطلوبة لإنشاء سجلات التجربة، ضمن اختيار وتشغيل
+ * الاختبارات.
+ */
 package SuiteSupport;
 
 import java.lang.reflect.Method;
@@ -15,7 +18,6 @@ import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 import org.testng.xml.internal.Parser;
 
-/** تحقق محلي لتعريفات التشغيل؛ لا يفتح المتصفح ولا ينشئ بيانات ERP. */
 public final class SuiteDefinitionsTest {
     private static final Path RESOURCES = Path.of("src", "test", "resources");
 

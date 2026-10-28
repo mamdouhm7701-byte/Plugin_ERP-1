@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة إشعار خصم من المورد: بنحدد المورد وقيمة الخصم والمستندات المرتبطة به. فائدتها
+ * توثيق تخفيض مستحقات المورد ومراجعة أثر الضريبة.
+ */
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
 import io.qameta.allure.Allure;

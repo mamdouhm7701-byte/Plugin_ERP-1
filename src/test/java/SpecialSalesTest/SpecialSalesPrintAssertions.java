@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة الأصناف والمبالغ في الطباعة، ضمن المطعم ونقاط البيع.
+ */
 package SpecialSalesTest;
 
 import io.qameta.allure.Allure;
@@ -8,9 +10,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-/**
- * Observes the real receipt window and delegates to the browser's original print implementation.
- */
 final class SpecialSalesPrintAssertions {
     private SpecialSalesPrintAssertions() {}
 

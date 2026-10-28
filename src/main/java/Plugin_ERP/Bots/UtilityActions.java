@@ -1,3 +1,5 @@
+/* شرح الملف: توفير أعمال مساعدة تحتاجها خطوات الاختبار.
+ */
 package Plugin_ERP.Bots;
 
 import io.qameta.allure.Allure;

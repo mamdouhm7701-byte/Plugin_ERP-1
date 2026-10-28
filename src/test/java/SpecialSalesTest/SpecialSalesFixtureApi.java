@@ -1,10 +1,11 @@
+/* شرح الملف: تنفيذ تجهيز وقراءة وحذف بيانات التجربة على الفرع الصحيح، ضمن المطعم ونقاط البيع.
+ */
 package SpecialSalesTest;
 
 import java.time.Duration;
 import java.util.Map;
 import org.openqa.selenium.WebDriver;
 
-/** Browser transport with the existing session checks, timeouts and error responses. */
 final class SpecialSalesFixtureApi {
     private final Plugin_ERP.BranchProfiles.BranchProfileGuard profileGuard =
             Plugin_ERP.BranchProfiles.BranchProfileGuard.capture();
@@ -29,6 +30,7 @@ final class SpecialSalesFixtureApi {
     Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
         profileGuard.verify(driver);
         contextGuard.run();
+        Plugin_ERP.Util.RunEnvironmentGate.beforeCreate(action);
         driver.manage()
                 .timeouts()
                 .scriptTimeout(Duration.ofSeconds(action.equals("delete") ? 60 : 30));
@@ -64,6 +66,7 @@ final class SpecialSalesFixtureApi {
                         values);
         Map<String, Object> response = (Map<String, Object>) result;
         if (response.get("error") != null) {
+            Plugin_ERP.Util.RunEnvironmentGate.observe(action, endpoint, response.get("error"));
             int status = response.get("status") instanceof Number number ? number.intValue() : 0;
             throw new ApiFailure(
                     status, "Fixture " + action + " " + endpoint + ": " + response.get("error"));

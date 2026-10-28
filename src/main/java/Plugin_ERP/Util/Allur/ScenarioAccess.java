@@ -1,3 +1,5 @@
+/* شرح الملف: تسجيل بيئة الدخول والشاشة المرتبطة بالحالة.
+ */
 package Plugin_ERP.Util.Allur;
 
 import Plugin_ERP.Util.PropertyReader;
@@ -9,7 +11,6 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import org.openqa.selenium.WebDriver;
 
-/** Access details belong to the browser session and the current test result. */
 public final class ScenarioAccess {
     private ScenarioAccess() {}
 

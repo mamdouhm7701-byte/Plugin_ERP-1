@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة بيانات الخزينة مثل الاسم والكود والحساب والملاحظات. فائدتها مراجعة
+ * تفاصيل الخزينة والحقول المطلوبة.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Cash Form Reader: focused operations used by the original page facade. */
 final class CashFormReader {
     private final CashPage owner;
     private final WebDriver driver;

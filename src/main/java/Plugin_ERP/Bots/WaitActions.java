@@ -1,3 +1,5 @@
+/* شرح الملف: انتظار ظهور النتيجة المطلوبة قبل استكمال الخطوات.
+ */
 package Plugin_ERP.Bots;
 
 import Plugin_ERP.Util.PropertyReader;

@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار دليل الحسابات والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package CoverageTest;
 
 public final class ChartOfAccountsCoverageTest extends MasterCoverageScenario {

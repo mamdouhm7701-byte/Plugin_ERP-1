@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة جهات التوزيع والبحث عنها وتعديلها أو حذفها. فائدتها مراجعة سجلات الجهات
+ * واختيار الجهة المقصودة.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Distribution Records: focused operations used by the original page facade. */
 final class DistributionRecords {
     private final DistributionEntityPage owner;
     private final WebDriver driver;

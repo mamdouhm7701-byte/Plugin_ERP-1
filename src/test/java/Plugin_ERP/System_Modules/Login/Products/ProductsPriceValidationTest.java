@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة رسائل أسعار الصنف وحالة زر الحفظ دون قبول رسالة من حقل آخر.
+ */
 package Plugin_ERP.System_Modules.Login.Products;
 
 import java.lang.reflect.Proxy;

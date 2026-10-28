@@ -1,10 +1,11 @@
+/* شرح الملف: مراجعة الأصناف والكميات والمبالغ في الفاتورة المطبوعة.
+ */
 package Plugin_ERP.Util;
 
 import java.math.BigDecimal;
 import java.util.*;
 import org.openqa.selenium.*;
 
-/** Associates report values with their printed row/column or label, never a page-wide number. */
 public final class PrintedInvoiceAssertions {
     public record Cell(String text, double x, double y, double width, double height, String page) {}
 

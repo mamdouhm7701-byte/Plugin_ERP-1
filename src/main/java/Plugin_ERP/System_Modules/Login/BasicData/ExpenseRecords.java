@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة أنواع المصروفات وفتح النوع المطلوب للتعديل أو الحذف. فائدتها متابعة
+ * بيانات المصروفات المسجلة وحساباتها.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Expense Records: focused operations used by the original page facade. */
 final class ExpenseRecords {
     private final ExpensesPage owner;
     private final WebDriver driver;

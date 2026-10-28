@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لإضافة أصناف حركة المخزون بالاسم أو الباركود أو نافذة الاختيار. فائدتها تحديد
+ * الأصناف المقصودة قبل تسجيل الكميات.
+ */
 package Plugin_ERP.System_Modules.Login.StoreModel;
 
 import org.openqa.selenium.By;
@@ -5,7 +8,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 
-/** Warehouse item selection by name, barcode or picker. */
 final class StoreItemSelection {
     private final StoreModulePage owner;
 

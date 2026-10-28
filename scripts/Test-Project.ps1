@@ -1,3 +1,4 @@
+# شرح الملف: يشغّل مستوى الفحص المطلوب ويحفظ سجلًا واضحًا لكل تشغيل.
 [CmdletBinding()]
 param(
     [ValidateSet('Local', 'Acceptance', 'Regression', 'ParallelPilot', 'ParallelScreens', 'Smoke', 'Sanity', 'E2E', 'Qualification')]

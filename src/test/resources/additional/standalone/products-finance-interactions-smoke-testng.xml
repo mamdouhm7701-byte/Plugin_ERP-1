@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: يحدد مجموعة تشغيل منفصلة لمراجعة الأصناف. -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Products and financial dropdowns" parallel="none" configfailurepolicy="continue">
     <test name="Exact choices and dependent financial pickers" preserve-order="true">

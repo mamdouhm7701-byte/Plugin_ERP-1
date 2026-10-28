@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة استلام الخزينة ومراجعة تسليمها: بنسجل الرصيد الافتتاحي ونراجع النقد الفعلي والفرق
+ * والإجمالي والطباعة. فائدتها متابعة رصيد الخزينة عند الاستلام والتسليم.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;

@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات عرض السعر: تطبيق قائمة أسعار أنشأها الاختبار على عرض السعر.
+ */
 package Invoice;
 
 public final class QuotationTest extends SalesFormTest {

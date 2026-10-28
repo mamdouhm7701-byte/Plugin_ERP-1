@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات اختيار حزمة الاختبارات وطريقة عرض المتصفح قبل التشغيل.
+ */
 package SuiteSupport;
 
 import java.nio.file.Path;

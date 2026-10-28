@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة قائمة المتعاملين والبحث عن الاسم وعد النتائج. فائدتها التأكد من وجود
+ * المتعامل وتمييز الأسماء المتشابهة.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import java.time.Duration;
@@ -7,7 +10,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Read-only dealer list queries and exact-name matching. */
 final class DealerListQueries {
     private final AbstractForDealer owner;
     private final WebDriver driver;

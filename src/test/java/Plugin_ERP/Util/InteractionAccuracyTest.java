@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة دقة الضغط على العنصر المطلوب.
+ */
 package Plugin_ERP.Util;
 
 import Plugin_ERP.Bots.*;
@@ -8,7 +10,6 @@ import org.openqa.selenium.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Regressions for false monetary matches, synthetic clicks and already-open report tabs. */
 public final class InteractionAccuracyTest {
     @Test
     public void hiddenTextInsideVisibleAncestorDoesNotCountAsDisplayed() {

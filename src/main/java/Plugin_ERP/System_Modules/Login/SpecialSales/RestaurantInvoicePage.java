@@ -1,9 +1,11 @@
+/* شرح الملف: شاشة فاتورة المطعم: بنختار نوع الطلب والطاولة والأصناف والخصم ثم نسجل الدفع ونغلق
+ * الفاتورة. فائدتها متابعة طلبات المطعم وتحصيل قيمتها.
+ */
 package Plugin_ERP.System_Modules.Login.SpecialSales;
 
 import io.qameta.allure.Step;
 import org.openqa.selenium.*;
 
-/** Restaurant orders are a separate page/workflow, never a normal-invoice subclass. */
 public final class RestaurantInvoicePage extends SpecialSalesPage {
     public RestaurantInvoicePage(WebDriver driver) {
         super(driver);

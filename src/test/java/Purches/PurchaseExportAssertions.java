@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة محتوى الملف الذي تم تنزيله، ضمن المشتريات.
+ */
 package Purches;
 
 import java.nio.charset.StandardCharsets;

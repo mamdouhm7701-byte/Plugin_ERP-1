@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة محتوى الملف الذي تم تنزيله، ضمن الأصناف.
+ */
 package ProductsTest;
 
 import java.nio.charset.StandardCharsets;

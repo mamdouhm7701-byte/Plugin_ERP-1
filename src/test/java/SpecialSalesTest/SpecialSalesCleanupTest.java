@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة تنظيف البيانات التي أنشأتها التجربة فقط، ضمن المطعم ونقاط البيع.
+ */
 package SpecialSalesTest;
 
 import java.util.LinkedHashMap;

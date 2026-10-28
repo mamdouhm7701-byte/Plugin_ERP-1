@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة الموردين: بنسجل بيانات المورد ووسائل التواصل وشروط التعامل معه. فائدتها تجهيز ملف
+ * المورد لاستخدامه في الشراء والسداد.
+ */
 package Plugin_ERP.System_Modules.Login.DealerModel;
 
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;

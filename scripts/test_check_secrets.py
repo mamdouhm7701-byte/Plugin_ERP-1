@@ -1,3 +1,4 @@
+# شرح الملف: يجرب فحص حماية البيانات الخاصة للتأكد من أنه يكتشفها.
 import unittest
 from check_secrets import findings
 

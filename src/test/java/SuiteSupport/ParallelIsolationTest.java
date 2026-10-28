@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة عدم مشاركة بيانات الحالات التي تعمل معًا.
+ */
 package SuiteSupport;
 
 import TestSupport.BranchMutationLock;

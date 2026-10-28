@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة مبالغ الضريبة والصافي المحفوظة، ضمن المطعم ونقاط البيع.
+ */
 package SpecialSalesTest;
 
 import Plugin_ERP.Business.Calculator.RestaurantAdditionalTaxCalculator.Totals;
@@ -5,7 +7,6 @@ import java.math.*;
 import java.util.Map;
 import org.testng.Assert;
 
-/** Final net is exact at two decimals; intermediate fields retain their displayed precision. */
 final class RestaurantTaxAssertions {
     private RestaurantTaxAssertions() {}
 

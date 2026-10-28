@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة لتجميع أسماء الأصناف وكمياتها وأسعارها من فاتورة الشراء. فائدتها الاحتفاظ
+ * بتفاصيل الفاتورة للمقارنة والمراجعة.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Purchase Invoice Snapshot: focused operations used by the original page facade. */
 final class PurchaseInvoiceSnapshot {
     private final DocumentPage owner;
     private final WebDriver driver;

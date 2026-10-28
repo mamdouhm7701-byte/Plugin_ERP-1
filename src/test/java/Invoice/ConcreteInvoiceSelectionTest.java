@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة انتظار انتهاء التحميل قبل تأكيد اختيار إذن التسليم.
+ */
 package Invoice;
 
 import java.lang.reflect.Proxy;

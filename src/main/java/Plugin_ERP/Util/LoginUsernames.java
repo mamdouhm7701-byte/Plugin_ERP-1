@@ -1,6 +1,8 @@
+/* شرح الملف: يبني اسم مستخدم التجربة بنفس بادئة الشركة في حساب الدخول المرجعي، ويرفض اسمًا فارغًا
+ * أو اسمًا مرتبطًا بشركة أخرى.
+ */
 package Plugin_ERP.Util;
 
-/** New users retain local names in the API; their login uses the configured company's prefix. */
 public final class LoginUsernames {
     private LoginUsernames() {}
 

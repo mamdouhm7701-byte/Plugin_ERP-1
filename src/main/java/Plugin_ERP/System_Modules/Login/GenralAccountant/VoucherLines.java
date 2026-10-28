@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لإدخال مبالغ المدين والدائن وملاحظات بنود القيد ومراجعة الضريبة والتوازن.
+ * فائدتها التأكد من تساوي طرفي القيد.
+ */
 package Plugin_ERP.System_Modules.Login.GenralAccountant;
 
 import java.math.BigDecimal;
@@ -8,7 +11,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
-/** Journal line amounts, notes, tax settlement and draft totals. */
 final class VoucherLines {
     private final VouchersPage owner;
     private final WebDriver driver;

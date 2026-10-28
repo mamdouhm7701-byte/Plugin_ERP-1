@@ -1,3 +1,5 @@
+/* شرح الملف: اختيار ملف إعدادات الفرع المطلوب.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import java.nio.file.Files;
@@ -7,7 +9,6 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 
-/** Explicit selection only: files outside the regular shared resource settings are never merged. */
 public final class BranchProfiles {
     private static final Set<String> FIELDS =
             Set.of(

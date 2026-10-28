@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات وصف إعدادات فرع محدد لمقارنتها بالفرع المستخدم أثناء التشغيل.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import java.nio.file.Files;

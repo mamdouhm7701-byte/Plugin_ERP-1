@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة للتأكد من اكتمال عرض بيانات الخزائن وانتهاء الرسائل المؤقتة. فائدتها إتاحة
+ * التعامل مع القائمة بعد ظهور بياناتها.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.time.Duration;
@@ -6,7 +9,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Focused CashLoadingWaits operations extracted from CashPage. */
 final class CashLoadingWaits {
     private final WebDriver driver;
 

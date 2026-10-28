@@ -1,3 +1,5 @@
+/* شرح الملف: تجميع المتطلبات المشتركة لفتح المتصفح.
+ */
 package Plugin_ERP.Drivers;
 
 import Plugin_ERP.Util.PropertyReader;

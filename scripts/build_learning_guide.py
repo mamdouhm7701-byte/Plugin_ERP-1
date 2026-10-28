@@ -1,3 +1,4 @@
+# شرح الملف: يجمع ملفات شرح المشروع في دليل للقراءة.
 """Build a source-backed Arabic file atlas and an offline HTML study guide.
 
 Only documentation is written. Credentials, generated run folders and private

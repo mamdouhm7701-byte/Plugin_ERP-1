@@ -1,3 +1,5 @@
+/* شرح الملف: اختيار رابط البرنامج وقراءة الإعدادات المطلوبة للتشغيل.
+ */
 package Plugin_ERP.Util;
 
 import Plugin_ERP.Models.DiscountType;

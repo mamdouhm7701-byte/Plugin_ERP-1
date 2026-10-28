@@ -1,3 +1,5 @@
+/* شرح الملف: تشغيل إرسال تقرير محفوظ عند طلبه.
+ */
 package Plugin_ERP.Util.Allur;
 
 import com.sun.net.httpserver.HttpServer;
@@ -10,7 +12,6 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.*;
 
-/** Local setup/retry entry point. Authentication values are never printed. */
 public final class ReportMailCommand {
     private ReportMailCommand() {}
 

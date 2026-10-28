@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار فتح شاشات المطاعم والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package SpecialSalesTest;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -11,7 +13,6 @@ import java.util.Map;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-/** Explicit activity smoke: mounts restaurant-specific screens without creating transactions. */
 public final class RestaurantScreenAccessTest extends BaseTest {
     private SpecialSalesTestData prerequisites;
 

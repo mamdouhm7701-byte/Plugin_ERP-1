@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لتمييز أنواع الحركات المالية، مثل القبض والصرف والمصروف والإيراد والخصم
+ * والتحويل. فائدتها تحديد العملية والطرف المطلوبين لكل حركة.
+ */
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
 import Plugin_ERP.Enums.Pages;

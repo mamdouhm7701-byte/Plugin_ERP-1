@@ -1,9 +1,10 @@
+/* شرح الملف: متابعة نتيجة تسليم التقرير والملفات المرفقة.
+ */
 package Plugin_ERP.Util.Allur;
 
 import java.nio.file.*;
 import java.util.*;
 
-/** Selects attachments and private Drive links before constructing MIME. */
 final class ReportDelivery {
     interface Publisher {
         String publish(Path file) throws Exception;

@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات تقارير السيارة والسائق والمشروع تطابق إذن التسليم: تقارير السيارة والسائق
+ * والمشروع تطابق إذن التسليم.
+ */
 package Invoice;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -16,7 +19,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-/** Reconciles four rendered delivery reports after reservation, partial delivery and billing. */
 public final class ConcreteOperationalReportTest extends ConcreteOwnedReportScenario {
     private BasicDataFixtures masters;
     private BasicDataFixtures.Record project, mixer, car;

@@ -1,3 +1,5 @@
+/* شرح الملف: تحديد نوع المستند الذي ستنفذ عليه الحالة، ضمن المبيعات.
+ */
 package Invoice;
 
 enum SalesDocumentKind {

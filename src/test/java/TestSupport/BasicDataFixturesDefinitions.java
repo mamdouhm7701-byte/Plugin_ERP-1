@@ -1,3 +1,5 @@
+/* شرح الملف: تحديد البيانات المطلوبة لإنشاء سجلات التجربة، ضمن تجهيز بيانات التجربة.
+ */
 package TestSupport;
 
 import static TestSupport.BasicDataFixtures.fields;
@@ -5,7 +7,6 @@ import static TestSupport.BasicDataFixtures.fields;
 import TestSupport.BasicDataFixtures.Record;
 import java.util.List;
 
-/** Payload recipes; the owner retains registration, recovery and cleanup ordering. */
 final class BasicDataFixturesDefinitions {
     private final BasicDataFixtures data;
 

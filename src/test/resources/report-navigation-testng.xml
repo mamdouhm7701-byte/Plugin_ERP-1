@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: يحدد الحالات المختارة لتشغيل التنقل بين التقارير. -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Read-only report catalogue coverage" parallel="none">
     <listeners><listener class-name="Plugin_ERP.Listeners.TestNGListeners"/></listeners>

@@ -1,3 +1,4 @@
+# شرح الملف: يربط متابعة التشغيل والتقارير بحزم الاختبارات.
 DealerModelTest.DealerSuitePolicy
 FinancialMovementsTest.FinancialSuitePolicy
 ProductsTest.ProductsSuitePolicy

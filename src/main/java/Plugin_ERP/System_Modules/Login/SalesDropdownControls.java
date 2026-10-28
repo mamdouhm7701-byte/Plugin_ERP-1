@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة اختيارات فاتورة البيع والقيمة المختارة منها. فائدتها مراجعة الخيارات
+ * المتاحة والاختيار المستخدم في الفاتورة.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import java.time.Duration;
@@ -9,7 +12,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Read the options and selected values of sales form dropdowns. */
 final class SalesDropdownControls {
     private final WebDriver driver;
 

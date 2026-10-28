@@ -1,3 +1,5 @@
+/* شرح الملف: قراءة شرح كل حالة وخطواتها ونتيجتها المطلوبة.
+ */
 package Plugin_ERP.Util.Allur;
 
 import java.io.IOException;
@@ -10,7 +12,6 @@ import java.util.Map;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-/** Human-authored case details, independent of execution results and failure diagnosis. */
 public final class ScenarioCaseDescriptions {
     private static final Map<String, CaseDetails> CASES = load();
 
@@ -24,7 +25,10 @@ public final class ScenarioCaseDescriptions {
                         "<div lang=\"ar\" dir=\"rtl\" style=\"text-align:right;line-height:1.8\">");
         section(out, "بنختبر إيه؟", details.objective());
         section(out, "قبل التجربة", details.preconditions());
-        section(out, "بيانات التجربة", details.data());
+        out.append("<h3>بيانات التجربة</h3><ul>");
+        for (String item : details.data().split("[؛;]"))
+            if (!item.isBlank()) out.append("<li>").append(escape(item.trim())).append("</li>");
+        out.append("</ul>");
         out.append("<h3>خطوات التجربة</h3><ol>");
         for (String step : details.steps()) out.append("<li>").append(escape(step)).append("</li>");
         out.append("</ol>");
@@ -76,7 +80,8 @@ public final class ScenarioCaseDescriptions {
                 new String[] {
                     "allure-case-descriptions-master.json",
                     "allure-case-descriptions-transactions.json",
-                    "allure-case-descriptions-remaining.json"
+                    "allure-case-descriptions-remaining.json",
+                    "allure-case-descriptions-business.json"
                 }) {
             try (var stream =
                     ScenarioCaseDescriptions.class.getClassLoader().getResourceAsStream(name)) {

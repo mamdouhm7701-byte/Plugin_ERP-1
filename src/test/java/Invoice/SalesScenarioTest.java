@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار سلامة تجهيز الخطوات المشتركة للحالات ثم تنظيف بياناتها، ضمن المبيعات.
+ */
 package Invoice;
 
 import Plugin_ERP.System_Modules.Login.Invoice.*;
@@ -12,7 +14,6 @@ import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
-/** Scenarios own their fixtures; browser interactions belong to the sales page objects. */
 public abstract class SalesScenarioTest extends BaseTest {
     protected SalesDocumentKind kind() {
         return SalesDocumentKind.INVOICE;
@@ -272,7 +273,7 @@ public abstract class SalesScenarioTest extends BaseTest {
         return new BigDecimal(value.toString().replace(",", ""));
     }
 
-    @io.qameta.allure.Step("مطابقة القيمة: المتوقع {expected}، الفعلي {actual}")
+    @io.qameta.allure.Step("التحقق من المبلغ أو الكمية: المتوقع {expected}، الفعلي {actual}")
     protected static void sameNumber(Object actual, String expected) {
         Assert.assertEquals(
                 number(actual).compareTo(new BigDecimal(expected)),

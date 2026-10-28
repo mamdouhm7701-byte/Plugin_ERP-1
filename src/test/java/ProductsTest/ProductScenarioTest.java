@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار سلامة تجهيز الخطوات المشتركة للحالات ثم تنظيف بياناتها، ضمن الأصناف.
+ */
 package ProductsTest;
 
 import Plugin_ERP.Enums.Pages;
@@ -11,7 +13,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-/** Business assertions and isolated scenarios; browser interactions belong in Page Objects. */
 public abstract class ProductScenarioTest extends BaseTest {
     protected enum Kind {
         ITEM(Pages.ADDITEM, "Items"),

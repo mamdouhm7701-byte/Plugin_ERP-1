@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لمقارنة أسماء الأصناف وكمياتها مع الطباعة. فائدتها مراجعة أن الكميات المطبوعة
+ * تطابق الحركة المسجلة.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import java.time.Duration;
@@ -6,7 +9,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 import org.testng.Assert;
 
-/** Document Quantity Print Check: focused operations used by the original page facade. */
 final class DocumentQuantityPrintCheck {
     private final DocumentPage owner;
     private final WebDriver driver;

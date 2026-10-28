@@ -1,3 +1,4 @@
+# شرح الملف: يراجع قواعد ترتيب المشروع والملفات الكبيرة والأخطاء المتكررة.
 """Enforce the structural cleanup without reading generated reports or local credentials."""
 import re
 import sys

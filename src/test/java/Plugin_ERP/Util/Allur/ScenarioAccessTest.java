@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات تسجيل بيئة الدخول والشاشة المرتبطة بالحالة.
+ */
 package Plugin_ERP.Util.Allur;
 
 import io.qameta.allure.Allure;

@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات تحويل العقد لفاتورة يعرض الكمية المتبقية الصحيحة: تحويل العقد لفاتورة يعرض
+ * الكمية المتبقية الصحيحة؛ البنود الإضافية تظهر عند تحويل العقد إلى فاتورة.
+ */
 package Invoice;
 
 import Plugin_ERP.BranchProfiles.BranchPolicies.ActivityType;
@@ -13,7 +16,6 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-/** A contract reserves no stock; native source billing consumes only the invoiced quantity. */
 public final class ConstructionContractConversionTest extends SalesScenarioTest {
     private static final String CONTRACT = "ItemTransactions-Contract";
     private static final String SALES = "ItemTransactions-Sales";

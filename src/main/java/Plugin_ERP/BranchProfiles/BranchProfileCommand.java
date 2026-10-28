@@ -1,9 +1,10 @@
+/* شرح الملف: تشغيل مراجعة إعدادات فرع محدد عند طلبها.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/** Pins a runner's expectation before any live work, without accessing the application. */
 public final class BranchProfileCommand {
     private BranchProfileCommand() {}
 

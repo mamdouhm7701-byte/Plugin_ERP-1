@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار فتح شاشات النشاط الصحيح والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package CoverageTest;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -11,7 +13,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-/** Activity-specific route access only. It never submits a form or claims business coverage. */
 public final class ActivitySpecificScreenAccessTest extends BaseTest {
     @DataProvider
     public Object[][] screens() {

@@ -1,3 +1,6 @@
+/* شرح الملف: اختبار سلامة Extraction must retain overridden readers, assertion policies and
+ * rounding tolerance.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Models.InvoiceRow;
@@ -12,7 +15,6 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-/** Extraction must retain overridden readers, assertion policies and rounding tolerance. */
 public class PageComponentDispatchTest {
     private static WebDriver noBrowser() {
         return (WebDriver)

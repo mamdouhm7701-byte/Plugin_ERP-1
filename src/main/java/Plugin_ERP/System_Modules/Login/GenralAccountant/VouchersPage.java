@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة القيود المحاسبية: بنختار الحسابات ونسجل المدين والدائن والتاريخ والملاحظات.
+ * فائدتها تسجيل الحركة المحاسبية ومراجعة توازن القيد وطباعته.
+ */
 package Plugin_ERP.System_Modules.Login.GenralAccountant;
 
 import Plugin_ERP.System_Modules.Login.Abstract;
@@ -8,7 +11,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-/** Page object for the general journal vouchers list and entry form. */
 public class VouchersPage extends Abstract {
     private final VoucherRecordList recordControls;
     private final VoucherLines lines;

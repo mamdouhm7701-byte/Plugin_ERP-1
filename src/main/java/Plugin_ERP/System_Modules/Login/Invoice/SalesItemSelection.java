@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة لإضافة أصناف البيع بالاسم أو الباركود أو نافذة اختيار الأصناف. فائدتها الوصول
+ * للصنف المطلوب ومراجعة الخيارات المتاحة.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Item autocomplete, barcode lookup and picker modal; document line editing stays separate. */
 final class SalesItemSelection {
     private final SalesModulePage page;
     private final WebDriver driver;

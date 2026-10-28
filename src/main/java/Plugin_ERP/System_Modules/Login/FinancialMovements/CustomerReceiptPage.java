@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة سند قبض من عميل: بنحدد العميل والمبلغ وطريقة الدفع ونوزع التحصيل على المستندات.
+ * فائدتها تسجيل المبالغ المستلمة وتسوية مستحقات العميل.
+ */
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
 import io.qameta.allure.Step;

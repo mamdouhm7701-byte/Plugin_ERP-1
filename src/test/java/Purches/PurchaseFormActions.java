@@ -1,9 +1,10 @@
+/* شرح الملف: تجميع خطوات إدخال وحفظ ومراجعة المستند، ضمن المشتريات.
+ */
 package Purches;
 
 import java.util.*;
 import org.testng.Assert;
 
-/** Reusable scenarios; UI operations are implemented by PurchaseModulePage. */
 public abstract class PurchaseFormActions extends PurchaseScenarioTest {
     protected void picker() {
         create("picker", "Credit", false);

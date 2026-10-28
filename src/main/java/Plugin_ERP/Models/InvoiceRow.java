@@ -1,3 +1,5 @@
+/* شرح الملف: وصف صنف واحد بكمية وسعر داخل حساب الفاتورة.
+ */
 package Plugin_ERP.Models;
 
 import java.math.BigDecimal;

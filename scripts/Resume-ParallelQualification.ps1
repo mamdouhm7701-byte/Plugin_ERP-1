@@ -1,3 +1,4 @@
+# شرح الملف: يستكمل مستويات التحقق التي لم تكتمل في التشغيل السابق.
 [CmdletBinding()]
 param([Parameter(Mandatory)][string]$RunRoot)
 $ErrorActionPreference='Stop'

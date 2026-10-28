@@ -1,9 +1,10 @@
+/* شرح الملف: تجميع اختيارات النشاط المطلوبة قبل بدء التشغيل.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import Plugin_ERP.BranchProfiles.BranchPolicies.*;
 import java.util.*;
 
-/** Business choices are independent of branch identity and never modify shared properties. */
 public record BusinessRunRequest(
         ActivityType activity,
         DiscountLevel discount,

@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات طلبات داخلي وخارجي وتوصيل تحفظ الضريبة وتخصم المخزون مرة واحدة: طلبات داخلي
+ * وخارجي وتوصيل تحفظ الضريبة وتخصم المخزون مرة واحدة.
+ */
 package SpecialSalesTest;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -10,9 +13,6 @@ import java.util.*;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-/**
- * Internal/held, external and delivery orders use the same item tax rule; no delivery fee exists.
- */
 public final class RestaurantAdditionalTaxOrderTest extends SpecialSalesScenario {
     @Override
     protected SpecialSalesPage createPage() {

@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة للبحث عن خزينة وفتحها للتعديل أو طلب حذفها وإلغاء الطلب. فائدتها إدارة الخزائن
+ * المسجلة ومراجعة وجودها بالقائمة.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.time.Duration;
@@ -8,7 +11,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Safe record search, editing and confirmed or cancelled deletion. */
 final class CashRecordActions {
     private final CashPage owner;
     private final WebDriver driver;

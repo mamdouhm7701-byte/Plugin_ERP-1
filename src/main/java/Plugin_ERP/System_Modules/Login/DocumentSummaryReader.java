@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة إجماليات المستند الظاهرة. فائدتها إتاحة مراجعة قيمة الحركة ومبالغها
+ * النهائية.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import java.math.BigDecimal;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Document Summary Reader: focused operations used by the original page facade. */
 final class DocumentSummaryReader {
     private final DocumentPage owner;
     private final WebDriver driver;

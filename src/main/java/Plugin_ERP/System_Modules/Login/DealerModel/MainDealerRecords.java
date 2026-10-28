@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة قائمة المتعاملين الرئيسيين وفتح السجل أو طلب حذفه. فائدتها تحديد
+ * المتعامل المقصود ومراجعة بياناته المسجلة.
+ */
 package Plugin_ERP.System_Modules.Login.DealerModel;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Main Dealer Records: focused operations used by the original page facade. */
 final class MainDealerRecords {
     private final MainDealer owner;
     private final WebDriver driver;

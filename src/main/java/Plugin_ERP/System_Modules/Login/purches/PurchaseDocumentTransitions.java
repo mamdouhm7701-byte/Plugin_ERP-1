@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة لفتح مستند الشراء وتعديله وحذفه أو تحويله ومتابعة المرتجع المرتبط به. فائدتها
+ * متابعة انتقال عملية الشراء بين مستنداتها.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Purchase Document Transitions: focused operations used by the original page facade. */
 final class PurchaseDocumentTransitions {
     private final PurchaseModulePage owner;
     private final WebDriver driver;

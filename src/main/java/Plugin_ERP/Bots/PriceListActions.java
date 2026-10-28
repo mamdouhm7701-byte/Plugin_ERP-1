@@ -1,3 +1,5 @@
+/* شرح الملف: التعامل مع الأصناف والأسعار داخل قائمة الأسعار.
+ */
 package Plugin_ERP.Bots;
 
 import java.time.Duration;

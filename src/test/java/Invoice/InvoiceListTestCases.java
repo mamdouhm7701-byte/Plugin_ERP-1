@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار قائمة فواتير المبيعات والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package Invoice;
 
 import Plugin_ERP.System_Modules.Login.Invoice.InvoicListPage;
@@ -6,7 +8,6 @@ import java.util.*;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-/** Original entry points retained; assertions are scoped to newly created owned documents. */
 public class InvoiceListTestCases extends SalesListActions {
     private InvoicListPage list() {
         return new InvoicListPage(driver);

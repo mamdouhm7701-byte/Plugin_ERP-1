@@ -1,10 +1,12 @@
+/* شرح الملف: اختبار سلامة تجهيز الخطوات المشتركة للحالات ثم تنظيف بياناتها، ضمن تجهيز بيانات
+ * التجربة.
+ */
 package TestSupport;
 
 import Plugin_ERP.Tests.LoginTest.BaseTest;
 import java.util.ArrayList;
 import org.testng.annotations.*;
 
-/** Shared basic-data fixture scope. Browser teardown remains in BaseTest. */
 public abstract class BasicDataScenarioTest extends BaseTest {
     private BasicDataFixtures basicData;
     private String fixtureWindow;

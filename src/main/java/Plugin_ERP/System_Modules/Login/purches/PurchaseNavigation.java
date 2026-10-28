@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لفتح شاشات المشتريات والانتقال بينها وإغلاق الرسائل العارضة. فائدتها الوصول إلى
+ * مستند الشراء المطلوب.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import Plugin_ERP.Util.PropertyReader;
@@ -6,7 +9,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Focused PurchaseNavigation operations extracted from PurchaseModulePage. */
 final class PurchaseNavigation {
     private final PurchaseModulePage owner;
     private final WebDriver driver;

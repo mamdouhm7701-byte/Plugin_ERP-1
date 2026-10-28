@@ -1,3 +1,5 @@
+/* شرح الملف: اختيار الاسم المطلوب من القوائم.
+ */
 package Plugin_ERP.Bots;
 
 import java.time.Duration;

@@ -1,3 +1,5 @@
+/* شرح الملف: قراءة طريقة حساب ضريبة البيع المستخدمة في التجربة.
+ */
 package TestSupport;
 
 import java.math.BigDecimal;
@@ -6,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import org.openqa.selenium.WebDriver;
 
-/** توقع مستقل للصافي من إعداد الضريبة، لا من الصافي المحسوب في الشاشة. الأصناف هنا معفاة. */
 public record SalesTaxProfile(String policy, List<BigDecimal> rates) {
     @SuppressWarnings("unchecked")
     public static SalesTaxProfile capture(WebDriver driver) {

@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات حفظ العقد لا يخصم المخزون ولا يغير رصيد العميل: حفظ العقد لا يخصم المخزون ولا
+ * يغير رصيد العميل.
+ */
 package Invoice;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -12,7 +15,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Contract persistence is separate from sales and does not infer posting or settlement rules. */
 public final class ConstructionContractTest extends SalesScenarioTest {
     private static final String ENDPOINT = "ItemTransactions-Contract";
 

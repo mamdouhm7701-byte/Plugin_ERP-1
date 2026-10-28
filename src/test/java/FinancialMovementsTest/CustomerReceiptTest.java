@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات سند قبض عميل: تعديل سند قبض عميل مع الحفظ والطباعة ونتأكد من التقرير؛ حذف سند
+ * قبض عميل؛ رفض مبلغ سالب؛ تصدير قائمة الحركات إلى Excel؛ إغلاق الحركة الجديدة دون حفظ.
+ */
 package FinancialMovementsTest;
 
 import Plugin_ERP.System_Modules.Login.FinancialMovements.*;

@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات تجميع اختيارات النشاط المطلوبة قبل بدء التشغيل.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import Plugin_ERP.BranchProfiles.BranchPolicies.*;

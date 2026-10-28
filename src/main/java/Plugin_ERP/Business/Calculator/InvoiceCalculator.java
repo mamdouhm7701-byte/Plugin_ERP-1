@@ -1,3 +1,5 @@
+/* شرح الملف: حساب إجماليات الفاتورة والخصم والضريبة بعيدًا عن أرقام الشاشة.
+ */
 package Plugin_ERP.Business.Calculator;
 
 import Plugin_ERP.Models.*;

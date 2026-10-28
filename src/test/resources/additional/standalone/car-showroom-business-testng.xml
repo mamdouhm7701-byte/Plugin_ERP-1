@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: يحدد مجموعة تشغيل منفصلة لمراجعة معرض السيارات. -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <!-- Explicit CarShowroom profile required; owned records are removed after each class. -->
 <suite name="Car showroom business" parallel="none"><test name="Car color owned lifecycle"><classes>

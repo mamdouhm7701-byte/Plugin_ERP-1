@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات مرتجع المبيعات: حفظ مرتجع حر بسعر مدخل يدوياً ونتأكد من الإجمالي وزيادة
+ * المخزون وأثر رصيد العميل.
+ */
 package Invoice;
 
 public final class SalesReturnTest extends SalesFormTest {

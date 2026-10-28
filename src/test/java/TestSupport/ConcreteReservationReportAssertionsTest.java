@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات مطابقة أصل الحجز والمنصرف والمتبقي في تقرير الحجوزات.
+ */
 package TestSupport;
 
 import Plugin_ERP.Util.PrintedInvoiceAssertions.Cell;

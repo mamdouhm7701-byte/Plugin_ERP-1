@@ -1,3 +1,4 @@
+# شرح الملف: يقيس مدة التشغيل وأعداد النجاح والفشل.
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)][string]$ResultsDirectory,

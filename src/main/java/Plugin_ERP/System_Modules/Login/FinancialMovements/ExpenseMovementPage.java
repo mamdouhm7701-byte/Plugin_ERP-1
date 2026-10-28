@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة حركة مصروف: بنحدد نوع المصروف والمبلغ وطريقة الدفع. فائدتها تسجيل الأموال
+ * المنصرفة ومراجعة الضريبة والإجمالي.
+ */
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
 import io.qameta.allure.Allure;

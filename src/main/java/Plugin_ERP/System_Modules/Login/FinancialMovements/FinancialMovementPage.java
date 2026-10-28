@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لتسجيل الحركات المالية وحفظها وتوزيع مبالغها على المستندات ومراجعة قائمتها.
+ * فائدتها متابعة القبض والصرف والخصومات والتحويلات في خطوات مشتركة.
+ */
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
 import Plugin_ERP.Enums.Pages;
@@ -11,7 +14,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Shared interactions for financial forms; business expectations belong in tests. */
 public class FinancialMovementPage extends Abstract {
     private final FinancialChoiceControls choiceControls;
     private final FinancialFieldValues fieldValues;

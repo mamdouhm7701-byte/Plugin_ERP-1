@@ -1,3 +1,5 @@
+/* شرح الملف: تجهيز نص رسالة التقرير وأعداد النجاح والفشل.
+ */
 package Plugin_ERP.Util.Allur;
 
 import Plugin_ERP.Util.PropertyReader;
@@ -6,7 +8,6 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-/** Self-contained email presentation: inline styles, table layout, no external assets. */
 public final class ReportMailTemplate {
     private ReportMailTemplate() {}
 

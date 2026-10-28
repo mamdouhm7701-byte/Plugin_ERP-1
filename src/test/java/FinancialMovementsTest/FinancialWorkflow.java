@@ -1,3 +1,5 @@
+/* شرح الملف: تنفيذ رحلة تمر بأكثر من مستند مع مراجعة الربط بينها، ضمن الحركات المالية.
+ */
 package FinancialMovementsTest;
 
 import Plugin_ERP.System_Modules.Login.FinancialMovements.FinancialMovementKind;
@@ -12,11 +14,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-/**
- * مساعد رحلة مالية تستخدم فاتورة أنشأتها رحلة البيع أو الشراء من الواجهة. يملك السندات ووسيلة الدفع
- * فقط؛ لا ينشئ نسخة بديلة للطرف أو الفاتورة. يجب إغلاقه قبل مالك الفاتورة. سجلات financial تحفظ
- * محاولات الحفظ حتى عند الانقطاع.
- */
 public final class FinancialWorkflow implements AutoCloseable {
     public record Movement(Object id, String note, String endpoint, Map<String, Object> values) {}
 

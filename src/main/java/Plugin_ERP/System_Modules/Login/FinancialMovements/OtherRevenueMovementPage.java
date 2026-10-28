@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة حركة إيراد آخر: بنختار نوع الإيراد أو الحساب والمبلغ وطريقة الدفع. فائدتها تسجيل
+ * المبالغ الواردة من مصادر أخرى ومراجعة بياناتها المطلوبة.
+ */
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
 import io.qameta.allure.Step;

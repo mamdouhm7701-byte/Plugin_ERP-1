@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة معلومات المتصفح والصور وتصنيفات نتائج التقرير.
+ */
 package Plugin_ERP.Util.Allur;
 
 import Plugin_ERP.Listeners.TestNGListeners;

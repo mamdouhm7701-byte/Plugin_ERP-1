@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة لاختيار أصناف الشراء بالاسم أو الباركود أو نافذة الأصناف. فائدتها إضافة الصنف
+ * المطلوب للمستند ومراجعة نتائج البحث.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Item autocomplete, barcode lookup and picker modal; document line editing stays separate. */
 final class PurchaseItemSelection {
     private final PurchaseModulePage page;
     private final WebDriver driver;

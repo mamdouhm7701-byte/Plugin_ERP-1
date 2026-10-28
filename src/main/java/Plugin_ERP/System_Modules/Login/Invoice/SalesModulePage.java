@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة مشتركة لمستندات البيع من إضافة الأصناف حتى الحفظ والطباعة ومراجعة القائمة.
+ * فائدتها توحيد خطوات العمل في الفواتير والعروض والأوامر والمرتجعات.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import Plugin_ERP.System_Modules.Login.AbstractForSales;
@@ -8,7 +11,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Sales UI interactions; scenarios and persisted inventory assertions live in tests. */
 public class SalesModulePage extends AbstractForSales {
     private final SalesNavigation navigation;
     private final SalesDocumentForm form;

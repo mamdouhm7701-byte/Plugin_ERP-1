@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة للبحث عن القيود المسجلة وفتحها للتعديل أو الحذف. فائدتها الوصول للقيد المقصود
+ * ومراجعة وجوده في القائمة.
+ */
 package Plugin_ERP.System_Modules.Login.GenralAccountant;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Voucher Record List: focused operations used by the original page facade. */
 final class VoucherRecordList {
     private final VouchersPage owner;
     private final WebDriver driver;

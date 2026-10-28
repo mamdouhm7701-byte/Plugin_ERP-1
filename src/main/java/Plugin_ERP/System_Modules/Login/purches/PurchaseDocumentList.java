@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة للبحث في مستندات الشراء وترتيبها وتصفحها وتصديرها. فائدتها مراجعة المشتريات
+ * المسجلة والوصول للمستند المطلوب.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** List filters, readiness and owned row checks; form operations stay in the page. */
 final class PurchaseDocumentList {
     private final PurchaseListPage page;
     private final WebDriver driver;

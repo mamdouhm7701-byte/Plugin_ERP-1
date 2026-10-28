@@ -1,9 +1,10 @@
+/* شرح الملف: تجميع خطوات إدخال وحفظ ومراجعة المستند، ضمن المبيعات.
+ */
 package Invoice;
 
 import java.util.*;
 import org.testng.Assert;
 
-/** Shared contract exercised through each concrete sales form, with fresh owned fixtures. */
 public abstract class SalesFormActions extends SalesScenarioTest {
     protected void savesOwnedItemFromPicker() {
         create("picker", "Credit", false);

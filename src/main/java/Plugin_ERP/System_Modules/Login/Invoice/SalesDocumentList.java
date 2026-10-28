@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة للبحث في مستندات البيع وقراءة نتائجها وتصديرها. فائدتها مراجعة المستندات
+ * المسجلة حسب شروط البحث.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** List filters, readiness and owned row checks; form operations stay in the page. */
 final class SalesDocumentList {
     private final SalesModulePage page;
     private final WebDriver driver;

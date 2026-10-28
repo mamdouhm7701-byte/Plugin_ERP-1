@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات حركة الايرادات: تعديل حركة إيراد مع الحفظ والطباعة ونتأكد من التقرير؛ حذف
+ * حركة إيراد؛ رفض مبلغ سالب؛ تصدير قائمة الحركات إلى Excel؛ إغلاق الحركة الجديدة دون حفظ.
+ */
 package FinancialMovementsTest;
 
 import Plugin_ERP.System_Modules.Login.FinancialMovements.*;

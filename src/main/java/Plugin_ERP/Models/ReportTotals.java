@@ -1,3 +1,5 @@
+/* شرح الملف: تجميع المبالغ المقروءة من التقرير للمراجعة.
+ */
 package Plugin_ERP.Models;
 
 import java.math.BigDecimal;

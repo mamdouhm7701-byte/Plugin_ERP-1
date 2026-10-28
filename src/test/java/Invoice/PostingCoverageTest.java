@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات ترحيل فاتورة محددة ثم إلغاء ترحيلها دون تغيير فاتورة المقارنة: ترحيل فاتورة
+ * محددة ثم إلغاء ترحيلها دون تغيير فاتورة المقارنة.
+ */
 package Invoice;
 
 import Plugin_ERP.System_Modules.Login.Coverage.ScreenPage;
@@ -11,7 +14,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Posting is scoped to one captured owned sales code, never a branch-wide posting run. */
 public final class PostingCoverageTest extends SalesScenarioTest {
     @Test
     @Story("ترحيل فاتورة مملوكة ثم إلغاء ترحيلها مع بقاء فاتورة التحكم دون تغيير")

@@ -1,3 +1,4 @@
+# شرح الملف: يراجع عدم إضافة بيانات دخول أو تقارير خاصة إلى الملفات المشتركة.
 """Reject credential files and populated credential settings; never print values."""
 import re
 import subprocess

@@ -1,3 +1,5 @@
+/* شرح الملف: عرض نافذة اختيار البيئة والنشاط والإعدادات وعدد المتصفحات قبل التشغيل.
+ */
 package SuiteSupport;
 
 import Plugin_ERP.BranchProfiles.BranchPolicies.*;
@@ -6,7 +8,6 @@ import java.awt.GridLayout;
 import java.util.List;
 import javax.swing.*;
 
-/** Native IntelliJ entry; selections remain scoped to this JVM run. */
 final class BusinessRunDialog {
     record Selection(
             BusinessRunRequest business,

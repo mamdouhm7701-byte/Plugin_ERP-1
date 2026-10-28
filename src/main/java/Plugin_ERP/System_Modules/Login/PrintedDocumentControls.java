@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لحفظ المستند وطباعته ومراجعة النصوص والأرقام والتاريخ في التقرير. فائدتها
+ * التأكد من ظهور بيانات المستند في الطباعة.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.*;
@@ -6,7 +9,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 import org.testng.Assert;
 
-/** Printed Document Controls: focused operations used by the original page facade. */
 final class PrintedDocumentControls {
     private final Abstract owner;
     private final WebDriver driver;

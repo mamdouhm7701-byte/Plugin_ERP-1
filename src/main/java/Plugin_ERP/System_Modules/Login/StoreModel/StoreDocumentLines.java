@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة لقراءة بنود حركة المخزون وتعديل كمياتها وحذف الأصناف. فائدتها ضبط تفاصيل الحركة
+ * ومراجعة الكميات غير المقبولة.
+ */
 package Plugin_ERP.System_Modules.Login.StoreModel;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Line editing and displayed totals for this document form; the page retains its public API. */
 final class StoreDocumentLines {
     private final StoreModulePage page;
     private final WebDriver driver;

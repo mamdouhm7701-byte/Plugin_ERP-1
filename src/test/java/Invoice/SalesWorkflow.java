@@ -1,3 +1,5 @@
+/* شرح الملف: تنفيذ رحلة تمر بأكثر من مستند مع مراجعة الربط بينها، ضمن المبيعات.
+ */
 package Invoice;
 
 import Plugin_ERP.System_Modules.Login.Invoice.SalesModulePage;
@@ -12,10 +14,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-/**
- * بيع أو مرتجع عبر الواجهة على صنف ومخزن أنشأتهما رحلة شراء أو تصنيع. يملك مستنداته فقط. يجب تنظيفه
- * قبل تحويل المخزون ثم صاحب المراجع الأصلية.
- */
 public final class SalesWorkflow implements AutoCloseable {
     public record Document(
             Object id, String code, String note, String endpoint, Map<String, Object> values) {}

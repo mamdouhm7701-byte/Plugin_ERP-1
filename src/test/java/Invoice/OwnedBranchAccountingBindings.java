@@ -1,3 +1,5 @@
+/* شرح الملف: تجهيز ربط حسابات فرع التجربة ثم إعادة الربط كما كان.
+ */
 package Invoice;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -7,7 +9,6 @@ import java.nio.file.*;
 import java.util.*;
 import org.openqa.selenium.WebDriver;
 
-/** Temporary links on an exact fresh owned branch; journals survive uncertain writes. */
 final class OwnedBranchAccountingBindings implements AutoCloseable {
     private final WebDriver driver;
     private final BranchProfile profile;

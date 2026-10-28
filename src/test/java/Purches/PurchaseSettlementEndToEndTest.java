@@ -1,3 +1,7 @@
+/* شرح الملف: اختبارات تعديل سند الصرف وحذفه يعيدان حساب مستحق المورد: تعديل سند الصرف وحذفه يعيدان
+ * حساب مستحق المورد؛ سداد فاتورة شراء كاملة ثم حذف السداد يعيد مستحق المورد؛ سداد جزئي ثم كامل
+ * لفاتورة شراء.
+ */
 package Purches;
 
 import FinancialMovementsTest.FinancialWorkflow;
@@ -11,7 +15,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-/** فاتورة شراء ثم سندات صرف للمورد نفسه، مع التحقق من التخصيص والمديونية والمخزون. */
 public final class PurchaseSettlementEndToEndTest extends PurchaseScenarioTest {
     private final List<FinancialWorkflow> settlements = new ArrayList<>();
 

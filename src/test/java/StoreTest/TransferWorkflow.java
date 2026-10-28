@@ -1,3 +1,5 @@
+/* شرح الملف: تنفيذ رحلة تمر بأكثر من مستند مع مراجعة الربط بينها، ضمن المخازن.
+ */
 package StoreTest;
 
 import Plugin_ERP.System_Modules.Login.StoreModel.StoreModulePage;
@@ -12,7 +14,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-/** ينقل نفس الصنف والمخزنين التابعين لمالك خارجي؛ لا يجهز صنفاً بديلاً ولا يحذف المراجع. */
 public final class TransferWorkflow implements AutoCloseable {
     private static final String ENDPOINT = "ItemTransactions-storageTransfer";
     private final StoreTestData data;

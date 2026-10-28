@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة استمرار عمل المقارنات القديمة بنفس النتائج.
+ */
 package Plugin_ERP.Valditon;
 
 import java.lang.reflect.Proxy;
@@ -8,7 +10,6 @@ import org.openqa.selenium.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Exercises the legacy assertion entry points without a real browser or ERP session. */
 public final class LegacyAssertionsTest {
     @Test
     public void visibleElementPasses() {

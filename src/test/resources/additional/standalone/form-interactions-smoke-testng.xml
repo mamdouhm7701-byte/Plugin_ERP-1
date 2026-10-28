@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: يحدد مجموعة تشغيل منفصلة لمراجعة مراجعة الخطوات الأساسية بسرعة. -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Shared form interactions" parallel="none" configfailurepolicy="continue">
     <test name="Sales purchase and manufacturing forms" preserve-order="true">

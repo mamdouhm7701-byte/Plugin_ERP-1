@@ -1,3 +1,4 @@
+<!-- شرح الملف: يفتح نافذة اختيار النشاط والضريبة والخصم والجرد قبل تشغيل الحالات. -->
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ERP - Business run" type="TestNG" factoryName="TestNG" singleton="true">
     <module name="POM" />

@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات المرتجع يعيد الإضافية وضريبة الفاتورة الأصلية: المرتجع يعيد الإضافية وضريبة
+ * الفاتورة الأصلية.
+ */
 package SpecialSalesTest;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -13,7 +16,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-/** User-reported failure remains a real assertion: linked returns must refund both tax amounts. */
 public final class RestaurantAdditionalTaxReturnTest extends SpecialSalesScenario {
     private static final String RETURN_ENDPOINT = "ItemTransactions-ReturnSales";
     private SalesModulePage returnPage;

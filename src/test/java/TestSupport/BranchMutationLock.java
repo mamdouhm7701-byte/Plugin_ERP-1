@@ -1,6 +1,7 @@
+/* شرح الملف: منع تغيير إعدادات نفس الفرع من أكثر من تجربة في نفس الوقت.
+ */
 package TestSupport;
 
-/** One JVM coordinates the read/modify/write of the branch's store membership. */
 public final class BranchMutationLock {
     private static final Object MONITOR = new Object();
 

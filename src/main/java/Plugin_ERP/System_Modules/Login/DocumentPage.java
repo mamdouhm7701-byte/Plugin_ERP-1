@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لتسجيل بنود المستند وكمياتها وأسعارها وخصوماتها ومدفوعاتها. فائدتها مراجعة
+ * المبالغ ومطابقة المستند مع النسخة المطبوعة.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.LogUtils;
@@ -11,10 +14,6 @@ import java.util.List;
 import java.util.Map;
 import org.openqa.selenium.*;
 
-/**
- * Shared transaction capabilities. Domain pages coordinate these components without inheriting
- * another domain.
- */
 public abstract class DocumentPage extends Abstract {
     protected DocumentPage(WebDriver driver) {
         super(driver);

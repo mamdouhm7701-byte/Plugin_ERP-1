@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة أسماء أصناف مرتجع المشتريات وكمياتها وأسعارها وبنوده. فائدتها مراجعة
+ * تفاصيل البضاعة المردودة للمورد.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import Plugin_ERP.Models.InvoiceRow;
@@ -6,7 +9,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Return Order Rows: focused operations used by the original page facade. */
 final class ReturnOrderRows {
     private final ReturnOrderPage owner;
     private final WebDriver driver;

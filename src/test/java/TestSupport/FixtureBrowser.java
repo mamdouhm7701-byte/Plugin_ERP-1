@@ -1,10 +1,11 @@
+/* شرح الملف: توفير المتصفح المستخدم لتجهيز بيانات الاختبار.
+ */
 package TestSupport;
 
 import java.lang.reflect.*;
 import java.util.*;
 import org.openqa.selenium.*;
 
-/** Local lifecycle harness. Delegates fixture API calls and supplies disposable browser windows. */
 public final class FixtureBrowser implements AutoCloseable {
     public final WebDriver driver;
     private final Field field;

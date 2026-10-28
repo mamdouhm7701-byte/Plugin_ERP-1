@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات تنفيذ إعداد فرع التجربة ثم مراجعة القيم المحفوظة.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import java.util.*;

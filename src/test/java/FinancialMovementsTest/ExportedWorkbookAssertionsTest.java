@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة الصفوف والقيم داخل ملف إكسل الناتج، ضمن الحركات المالية.
+ */
 package FinancialMovementsTest;
 
 import java.io.*;

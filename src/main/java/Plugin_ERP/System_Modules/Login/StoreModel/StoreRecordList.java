@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة للبحث عن مستند مخزني وقراءة بياناته وحذفه وتصدير القائمة. فائدتها متابعة حركات
+ * المخزون المسجلة والوصول للمستند المطلوب.
+ */
 package Plugin_ERP.System_Modules.Login.StoreModel;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Store Record List: focused operations used by the original page facade. */
 final class StoreRecordList {
     private final StoreModulePage owner;
     private final WebDriver driver;

@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة بقاء كل تجربة على إعدادات الفرع الذي اختارته.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import java.lang.reflect.Proxy;

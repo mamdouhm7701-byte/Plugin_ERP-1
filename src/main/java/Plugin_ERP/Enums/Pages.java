@@ -1,3 +1,5 @@
+/* شرح الملف: دليل أسماء شاشات البرنامج والمسارات التي تفتحها.
+ */
 package Plugin_ERP.Enums;
 
 public enum Pages {

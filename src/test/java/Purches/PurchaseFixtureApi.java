@@ -1,10 +1,11 @@
+/* شرح الملف: تنفيذ تجهيز وقراءة وحذف بيانات التجربة على الفرع الصحيح، ضمن المشتريات.
+ */
 package Purches;
 
 import java.time.Duration;
 import java.util.Map;
 import org.openqa.selenium.WebDriver;
 
-/** Browser transport; ownership, recovery and retry policy remain with PurchaseTestData. */
 final class PurchaseFixtureApi {
     private final Plugin_ERP.BranchProfiles.BranchProfileGuard profileGuard =
             Plugin_ERP.BranchProfiles.BranchProfileGuard.capture();
@@ -34,6 +35,7 @@ final class PurchaseFixtureApi {
     Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
         profileGuard.verify(driver);
         contextGuard.run();
+        Plugin_ERP.Util.RunEnvironmentGate.beforeCreate(action);
         driver.manage()
                 .timeouts()
                 .scriptTimeout(Duration.ofSeconds(action.equals("delete") ? 60 : 30));
@@ -72,6 +74,7 @@ final class PurchaseFixtureApi {
                         sessionBranchId);
         Map<String, Object> response = (Map<String, Object>) result;
         if (response.get("error") != null) {
+            Plugin_ERP.Util.RunEnvironmentGate.observe(action, endpoint, response.get("error"));
             int status = response.get("status") instanceof Number number ? number.intValue() : 0;
             throw new ApiFailure(
                     status, "Fixture " + action + " " + endpoint + ": " + response.get("error"));

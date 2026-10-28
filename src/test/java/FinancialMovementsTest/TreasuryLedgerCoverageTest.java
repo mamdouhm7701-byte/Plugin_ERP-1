@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات حركة الخزينة والأرصدة: احتساب النقدي والإجمالي بتمييز التحصيل الآخر.
+ */
 package FinancialMovementsTest;
 
 import static TestSupport.BasicDataFixtures.fields;
@@ -18,7 +20,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Real receipts/payments are authored by the same limited user as the owned handover. */
 public final class TreasuryLedgerCoverageTest extends BaseTest {
     @Test
     public void reconcilesIndependentCashAndOtherPaymentLedgerInScreenAndPrint() {

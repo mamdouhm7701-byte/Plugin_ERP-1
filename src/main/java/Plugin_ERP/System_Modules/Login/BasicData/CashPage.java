@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة الخزائن: بنضيف منها الخزينة واسمها وحسابها ونراجع الخزائن المسجلة. فائدتها تنظيم
+ * أماكن حفظ النقد واختيارها في الحركات المالية.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import Plugin_ERP.Enums.Pages;

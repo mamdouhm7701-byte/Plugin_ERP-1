@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات طلبات المطبخ: طلب مطبخ خاص بالاختبار: تحضير ثم تسليم ثم إغلاق دون تكرار خصم
+ * المخزون.
+ */
 package SpecialSalesTest;
 
 import Plugin_ERP.System_Modules.Login.Coverage.ScreenPage;

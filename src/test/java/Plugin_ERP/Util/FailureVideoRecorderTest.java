@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات تسجيل ما حدث في المتصفح والاحتفاظ بالفيديو عند الفشل إذا كان مفعّلًا.
+ */
 package Plugin_ERP.Util;
 
 import java.awt.image.BufferedImage;

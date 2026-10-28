@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة تصنيفات العملاء: بنحدد أسماء التصنيفات وملاحظاتها. فائدتها تقسيم العملاء إلى
+ * مجموعات تسهل تنظيم التعامل معهم.
+ */
 package Plugin_ERP.System_Modules.Login.DealerModel;
 
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;

@@ -1,3 +1,5 @@
+/* شرح الملف: تجهيز الخطوات المشتركة للحالات ثم تنظيف بياناتها، ضمن المخازن.
+ */
 package StoreTest;
 
 import Plugin_ERP.System_Modules.Login.Coverage.ScreenPage;

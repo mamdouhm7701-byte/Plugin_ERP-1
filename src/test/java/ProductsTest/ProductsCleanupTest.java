@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة تنظيف البيانات التي أنشأتها التجربة فقط، ضمن الأصناف.
+ */
 package ProductsTest;
 
 import java.util.ArrayList;

@@ -1,8 +1,9 @@
+/* شرح الملف: استكمال تنظيف بيانات تجربة سابقة من سجلها المحدد، ضمن المطعم ونقاط البيع.
+ */
 package SpecialSalesTest;
 
 import Plugin_ERP.Tests.LoginTest.BaseTest;
 
-/** Explicit recovery accepts one exact owned journal, never tenant-wide deletion. */
 public final class SpecialSalesRecovery extends BaseTest {
     public static void main(String[] args) throws Exception {
         if (args.length != 1)

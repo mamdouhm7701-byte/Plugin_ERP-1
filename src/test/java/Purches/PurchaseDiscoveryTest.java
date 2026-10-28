@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار الشاشات المتاحة للمشتريات والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package Purches;
 
 import Plugin_ERP.System_Modules.Login.Invoice.SalesModulePage;
@@ -7,7 +9,6 @@ import java.nio.file.*;
 import java.util.*;
 import org.testng.annotations.Test;
 
-/** Read-only discovery; no documents or fixtures are created. */
 public class PurchaseDiscoveryTest extends BaseTest {
     @Test
     @Story("فحص شاشات المشتريات وحقولها دون إنشاء أو تغيير أي بيانات")

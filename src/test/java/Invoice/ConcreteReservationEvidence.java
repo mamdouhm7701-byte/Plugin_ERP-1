@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة ظهور الحجز الصحيح ضمن أذون التسليم.
+ */
 package Invoice;
 
 import Plugin_ERP.System_Modules.Login.Invoice.SalesModulePage;
@@ -7,7 +9,6 @@ import java.util.Map;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Read-only evidence for the exact owned reservation available to a delivery. */
 final class ConcreteReservationEvidence {
     private ConcreteReservationEvidence() {}
 

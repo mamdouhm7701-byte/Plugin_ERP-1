@@ -1,10 +1,13 @@
+/* شرح الملف: اختبارات رحلة مشتريات بين شاشات متعددة: تعديل فاتورة شراء ثم مرتجع مرتبط يستخدم الكمية
+ * والقيمة المعدلتين؛ شراء بكمية كسرية ثم مرتجع مرتبط يعيد الرصيد دون فقد كسور؛ أمر شراء ثم فاتورة
+ * ثم مرتجع كامل يعيد المخزون ورصيد المورد.
+ */
 package Purches;
 
 import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** رحلات تحويل مترابطة؛ لا تستخدم seedInvoice لإنشاء مستندات العمل. */
 public final class PurchaseEndToEndTest extends PurchaseFormActions {
     @Override
     protected PurchaseDocumentKind kind() {

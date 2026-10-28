@@ -1,3 +1,4 @@
+# شرح الملف: يشغّل مستوى التحقق المطلوب وينتظر نتيجته.
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)][string]$Suite,

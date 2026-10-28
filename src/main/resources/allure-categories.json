@@ -1,24 +1,24 @@
 [
   {
-    "name": "Known bug \u2014 explicit reference",
+    "name": "مشكلة معروفة — لها رقم مرجعي",
     "matchedStatuses": [
       "failed",
       "broken"
     ],
-    "messageRegex": "[\\s\\S]*KNOWN_BUG:[A-Z]+-[0-9]+[\\s\\S]*"
+    "messageRegex": "[\\s\\S]*KNOWN_BUG:[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-[0-9]+[\\s\\S]*"
   },
   {
-    "name": "New assertion failure",
+    "name": "فشل تحقق جديد — يحتاج مراجعة",
     "matchedStatuses": [
       "failed"
     ],
-    "messageRegex": "^(?![\\s\\S]*KNOWN_BUG:[A-Z]+-[0-9]+)[\\s\\S]*$"
+    "messageRegex": "^(?![\\s\\S]*KNOWN_BUG:[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-[0-9]+)[\\s\\S]*$"
   },
   {
-    "name": "New execution failure",
+    "name": "تعذر التشغيل — يحتاج مراجعة",
     "matchedStatuses": [
       "broken"
     ],
-    "messageRegex": "^(?![\\s\\S]*KNOWN_BUG:[A-Z]+-[0-9]+)[\\s\\S]*$"
+    "messageRegex": "^(?![\\s\\S]*KNOWN_BUG:[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-[0-9]+)[\\s\\S]*$"
   }
 ]

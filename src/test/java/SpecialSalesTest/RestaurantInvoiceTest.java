@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات فاتورة المطعم: حذف بند؛ تعليق طلب داخلي يخصم وحدة فورًا؛ نوع الطلب؛ الكمية
+ * الكسرية؛ الكمية.
+ */
 package SpecialSalesTest;
 
 import Plugin_ERP.System_Modules.Login.SpecialSales.*;

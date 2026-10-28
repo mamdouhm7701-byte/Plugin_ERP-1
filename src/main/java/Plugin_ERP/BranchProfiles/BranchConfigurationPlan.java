@@ -1,11 +1,9 @@
+/* شرح الملف: تحديد التغييرات المطلوبة لإعداد فرع التجربة.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import java.util.*;
 
-/**
- * A deliberate change to four policies on the same origin and branch, never an implicit branch
- * switch.
- */
 public record BranchConfigurationPlan(BranchSnapshot before, BranchProfile target) {
     public static final List<String> EDITABLE =
             List.of("activityType", "discountLevel", "taxPolicy", "stocktakingMethod");

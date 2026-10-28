@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات قراءة بيانات الشاشة التي يحتاجها الاختبار من مكان موحد.
+ */
 package Plugin_ERP.Util;
 
 import java.lang.reflect.Proxy;

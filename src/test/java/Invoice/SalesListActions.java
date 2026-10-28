@@ -1,10 +1,11 @@
+/* شرح الملف: تجميع خطوات البحث والتصفية ومراجعة القائمة، ضمن المبيعات.
+ */
 package Invoice;
 
 import Plugin_ERP.System_Modules.Login.Invoice.InvoicListPage;
 import java.util.*;
 import org.testng.Assert;
 
-/** Every list expectation is scoped to documents created by this scenario. */
 public abstract class SalesListActions extends SalesScenarioTest {
     protected String seedDate;
 

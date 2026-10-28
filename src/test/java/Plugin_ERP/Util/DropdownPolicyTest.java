@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة دقة اختيار القيم من القوائم.
+ */
 package Plugin_ERP.Util;
 
 import java.lang.reflect.Proxy;
@@ -10,7 +12,6 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-/** Exact-first matching must not select a similarly named financial party. */
 public final class DropdownPolicyTest {
     @DataProvider
     public Object[][] policies() {

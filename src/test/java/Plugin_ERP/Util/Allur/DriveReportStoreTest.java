@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات رفع التقرير إلى مساحة الحفظ ومراجعته عند تفعيل الإرسال.
+ */
 package Plugin_ERP.Util.Allur;
 
 import com.sun.net.httpserver.HttpServer;

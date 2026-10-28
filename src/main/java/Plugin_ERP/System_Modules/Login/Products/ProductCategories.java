@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة مجموعات الأصناف: بنسجل اسم المجموعة وملاحظاتها. فائدتها تنظيم الأصناف في مجموعات
+ * تسهل الوصول إليها.
+ */
 package Plugin_ERP.System_Modules.Login.Products;
 
 import io.qameta.allure.Step;

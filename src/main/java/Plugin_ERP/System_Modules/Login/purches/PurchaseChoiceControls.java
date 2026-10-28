@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لاختيار بيانات مستند الشراء ومسح الاختيار ومراجعته. فائدتها ضبط الأطراف
+ * والاختيارات المرتبطة بالمستند.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import Plugin_ERP.Util.FormInteractions;
@@ -6,7 +9,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-/** Select, clear and inspect purchase document dropdowns. */
 final class PurchaseChoiceControls {
     private final PurchaseModulePage owner;
     private final WebDriver driver;

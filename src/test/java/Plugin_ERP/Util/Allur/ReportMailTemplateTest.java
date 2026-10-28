@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات تجهيز نص رسالة التقرير وأعداد النجاح والفشل.
+ */
 package Plugin_ERP.Util.Allur;
 
 import java.util.List;

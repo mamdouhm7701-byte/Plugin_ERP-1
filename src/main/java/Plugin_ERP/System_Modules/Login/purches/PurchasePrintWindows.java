@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لفتح تقرير الشراء المطبوع ومراجعته وإغلاق نوافذ الطباعة. فائدتها التأكد من ظهور
+ * بيانات المستند في نسخته المطبوعة.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Purchase Print Windows: focused operations used by the original page facade. */
 final class PurchasePrintWindows {
     private final PurchaseModulePage owner;
     private final WebDriver driver;

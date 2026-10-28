@@ -1,3 +1,5 @@
+/* شرح الملف: معرفة نظام الجهاز لاختيار طريقة التشغيل المناسبة.
+ */
 package Plugin_ERP.Util;
 
 public class OSUtils {

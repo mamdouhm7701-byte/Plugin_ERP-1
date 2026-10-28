@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة ربط المتعاملين بخط السير: بنختار الخط والمتعاملين المرتبطين به. فائدتها تنظيم
+ * توزيع العملاء والمتعاملين على خطوط العمل.
+ */
 package Plugin_ERP.System_Modules.Login.DealerModel;
 
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;

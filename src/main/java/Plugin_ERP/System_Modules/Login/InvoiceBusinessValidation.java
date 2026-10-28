@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لمراجعة حسابات الفاتورة والخصم والضريبة ومقارنتها بالطباعة. فائدتها اكتشاف
+ * الفروق في المبالغ قبل الاعتماد على النتيجة.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Business.Calculator.InvoiceCalculator;
@@ -9,7 +12,6 @@ import io.qameta.allure.Allure;
 import java.math.BigDecimal;
 import org.testng.Assert;
 
-/** Invoice calculation validation and Allure evidence, using the page's overridden readers. */
 final class InvoiceBusinessValidation {
     private final DocumentPage owner;
 

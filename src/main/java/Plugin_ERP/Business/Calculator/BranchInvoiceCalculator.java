@@ -1,3 +1,5 @@
+/* شرح الملف: حساب مبالغ البيع حسب سياسة ضريبة الفرع.
+ */
 package Plugin_ERP.Business.Calculator;
 
 import Plugin_ERP.BranchProfiles.BranchPolicies.*;
@@ -8,7 +10,6 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.Objects;
 
-/** User-confirmed 15% sales arithmetic. Additional restaurant tax is excluded. */
 public final class BranchInvoiceCalculator {
     /**
      * Aggregate-precision contract: keep intermediate amounts and round only the final invoice net.

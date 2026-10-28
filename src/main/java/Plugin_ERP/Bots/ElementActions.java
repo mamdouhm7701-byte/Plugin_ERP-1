@@ -1,3 +1,5 @@
+/* شرح الملف: الضغط والكتابة وقراءة القيم الظاهرة في الشاشات.
+ */
 package Plugin_ERP.Bots;
 
 import java.time.Duration;

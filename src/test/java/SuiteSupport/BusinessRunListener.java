@@ -1,3 +1,5 @@
+/* شرح الملف: تجهيز فرع الاختبار ثم بدء الحزمة وتنظيف الفرع عند الانتهاء.
+ */
 package SuiteSupport;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -5,7 +7,6 @@ import java.nio.file.*;
 import java.util.*;
 import org.testng.xml.XmlSuite;
 
-/** Separate native TestNG runner: prepares policies before TestNG starts fixture lifecycles. */
 public class BusinessRunListener extends NativeInteractiveSuiteListener {
     private BranchProfile ownedProfile;
     private Path runOutput;
@@ -41,6 +42,7 @@ public class BusinessRunListener extends NativeInteractiveSuiteListener {
 
     @Override
     public void alter(List<XmlSuite> suites) {
+        Plugin_ERP.Util.Allur.AllureContextNoiseFilter.install();
         try {
             var choice = selectBusiness();
             if (choice == null) {
@@ -83,6 +85,28 @@ public class BusinessRunListener extends NativeInteractiveSuiteListener {
                             .toString(2));
             var profile = prepare(choice.business(), project, output.resolve("preparation"));
             ownedProfile = profile;
+            int capacityWorkers =
+                    CapacityPreflight.workerLimit(workers, output.resolve("preparation"));
+            if (capacityWorkers < workers) {
+                workers = capacityWorkers;
+                Files.writeString(
+                        output.resolve("run-settings.json"),
+                        new org.json.JSONObject(
+                                        Map.of(
+                                                "target",
+                                                choice.target().description(),
+                                                "execution",
+                                                choice.execution(),
+                                                "requestedBrowsers",
+                                                choice.workers(),
+                                                "selectedBrowsers",
+                                                workers,
+                                                "reason",
+                                                "Available store headroom limits concurrent fixture setup"))
+                                .toString(2));
+                System.out.println(
+                        "Browser limit reduced to " + workers + " by available store capacity.");
+            }
             set("branch.profile", profile.name());
             set("branch.profile.fingerprint", profile.fingerprint());
             set("branch.profile.select", "true");

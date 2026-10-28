@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة تجهيز بيانات الحركات المالية وتنظيفها دون المساس بسجلات أخرى.
+ */
 package FinancialMovementsTest;
 
 import Plugin_ERP.Tests.LoginTest.BaseTest;

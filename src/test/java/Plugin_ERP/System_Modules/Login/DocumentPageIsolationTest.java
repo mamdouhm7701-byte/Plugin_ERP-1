@@ -1,3 +1,6 @@
+/* شرح الملف: اختبار سلامة Protects the architectural boundary that previously made sales depend on
+ * three unrelated domains.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import java.lang.reflect.Proxy;
@@ -6,9 +9,6 @@ import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/**
- * Protects the architectural boundary that previously made sales depend on three unrelated domains.
- */
 public class DocumentPageIsolationTest {
     private static WebDriver browser() {
         return (WebDriver)

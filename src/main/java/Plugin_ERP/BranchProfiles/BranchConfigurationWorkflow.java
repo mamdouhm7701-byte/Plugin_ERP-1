@@ -1,11 +1,9 @@
+/* شرح الملف: تنفيذ إعداد فرع التجربة ثم مراجعة القيم المحفوظة.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import java.util.Map;
 
-/**
- * No test may start until both the persisted form and refreshed session match the requested
- * profile.
- */
 public final class BranchConfigurationWorkflow {
     public interface Settings {
         BranchSnapshot current();

@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات كتابة النص في الحقل والتأكد من ظهور نفس النص.
+ */
 package Plugin_ERP.Bots;
 
 import java.lang.reflect.Proxy;

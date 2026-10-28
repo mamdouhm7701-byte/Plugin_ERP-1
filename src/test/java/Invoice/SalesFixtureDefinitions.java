@@ -1,3 +1,5 @@
+/* شرح الملف: تحديد البيانات المطلوبة لإنشاء سجلات التجربة، ضمن المبيعات.
+ */
 package Invoice;
 
 import static Invoice.SalesTestData.fields;
@@ -7,9 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * Fixture payloads and seeding recipes. Ownership, journaling and cleanup stay in SalesTestData.
- */
 final class SalesFixtureDefinitions {
     private final SalesTestData data;
 

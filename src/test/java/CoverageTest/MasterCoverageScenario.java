@@ -1,3 +1,5 @@
+/* شرح الملف: تجهيز الخطوات المشتركة للحالات ثم تنظيف بياناتها، ضمن خطوات التشغيل والتقارير.
+ */
 package CoverageTest;
 
 import static TestSupport.BasicDataFixtures.fields;
@@ -13,7 +15,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Shared journeys, instantiated separately for each previously uncovered master screen. */
 public abstract class MasterCoverageScenario extends BasicDataScenarioTest {
     protected abstract String endpoint();
 

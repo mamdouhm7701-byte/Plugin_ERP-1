@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة للتأكد من ظهور نتائج القائمة وعد الأسماء المطابقة. فائدتها مراجعة السجل بعد
+ * اكتمال عرض البيانات.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.Locale;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** The search box can render before a basic-data table's first provider response. */
 final class GridProviderWait {
     private final WebDriver driver;
     private final String resource;

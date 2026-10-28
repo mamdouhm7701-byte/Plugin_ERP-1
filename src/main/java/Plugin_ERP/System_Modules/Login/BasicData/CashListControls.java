@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لعرض قائمة الخزائن وترتيبها والتنقل بينها وتصديرها. فائدتها الوصول إلى بيانات
+ * الخزائن ومراجعتها خارج القائمة.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.List;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Safe-list rows, sorting, pagination and export; no form data or save/delete ownership. */
 final class CashListControls {
     private final CashPage page;
     private final WebDriver driver;

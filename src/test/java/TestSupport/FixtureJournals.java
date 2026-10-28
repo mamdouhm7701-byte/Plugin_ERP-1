@@ -1,3 +1,5 @@
+/* شرح الملف: حفظ قائمة بيانات الاختبار التي قد تحتاج إلى تنظيف لاحق.
+ */
 package TestSupport;
 
 import java.io.IOException;

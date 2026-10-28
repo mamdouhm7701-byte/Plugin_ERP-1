@@ -1,9 +1,10 @@
+/* شرح الملف: ترتيب تنظيف مرتجع البيع وفاتورته وبياناته.
+ */
 package Invoice;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/** Orders exact owned documents around their native deletion dependencies. */
 final class SalesCleanupOrder {
     private SalesCleanupOrder() {}
 

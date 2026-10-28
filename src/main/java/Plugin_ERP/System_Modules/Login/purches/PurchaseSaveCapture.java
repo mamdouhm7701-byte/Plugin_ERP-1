@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة لمتابعة محاولات حفظ مستند الشراء ونتائجها وأخطاء الحفظ. فائدتها معرفة نجاح
+ * التسجيل واكتشاف التكرار أو التعثر.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import java.util.List;
 import java.util.Map;
 import org.openqa.selenium.By;
 
-/** Observe requests and outcomes for owned purchase documents. */
 final class PurchaseSaveCapture {
     private final PurchaseModulePage owner;
 

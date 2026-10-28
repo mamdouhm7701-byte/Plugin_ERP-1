@@ -1,3 +1,6 @@
+/* شرح الملف: اختبار سلامة Caption parsing must work for every month in the ERP's Arabic and English
+ * datepicker.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import java.time.Month;
@@ -9,7 +12,6 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-/** Caption parsing must work for every month in the ERP's Arabic and English datepicker. */
 public final class PurchaseCalendarTest {
     @DataProvider
     public Object[][] calendarCaptions() {

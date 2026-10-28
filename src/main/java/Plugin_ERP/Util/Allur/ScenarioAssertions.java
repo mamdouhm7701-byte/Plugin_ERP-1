@@ -1,3 +1,5 @@
+/* شرح الملف: إظهار المقارنات التي نفذتها الحالة مع المتوقع والفعلي.
+ */
 package Plugin_ERP.Util.Allur;
 
 import io.qameta.allure.Allure;
@@ -19,6 +21,10 @@ public class ScenarioAssertions {
     private static final ThreadLocal<java.util.Deque<String>> FRAMES =
             ThreadLocal.withInitial(java.util.ArrayDeque::new);
 
+    public static boolean isRecording() {
+        return ACTIVE.get() && Allure.getLifecycle().getCurrentTestCase().isPresent();
+    }
+
     public static void begin() {
         ACTIVE.set(true);
     }
@@ -31,12 +37,7 @@ public class ScenarioAssertions {
             Object actual, Object expected, String message, AssertionError failure) {
         if (!ACTIVE.get() || Allure.getLifecycle().getCurrentTestCase().isEmpty()) return;
         String id = UUID.randomUUID().toString();
-        String name =
-                (message == null ? "التحقق من القيمة" : message)
-                        + ": المتوقع "
-                        + display(expected)
-                        + "، الفعلي "
-                        + display(actual);
+        String name = ReadableChecks.comparison(message, expected, actual);
         Allure.getLifecycle().startStep(id, new StepResult().setName(name));
         Allure.getLifecycle()
                 .updateStep(
@@ -59,8 +60,8 @@ public class ScenarioAssertions {
         if (args.length == 0) return "التحقق من نتيجة الحالة";
         String actual = display(args[0]);
         return switch (method) {
-            case "assertTrue" -> "التحقق من الشرط: المتوقع true، الفعلي " + actual;
-            case "assertFalse" -> "التحقق من الشرط: المتوقع false، الفعلي " + actual;
+            case "assertTrue" -> "التحقق من الشرط: المتوقع نعم، الفعلي " + actual;
+            case "assertFalse" -> "التحقق من الشرط: المتوقع لا، الفعلي " + actual;
             case "assertNull" -> "التحقق من خلو القيمة: الفعلي " + actual;
             case "assertNotNull" -> "التحقق من وجود قيمة: الفعلي " + actual;
             case "assertEquals", "assertEqualsNoOrder", "assertSame" ->
@@ -78,11 +79,7 @@ public class ScenarioAssertions {
     }
 
     private static String display(Object value) {
-        String text;
-        if (value != null && value.getClass().isArray())
-            text = java.util.Arrays.deepToString(new Object[] {value});
-        else text = String.valueOf(value);
-        return text.length() > 300 ? text.substring(0, 300) + "…" : text;
+        return ReadableChecks.display(value);
     }
 
     @Pointcut(

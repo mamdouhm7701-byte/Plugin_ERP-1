@@ -1,3 +1,5 @@
+/* شرح الملف: قراءة إعدادات الفرع كما هي محفوظة في البرنامج.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import Plugin_ERP.Util.VueComponentAccess;
@@ -6,7 +8,6 @@ import java.util.Map;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Reads configuration only. It never dispatches an API write or selects another branch. */
 public final class BranchProfileReader {
     private BranchProfileReader() {}
 

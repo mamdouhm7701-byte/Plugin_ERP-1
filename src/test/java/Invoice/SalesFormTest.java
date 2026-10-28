@@ -1,9 +1,10 @@
+/* شرح الملف: اختبار إدخال فاتورة البيع والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package Invoice;
 
 import io.qameta.allure.Story;
 import org.testng.annotations.Test;
 
-/** Shared contracts inherited by the four concrete forms. */
 public abstract class SalesFormTest extends SalesFormActions {
     @Test
     @Story("حفظ مستند بالصنف المختار من قائمة الأصناف")

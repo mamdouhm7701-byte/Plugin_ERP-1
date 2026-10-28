@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات قراءة طريقة حساب ضريبة البيع المستخدمة في التجربة.
+ */
 package SuiteSupport;
 
 import TestSupport.SalesTaxProfile;

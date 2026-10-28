@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات قراءة إعدادات الفرع كما هي محفوظة في البرنامج.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import java.lang.reflect.Proxy;

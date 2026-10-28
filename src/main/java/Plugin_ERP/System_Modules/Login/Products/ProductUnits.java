@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة لإضافة وحدات الصنف ومعامل التحويل والباركود وأسعار كل وحدة. فائدتها التعامل مع
+ * الصنف بوحدات بيع مختلفة بكميات وأسعار صحيحة.
+ */
 package Plugin_ERP.System_Modules.Login.Products;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Product Units: focused operations used by the original page facade. */
 final class ProductUnits {
     private final AddProductsPage owner;
     private final WebDriver driver;

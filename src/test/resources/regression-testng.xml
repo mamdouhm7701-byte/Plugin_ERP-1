@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!-- شرح الملف: يحدد الحالات المختارة لتشغيل كل الحالات المعتمدة للمراجعة الشاملة. -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <!--
   Regression إعادة التغطية الواسعة بعد تغييرات مهمة أو قبل إصدار.

@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة إشعار خصم للعميل: بنحدد العميل وقيمة الخصم والمستندات المرتبطة به. فائدتها تخفيض
+ * مستحقات العميل وتوثيق أثر الخصم والضريبة.
+ */
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
 import io.qameta.allure.Allure;

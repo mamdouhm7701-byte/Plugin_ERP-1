@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة تنظيف البيانات التي أنشأتها التجربة فقط، ضمن المخازن.
+ */
 package StoreTest;
 
 import java.lang.reflect.Proxy;

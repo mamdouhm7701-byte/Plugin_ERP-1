@@ -1,8 +1,9 @@
+/* شرح الملف: مراجعة وصول أحداث بداية ونهاية الحالة إلى شاشة النتائج.
+ */
 package SuiteSupport;
 
 import org.testng.annotations.Test;
 
-/** Local event source used only by NativeInteractiveSuiteListenerTest; no ERP access. */
 public final class NativeRunnerEventProbe {
     @Test
     public void firstCase() {}

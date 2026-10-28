@@ -1,9 +1,11 @@
+/* شرح الملف: مساعدة لمتابعة محاولات حفظ مستند البيع ونتائجها وأخطاء الحفظ. فائدتها معرفة نجاح
+ * التسجيل واكتشاف تكرار الحفظ.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import java.util.List;
 import java.util.Map;
 
-/** Observe requests and outcomes for owned sales documents. */
 final class SalesSaveCapture {
     private final SalesModulePage owner;
 

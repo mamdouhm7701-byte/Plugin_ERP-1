@@ -1,3 +1,5 @@
+/* شرح الملف: تجهيز الوقت المستخدم في أسماء الملفات وسجلات التشغيل.
+ */
 package Plugin_ERP.Util;
 
 import java.text.SimpleDateFormat;

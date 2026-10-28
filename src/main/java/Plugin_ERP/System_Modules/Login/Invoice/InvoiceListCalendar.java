@@ -1,3 +1,5 @@
+/* شرح الملف: مساعدة لاختيار التواريخ في بحث فواتير البيع. فائدتها حصر الفواتير في الفترة المطلوبة.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import java.time.Duration;
@@ -6,7 +8,6 @@ import java.util.Locale;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Datepicker interactions belonging to the invoice list, with the original waits and selectors. */
 final class InvoiceListCalendar {
     private final WebDriver driver;
 

@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة للبحث عن الأصناف بالاسم أو الباركود وإضافتها للمستند، ومراجعة البيانات
+ * المطلوبة. فائدتها استكمال المستند قبل الحفظ.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Document Item Controls: focused operations used by the original page facade. */
 final class DocumentItemControls {
     private final DocumentPage owner;
     private final WebDriver driver;

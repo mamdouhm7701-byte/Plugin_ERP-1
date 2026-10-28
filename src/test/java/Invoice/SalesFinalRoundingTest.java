@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات تقريب صافي الفاتورة في النهاية فقط: تقريب صافي الفاتورة في النهاية فقط.
+ */
 package Invoice;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -11,9 +13,6 @@ import java.util.*;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-/**
- * Full save journey when totals satisfy final-only rounding; a mismatching draft remains a failure.
- */
 public final class SalesFinalRoundingTest extends SalesScenarioTest {
     @DataProvider
     public Object[][] itemCounts() {

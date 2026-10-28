@@ -1,3 +1,5 @@
+/* شرح الملف: تحديد التواريخ المستخدمة في المستندات.
+ */
 package Plugin_ERP.Util;
 
 import java.time.LocalDate;
@@ -6,7 +8,6 @@ import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.Locale;
 
-/** Dates displayed by the Arabic document date picker, including invisible direction marks. */
 public final class DocumentDates {
     private DocumentDates() {}
 

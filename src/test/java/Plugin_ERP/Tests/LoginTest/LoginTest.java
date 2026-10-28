@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات تسجيل الدخول: رفض حساب عشوائي غير موجود؛ دخول بحساب اختبار صحيح.
+ */
 package Plugin_ERP.Tests.LoginTest;
 
 import Plugin_ERP.Drivers.Browser;

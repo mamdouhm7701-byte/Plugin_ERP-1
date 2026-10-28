@@ -1,3 +1,5 @@
+/* شرح الملف: التأكد أن النشاط والخصم والضريبة والجرد لم يتغيروا عن المطلوب.
+ */
 package SuiteSupport;
 
 import Plugin_ERP.BranchProfiles.*;

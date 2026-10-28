@@ -1,3 +1,5 @@
+# شرح الملف: ينسق شكل الفاتورة المطبوعة مع الحفاظ على حساباتها.
+# أداة اختيارية لتنسيق شكل الفاتورة المطبوعة. نحتفظ بها حتى يمكن تعديل التصميم دون تغيير حسابات الفاتورة.
 from pathlib import Path
 from copy import deepcopy
 from collections import Counter

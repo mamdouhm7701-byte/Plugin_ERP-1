@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة قائمة المناطق وترتيبها والتنقل بين صفحاتها. فائدتها الوصول إلى المنطقة
+ * المطلوبة ومقارنة بيانات المناطق.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Focused UI component; public page entry points and their Allure steps stay on the page. */
 final class AreaGridControls {
     private final AreaPage page;
     private final WebDriver driver;

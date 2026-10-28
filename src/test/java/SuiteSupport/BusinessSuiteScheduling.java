@@ -1,9 +1,10 @@
+/* شرح الملف: توزيع الحالات التي يمكن تشغيلها معًا وإبقاء الحالات المشتركة منفردة.
+ */
 package SuiteSupport;
 
 import java.util.*;
 import org.testng.xml.*;
 
-/** Uses the existing reviewed isolation policy; methods and data-provider rows stay serial. */
 final class BusinessSuiteScheduling {
     private BusinessSuiteScheduling() {}
 

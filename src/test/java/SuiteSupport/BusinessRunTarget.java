@@ -1,10 +1,11 @@
+/* شرح الملف: تحديد البيئة والرابط وبيانات الدخول المطلوبة لهذه التجربة.
+ */
 package SuiteSupport;
 
 import Plugin_ERP.Util.PropertyReader;
 import java.net.URI;
 import java.util.*;
 
-/** A run-scoped endpoint; optional credentials are never written to shared configuration. */
 final class BusinessRunTarget {
     private final String environment;
     private final String tenant;

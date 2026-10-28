@@ -1,3 +1,5 @@
+/* شرح الملف: تقسيم الحالات المستقلة لتعمل معًا وتقليل مدة التشغيل.
+ */
 package SuiteSupport;
 
 import java.nio.charset.StandardCharsets;
@@ -10,9 +12,6 @@ import org.testng.annotations.Test;
 import org.testng.xml.*;
 import org.testng.xml.internal.Parser;
 
-/**
- * Partitions original XML selections; a passed checkpoint is excluded explicitly, never a failure.
- */
 public final class ParallelSuitePlanner {
     private ParallelSuitePlanner() {}
 

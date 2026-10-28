@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة المناطق: بنسجل منها أسماء المناطق وملاحظاتها ونبحث عنها ونعدلها. فائدتها تنظيم
+ * البيانات المرتبطة بالمناطق.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;

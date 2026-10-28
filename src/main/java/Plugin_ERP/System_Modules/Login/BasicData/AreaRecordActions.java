@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة للبحث عن منطقة وتعديلها أو حذفها مع مراجعة التأكيد. فائدتها إدارة المناطق
+ * المسجلة بالاسم الصحيح.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Area Record Actions: focused operations used by the original page facade. */
 final class AreaRecordActions {
     private final AreaPage owner;
     private final WebDriver driver;

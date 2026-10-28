@@ -1,3 +1,5 @@
+/* شرح الملف: الاحتفاظ بصورة من إعدادات الفرع للمقارنة.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import static Plugin_ERP.BranchProfiles.BranchPolicies.*;
@@ -7,7 +9,6 @@ import java.net.URISyntaxException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** Read-only identity and core policies; never inferred from calculated invoice totals. */
 public record BranchSnapshot(
         String origin,
         String branchId,

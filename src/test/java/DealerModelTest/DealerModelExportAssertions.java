@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة محتوى الملف الذي تم تنزيله، ضمن العملاء والموردين والمناديب.
+ */
 package DealerModelTest;
 
 import java.nio.charset.StandardCharsets;

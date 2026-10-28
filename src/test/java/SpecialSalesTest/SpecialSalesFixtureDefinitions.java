@@ -1,3 +1,5 @@
+/* شرح الملف: تحديد البيانات المطلوبة لإنشاء سجلات التجربة، ضمن المطعم ونقاط البيع.
+ */
 package SpecialSalesTest;
 
 import static SpecialSalesTest.SpecialSalesTestData.fields;
@@ -7,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/** Payload definitions; ownership, branch state, recovery and cleanup stay with the owner. */
 final class SpecialSalesFixtureDefinitions {
     private final SpecialSalesTestData data;
 

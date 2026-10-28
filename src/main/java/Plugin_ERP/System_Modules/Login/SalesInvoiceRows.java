@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة بنود فاتورة البيع وقيمها. فائدتها مراجعة تفاصيل الأصناف الداخلة في حساب
+ * الفاتورة.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Models.InvoiceRow;
@@ -9,7 +12,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-/** Visible sales invoice rows mapped to calculation models. */
 final class SalesInvoiceRows {
     private final WebDriver driver;
 

@@ -1,3 +1,4 @@
+# شرح الملف: يحدد الملفات المؤقتة والشخصية التي لا تدخل إلى Git.
 # Maven and other build outputs
 target/
 !**/src/main/**/target/

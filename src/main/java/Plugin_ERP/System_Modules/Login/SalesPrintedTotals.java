@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة إجماليات فاتورة البيع المطبوعة. فائدتها مقارنة المبلغ المطبوع بقيمة
+ * الفاتورة المسجلة.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Models.ReportTotals;
@@ -6,7 +9,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Sales Printed Totals: focused operations used by the original page facade. */
 final class SalesPrintedTotals {
     private final AbstractForSales owner;
     private final WebDriver driver;

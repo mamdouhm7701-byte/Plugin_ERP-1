@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار تسوية الفائض والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package StoreTest;
 
 public final class OverflowAdjustmentCoverageTest extends AdjustmentCoverageScenario {

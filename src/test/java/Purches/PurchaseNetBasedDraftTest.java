@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار ضريبة مسودة المشتريات والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package Purches;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -15,10 +17,6 @@ import org.openqa.selenium.*;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-/**
- * Explicit live suite: edits unsaved drafts using existing items; never saves
- * transactions/settings.
- */
 public final class PurchaseNetBasedDraftTest extends BaseTest {
     @DataProvider
     public Object[][] documents() {

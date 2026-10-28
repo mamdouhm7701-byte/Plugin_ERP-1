@@ -1,3 +1,5 @@
+/* شرح الملف: قراءة رسائل النجاح والخطأ وإغلاقها عند الحاجة.
+ */
 package Plugin_ERP.Bots;
 
 import java.time.Duration;

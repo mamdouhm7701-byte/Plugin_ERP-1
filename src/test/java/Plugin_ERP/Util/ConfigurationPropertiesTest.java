@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات جمع إعدادات التشغيل من ملفات المشروع والإعدادات المحلية.
+ */
 package Plugin_ERP.Util;
 
 import java.io.IOException;
@@ -10,7 +12,6 @@ import java.util.UUID;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Uses disposable files and synthetic credentials; never rewrites project configuration. */
 public final class ConfigurationPropertiesTest {
     @Test
     public void reloadReflectsChangedAddedAndRemovedKeys() throws Exception {

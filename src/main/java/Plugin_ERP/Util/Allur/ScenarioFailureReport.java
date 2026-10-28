@@ -1,3 +1,5 @@
+/* شرح الملف: إظهار شرح مبسط لمكان الفشل والقيمة المتوقعة والفعلية.
+ */
 package Plugin_ERP.Util.Allur;
 
 import io.qameta.allure.Allure;
@@ -18,7 +20,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.testng.ITestResult;
 
-/** Adds a readable view of recorded evidence; never changes the outcome or original failure. */
 public final class ScenarioFailureReport {
     private static final int MAX_STEPS = 25;
     private static final Pattern ARABIC_VALUES =
@@ -99,7 +100,9 @@ public final class ScenarioFailureReport {
                         : "القيم من: "
                                 + values.source()
                                 + ". هذه قراءة للبيانات المسجلة وليست نتيجة تنفيذ جديد.";
-        String error = firstLine(originalFailureMessage);
+        String error =
+                ReadableFailure.describe(
+                        originalFailureMessage, context.isEmpty() ? "" : context.getLast());
         StringBuilder html =
                 new StringBuilder(
                         """
@@ -120,6 +123,20 @@ public final class ScenarioFailureReport {
         html.append("<p><strong>الحالة: </strong>")
                 .append(value(nonblank(test.getName(), "حالة بدون عنوان مسجل")))
                 .append("</p>");
+        var classification =
+                FailureClassification.classify(
+                        test,
+                        originalFailureMessage == null
+                                ? null
+                                : new RuntimeException(originalFailureMessage));
+        html.append("<h2>تصنيف المشكلة</h2><p>النوع: ")
+                .append(value(classification.domain()))
+                .append("<br>مصدر التوقف: ")
+                .append(value(classification.origin()))
+                .append("<br>الحالة: ")
+                .append(value(classification.confirmation()))
+                .append(
+                        "</p><p class=\"note\">التصنيف يساعد على المراجعة؛ فشل الاختبار وحده لا يثبت وجود عيب في البرنامج.</p>");
         html.append("<h2>موضع التوقف</h2><p>")
                 .append(
                         context.isEmpty()

@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة أنواع الإيرادات والبحث عن النوع وتعديله أو حذفه. فائدتها متابعة تصنيفات
+ * الإيرادات المسجلة.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Revenue Records: focused operations used by the original page facade. */
 final class RevenueRecords {
     private final RevenuesPage owner;
     private final WebDriver driver;

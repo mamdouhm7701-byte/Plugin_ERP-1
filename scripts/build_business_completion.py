@@ -1,3 +1,4 @@
+# شرح الملف: يربط كل شاشة بالاختبارات الموجودة دون اعتبار ذلك إثبات نجاحها.
 """Track executable assignments separately from live evidence; never call assigned code a passed screen."""
 import csv
 from pathlib import Path

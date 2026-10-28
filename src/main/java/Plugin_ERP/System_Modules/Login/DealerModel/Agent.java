@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة المندوبين: بنسجل بيانات المندوب ووسائل التواصل معه. فائدتها تعريف المندوبين
+ * وربطهم بالتعاملات المناسبة.
+ */
 package Plugin_ERP.System_Modules.Login.DealerModel;
 
 import Plugin_ERP.Bots.LogUtils;

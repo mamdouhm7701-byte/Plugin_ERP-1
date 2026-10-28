@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات إرسال تقرير التشغيل بالبريد عند تفعيله.
+ */
 package Plugin_ERP.Util.Allur;
 
 import java.nio.file.Files;

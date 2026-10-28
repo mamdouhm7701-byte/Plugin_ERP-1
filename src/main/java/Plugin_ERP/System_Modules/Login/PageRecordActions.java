@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لإنشاء السجلات وحفظها وتعديلها وحذفها وإغلاقها. فائدتها إدارة البيانات المسجلة
+ * ومراجعة نجاح الإضافة.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.*;
@@ -6,7 +9,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 import org.testng.Assert;
 
-/** Page Record Actions: focused operations used by the original page facade. */
 final class PageRecordActions {
     private final Abstract owner;
     private final WebDriver driver;

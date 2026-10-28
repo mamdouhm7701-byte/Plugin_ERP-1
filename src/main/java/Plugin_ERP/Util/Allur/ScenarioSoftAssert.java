@@ -1,9 +1,10 @@
+/* شرح الملف: تجميع أكثر من اختلاف داخل نفس الحالة قبل عرض النتيجة.
+ */
 package Plugin_ERP.Util.Allur;
 
 import org.testng.asserts.IAssert;
 import org.testng.asserts.SoftAssert;
 
-/** Records each deferred comparison at its actual position without changing assertAll semantics. */
 public final class ScenarioSoftAssert extends SoftAssert {
     @Override
     public void onAssertSuccess(IAssert<?> assertion) {

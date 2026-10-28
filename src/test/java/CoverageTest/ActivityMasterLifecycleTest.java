@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار البيانات الخاصة بكل نشاط والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package CoverageTest;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -12,9 +14,6 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-/**
- * Positive master lifecycle with server-assigned code; manual-code behavior is a separate contract.
- */
 public final class ActivityMasterLifecycleTest extends BasicDataScenarioTest {
     private record Master(String endpoint, String route, String title) {}
 

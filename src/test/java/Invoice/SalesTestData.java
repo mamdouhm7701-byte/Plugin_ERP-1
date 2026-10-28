@@ -1,3 +1,5 @@
+/* شرح الملف: تجهيز سجلات مستقلة للتجربة ومراجعتها وحذفها بعد الانتهاء، ضمن المبيعات.
+ */
 package Invoice;
 
 import Invoice.SalesFixtureApi.ApiFailure;
@@ -10,7 +12,6 @@ import java.util.UUID;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Page-owned fixtures with isolated case namespaces, bound to the logged-in origin and branch. */
 final class SalesTestData implements AutoCloseable {
     record Record(String endpoint, Object id, String name, Map<String, Object> values) {}
 
@@ -205,59 +206,30 @@ final class SalesTestData implements AutoCloseable {
     }
 
     @SuppressWarnings("unchecked")
+    private TestSupport.OwnedBranchStoreMembership branchMembership() {
+        return new TestSupport.OwnedBranchStoreMembership(
+                id -> {
+                    Object entity = call("get", "Branches", fields("id", id)).get("entity");
+                    return entity instanceof Map<?, ?> ? (Map<String, Object>) entity : null;
+                },
+                update -> call("update", "Branches", update),
+                branch ->
+                        Plugin_ERP.Util.VueComponentAccess.execute(
+                                driver,
+                                "const root=erpVue.root();if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
+                                branch));
+    }
+
     private Map<String, Object> branchFor(Record link) {
-        Object entity =
-                call("get", "Branches", fields("id", link.values().get("branchId"))).get("entity");
-        if (!(entity instanceof Map<?, ?> branch)
-                || !link.values().get("branchId").equals(branch.get("id"))
-                || !(branch.get("stores") instanceof List<?>))
-            throw new AssertionError(
-                    "Cannot verify branch stores before changing owned membership");
-        return (Map<String, Object>) entity;
+        return branchMembership().read(link.values().get("branchId"));
     }
 
     private boolean containsStore(Map<String, Object> branch, Object storeId) {
-        return ((List<?>) branch.get("stores"))
-                .stream()
-                        .anyMatch(
-                                value ->
-                                        value instanceof Map<?, ?> row
-                                                && storeId.equals(row.get("storeId")));
+        return branchMembership().contains(branch, storeId);
     }
 
     private void changeBranchStore(Record link, boolean add) {
-        synchronized (TestSupport.BranchMutationLock.monitor()) {
-            Map<String, Object> branch = branchFor(link);
-            Object storeId = link.values().get("storeId");
-            if (containsStore(branch, storeId) != add) {
-                List<Object> stores = new ArrayList<>((List<?>) branch.get("stores"));
-                if (add) stores.add(fields("branchId", branch.get("id"), "storeId", storeId));
-                else
-                    stores.removeIf(
-                            value ->
-                                    value instanceof Map<?, ?> row
-                                            && storeId.equals(row.get("storeId")));
-                Map<String, Object> update = new LinkedHashMap<>(branch);
-                update.put("stores", stores);
-                call("update", "Branches", update);
-                Map<String, Object> refreshed = branchFor(link);
-                if (containsStore(refreshed, storeId) != add)
-                    throw new AssertionError("Owned store membership was not updated");
-                for (Object value : (List<?>) branch.get("stores")) {
-                    Object previousId = ((Map<?, ?>) value).get("storeId");
-                    if (!previousId.equals(storeId) && !containsStore(refreshed, previousId))
-                        throw new AssertionError("Existing branch store was removed");
-                }
-                if (!java.util.Objects.equals(
-                        branch.get("defaultStoreId"), refreshed.get("defaultStoreId")))
-                    throw new AssertionError("Branch default store changed");
-                branch = refreshed;
-            }
-            Plugin_ERP.Util.VueComponentAccess.execute(
-                    driver,
-                    "const root=erpVue.root();if(root.$store.getters['app/currentBranch']?.id===arguments[0].id)root.$store.commit('app/setCurrentBranch',arguments[0])",
-                    branch);
-        }
+        branchMembership().change(link.values().get("branchId"), link.values().get("storeId"), add);
     }
 
     Map<String, Object> itemValues() {

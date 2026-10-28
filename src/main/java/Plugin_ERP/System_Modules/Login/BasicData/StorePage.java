@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة المخازن: بنسجل اسم المخزن والحساب المرتبط به ونراجع بياناته. فائدتها تجهيز أماكن
+ * حفظ الأصناف واستخدامها في حركات المخزون.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import Plugin_ERP.Enums.Pages;

@@ -1,3 +1,8 @@
+/* شرح الملف: اختبارات رحلة مخازن بين شاشات متعددة: تحويل ثم عكس المستند يعيد رصيدي المصدر والوجهة؛
+ * إضافة ثم تحويل ثم تالف بالوجهة يمنع تضاعف المخزون؛ نقل كمية كسرية والعودة بها يحافظ على الكسور في
+ * المخزنين؛ تصنيع ثم نقل المنتج النهائي وصرفه مع استهلاك المكون مرة واحدة؛ إذن إضافة ثم تحويل ثم
+ * صرف من الوجهة يتتبع نفس الصنف.
+ */
 package StoreTest;
 
 import Plugin_ERP.System_Modules.Login.StoreModel.StoreModulePage;
@@ -10,7 +15,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-/** يتتبع نفس الصنف بين المستندات والمخازن؛ المكونات لا تجهز بحركات API. */
 public final class WarehouseEndToEndTest extends StoreScenarioTest {
     private StoreMovementKind current = StoreMovementKind.ADDITION;
     private int stageNumber;

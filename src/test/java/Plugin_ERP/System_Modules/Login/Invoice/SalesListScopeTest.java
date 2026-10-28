@@ -1,3 +1,6 @@
+/* شرح الملف: اختبار سلامة A retained filter panel must not make repeated owned-list preparation
+ * fail.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import java.lang.reflect.Proxy;
@@ -8,7 +11,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** A retained filter panel must not make repeated owned-list preparation fail. */
 public final class SalesListScopeTest {
     @Test
     public void alreadyOpenPanelRemainsOpenAcrossRepeatedPreparation() {

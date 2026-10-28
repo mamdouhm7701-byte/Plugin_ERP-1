@@ -1,3 +1,4 @@
+# شرح الملف: يجمع تغطية الشاشات لكل نشاط ويفصل الدليل الحي عن مجرد وجود اختبار.
 """Join existing test coverage with observed activity navigation without inferring capabilities."""
 import argparse
 import csv

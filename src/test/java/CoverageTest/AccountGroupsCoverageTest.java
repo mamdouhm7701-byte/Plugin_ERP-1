@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار مجموعات الحسابات والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package CoverageTest;
 
 public final class AccountGroupsCoverageTest extends MasterCoverageScenario {

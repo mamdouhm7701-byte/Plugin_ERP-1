@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة انتظار اكتمال تحميل الشاشة.
+ */
 package Plugin_ERP.Bots;
 
 import java.lang.reflect.Proxy;

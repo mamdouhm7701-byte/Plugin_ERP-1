@@ -1,3 +1,6 @@
+/* شرح الملف: اختبار سلامة تجهيز سجلات مستقلة للتجربة ومراجعتها وحذفها بعد الانتهاء، ضمن العملاء
+ * والموردين والمناديب.
+ */
 package DealerModelTest;
 
 import Plugin_ERP.Tests.LoginTest.BaseTest;

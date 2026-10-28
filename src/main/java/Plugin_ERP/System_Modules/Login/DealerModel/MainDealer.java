@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة المتعامل الرئيسي: بنسجل اسم المتعامل ونوعه وملاحظاته. فائدتها تجهيز سجل المتعامل
+ * الرئيسي ومراجعته وتعديله.
+ */
 package Plugin_ERP.System_Modules.Login.DealerModel;
 
 import Plugin_ERP.Enums.Pages;

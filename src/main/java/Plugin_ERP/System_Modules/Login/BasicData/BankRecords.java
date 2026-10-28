@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة للبحث في البنوك المسجلة وقراءة بياناتها وفتحها للتعديل أو الحذف. فائدتها مراجعة
+ * البنك الصحيح قبل تغيير بياناته.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Bank Records: focused operations used by the original page facade. */
 final class BankRecords {
     private final BankPage owner;
     private final WebDriver driver;

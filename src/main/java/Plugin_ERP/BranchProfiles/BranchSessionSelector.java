@@ -1,3 +1,5 @@
+/* شرح الملف: اختيار الفرع المطلوب داخل البرنامج بعد الدخول.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import Plugin_ERP.Util.VueComponentAccess;
@@ -6,9 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/**
- * Explicit opt-in branch selection by server identifier, followed by complete profile verification.
- */
 public final class BranchSessionSelector {
     private BranchSessionSelector() {}
 

@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة للتعامل مع فاتورة البيع وفتح إضافة عميل أو صنف والبحث عن الأصناف. فائدتها
+ * استكمال الفاتورة من نفس موضع العمل.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import java.time.Duration;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Sales Form Controls: focused operations used by the original page facade. */
 final class SalesFormControls {
     private final AbstractForSales owner;
     private final WebDriver driver;

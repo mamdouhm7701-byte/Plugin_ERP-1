@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات تحديد التواريخ المستخدمة في المستندات.
+ */
 package SuiteSupport;
 
 import Plugin_ERP.Util.DocumentDates;

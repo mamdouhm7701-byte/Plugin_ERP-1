@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة انتظار تحميل الخزن وترتيب أكوادها بطريقة صحيحة.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import java.lang.reflect.Proxy;

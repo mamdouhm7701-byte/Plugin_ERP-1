@@ -1,3 +1,4 @@
+# شرح الملف: يراجع أن توزيع الحالات على الشاشات لا يتحول إلى ادعاء اكتمال.
 import tempfile,unittest
 from pathlib import Path
 from build_business_completion import build

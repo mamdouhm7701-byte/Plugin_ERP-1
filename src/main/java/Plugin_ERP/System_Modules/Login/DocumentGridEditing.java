@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لتعديل المستندات وحذف البنود وسجلات التالف. فائدتها تصحيح تفاصيل الحركة عند
+ * المراجعة.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.LogUtils;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Document Grid Editing: focused operations used by the original page facade. */
 final class DocumentGridEditing {
     private final DocumentPage owner;
     private final WebDriver driver;

@@ -1,3 +1,4 @@
+# شرح الملف: يحفظ إعداد إرسال التقرير بالبريد محليًا.
 param(
     [string]$Username = 'eyd.mmdouh@gmail.com',
     [string]$Recipients = 'mamdouhm7701@gmail.com'

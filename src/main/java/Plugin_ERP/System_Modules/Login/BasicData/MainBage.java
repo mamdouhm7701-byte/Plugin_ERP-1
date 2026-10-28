@@ -1,3 +1,6 @@
+/* شرح الملف: ملف مبدئي للصفحة الرئيسية ضمن البيانات الأساسية، ولا توجد به وظائف عمل حاليا. فائدته
+ * الحالية محدودة بتمهيد التعامل مع هذه الصفحة.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import Plugin_ERP.Bots.ElementActions;

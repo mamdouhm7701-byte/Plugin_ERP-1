@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لتعديل كميات بنود نقطة البيع والمطعم وحذفها ومراجعة الإجماليات. فائدتها ضبط
+ * محتوى الفاتورة وقيمتها قبل الدفع.
+ */
 package Plugin_ERP.System_Modules.Login.SpecialSales;
 
 import java.util.List;
@@ -8,7 +11,6 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-/** Counter cart quantities, removal and total synchronization. */
 final class CounterDocumentLines {
     private final SpecialSalesPage owner;
     private final WebDriver driver;

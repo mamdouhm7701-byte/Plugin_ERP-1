@@ -1,3 +1,5 @@
+/* شرح الملف: حصر الحالات المختارة في كل حزمة لكتابة دليل المشروع بأعداد صحيحة.
+ */
 import java.lang.reflect.Method;
 import java.nio.file.*;
 import java.util.*;

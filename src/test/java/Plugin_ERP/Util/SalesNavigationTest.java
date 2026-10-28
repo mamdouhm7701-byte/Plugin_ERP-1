@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة الانتقال بين شاشات البيع وفتح المستند الصحيح.
+ */
 package Plugin_ERP.Util;
 
 import Plugin_ERP.System_Modules.Login.Invoice.SalesModulePage;

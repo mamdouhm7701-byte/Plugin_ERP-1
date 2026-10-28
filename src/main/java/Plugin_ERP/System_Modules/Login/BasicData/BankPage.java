@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة البنوك: بنسجل فيها اسم البنك وبيانات الحساب والتواصل. فائدتها تجهيز بيانات البنوك
+ * المستخدمة في التعاملات المالية.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;

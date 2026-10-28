@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة فاتورة المشتريات: بنسجل المورد والأصناف والكميات والأسعار والسداد ويمكن الانتقال
+ * للمرتجع. فائدتها توثيق الشراء ومراجعة المبلغ المستحق للمورد.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import Plugin_ERP.System_Modules.Login.AbstractForPurchases;

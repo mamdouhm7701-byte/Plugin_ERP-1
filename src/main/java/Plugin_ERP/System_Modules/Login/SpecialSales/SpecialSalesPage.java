@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة مشتركة لفواتير نقطة البيع والمطعم، تشمل الأصناف والكميات والخصم والدفع والحفظ.
+ * فائدتها إتمام البيع ومراجعة الفاتورة في هاتين الشاشتين.
+ */
 package Plugin_ERP.System_Modules.Login.SpecialSales;
 
 import Plugin_ERP.System_Modules.Login.Abstract;
@@ -8,7 +11,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Native controls shared by the two counter screens; independent of the normal invoice POM. */
 public abstract class SpecialSalesPage extends Abstract {
     private final CounterPaymentControls recordControls;
     private final CounterDocumentLines lines;

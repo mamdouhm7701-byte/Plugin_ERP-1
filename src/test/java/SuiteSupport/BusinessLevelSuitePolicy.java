@@ -1,3 +1,5 @@
+/* شرح الملف: تطبيق اختيار النشاط والإعدادات على الحزمة المطلوبة.
+ */
 package SuiteSupport;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -7,7 +9,6 @@ import java.util.*;
 import org.testng.IAlterSuiteListener;
 import org.testng.xml.*;
 
-/** Direct level XMLs opt into the same contracts when an explicit branch profile is selected. */
 public class BusinessLevelSuitePolicy implements IAlterSuiteListener {
     Optional<BusinessRunRequest> selectedBusiness() {
         return BranchProfiles.selected()

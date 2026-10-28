@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة وحدات الأصناف: بنسجل اسم الوحدة ونراجع البيانات المطلوبة. فائدتها تجهيز وحدات
+ * القياس المستخدمة في البيع والشراء والمخزون.
+ */
 package Plugin_ERP.System_Modules.Login.Products;
 
 import io.qameta.allure.Step;

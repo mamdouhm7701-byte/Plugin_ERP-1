@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة لمتابعة محاولات حفظ بيانات الأصناف ونتيجتها. فائدتها معرفة نجاح الحفظ واكتشاف
+ * الأخطاء أو التكرار.
+ */
 package Plugin_ERP.System_Modules.Login.Products;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Product Save Capture: focused operations used by the original page facade. */
 final class ProductSaveCapture {
     private final ProductsModulePage owner;
     private final WebDriver driver;

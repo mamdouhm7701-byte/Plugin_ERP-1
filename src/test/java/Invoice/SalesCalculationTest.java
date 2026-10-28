@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار حسابات البيع والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package Invoice;
 
 import Plugin_ERP.Business.Calculator.InvoiceCalculator;
@@ -8,7 +10,6 @@ import java.util.List;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Known arithmetic examples; independent of tenant settings and browser totals. */
 public final class SalesCalculationTest {
     private static List<InvoiceRow> row(String quantity, String price) {
         return List.of(

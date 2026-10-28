@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لاختيار شروط البحث في قائمة فواتير البيع وقراءة الاختيار الحالي. فائدتها تحديد
+ * الفواتير المطلوب مراجعتها.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import java.time.Duration;
@@ -10,7 +13,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Focused InvoiceFilterControls operations extracted from InvoiceListFilters. */
 final class InvoiceFilterControls {
     private final WebDriver driver;
     private final Runnable refresh;

@@ -1,10 +1,11 @@
+/* شرح الملف: التأكد أن التنظيف والتجربة على نفس الفرع والبيئة.
+ */
 package TestSupport;
 
 import java.util.Map;
 import java.util.Objects;
 import org.openqa.selenium.WebDriver;
 
-/** Recovery identities are valid only in the origin and branch that created them. */
 public final class FixtureSession {
     private final WebDriver driver;
     public final String origin;

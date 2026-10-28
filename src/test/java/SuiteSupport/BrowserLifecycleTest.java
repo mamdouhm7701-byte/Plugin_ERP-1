@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة فتح وإغلاق المتصفح دون تداخل.
+ */
 package SuiteSupport;
 
 import Plugin_ERP.Drivers.WebDriverFactory;
@@ -10,7 +12,6 @@ import org.openqa.selenium.WebDriverException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Local regression checks for browser ownership and setup failure; no ERP connection. */
 public final class BrowserLifecycleTest {
     @Test
     @SuppressWarnings("unchecked")

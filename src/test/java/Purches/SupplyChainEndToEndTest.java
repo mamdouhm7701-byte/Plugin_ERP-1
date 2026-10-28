@@ -1,3 +1,8 @@
+/* شرح الملف: اختبارات رحلة سلسلة الإمداد بين شاشات متعددة: شراء ثم تحويل ثم بيع من الوجهة بنفس
+ * الصنف والمخازن؛ شراء ونقل وبيع ثم عكس الرحلة بمرتجع بيع ونقل عكسي ومرتجع شراء؛ بيع جزئي من الكمية
+ * المنقولة ثم مرتجع جزئي يصحح مخزون الوجهة والمديونية؛ شراء ونقل وبيع بكمية كسرية يثبت الدقة بين
+ * الموديولات؛ شراء3 ونقل2 وبيع1 يحافظ على المخزون المتبقي في المخزنين.
+ */
 package Purches;
 
 import FinancialMovementsTest.FinancialWorkflow;
@@ -18,7 +23,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-/** شراء ثم نقل ثم بيع وتحميل نفس الفواتير بالسداد أو إعادتها؛ لا يوجد تجهيز مستندات عبر API. */
 public final class SupplyChainEndToEndTest extends PurchaseFormActions {
     private final List<FinancialWorkflow> finances = new ArrayList<>();
     private final List<SalesWorkflow> sales = new ArrayList<>();

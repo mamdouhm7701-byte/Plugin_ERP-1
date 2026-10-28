@@ -1,3 +1,5 @@
+/* شرح الملف: تجهيز حجز وتسليم الخرسانة المشترك بين اختبارات التقارير.
+ */
 package Invoice;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -14,7 +16,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-/** Shared native reservation/delivery setup; business-specific references are optional hooks. */
 abstract class ConcreteOwnedReportScenario extends SalesScenarioTest {
     protected static final String ENDPOINT = "ItemTransactions-Reservations";
     protected String captureEndpoint = ENDPOINT;

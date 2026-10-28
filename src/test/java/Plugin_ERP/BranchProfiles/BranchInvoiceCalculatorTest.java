@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات حساب مبالغ البيع حسب سياسة ضريبة الفرع.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import Plugin_ERP.BranchProfiles.BranchPolicies.*;

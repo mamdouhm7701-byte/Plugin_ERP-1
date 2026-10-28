@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات إجراءات المبيعات: نسخ فاتورة خاصة بالتجربة إلى نموذج غير محفوظ دون تعديل
+ * المصدر أو المخزون.
+ */
 package Invoice;
 
 import Plugin_ERP.System_Modules.Login.Coverage.ScreenPage;
@@ -6,7 +9,6 @@ import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Tests the copy/lookup action on an owned invoice; excludes invoice aggregation explicitly. */
 public final class ActionsCoverageTest extends SalesScenarioTest {
     @Test
     @Story("نسخ فاتورة مملوكة إلى نموذج غير محفوظ دون تعديل المصدر أو المخزون")

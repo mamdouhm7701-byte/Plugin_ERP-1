@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة للبحث في سجلات الأصناف وفتح السجل للتعديل أو الحذف. فائدتها الوصول للصنف
+ * المقصود ومراجعة وجوده بعد التسجيل.
+ */
 package Plugin_ERP.System_Modules.Login.Products;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Product Record List: focused operations used by the original page facade. */
 final class ProductRecordList {
     private final ProductsModulePage owner;
     private final WebDriver driver;

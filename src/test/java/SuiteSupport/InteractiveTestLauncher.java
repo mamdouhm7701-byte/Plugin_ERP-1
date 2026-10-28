@@ -1,3 +1,5 @@
+/* شرح الملف: اختيار حزمة الاختبارات وطريقة عرض المتصفح قبل التشغيل.
+ */
 package SuiteSupport;
 
 import java.awt.GridLayout;
@@ -5,9 +7,6 @@ import java.nio.file.*;
 import java.util.*;
 import javax.swing.*;
 
-/**
- * IntelliJ Application entry point: choose the test level and worker ceiling without a terminal.
- */
 public final class InteractiveTestLauncher {
     private static final List<String> LEVELS =
             List.of("Smoke", "Sanity", "E2E", "Regression", "Qualification");

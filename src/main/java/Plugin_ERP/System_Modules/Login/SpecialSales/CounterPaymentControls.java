@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة لتسجيل الخصم ووسائل الدفع والحفظ والطباعة في نقطة البيع والمطعم. فائدتها إتمام
+ * تحصيل الفاتورة وتجهيز نسختها المطبوعة.
+ */
 package Plugin_ERP.System_Modules.Login.SpecialSales;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Counter Payment Controls: focused operations used by the original page facade. */
 final class CounterPaymentControls {
     private final SpecialSalesPage owner;
     private final WebDriver driver;

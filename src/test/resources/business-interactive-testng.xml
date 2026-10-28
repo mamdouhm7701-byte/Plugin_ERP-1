@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: يحدد الحالات المختارة لتشغيل اختيار النشاط والإعدادات قبل التشغيل. -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="ERP - Business choices" parallel="none"><listeners>
 <listener class-name="SuiteSupport.BusinessRunListener"/>

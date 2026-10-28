@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لاختيار بيانات مستند البيع أو مسح الاختيار ومراجعته. فائدتها ضبط القيم المرتبطة
+ * بالمستند قبل الحفظ.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import Plugin_ERP.Util.FormInteractions;
@@ -6,7 +9,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-/** Select, clear and inspect sales document dropdowns. */
 final class SalesChoiceControls {
     private final SalesModulePage owner;
     private final WebDriver driver;

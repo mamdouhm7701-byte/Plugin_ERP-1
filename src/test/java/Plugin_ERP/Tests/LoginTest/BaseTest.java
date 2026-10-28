@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار سلامة تجهيز الدخول والمتصفح قبل الحالات ثم إغلاق المتصفح بعد الانتهاء.
+ */
 package Plugin_ERP.Tests.LoginTest;
 
 import Plugin_ERP.Drivers.WebDriverFactory;
@@ -12,7 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
 
 @Listeners({AllureTestNg.class, TestNGListeners.class})
-public class BaseTest {
+public class BaseTest implements Plugin_ERP.Util.RunEnvironmentGate.ProtectedScenario {
 
     protected WebDriver driver;
     protected WebDriverWait wait;
@@ -21,6 +23,12 @@ public class BaseTest {
     private Plugin_ERP.BranchProfiles.BranchProfileScope profileScope;
 
     protected final void requirePreparedSession() {
+        if (setupFailure != null
+                && Plugin_ERP.Util.CapacityFailure.matches(setupFailure.getMessage()))
+            throw new org.testng.SkipException(
+                    "ENVIRONMENT_BLOCKED: LICENSE_CAPACITY; "
+                            + Plugin_ERP.Util.CapacityFailure.explanation(),
+                    setupFailure);
         if (setupFailure != null)
             throw new org.testng.SkipException(
                     "Scenario preparation skipped because base login/setup failed; see the setup result",
@@ -36,6 +44,7 @@ public class BaseTest {
         setupFailure = null;
         branchProfile = null;
         try {
+            Plugin_ERP.Util.RunEnvironmentGate.current().beforeScenario();
             PropertyReader.loadProperties();
             branchProfile = Plugin_ERP.BranchProfiles.BranchProfiles.selected().orElse(null);
             if (branchProfile != null)
@@ -72,6 +81,7 @@ public class BaseTest {
 
     @BeforeMethod(alwaysRun = true)
     public final void verifyProfileBeforeScenario() {
+        Plugin_ERP.Util.RunEnvironmentGate.current().beforeScenario();
         if (branchProfile != null) {
             requirePreparedSession();
             verifySelectedBranchProfile();

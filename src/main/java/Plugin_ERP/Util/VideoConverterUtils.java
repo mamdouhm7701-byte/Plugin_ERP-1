@@ -1,3 +1,5 @@
+/* شرح الملف: تحويل تسجيل التجربة إلى صيغة مناسبة للمشاهدة.
+ */
 package Plugin_ERP.Util;
 
 import java.io.File;

@@ -1,3 +1,5 @@
+/* شرح الملف: التأكد أن التشغيل المنفرد لا يتداخل مع تشغيل آخر على الفرع.
+ */
 package SuiteSupport;
 
 import java.util.ArrayDeque;
@@ -8,7 +10,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.testng.IClassListener;
 import org.testng.ITestClass;
 
-/** Owned-data classes may overlap; unreviewed or branch-default classes stay exclusive. */
 public final class BranchIsolationListener implements IClassListener {
     private static final Set<String> INDEPENDENT =
             Set.of(

@@ -1,3 +1,5 @@
+/* شرح الملف: فتح متصفح كروم بالطريقة المختارة للتشغيل.
+ */
 package Plugin_ERP.Drivers;
 
 import Plugin_ERP.Bots.LogUtils;

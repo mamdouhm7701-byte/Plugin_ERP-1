@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة للبحث عن حركة مالية وفتحها للتعديل أو حذفها وتصدير القائمة. فائدتها متابعة
+ * الحركات المسجلة ومراجعة وجودها.
+ */
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Financial Record List: focused operations used by the original page facade. */
 final class FinancialRecordList {
     private final FinancialMovementPage owner;
     private final WebDriver driver;

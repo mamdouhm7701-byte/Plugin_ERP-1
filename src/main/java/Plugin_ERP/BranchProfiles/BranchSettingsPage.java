@@ -1,3 +1,5 @@
+/* شرح الملف: فتح إعدادات الفرع ومراجعة النشاط والخصم والضريبة والجرد.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import Plugin_ERP.Util.*;
@@ -6,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Native branch settings controls. JavaScript reads configuration only; changes use UI actions. */
 public final class BranchSettingsPage implements BranchConfigurationWorkflow.Settings {
     private final WebDriver driver;
     private final BranchSnapshot identity;

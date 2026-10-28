@@ -1,3 +1,6 @@
+/* شرح الملف: اختبار فتح تقارير الخرسانة على الفرع الصحيح والتأكد من حفظ البيانات وظهور النتيجة
+ * المطلوبة.
+ */
 package CoverageTest;
 
 import Plugin_ERP.System_Modules.Login.Coverage.ScreenPage;
@@ -12,7 +15,6 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-/** Native report submission contract; does not claim report balances or rendered totals. */
 public final class ConcreteReportRequestTest extends BaseTest {
     @DataProvider
     public Object[][] reports() {

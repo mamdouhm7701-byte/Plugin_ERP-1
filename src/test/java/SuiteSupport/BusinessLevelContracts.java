@@ -1,3 +1,5 @@
+/* شرح الملف: إضافة حالات البيزنس المناسبة إلى مستوى الاختبار دون تكرار.
+ */
 package SuiteSupport;
 
 import Plugin_ERP.BranchProfiles.BusinessRunRequest;
@@ -5,9 +7,6 @@ import java.util.*;
 import org.testng.annotations.Test;
 import org.testng.xml.*;
 
-/**
- * Adds selected business contracts once while preserving each original level's method selection.
- */
 final class BusinessLevelContracts {
     private BusinessLevelContracts() {}
 

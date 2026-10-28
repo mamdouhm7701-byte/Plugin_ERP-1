@@ -1,3 +1,5 @@
+/* شرح الملف: تحديد البيانات المطلوبة لإنشاء سجلات التجربة، ضمن المشتريات.
+ */
 package Purches;
 
 import static Purches.PurchaseTestData.fields;
@@ -7,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/** Payload definitions; the owner retains scenario state, journaling and cleanup. */
 final class PurchaseFixtureDefinitions {
     private final PurchaseTestData data;
 

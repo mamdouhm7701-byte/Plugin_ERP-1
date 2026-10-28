@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار أن شرح الحالات واضح ومكتمل وأن كل وصف مرتبط بحالة موجودة.
+ */
 package Plugin_ERP.Util.Allur;
 
 import io.qameta.allure.model.TestResult;
@@ -86,7 +88,7 @@ public final class ScenarioCaseDescriptionTest {
 
     @Test
     public void everyLiveCaseHasStepsAndExpectedWithoutTechnicalPlaceholders() throws Exception {
-        Assert.assertEquals(ScenarioCaseDescriptions.size(), 895);
+        Assert.assertEquals(ScenarioCaseDescriptions.size(), 918);
         for (String key : ScenarioCaseDescriptions.references()) {
             String[] parts = key.split("#", 2);
             var type = Class.forName(parts[0]);

@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة تفعيل الضريبة الإضافية ونسبتها قبل اختبار المطعم.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import Plugin_ERP.Util.VueComponentAccess;
@@ -5,7 +7,6 @@ import java.math.BigDecimal;
 import java.util.Map;
 import org.openqa.selenium.WebDriver;
 
-/** Optional business-run guard; an absent property preserves every legacy call path. */
 public final class AdditionalTaxExpectation {
     private final Boolean enabled;
 

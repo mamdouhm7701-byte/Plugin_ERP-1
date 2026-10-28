@@ -1,3 +1,6 @@
+/* شرح الملف: اختبار سلامة Checks the DOM-to-model boundary, including different sales and purchase
+ * visibility policies.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import java.lang.reflect.Proxy;
@@ -9,7 +12,6 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Checks the DOM-to-model boundary, including different sales and purchase visibility policies. */
 public class InvoiceRowReadersTest {
     @Test
     public void salesReadsFractionalValuesAndSkipsHiddenRows() {

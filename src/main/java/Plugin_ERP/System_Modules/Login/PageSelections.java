@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لاختيار القيم وتحديد الخيارات داخل النماذج. فائدتها ضبط الاختيارات المرتبطة
+ * بالسجل مثل الخزينة والمستخدمين.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.*;
@@ -7,7 +10,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
 
-/** Page Selections: focused operations used by the original page facade. */
 final class PageSelections {
     private final Abstract owner;
     private final WebDriver driver;

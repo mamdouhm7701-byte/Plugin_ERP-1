@@ -1,9 +1,10 @@
+/* شرح الملف: اختبار فاتورة المبيعات والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package Invoice;
 
 import io.qameta.allure.Story;
 import org.testng.annotations.Test;
 
-/** Legacy entry points preserved with owned fixtures and actual persistence checks. */
 public class InvoiceTest extends SalesFormActions {
     @Test
     @Story("إنشاء فاتورة بيع آجلة بأصناف الاختبار")

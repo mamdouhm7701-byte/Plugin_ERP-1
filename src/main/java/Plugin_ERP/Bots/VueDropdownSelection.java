@@ -1,3 +1,5 @@
+/* شرح الملف: اختيار قيمة محددة من قائمة الشاشة مع التأكد من عدم اختيار اسم آخر.
+ */
 package Plugin_ERP.Bots;
 
 import java.time.Duration;
@@ -5,7 +7,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Focused VueDropdownSelection operations extracted from DropdownActions. */
 final class VueDropdownSelection {
     private final DropdownActions owner;
     private final WebDriver driver;

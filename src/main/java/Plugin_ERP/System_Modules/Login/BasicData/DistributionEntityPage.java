@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة جهات التوزيع: بنسجل اسم الجهة والحساب المرتبط بها. فائدتها تجهيز الجهات المستخدمة
+ * في توزيع التعاملات وربطها بحساباتها.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;

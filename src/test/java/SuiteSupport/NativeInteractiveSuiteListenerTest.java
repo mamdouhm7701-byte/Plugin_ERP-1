@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات بدء الحزمة المختارة مع منع تشغيلين متداخلين.
+ */
 package SuiteSupport;
 
 import java.nio.file.*;

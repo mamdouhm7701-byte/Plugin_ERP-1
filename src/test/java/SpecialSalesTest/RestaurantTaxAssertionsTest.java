@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة مبالغ الضريبة والصافي المحفوظة، ضمن المطعم ونقاط البيع.
+ */
 package SpecialSalesTest;
 
 import java.math.BigDecimal;

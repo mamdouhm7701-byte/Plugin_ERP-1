@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات الصلاحيات: منع مستخدم بلا صلاحية من الطاولات؛ حماية رابط المستخدمين دون جلسة.
+ */
 package CoverageTest;
 
 import static TestSupport.BasicDataFixtures.fields;
@@ -15,9 +17,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/**
- * Direct-route and backend authorization use a separately authenticated disposable limited user.
- */
 public final class PermissionsCoverageTest extends BasicDataScenarioTest {
     @Test
     @Story("المستخدم بلا صلاحية لا يصل لرابط الطاولات أو بياناته من الخادم")

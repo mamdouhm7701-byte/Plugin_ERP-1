@@ -1,3 +1,5 @@
+/* شرح الملف: تجميع الحركات الأساسية المستخدمة أثناء التعامل مع الشاشات.
+ */
 package Plugin_ERP.Bots;
 
 import org.openqa.selenium.*;

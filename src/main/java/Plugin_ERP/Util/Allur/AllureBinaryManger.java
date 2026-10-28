@@ -1,3 +1,5 @@
+/* شرح الملف: تشغيل أداة تجهيز تقرير النتائج وفتحه.
+ */
 package Plugin_ERP.Util.Allur;
 
 import Plugin_ERP.Bots.LogUtils;

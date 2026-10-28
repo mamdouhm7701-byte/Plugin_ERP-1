@@ -1,3 +1,4 @@
+# شرح الملف: يربط مساحة حفظ التقارير عند تفعيل مشاركة التقرير.
 param([Parameter(Mandatory=$true)][string]$ClientJson)
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path $PSScriptRoot -Parent

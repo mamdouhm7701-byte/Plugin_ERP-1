@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات تصنيع 3 وحدات وتحويلها ثم بيع 1.25 من مخزن الوجهة: تصنيع 3 وحدات وتحويلها ثم
+ * بيع 1.25 من مخزن الوجهة؛ تصنيع 3 وحدات ثم بيعها بالكامل يستهلك المكونات مرة واحدة.
+ */
 package StoreTest;
 
 import Invoice.SalesWorkflow;
@@ -16,7 +19,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-/** التصنيع ثم فاتورة بيع حقيقية للمنتج نفسه؛ اختيار بيانات مشتركة لا يعني نسخ المنتج. */
 public final class ManufacturingSalesEndToEndTest extends StoreScenarioTest {
     private final List<SalesWorkflow> sales = new ArrayList<>();
     private final List<TransferWorkflow> transfers = new ArrayList<>();

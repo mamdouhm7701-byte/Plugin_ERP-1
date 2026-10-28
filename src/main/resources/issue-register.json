@@ -1,0 +1,57 @@
+[
+  {
+    "id": "REST-ROUNDING-001",
+    "method": "SpecialSalesTest.RestaurantAdditionalTaxBoundaryTest.savedBoundaryAndFractionalTotalsMatchIndependentRecipe",
+    "failureContains": [
+      "المتوقع 57.58، الفعلي 57.59",
+      "المتوقع 115.17، الفعلي 115.18"
+    ],
+    "rule": "احتفظ بدقة الحساب الوسيط، ثم قرّب صافي الفاتورة النهائي فقط إلى رقمين عشريين.",
+    "state": "OPEN",
+    "ticket": "",
+    "fixedIn": "",
+    "verifiedIn": "",
+    "notes": "اختلاف مثبت في المسودة. لا يشمل توقف إضافة الصنف أو أخطاء الاتصال في نفس الكلاس.",
+    "kind": "APPLICATION_DEFECT",
+    "confirmed": true
+  },
+  {
+    "id": "SALES-ROUNDING-001",
+    "method": "Invoice.SalesFinalRoundingTest.savedInvoiceRoundsFinalNetWithoutRoundingEveryInput",
+    "failureContains": [],
+    "rule": "قرّب الإجمالي النهائي فقط مع الحفاظ على دقة السعر والحسابات الوسيطة.",
+    "state": "OPEN",
+    "ticket": "",
+    "fixedIn": "",
+    "verifiedIn": "",
+    "notes": "سجل متابعة فقط؛ لا يربط تلقائيا قبل اعتماد بصمة رسالة الفشل والطريقة.",
+    "kind": "APPLICATION_DEFECT",
+    "confirmed": true
+  },
+  {
+    "id": "REST-RETURN-001",
+    "method": "SpecialSalesTest.RestaurantAdditionalTaxReturnTest.linkedReturnRefundsOriginalAdditionalTaxAndVat",
+    "failureContains": [],
+    "rule": "المرتجع الجزئي يرد إضافية وضريبة الكمية المرتجعة بالقيم الأصلية، بما فيها حد25 للوحدة.",
+    "state": "OPEN",
+    "ticket": "",
+    "fixedIn": "",
+    "verifiedIn": "",
+    "notes": "لا يكفي اسم الطريقة لاعتبار أي فشل فيها نفس العيب.",
+    "kind": "APPLICATION_DEFECT",
+    "confirmed": true
+  },
+  {
+    "id": "REST-RETURN-002",
+    "method": "SpecialSalesTest.RestaurantAdditionalTaxReturnTest.linkedReturnRefundsOriginalAdditionalTaxAndVat",
+    "failureContains": [],
+    "rule": "المرتجع الكلي يرد كامل إضافية وضريبة الفاتورة الأصلية.",
+    "state": "OPEN",
+    "ticket": "",
+    "fixedIn": "",
+    "verifiedIn": "",
+    "notes": "التحقق السابق توقف في مسودة المرتجع قبل الحفظ.",
+    "kind": "APPLICATION_DEFECT",
+    "confirmed": true
+  }
+]

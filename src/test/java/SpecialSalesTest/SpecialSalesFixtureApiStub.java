@@ -1,3 +1,5 @@
+/* شرح الملف: تجربة تجهيز وقراءة البيانات دون الاتصال بالبرنامج الحقيقي، ضمن المطعم ونقاط البيع.
+ */
 package SpecialSalesTest;
 
 import java.lang.reflect.Proxy;
@@ -9,7 +11,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 
-/** In-memory ERP transport used by cleanup regressions. */
 final class SpecialSalesFixtureApiStub {
     final Map<String, Map<String, Object>> records = new LinkedHashMap<>();
     final List<String> deletes = new ArrayList<>();

@@ -1,6 +1,7 @@
+/* شرح الملف: استكمال تنظيف بيانات تجربة سابقة من سجلها المحدد، ضمن تجهيز بيانات التجربة.
+ */
 package TestSupport;
 
-/** Explicit recovery never scans or selects another run's journal. */
 public final class BasicDataFixturesRecovery extends Plugin_ERP.Tests.LoginTest.BaseTest {
     public static void main(String[] args) throws Exception {
         if (args.length != 1 || !args[0].matches("[a-f0-9]{8}-[a-f0-9]{3}"))

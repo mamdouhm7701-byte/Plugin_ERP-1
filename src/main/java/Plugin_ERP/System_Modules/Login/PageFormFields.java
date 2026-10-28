@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لإدخال الاسم والعنوان والهاتف والتاريخ والقيمة والملاحظات. فائدتها استكمال
+ * البيانات العامة المشتركة بين السجلات.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.*;
@@ -5,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Page Form Fields: focused operations used by the original page facade. */
 final class PageFormFields {
     private final Abstract owner;
     private final WebDriver driver;

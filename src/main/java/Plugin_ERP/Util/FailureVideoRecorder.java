@@ -1,3 +1,5 @@
+/* شرح الملف: تسجيل ما حدث في المتصفح والاحتفاظ بالفيديو عند الفشل إذا كان مفعّلًا.
+ */
 package Plugin_ERP.Util;
 
 import Plugin_ERP.Bots.LogUtils;
@@ -13,7 +15,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.events.EventFiringDecorator;
 import org.openqa.selenium.support.events.WebDriverListener;
 
-/** Browser-only, command-sampled recording; all WebDriver access stays on its owning thread. */
 public final class FailureVideoRecorder implements WebDriverListener {
     private static final ThreadLocal<FailureVideoRecorder> CURRENT = new ThreadLocal<>();
     private final WebDriver browser;

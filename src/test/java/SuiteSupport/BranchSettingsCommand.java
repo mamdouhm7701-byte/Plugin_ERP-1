@@ -1,3 +1,5 @@
+/* شرح الملف: تشغيل مراجعة إعدادات الفرع المطلوب.
+ */
 package SuiteSupport;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -8,7 +10,6 @@ import java.nio.file.*;
 import java.time.Duration;
 import java.util.Map;
 
-/** Explicit preparation step; preview is read-only, apply requires its own exact mode argument. */
 public final class BranchSettingsCommand {
     private BranchSettingsCommand() {}
 

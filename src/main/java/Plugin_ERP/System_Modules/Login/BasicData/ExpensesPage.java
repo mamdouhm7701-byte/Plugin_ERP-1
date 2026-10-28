@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة أنواع المصروفات: بنسجل اسم المصروف وحسابه ونحدد إذا كان مشتركا. فائدتها تصنيف
+ * المصروفات قبل استخدامها في الحركات المالية.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;

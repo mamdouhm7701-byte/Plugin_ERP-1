@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة فهم اسم الشهر العربي والإنجليزي عند اختيار تاريخ الفاتورة.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import org.testng.Assert;

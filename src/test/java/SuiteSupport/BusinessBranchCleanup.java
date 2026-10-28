@@ -1,3 +1,5 @@
+/* شرح الملف: حذف فرع التجربة فقط بعد التأكد من انتهاء تنظيف بياناته.
+ */
 package SuiteSupport;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -9,7 +11,6 @@ import java.time.Duration;
 import java.util.*;
 import org.json.*;
 
-/** Deletes only a verified run-owned branch after all its recovery journals are clear. */
 final class BusinessBranchCleanup {
     private BusinessBranchCleanup() {}
 

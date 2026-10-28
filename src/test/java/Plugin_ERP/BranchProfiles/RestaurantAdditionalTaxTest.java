@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة حساب إضافية المطعم والحد الأدنى25 والخصم وضريبة15%.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import Plugin_ERP.BranchProfiles.BranchPolicies.TaxPolicy;

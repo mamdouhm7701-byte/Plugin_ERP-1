@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: يحدد مجموعة تشغيل منفصلة لمراجعة المبيعات. -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <!-- Explicit selected-branch validation. Existing regression and smoke selections stay unchanged. -->
 <suite name="Selected branch owned sales contracts" parallel="none"><test name="Owned sales document save and cleanup"><classes>

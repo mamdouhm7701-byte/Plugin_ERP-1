@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار سلامة تجهيز الخطوات المشتركة للحالات ثم تنظيف بياناتها، ضمن المشتريات.
+ */
 package Purches;
 
 import Plugin_ERP.System_Modules.Login.purches.PurchaseModulePage;
@@ -11,7 +13,6 @@ import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
-/** Each class owns one page fixture scope; each case owns its supplier and items. */
 public abstract class PurchaseScenarioTest extends BaseTest {
     protected abstract PurchaseDocumentKind kind();
 

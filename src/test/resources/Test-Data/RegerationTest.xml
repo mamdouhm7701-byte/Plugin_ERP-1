@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: يوزع مجموعات تجربة المراجعة الشاملة. -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
 <suite name="Plugin_ERP_All_Tests" verbose="1">

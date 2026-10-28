@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات الإضافية تتحسب بعد الخصم: الإضافية تتحسب بعد الخصم؛ الصنف الخاضع للإضافية
+ * يدخل في حساب الضريبة؛ الإضافية تطبق على الصنف الخاضع فقط.
+ */
 package SpecialSalesTest;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -12,7 +15,6 @@ import java.util.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Profile-specific smoke; never enables tax or changes policies on a branch with transactions. */
 public final class RestaurantAdditionalTaxSmokeTest extends SpecialSalesScenario {
     protected SpecialSalesPage createPage() {
         return new RestaurantInvoicePage(driver);

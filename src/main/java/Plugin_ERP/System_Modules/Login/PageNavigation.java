@@ -1,3 +1,5 @@
+/* شرح الملف: مساعدة لفتح أقسام النظام وشاشاته. فائدتها الوصول إلى العمل المطلوب من القوائم.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.*;
@@ -6,7 +8,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Page Navigation: focused operations used by the original page facade. */
 final class PageNavigation {
     private final Abstract owner;
     private final WebDriver driver;

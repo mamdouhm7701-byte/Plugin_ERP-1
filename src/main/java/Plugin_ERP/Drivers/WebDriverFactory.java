@@ -1,3 +1,5 @@
+/* شرح الملف: فتح المتصفح المختار وحماية كل تجربة من التداخل مع متصفح آخر.
+ */
 package Plugin_ERP.Drivers;
 
 import Plugin_ERP.Bots.LogUtils;

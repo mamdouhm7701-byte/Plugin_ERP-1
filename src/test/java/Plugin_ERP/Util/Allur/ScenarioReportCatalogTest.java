@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات ترتيب الحالات في التقرير حسب القسم والشاشة.
+ */
 package Plugin_ERP.Util.Allur;
 
 import io.qameta.allure.Description;

@@ -1,3 +1,4 @@
+# شرح الملف: يجهز شكل تقرير Word السابق ومراجعات صفحاته.
 from docx import Document
 from docx.shared import Inches,Pt,RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH

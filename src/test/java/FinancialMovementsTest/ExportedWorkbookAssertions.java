@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة الصفوف والقيم داخل ملف إكسل الناتج، ضمن الحركات المالية.
+ */
 package FinancialMovementsTest;
 
 import java.io.*;
@@ -5,7 +7,6 @@ import java.math.BigDecimal;
 import java.util.*;
 import org.apache.poi.ss.usermodel.*;
 
-/** Reads actual XLS/XLSX cells, keeping code, party and amount on the same exported row. */
 final class ExportedWorkbookAssertions {
     static void assertOwnedRow(byte[] contents, String code, String party, BigDecimal amount) {
         try (Workbook book = WorkbookFactory.create(new ByteArrayInputStream(contents))) {

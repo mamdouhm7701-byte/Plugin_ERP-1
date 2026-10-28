@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار محضر الجرد والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package StoreTest;
 
 public final class StocktakingCoverageTest extends InventoryCoverageScenario {

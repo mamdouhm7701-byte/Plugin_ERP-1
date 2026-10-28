@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة محتوى الملف الذي تم تنزيله، ضمن المبيعات.
+ */
 package Invoice;
 
 import java.nio.charset.StandardCharsets;

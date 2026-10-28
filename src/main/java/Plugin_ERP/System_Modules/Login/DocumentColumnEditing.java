@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لتعديل قيم محددة داخل بنود المستند. فائدتها ضبط بيانات كل صنف دون تغيير بقية
+ * البنود.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.LogUtils;
@@ -6,7 +9,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Document Column Editing: focused operations used by the original page facade. */
 final class DocumentColumnEditing {
     private final DocumentPage owner;
     private final WebDriver driver;

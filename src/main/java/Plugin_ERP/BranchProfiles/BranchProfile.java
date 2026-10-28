@@ -1,9 +1,10 @@
+/* شرح الملف: وصف إعدادات فرع محدد لمقارنتها بالفرع المستخدم أثناء التشغيل.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-/** An immutable expected profile. Verification must never rewrite it to match the application. */
 public record BranchProfile(String name, BranchSnapshot expected) {
     public BranchProfile {
         Objects.requireNonNull(name);

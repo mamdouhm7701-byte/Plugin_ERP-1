@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة جاهزية إنشاء فرع التجربة.
+ */
 package SuiteSupport;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -10,7 +12,6 @@ import java.util.Map;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Read-only preparation evidence. A mounted create form never proves a branch can be saved. */
 public final class BranchProvisioningReadinessCommand {
     private BranchProvisioningReadinessCommand() {}
 

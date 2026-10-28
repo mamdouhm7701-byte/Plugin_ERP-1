@@ -1,3 +1,4 @@
+# شرح الملف: يشغّل فحوص المشروع على GitHub عند رفع التعديلات ومراجعتها.
 name: Local checks
 
 on:
@@ -38,6 +39,9 @@ jobs:
           python scripts/test_check_secrets.py
           python scripts/check_secrets.py
           python scripts/check_maintainability.py
+          python scripts/test_analyze_stability.py
+          python scripts/test_run_evidence.py
+          python scripts/test_cleanup_layout.py
       - name: Build and run local contracts
         env:
           REPORT_MAIL_ENABLED: ${{ secrets.REPORT_MAIL_ENABLED }}

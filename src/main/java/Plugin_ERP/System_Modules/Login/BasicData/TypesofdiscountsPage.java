@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة أنواع الخصومات: بنسجل نسبة الخصم والرمز السري والمستخدمين المسموح لهم. فائدتها
+ * تنظيم الخصومات وصلاحية استخدامها.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;

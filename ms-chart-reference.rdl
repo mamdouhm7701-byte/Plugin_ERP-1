@@ -1,4 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- شرح الملف: مرجع لشكل تقرير المبيعات ورسومه. فائدته: يوضح الاختيارات أو التصميم المطلوب دون تغيير محتوى التشغيل. -->
 <Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:cl="http://schemas.microsoft.com/sqlserver/reporting/2010/01/componentdefinition" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/reportdefinition">
   <Description>This report shows resource usage of R Services.</Description>
   <Author>Umachandar Jayachandran</Author>

@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة لاختيار السداد من الخزينة أو بوسيلة أخرى وإدخال الخصم. فائدتها تسجيل طريقة
+ * الدفع وقيمة الخصم في المستند.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Document Payment Controls: focused operations used by the original page facade. */
 final class DocumentPaymentControls {
     private final DocumentPage owner;
     private final WebDriver driver;

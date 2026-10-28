@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة لتعديل أصناف مستند البيع وكمياتها وقيمها وحذف البنود ومراجعة الإجماليات.
+ * فائدتها ضبط تفاصيل البيع وصافي المستند.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Line editing and displayed totals for this document form; the page retains its public API. */
 final class SalesDocumentLines {
     private final SalesModulePage page;
     private final WebDriver driver;

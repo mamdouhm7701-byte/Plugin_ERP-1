@@ -1,3 +1,5 @@
+/* شرح الملف: تجربة تجهيز وقراءة البيانات دون الاتصال بالبرنامج الحقيقي، ضمن المشتريات.
+ */
 package Purches;
 
 import java.lang.reflect.Proxy;
@@ -9,7 +11,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 
-/** In-memory fixture API with explicit fault injection; never connects to ERP. */
 final class PurchaseFixtureApiStub {
     String origin = "offline", activeBranch = "branch-test";
     int branchUnavailableReads;

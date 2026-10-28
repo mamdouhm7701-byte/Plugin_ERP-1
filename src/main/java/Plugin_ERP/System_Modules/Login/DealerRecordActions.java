@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لفتح سجلات المتعاملين وتعديلها وطلب حذفها أو إلغائه. فائدتها إدارة ملفات
+ * المتعاملين ومراجعة نتيجة الحفظ.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import java.time.Duration;
@@ -7,7 +10,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Dealer edit and delete actions, including their confirmation dialogs. */
 final class DealerRecordActions {
     private final AbstractForDealer owner;
     private final WebDriver driver;

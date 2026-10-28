@@ -1,3 +1,5 @@
+/* شرح الملف: كتابة سجل لما حدث أثناء التشغيل لتسهيل معرفة سبب التوقف.
+ */
 package Plugin_ERP.Bots;
 
 import java.util.logging.Logger;

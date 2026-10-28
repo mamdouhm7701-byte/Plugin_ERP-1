@@ -1,10 +1,9 @@
+/* شرح الملف: ترتيب تنظيف مستندات المطعم ونقاط البيع.
+ */
 package SpecialSalesTest;
 
 import java.util.*;
 
-/**
- * A linked owned return is removed before its source even when source capture is refreshed later.
- */
 final class SpecialSalesCleanupOrder {
     private SpecialSalesCleanupOrder() {}
 

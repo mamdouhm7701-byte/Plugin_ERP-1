@@ -1,3 +1,6 @@
+/* شرح الملف: اختبار سلامة Export selection must never click a hidden control or accept an
+ * unsupported format.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import java.lang.reflect.Proxy;
@@ -9,7 +12,6 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-/** Export selection must never click a hidden control or accept an unsupported format. */
 public final class InvoiceListExportTest {
     @DataProvider
     public Object[][] formats() {

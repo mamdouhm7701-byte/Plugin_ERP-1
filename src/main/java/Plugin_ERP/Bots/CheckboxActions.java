@@ -1,3 +1,5 @@
+/* شرح الملف: اختيار العلامات وإلغاؤها والتأكد من حالتها.
+ */
 package Plugin_ERP.Bots;
 
 import java.time.Duration;

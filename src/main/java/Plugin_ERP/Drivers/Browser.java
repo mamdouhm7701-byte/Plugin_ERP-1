@@ -1,3 +1,5 @@
+/* شرح الملف: تحديد أنواع المتصفحات المتاحة.
+ */
 package Plugin_ERP.Drivers;
 
 public enum Browser {

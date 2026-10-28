@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات انتظار وصول رصيد المخزون إلى الكمية المتوقعة.
+ */
 package SpecialSalesTest;
 
 import java.time.Duration;

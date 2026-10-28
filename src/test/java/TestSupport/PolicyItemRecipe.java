@@ -1,9 +1,10 @@
+/* شرح الملف: تجهيز صنف بسعر وإعفاء محددين لاختبار سياسة الضريبة.
+ */
 package TestSupport;
 
 import java.math.BigDecimal;
 import java.util.*;
 
-/** Explicit tax and opening-stock recipe for owned policy validation items. */
 public final class PolicyItemRecipe {
     private PolicyItemRecipe() {}
 

@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة رسائل الأخطاء والبيانات المطلوبة وتأكيد الرسائل أو إلغائها. فائدتها
+ * معرفة سبب تعذر الحفظ وتصحيح المدخلات.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.*;
@@ -6,7 +9,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Page Feedback: focused operations used by the original page facade. */
 final class PageFeedback {
     private final Abstract owner;
     private final WebDriver driver;

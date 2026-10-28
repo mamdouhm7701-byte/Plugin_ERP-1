@@ -2,6 +2,15 @@
 
 إطار اختبارات Java وSelenium وTestNG لشاشات ERP، مع تقارير Allure واختبارات محلية للحسابات وملكية بيانات الاختبار وتنظيفها.
 
+## شرح بسيط للمشروع والتستات
+
+- [دليل الحالات القابل للبحث:918 حالة](docs/testing/TEST_CASES_SIMPLE_AR.html).
+- [إزاي تقرأ الحالة وخطواتها](docs/testing/TEST_CASES_SIMPLE_AR.md).
+- [أنواع المشاكل ومعنى كل تصنيف](docs/testing/BUG_TYPES_SIMPLE_AR.md).
+- [فرز الملفات: إيه المطلوب وإيه المؤقت](docs/testing/FILE_PURPOSE_AND_CLEANUP_AR.md).
+
+شرح مبسط في أول كل ملف من553 ملف Java، يشمل كود التشغيل والاختبارات والمساعدات. يوجد شرح أيضًا في127 ملف تشغيل وإعدادات وأدوات. ملفات البيانات والصور لها تعريف بجانبها في `شرح_الملفات.md` لأن صيغتها لا تقبل تعليقات عادية.
+
 ## الحالة الحالية — 24 أكتوبر2026
 
 آخر فحص محلي بعد إصلاح انتقال البيع إلى المرتجع المرتبط: **459 ناجحة، دون فشل أو تخطي**. ملفات التشغيل الحالية تختار13 حالة Smoke و57 Sanity و41 رحلة E2E و1124 حالة في Regression؛ الأعداد تعبر عن اختيارات الدوال، وقد يزيد عدد الاستدعاءات بسبب DataProvider.
@@ -84,3 +93,17 @@ mvn '-DExecutionType=LocalHeadless' '-Dsurefire.suiteXmlFiles=src/test/resources
 اختيار إعداد فرع متوقع اختياري عبر `-Dbranch.profile=public-reference` بعد تجهيز ملفه تحت `config/branch-profiles`. بدون الخاصية يبقى المسار الحالي كما هو. [التجهيز وحدود التحقق](docs/testing/BRANCH_PROFILE_SETUP_AR.md). [عقد الحساب وحالة ربط الموديولات](docs/testing/BRANCH_FINANCE_CONTRACT_AR.md). [الشاشات حسب النشاط](docs/testing/ACTIVITY_COVERAGE_AR.md). [تجهيز فروع الاختبار](docs/testing/BRANCH_PROVISIONING_AR.md). [Smoke الإضافية للمطاعم](docs/testing/RESTAURANT_ADDITIONAL_TAX_AR.md).
 
 تشغيل النشاط والسياسات من IntelliJ: [دليل ERP - Business run](docs/testing/BUSINESS_RUNNER_AR.md).
+
+بعد التشغيل، ملخص أسباب الفشل والأدلة والتكرار وإعادة الاختبار في `target/failure-review/summary.html`.
+للـCI يكون بجانب نتائج تشغيله المنفصلة. [طريقة قراءة الملخص ومتابعة الإصلاح](docs/testing/FAILURE_REVIEW_AR.md).
+
+لقياس قابلية تكرار نفس المجموعة ثلاث مرات: `./scripts/Test-Stability.ps1 -Mode Local -Repeats 3`.
+استخدم `-Mode Business` لاختيار إعدادات البيزنس مرة واحدة وتشغيل الجولات بفروع جديدة.
+[معنى نتائج الثبات وحدودها](docs/testing/REPEATABILITY_AR.md).
+
+تشغيل البيزنس يراجع سعة الاشتراك قبل التجهيز، ويمنع تكرار إنشاء البيانات بعد رفض حد الترخيص
+مع استمرار التنظيف. [فحص السعة وحدود الحماية](docs/testing/CAPACITY_READINESS_AR.md).
+
+لربط نتائج محفوظة بالشاشات ومعرفة أبطأ المجموعات وأوقات تجهيزها وتنظيفها:
+`python -X utf8 scripts/build_run_evidence.py allure-results target/run-evidence`.
+[قراءة أدلة التغطية والوقت وحدودها](docs/testing/RUN_EVIDENCE_AR.md).

@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات الخصم يقلل المبلغ الذي نحسب عليه الضريبة: الخصم يقلل المبلغ الذي نحسب عليه
+ * الضريبة؛ حساب الضريبة حسب إعداد الفرع.
+ */
 package Invoice;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -9,9 +12,6 @@ import java.util.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/**
- * Exact owned recipes, evaluated from the selected persisted policy instead of legacy tax defaults.
- */
 public final class SelectedBranchSalesPolicyTest extends SalesScenarioTest {
     @Test
     public void taxableItemsAndSupportedExemptionsSaveUsingSelectedTaxPolicy() {

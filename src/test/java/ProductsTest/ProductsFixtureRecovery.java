@@ -1,3 +1,5 @@
+/* شرح الملف: استكمال تنظيف بيانات تجربة سابقة من سجلها المحدد، ضمن الأصناف.
+ */
 package ProductsTest;
 
 public final class ProductsFixtureRecovery extends Plugin_ERP.Tests.LoginTest.BaseTest {

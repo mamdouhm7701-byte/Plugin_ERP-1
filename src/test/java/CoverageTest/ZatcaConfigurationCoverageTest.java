@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات إعدادات الربط مع الهيئة: عرض حالة الربط دون تسجيل خارجي.
+ */
 package CoverageTest;
 
 import Plugin_ERP.System_Modules.Login.Coverage.ScreenPage;
@@ -7,7 +9,6 @@ import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** Configuration presentation only: never registers a device or sends invoices to the authority. */
 public final class ZatcaConfigurationCoverageTest extends BaseTest {
     @Test
     @Story("عرض حالة الربط مع الهيئة دون التسجيل أو إرسال فواتير")

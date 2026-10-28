@@ -1,12 +1,11 @@
+/* شرح الملف: وصف سعر وكمية وخصم وإعفاء بند واحد للحساب.
+ */
 package Plugin_ERP.Business.Calculator;
 
 import Plugin_ERP.Models.DiscountType;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-/**
- * Recipe inputs, never a line net or tax copied from the application. Fixed discount is per line.
- */
 public record PolicyInvoiceLine(
         String name,
         BigDecimal quantity,

@@ -1,3 +1,7 @@
+/* شرح الملف: اختبارات تعديل سند القبض وحذفه يعيدان حساب مديونية العميل: تعديل سند القبض وحذفه
+ * يعيدان حساب مديونية العميل؛ بيع آجل ثم تحصيل كامل ثم حذف التحصيل يعيد المديونية؛ تحصيل جزئي ثم
+ * كامل لفاتورة بيع آجلة.
+ */
 package Invoice;
 
 import FinancialMovementsTest.FinancialWorkflow;
@@ -11,7 +15,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-/** فاتورة بيع وسندات قبض فعلية بنفس العميل والفاتورة؛ التنظيف المالي يسبق مصدر البيع. */
 public final class SalesSettlementEndToEndTest extends SalesScenarioTest {
     private final List<FinancialWorkflow> settlements = new ArrayList<>();
 

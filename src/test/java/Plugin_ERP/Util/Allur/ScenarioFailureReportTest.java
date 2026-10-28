@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات إظهار شرح مبسط لمكان الفشل والقيمة المتوقعة والفعلية.
+ */
 package Plugin_ERP.Util.Allur;
 
 import io.qameta.allure.Allure;
@@ -22,7 +24,6 @@ import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.Test;
 
-/** Local Allure model tests: no ERP, browser, credentials or network. */
 public final class ScenarioFailureReportTest {
     @Test
     public void customerDebtFailureShowsExpectedAndPersistedBalance() {

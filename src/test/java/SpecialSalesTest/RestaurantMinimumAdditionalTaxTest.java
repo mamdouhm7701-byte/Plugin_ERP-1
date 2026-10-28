@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات الحد الأدنى للإضافية25 لكل وحدة: الحد الأدنى للإضافية25 لكل وحدة.
+ */
 package SpecialSalesTest;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -12,7 +14,6 @@ import java.util.*;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-/** The confirmed additional-tax floor is per unit, including VAT-inclusive unit prices. */
 public final class RestaurantMinimumAdditionalTaxTest extends SpecialSalesScenario {
     protected SpecialSalesPage createPage() {
         return new RestaurantInvoicePage(driver);

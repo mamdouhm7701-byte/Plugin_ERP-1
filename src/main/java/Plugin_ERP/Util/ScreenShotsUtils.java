@@ -1,3 +1,5 @@
+/* شرح الملف: حفظ صورة للشاشة لتوضيح ما حدث أثناء الاختبار.
+ */
 package Plugin_ERP.Util;
 
 import Plugin_ERP.Bots.LogUtils;

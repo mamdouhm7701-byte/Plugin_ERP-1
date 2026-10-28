@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة وجود الحالات الجديدة في حزم التشغيل.
+ */
 package SuiteSupport;
 
 import java.util.*;
@@ -5,7 +7,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.xml.internal.Parser;
 
-/** Keeps the requested screen expansion explicit and prevents scope drift. */
 public final class CoverageExpansionContractTest {
     @Test
     public void expansionSelectsEveryRequestedScreenAndOnlyThoseScreens() throws Exception {

@@ -1,9 +1,10 @@
+/* شرح الملف: قراءة بيانات الشاشة التي يحتاجها الاختبار من مكان موحد.
+ */
 package Plugin_ERP.Util;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
-/** Single compatibility boundary for the ERP Vue component root and child traversal. */
 public final class VueComponentAccess {
     private VueComponentAccess() {}
 

@@ -1,10 +1,11 @@
+/* شرح الملف: متابعة المستند الذي حفظته التجربة حتى يمكن مراجعته وتنظيفه.
+ */
 package Invoice;
 
 import Plugin_ERP.System_Modules.Login.Invoice.SalesModulePage;
 import java.util.*;
 import org.testng.Assert;
 
-/** Tracks exact activity endpoints without relabeling their documents as ordinary sales. */
 final class ActivityDocumentCapture {
     private ActivityDocumentCapture() {}
 

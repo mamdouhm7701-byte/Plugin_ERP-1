@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة مشتركة لحركات المخزون، تشمل التاريخ والمخزن والأصناف والكميات والحفظ والقائمة.
+ * فائدتها تنظيم تسجيل الإضافة والصرف والتحويل والتصنيع والتالف.
+ */
 package Plugin_ERP.System_Modules.Login.StoreModel;
 
 import Plugin_ERP.System_Modules.Login.AbstractForStore;
@@ -9,7 +12,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Warehouse UI interactions; scenarios and persisted inventory assertions live in tests. */
 public class StoreModulePage extends AbstractForStore {
     private final StoreRecordList records;
     private final StoreSaveCapture saveCapture;

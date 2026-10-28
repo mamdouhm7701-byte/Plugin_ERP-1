@@ -1,3 +1,5 @@
+/* شرح الملف: إنشاء فرع جديد للتجربة ومراجعة إعداداته.
+ */
 package SuiteSupport;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -11,7 +13,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Creates one API branch per business run, using live new-form defaults and verified policies. */
 public final class BusinessBranchPreparation {
     private BusinessBranchPreparation() {}
 
@@ -58,6 +59,10 @@ public final class BusinessBranchPreparation {
             login.AssertLoginPageTitle();
             var original = BranchProfileReader.capture(driver, Duration.ofSeconds(30));
             verifyCreationOrigin(original.origin(), PropertyReader.getApplicationUrl());
+            CapacityPreflight.verify(driver, output);
+            Files.copy(
+                    output.resolve("capacity-preflight.json"),
+                    output.resolve("capacity-before-branch.json"));
             Path profiles = project.resolve("config/branch-profiles");
             Files.createDirectories(profiles);
             BranchProfile selected =
@@ -76,6 +81,7 @@ public final class BusinessBranchPreparation {
             BranchSessionSelector.select(driver, selected);
             request.verify(read(driver, selected.expected().branchId()), original.origin());
             selected.verify(BranchProfileReader.capture(driver, Duration.ofSeconds(30)));
+            CapacityPreflight.verify(driver, output, false);
             Files.writeString(
                     output.resolve("verified.json"),
                     new org.json.JSONObject(
@@ -227,6 +233,7 @@ public final class BusinessBranchPreparation {
                 new org.json.JSONObject(payload).toString(2),
                 StandardOpenOption.CREATE_NEW);
         driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(60));
+        RunEnvironmentGate.beforeCreate("create");
         @SuppressWarnings("unchecked")
         var response =
                 (Map<String, Object>)
@@ -244,6 +251,13 @@ public final class BusinessBranchPreparation {
                 output.resolve("create-response.json"),
                 new org.json.JSONObject(response).toString(2),
                 StandardOpenOption.CREATE_NEW);
+        RunEnvironmentGate.observe("create", "Branches", response.get("error"));
+        if (CapacityFailure.matches(Objects.toString(response.get("error"), "")))
+            throw new IllegalStateException(
+                    "ENVIRONMENT_BLOCKED: LICENSE_CAPACITY; "
+                            + CapacityFailure.explanation()
+                            + "; preserve registry "
+                            + registry);
         if (response.get("id") == null || response.get("error") != null)
             throw new IllegalStateException(
                     "Branch creation was not confirmed; preserve pending registry " + registry);

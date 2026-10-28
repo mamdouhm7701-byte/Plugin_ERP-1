@@ -1,8 +1,9 @@
+/* شرح الملف: إبقاء كل تشغيل مرتبطًا بفرعه الصحيح.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import java.util.Optional;
 
-/** Pins one immutable expectation to the owning test thread, including its fixture cleanup. */
 public final class BranchProfileScope implements AutoCloseable {
     private static final ThreadLocal<BranchProfileScope> ACTIVE = new ThreadLocal<>();
     private final BranchProfileScope previous;

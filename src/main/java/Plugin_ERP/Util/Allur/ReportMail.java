@@ -1,3 +1,5 @@
+/* شرح الملف: إرسال تقرير التشغيل بالبريد عند تفعيله.
+ */
 package Plugin_ERP.Util.Allur;
 
 import jakarta.mail.Message;
@@ -13,7 +15,6 @@ import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-/** Opt-in Gmail delivery; never logs authentication values. */
 public final class ReportMail {
     private ReportMail() {}
 

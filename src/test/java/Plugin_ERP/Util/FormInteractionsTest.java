@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات تنفيذ الضغط والكتابة والاختيار مع مراجعة نجاح الخطوة.
+ */
 package Plugin_ERP.Util;
 
 import java.lang.reflect.Proxy;

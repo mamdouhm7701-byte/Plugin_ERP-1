@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار تسوية العجز والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package StoreTest;
 
 public final class ShortageAdjustmentCoverageTest extends AdjustmentCoverageScenario {

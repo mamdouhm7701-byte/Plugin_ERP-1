@@ -1,3 +1,5 @@
+/* شرح الملف: بيانات العملاء والموردين والمندوبين؛ لاستكمال الاسم والعنوان والضريبة ومراجعتها.
+ */
 package Plugin_ERP.System_Modules.Login;
 
 import Plugin_ERP.Bots.LogUtils;

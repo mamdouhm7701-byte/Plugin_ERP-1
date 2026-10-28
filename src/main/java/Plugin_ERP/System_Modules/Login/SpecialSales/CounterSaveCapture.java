@@ -1,9 +1,11 @@
+/* شرح الملف: مساعدة لمتابعة محاولات حفظ فواتير نقطة البيع والمطعم ونتائجها. فائدتها معرفة الفواتير
+ * التي سجلت فعلا واكتشاف تكرار الحفظ.
+ */
 package Plugin_ERP.System_Modules.Login.SpecialSales;
 
 import java.util.List;
 import java.util.Map;
 
-/** Observe requests and outcomes for owned counter invoices. */
 final class CounterSaveCapture {
     private final SpecialSalesPage owner;
 

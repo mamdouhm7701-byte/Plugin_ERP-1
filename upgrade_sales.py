@@ -1,3 +1,5 @@
+# شرح الملف: يجهز أشكالًا مختلفة لتقرير المبيعات.
+# أداة اختيارية لإنتاج أشكال مختلفة من تقرير المبيعات. تستخدم عند تعديل شكل التقرير فقط.
 from pathlib import Path
 from copy import deepcopy
 from collections import Counter

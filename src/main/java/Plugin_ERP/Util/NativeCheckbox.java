@@ -1,3 +1,5 @@
+/* شرح الملف: تغيير علامة الاختيار ومراجعة أنها وصلت للحالة المطلوبة.
+ */
 package Plugin_ERP.Util;
 
 import java.time.Duration;
@@ -6,7 +8,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Clicks Bootstrap's rendered checkbox square with native pointer input. */
 public final class NativeCheckbox {
     private NativeCheckbox() {}
 

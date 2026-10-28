@@ -1,3 +1,5 @@
+/* شرح الملف: استكمال تنظيف بيانات تجربة سابقة من سجلها المحدد، ضمن الحركات المالية.
+ */
 package FinancialMovementsTest;
 
 public final class FinancialFixtureRecovery extends Plugin_ERP.Tests.LoginTest.BaseTest {

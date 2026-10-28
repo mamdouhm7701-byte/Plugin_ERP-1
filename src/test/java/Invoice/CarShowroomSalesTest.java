@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات مرتجع السيارة يعيد نفس الشاسيه واللون والمخزون: مرتجع السيارة يعيد نفس
+ * الشاسيه واللون والمخزون؛ بيع السيارة يحافظ على رقم الشاسيه واللون.
+ */
 package Invoice;
 
 import Plugin_ERP.BranchProfiles.BranchPolicies.ActivityType;
@@ -18,7 +21,6 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-/** A showroom sale consumes one exact chassis received through an owned purchase. */
 public final class CarShowroomSalesTest extends SalesScenarioTest {
     private SalesTestData.Record ownedPurchase;
     private String activeEndpoint = "ItemTransactions-Sales";

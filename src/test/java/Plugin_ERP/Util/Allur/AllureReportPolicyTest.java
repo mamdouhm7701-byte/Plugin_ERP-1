@@ -1,3 +1,5 @@
+/* شرح الملف: اختبارات تحديد متى نجهز التقرير ومتى نفتحه.
+ */
 package Plugin_ERP.Util.Allur;
 
 import java.nio.file.Path;

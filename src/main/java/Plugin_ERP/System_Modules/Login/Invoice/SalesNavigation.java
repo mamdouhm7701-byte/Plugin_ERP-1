@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لفتح شاشات البيع والانتقال بينها وإغلاق الرسائل العارضة. فائدتها الوصول إلى
+ * مستند البيع المطلوب.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import Plugin_ERP.Util.PropertyReader;
@@ -6,7 +9,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Focused SalesNavigation operations extracted from SalesModulePage. */
 final class SalesNavigation {
     private final SalesModulePage owner;
     private final WebDriver driver;

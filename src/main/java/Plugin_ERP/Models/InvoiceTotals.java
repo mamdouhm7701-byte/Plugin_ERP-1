@@ -1,3 +1,5 @@
+/* شرح الملف: تجميع إجمالي الفاتورة والخصم والضريبة والصافي.
+ */
 package Plugin_ERP.Models;
 
 import java.math.BigDecimal;

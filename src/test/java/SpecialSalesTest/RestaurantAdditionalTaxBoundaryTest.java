@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات الإضافية تطبق حد25 على الوحدة قبل ضرب الكمية: الإضافية تطبق حد25 على الوحدة
+ * قبل ضرب الكمية.
+ */
 package SpecialSalesTest;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -10,7 +13,6 @@ import java.util.*;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-/** Per-unit floor boundaries and final-only rounding, saved and independently reread. */
 public final class RestaurantAdditionalTaxBoundaryTest extends SpecialSalesScenario {
     @Override
     protected SpecialSalesPage createPage() {

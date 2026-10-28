@@ -1,3 +1,4 @@
+# شرح الملف: يراجع أن دليل التغطية لا يعلن نجاحًا دون دليل.
 import unittest
 from build_activity_coverage import build, ACTIVITIES
 

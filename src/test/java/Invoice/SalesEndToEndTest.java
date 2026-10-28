@@ -1,3 +1,8 @@
+/* شرح الملف: اختبارات رحلة مبيعات بين شاشات متعددة: إنشاء فاتورة بيع ثم مرتجع كامل مرتبط يعيد
+ * المخزون ورصيد العميل؛ بيع ثم مرتجع جزئي ثم رفض تجاوز المتبقي مع ثبات الأرصدة؛ بيع ثم إلغاء مسودة
+ * المرتجع يبقي أثر البيع ثم يحفظ المرتجع الصحيح؛ بيع بكمية كسرية ثم مرتجع كامل يحافظ على الكسور
+ * والأرصدة؛ بيع ثم مرتجع جزئي ثم باقي الكمية يعيدان الرصيد بالكامل.
+ */
 package Invoice;
 
 import Plugin_ERP.System_Modules.Login.Invoice.SalesReturnPage;
@@ -7,11 +12,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-/**
- * E2E: فاتورة من الواجهة ثم مرتجع مرتبط بنفس الفاتورة والعميل والصنف. فائدته كشف أخطاء الربط
- * والأرصدة بين الشاشات التي لا يكشفها اختبار كل شاشة منفردة. API يجهز المراجع ويقرأ النتيجة
- * وينظفها؛ إنشاء مستندي العمل وحفظهما يتم من الواجهة.
- */
 public final class SalesEndToEndTest extends SalesScenarioTest {
     private SalesDocumentKind currentKind = SalesDocumentKind.INVOICE;
 

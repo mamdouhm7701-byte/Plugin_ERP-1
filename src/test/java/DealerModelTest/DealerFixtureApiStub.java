@@ -1,3 +1,6 @@
+/* شرح الملف: تجربة تجهيز وقراءة البيانات دون الاتصال بالبرنامج الحقيقي، ضمن العملاء والموردين
+ * والمناديب.
+ */
 package DealerModelTest;
 
 import java.lang.reflect.Proxy;
@@ -9,7 +12,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 
-/** In-memory ERP transport used by local cleanup regressions. */
 final class DealerFixtureApiStub {
     final Map<String, Map<String, Object>> records = new LinkedHashMap<>();
     final List<String> deletes = new ArrayList<>();

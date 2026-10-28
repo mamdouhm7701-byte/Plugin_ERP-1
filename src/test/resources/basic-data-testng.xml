@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: يحدد الحالات المختارة لتشغيل البيانات الأساسية. -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Basic data - owned fixtures" parallel="none" configfailurepolicy="continue">
     <test name="Independent basic data screens" preserve-order="true">

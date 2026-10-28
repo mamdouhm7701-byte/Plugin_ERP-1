@@ -1,10 +1,11 @@
+/* شرح الملف: حساب إضافية المطعم وحدها الأدنى وضريبة القيمة المضافة بعد الخصم.
+ */
 package Plugin_ERP.Business.Calculator;
 
 import Plugin_ERP.BranchProfiles.BranchPolicies.TaxPolicy;
 import java.math.*;
 import java.util.*;
 
-/** Restaurant recipe inputs: discount precedes additional tax, which enters the 15% VAT base. */
 public final class RestaurantAdditionalTaxCalculator {
     public record Line(
             BigDecimal quantity,

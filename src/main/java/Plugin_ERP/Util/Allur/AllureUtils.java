@@ -1,3 +1,5 @@
+/* شرح الملف: تجهيز ملفات التقرير وأعماله المساعدة.
+ */
 package Plugin_ERP.Util.Allur;
 
 import Plugin_ERP.Bots.LogUtils;

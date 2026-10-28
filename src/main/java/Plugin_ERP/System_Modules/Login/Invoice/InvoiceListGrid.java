@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لقراءة فواتير البيع المعروضة وترتيب أعمدتها ومراجعة النتائج. فائدتها مقارنة
+ * بيانات الفواتير وتحديد الفواتير المطابقة للبحث.
+ */
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import java.time.Duration;
@@ -9,7 +12,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Visible invoice rows, columns, sorting and grid refresh synchronization. */
 final class InvoiceListGrid {
     private final InvoicListPage owner;
     private final WebDriver driver;

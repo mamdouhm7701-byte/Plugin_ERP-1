@@ -1,3 +1,6 @@
+/* شرح الملف: مساعدة لتصفح قوائم مستندات الشراء وتطبيق شروط البحث والترتيب والتصدير. فائدتها الوصول
+ * إلى المشتريات المطلوب مراجعتها.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import Plugin_ERP.System_Modules.Login.AbstractForPurchases;
@@ -7,7 +10,6 @@ import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Purchase list API and readiness; document forms remain in PurchaseModulePage. */
 public abstract class PurchaseListPage extends AbstractForPurchases {
     protected final WebDriverWait ready;
     private final PurchaseDocumentList documentList;

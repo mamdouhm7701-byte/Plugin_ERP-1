@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار طاولات المطعم والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package CoverageTest;
 
 public final class TablesCoverageTest extends MasterCoverageScenario {

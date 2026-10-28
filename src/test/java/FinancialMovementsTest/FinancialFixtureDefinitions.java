@@ -1,3 +1,5 @@
+/* شرح الملف: تحديد البيانات المطلوبة لإنشاء سجلات التجربة، ضمن الحركات المالية.
+ */
 package FinancialMovementsTest;
 
 import static FinancialMovementsTest.FinancialTestData.fields;
@@ -6,7 +8,6 @@ import FinancialMovementsTest.FinancialTestData.Record;
 import java.util.List;
 import java.util.Map;
 
-/** Payload recipes; the owner retains registration, recovery and cleanup ordering. */
 final class FinancialFixtureDefinitions {
     private final FinancialTestData data;
 

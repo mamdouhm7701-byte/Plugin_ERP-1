@@ -1,3 +1,5 @@
+/* شرح الملف: حصر الشاشات المتاحة لكل نشاط.
+ */
 package Plugin_ERP.BranchProfiles;
 
 import Plugin_ERP.Util.VueComponentAccess;
@@ -6,7 +8,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import org.openqa.selenium.WebDriver;
 
-/** Read-only evidence for one activity and user; registered routes do not prove authorization. */
 public final class ActivityScreenInventory {
     private ActivityScreenInventory() {}
 

@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة طرق الدفع: بنسجل وسيلة السداد ونربطها بالبنك ونحدد خياراتها. فائدتها تجهيز وسائل
+ * الدفع المستخدمة في المستندات والحركات المالية.
+ */
 package Plugin_ERP.System_Modules.Login.BasicData;
 
 import Plugin_ERP.System_Modules.Login.AbstractForDealer;

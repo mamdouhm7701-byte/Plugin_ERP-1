@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: يوزع مجموعات تجربة المشتريات. -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
 <suite name="Plugin_ERP_Suite" verbose="1" configfailurepolicy="continue" parallel="none">
@@ -14,6 +15,13 @@
             <class name="Purches.PurchaseListCoverageTest"/>
             <class name="Purches.PurchaseCalculationTest"/>
             <class name="Purches.PurchaseCleanupTest"/>
+<class name="Purches.PurchaseCore2CleanupTest"/>
+<class name="Purches.PurchaseOwnershipCleanupTest"/>
+<class name="Purches.PurchaseRecoveryCleanupTest"/>
+<class name="Purches.PurchaseRecovery2CleanupTest"/>
+<class name="Purches.PurchaseRecovery3CleanupTest"/>
+<class name="Purches.PurchaseDependenciesCleanupTest"/>
+<class name="Purches.PurchaseLifecycleCleanupTest"/>
 
         </classes>
 

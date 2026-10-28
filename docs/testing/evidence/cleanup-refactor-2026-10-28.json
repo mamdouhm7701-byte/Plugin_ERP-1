@@ -1,0 +1,45 @@
+{
+  "testBodiesPreserved": true,
+  "selectionCheckedInEveryOriginalSuite": true,
+  "groups": [
+    {
+      "original": "Invoice.SalesCleanupTest",
+      "testCount": 55,
+      "classes": [
+        "Invoice.SalesCleanupTest",
+        "Invoice.SalesCore2CleanupTest",
+        "Invoice.SalesOwnershipCleanupTest",
+        "Invoice.SalesRecoveryCleanupTest",
+        "Invoice.SalesRecovery2CleanupTest",
+        "Invoice.SalesRecovery3CleanupTest",
+        "Invoice.SalesDependenciesCleanupTest",
+        "Invoice.SalesDependencies2CleanupTest",
+        "Invoice.SalesLifecycleCleanupTest"
+      ],
+      "maxLines": 266
+    },
+    {
+      "original": "Purches.PurchaseCleanupTest",
+      "testCount": 48,
+      "classes": [
+        "Purches.PurchaseCleanupTest",
+        "Purches.PurchaseCore2CleanupTest",
+        "Purches.PurchaseOwnershipCleanupTest",
+        "Purches.PurchaseRecoveryCleanupTest",
+        "Purches.PurchaseRecovery2CleanupTest",
+        "Purches.PurchaseRecovery3CleanupTest",
+        "Purches.PurchaseDependenciesCleanupTest",
+        "Purches.PurchaseLifecycleCleanupTest"
+      ],
+      "maxLines": 270
+    }
+  ],
+  "validation": {
+    "javaTests": 907,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "log": "target/remaining-priorities-complete-validation.log"
+  },
+  "scope": "Two largest cleanup test classes split; shared store membership extracted from sales/purchase fixture owners. Other oversized files remain."
+}

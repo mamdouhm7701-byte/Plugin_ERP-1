@@ -1,10 +1,11 @@
+/* شرح الملف: متابعة عمليات حفظ بيانات التجربة التي لم تتأكد نتيجتها.
+ */
 package TestSupport;
 
 import java.nio.file.*;
 import java.util.*;
 import java.util.function.BiFunction;
 
-/** Journals a fixture create before dispatch, so a lost response cannot orphan its parents. */
 public final class PendingFixtureWrites {
     public interface Recovered {
         void accept(String endpoint, Object id, String name, Map<String, Object> values);

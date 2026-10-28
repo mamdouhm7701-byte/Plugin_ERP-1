@@ -1,3 +1,6 @@
+/* شرح الملف: شاشة مرتجع المشتريات: بنحدد المورد والأصناف والكميات المراد ردها ونراجع الخصم والضريبة
+ * والسداد. فائدتها توثيق البضاعة المردودة ومراجعة قيمتها.
+ */
 package Plugin_ERP.System_Modules.Login.purches;
 
 import Plugin_ERP.Business.Calculator.InvoiceCalculator;

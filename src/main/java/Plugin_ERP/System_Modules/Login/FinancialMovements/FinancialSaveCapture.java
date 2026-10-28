@@ -1,10 +1,12 @@
+/* شرح الملف: مساعدة لمتابعة محاولات حفظ الحركة المالية ونتيجتها. فائدتها معرفة ما تم حفظه فعلا
+ * واكتشاف تكرار الحفظ أو تعثره.
+ */
 package Plugin_ERP.System_Modules.Login.FinancialMovements;
 
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 
-/** Financial Save Capture: focused operations used by the original page facade. */
 final class FinancialSaveCapture {
     @SuppressWarnings("unchecked")
     List<Map<String, Object>> capturedAttempts() {

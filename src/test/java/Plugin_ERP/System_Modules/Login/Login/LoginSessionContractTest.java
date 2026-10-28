@@ -1,3 +1,6 @@
+/* شرح الملف: اختبار سلامة A restricted user can authenticate without permission to render the home
+ * page.
+ */
 package Plugin_ERP.System_Modules.Login.Login;
 
 import java.lang.reflect.Proxy;
@@ -8,7 +11,6 @@ import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/** A restricted user can authenticate without permission to render the home page. */
 public final class LoginSessionContractTest {
     private LoginPage page(String route, Object branch) {
         return page(route, branch, true, "owned-user");

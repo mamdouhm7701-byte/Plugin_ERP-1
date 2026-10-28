@@ -1,3 +1,6 @@
+/* شرح الملف: اختبارات سند صرف مورد: تعديل سند صرف مورد مع الحفظ والطباعة ونتأكد من التقرير؛ حذف سند
+ * صرف مورد؛ رفض مبلغ سالب؛ تصدير قائمة الحركات إلى Excel؛ إغلاق الحركة الجديدة دون حفظ.
+ */
 package FinancialMovementsTest;
 
 import Plugin_ERP.System_Modules.Login.FinancialMovements.*;

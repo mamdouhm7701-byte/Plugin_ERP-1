@@ -1,3 +1,5 @@
+/* شرح الملف: اختيار الحالات المناسبة للنشاط والإعدادات المطلوبة.
+ */
 package SuiteSupport;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -6,7 +8,6 @@ import java.nio.file.*;
 import java.util.*;
 import org.testng.xml.*;
 
-/** Explicit business checks; original level definitions remain untouched. */
 final class BusinessRunSuites {
     private BusinessRunSuites() {}
 

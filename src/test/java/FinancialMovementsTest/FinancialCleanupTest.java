@@ -1,3 +1,5 @@
+/* شرح الملف: مراجعة تنظيف البيانات التي أنشأتها التجربة فقط، ضمن الحركات المالية.
+ */
 package FinancialMovementsTest;
 
 import java.util.ArrayList;

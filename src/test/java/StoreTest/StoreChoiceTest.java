@@ -1,3 +1,5 @@
+/* شرح الملف: اختبار اختيار مخزن التجربة والتأكد من حفظ البيانات وظهور النتيجة المطلوبة.
+ */
 package StoreTest;
 
 import Plugin_ERP.System_Modules.Login.StoreModel.StoreModulePage;
@@ -11,7 +13,6 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-/** Local UI contract: a dropdown redraw must not abort an owned selection. */
 public final class StoreChoiceTest {
     @DataProvider
     public Object[][] redrawStages() {

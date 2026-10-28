@@ -1,8 +1,9 @@
+/* شرح الملف: استكمال تنظيف بيانات تجربة سابقة من سجلها المحدد، ضمن المبيعات.
+ */
 package Invoice;
 
 import Plugin_ERP.Tests.LoginTest.BaseTest;
 
-/** Explicit recovery of a single journal, guarded by its recorded origin and branch. */
 public final class SalesFixtureRecovery extends BaseTest {
     public static void main(String[] args) throws Exception {
         if (args.length != 1 || !args[0].matches("[a-f0-9-]+"))

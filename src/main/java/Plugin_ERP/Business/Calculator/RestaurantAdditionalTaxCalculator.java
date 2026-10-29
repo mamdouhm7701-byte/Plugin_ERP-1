@@ -77,7 +77,7 @@ public final class RestaurantAdditionalTaxCalculator {
                                     .max(MINIMUM_ADDITIONAL_TAX_PER_UNIT.multiply(line.quantity()))
                             : BigDecimal.ZERO;
             additional = additional.add(extra);
-            if (policy != TaxPolicy.ITEM_BASED || !line.vatExempt() || applied)
+            if (policy != TaxPolicy.ITEM_BASED || !line.vatExempt())
                 taxable = taxable.add(base).add(extra);
         }
         BigDecimal beforeVat = original.add(additional);

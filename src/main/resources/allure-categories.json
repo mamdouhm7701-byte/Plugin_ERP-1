@@ -5,20 +5,44 @@
       "failed",
       "broken"
     ],
-    "messageRegex": "[\\s\\S]*KNOWN_BUG:[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-[0-9]+[\\s\\S]*"
+    "messageRegex": "^(?![\\s\\S]*OUTCOME:(?:APPLICATION_DEFECT|TEST_DEFECT|ENVIRONMENT))[\\s\\S]*KNOWN_BUG:[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-[0-9]+[\\s\\S]*"
   },
   {
     "name": "فشل تحقق جديد — يحتاج مراجعة",
     "matchedStatuses": [
       "failed"
     ],
-    "messageRegex": "^(?![\\s\\S]*KNOWN_BUG:[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-[0-9]+)[\\s\\S]*$"
+    "messageRegex": "^(?![\\s\\S]*(?:KNOWN_BUG:[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-[0-9]+|OUTCOME:(?:APPLICATION_DEFECT|TEST_DEFECT|ENVIRONMENT)))[\\s\\S]*$"
   },
   {
     "name": "تعذر التشغيل — يحتاج مراجعة",
     "matchedStatuses": [
       "broken"
     ],
-    "messageRegex": "^(?![\\s\\S]*KNOWN_BUG:[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-[0-9]+)[\\s\\S]*$"
+    "messageRegex": "^(?![\\s\\S]*(?:KNOWN_BUG:[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*-[0-9]+|OUTCOME:(?:APPLICATION_DEFECT|TEST_DEFECT|ENVIRONMENT)))[\\s\\S]*$"
+  },
+  {
+    "name": "عيب تطبيق مؤكد",
+    "matchedStatuses": [
+      "failed",
+      "broken"
+    ],
+    "messageRegex": "[\\s\\S]*OUTCOME:APPLICATION_DEFECT[\\s\\S]*"
+  },
+  {
+    "name": "عيب في كود الاختبار",
+    "matchedStatuses": [
+      "failed",
+      "broken"
+    ],
+    "messageRegex": "[\\s\\S]*OUTCOME:TEST_DEFECT[\\s\\S]*"
+  },
+  {
+    "name": "مشكلة بيئة التشغيل",
+    "matchedStatuses": [
+      "failed",
+      "broken"
+    ],
+    "messageRegex": "[\\s\\S]*OUTCOME:ENVIRONMENT[\\s\\S]*"
   }
 ]

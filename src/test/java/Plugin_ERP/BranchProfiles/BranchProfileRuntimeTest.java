@@ -137,4 +137,54 @@ public final class BranchProfileRuntimeTest {
             Assert.assertEquals(writes.get(), 0);
         }
     }
+
+    @Test
+    public void policyAndAdditionalTaxAreCheckedTogetherAndNeverCachedAcrossCalls() {
+        var selected =
+                new BranchProfile(
+                        "combined",
+                        BranchSnapshot.from(
+                                Map.of(
+                                        "origin",
+                                        "https://erp.example",
+                                        "branchId",
+                                        "owned",
+                                        "activityType",
+                                        "Restaurant",
+                                        "discountLevel",
+                                        "Items",
+                                        "taxPolicy",
+                                        "NetBased",
+                                        "stocktakingMethod",
+                                        "Periodic")));
+        var values = new java.util.LinkedHashMap<String, Object>(selected.expected().fields());
+        values.put("additionalEnabled", true);
+        values.put("additionalRate", 100);
+        var reads = new AtomicInteger();
+        WebDriver driver =
+                (WebDriver)
+                        Proxy.newProxyInstance(
+                                getClass().getClassLoader(),
+                                new Class<?>[] {WebDriver.class, JavascriptExecutor.class},
+                                (p, m, args) -> {
+                                    if (m.getName().equals("executeScript")) {
+                                        reads.incrementAndGet();
+                                        return values;
+                                    }
+                                    throw new AssertionError(m.getName());
+                                });
+        String previous = System.getProperty("business.additionalTax");
+        System.setProperty("business.additionalTax", "true");
+        try (var scope = BranchProfileScope.bind(selected)) {
+            var guard = BranchProfileGuard.capture();
+            guard.verify(driver);
+            Assert.assertEquals(reads.get(), 1);
+            values.put("additionalRate", 50);
+            Assert.expectThrows(IllegalStateException.class, () -> guard.verify(driver));
+            Assert.assertEquals(reads.get(), 2);
+        } finally {
+            if (previous == null) System.clearProperty("business.additionalTax");
+            else System.setProperty("business.additionalTax", previous);
+        }
+    }
 }

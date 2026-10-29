@@ -59,10 +59,19 @@ public abstract class PurchaseScenarioTest extends BaseTest {
         return record;
     }
 
+    protected PurchaseTestData.Record preparedScenarioItem() {
+        return ownItem(1);
+    }
+
+    protected PurchaseTestData.Record preparedScenarioSupplier() {
+        return data.supplier();
+    }
+
     protected void prepare(String paymentType) {
         this.paymentType = paymentType;
-        item = ownItem(1);
-        supplier = data.supplier();
+        item = preparedScenarioItem();
+        allowedItems.add(item.id());
+        supplier = preparedScenarioSupplier();
         agent = data.agent();
         if (paymentType.equals("Cash")) payment = data.payment();
         page.puOpen(documentKind().route + "/new");

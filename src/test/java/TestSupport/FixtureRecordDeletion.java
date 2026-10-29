@@ -21,9 +21,13 @@ public final class FixtureRecordDeletion {
                     "Refusing cleanup: fixture ownership changed for " + record.id());
         AssertionError lastFailure = null;
         for (int attempt = 1; attempt <= 3; attempt++) {
+            Map<String, Object> verifiedRecord = null;
+            boolean readCompleted = false;
             try {
                 remove.accept(record);
-                if (read.apply(record) == null) return;
+                verifiedRecord = read.apply(record);
+                if (verifiedRecord == null) return;
+                readCompleted = true;
                 lastFailure =
                         new AssertionError(
                                 "Delete did not remove owned record: "
@@ -52,7 +56,7 @@ public final class FixtureRecordDeletion {
             }
             // A timed-out DELETE may have committed. Read back before sending another DELETE.
             try {
-                Map<String, Object> existing = read.apply(record);
+                Map<String, Object> existing = readCompleted ? verifiedRecord : read.apply(record);
                 if (existing == null) {
                     return;
                 }

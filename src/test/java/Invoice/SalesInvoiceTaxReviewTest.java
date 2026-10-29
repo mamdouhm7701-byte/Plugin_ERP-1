@@ -9,6 +9,13 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 
 public final class SalesInvoiceTaxReviewTest extends SalesScenarioTest {
+    private SalesTestData.Record reviewItem;
+
+    @Override
+    protected SalesTestData.Record preparedScenarioItem() {
+        return java.util.Objects.requireNonNull(reviewItem);
+    }
+
     @DataProvider
     public Object[][] actions() {
         return InvoiceReviewRecipe.actions(
@@ -24,14 +31,13 @@ public final class SalesInvoiceTaxReviewTest extends SalesScenarioTest {
         var policy = BranchProfiles.selected().orElseThrow().expected().taxPolicy();
         boolean exempt = InvoiceReviewRecipe.exempt(policy, requestExemption);
         String price = exempt ? "100" : InvoiceReviewRecipe.price(policy);
-        var reviewItem =
+        reviewItem =
                 data.fixture(
                         "invoice-review-item",
                         "Items",
-                        InvoiceReviewRecipe.stockedItem(
-                                data.itemValues(), data.item(1).values(), price, exempt));
+                        InvoiceReviewRecipe.stockedItemForStores(
+                                data.itemValues(), data.store(2).id(), price, exempt));
         prepare("Credit");
-        item = reviewItem;
         InvoiceReviewRecipe.explain(
                 "فاتورة المبيعات",
                 action,
@@ -41,10 +47,6 @@ public final class SalesInvoiceTaxReviewTest extends SalesScenarioTest {
                 new BigDecimal("100"),
                 InvoiceReviewRecipe.vat(exempt, 1),
                 InvoiceReviewRecipe.net(exempt, 1));
-        allowedItems.add(item.id());
-        page.slCapture(marker, data.store(1).id(), item.id(), kind().endpoint);
-        for (int i = 1; i <= 2; i++)
-            initialBalances.put(i, new BigDecimal(data.balance(item, i).toString()));
         add(item, "picker");
         page.slWaitNet(InvoiceReviewRecipe.net(exempt, 1).toPlainString());
         InvoiceReviewRecipe.verify(page.slDocument(), exempt, 1);

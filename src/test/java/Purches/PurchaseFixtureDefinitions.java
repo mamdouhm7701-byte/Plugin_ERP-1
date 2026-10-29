@@ -248,8 +248,13 @@ final class PurchaseFixtureDefinitions {
     }
 
     Record supplier() {
+        return supplier(false);
+    }
+
+    Record supplier(boolean taxable) {
+        String key = taxable ? "supplier-taxable" : "supplier";
         return data.fixture(
-                "supplier",
+                key,
                 "Suppliers",
                 fields(
                         "isActive",
@@ -263,7 +268,7 @@ final class PurchaseFixtureDefinitions {
                         "purchaseDiscount",
                         true,
                         "isTaxable",
-                        false,
+                        taxable,
                         "isClosed",
                         false,
                         "purchaseReturn",
@@ -277,7 +282,7 @@ final class PurchaseFixtureDefinitions {
                         "allowanceDays",
                         0,
                         "accountId",
-                        account("supplier").id()));
+                        account(key).id()));
     }
 
     Record customer() {

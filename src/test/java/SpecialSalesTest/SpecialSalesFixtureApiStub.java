@@ -59,6 +59,12 @@ final class SpecialSalesFixtureApiStub {
                         (proxy, method, args) -> {
                             if (method.getName().equals("executeScript")) {
                                 String code = (String) args[0];
+                                if (code.contains("fixture-context-snapshot")) {
+                                    var snapshot = new java.util.LinkedHashMap<String, Object>();
+                                    snapshot.put("origin", "offline");
+                                    snapshot.put("branchId", activeBranch);
+                                    return snapshot;
+                                }
                                 if (code.equals("return location.origin")) return "offline";
                                 return code.contains("return erpVue.root()") ? activeBranch : true;
                             }

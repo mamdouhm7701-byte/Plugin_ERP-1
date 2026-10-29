@@ -9,6 +9,8 @@
     </listeners>
     <test name="Configuration, arithmetic and owned fixture recovery" preserve-order="true">
         <classes>
+            <class name="TestSupport.FixtureJournalEfficiencyTest"/>
+            <class name="TestSupport.FixtureContextSnapshotTest"/>
             <class name="Plugin_ERP.Util.BrowserSessionHealthTest"/>
             <class name="SuiteSupport.CleanupRunDialogTest"/>
             <class name="SuiteSupport.XmlSuiteCatalogTest"/>
@@ -83,6 +85,7 @@
             <class name="Plugin_ERP.Util.Allur.FailureReviewTest"/>
             <class name="Plugin_ERP.Util.Allur.OutcomeClassificationTest"/>
             <class name="Plugin_ERP.Util.Allur.ScenarioFailureReportTest"/>
+            <class name="Plugin_ERP.Util.Allur.ReportResultMetadataTest"/>
             <class name="Plugin_ERP.Util.Allur.ScenarioAccessTest"/>
             <class name="Plugin_ERP.Util.InteractionAccuracyTest"/>
             <class name="Plugin_ERP.Util.SalesNavigationTest"/>

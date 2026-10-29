@@ -36,11 +36,13 @@ public final class FixtureJournals {
         return contents;
     }
 
-    private static java.util.Collection<?> profileRows(Path path, Object rows) throws IOException {
-        if (Files.isRegularFile(path)) read(path);
+    private record JournalView(java.util.Collection<?> rows, String previous) {}
+
+    private static JournalView profileRows(Path path, Object rows) throws IOException {
+        String previous = Files.isRegularFile(path) ? read(path) : null;
         var profile = Plugin_ERP.BranchProfiles.BranchProfileScope.currentOrSelected();
         var collection = (java.util.Collection<?>) rows;
-        if (profile.isEmpty()) return collection;
+        if (profile.isEmpty()) return new JournalView(collection, previous);
         var expected = profile.orElseThrow();
         var result = new java.util.ArrayList<java.util.Map<String, Object>>();
         for (Object value : collection) {
@@ -59,17 +61,19 @@ public final class FixtureJournals {
                             expected.expected().fields()));
             result.add(copy);
         }
-        return result;
+        return new JournalView(result, previous);
     }
 
     /** Replace atomically, preserving the prior recovery file if writing is interrupted. */
     public static void write(Path path, Object rows) {
         try {
-            var persistedRows = profileRows(path, rows);
+            var view = profileRows(path, rows);
+            String contents = new org.json.JSONArray(view.rows()).toString(2);
+            if (contents.equals(view.previous())) return;
             Files.createDirectories(path.getParent());
             Path temporary =
                     Files.createTempFile(path.getParent(), path.getFileName() + "-", ".tmp");
-            Files.writeString(temporary, new org.json.JSONArray(persistedRows).toString(2));
+            Files.writeString(temporary, contents);
             for (int attempt = 0; ; attempt++) {
                 try {
                     try {

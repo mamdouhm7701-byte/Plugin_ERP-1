@@ -203,7 +203,21 @@ public final class RestaurantAdditionalTaxTest {
     }
 
     @Test
-    public void additionalSubjectOverridesItemVatExemptionButNotOtherItems() {
+    public void exemptMinimumAdditionalTaxIsPerUnitAndRemainsVatFree() {
+        var line =
+                new RestaurantAdditionalTaxCalculator.Line(
+                        new BigDecimal("3"), new BigDecimal("10"), true, BigDecimal.ZERO, true);
+        var result =
+                RestaurantAdditionalTaxCalculator.calculate(
+                        List.of(line), TaxPolicy.ITEM_BASED, true, new BigDecimal("100"), 2);
+        same(result.originalBeforeVat(), "30");
+        same(result.additionalTax(), "75");
+        same(result.vat(), "0");
+        same(result.net(), "105");
+    }
+
+    @Test
+    public void additionalTaxDoesNotRemoveItemVatExemption() {
         var subject =
                 new RestaurantAdditionalTaxCalculator.Line(
                         BigDecimal.ONE, new BigDecimal("100"), true, BigDecimal.ZERO, true);
@@ -219,8 +233,8 @@ public final class RestaurantAdditionalTaxTest {
                         2);
         same(result.additionalTax(), "100");
         same(result.beforeVat(), "300");
-        same(result.vat(), "30");
-        same(result.net(), "330");
+        same(result.vat(), "0");
+        same(result.net(), "300");
         var off =
                 RestaurantAdditionalTaxCalculator.calculate(
                         List.of(subject, exempt),

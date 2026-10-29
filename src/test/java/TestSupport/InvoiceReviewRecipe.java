@@ -9,6 +9,23 @@ import org.testng.Assert;
 public final class InvoiceReviewRecipe {
     private InvoiceReviewRecipe() {}
 
+    public static Map<String, Object> stockedItemForStores(
+            Map<String, Object> defaults, Object secondStore, String price, boolean exempt) {
+        if (!(defaults.get("stores") instanceof java.util.List<?> rows) || rows.isEmpty())
+            throw new IllegalArgumentException("Owned stores are required");
+        var stores = new java.util.ArrayList<Map<String, Object>>();
+        for (Object row : rows)
+            stores.add(new java.util.LinkedHashMap<>((Map<String, Object>) row));
+        if (stores.stream().noneMatch(row -> secondStore.equals(row.get("storeId")))) {
+            var second = new java.util.LinkedHashMap<>(stores.getFirst());
+            second.put("storeId", secondStore);
+            second.put("openingBalance", 0);
+            second.put("currentBalance", 0);
+            stores.add(second);
+        }
+        return stockedItem(defaults, Map.of("stores", stores), price, exempt);
+    }
+
     public static Map<String, Object> stockedItem(
             Map<String, Object> defaults,
             Map<String, Object> stockReference,
@@ -105,6 +122,7 @@ public final class InvoiceReviewRecipe {
         amount(document.get("net"), net(exempt, quantity), "الصافي");
     }
 
+    @io.qameta.allure.Step("التحقق من {label}: المتوقع {expected}، والقيمة المعروضة {actual}")
     public static void amount(Object actual, BigDecimal expected, String label) {
         Assert.assertNotNull(actual, label);
         Assert.assertEquals(

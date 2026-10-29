@@ -116,3 +116,5 @@ mvn '-DExecutionType=LocalHeadless' '-Dsurefire.suiteXmlFiles=src/test/resources
 تنظيف بيانات تشغيل توقف سابقًا من نافذة مستقلة: [دليل ERP - Cleanup](docs/testing/CLEANUP_RUNNER_AR.md).
 
 [مراجعة آخر تشغيل XML وأسباب الفشل والوقت والإصلاحات المثبتة](docs/testing/LAST_XML_RUN_REVIEW_AR.md).
+
+[تحسين الوقت على مستوى الإطار وإصلاح توقف الانتظار مع الفيديو](docs/testing/FRAMEWORK_SPEED_IMPROVEMENTS_AR.md).

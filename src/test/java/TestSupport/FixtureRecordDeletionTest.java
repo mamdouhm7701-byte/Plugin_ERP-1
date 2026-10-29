@@ -89,4 +89,23 @@ public final class FixtureRecordDeletionTest {
                                 }));
         Assert.assertEquals(deletes.get(), 1);
     }
+
+    @Test
+    public void acknowledgedButUncommittedDeleteDoesNotReadTheSameIdentityTwice() {
+        var state = new AtomicReference<Map<String, Object>>(Map.of("owner", "ours"));
+        var reads = new AtomicInteger();
+        var deletes = new AtomicInteger();
+        FixtureRecordDeletion.delete(
+                row,
+                r -> {
+                    reads.incrementAndGet();
+                    return state.get();
+                },
+                (r, v) -> "ours".equals(v.get("owner")),
+                r -> {
+                    if (deletes.incrementAndGet() == 2) state.set(null);
+                });
+        Assert.assertEquals(deletes.get(), 2);
+        Assert.assertEquals(reads.get(), 3);
+    }
 }

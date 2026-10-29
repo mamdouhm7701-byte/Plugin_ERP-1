@@ -8,13 +8,32 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
 public final class BrowserSessionHealth {
-    private static final Map<WebDriver, AtomicBoolean> SESSIONS =
+    private record Session(WebDriver raw, AtomicBoolean blocked) {}
+
+    private static final Map<WebDriver, Session> SESSIONS =
             Collections.synchronizedMap(new IdentityHashMap<>());
 
     private BrowserSessionHealth() {}
 
     public static WebDriver decorate(WebDriver raw) {
-        var blocked = new AtomicBoolean();
+        if (SESSIONS.containsKey(raw)) return raw;
+        var session = new Session(raw, new AtomicBoolean());
+        SESSIONS.put(raw, session);
+        return decorate(session, null);
+    }
+
+    static boolean managed(WebDriver driver) {
+        return SESSIONS.containsKey(driver);
+    }
+
+    static WebDriver withRecording(WebDriver driver) {
+        var session = SESSIONS.get(driver);
+        if (session == null) throw new IllegalArgumentException("Unmanaged browser");
+        var recorder = FailureVideoRecorder.prepare(session.raw());
+        return recorder == null ? driver : decorate(session, recorder);
+    }
+
+    private static WebDriver decorate(Session session, FailureVideoRecorder recorder) {
         var decorator =
                 new org.openqa.selenium.support.decorators.WebDriverDecorator<WebDriver>() {
                     @Override
@@ -23,18 +42,34 @@ public final class BrowserSessionHealth {
                             Method method,
                             Object[] args)
                             throws Throwable {
-                        if (blocked.get() && !method.getName().equals("quit")) throw unavailable();
+                        if (session.blocked().get() && !method.getName().equals("quit"))
+                            throw unavailable();
                         try {
                             return super.call(target, method, args);
                         } catch (Throwable failure) {
-                            if (terminal(failure)) blocked.set(true);
+                            if (terminal(failure)) session.blocked().set(true);
                             throw failure;
                         }
                     }
+
+                    @Override
+                    public void afterCall(
+                            org.openqa.selenium.support.decorators.Decorated<?> target,
+                            Method method,
+                            Object[] args,
+                            Object result) {
+                        if (recorder != null)
+                            recorder.afterAnyCall(target.getOriginal(), method, args, result);
+                    }
                 };
-        var decorated = decorator.decorate(raw);
-        SESSIONS.put(decorated, blocked);
+        var decorated = decorator.decorate(session.raw());
+        SESSIONS.put(decorated, session);
         return decorated;
+    }
+
+    static void observe(WebDriver driver, Throwable failure) {
+        var session = SESSIONS.get(driver);
+        if (session != null && terminal(failure)) session.blocked().set(true);
     }
 
     public static void alias(WebDriver source, WebDriver alias) {
@@ -44,7 +79,7 @@ public final class BrowserSessionHealth {
 
     public static boolean available(WebDriver driver) {
         var state = SESSIONS.get(driver);
-        return state == null || !state.get();
+        return state == null || !state.blocked().get();
     }
 
     public static void require(WebDriver driver) {

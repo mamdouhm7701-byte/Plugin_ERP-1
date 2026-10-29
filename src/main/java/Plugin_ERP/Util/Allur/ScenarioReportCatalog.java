@@ -18,6 +18,18 @@ public final class ScenarioReportCatalog {
     private static final Map<String, Entry> SCREENS =
             Map.ofEntries(
                     Map.entry(
+                            "Invoice.SalesInvoiceTaxReviewTest",
+                            new Entry("مراجعة الفواتير", "فاتورة المبيعات")),
+                    Map.entry(
+                            "Purches.PurchaseInvoiceTaxReviewTest",
+                            new Entry("مراجعة الفواتير", "فاتورة المشتريات")),
+                    Map.entry(
+                            "SpecialSalesTest.PosInvoiceTaxReviewTest",
+                            new Entry("مراجعة الفواتير", "فاتورة نقاط البيع")),
+                    Map.entry(
+                            "SpecialSalesTest.RestaurantInvoiceTaxReviewTest",
+                            new Entry("مراجعة الفواتير", "فاتورة المطعم")),
+                    Map.entry(
                             "Invoice.CarShowroomSalesTest",
                             new Entry("اختبارات النشاط", "بيع السيارات")),
                     Map.entry(

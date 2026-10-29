@@ -1,6 +1,4 @@
-/* شرح الملف: اختبارات الصنف الخاضع للإضافية يدفع الضريبة حتى لو معلّم معفى: الصنف الخاضع للإضافية
- * يدفع الضريبة حتى لو معلّم معفى.
- */
+/* شرح الملف: يتأكد أن الصنف المعفى يظل بلا VAT عند إضافة ضريبة المطعم الإضافية، وأن غير الخاضع للإضافية يظل بلا إضافية. */
 package SpecialSalesTest;
 
 import Plugin_ERP.BranchProfiles.*;
@@ -21,8 +19,8 @@ public final class RestaurantItemBasedAdditionalTaxTest extends SpecialSalesScen
     }
 
     @Test
-    @Story("المعفى الخاضع للإضافية يحسب VAT وغير الخاضع يظل معفى في نفس الطلب")
-    public void additionalSubjectPaysVatWhileOtherExemptItemRemainsExempt() {
+    @Story("الصنف المعفى يظل بلا ضريبة قيمة مضافة مع الإضافية وبدونها")
+    public void exemptItemsRemainVatExemptWithAdditionalTax() {
         var branch = BranchProfileReader.capture(driver, Duration.ofSeconds(30));
         Assert.assertEquals(branch.activityType(), ActivityType.RESTAURANT);
         Assert.assertEquals(branch.taxPolicy(), TaxPolicy.ITEM_BASED);

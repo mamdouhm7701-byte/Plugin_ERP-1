@@ -8,6 +8,15 @@ import java.util.*;
 public final class PolicyItemRecipe {
     private PolicyItemRecipe() {}
 
+    /** الإعفاء يظل على الصنف؛ الإضافية تحتاج الاحتفاظ بنسبة VAT الأساسية 15% لحساب ضريبتها. */
+    public static Map<String, Object> create(
+            Map<String, Object> defaults, String price, boolean exempt, boolean additional) {
+        var values = create(defaults, price, exempt);
+        values.put("isAdditionalTaxable", additional);
+        if (additional) values.put("itemTax", 15);
+        return values;
+    }
+
     @SuppressWarnings("unchecked")
     public static Map<String, Object> create(
             Map<String, Object> defaults, String price, boolean exempt) {

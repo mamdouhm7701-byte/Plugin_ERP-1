@@ -48,6 +48,15 @@ final class BasicDataFixturesApiStub {
                         (proxy, method, args) -> {
                             if (method.getName().equals("executeScript")) {
                                 String code = (String) args[0];
+                                if (code.contains("fixture-context-snapshot")) {
+                                    var snapshot = new java.util.LinkedHashMap<String, Object>();
+                                    snapshot.put("origin", "offline");
+                                    if (branchUnavailableReads > 0) {
+                                        branchUnavailableReads--;
+                                        snapshot.put("branchId", null);
+                                    } else snapshot.put("branchId", activeBranch);
+                                    return snapshot;
+                                }
                                 if (code.contains("__basicDataQA?.pending")) {
                                     beforeUiPoll.run();
                                     if (uiPollFailure)

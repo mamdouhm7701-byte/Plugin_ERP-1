@@ -69,6 +69,7 @@ public class BusinessRunListener extends NativeInteractiveSuiteListener {
                             choice.workers(), freeGb, Runtime.getRuntime().availableProcessors());
             Path output = project.resolve("target/validation/business-" + UUID.randomUUID());
             runOutput = output;
+            pinEvidenceOutput(output);
             Files.createDirectories(output);
             Files.writeString(
                     output.resolve("run-settings.json"),

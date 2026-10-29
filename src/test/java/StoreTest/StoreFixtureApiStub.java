@@ -64,6 +64,15 @@ final class StoreFixtureApiStub {
                         (proxy, method, args) -> {
                             if (method.getName().equals("executeScript")) {
                                 String script = (String) args[0];
+                                if (script.contains("fixture-context-snapshot")) {
+                                    var snapshot = new java.util.LinkedHashMap<String, Object>();
+                                    snapshot.put("origin", activeOrigin);
+                                    if (missingBranchReads > 0) {
+                                        missingBranchReads--;
+                                        snapshot.put("branchId", null);
+                                    } else snapshot.put("branchId", activeBranch);
+                                    return snapshot;
+                                }
                                 if (script.startsWith("return location.origin"))
                                     return activeOrigin;
                                 if (script.contains("return erpVue.root()")) {

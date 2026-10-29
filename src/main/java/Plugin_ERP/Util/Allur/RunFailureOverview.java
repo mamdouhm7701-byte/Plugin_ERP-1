@@ -249,7 +249,7 @@ public final class RunFailureOverview {
         if (labels != null)
             for (int i = 0; i < labels.length(); i++) {
                 JSONObject label = labels.getJSONObject(i);
-                if (label.optString("name").equals("review.scope"))
+                if (Set.of("review.scope", "testClass").contains(label.optString("name")))
                     scope.add(label.optString("value"));
             }
         return hash(test.optString("fullName", test.optString("name")) + parameters + scope);

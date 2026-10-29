@@ -28,6 +28,10 @@ public abstract class SpecialSalesScenario extends BaseTest {
         mainWindow = driver.getWindowHandle();
     }
 
+    protected boolean useDefaultDraft() {
+        return true;
+    }
+
     @BeforeMethod(alwaysRun = true)
     public void scenario() {
         requirePreparedSession();
@@ -37,9 +41,9 @@ public abstract class SpecialSalesScenario extends BaseTest {
                 data.read(customer).get("isTaxable"), Boolean.TRUE, "مطابقة تطبيق الضريبة");
         org.testng.Assert.assertEquals(
                 data.read(customer).get("isOnTheFly"), Boolean.FALSE, "مطابقة نوع العميل");
-        item = data.item(1);
+        item = useDefaultDraft() ? data.item(1) : null;
         defaults = data.configureOwnedDefaults(customer);
-        restartPage();
+        if (useDefaultDraft()) restartPage();
     }
 
     protected void restartPage() {

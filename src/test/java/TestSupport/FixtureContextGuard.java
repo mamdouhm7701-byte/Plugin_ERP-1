@@ -22,13 +22,9 @@ public final class FixtureContextGuard {
         new WebDriverWait(driver, Duration.ofSeconds(30))
                 .until(
                         d -> {
-                            Object activeOrigin =
-                                    Plugin_ERP.Util.VueComponentAccess.execute(
-                                            d, "return location.origin");
-                            Object activeBranch =
-                                    Plugin_ERP.Util.VueComponentAccess.execute(
-                                            d,
-                                            "return erpVue.root()?.$store?.getters['app/currentBranch']?.id");
+                            var snapshot = FixtureContextSnapshot.read(d);
+                            Object activeOrigin = snapshot.origin(),
+                                    activeBranch = snapshot.branchId();
                             if (!origin.equals(activeOrigin)
                                     || (activeBranch != null
                                             && !java.util.Objects.equals(

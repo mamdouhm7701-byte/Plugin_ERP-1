@@ -17,6 +17,16 @@ public class NativeInteractiveSuiteListener implements IAlterSuiteListener, IExe
     private FileLock lease;
     private String previousProfileFingerprint;
     private boolean profilePinned;
+    private String previousEvidenceOutput;
+    private boolean evidencePinned;
+
+    protected final void pinEvidenceOutput(Path output) {
+        String value = System.getProperty("erp.run.evidence.output");
+        if (value != null && !value.isBlank()) return;
+        previousEvidenceOutput = value;
+        evidencePinned = true;
+        System.setProperty("erp.run.evidence.output", output.toString());
+    }
 
     static int safeWorkers(int requested, double freeGb, int cpus) {
         if (requested < 1 || requested > 6)
@@ -130,6 +140,7 @@ public class NativeInteractiveSuiteListener implements IAlterSuiteListener, IExe
             int workers =
                     safeWorkers(requested, freeGb, Runtime.getRuntime().availableProcessors());
             Path output = project.resolve("target/validation/native-" + UUID.randomUUID());
+            pinEvidenceOutput(output);
             var profile = Plugin_ERP.BranchProfiles.BranchProfiles.selected();
             if (profile.isPresent()) {
                 var selected = profile.orElseThrow();
@@ -163,6 +174,11 @@ public class NativeInteractiveSuiteListener implements IAlterSuiteListener, IExe
     }
 
     private synchronized void release() {
+        if (evidencePinned) {
+            if (previousEvidenceOutput == null) System.clearProperty("erp.run.evidence.output");
+            else System.setProperty("erp.run.evidence.output", previousEvidenceOutput);
+            evidencePinned = false;
+        }
         if (profilePinned) {
             if (previousProfileFingerprint == null)
                 System.clearProperty("branch.profile.fingerprint");

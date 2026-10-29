@@ -40,10 +40,14 @@ final class SpecialSalesFixtureDeletion {
                     "Refusing cleanup: fixture ownership changed for " + record.id());
         AssertionError lastFailure = null;
         for (int attempt = 1; attempt <= 3; attempt++) {
+            Map<String, Object> verifiedRecord = null;
+            boolean readCompleted = false;
             try {
                 if (record.endpoint().equals(BRANCH_STORE_LINK)) unlink.accept(record);
                 else api.call("delete", record.endpoint(), fields("id", record.id()));
-                if (data.read(record) == null) return;
+                verifiedRecord = data.read(record);
+                if (verifiedRecord == null) return;
+                readCompleted = true;
                 lastFailure =
                         new AssertionError(
                                 "Delete did not remove owned record: "
@@ -72,7 +76,7 @@ final class SpecialSalesFixtureDeletion {
             }
             // A timed-out DELETE may have committed. Read back before sending another DELETE.
             try {
-                Map<String, Object> existing = data.read(record);
+                Map<String, Object> existing = readCompleted ? verifiedRecord : data.read(record);
                 if (existing == null) {
                     return;
                 }

@@ -40,19 +40,27 @@ public final class FailureVideoRecorder implements WebDriverListener {
     }
 
     public static WebDriver decorate(WebDriver browser) {
+        if (BrowserSessionHealth.managed(browser))
+            return BrowserSessionHealth.withRecording(browser);
+        var recorder = prepare(browser);
+        return recorder == null
+                ? browser
+                : new EventFiringDecorator<WebDriver>(recorder).decorate(browser);
+    }
+
+    static FailureVideoRecorder prepare(WebDriver browser) {
         CURRENT.remove();
-        if (!enabled() || !(browser instanceof TakesScreenshot)) return browser;
+        if (!enabled() || !(browser instanceof TakesScreenshot)) return null;
         int fps = integerSetting("video.frame.rate", 2, 1, 5);
         int width = integerSetting("video.max.width", 960, 320, 1920);
         String folder = PropertyReader.getProperty("video.folder");
         Path project = Path.of(System.getProperty("user.dir")).toAbsolutePath().normalize();
         Path directory = project.resolve(folder == null ? "target/video" : folder).normalize();
-        if (!directory.startsWith(project.resolve("target"))) {
+        if (!directory.startsWith(project.resolve("target")))
             throw new IllegalArgumentException("Video folder must be inside target");
-        }
         var recorder = new FailureVideoRecorder(browser, directory, fps, width);
         CURRENT.set(recorder);
-        return new EventFiringDecorator<WebDriver>(recorder).decorate(browser);
+        return recorder;
     }
 
     private static int integerSetting(String key, int fallback, int min, int max) {
@@ -92,6 +100,7 @@ public final class FailureVideoRecorder implements WebDriverListener {
             frames = 0;
             capture();
         } catch (RuntimeException | java.io.IOException failure) {
+            BrowserSessionHealth.observe(browser, failure);
             LogUtils.warn(
                     "Browser recording unavailable ("
                             + failure.getClass().getSimpleName()
@@ -138,6 +147,7 @@ public final class FailureVideoRecorder implements WebDriverListener {
             lastFrame = frame;
             nextCapture = System.nanoTime() + 1_000_000_000L / fps;
         } catch (RuntimeException | java.io.IOException failure) {
+            BrowserSessionHealth.observe(browser, failure);
             LogUtils.warn(
                     "Browser recording unavailable ("
                             + failure.getClass().getSimpleName()
@@ -160,6 +170,7 @@ public final class FailureVideoRecorder implements WebDriverListener {
             }
             return recording;
         } catch (RuntimeException | java.io.IOException failure) {
+            BrowserSessionHealth.observe(browser, failure);
             LogUtils.warn("Video finalization failed (" + failure.getClass().getSimpleName() + ")");
             return null;
         } finally {

@@ -4,7 +4,6 @@ package SuiteSupport;
 
 import Plugin_ERP.BranchProfiles.BranchPolicies.*;
 import Plugin_ERP.BranchProfiles.BusinessRunRequest;
-import java.awt.GridLayout;
 import java.util.List;
 import javax.swing.*;
 
@@ -44,10 +43,22 @@ final class BusinessRunDialog {
     private BusinessRunDialog() {}
 
     static Selection choose() throws Exception {
+        return choose(false);
+    }
+
+    static Selection choose(boolean xmlSelection) throws Exception {
+        var catalog =
+                xmlSelection
+                        ? XmlSuiteCatalog.load(java.nio.file.Path.of(""))
+                        : List.<XmlSuiteCatalog.Entry>of();
         var result = new java.util.concurrent.CompletableFuture<Selection>();
         SwingUtilities.invokeLater(
                 () -> {
-                    var frame = new JFrame("ERP - Business run / تشغيل حسب النشاط");
+                    var frame =
+                            new JFrame(
+                                    xmlSelection
+                                            ? "ERP - XML review / اختيار ملف التشغيل"
+                                            : "ERP - Business run / تشغيل حسب النشاط");
                     frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                     var activity =
                             new JComboBox<>(
@@ -136,8 +147,47 @@ final class BusinessRunDialog {
                                         "Regression",
                                         "Qualification"
                                     });
+                    var xml = new JComboBox<>(catalog.toArray(XmlSuiteCatalog.Entry[]::new));
+                    if (xmlSelection) {
+                        catalog.stream()
+                                .filter(
+                                        entry ->
+                                                entry.path().equals(XmlSuiteCatalog.INVOICE_REVIEW))
+                                .findFirst()
+                                .ifPresent(xml::setSelectedItem);
+                        activity.setSelectedIndex(1);
+                    }
+                    var explanation = new JTextArea(5, 55);
+                    explanation.setEditable(false);
+                    explanation.setLineWrap(true);
+                    explanation.setWrapStyleWord(true);
+                    Runnable describe =
+                            () -> {
+                                if (xml.getSelectedItem() instanceof XmlSuiteCatalog.Entry entry) {
+                                    explanation.setText(entry.description());
+                                    explanation.setCaretPosition(0);
+                                    tax.setEnabled(
+                                            !entry.path().equals(XmlSuiteCatalog.INVOICE_REVIEW));
+                                }
+                            };
+                    xml.addActionListener(e -> describe.run());
+                    describe.run();
+                    if (xmlSelection) {
+                        workers.setValue(1);
+                        workers.setEnabled(false);
+                    }
                     var display = new JComboBox<>(new String[] {"Visible browsers", "Headless"});
-                    var panel = new JPanel(new GridLayout(0, 1, 6, 6));
+                    var xmlPanel = new JPanel(new java.awt.BorderLayout(0, 6));
+                    xmlPanel.add(xml, java.awt.BorderLayout.NORTH);
+                    var descriptionScroll = new JScrollPane(explanation);
+                    descriptionScroll.setPreferredSize(new java.awt.Dimension(640, 150));
+                    xmlPanel.add(descriptionScroll, java.awt.BorderLayout.CENTER);
+                    xmlPanel.add(
+                            new JLabel(
+                                    "XML يعمل بمتصفح واحد للحفاظ على ترتيب الحالات والإعدادات المشتركة."),
+                            java.awt.BorderLayout.SOUTH);
+                    var panel = new JPanel();
+                    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
                     List.of(
                                     new JLabel("بيئة التشغيل"),
                                     environment,
@@ -165,14 +215,23 @@ final class BusinessRunDialog {
                                     stock,
                                     additional,
                                     new JLabel("حزمة الاختبارات"),
-                                    level,
+                                    xmlSelection ? xmlPanel : level,
                                     new JLabel("عرض المتصفح"),
                                     display,
                                     new JLabel(
                                             "يُنشأ فرع جديد بالـAPI لكل تشغيل؛ حالات المجموعة تشترك فيه ببيانات مستقلة."),
                                     new JLabel(
                                             "Business checks تغطي العقود المنفذة فقط؛ تفاصيل النطاق تُحفظ مع نتيجة التشغيل."))
-                            .forEach(panel::add);
+                            .forEach(
+                                    component -> {
+                                        component.setMaximumSize(
+                                                new java.awt.Dimension(
+                                                        Integer.MAX_VALUE,
+                                                        component.getPreferredSize().height));
+                                        component.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
+                                        panel.add(component);
+                                        panel.add(Box.createVerticalStrut(6));
+                                    });
                     var start = new JButton("تجهيز الفرع وبدء التشغيل");
                     var cancel = new JButton("إلغاء");
                     var buttons = new JPanel();
@@ -182,6 +241,14 @@ final class BusinessRunDialog {
                             e -> {
                                 BusinessRunTarget target = null;
                                 try {
+                                    if (xmlSelection
+                                            && xml.getSelectedItem()
+                                                    instanceof XmlSuiteCatalog.Entry entry
+                                            && entry.path().equals(XmlSuiteCatalog.INVOICE_REVIEW)
+                                            && ((Option<?>) activity.getSelectedItem()).value()
+                                                    != ActivityType.RESTAURANT)
+                                        throw new IllegalArgumentException(
+                                                "اختر نشاط المطاعم لمراجعة الشاشات الأربع معًا.");
                                     target =
                                             new BusinessRunTarget(
                                                     environment.getSelectedItem().toString(),
@@ -208,7 +275,13 @@ final class BusinessRunDialog {
                                     result.complete(
                                             new Selection(
                                                     request,
-                                                    level.getSelectedItem().toString(),
+                                                    xmlSelection
+                                                            ? "XML:"
+                                                                    + ((XmlSuiteCatalog.Entry)
+                                                                                    xml
+                                                                                            .getSelectedItem())
+                                                                            .path()
+                                                            : level.getSelectedItem().toString(),
                                                     InteractiveTestLauncher.executionType(
                                                             display.getSelectedItem().toString()),
                                                     target,

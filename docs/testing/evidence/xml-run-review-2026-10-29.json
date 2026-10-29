@@ -1,0 +1,82 @@
+{
+  "sourceRun": "xml-6b019fae-ac65-4105-8554-4c3dad8403b1",
+  "date": "2026-10-29",
+  "scope": "First result start to last result finish; excludes the initial settings dialog and initial branch preparation. Intervals are disjoint; cleanup has precedence over broken configurations.",
+  "spanSeconds": 6592.247,
+  "testCases": {
+    "passed": 59,
+    "failed": 20,
+    "skipped": 44,
+    "total": 123
+  },
+  "additionalConfigurationFailureResults": 12,
+  "wallSeconds": {
+    "الحالات المنفذة": 2372.096,
+    "تجهيز سليم وانتقالات وفواصل غير مفصلة": 883.602,
+    "تنظيف بيانات الكلاسات": 2312.162,
+    "إعداد وتشخيصات فاشلة": 1024.387
+  },
+  "failures": [
+    {
+      "kind": "TEST_DEFECT",
+      "cases": 16,
+      "reason": "Changing the supplier clears agentId; request and stored invoice both have null. Reselect and verify agent before save."
+    },
+    {
+      "kind": "APPLICATION_DEFECT",
+      "cases": 4,
+      "issue": "REST-ADDITIONAL-EXEMPT-003",
+      "expectedNet": "230.00",
+      "actualNet": "200",
+      "reason": "ItemBased restaurant, exempt item subject to additional tax. All four operations stop at the initial draft."
+    },
+    {
+      "kind": "ENVIRONMENT",
+      "casesSkipped": 3,
+      "reason": "POS renderer timed out; subsequent hooks repeatedly sent commands to the same unresponsive browser."
+    },
+    {
+      "kind": "NOT_EXECUTED",
+      "cases": 41,
+      "reason": "PriceIncluded policy was prevented because previous policy cleanup was not confirmed."
+    }
+  ],
+  "policyState": {
+    "NET_BASED": "CLEANED",
+    "ITEM_BASED": "RECOVERY_REQUIRED",
+    "PRICE_INCLUDED": "NOT_PREPARED"
+  },
+  "newPolicyCaseCount": 91,
+  "previousPolicyCaseCount": 123,
+  "validation": {
+    "localTests": 976,
+    "localFailures": 0,
+    "localSkips": 0,
+    "livePurchaseVerification": {
+      "scope": "NetBased restaurant; purchase add and edit after supplier change plus profile verification",
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "branchDeleted": true,
+      "evidence": "target/purchase-invoice-fix-live-2026-10-29/verification.json"
+    },
+    "olderStoppedXmlRecovery": {
+      "profile": "business-f4d76476c49d9ea0",
+      "recordsBefore": 6,
+      "dataCleaned": true,
+      "branchDeleted": true,
+      "evidence": "target/cleanup/ceaeece8-aa82-4465-9c3f-f2d794691cff/summary.json"
+    },
+    "latestItemPolicyRecovery": {
+      "profile": "business-37f1f9550a828b9a",
+      "recordsBefore": 124,
+      "dataCleaned": true,
+      "branchDeleted": true,
+      "remaining": [],
+      "evidence": "target/cleanup/0ddae571-bc43-4d63-9eb4-a3cb072938fb/summary.json",
+      "timedRecords": 124,
+      "totalRecordCleanupMilliseconds": 321064,
+      "slowestRecordMilliseconds": 20461
+    }
+  }
+}

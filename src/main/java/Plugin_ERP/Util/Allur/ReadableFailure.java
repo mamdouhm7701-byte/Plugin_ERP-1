@@ -12,6 +12,9 @@ public final class ReadableFailure {
         String raw = message == null ? "" : message;
         String text = raw.toLowerCase(Locale.ROOT);
         String action = step == null || step.isBlank() ? "الخطوة المطلوبة" : step;
+        if (text.contains("browser_session_unavailable")
+                || text.contains("timed out receiving message from renderer"))
+            return "المتصفح توقف عن الاستجابة؛ لم تكتمل الخطوة. احتفظ بسجلات البيانات للتنظيف ولا تعتبرها نتيجة بيزنس.";
         if (Plugin_ERP.Util.CapacityFailure.matches(raw))
             return Plugin_ERP.Util.CapacityFailure.explanation();
         if (text.contains("element click intercepted"))

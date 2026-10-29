@@ -110,3 +110,9 @@ mvn '-DExecutionType=LocalHeadless' '-Dsurefire.suiteXmlFiles=src/test/resources
 
 
 تقرير الصيانة والتحقق الحالي: [حالة الصيانة وحدود التأهيل الحي](docs/testing/FINAL_MAINTENANCE_STATUS_AR.md).
+
+اختيار ملف XML مع وصفه ومراجعة الفواتير الأربع على سياسات الضريبة الثلاث: [دليل ERP - XML review](docs/testing/XML_REVIEW_RUNNER_AR.md).
+
+تنظيف بيانات تشغيل توقف سابقًا من نافذة مستقلة: [دليل ERP - Cleanup](docs/testing/CLEANUP_RUNNER_AR.md).
+
+[مراجعة آخر تشغيل XML وأسباب الفشل والوقت والإصلاحات المثبتة](docs/testing/LAST_XML_RUN_REVIEW_AR.md).

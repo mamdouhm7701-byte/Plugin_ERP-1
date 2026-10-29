@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: يفتح اختيار XML ثم يعرض حالات كل سياسة مباشرة في شجرة IntelliJ مع تجهيز فرعها وتنظيفه. -->
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="ERP - XML selection" parallel="none">
+  <listeners><listener class-name="SuiteSupport.XmlReviewSuiteListener"/><listener class-name="SuiteSupport.BranchIsolationListener"/></listeners>
+</suite>

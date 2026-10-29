@@ -1,0 +1,12 @@
+<!-- شرح الملف: شاشة معاينة وتنظيف بيانات تشغيل سابق وفرعه المملوك فقط. -->
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ERP - Cleanup" type="Application" factoryName="Application" singleton="true">
+    <module name="POM" />
+    <option name="MAIN_CLASS_NAME" value="SuiteSupport.CleanupRunDialog" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <option name="VM_PARAMETERS" value="-Dfile.encoding=UTF-8" />
+    <shortenClasspath name="ARGS_FILE" />
+    <envs><env name="REPORT_MAIL_ENABLED" value="false" /></envs>
+    <method v="2"><option name="Make" enabled="true" /></method>
+  </configuration>
+</component>

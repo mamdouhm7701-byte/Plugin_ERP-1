@@ -23,6 +23,7 @@ public class BaseTest implements Plugin_ERP.Util.RunEnvironmentGate.ProtectedSce
     private Plugin_ERP.BranchProfiles.BranchProfileScope profileScope;
 
     protected final void requirePreparedSession() {
+        Plugin_ERP.Util.BrowserSessionHealth.require(driver);
         if (setupFailure != null
                 && Plugin_ERP.Util.CapacityFailure.matches(setupFailure.getMessage()))
             throw new org.testng.SkipException(
@@ -82,6 +83,7 @@ public class BaseTest implements Plugin_ERP.Util.RunEnvironmentGate.ProtectedSce
 
     @BeforeMethod(alwaysRun = true)
     public final void verifyProfileBeforeScenario() {
+        Plugin_ERP.Util.BrowserSessionHealth.require(driver);
         Plugin_ERP.Util.RunEnvironmentGate.current().beforeScenario();
         if (branchProfile != null) {
             requirePreparedSession();
@@ -91,7 +93,10 @@ public class BaseTest implements Plugin_ERP.Util.RunEnvironmentGate.ProtectedSce
 
     @AfterMethod(alwaysRun = true)
     public final void verifyProfileAfterScenario() {
-        if (branchProfile != null && setupFailure == null && driver != null) {
+        if (branchProfile != null
+                && setupFailure == null
+                && driver != null
+                && Plugin_ERP.Util.BrowserSessionHealth.available(driver)) {
             verifySelectedBranchProfile();
         }
     }

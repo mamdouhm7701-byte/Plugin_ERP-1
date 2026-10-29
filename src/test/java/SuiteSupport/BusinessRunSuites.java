@@ -20,6 +20,8 @@ final class BusinessRunSuites {
             Path project, BusinessRunRequest request, String level, int workers, Path output)
             throws Exception {
         if (workers < 1 || workers > 6) throw new IllegalArgumentException("Choose 1–6 browsers");
+        if (level.startsWith("XML:"))
+            return XmlSuiteCatalog.plan(project, level.substring(4), workers, output);
         List<XmlSuite> result;
         if (!level.equals("Business checks")) {
             result =

@@ -28,9 +28,14 @@ public final class AdditionalTaxExpectation {
                         VueComponentAccess.execute(
                                 driver,
                                 "const b=erpVue.root()?.$store?.getters['app/currentBranch'];return {enabled:!!b?.enableAdditionalTax,rate:b?.additionalTaxPercentage}");
-        if (!enabled.equals(actual.get("enabled"))
+        verify(Boolean.TRUE.equals(actual.get("enabled")), actual.get("rate"));
+    }
+
+    public void verify(boolean actualEnabled, Object actualRate) {
+        if (enabled == null) return;
+        if (!enabled.equals(actualEnabled)
                 || (enabled
-                        && new BigDecimal(String.valueOf(actual.get("rate")))
+                        && new BigDecimal(String.valueOf(actualRate))
                                         .compareTo(new BigDecimal("100"))
                                 != 0))
             throw new IllegalStateException(

@@ -54,4 +54,19 @@ public final class PurchaseSeedInvoicesTest {
         }
         Assert.assertTrue(api.records.isEmpty(), "All owned invoice fixtures must be removed");
     }
+
+    @Test
+    public void taxableSupplierRecipeDoesNotCreateAnUnusedUntaxableSupplier() {
+        var api = new PurchaseFixtureApiStub();
+        try (var data = new PurchaseTestData(api.driver())) {
+            var supplier = new PurchaseFixtureDefinitions(data).supplier(true);
+            Assert.assertEquals(data.read(supplier).get("isTaxable"), true);
+            Assert.assertEquals(
+                    api.records.keySet().stream()
+                            .filter(key -> key.startsWith("Suppliers-"))
+                            .count(),
+                    1L);
+        }
+        Assert.assertTrue(api.records.isEmpty());
+    }
 }

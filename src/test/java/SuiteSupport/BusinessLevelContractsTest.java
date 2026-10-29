@@ -138,7 +138,7 @@ public final class BusinessLevelContractsTest {
                 additional);
         Assert.assertEquals(
                 cases.contains(
-                        "SpecialSalesTest.RestaurantItemBasedAdditionalTaxTest#additionalSubjectPaysVatWhileOtherExemptItemRemainsExempt"),
+                        "SpecialSalesTest.RestaurantItemBasedAdditionalTaxTest#exemptItemsRemainVatExemptWithAdditionalTax"),
                 additional && tax == TaxPolicy.ITEM_BASED);
         Assert.assertEquals(
                 cases.contains(

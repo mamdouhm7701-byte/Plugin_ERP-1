@@ -94,4 +94,26 @@ public final class InvoiceReviewRecipeTest {
                                 InvoiceReviewRecipe.actions(TaxPolicy.NET_BASED, actions, true))
                         .noneMatch(row -> (boolean) row[1]));
     }
+
+    @Test
+    public void customStockRecipeCreatesBothStoreRowsWithoutCreatingAnUnusedItem() {
+        var first =
+                Map.<String, Object>of(
+                        "storeId",
+                        "main",
+                        "openingBalance",
+                        0,
+                        "currentBalance",
+                        0,
+                        "costPrice",
+                        80);
+        var defaults =
+                Map.<String, Object>of(
+                        "stores", java.util.List.of(first), "mainUnitBarcode", "unique");
+        var result = InvoiceReviewRecipe.stockedItemForStores(defaults, "secondary", "115", false);
+        Assert.assertEquals(TestSupport.FixtureStockBalance.read(result, () -> "main"), 1000);
+        Assert.assertEquals(TestSupport.FixtureStockBalance.read(result, () -> "secondary"), 0);
+        Assert.assertEquals(result.get("mainUnitBarcode"), "unique");
+        Assert.assertEquals(((java.util.List<?>) defaults.get("stores")).size(), 1);
+    }
 }

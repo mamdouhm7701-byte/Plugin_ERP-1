@@ -9,6 +9,18 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 
 public final class PurchaseInvoiceTaxReviewTest extends PurchaseScenarioTest {
+    private PurchaseTestData.Record reviewItem, reviewSupplier;
+
+    @Override
+    protected PurchaseTestData.Record preparedScenarioItem() {
+        return java.util.Objects.requireNonNull(reviewItem);
+    }
+
+    @Override
+    protected PurchaseTestData.Record preparedScenarioSupplier() {
+        return java.util.Objects.requireNonNull(reviewSupplier);
+    }
+
     protected PurchaseDocumentKind kind() {
         return PurchaseDocumentKind.INVOICE;
     }
@@ -28,27 +40,20 @@ public final class PurchaseInvoiceTaxReviewTest extends PurchaseScenarioTest {
         var policy = BranchProfiles.selected().orElseThrow().expected().taxPolicy();
         boolean exempt = InvoiceReviewRecipe.exempt(policy, requestExemption);
         String price = InvoiceReviewRecipe.price(policy);
-        var reviewItem =
+        reviewItem =
                 data.fixture(
                         "invoice-review-item",
                         "Items",
-                        InvoiceReviewRecipe.stockedItem(
-                                data.itemValues(), data.item(1).values(), price, exempt));
-        var supplierValues = new java.util.LinkedHashMap<>(data.supplier().values());
-        supplierValues.put("isTaxable", true);
-        var taxableSupplier = data.fixture("review-taxable-supplier", "Suppliers", supplierValues);
+                        InvoiceReviewRecipe.stockedItemForStores(
+                                data.itemValues(), data.store(2).id(), price, exempt));
+        reviewSupplier = new PurchaseFixtureDefinitions(data).supplier(true);
         prepare("Credit");
-        supplier = taxableSupplier;
         Assert.assertEquals(
                 data.read(supplier).get("isTaxable"), true, "مورد مراجعة الضريبة خاضع للضريبة");
-        page.puChoose("المورد", supplier.name());
-        // Changing the supplier clears its dependent agent selection in the form.
-        page.puChoose("مندوب", agent.name());
         Assert.assertEquals(
                 page.puDocument().get("agentId"),
                 agent.id(),
-                "إعادة اختيار المندوب بعد تغيير المورد قبل الحفظ");
-        item = reviewItem;
+                "المندوب محدد بعد اختيار مورد مراجعة الضريبة");
         InvoiceReviewRecipe.explain(
                 "فاتورة المشتريات",
                 action,
@@ -58,9 +63,6 @@ public final class PurchaseInvoiceTaxReviewTest extends PurchaseScenarioTest {
                 new BigDecimal("100"),
                 InvoiceReviewRecipe.vat(exempt, 1),
                 InvoiceReviewRecipe.net(exempt, 1));
-        allowedItems.add(item.id());
-        page.puCapture(marker, data.store(1).id(), item.id(), kind().endpoint);
-        for (int i = 1; i <= 2; i++) initialBalances.put(i, number(data.balance(item, i)));
         add(item, "picker");
         page.puSetLine(item.name(), "سعر الشراء", exempt ? "100" : price);
         page.puWaitNet(InvoiceReviewRecipe.net(exempt, 1).toPlainString());

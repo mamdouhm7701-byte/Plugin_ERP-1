@@ -78,6 +78,10 @@ public abstract class SalesScenarioTest extends BaseTest {
         return salesTax.net(beforeTax);
     }
 
+    protected SalesTestData.Record preparedScenarioItem() {
+        return ownItem(1);
+    }
+
     protected void prepare(String paymentType) {
         prepare(paymentType, false, false);
     }
@@ -92,7 +96,8 @@ public abstract class SalesScenarioTest extends BaseTest {
             boolean useDiscountType,
             boolean selectCustomer) {
         this.paymentType = paymentType;
-        item = ownItem(1);
+        item = preparedScenarioItem();
+        allowedItems.add(item.id());
         customer = data.customer();
         var customerProfile = data.read(customer);
         Assert.assertEquals(

@@ -13,6 +13,11 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 
 public abstract class SpecialInvoiceTaxReview extends SpecialSalesScenario {
+    @Override
+    protected boolean useDefaultDraft() {
+        return false;
+    }
+
     @DataProvider
     public Object[][] actions() {
         return InvoiceReviewRecipe.actions(
@@ -34,8 +39,7 @@ public abstract class SpecialInvoiceTaxReview extends SpecialSalesScenario {
                 policy == TaxPolicy.PRICE_INCLUDED
                         ? (lowPrice ? "11.5" : "115")
                         : (lowPrice ? "10" : "100");
-        var values = PolicyItemRecipe.create(data.itemValues(), price, exempt);
-        values.put("isAdditionalTaxable", additional);
+        var values = PolicyItemRecipe.create(data.itemValues(), price, exempt, additional);
         item = data.fixture("review-tax-item", "Items", values);
         Assert.assertEquals(data.read(item).get("isAdditionalTaxable"), additional);
         var firstPayment = data.payment();
@@ -48,6 +52,7 @@ public abstract class SpecialInvoiceTaxReview extends SpecialSalesScenario {
                                 SpecialSalesTestData.fields("bankId", data.bank().id()))
                         : null;
         restartPage();
+        verifyTaxSetup(exempt, additional);
         add();
         var expected = expected(policy, price, exempt, additional, 1);
         InvoiceReviewRecipe.explain(
@@ -134,6 +139,44 @@ public abstract class SpecialInvoiceTaxReview extends SpecialSalesScenario {
         number(data.balance(item, 2), "1000");
     }
 
+    @io.qameta.allure.Step("التأكد من إعداد ضريبة الصنف والعميل المختار قبل مراجعة أرقام الفاتورة")
+    private void verifyTaxSetup(boolean exempt, boolean additional) {
+        var persistedItem = data.read(item);
+        var persistedCustomer = data.read(customer);
+        Object selectedCustomer = page.document().get("dealerId");
+        var evidence =
+                Map.of(
+                        "itemName", item.name(),
+                        "itemIsTaxable", persistedItem.get("isTaxable"),
+                        "itemTax", persistedItem.get("itemTax"),
+                        "itemAdditional", persistedItem.get("isAdditionalTaxable"),
+                        "customerIsTaxable", persistedCustomer.get("isTaxable"),
+                        "expectedCustomerId", customer.id(),
+                        "selectedCustomerId",
+                                java.util.Objects.toString(selectedCustomer, "لم يتم اختيار عميل"));
+        io.qameta.allure.Allure.addAttachment(
+                "إعداد الصنف والعميل الفعلي",
+                "application/json",
+                new org.json.JSONObject(evidence).toString(2),
+                ".json");
+        Assert.assertEquals(
+                persistedItem.get("isTaxable"),
+                !exempt,
+                "إعفاء الصنف المحفوظ يطابق الحالة المطلوبة");
+        Assert.assertEquals(
+                persistedItem.get("isAdditionalTaxable"),
+                additional,
+                "خضوع الصنف للإضافية يطابق الحالة المطلوبة");
+        InvoiceReviewRecipe.amount(
+                persistedItem.get("itemTax"),
+                new BigDecimal(additional || !exempt ? "15" : "0"),
+                "نسبة ضريبة الصنف المحفوظة");
+        Assert.assertEquals(
+                persistedCustomer.get("isTaxable"), Boolean.TRUE, "عميل التجربة خاضع للضريبة");
+        Assert.assertEquals(
+                selectedCustomer, customer.id(), "الفاتورة تستخدم نفس العميل الضريبي الذي جهزناه");
+    }
+
     static boolean containsAmount(String text, BigDecimal amount) {
         var numbers =
                 java.util.regex.Pattern.compile("(?<![\\d.])\\d+(?:[,.]\\d+)*(?![\\d.])")
@@ -166,10 +209,11 @@ public abstract class SpecialInvoiceTaxReview extends SpecialSalesScenario {
 
     private void amounts(
             Map<String, Object> actual, RestaurantAdditionalTaxCalculator.Totals expected) {
-        number(actual.get("netBeforeTaxes"), expected.beforeVat().toPlainString());
+        InvoiceReviewRecipe.amount(
+                actual.get("netBeforeTaxes"), expected.beforeVat(), "قبل الضريبة");
         number(actual.get("totalAdditionalTaxes"), expected.additionalTax().toPlainString());
-        number(actual.get("totalTaxes"), expected.vat().toPlainString());
-        number(actual.get("net"), expected.net().toPlainString());
+        InvoiceReviewRecipe.amount(actual.get("totalTaxes"), expected.vat(), "الضريبة");
+        InvoiceReviewRecipe.amount(actual.get("net"), expected.net(), "الصافي");
     }
 
     private void pay(SpecialSalesTestData.Record payment, BigDecimal amount) {

@@ -71,7 +71,6 @@ public final class AdditionalTaxSuiteDefinitionsTest {
                 Class.forName("SpecialSalesTest.RestaurantItemBasedAdditionalTaxTest")
                         .getDeclaredMethods())
             if (method.isAnnotationPresent(Test.class)) cases.add(method.getName());
-        Assert.assertEquals(
-                cases, Set.of("additionalSubjectPaysVatWhileOtherExemptItemRemainsExempt"));
+        Assert.assertEquals(cases, Set.of("exemptItemsRemainVatExemptWithAdditionalTax"));
     }
 }

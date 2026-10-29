@@ -33,6 +33,14 @@ public final class FailureClassification {
             return new Category(domain, "تجهيز أو اختيار التشغيل", "الحالة لم تُنفذ", reference);
         if (Plugin_ERP.Util.CapacityFailure.matches(message))
             return new Category("سعة وتجهيز البيئة", "حد الترخيص", "لم يكتمل اختبار البيزنس", "");
+        var registered = ReportResultMetadata.knownIssue(test.getFullName(), message);
+        if (registered != null && reference.isBlank()) {
+            var decision =
+                    OutcomeClassification.classify(
+                            "failed", message, "", registered.optString("kind"));
+            return new Category(
+                    domain, decision.kind().label(), "مشكلة معروفة", registered.optString("id"));
+        }
         if (!reference.isBlank())
             return new Category(domain, "مشكلة موثقة", "مشكلة معروفة", reference);
         if (contains(

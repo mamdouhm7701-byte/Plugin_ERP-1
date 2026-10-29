@@ -19,9 +19,9 @@ public final class BranchProfileGuard {
     }
 
     public void verify(WebDriver driver) {
-        if (expected.isPresent())
-            expected.orElseThrow()
-                    .verify(BranchProfileReader.capture(driver, Duration.ofSeconds(30)));
-        if (expected.isPresent()) additional.verify(driver);
+        if (expected.isEmpty()) return;
+        var state = BranchProfileReader.captureState(driver, Duration.ofSeconds(30));
+        expected.orElseThrow().verify(state.profile());
+        additional.verify(state.additionalEnabled(), state.additionalRate());
     }
 }

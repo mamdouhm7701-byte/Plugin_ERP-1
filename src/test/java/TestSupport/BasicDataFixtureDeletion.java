@@ -28,6 +28,8 @@ final class BasicDataFixtureDeletion {
     void remove(Record record) {
         AssertionError lastFailure = null;
         for (int attempt = 1; attempt <= 3; attempt++) {
+            Map<String, Object> verifiedRecord = null;
+            boolean readCompleted = false;
             try {
                 Map<String, Object> owned = cleanupIdentity(record);
                 if (owned == null) return;
@@ -38,7 +40,9 @@ final class BasicDataFixtureDeletion {
                     throw new AssertionError(
                             "Refusing cleanup: fixture ownership changed for " + record.id());
                 api.call("delete", record.endpoint(), fields("id", record.id()));
-                if (data.read(record) == null) return;
+                verifiedRecord = data.read(record);
+                if (verifiedRecord == null) return;
+                readCompleted = true;
                 lastFailure =
                         new AssertionError(
                                 "Delete did not remove owned record: "
@@ -67,7 +71,7 @@ final class BasicDataFixtureDeletion {
             }
             // A timed-out DELETE may have committed. Read back before sending another DELETE.
             try {
-                Map<String, Object> existing = data.read(record);
+                Map<String, Object> existing = readCompleted ? verifiedRecord : data.read(record);
                 if (existing == null) {
                     return;
                 }

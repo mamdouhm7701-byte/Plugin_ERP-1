@@ -302,18 +302,18 @@
     ],
     "expected": "تطابق المبالغ الحساب المستقل. الخصم يقلل أساس الإضافية، والصنف غير الخاضع لا تضاف عليه إضافية."
   },
-  "SpecialSalesTest.RestaurantItemBasedAdditionalTaxTest#additionalSubjectPaysVatWhileOtherExemptItemRemainsExempt": {
-    "title": "الصنف الخاضع للإضافية يدفع الضريبة حتى لو معلّم معفى",
-    "objective": "الصنف الخاضع للإضافية يدفع الضريبة حتى لو معلّم معفى",
+  "SpecialSalesTest.RestaurantItemBasedAdditionalTaxTest#exemptItemsRemainVatExemptWithAdditionalTax": {
+    "title": "الصنف المعفى يظل بدون VAT حتى مع الإضافية",
+    "objective": "الصنف المعفى يظل بدون VAT حتى مع الإضافية",
     "preconditions": "سجل الدخول واختر إعدادات النشاط المطلوبة قبل التشغيل. استخدم أسماء الأصناف والعملاء الخاصة بهذه التجربة.",
-    "data": "الضريبة على الأصناف، وإضافية100%، وصنف آخر معفى وغير خاضع للإضافية.",
+    "data": "صنفان معفيان، سعر كل واحد 100، الأول خاضع لإضافية 100% والثاني غير خاضع لها.",
     "steps": [
       "أضف الصنف المعلّم معفى والخاضع للإضافية.",
       "أضف الصنف المعفى غير الخاضع.",
       "راجع حساب الإضافية والضريبة لكل صنف.",
       "راجع إجمالي الضريبة والصافي."
     ],
-    "expected": "تطبق15% على الصنف الخاضع للإضافية وأساس إضافيته، والصنف الآخر يظل معفى."
+    "expected": "الإضافية 100، وقبل الضريبة 300، وضريبة القيمة المضافة صفر، والصافي 300."
   },
   "SpecialSalesTest.SelectedRestaurantPolicyTest#selectedVatPolicySavesTaxableItemsAndSupportedExemptions": {
     "title": "فاتورة المطعم تستخدم سياسة الضريبة المختارة",

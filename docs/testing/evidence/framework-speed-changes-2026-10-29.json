@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-29",
+  "scope": "Shared framework transports, runtime guards, browser recording and fixture recovery IO; all eight fixture modules benefit.",
+  "stoppedRun": {
+    "pid": 26800,
+    "lockReleased": true,
+    "diagnosis": "Nested browser decorators did not unwrap while constructing a WebDriverWait timeout exception",
+    "threadEvidence": "target/stopped-user-run-26800-threads.txt",
+    "dataJournalsPreserved": true
+  },
+  "runtimeTimeoutVerification": {
+    "erpAccessed": false,
+    "requestedWaitMillis": 100,
+    "elapsedMillis": 521,
+    "recordingSaved": true,
+    "browserStillAvailable": true,
+    "evidence": "target/framework-timeout-browser/verification.json"
+  },
+  "deterministicSavings": {
+    "fixtureContextBrowserCommandsPerCheck": {
+      "before": 2,
+      "after": 1
+    },
+    "profileAndAdditionalTaxBrowserCommandsPerGuard": {
+      "before": 2,
+      "after": 1
+    },
+    "unchangedRecoveryJournalReplacement": {
+      "before": 1,
+      "after": 0,
+      "profileStillValidated": true
+    },
+    "acknowledgedUncommittedDeleteReadCountForTwoAttempts": {
+      "before": 4,
+      "after": 3
+    }
+  },
+  "invoiceReviewSavingsAtFullExecution": {
+    "scope": "Same 91-case matrix, not a wall-time benchmark",
+    "unusedItemsAvoidedUpTo": 88,
+    "unusedSuppliersAvoidedUpTo": 16,
+    "unusedDraftOpensAvoidedUpTo": 56
+  },
+  "liveMatrixRerunAfterTheseChanges": false,
+  "unsafeParallelismEnabled": false,
+  "validation": {
+    "javaTests": 985,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "log": "target/framework-speed-final-ci.log",
+    "maintainabilityViolations": 0,
+    "credentialPolicyViolations": 0
+  }
+}

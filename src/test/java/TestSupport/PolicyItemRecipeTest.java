@@ -8,6 +8,18 @@ import org.testng.annotations.Test;
 
 public final class PolicyItemRecipeTest {
     @Test
+    public void additionalTaxKeepsVatRateEvenWhenTheItemIsExempt() {
+        var defaults = Map.<String, Object>of("stores", List.of(Map.of("storeId", "owned-store")));
+        var additional = PolicyItemRecipe.create(defaults, "100", true, true);
+        Assert.assertEquals(additional.get("isTaxable"), false);
+        Assert.assertEquals(additional.get("isAdditionalTaxable"), true);
+        Assert.assertEquals(additional.get("itemTax"), 15);
+        var ordinaryExempt = PolicyItemRecipe.create(defaults, "100", true, false);
+        Assert.assertEquals(ordinaryExempt.get("itemTax"), 0);
+        Assert.assertEquals(ordinaryExempt.get("isAdditionalTaxable"), false);
+    }
+
+    @Test
     public void explicitPolicyRecipeSeedsStockAndKeepsOriginalUntouched() {
         var store =
                 new LinkedHashMap<String, Object>(

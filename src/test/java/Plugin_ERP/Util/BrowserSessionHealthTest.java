@@ -87,4 +87,104 @@ public final class BrowserSessionHealthTest {
                 Plugin_ERP.Util.Allur.ReadableFailure.describe(failure.getMessage(), "حفظ")
                         .contains("المتصفح توقف"));
     }
+
+    @Test
+    public void videoAndHealthWrappersUnwrapToTheOriginalDriverInBoundedSteps() {
+        String previous = System.getProperty("video.enabled");
+        System.setProperty("video.enabled", "true");
+        WebDriver raw =
+                (WebDriver)
+                        Proxy.newProxyInstance(
+                                getClass().getClassLoader(),
+                                new Class<?>[] {WebDriver.class, TakesScreenshot.class},
+                                (proxy, method, args) -> {
+                                    if (method.getName().equals("hashCode"))
+                                        return System.identityHashCode(proxy);
+                                    if (method.getName().equals("equals")) return proxy == args[0];
+                                    if (method.getName().equals("toString"))
+                                        return "original-driver";
+                                    return null;
+                                });
+        var guarded = BrowserSessionHealth.decorate(raw);
+        try {
+            WebDriver wrapped = FailureVideoRecorder.decorate(guarded);
+            int depth = 0;
+            while (wrapped instanceof WrapsDriver driver && depth < 8) {
+                wrapped = driver.getWrappedDriver();
+                depth++;
+            }
+            Assert.assertSame(
+                    wrapped,
+                    raw,
+                    "Unwrapping must reach the original driver, not create an endless wrapper chain");
+        } finally {
+            FailureVideoRecorder.release();
+            BrowserSessionHealth.release(guarded);
+            if (previous == null) System.clearProperty("video.enabled");
+            else System.setProperty("video.enabled", previous);
+        }
+    }
+
+    @Test
+    public void timeoutWithVideoAndThreadProtectionReturnsInsteadOfLooping() throws Exception {
+        var worker =
+                java.util.concurrent.Executors.newSingleThreadExecutor(
+                        r -> {
+                            var t = new Thread(r, "timeout-regression");
+                            t.setDaemon(true);
+                            return t;
+                        });
+        String previous = System.getProperty("video.enabled");
+        System.setProperty("video.enabled", "true");
+        try {
+            var result =
+                    worker.submit(
+                            () -> {
+                                WebDriver raw =
+                                        (WebDriver)
+                                                Proxy.newProxyInstance(
+                                                        getClass().getClassLoader(),
+                                                        new Class<?>[] {
+                                                            WebDriver.class,
+                                                            TakesScreenshot.class,
+                                                            HasCapabilities.class
+                                                        },
+                                                        (proxy, method, args) -> {
+                                                            if (method.getName()
+                                                                    .equals("getCapabilities"))
+                                                                return new ImmutableCapabilities(
+                                                                        "browserName",
+                                                                        "local-probe");
+                                                            if (method.getName().equals("toString"))
+                                                                return "timeout-probe";
+                                                            return null;
+                                                        });
+                                var health = BrowserSessionHealth.decorate(raw);
+                                var browser =
+                                        org.openqa.selenium.support.ThreadGuard.protect(
+                                                FailureVideoRecorder.decorate(health));
+                                try {
+                                    return Assert.expectThrows(
+                                                    TimeoutException.class,
+                                                    () ->
+                                                            new org.openqa.selenium.support.ui
+                                                                            .WebDriverWait(
+                                                                            browser,
+                                                                            java.time.Duration.ZERO)
+                                                                    .until(d -> false))
+                                            .getMessage();
+                                } finally {
+                                    FailureVideoRecorder.release();
+                                    BrowserSessionHealth.release(health);
+                                }
+                            });
+            Assert.assertTrue(
+                    result.get(5, java.util.concurrent.TimeUnit.SECONDS)
+                            .contains("Expected condition failed"));
+        } finally {
+            worker.shutdownNow();
+            if (previous == null) System.clearProperty("video.enabled");
+            else System.setProperty("video.enabled", previous);
+        }
+    }
 }

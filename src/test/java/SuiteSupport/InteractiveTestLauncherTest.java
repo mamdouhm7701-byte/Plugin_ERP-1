@@ -86,4 +86,27 @@ public final class InteractiveTestLauncherTest {
                         InteractiveTestLauncher.command(
                                 Path.of("pwsh.exe"), Path.of("."), "Unknown", 3));
     }
+
+    @Test
+    public void cleanupTimingOutputRestoresItsScopeAndPreservesAnExternalFolder() {
+        String previous = System.getProperty("erp.run.evidence.output");
+        System.clearProperty("erp.run.evidence.output");
+        try {
+            var listener = new NativeInteractiveSuiteListener();
+            listener.pinEvidenceOutput(Path.of("target/test-run"));
+            Assert.assertEquals(
+                    System.getProperty("erp.run.evidence.output"),
+                    Path.of("target/test-run").toString());
+            listener.onExecutionFinish();
+            Assert.assertNull(System.getProperty("erp.run.evidence.output"));
+            System.setProperty("erp.run.evidence.output", "target/external");
+            var nested = new NativeInteractiveSuiteListener();
+            nested.pinEvidenceOutput(Path.of("target/another"));
+            nested.onExecutionFinish();
+            Assert.assertEquals(System.getProperty("erp.run.evidence.output"), "target/external");
+        } finally {
+            if (previous == null) System.clearProperty("erp.run.evidence.output");
+            else System.setProperty("erp.run.evidence.output", previous);
+        }
+    }
 }

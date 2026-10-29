@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-29",
+  "activity": "Restaurant",
+  "taxPolicy": "ItemBased",
+  "discount": "Transaction",
+  "additionalTaxEnabled": true,
+  "method": "Three live draft observations; same verified taxable customer configuration; no invoices saved",
+  "observations": [
+    {
+      "itemExempt": false,
+      "itemIsTaxable": true,
+      "itemTax": 15,
+      "itemAdditional": true,
+      "customerIsTaxable": true,
+      "total": 100,
+      "netBeforeTaxes": 200,
+      "totalAdditionalTaxes": 100,
+      "totalTaxes": 30,
+      "net": 230,
+      "selectedCustomerMatchesVerifiedCustomer": true,
+      "source": "target/tax-flags-audit-2026-10-29/taxable.json"
+    },
+    {
+      "itemExempt": true,
+      "itemIsTaxable": false,
+      "itemTax": 0,
+      "itemAdditional": true,
+      "customerIsTaxable": true,
+      "total": 100,
+      "netBeforeTaxes": 200,
+      "totalAdditionalTaxes": 100,
+      "totalTaxes": 0,
+      "net": 200,
+      "selectedCustomerMatchesVerifiedCustomer": true,
+      "source": "target/tax-flags-audit-2026-10-29/exempt.json"
+    },
+    {
+      "itemExempt": true,
+      "itemIsTaxable": false,
+      "itemTax": 15,
+      "itemAdditional": true,
+      "customerIsTaxable": true,
+      "total": 100,
+      "netBeforeTaxes": 200,
+      "totalAdditionalTaxes": 100,
+      "totalTaxes": 0,
+      "net": 200,
+      "selectedCustomerMatchesVerifiedCustomer": true,
+      "source": "target/tax-flags-audit-rate15-2026-10-29/exempt.json"
+    }
+  ],
+  "businessRule": "User previously confirmed VAT applies when an exempt item is eligible for additional tax: base100 + additional100 + VAT30 =230",
+  "interpretation": "No non-taxable customer mismatch. VAT=0 persists for exempt item at both itemTax=0 and itemTax=15. The current application differs from the confirmed expectation; changing the expectation requires business clarification, not assuming zero VAT is correct.",
+  "originalFourResultsUnchanged": true,
+  "liveRuns": [
+    {
+      "source": "target/tax-flags-audit-2026-10-29/verification.json",
+      "branchCleaned": true,
+      "status": 0,
+      "scope": "ItemBased restaurant: verify actual customer and both item tax states; drafts only; no saved invoices"
+    },
+    {
+      "source": "target/tax-flags-audit-rate15-2026-10-29/verification.json",
+      "branchCleaned": true,
+      "status": 0,
+      "scope": "ItemBased restaurant: verify actual customer and both item tax states; drafts only; no saved invoices"
+    }
+  ],
+  "validation": {
+    "ciTests": 991,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "latestBusinessClarification": "User corrected the rule: VAT-exempt item remains VAT exempt with additional tax. Base100 + additional100 = net200, VAT0.",
+  "latestInterpretation": "Recorded application values match the clarified rule. The four original assertions expected230 incorrectly; classify as TEST_DEFECT. Preserve original observation data and statuses."
+}

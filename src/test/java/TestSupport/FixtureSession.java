@@ -13,31 +13,26 @@ public final class FixtureSession {
 
     public FixtureSession(WebDriver driver) {
         this.driver = driver;
-        Object location = script("return location.origin");
-        origin = location instanceof String text ? text : "offline";
-        branchId =
+        var snapshot =
                 new org.openqa.selenium.support.ui.WebDriverWait(
                                 driver, java.time.Duration.ofSeconds(30))
                         .until(
-                                d ->
-                                        script(
-                                                "return erpVue.root()?.$store?.getters['app/currentBranch']?.id"));
+                                d -> {
+                                    var current = FixtureContextSnapshot.read(d);
+                                    return current.branchId() == null ? null : current;
+                                });
+        origin = snapshot.origin();
+        branchId = snapshot.branchId();
         if (branchId == null) throw new AssertionError("Fixture branch is unavailable");
-    }
-
-    private Object script(String code) {
-        return Plugin_ERP.Util.VueComponentAccess.execute(driver, code);
     }
 
     public void verify() {
         new org.openqa.selenium.support.ui.WebDriverWait(driver, java.time.Duration.ofSeconds(30))
                 .until(
                         d -> {
-                            Object location = script("return location.origin");
-                            String actual = location instanceof String text ? text : "offline";
-                            Object branch =
-                                    script(
-                                            "return erpVue.root()?.$store?.getters['app/currentBranch']?.id");
+                            var snapshot = FixtureContextSnapshot.read(d);
+                            String actual = snapshot.origin();
+                            Object branch = snapshot.branchId();
                             if (!origin.equals(actual)
                                     || (branch != null && !Objects.equals(branchId, branch)))
                                 throw new AssertionError(

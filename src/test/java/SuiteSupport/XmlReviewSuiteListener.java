@@ -183,6 +183,7 @@ public class XmlReviewSuiteListener extends NativeInteractiveSuiteListener
             System.err.println(blocked + "; preserve recovery journals.");
         } finally {
             round.preparationMillis = (System.nanoTime() - preparationStarted) / 1_000_000;
+            writeSummary();
         }
     }
 
@@ -237,6 +238,8 @@ public class XmlReviewSuiteListener extends NativeInteractiveSuiteListener
                     output.resolve("summary.json"),
                     new org.json.JSONObject(
                                     Map.of(
+                                            "processId",
+                                            ProcessHandle.current().pid(),
                                             "blocked",
                                             Objects.toString(blocked, ""),
                                             "policies",

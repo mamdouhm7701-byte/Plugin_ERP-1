@@ -230,6 +230,43 @@ public final class FailureReviewTest {
         Assert.assertTrue(html.contains("&lt;script&gt;"));
     }
 
+    @Test
+    public void inheritedMethodsDoNotMixRestaurantAndPosRetests() throws Exception {
+        Path root = Files.createTempDirectory("failure-review-inherited-");
+        Path results = Files.createDirectory(root.resolve("results"));
+        Path output = root.resolve("review");
+        JSONObject restaurant = test("failed", "mismatch", "ItemBased");
+        restaurant.put(
+                "labels",
+                new JSONArray()
+                        .put(new JSONObject().put("name", "review.scope").put("value", "ItemBased"))
+                        .put(
+                                new JSONObject()
+                                        .put("name", "testClass")
+                                        .put("value", "RestaurantInvoiceTaxReviewTest")));
+        put(results, restaurant);
+        RunFailureOverview.write(results, output, "one", new JSONArray());
+        JSONObject pos =
+                test("passed", "", "ItemBased")
+                        .put(
+                                "labels",
+                                new JSONArray()
+                                        .put(
+                                                new JSONObject()
+                                                        .put("name", "review.scope")
+                                                        .put("value", "ItemBased"))
+                                        .put(
+                                                new JSONObject()
+                                                        .put("name", "testClass")
+                                                        .put("value", "PosInvoiceTaxReviewTest")));
+        put(results, pos);
+        RunFailureOverview.write(results, output, "two", new JSONArray());
+        Assert.assertEquals(
+                summary(output).getJSONArray("cases").length(),
+                0,
+                "A different screen must not count as a successful retest of the restaurant defect");
+    }
+
     private static JSONObject test(String status, String message, String policy) {
         return new JSONObject()
                 .put("fullName", "Sales.check")

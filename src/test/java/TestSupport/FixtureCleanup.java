@@ -31,11 +31,14 @@ public final class FixtureCleanup {
                                 + "]: waiting for dependent fixture cleanup");
                 continue;
             }
+            long cleanupStarted = System.nanoTime();
+            boolean removed = false;
             try {
                 remove.accept(record);
                 records.remove(record);
                 fixtures.entrySet().removeIf(entry -> entry.getValue().equals(record));
                 persist.run();
+                removed = true;
             } catch (RuntimeException | AssertionError failure) {
                 pending.add(record);
                 failures.add(
@@ -46,6 +49,8 @@ public final class FixtureCleanup {
                                 + record.id()
                                 + "]: "
                                 + String.valueOf(failure.getMessage()).split("\\R", 2)[0]);
+            } finally {
+                FixtureCleanupTiming.record(record, cleanupStarted, removed);
             }
         }
         records.removeIf(record -> !pending.contains(record));

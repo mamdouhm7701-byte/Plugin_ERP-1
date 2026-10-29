@@ -42,7 +42,12 @@ public final class FailureClassification {
                 "connection reset",
                 "unknownhost",
                 "connectexception",
-                "sockettimeout"))
+                "sockettimeout",
+                "browser_session_unavailable",
+                "timed out receiving message from renderer",
+                "tab crashed",
+                "invalid session id",
+                "chrome not reachable"))
             return new Category(domain, "شبكة أو بيئة التشغيل", "لم يثبت أنه عيب في البرنامج", "");
         if (failure instanceof NullPointerException
                 || failure instanceof IllegalArgumentException

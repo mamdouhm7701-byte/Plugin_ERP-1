@@ -9,6 +9,11 @@
     </listeners>
     <test name="Configuration, arithmetic and owned fixture recovery" preserve-order="true">
         <classes>
+            <class name="Plugin_ERP.Util.BrowserSessionHealthTest"/>
+            <class name="SuiteSupport.CleanupRunDialogTest"/>
+            <class name="SuiteSupport.XmlSuiteCatalogTest"/>
+            <class name="SuiteSupport.XmlReviewSuiteListenerTest"/>
+            <class name="SpecialSalesTest.InvoiceReviewRecipeTest"/>
             <class name="Invoice.SalesSeedInvoicesTest"/>
             <class name="Purches.PurchaseSeedInvoicesTest"/>
             <class name="Invoice.SalesMovementRecoveryTest"/>

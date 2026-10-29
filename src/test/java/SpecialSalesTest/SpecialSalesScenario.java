@@ -130,6 +130,11 @@ public abstract class SpecialSalesScenario extends BaseTest {
     @SuppressWarnings("unchecked")
     @AfterMethod(alwaysRun = true)
     public void evidence(ITestResult result) {
+        if (!Plugin_ERP.Util.BrowserSessionHealth.available(driver)) {
+            Plugin_ERP.Bots.LogUtils.warn(
+                    "Browser stopped responding; skip repeated screenshots/default queries and preserve recovery journals.");
+            return;
+        }
         try {
             if (page != null) {
                 String marker = page.captureMarker();

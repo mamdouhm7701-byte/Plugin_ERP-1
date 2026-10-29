@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- شرح الملف: مراجعة الفواتير الأربع وسياسات الضريبة الثلاث من ERP - XML review.
+     تشغيل XML مباشرة يراجع سياسة الفرع الحالية فقط. فواتير المبيعات العادية تختبر منع التعديل والحذف بعد الحفظ.
+     كل حالة تنشئ بياناتها وتنظفها؛ الإضافية للمطعم حسب اختيار المستخدم. -->
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Invoice review - selected tax policy" parallel="none" configfailurepolicy="continue">
+  <listeners><listener class-name="SuiteSupport.BranchIsolationListener"/></listeners>
+  <test name="Sales, POS, restaurant and purchases - numbers and lifecycle" preserve-order="true">
+    <classes>
+      <class name="SuiteSupport.BusinessProfileVerificationTest"/>
+      <class name="Invoice.SalesInvoiceTaxReviewTest"/>
+      <class name="SpecialSalesTest.PosInvoiceTaxReviewTest"/>
+      <class name="SpecialSalesTest.RestaurantInvoiceTaxReviewTest"/>
+      <class name="Purches.PurchaseInvoiceTaxReviewTest"/>
+    </classes>
+  </test>
+</suite>

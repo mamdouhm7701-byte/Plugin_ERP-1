@@ -30,9 +30,13 @@ public class WebDriverFactory {
         }
         WebDriver rawDriver = getDriver(browserType.trim());
         WebDriver driver;
+        WebDriver session = null;
         try {
-            driver = ThreadGuard.protect(Plugin_ERP.Util.FailureVideoRecorder.decorate(rawDriver));
+            session = Plugin_ERP.Util.BrowserSessionHealth.decorate(rawDriver);
+            driver = ThreadGuard.protect(Plugin_ERP.Util.FailureVideoRecorder.decorate(session));
+            Plugin_ERP.Util.BrowserSessionHealth.alias(session, driver);
         } catch (RuntimeException failure) {
+            Plugin_ERP.Util.BrowserSessionHealth.release(session);
             rawDriver.quit();
             throw failure;
         }
@@ -58,6 +62,7 @@ public class WebDriverFactory {
         try {
             if (ownedDriver != null) ownedDriver.quit();
         } finally {
+            Plugin_ERP.Util.BrowserSessionHealth.release(ownedDriver);
             if (driverThreadLocal.get() == ownedDriver) {
                 Plugin_ERP.Util.FailureVideoRecorder.release();
                 driverThreadLocal.remove();

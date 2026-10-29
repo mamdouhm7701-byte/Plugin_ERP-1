@@ -54,7 +54,12 @@ public final class OutcomeClassification {
                 "connectexception",
                 "sockettimeoutexception",
                 "sessionnotcreatedexception",
-                "only supports chrome version"))
+                "only supports chrome version",
+                "browser_session_unavailable",
+                "timed out receiving message from renderer",
+                "tab crashed",
+                "chrome not reachable",
+                "invalid session id"))
             return new Decision(
                     Kind.ENVIRONMENT,
                     "دليل الخطأ يشير إلى اتصال أو توافق تشغيل المتصفح؛ لا يثبت خللًا في حسابات التطبيق.");

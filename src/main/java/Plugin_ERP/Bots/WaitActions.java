@@ -37,55 +37,12 @@ public class WaitActions extends BaseAction {
     }
 
     public void waitForReportReady(int timeoutSec) {
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSec));
-
-        // 1. Page ready
-        wait.until(
-                webDriver ->
-                        ((JavascriptExecutor) webDriver)
-                                .executeScript("return document.readyState")
-                                .equals("complete"));
-
-        // 2. Spinner يختفي
-        List<By> loaders =
-                List.of(
-                        By.cssSelector(".e-reportviewer-progressbar"),
-                        By.cssSelector(".e-reportviewer-loadingindicator"),
-                        By.cssSelector("[class*='loading']"),
-                        By.cssSelector("[class*='spinner']"));
-        for (By loader : loaders) {
-            try {
-                wait.until(ExpectedConditions.invisibilityOfElementLocated(loader));
-            } catch (Exception ignored) {
-                Plugin_ERP.Bots.LogUtils.debug(
-                        "WaitActions fallback: " + ignored.getClass().getSimpleName());
-            }
-        }
-
-        // 3. استنى أي عنصر فيه بيانات في التقرير
-        wait.until(
-                ExpectedConditions.presenceOfElementLocated(
-                        By.cssSelector(
-                                "div.e-reportviewer-paragrap div[style*='white-space:"
-                                        + " pre-wrap']")));
-
-        // 4. استنى إن في عنصر فيه نص فعلي مش فاضي
-        wait.until(
-                webDriver -> {
-                    try {
-                        List<WebElement> elements =
-                                webDriver.findElements(
-                                        By.cssSelector(
-                                                "div.e-reportviewer-paragrap"
-                                                        + " div[style*='white-space: pre-wrap']"));
-                        return elements.stream().anyMatch(el -> !el.getText().trim().isEmpty());
-                    } catch (Exception e) {
-                        Plugin_ERP.Bots.LogUtils.debug(
-                                "WaitActions condition unavailable: "
-                                        + e.getClass().getSimpleName());
-                        return false;
-                    }
+        Plugin_ERP.Util.RunPerformance.request(
+                "ui-wait",
+                "report-ready",
+                () -> {
+                    ReportReadiness.await(driver, Duration.ofSeconds(timeoutSec));
+                    return null;
                 });
     }
 
@@ -119,6 +76,16 @@ public class WaitActions extends BaseAction {
     }
 
     public void waitForOverlayToDisappear() {
+        Plugin_ERP.Util.RunPerformance.request(
+                "ui-wait",
+                "overlay-ready",
+                () -> {
+                    awaitOverlay();
+                    return null;
+                });
+    }
+
+    private void awaitOverlay() {
         By overlay = By.cssSelector("div.b-overlay");
         final long[] hiddenSince = {-1};
         new WebDriverWait(driver, Duration.ofSeconds(30))

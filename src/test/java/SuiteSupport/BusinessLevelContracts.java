@@ -50,7 +50,10 @@ final class BusinessLevelContracts {
         for (var contract : candidates) {
             var desired = new LinkedHashSet<>(methods(contract));
             if (level.equals("Smoke")) {
-                if (contract.getName().equals("Invoice.ConcreteStockJourneyTest"))
+                if (contract.getName().equals("Invoice.CarShowroomSalesTest"))
+                    desired.retainAll(
+                            Set.of("sellsOwnedChassisAndPreservesItsColorAndStockIdentity"));
+                else if (contract.getName().equals("Invoice.ConcreteStockJourneyTest"))
                     desired.retainAll(
                             Set.of(
                                     "directConcreteInvoiceDoesNotConsumeStock",

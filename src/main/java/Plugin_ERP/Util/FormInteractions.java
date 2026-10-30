@@ -35,7 +35,7 @@ public final class FormInteractions {
     private final Consumer<WebElement> scroll;
 
     public FormInteractions(WebDriverWait ready, Consumer<WebElement> scroll) {
-        this.ready = ready;
+        this.ready = UiPolling.configure(ready);
         this.scroll = scroll;
     }
 
@@ -61,7 +61,6 @@ public final class FormInteractions {
                         if (!element.isDisplayed() || !element.isEnabled()) continue;
                         if (mode == InputMode.CLICK_REPLACE) {
                             element.click();
-                            element.getDomProperty("value");
                             if (value.isEmpty())
                                 element.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
                             else element.sendKeys(Keys.chord(Keys.CONTROL, "a"), value);
@@ -102,7 +101,7 @@ public final class FormInteractions {
                             }
                         }
                         String id = input.getDomAttribute("aria-controls");
-                        List<WebElement> options =
+                        List<VisibleOption> available =
                                 driver
                                         .findElements(
                                                 By.xpath(
@@ -111,27 +110,26 @@ public final class FormInteractions {
                                                                 + "']//li[not(@aria-disabled='true')]"))
                                         .stream()
                                         .filter(WebElement::isDisplayed)
-                                        .filter(option -> match.matches(option.getText(), name))
+                                        .map(option -> new VisibleOption(option, option.getText()))
+                                        .toList();
+                        List<VisibleOption> options =
+                                available.stream()
+                                        .filter(option -> match.matches(option.text(), name))
                                         .toList();
                         if (options.isEmpty() && match == OptionMatch.EXACT_THEN_CONTAINS) {
                             options =
-                                    driver
-                                            .findElements(
-                                                    By.xpath(
-                                                            "//ul[@id='"
-                                                                    + id
-                                                                    + "']//li[not(@aria-disabled='true')]"))
-                                            .stream()
-                                            .filter(WebElement::isDisplayed)
-                                            .filter(option -> option.getText().contains(name))
+                                    available.stream()
+                                            .filter(option -> option.text().contains(name))
                                             .toList();
                         }
                         if (options.isEmpty()) return false;
                         if (options.size() != 1) throw new AssertionError(ambiguityMessage + name);
-                        options.get(0).click();
+                        options.get(0).element().click();
                         return true;
                     }
                     return false;
                 });
     }
+
+    private record VisibleOption(WebElement element, String text) {}
 }

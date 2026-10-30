@@ -19,6 +19,7 @@ final class PurchaseTestData implements AutoCloseable {
 
     private final WebDriver driver;
     private final PurchaseFixtureApi api;
+    final TestSupport.FixtureAccountPool accounts = new TestSupport.FixtureAccountPool();
     private final PurchaseFixtureDefinitions definitions = new PurchaseFixtureDefinitions(this);
     private final String origin;
     private final Object sessionBranchId;
@@ -42,12 +43,13 @@ final class PurchaseTestData implements AutoCloseable {
         new TestSupport.FixtureContextGuard(driver, origin, sessionBranchId).verify();
     }
 
-    private String fixtureKey(String key) {
+    String fixtureKey(String key) {
         boolean shared =
                 key.startsWith("store-")
                         || key.startsWith("unit-")
                         || key.equals("category-main")
                         || key.startsWith("agent-")
+                        || key.startsWith("account-main-pool-")
                         || key.startsWith("account-main-store-")
                         || key.startsWith("account-sub-store-");
         return shared ? key : scenarioScope + key;

@@ -20,6 +20,7 @@ final class StoreTestData implements AutoCloseable {
 
     private final WebDriver driver;
     private final StoreFixtureApi api;
+    final TestSupport.FixtureAccountPool accounts = new TestSupport.FixtureAccountPool();
     private final StoreFixtureDefinitions definitions = new StoreFixtureDefinitions(this);
     private final String origin;
     private final Object sessionBranchId;
@@ -86,10 +87,11 @@ final class StoreTestData implements AutoCloseable {
         scenarioScope = "case-" + (++scenarioSequence) + "-";
     }
 
-    private String fixtureKey(String key) {
+    String fixtureKey(String key) {
         return key.startsWith("unit-")
                         || key.equals("category-main")
                         || key.startsWith("store-")
+                        || key.startsWith("account-main-pool-")
                         || key.startsWith("account-main-store-")
                         || key.startsWith("account-sub-store-")
                 ? key

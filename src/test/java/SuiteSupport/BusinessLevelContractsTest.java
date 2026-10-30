@@ -14,6 +14,31 @@ import org.testng.xml.internal.Parser;
 
 public final class BusinessLevelContractsTest {
     @Test
+    public void smokeDoesNotExpandIntoReturnAndSettlementJourneysWhenActivityClassGrows() {
+        var request =
+                new BusinessRunRequest(
+                        ActivityType.CAR_SHOWROOM,
+                        DiscountLevel.TRANSACTION,
+                        TaxPolicy.NET_BASED,
+                        StocktakingMethod.PERIODIC,
+                        false);
+        var smoke = cases(BusinessLevelContracts.missing(request, "Smoke", List.of()));
+        Assert.assertTrue(
+                smoke.contains(
+                        "Invoice.CarShowroomSalesTest#sellsOwnedChassisAndPreservesItsColorAndStockIdentity"));
+        Assert.assertFalse(
+                smoke.contains(
+                        "Invoice.CarShowroomSalesTest#chassisSaleCollectionEditDeleteAndFinalPaymentPreserveCarStock"));
+        Assert.assertFalse(
+                smoke.contains(
+                        "Invoice.CarShowroomSalesTest#linkedReturnRestoresExactSoldChassisColorAndStock"));
+        var regression = cases(BusinessLevelContracts.missing(request, "Regression", List.of()));
+        Assert.assertTrue(
+                regression.contains(
+                        "Invoice.CarShowroomSalesTest#chassisSaleCollectionEditDeleteAndFinalPaymentPreserveCarStock"));
+    }
+
+    @Test
     public void explicitShowroomXmlUsesChassisContractsWithoutGenericInvoiceJourneys()
             throws Exception {
         var suites = new ArrayList<>(new Parser("src/test/resources/e2e-testng.xml").parseToList());

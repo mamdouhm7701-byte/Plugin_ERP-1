@@ -1,0 +1,30 @@
+{
+  "scope": "Parallel pilot only: one sales invoice and one purchase invoice; NetBased; not a full three-policy qualification",
+  "status": 0,
+  "branchCleaned": true,
+  "cases": [
+    {
+      "method": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+      "status": "passed",
+      "start": 1793396444311,
+      "stop": 1793396445218
+    },
+    {
+      "method": "Purches.PurchaseInvoiceTaxReviewTest.reviewPurchaseInvoice",
+      "status": "passed",
+      "start": 1793396454876,
+      "stop": 1793396481051
+    },
+    {
+      "method": "Invoice.SalesInvoiceTaxReviewTest.reviewSalesInvoice",
+      "status": "passed",
+      "start": 1793396454506,
+      "stop": 1793396487669
+    }
+  ],
+  "invoiceCasesOverlap": true,
+  "branchCleanup": {
+    "branchId": "b734ad59e9f16ce0",
+    "status": "DELETED"
+  }
+}

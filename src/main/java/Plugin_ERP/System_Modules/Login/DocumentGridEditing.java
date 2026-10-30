@@ -24,12 +24,10 @@ final class DocumentGridEditing {
             By.xpath("//tbody//tr[@role='row' and .//input[not(@type='hidden')]]");
 
     void WaitEditeForBills() {
-        utilites.waits().waitForOverlayToDisappear();
         utilites.waits().waitForExchangeEditPageForEditBills(SaveAndPrintButton, EditableRows);
     }
 
     void clickDeleteRows(int... rowNumbers) {
-        utilites.waits().waitForOverlayToDisappear();
         owner.WaitEditeForBills();
         utilites.grid().clickDeleteRows(rowNumbers);
         utilites.waits().waitForOverlayToDisappear();

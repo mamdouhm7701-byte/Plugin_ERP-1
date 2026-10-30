@@ -39,7 +39,11 @@ public class BusinessLevelSuitePolicy implements IAlterSuiteListener {
         for (var original : new ArrayList<>(suites)) {
             String level = original.getParameter("business.level");
             if (level == null) continue;
+            String scope = System.getProperty("sanity.scope", "All");
+            if (level.equals("Sanity")) SanityScope.filter(List.of(original), scope);
             var additions = BusinessLevelContracts.missing(selected.orElseThrow(), level, suites);
+            if (level.equals("Sanity"))
+                additions.removeIf(type -> !SanityScope.accepts(scope, type.getName()));
             if (additions.isEmpty()) continue;
             var business = new XmlSuite();
             business.setName("Selected business / " + level);

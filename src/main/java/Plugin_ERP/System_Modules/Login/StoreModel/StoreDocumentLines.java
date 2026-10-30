@@ -109,6 +109,9 @@ final class StoreDocumentLines {
     Map<String, String> smAwaitInvalidQuantity(String name) {
         return ready.until(
                 d -> {
+                    if (!page.smSaves().isEmpty())
+                        throw new AssertionError(
+                                "Invalid quantity was persisted instead of rejected: " + name);
                     for (WebElement row : d.findElements(line(name))) {
                         if (!row.isDisplayed()) continue;
                         for (WebElement input :
@@ -119,16 +122,16 @@ final class StoreDocumentLines {
                             String state = input.getDomAttribute("aria-invalid");
                             String classes = input.getDomAttribute("class");
                             if ("true".equals(state)
-                                    && classes != null
-                                    && Arrays.asList(classes.split("\\s+"))
-                                            .contains("is-invalid")) {
+                                    || (classes != null
+                                            && Arrays.asList(classes.split("\\s+"))
+                                                    .contains("is-invalid"))) {
                                 return Map.of(
                                         "quantity",
                                         input.getDomProperty("value"),
                                         "aria-invalid",
-                                        state,
+                                        Objects.toString(state, ""),
                                         "class",
-                                        classes,
+                                        Objects.toString(classes, ""),
                                         "title",
                                         Objects.toString(input.getDomAttribute("title"), ""));
                             }

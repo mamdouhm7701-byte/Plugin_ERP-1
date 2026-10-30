@@ -54,6 +54,36 @@ public final class FixtureCleanupTest {
     }
 
     @Test
+    public void aFailedChildPreservesTheSharedParentAfterTheOtherChildIsRemoved() {
+        var parent = new Row("Accounts", "main", "QA-main", Map.of());
+        var first = new Row("Accounts", "first", "QA-first", Map.of("parentId", "main"));
+        var second = new Row("Accounts", "second", "QA-second", Map.of("parentId", "main"));
+        var records = new ArrayList<>(List.of(parent, first, second));
+        var fixtures =
+                new LinkedHashMap<>(Map.of("main", parent, "first", first, "second", second));
+        var removed = new ArrayList<Object>();
+        Assert.expectThrows(
+                AssertionError.class,
+                () ->
+                        FixtureCleanup.run(
+                                records,
+                                fixtures,
+                                List.of(second, first, parent),
+                                row -> {
+                                    if (row.equals(first))
+                                        throw new AssertionError("Child is still in use");
+                                    removed.add(row.id());
+                                },
+                                () -> {}));
+        Assert.assertEquals(removed, List.of("second"));
+        Assert.assertEquals(records, List.of(parent, first));
+        FixtureCleanup.run(
+                records, fixtures, List.of(first, parent), row -> removed.add(row.id()), () -> {});
+        Assert.assertEquals(removed, List.of("second", "first", "main"));
+        Assert.assertTrue(records.isEmpty());
+    }
+
+    @Test
     public void cyclicDependenciesRemainRecordedWhenNeitherCanBeRemoved() {
         var first = new Row("Items", "first", "QA-first", Map.of("otherId", "second"));
         var second = new Row("Items", "second", "QA-second", Map.of("otherId", "first"));

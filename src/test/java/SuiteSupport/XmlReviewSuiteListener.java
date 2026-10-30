@@ -101,12 +101,17 @@ public class XmlReviewSuiteListener extends NativeInteractiveSuiteListener
                                 details.get("url"),
                                 credentials.get(key + ".Username"),
                                 credentials.get(key + ".Password").toCharArray());
+                int workers =
+                        matrix && XmlSuiteCatalog.parallelReviewEnabled()
+                                ? Math.min(2, choice.workers())
+                                : 1;
                 var selection =
                         new BusinessRunDialog.Selection(
-                                request, choice.level(), choice.execution(), target, 1);
+                                request, choice.level(), choice.execution(), target, workers);
                 Path roundOutput = folder.resolve(tax.name());
                 var selected =
-                        XmlSuiteCatalog.plan(project, choice.level().substring(4), 1, roundOutput);
+                        XmlSuiteCatalog.plan(
+                                project, choice.level().substring(4), workers, roundOutput);
                 // A policy owns one root suite so its branch survives all nested XML suites.
                 var root = new XmlSuite();
                 root.setName("XML / " + tax.code());
@@ -147,12 +152,23 @@ public class XmlReviewSuiteListener extends NativeInteractiveSuiteListener
             @Override
             List<XmlSuite> plan(Path project, BusinessRunDialog.Selection selection, Path output)
                     throws Exception {
+                limitWorkers(suite, selection.workers());
                 Files.writeString(
                         output.resolve("xml-policy-settings.json"),
                         new org.json.JSONObject(selection.business().fields()).toString(2));
                 return List.of(suite);
             }
         };
+    }
+
+    static void limitWorkers(XmlSuite suite, int limit) {
+        suite.setThreadCount(Math.min(suite.getThreadCount(), limit));
+        if (limit == 1) suite.setParallel(XmlSuite.ParallelMode.NONE);
+        for (var test : suite.getTests()) {
+            test.setThreadCount(Math.min(test.getThreadCount(), limit));
+            if (limit == 1) test.setParallel(XmlSuite.ParallelMode.NONE);
+        }
+        for (var child : suite.getChildSuites()) limitWorkers(child, limit);
     }
 
     @Override

@@ -124,7 +124,7 @@ abstract class ConcreteOwnedReportScenario extends SalesScenarioTest {
         Assert.assertEquals(stored.get("dealerId"), customer.id());
         Assert.assertEquals(firstLine(stored).get("itemId"), item.id());
         sameNumber(firstLine(stored).get("quantity"), "2");
-        sameNumber(stored.get("net"), "230");
+        TestSupport.DecimalAmountAssertions.amount(stored.get("net"), "230");
         page.slDismiss();
         return saved;
     }

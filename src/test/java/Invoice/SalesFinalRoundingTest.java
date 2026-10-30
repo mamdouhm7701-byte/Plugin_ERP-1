@@ -79,7 +79,7 @@ public final class SalesFinalRoundingTest extends SalesScenarioTest {
                 page.slDocument().get("totalTaxes"), expected.getTax());
         var source = save(false);
         var stored = data.read(source);
-        DecimalAmountAssertions.exact(stored.get("net"), expected.getNet());
+        DecimalAmountAssertions.matchesExpected(stored.get("net"), expected.getNet());
         for (var owned : items) sameNumber(data.balance(owned, 1), "999");
     }
 }

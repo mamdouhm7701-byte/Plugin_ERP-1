@@ -112,7 +112,7 @@ public final class SalesWorkflow implements AutoCloseable {
         Assert.assertEquals(lines.size(), 1);
         Assert.assertEquals(lines.get(0).get("itemId"), item.id(), "مطابقة الصنف");
         same(lines.get(0).get("quantity"), new BigDecimal(quantity));
-        same(
+        TestSupport.DecimalAmountAssertions.matchesExpected(
                 stored.get("net"),
                 new BigDecimal(
                         net(

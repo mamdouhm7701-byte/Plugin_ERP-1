@@ -180,7 +180,7 @@ public final class ConcreteOperationalReportTest extends ConcreteOwnedReportScen
         Assert.assertEquals(stored.get("projectId"), project.id());
         Assert.assertEquals(
                 invoice.values().get("concreteDeliveryOrderIdsList"), List.of(delivery.id()));
-        sameNumber(stored.get("net"), "115");
+        TestSupport.DecimalAmountAssertions.amount(stored.get("net"), "115");
         sameNumber(data.balance(item, 1), "999");
         page.slDismiss();
     }

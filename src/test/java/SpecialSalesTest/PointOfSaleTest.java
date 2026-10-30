@@ -59,7 +59,7 @@ public class PointOfSaleTest extends SpecialSalesScenario {
     public void barcodeAddsItem() {
         add();
         Assert.assertEquals(lines().size(), 1, "مطابقة عدد بنود الفاتورة");
-        number(page.document().get("total"), "100");
+        TestSupport.DecimalAmountAssertions.amount(page.document().get("total"), "100");
         number(data.balance(item, 1), "1000");
     }
 
@@ -250,7 +250,7 @@ public class PointOfSaleTest extends SpecialSalesScenario {
         page.awaitSaveCount(count + 1);
         var updated = saved();
         Assert.assertEquals(updated.id(), invoice.id());
-        number(data.read(updated).get("total"), "300");
+        TestSupport.DecimalAmountAssertions.amount(data.read(updated).get("total"), "300");
         number(data.balance(item, 1), "997");
         number(data.balance(item, 2), "1000");
         customerBalance("0");

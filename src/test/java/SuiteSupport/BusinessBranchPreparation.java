@@ -16,6 +16,19 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public final class BusinessBranchPreparation {
     private BusinessBranchPreparation() {}
 
+    static Map<String, Object> ownedBranchPayload(
+            Map<String, Object> defaults, String name, BusinessRunRequest request) {
+        var payload = new LinkedHashMap<>(defaults);
+        payload.remove("id");
+        if (payload.get("scalesNature") == null) payload.put("scalesNature", 0);
+        payload.put("arabicName", name);
+        payload.put("englishName", name);
+        // Only the new owned branch: regression price-list cases require this visible control.
+        payload.put("enablePriceLists", true);
+        payload.putAll(request.fields());
+        return payload;
+    }
+
     static void verifyCreationOrigin(String actualOrigin, String requestedUrl) {
         var actual = java.net.URI.create(actualOrigin).resolve("/");
         var requested = java.net.URI.create(requestedUrl).resolve("/");
@@ -205,13 +218,7 @@ public final class BusinessBranchPreparation {
             return r?.path==='/branches/new'&&value&&!value.id&&
               ['discountLevel','taxPolicy','stocktakingMethod','accounts','stores','scalesNature'].every(k=>k in value)&&value.accounts&&'salesAccountId' in value.accounts?JSON.parse(JSON.stringify(value)):null;
             """));
-        var payload = new LinkedHashMap<>(defaults);
-        payload.remove("id");
-        // Native save normalizes the unused scale enum to 0 (captured branch-create contract).
-        if (payload.get("scalesNature") == null) payload.put("scalesNature", 0);
-        payload.put("arabicName", name);
-        payload.put("englishName", name);
-        payload.putAll(request.fields());
+        var payload = ownedBranchPayload(defaults, name, request);
         var ownership =
                 new org.json.JSONObject(
                         Map.of(

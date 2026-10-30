@@ -35,7 +35,7 @@ public abstract class PurchaseFormActions extends PurchaseScenarioTest {
         page.puWaitNet("419.75");
         printContentAssertions =
                 stored -> {
-                    sameNumber(stored.get("net"), "419.75");
+                    TestSupport.DecimalAmountAssertions.amount(stored.get("net"), "419.75");
                     Plugin_ERP.Util.PrintedInvoiceAssertions.invoice(
                             driver,
                             stored.get("code").toString(),
@@ -152,7 +152,7 @@ public abstract class PurchaseFormActions extends PurchaseScenarioTest {
                     "application/json",
                     new org.json.JSONObject(stored).toString(),
                     ".json");
-            sameNumber(stored.get("net"), net);
+            TestSupport.DecimalAmountAssertions.amount(stored.get("net"), net);
             Assert.assertEquals(stored.get("notes"), marker, "مطابقة الملاحظات");
             Assert.assertEquals(stored.get("dealerId"), supplier.id(), "مطابقة العميل أو المورد");
             Assert.assertEquals(stored.get("storeId"), data.store(1).id(), "مطابقة المخزن");
@@ -283,11 +283,11 @@ public abstract class PurchaseFormActions extends PurchaseScenarioTest {
         var returned = save(false);
         assertSource(returned, invoice.id());
         sameNumber(firstLine(data.read(returned)).get("quantity"), "2");
-        sameNumber(data.read(returned).get("net"), "200");
+        TestSupport.DecimalAmountAssertions.amount(data.read(returned).get("net"), "200");
         assertStock("2");
         assertSupplierDelta(supplierBefore, "200");
         sameNumber(firstLine(data.read(invoice)).get("quantity"), "3");
-        sameNumber(data.read(invoice).get("net"), "300");
+        TestSupport.DecimalAmountAssertions.amount(data.read(invoice).get("net"), "300");
     }
 
     protected void convertOrder() {

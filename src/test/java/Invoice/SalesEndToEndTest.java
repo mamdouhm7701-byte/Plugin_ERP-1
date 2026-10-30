@@ -61,7 +61,7 @@ public final class SalesEndToEndTest extends SalesScenarioTest {
         Assert.assertEquals(storedReturn.get("sourceTransactionId"), invoice.id());
         Assert.assertEquals(firstLine(storedReturn).get("itemId"), item.id(), "مطابقة الصنف");
         sameNumber(firstLine(storedReturn).get("quantity"), "3");
-        sameNumber(storedReturn.get("net"), salesNet("300"));
+        TestSupport.DecimalAmountAssertions.amount(storedReturn.get("net"), salesNet("300"));
         assertStock("3");
         awaitOwnedStock(stockBeforeSale, "Full linked return restores the pre-sale stock");
         assertCustomerDelta(customerBeforeSale, "0");

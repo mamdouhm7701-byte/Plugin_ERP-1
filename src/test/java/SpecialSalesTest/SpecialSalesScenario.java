@@ -113,7 +113,8 @@ public abstract class SpecialSalesScenario extends BaseTest {
                                                         new BigDecimal(
                                                                 value.get("prevCredit")
                                                                         .toString()));
-                                return actual.compareTo(new BigDecimal(expected)) == 0;
+                                return Plugin_ERP.Util.DecimalAmountComparison.matches(
+                                        actual, new BigDecimal(expected));
                             });
         } catch (TimeoutException failure) {
             throw new AssertionError(

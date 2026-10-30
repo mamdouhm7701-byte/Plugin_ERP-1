@@ -8,11 +8,11 @@
     <class name="StoreTest.ManufacturingTest"/>
     <class name="StoreTest.DamageAdjustmentTest"/>
     <class name="StoreTest.TransBetweenStoreTest"/>
-    <class name="StoreTest.StoreCleanupTest"/>
-<class name="StoreTest.StoreOwnershipCleanupTest"/>
-<class name="StoreTest.StoreRecoveryCleanupTest"/>
-<class name="StoreTest.StoreRecovery2CleanupTest"/>
-<class name="StoreTest.StoreDependenciesCleanupTest"/>
-<class name="StoreTest.StoreLifecycleCleanupTest"/>
+
+
+
+
+
+
   </classes></test>
 </suite>

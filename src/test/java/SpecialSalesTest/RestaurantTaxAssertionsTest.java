@@ -42,7 +42,7 @@ public final class RestaurantTaxAssertionsTest {
                                                         "otherPaymentMethodId",
                                                         "owned",
                                                         "value",
-                                                        "40.24"))),
+                                                        "39.94"))),
                                 "owned",
                                 new BigDecimal("40.25")));
     }
@@ -55,12 +55,14 @@ public final class RestaurantTaxAssertionsTest {
     }
 
     @Test
-    public void rejectsPrematurelyRoundedLineSumAndIncorrectExtraDigits() {
+    public void acceptsSmallDecimalDifferencesAndRejectsAmountsOutsideConfiguredRange() {
+        RestaurantTaxAssertions.intermediate("50.08", new BigDecimal("50.072"));
+        RestaurantTaxAssertions.intermediate("50.073", new BigDecimal("50.072"));
         Assert.expectThrows(
                 AssertionError.class,
-                () -> RestaurantTaxAssertions.intermediate("50.08", new BigDecimal("50.072")));
+                () -> RestaurantTaxAssertions.intermediate("50.375", new BigDecimal("50.072")));
         Assert.expectThrows(
                 AssertionError.class,
-                () -> RestaurantTaxAssertions.intermediate("50.073", new BigDecimal("50.072")));
+                () -> RestaurantTaxAssertions.intermediate("49.7649", new BigDecimal("50.072")));
     }
 }

@@ -144,12 +144,15 @@ public final class RestaurantAdditionalTaxSmokeTest extends SpecialSalesScenario
                         .toString(2),
                 ".json");
         page.waitNet(expected.net().toPlainString());
-        number(page.document().get("net"), expected.net().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                page.document().get("net"), expected.net().toPlainString());
         number(
                 page.document().get("totalAdditionalTaxes"),
                 expected.additionalTax().toPlainString());
-        number(page.document().get("netBeforeTaxes"), expected.beforeVat().toPlainString());
-        number(page.document().get("totalTaxes"), expected.vat().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                page.document().get("netBeforeTaxes"), expected.beforeVat().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                page.document().get("totalTaxes"), expected.vat().toPlainString());
         Assert.assertEquals(lines().size(), mixed ? 2 : 1);
         number(data.balance(subject, 1), "1000");
         if (!mixed && !discounted) {
@@ -160,10 +163,15 @@ public final class RestaurantAdditionalTaxSmokeTest extends SpecialSalesScenario
             restaurant.payAndClose();
             var invoice = saved();
             var persisted = data.read(invoice);
-            number(persisted.get("totalAdditionalTaxes"), expected.additionalTax().toPlainString());
-            number(persisted.get("netBeforeTaxes"), expected.beforeVat().toPlainString());
-            number(persisted.get("totalTaxes"), expected.vat().toPlainString());
-            number(persisted.get("net"), expected.net().toPlainString());
+            TestSupport.DecimalAmountAssertions.amount(
+                    persisted.get("totalAdditionalTaxes"),
+                    expected.additionalTax().toPlainString());
+            TestSupport.DecimalAmountAssertions.amount(
+                    persisted.get("netBeforeTaxes"), expected.beforeVat().toPlainString());
+            TestSupport.DecimalAmountAssertions.amount(
+                    persisted.get("totalTaxes"), expected.vat().toPlainString());
+            TestSupport.DecimalAmountAssertions.amount(
+                    persisted.get("net"), expected.net().toPlainString());
             number(data.balance(subject, 1), "999");
             Allure.addAttachment(
                     "Saved restaurant additional tax",

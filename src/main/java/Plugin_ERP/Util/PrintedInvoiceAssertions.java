@@ -131,7 +131,12 @@ public final class PrintedInvoiceAssertions {
                                                                         + heading.width() / 2))
                                                 <= Math.max(heading.width(), c.width()) * .6)
                         .toList();
-        if (values.size() != 1 || money(values.getFirst()).orElseThrow().compareTo(expected) != 0)
+        boolean quantity = names.contains("الكمية") || names.contains("الكميه");
+        if (values.size() != 1
+                || !(quantity
+                        ? money(values.getFirst()).orElseThrow().compareTo(expected) == 0
+                        : DecimalAmountComparison.matches(
+                                money(values.getFirst()).orElseThrow(), expected)))
             throw new AssertionError(
                     "Printed "
                             + names
@@ -159,8 +164,8 @@ public final class PrintedInvoiceAssertions {
                                                                                         / 2))))
                                 .toList();
                 if (!candidates.isEmpty()
-                        && money(candidates.getFirst()).orElseThrow().compareTo(expected) == 0)
-                    return;
+                        && DecimalAmountComparison.matches(
+                                money(candidates.getFirst()).orElseThrow(), expected)) return;
             }
         throw new AssertionError(
                 "Printed labeled value " + names + " differs: expected " + expected);

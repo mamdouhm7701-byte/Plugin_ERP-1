@@ -42,7 +42,7 @@ public final class StocktakingAccountingTest extends SalesScenarioTest {
                                 .filter(v -> data.store(1).id().equals(v.get("storeId")))
                                 .findFirst()
                                 .orElseThrow();
-        sameNumber(seededStore.get("costPrice"), "80");
+        TestSupport.DecimalAmountAssertions.amount(seededStore.get("costPrice"), "80");
         Allure.addAttachment(
                 "Owned seeded accounting cost",
                 "application/json",
@@ -136,7 +136,8 @@ public final class StocktakingAccountingTest extends SalesScenarioTest {
             page.slWaitNet(totals.getNet().toPlainString());
             var source = save(false);
             var stored = data.read(source);
-            sameNumber(stored.get("net"), totals.getNet().toPlainString());
+            TestSupport.DecimalAmountAssertions.amount(
+                    stored.get("net"), totals.getNet().toPlainString());
             sameNumber(data.balance(item, 1), "998");
             var accounts =
                     new InventoryPostingExpectation.Accounts(

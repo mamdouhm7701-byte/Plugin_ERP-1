@@ -81,10 +81,8 @@ public final class SalesNetBasedDraftTest extends BaseTest {
         amounts.forEach(
                 (label, amount) -> {
                     Assert.assertNotNull(actual.get(label), "Missing displayed total: " + label);
-                    Assert.assertEquals(
-                            new BigDecimal(actual.get(label).replace(",", "")).compareTo(amount),
-                            0,
-                            route + " / " + label);
+                    TestSupport.DecimalAmountAssertions.matchesExpected(
+                            actual.get(label).replace(",", ""), amount);
                 });
         new BranchProfile("live-draft-baseline", baseline)
                 .verify(BranchProfileReader.capture(driver, Duration.ofSeconds(30)));

@@ -243,7 +243,8 @@ public abstract class SalesScenarioTest extends BaseTest {
                     .until(
                             d -> {
                                 last.set(data.read(customer));
-                                return customerBalance(last.get()).compareTo(target) == 0;
+                                return Plugin_ERP.Util.DecimalAmountComparison.matches(
+                                        customerBalance(last.get()), target);
                             });
         } catch (TimeoutException failure) {
             var evidence =

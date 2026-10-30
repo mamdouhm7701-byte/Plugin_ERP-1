@@ -14,6 +14,36 @@ import org.testng.xml.internal.Parser;
 
 public final class BusinessLevelContractsTest {
     @Test
+    public void explicitShowroomXmlUsesChassisContractsWithoutGenericInvoiceJourneys()
+            throws Exception {
+        var suites = new ArrayList<>(new Parser("src/test/resources/e2e-testng.xml").parseToList());
+        var policy =
+                new BusinessLevelSuitePolicy() {
+                    @Override
+                    Optional<BusinessRunRequest> selectedBusiness() {
+                        return Optional.of(
+                                new BusinessRunRequest(
+                                        ActivityType.CAR_SHOWROOM,
+                                        DiscountLevel.TRANSACTION,
+                                        TaxPolicy.NET_BASED,
+                                        StocktakingMethod.PERIODIC,
+                                        false));
+                    }
+                };
+        policy.alter(suites);
+        var once = selected(suites);
+        Assert.assertTrue(
+                once.stream().anyMatch(name -> name.startsWith("Invoice.CarShowroomSalesTest#")));
+        Assert.assertFalse(
+                once.stream().anyMatch(name -> name.startsWith("Invoice.SalesEndToEndTest#")));
+        Assert.assertFalse(
+                once.stream()
+                        .anyMatch(name -> name.startsWith("Purches.SupplyChainEndToEndTest#")));
+        policy.alter(suites);
+        Assert.assertEquals(selected(suites), once);
+    }
+
+    @Test
     public void unqualifiedHistoryAccessProbeDoesNotBecomeAMandatoryBusinessCase() {
         for (var activity : ActivityType.values())
             for (String level : List.of("Smoke", "Sanity", "E2E", "Regression", "Qualification")) {

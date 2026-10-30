@@ -202,6 +202,13 @@ public class TestNGListeners
                         test ->
                                 Plugin_ERP.Util.Allur.ScenarioReportCatalog.apply(
                                         test, scenarioClass, scenarioMethod));
+        String caseInstructions =
+                Plugin_ERP.Util.Allur.ScenarioCaseDescriptions.html(
+                        scenarioClass, scenarioMethod.getName());
+        if (caseInstructions != null
+                && io.qameta.allure.Allure.getLifecycle().getCurrentTestCase().isPresent())
+            io.qameta.allure.Allure.addAttachment(
+                    "خطوات الحالة بالعربي — طريقة التجربة", "text/html", caseInstructions, ".html");
         io.qameta.allure.Allure.getLifecycle()
                 .getCurrentTestCase()
                 .ifPresent(

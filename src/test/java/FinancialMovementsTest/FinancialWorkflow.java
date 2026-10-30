@@ -5,7 +5,6 @@ package FinancialMovementsTest;
 import Plugin_ERP.System_Modules.Login.FinancialMovements.FinancialMovementKind;
 import Plugin_ERP.System_Modules.Login.FinancialMovements.FinancialMovementPage;
 import io.qameta.allure.Allure;
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
@@ -143,8 +142,7 @@ public final class FinancialWorkflow implements AutoCloseable {
 
     private static void equalAmount(Object actual, String expected) {
         Assert.assertNotNull(actual);
-        Assert.assertEquals(
-                new BigDecimal(actual.toString()).compareTo(new BigDecimal(expected)), 0);
+        TestSupport.DecimalAmountAssertions.amount(actual, expected);
     }
 
     @Override

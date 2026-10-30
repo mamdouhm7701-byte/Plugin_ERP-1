@@ -235,7 +235,10 @@ public abstract class PurchaseScenarioTest extends BaseTest {
     protected void assertSupplierDelta(Map<String, Object> before, String delta) {
         var expected = signedBalance(before).add(number(delta));
         new WebDriverWait(driver, Duration.ofSeconds(30))
-                .until(d -> signedBalance(data.read(supplier)).compareTo(expected) == 0);
+                .until(
+                        d ->
+                                Plugin_ERP.Util.DecimalAmountComparison.matches(
+                                        signedBalance(data.read(supplier)), expected));
     }
 
     @io.qameta.allure.Step("التحقق من أثر المشتريات على كمية المخزون: {quantity}")

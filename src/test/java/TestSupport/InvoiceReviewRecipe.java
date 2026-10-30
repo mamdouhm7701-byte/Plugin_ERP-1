@@ -125,9 +125,6 @@ public final class InvoiceReviewRecipe {
     @io.qameta.allure.Step("التحقق من {label}: المتوقع {expected}، والقيمة المعروضة {actual}")
     public static void amount(Object actual, BigDecimal expected, String label) {
         Assert.assertNotNull(actual, label);
-        Assert.assertEquals(
-                new BigDecimal(actual.toString().replace(",", "")).compareTo(expected),
-                0,
-                label + ": المتوقع " + expected + "، الفعلي " + actual);
+        DecimalAmountAssertions.matchesExpected(actual.toString().replace(",", ""), expected);
     }
 }

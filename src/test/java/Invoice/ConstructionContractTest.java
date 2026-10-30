@@ -78,10 +78,13 @@ public final class ConstructionContractTest extends SalesScenarioTest {
         var line = (Map<?, ?>) ((List<?>) stored.get("lines")).getFirst();
         Assert.assertEquals(line.get("itemId"), item.id());
         sameNumber(line.get("quantity"), "1");
-        sameNumber(line.get("price"), "100");
-        sameNumber(stored.get("netBeforeTaxes"), expected.getBeforeTax().toPlainString());
-        sameNumber(stored.get("totalTaxes"), expected.getTax().toPlainString());
-        sameNumber(stored.get("net"), expected.getNet().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(line.get("price"), "100");
+        TestSupport.DecimalAmountAssertions.amount(
+                stored.get("netBeforeTaxes"), expected.getBeforeTax().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                stored.get("totalTaxes"), expected.getTax().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                stored.get("net"), expected.getNet().toPlainString());
         sameNumber(data.balance(item, 1), stockBefore.toString());
         var customerAfter = data.read(customer);
         Assert.assertEquals(

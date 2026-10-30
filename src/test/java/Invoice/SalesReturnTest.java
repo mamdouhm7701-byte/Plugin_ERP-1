@@ -15,8 +15,8 @@ public final class SalesReturnTest extends SalesFormTest {
         page.slSetLine(item.name(), "السعر", "125");
         page.slWaitNet(salesNet("375"));
         var saved = save(false);
-        sameNumber(firstLine(data.read(saved)).get("price"), "125");
-        sameNumber(data.read(saved).get("net"), salesNet("375"));
+        TestSupport.DecimalAmountAssertions.amount(firstLine(data.read(saved)).get("price"), "125");
+        TestSupport.DecimalAmountAssertions.amount(data.read(saved).get("net"), salesNet("375"));
         assertStock("3");
         assertCustomerDelta(before, "-375");
     }

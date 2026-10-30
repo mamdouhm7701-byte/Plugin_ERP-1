@@ -48,12 +48,19 @@ final class ProductRecordList {
     }
 
     boolean prHasRow(String name) {
-        return driver.findElements(By.cssSelector("tbody tr")).stream()
-                .filter(WebElement::isDisplayed)
-                .anyMatch(
-                        r ->
-                                r.findElements(By.cssSelector("td")).stream()
-                                        .anyMatch(c -> c.getText().trim().equals(name)));
+        return Plugin_ERP.Util.StableDomRead.read(
+                driver,
+                () ->
+                        driver.findElements(By.cssSelector("tbody tr")).stream()
+                                .filter(WebElement::isDisplayed)
+                                .anyMatch(
+                                        r ->
+                                                r.findElements(By.cssSelector("td")).stream()
+                                                        .anyMatch(
+                                                                c ->
+                                                                        c.getText()
+                                                                                .trim()
+                                                                                .equals(name))));
     }
 
     void prWaitRow(String name) {

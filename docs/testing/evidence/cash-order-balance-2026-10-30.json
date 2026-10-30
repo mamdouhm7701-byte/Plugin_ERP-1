@@ -1,0 +1,54 @@
+{
+  "run": "business-9f672f89-ad85-478a-a00b-f3bf730e8a1c",
+  "capturedFrom": "saved Allure attachments; original results unchanged",
+  "savedCashOrders": [
+    {
+      "documentAttachment": "2e13cc87-def3-41b8-a14a-b43b77d60344",
+      "balanceAttachment": "d02367f5-5603-4a44-9043-7972e57c7462",
+      "stored": {
+        "paymentType": "Cash",
+        "paid": 345,
+        "net": 345,
+        "totalTaxes": 45,
+        "isAdvancePayment": false
+      },
+      "expectedDelta": "-345.00",
+      "before": {
+        "currentDebit": 0,
+        "currentCredit": 0,
+        "prevDebit": 0,
+        "prevCredit": 0
+      },
+      "after": {
+        "currentDebit": 0,
+        "currentCredit": 0,
+        "prevDebit": 0,
+        "prevCredit": 0
+      }
+    },
+    {
+      "documentAttachment": "dc266ce5-81e2-4f9d-ad36-24cb408574e1",
+      "balanceAttachment": "69143890-a95b-466f-b125-102d91f12230",
+      "stored": {
+        "paymentType": "Cash",
+        "paid": 345,
+        "net": 345,
+        "totalTaxes": 45,
+        "isAdvancePayment": false
+      },
+      "expectedDelta": "-345.00",
+      "before": {
+        "currentDebit": 0,
+        "currentCredit": 0,
+        "prevDebit": 0,
+        "prevCredit": 0
+      },
+      "after": {
+        "currentDebit": 0,
+        "currentCredit": 0,
+        "prevDebit": 0,
+        "prevCredit": 0
+      }
+    }
+  ]
+}

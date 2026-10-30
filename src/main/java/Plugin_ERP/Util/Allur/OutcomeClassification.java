@@ -43,8 +43,18 @@ public final class OutcomeClassification {
         String text =
                 ((message == null ? "" : message) + "\n" + (trace == null ? "" : trace))
                         .toLowerCase(Locale.ROOT);
+        if (text.contains("deadlocked") && text.contains("victim"))
+            return new Decision(
+                    Kind.ENVIRONMENT,
+                    "قاعدة البيانات ألغت عملية بسبب تعارض أقفال؛ هذا عائق تنفيذ ولا يثبت فشل قاعدة العمل المختبرة.");
         if (Plugin_ERP.Util.CapacityFailure.matches(text))
             return new Decision(Kind.ENVIRONMENT, Plugin_ERP.Util.CapacityFailure.explanation());
+        if (text.contains("transient failure")
+                && text.contains("enableretryonfailure")
+                && text.contains("usesqlserver"))
+            return new Decision(
+                    Kind.ENVIRONMENT,
+                    "السيرفر أبلغ عن عطل SQL مؤقت أثناء التنفيذ أو التنظيف. احتفظ بسجل الاسترجاع؛ التصنيف لا يعني نجاح الحذف ولا يعيد العملية تلقائيًا.");
         if (contains(
                 text,
                 "network error",
@@ -64,6 +74,10 @@ public final class OutcomeClassification {
                     Kind.ENVIRONMENT,
                     "دليل الخطأ يشير إلى اتصال أو توافق تشغيل المتصفح؛ لا يثبت خللًا في حسابات التطبيق.");
         String stack = trace == null ? "" : trace.stripLeading().toLowerCase(Locale.ROOT);
+        if (text.contains("scenario_not_applicable:"))
+            return new Decision(
+                    Kind.TEST_DEFECT,
+                    "خطوات الاختبار تطلب تغيير قيمة ثابتة في الشاشة؛ راجع سيناريو النشاط. لم تتخط الحالة ولم يتغير الحقل بالقوة.");
         boolean testNullFailure =
                 stack.startsWith("java.lang.nullpointerexception")
                         && contains(
@@ -78,6 +92,8 @@ public final class OutcomeClassification {
         if (contains(
                         text,
                         "invalidselectorexception",
+                        "classcastexception",
+                        "erpvue is not defined",
                         "noclassdeffounderror",
                         "classnotfoundexception",
                         "nosuchmethoderror")

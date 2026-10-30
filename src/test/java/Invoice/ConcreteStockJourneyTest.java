@@ -133,8 +133,10 @@ public final class ConcreteStockJourneyTest extends SalesScenarioTest {
         Assert.assertEquals(firstLine(stored).get("itemId"), item.id());
         Assert.assertEquals(firstLine(stored).get("unitId"), data.unit(1).id());
         sameNumber(firstLine(stored).get("quantity"), "1");
-        sameNumber(stored.get("net"), expected.getNet().toPlainString());
-        sameNumber(stored.get("totalTaxes"), expected.getTax().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                stored.get("net"), expected.getNet().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                stored.get("totalTaxes"), expected.getTax().toPlainString());
         sameNumber(data.balance(item, 1), "999");
         Allure.addAttachment(
                 "Saved delivery billing availability",
@@ -265,7 +267,8 @@ public final class ConcreteStockJourneyTest extends SalesScenarioTest {
         Assert.assertEquals(stored.get("notes"), marker);
         Assert.assertEquals(stored.get("dealerId"), customer.id());
         Assert.assertEquals(stored.get("storeId"), data.store(1).id());
-        sameNumber(stored.get("net"), expected.getNet().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                stored.get("net"), expected.getNet().toPlainString());
         page.slDismiss();
         return record;
     }
@@ -345,9 +348,12 @@ public final class ConcreteStockJourneyTest extends SalesScenarioTest {
         sameNumber(line.get("quantity"), "1");
         {
             Assert.assertEquals(stored.get("dealerId"), customer.id());
-            sameNumber(stored.get("netBeforeTaxes"), expected.getBeforeTax().toPlainString());
-            sameNumber(stored.get("totalTaxes"), expected.getTax().toPlainString());
-            sameNumber(stored.get("net"), expected.getNet().toPlainString());
+            TestSupport.DecimalAmountAssertions.amount(
+                    stored.get("netBeforeTaxes"), expected.getBeforeTax().toPlainString());
+            TestSupport.DecimalAmountAssertions.amount(
+                    stored.get("totalTaxes"), expected.getTax().toPlainString());
+            TestSupport.DecimalAmountAssertions.amount(
+                    stored.get("net"), expected.getNet().toPlainString());
         }
         BigDecimal expectedStock = stockBefore;
         new WebDriverWait(driver, Duration.ofSeconds(30))

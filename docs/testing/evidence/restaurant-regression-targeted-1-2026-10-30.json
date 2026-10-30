@@ -1,0 +1,33 @@
+{
+  "scope": "Saved restaurant regression 29-30 October: price-list selection and held-order items/notes; same NetBased/Transaction/Periodic/additionalTax100 settings",
+  "branchCleaned": true,
+  "status": 1,
+  "sourceBaseline": "2026-10-29_30_restaurants",
+  "cases": [
+    {
+      "method": "SpecialSalesTest.RestaurantInvoiceTest.reopeningHoldKeepsNotes",
+      "status": "failed",
+      "message": "Held restaurant notes must survive reopening expected [QA-SP-c8242802-70aa-4c71-8686-2070745d7a2c] but found []"
+    },
+    {
+      "method": "SpecialSalesTest.RestaurantInvoiceTest.reopeningHoldKeepsItems",
+      "status": "passed",
+      "message": ""
+    },
+    {
+      "method": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+      "status": "passed",
+      "message": ""
+    },
+    {
+      "method": "Invoice.SalesInvoiceCoverageTest.ownedPriceListIsApplied",
+      "status": "passed",
+      "message": ""
+    }
+  ],
+  "branchCleanup": {
+    "branchId": "769be353205d993d",
+    "status": "DELETED"
+  },
+  "priceListsEnabledReadback": true
+}

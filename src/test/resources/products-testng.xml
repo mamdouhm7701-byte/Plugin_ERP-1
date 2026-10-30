@@ -9,10 +9,10 @@
   <class name="ProductsTest.ProductCategoriesTest"/>
   <class name="ProductsTest.AddProductsTest"/>
   <class name="ProductsTest.ProductListTest"/>
-  <class name="ProductsTest.ProductsCleanupTest"/>
-<class name="ProductsTest.ProductsOwnershipCleanupTest"/>
-<class name="ProductsTest.ProductsRecoveryCleanupTest"/>
-<class name="ProductsTest.ProductsDependenciesCleanupTest"/>
-<class name="ProductsTest.ProductsLifecycleCleanupTest"/>
+
+
+
+
+
  </classes></test>
 </suite>

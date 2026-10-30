@@ -1,5 +1,5 @@
-/* شرح الملف: اختبارات مرتجع السيارة يعيد نفس الشاسيه واللون والمخزون: مرتجع السيارة يعيد نفس
- * الشاسيه واللون والمخزون؛ بيع السيارة يحافظ على رقم الشاسيه واللون.
+/* شرح الملف: مراجعة بيع سيارة برقم شاسيه ولون محددين، مع الخصم وبدونه، ثم إرجاع نفس السيارة.
+ * يراجع كمية المخزون ومديونية العميل، ويجرب تحصيل قيمة السيارة وتعديل التحصيل وحذفه.
  */
 package Invoice;
 
@@ -22,6 +22,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public final class CarShowroomSalesTest extends SalesScenarioTest {
+    private final java.util.List<FinancialMovementsTest.FinancialWorkflow> settlements =
+            new java.util.ArrayList<>();
     private SalesTestData.Record ownedPurchase;
     private String activeEndpoint = "ItemTransactions-Sales";
 
@@ -29,7 +31,8 @@ public final class CarShowroomSalesTest extends SalesScenarioTest {
             SalesTestData.Record invoice,
             SalesTestData.Record car,
             Object colorId,
-            String serial) {}
+            String serial,
+            Map<String, Object> customerBeforeSale) {}
 
     @DataProvider
     public Object[][] discountModes() {
@@ -62,6 +65,7 @@ public final class CarShowroomSalesTest extends SalesScenarioTest {
                 .withMessage("Owned chassis receipt must add exactly one unit")
                 .until(d -> number(data.balance(car, 1)).compareTo(new BigDecimal("1001")) == 0);
         prepare("Credit");
+        var customerBeforeSale = data.read(customer);
         allowedItems.add(car.id());
         page.slCapture(marker, data.store(1).id(), car.id(), "ItemTransactions-Sales");
         add(car, "picker");
@@ -94,8 +98,12 @@ public final class CarShowroomSalesTest extends SalesScenarioTest {
         Assert.assertEquals(line.get("serial"), serial);
         Assert.assertEquals(line.get("carColorId"), color.id());
         sameNumber(line.get("quantity"), "1");
-        sameNumber(stored.get("net"), expected.getNet().toPlainString());
-        sameNumber(stored.get("totalTaxes"), expected.getTax().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                stored.get("net"), expected.getNet().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                stored.get("totalTaxes"), expected.getTax().toPlainString());
+        assertCustomerDelta(
+                customerBeforeSale, new BigDecimal("100").subtract(reduction).toPlainString());
         sameNumber(data.balance(car, 1), "1000");
         Allure.addAttachment(
                 "Owned showroom receipt and chassis sale",
@@ -116,7 +124,7 @@ public final class CarShowroomSalesTest extends SalesScenarioTest {
                                         data.balance(car, 1)))
                         .toString(2),
                 ".json");
-        return new ChassisSale(invoice, car, color.id(), serial);
+        return new ChassisSale(invoice, car, color.id(), serial, customerBeforeSale);
     }
 
     @Test
@@ -165,8 +173,11 @@ public final class CarShowroomSalesTest extends SalesScenarioTest {
         Assert.assertEquals(line.get("serial"), sold.serial());
         Assert.assertEquals(line.get("carColorId"), sold.colorId());
         sameNumber(line.get("quantity"), "1");
-        sameNumber(stored.get("totalTaxes"), expected.getTax().toPlainString());
-        sameNumber(stored.get("net"), expected.getNet().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                stored.get("totalTaxes"), expected.getTax().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                stored.get("net"), expected.getNet().toPlainString());
+        assertCustomerDelta(sold.customerBeforeSale(), "0");
         new WebDriverWait(driver, Duration.ofSeconds(30))
                 .until(
                         d ->
@@ -191,6 +202,45 @@ public final class CarShowroomSalesTest extends SalesScenarioTest {
                         .toString(2),
                 ".json");
         page.slDismiss();
+    }
+
+    @Test
+    @io.qameta.allure.Story("بيع سيارة ثم تحصيل جزئي وتعديل التحصيل وحذفه ثم تحصيل كامل")
+    public void chassisSaleCollectionEditDeleteAndFinalPaymentPreserveCarStock() {
+        var sold = sellOwnedChassis(false);
+        var flow =
+                new FinancialMovementsTest.FinancialWorkflow(
+                        driver,
+                        false,
+                        customer.id(),
+                        customer.name(),
+                        agent.name(),
+                        sold.invoice().id(),
+                        data.read(sold.invoice()).get("code"));
+        settlements.add(flow);
+        var receipt = flow.pay(salesNet("50"));
+        assertCustomerDelta(sold.customerBeforeSale(), "50");
+        flow.edit(receipt, salesNet("75"));
+        assertCustomerDelta(sold.customerBeforeSale(), "25");
+        flow.delete(receipt);
+        assertCustomerDelta(sold.customerBeforeSale(), "100");
+        flow.pay(salesNet("100"));
+        assertCustomerDelta(sold.customerBeforeSale(), "0");
+        sameNumber(data.balance(sold.car(), 1), "1000");
+    }
+
+    @Override
+    @org.testng.annotations.AfterMethod(alwaysRun = true)
+    public void cleanSalesScenario(org.testng.ITestResult result) {
+        for (var settlement : settlements) settlement.capture();
+        super.cleanSalesScenario(result);
+    }
+
+    @Override
+    @org.testng.annotations.AfterClass(alwaysRun = true)
+    public void retrySalesCleanup() {
+        TestSupport.WorkflowCleanupOrder.closeChildrenBeforeParents(
+                settlements, () -> super.retrySalesCleanup());
     }
 
     @Override

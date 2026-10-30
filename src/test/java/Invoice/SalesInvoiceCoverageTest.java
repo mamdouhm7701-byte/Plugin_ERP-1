@@ -48,7 +48,7 @@ public final class SalesInvoiceCoverageTest extends SalesFormTest {
         page.slWaitNet(expectedNet);
         printContentAssertions =
                 stored -> {
-                    sameNumber(stored.get("net"), expectedNet);
+                    TestSupport.DecimalAmountAssertions.amount(stored.get("net"), expectedNet);
                     Plugin_ERP.Util.PrintedInvoiceAssertions.invoice(
                             driver,
                             stored.get("code").toString(),

@@ -11,6 +11,102 @@ import org.testng.annotations.Test;
 
 public final class OutcomeClassificationTest {
     @Test
+    public void explicitSqlTransientFailureDoesNotLookLikeABusinessAssertion() {
+        Assert.assertEquals(
+                classify(
+                        "broken",
+                        "Fixture delete Accounts: An exception has been raised that is likely due to a transient failure. Consider enabling transient error resiliency by adding 'EnableRetryOnFailure' to the 'UseSqlServer' call.",
+                        "",
+                        ""),
+                Kind.ENVIRONMENT);
+        Assert.assertEquals(
+                classify("broken", "Fixture delete Accounts: record is used", "", ""),
+                Kind.NEEDS_REVIEW);
+    }
+
+    @Test
+    public void explicitIncompatibleScenarioIsATestDefectAndDoesNotBecomeSkipped() {
+        Assert.assertEquals(
+                classify(
+                        "broken",
+                        "SCENARIO_NOT_APPLICABLE: fixed quantity differs from requested quantity",
+                        "",
+                        ""),
+                Kind.TEST_DEFECT);
+        Assert.assertEquals(
+                classify("failed", "quantity expected 3 actual 1", "", ""), Kind.NEEDS_REVIEW);
+    }
+
+    @Test
+    public void knownCashOrderAndReturnFailuresMatchOnlyTheirEvidence() throws Exception {
+        Path root = Files.createTempDirectory("known-business-failures-");
+        Path results = Files.createDirectory(root.resolve("results"));
+        String order = "Invoice.SalesOrderTest.cashOrderRecordsCustomerAdvanceWithoutStockMovement";
+        String returned =
+                "SpecialSalesTest.RestaurantAdditionalTaxReturnTest.linkedReturnRefundsOriginalAdditionalTaxAndVat";
+        String[] methods = {
+            order,
+            returned,
+            returned,
+            order,
+            "Invoice.SalesFormTest.cashDocumentUsesOwnedPayment",
+            "SpecialSalesTest.RestaurantInvoiceTest.reopeningHoldKeepsNotes",
+            "SpecialSalesTest.RestaurantInvoiceTest.reopeningHoldKeepsNotes"
+        };
+        String[] messages = {
+            "Expected customer balance delta -345.00, actual 0",
+            "صافي السند غير مطابق: المتوقع 40.25، الفعلي 23",
+            "صافي السند غير مطابق: المتوقع 120.75، الفعلي 69",
+            "Expected condition failed",
+            "Expected customer balance delta -345.00, actual 0",
+            "Held restaurant notes must survive reopening expected [owned-marker] but found []",
+            "Held restaurant notes must be persisted before reopening"
+        };
+        for (int i = 0; i < methods.length; i++)
+            Files.writeString(
+                    results.resolve(i + "-result.json"),
+                    new JSONObject()
+                            .put("fullName", methods[i])
+                            .put("historyId", "case-" + i)
+                            .put("status", "failed")
+                            .put("statusDetails", new JSONObject().put("message", messages[i]))
+                            .toString());
+        JSONArray issues;
+        try (var stream = getClass().getResourceAsStream("/issue-register.json")) {
+            Assert.assertNotNull(stream);
+            issues =
+                    new JSONArray(
+                            new String(
+                                    stream.readAllBytes(),
+                                    java.nio.charset.StandardCharsets.UTF_8));
+        }
+        Path output = root.resolve("review");
+        RunFailureOverview.write(results, output, "known-business", issues);
+        var summary = new JSONObject(Files.readString(output.resolve("summary.json")));
+        Assert.assertEquals(
+                summary.getJSONObject("outcomeCounts").getInt(Kind.APPLICATION_DEFECT.label()), 4);
+        Assert.assertEquals(
+                summary.getJSONObject("outcomeCounts").getInt(Kind.NEEDS_REVIEW.label()), 3);
+    }
+
+    @Test
+    public void databaseVictimAndFixtureScriptErrorsHaveExplicitOrigins() {
+        Assert.assertEquals(
+                classify("failed", "Transaction deadlocked; chosen as deadlock victim", "", ""),
+                Kind.ENVIRONMENT);
+        Assert.assertEquals(
+                classify("broken", "javascript error: erpVue is not defined", "", ""),
+                Kind.TEST_DEFECT);
+        Assert.assertEquals(
+                classify(
+                        "broken",
+                        "ClassCastException: proxy cannot be cast to JavascriptExecutor",
+                        "",
+                        ""),
+                Kind.TEST_DEFECT);
+    }
+
+    @Test
     public void assertionsAndTimeoutsAloneDoNotProveAnApplicationDefect() {
         Assert.assertEquals(
                 classify("failed", "VAT expected115 actual100", "", ""), Kind.NEEDS_REVIEW);

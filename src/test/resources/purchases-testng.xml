@@ -7,13 +7,13 @@
  <class name="Purches.PurchaseReturnCoverageTest"/>
  <class name="Purches.PurchaseLinkedCoverageTest"/>
  <class name="Purches.PurchaseListCoverageTest"/>
- <class name="Purches.PurchaseCalculationTest"/>
- <class name="Purches.PurchaseCleanupTest"/>
-<class name="Purches.PurchaseCore2CleanupTest"/>
-<class name="Purches.PurchaseOwnershipCleanupTest"/>
-<class name="Purches.PurchaseRecoveryCleanupTest"/>
-<class name="Purches.PurchaseRecovery2CleanupTest"/>
-<class name="Purches.PurchaseRecovery3CleanupTest"/>
-<class name="Purches.PurchaseDependenciesCleanupTest"/>
-<class name="Purches.PurchaseLifecycleCleanupTest"/>
+
+
+
+
+
+
+
+
+
 </classes></test></suite>

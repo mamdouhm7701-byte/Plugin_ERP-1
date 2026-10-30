@@ -206,10 +206,7 @@ final class SalesDocumentLines {
             ready.until(
                     d -> {
                         String actual = page.slTotals().get("الصافي");
-                        return actual != null
-                                && new java.math.BigDecimal(actual.replace(",", ""))
-                                                .compareTo(new java.math.BigDecimal(value))
-                                        == 0;
+                        return Plugin_ERP.Util.DecimalAmountComparison.matches(actual, value);
                     });
         } catch (org.openqa.selenium.TimeoutException failure) {
             throw new AssertionError(

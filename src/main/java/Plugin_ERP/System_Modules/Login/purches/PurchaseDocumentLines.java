@@ -123,11 +123,27 @@ final class PurchaseDocumentLines {
                                                     + "'] input:not([type='hidden'])"));
                     for (WebElement e : inputs) {
                         js("arguments[0].scrollIntoView({block:'center',inline:'center'})", e);
-                        if (!e.isDisplayed() || !e.isEnabled()) continue;
+                        if (!e.isDisplayed()) continue;
+                        if (e.getDomAttribute("readonly") != null) {
+                            if (new java.math.BigDecimal(e.getDomProperty("value"))
+                                            .compareTo(new java.math.BigDecimal(quantity))
+                                    == 0) return true;
+                            throw new IllegalArgumentException(
+                                    "SCENARIO_NOT_APPLICABLE: كمية الصنف "
+                                            + name
+                                            + " ثابتة في هذه الشاشة عند "
+                                            + e.getDomProperty("value")
+                                            + "، بينما السيناريو يطلب "
+                                            + quantity
+                                            + ". راجع سيناريو النشاط؛ لم يتم تغيير الحقل بالقوة.");
+                        }
+                        if (!e.isEnabled()) continue;
                         e.click();
                         e.getDomProperty("value");
                         e.sendKeys(Keys.chord(Keys.CONTROL, "a"), quantity, Keys.TAB);
-                        return true;
+                        return new java.math.BigDecimal(e.getDomProperty("value"))
+                                        .compareTo(new java.math.BigDecimal(quantity))
+                                == 0;
                     }
                     return false;
                 });
@@ -209,10 +225,7 @@ final class PurchaseDocumentLines {
             ready.until(
                     d -> {
                         String actual = page.puTotals().get("الصافي");
-                        return actual != null
-                                && new java.math.BigDecimal(actual.replace(",", ""))
-                                                .compareTo(new java.math.BigDecimal(value))
-                                        == 0;
+                        return Plugin_ERP.Util.DecimalAmountComparison.matches(actual, value);
                     });
         } catch (org.openqa.selenium.TimeoutException failure) {
             throw new AssertionError(

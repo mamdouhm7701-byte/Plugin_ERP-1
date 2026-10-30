@@ -81,9 +81,12 @@ public final class SelectedBranchSalesPolicyTest extends SalesScenarioTest {
         page.slWaitNet(expected.getNet().toPlainString());
         var record = save(false);
         var stored = data.read(record);
-        sameNumber(stored.get("netBeforeTaxes"), expected.getBeforeTax().toPlainString());
-        sameNumber(stored.get("totalTaxes"), expected.getTax().toPlainString());
-        sameNumber(stored.get("net"), expected.getNet().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                stored.get("netBeforeTaxes"), expected.getBeforeTax().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                stored.get("totalTaxes"), expected.getTax().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                stored.get("net"), expected.getNet().toPlainString());
         sameNumber(data.balance(taxable, 1), "999");
         if (exempt != null) sameNumber(data.balance(exempt, 1), "999");
     }

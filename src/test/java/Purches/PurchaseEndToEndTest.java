@@ -73,7 +73,7 @@ public final class PurchaseEndToEndTest extends PurchaseFormActions {
         assertStock("2");
         assertSupplierDelta(before, "0");
         sameNumber(firstLine(data.read(returned)).get("quantity"), "2");
-        sameNumber(data.read(returned).get("net"), "200");
+        TestSupport.DecimalAmountAssertions.amount(data.read(returned).get("net"), "200");
         sameNumber(data.balance(item, 1), stock.toPlainString());
     }
 

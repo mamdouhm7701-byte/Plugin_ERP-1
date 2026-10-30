@@ -17,17 +17,20 @@ final class BasicDataFixturesApi {
         this.contextGuard = contextGuard;
     }
 
-    static final class ApiFailure extends AssertionError {
-        final int status;
+    static final class ApiFailure extends TestSupport.FixtureApiFailure {
 
         ApiFailure(int status, String message) {
-            super(message);
-            this.status = status;
+            super(status, message);
         }
     }
 
     @SuppressWarnings("unchecked")
     Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
+        return TestSupport.FixtureCreateRetry.run(action, () -> callOnce(action, endpoint, values));
+    }
+
+    private Map<String, Object> callOnce(
+            String action, String endpoint, Map<String, Object> values) {
         profileGuard.verify(driver);
         contextGuard.run();
         Plugin_ERP.Util.RunEnvironmentGate.beforeCreate(action);

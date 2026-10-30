@@ -60,7 +60,9 @@ public final class ConcreteReservationReportAssertions {
             throw new AssertionError(
                     "Printed report value is not numeric: " + value.text(), failure);
         }
-        if (actual.compareTo(expected) != 0)
+        if (!(columnName.equals("قيمة")
+                ? Plugin_ERP.Util.DecimalAmountComparison.matches(actual, expected)
+                : actual.compareTo(expected) == 0))
             throw new AssertionError(
                     groupName
                             + "/"

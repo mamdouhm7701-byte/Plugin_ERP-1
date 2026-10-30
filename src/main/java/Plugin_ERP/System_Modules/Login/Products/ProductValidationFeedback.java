@@ -72,6 +72,10 @@ final class ProductValidationFeedback {
     }
 
     Map<String, String> prPriceValidationMessages() {
+        return Plugin_ERP.Util.StableDomRead.read(driver, this::readPriceValidationMessages);
+    }
+
+    private Map<String, String> readPriceValidationMessages() {
         Map<String, String> messages = new LinkedHashMap<>();
         for (String name : List.of("salesPrice", "minSalesPrice", "maxSalesPrice")) {
             for (WebElement input :

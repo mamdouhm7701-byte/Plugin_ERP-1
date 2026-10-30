@@ -9,6 +9,32 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public final class PrintedInvoiceAssertionsTest {
+    @Test
+    public void printedDecimalAmountsAcceptToleranceButFractionalQuantityRemainsExact() {
+        var cells = report();
+        cells.set(10, cell("73.50", 100, 110));
+        cells.set(12, cell("419.99", 300, 150));
+        verify(cells);
+        cells.set(6, cell("2.26", 200, 80));
+        Assert.expectThrows(
+                AssertionError.class,
+                () ->
+                        PrintedInvoiceAssertions.verify(
+                                cells,
+                                "12345",
+                                "عميل اختبار",
+                                List.of(
+                                        new Line(
+                                                "صنف أول",
+                                                new BigDecimal("2.25"),
+                                                new BigDecimal("100")),
+                                        new Line(
+                                                "صنف ثان",
+                                                new BigDecimal("3"),
+                                                new BigDecimal("73.25"))),
+                                new BigDecimal("419.75")));
+    }
+
     private Cell cell(String text, double x, double y) {
         return new Cell(text, x, y, 70, 15, "page-1");
     }

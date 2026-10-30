@@ -71,17 +71,6 @@ final class PurchaseFixtureCreation {
     }
 
     private Map<String, Object> createFixture(String endpoint, Map<String, Object> values) {
-        for (int attempt = 1; ; attempt++)
-            try {
-                return data.call("create", endpoint, values);
-            } catch (ApiFailure failure) {
-                String message = failure.getMessage().toLowerCase(java.util.Locale.ROOT);
-                // A SQL deadlock victim is explicitly rolled back; other failures may have
-                // committed.
-                if (attempt >= 3
-                        || failure.status != 500
-                        || !message.contains("deadlocked")
-                        || !message.contains("victim")) throw failure;
-            }
+        return data.call("create", endpoint, values);
     }
 }

@@ -35,7 +35,7 @@ final class SalesSaveCapture {
       return dispatch(action,payload,...rest).then(result=>{if(lookup){const data=result?.data||result;cap.lookups.push({url:payload.url,total:data?.totalRecords,items:data?.pageData?.map(i=>({id:i.id,arabicName:i.arabicName}))});}
         if(owned){cap.pending--;const entity=result?.data||result;
         cap.saves.push({endpoint:payload.url,id:sent.id||entity?.id||(typeof entity==='string'||typeof entity==='number'?entity:null),values:sent});}return result;})
-        .catch(error=>{if(lookup)cap.lookups.push({url:payload.url,error:String(error),status:error?.response?.status});if(owned){cap.pending--;cap.errors.push(String(error));}throw error;});};
+        .catch(error=>{if(lookup)cap.lookups.push({url:payload.url,error:String(error),status:error?.response?.status});if(owned){cap.pending--;cap.errors.push(JSON.stringify(error?.response?.data||error?.data||{message:typeof error==='string'?error:error?.message,detail:error?.detail,errors:error?.errors,status:error?.response?.status||error?.status}));}throw error;});};
     """,
                 marker,
                 storeId,

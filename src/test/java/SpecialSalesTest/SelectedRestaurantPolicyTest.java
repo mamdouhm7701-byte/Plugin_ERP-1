@@ -98,9 +98,12 @@ public final class SelectedRestaurantPolicyTest extends SpecialSalesScenario {
 
     private void amounts(
             Map<String, Object> document, RestaurantAdditionalTaxCalculator.Totals expected) {
-        number(document.get("totalAdditionalTaxes"), "0");
-        number(document.get("netBeforeTaxes"), expected.beforeVat().toPlainString());
-        number(document.get("totalTaxes"), expected.vat().toPlainString());
-        number(document.get("net"), expected.net().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(document.get("totalAdditionalTaxes"), "0");
+        TestSupport.DecimalAmountAssertions.amount(
+                document.get("netBeforeTaxes"), expected.beforeVat().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                document.get("totalTaxes"), expected.vat().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                document.get("net"), expected.net().toPlainString());
     }
 }

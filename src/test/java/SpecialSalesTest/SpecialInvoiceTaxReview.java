@@ -183,8 +183,8 @@ public abstract class SpecialInvoiceTaxReview extends SpecialSalesScenario {
                         .matcher(text);
         while (numbers.find())
             try {
-                if (new BigDecimal(numbers.group().replace(",", "")).compareTo(amount) == 0)
-                    return true;
+                if (Plugin_ERP.Util.DecimalAmountComparison.matches(
+                        new BigDecimal(numbers.group().replace(",", "")), amount)) return true;
             } catch (NumberFormatException malformed) {
                 Plugin_ERP.Bots.LogUtils.debug("Receipt token is not a monetary amount");
             }
@@ -211,7 +211,8 @@ public abstract class SpecialInvoiceTaxReview extends SpecialSalesScenario {
             Map<String, Object> actual, RestaurantAdditionalTaxCalculator.Totals expected) {
         InvoiceReviewRecipe.amount(
                 actual.get("netBeforeTaxes"), expected.beforeVat(), "قبل الضريبة");
-        number(actual.get("totalAdditionalTaxes"), expected.additionalTax().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                actual.get("totalAdditionalTaxes"), expected.additionalTax().toPlainString());
         InvoiceReviewRecipe.amount(actual.get("totalTaxes"), expected.vat(), "الضريبة");
         InvoiceReviewRecipe.amount(actual.get("net"), expected.net(), "الصافي");
     }

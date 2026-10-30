@@ -60,14 +60,14 @@ public class RoutLineForDealer extends AbstractForDealer {
     @Step("التحقق من اختيار العميل {customerId} في خط السير")
     public void AssertOnlyOwnedCustomerSelected(Object customerId) {
         Object valid =
-                ((org.openqa.selenium.JavascriptExecutor) driver)
-                        .executeScript(
-                                OWNED_CALENDAR
-                                        + """
+                Plugin_ERP.Util.VueComponentAccess.execute(
+                        driver,
+                        OWNED_CALENDAR
+                                + """
             const selected=calendar.selectedItem.extendedProps.customers;
             return selected.length===1 && selected[0].id===arguments[0];
             """,
-                                customerId);
+                        customerId);
         if (!Boolean.TRUE.equals(valid))
             throw new AssertionError("Route must only contain the owned customer");
     }
@@ -76,15 +76,15 @@ public class RoutLineForDealer extends AbstractForDealer {
         @SuppressWarnings("unchecked")
         java.util.List<String> titles =
                 (java.util.List<String>)
-                        ((org.openqa.selenium.JavascriptExecutor) driver)
-                                .executeScript(
-                                        OWNED_CALENDAR
-                                                + """
+                        Plugin_ERP.Util.VueComponentAccess.execute(
+                                driver,
+                                OWNED_CALENDAR
+                                        + """
                     return calendar.calendarOptions.events
                         .filter(event=>event.extendedProps?.title===arguments[0])
                         .map(event=>event.title);
                     """,
-                                        marker);
+                                marker);
         return titles;
     }
 

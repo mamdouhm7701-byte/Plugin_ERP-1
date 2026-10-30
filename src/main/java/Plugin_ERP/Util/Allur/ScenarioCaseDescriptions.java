@@ -32,7 +32,17 @@ public final class ScenarioCaseDescriptions {
         out.append("<h3>خطوات التجربة</h3><ol>");
         for (String step : details.steps()) out.append("<li>").append(escape(step)).append("</li>");
         out.append("</ol>");
+        section(
+                out,
+                "اقرأ النتيجة صح",
+                "دي طريقة التجربة والنتيجة المطلوبة. الخطوات التي اتنفذت فعلًا وموضع التوقف تظهر في سجل التنفيذ؛ وجود الشرح وحده لا يعني أن الحالة نجحت.");
         section(out, "المتوقع", details.expected());
+        section(
+                out,
+                "مقارنة المبالغ",
+                "لو المبلغ المتوقع فيه كسور، نقرب المبلغين لرقمين عشريين ثم نقبل فرقًا بالزيادة أو النقص لحد "
+                        + Plugin_ERP.Util.DecimalAmountComparison.tolerance().toPlainString()
+                        + ". لو المتوقع رقم صحيح، يفضل مطابقًا تمامًا. السماح لا ينطبق على كميات الأصناف أو الأكواد.");
         return out.append("</div>").toString();
     }
 
@@ -81,7 +91,8 @@ public final class ScenarioCaseDescriptions {
                     "allure-case-descriptions-master.json",
                     "allure-case-descriptions-transactions.json",
                     "allure-case-descriptions-remaining.json",
-                    "allure-case-descriptions-business.json"
+                    "allure-case-descriptions-business.json",
+                    "allure-case-descriptions-supplement.json"
                 }) {
             try (var stream =
                     ScenarioCaseDescriptions.class.getClassLoader().getResourceAsStream(name)) {

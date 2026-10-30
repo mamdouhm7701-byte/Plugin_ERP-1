@@ -84,7 +84,7 @@ public abstract class SalesFormActions extends SalesScenarioTest {
         page.slDiscount("10", true);
         page.slWaitNet(salesNet("270"));
         var saved = save(false);
-        sameNumber(data.read(saved).get("net"), salesNet("270"));
+        TestSupport.DecimalAmountAssertions.amount(data.read(saved).get("net"), salesNet("270"));
         assertStock("3");
     }
 
@@ -98,7 +98,7 @@ public abstract class SalesFormActions extends SalesScenarioTest {
         page.slDiscount("15", false);
         page.slWaitNet(salesNet("285"));
         var saved = save(false);
-        sameNumber(data.read(saved).get("net"), salesNet("285"));
+        TestSupport.DecimalAmountAssertions.amount(data.read(saved).get("net"), salesNet("285"));
         assertStock("3");
     }
 
@@ -106,7 +106,7 @@ public abstract class SalesFormActions extends SalesScenarioTest {
         prepare("Credit", true, false);
         fill("picker");
         var saved = save(false);
-        sameNumber(data.read(saved).get("net"), salesNet("375"));
+        TestSupport.DecimalAmountAssertions.amount(data.read(saved).get("net"), salesNet("375"));
         assertStock("3");
     }
 

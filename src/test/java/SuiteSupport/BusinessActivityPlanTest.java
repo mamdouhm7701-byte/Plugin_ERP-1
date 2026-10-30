@@ -12,6 +12,85 @@ import org.testng.xml.*;
 
 public final class BusinessActivityPlanTest {
     @Test
+    public void ownedBranchEnablesPriceListsWithoutChangingNativeDefaultsOrRequestedPolicies() {
+        var defaults = new HashMap<String, Object>();
+        defaults.put("id", "native-id");
+        defaults.put("enablePriceLists", false);
+        defaults.put("enableAdditionalTax", false);
+        defaults.put("accounts", Map.of("salesAccountId", "owned-account"));
+        var request =
+                new BusinessRunRequest(
+                        ActivityType.RESTAURANT,
+                        DiscountLevel.TRANSACTION,
+                        TaxPolicy.NET_BASED,
+                        StocktakingMethod.PERIODIC,
+                        true);
+        var payload =
+                BusinessBranchPreparation.ownedBranchPayload(defaults, "QA-BUS-owned", request);
+        Assert.assertEquals(payload.get("enablePriceLists"), true);
+        Assert.assertEquals(payload.get("enableAdditionalTax"), true);
+        Assert.assertEquals(payload.get("taxPolicy"), "NetBased");
+        Assert.assertEquals(payload.get("accounts"), defaults.get("accounts"));
+        Assert.assertFalse(payload.containsKey("id"));
+        Assert.assertEquals(defaults.get("enablePriceLists"), false);
+        Assert.assertEquals(defaults.get("id"), "native-id");
+    }
+
+    @Test
+    public void xmlSelectionAlsoWritesShowroomApplicabilityBeforeExecution() throws Exception {
+        var request =
+                new BusinessRunRequest(
+                        ActivityType.CAR_SHOWROOM,
+                        DiscountLevel.TRANSACTION,
+                        TaxPolicy.NET_BASED,
+                        StocktakingMethod.PERIODIC,
+                        false);
+        Path output = Files.createTempDirectory("showroom-selected-xml-");
+        var suites = BusinessRunSuites.plan(Path.of(""), request, "XML:e2e-testng.xml", output);
+        var names = new HashSet<String>();
+        collectNames(suites, names);
+        Assert.assertFalse(names.contains("Purches.SupplyChainEndToEndTest"));
+        Assert.assertTrue(names.contains("Invoice.CarShowroomSalesTest"));
+        Assert.assertTrue(Files.exists(output.resolve("activity-applicability.json")));
+        Assert.assertTrue(
+                Files.readString(output.resolve("activity-applicability.json"))
+                        .contains("Purches.SupplyChainEndToEndTest"));
+        Assert.assertTrue(Files.exists(output.resolve("xml-selection.json")));
+    }
+
+    @Test
+    public void showroomE2eUsesChassisJourneysAndExplainsIncompatibleGenericJourneys()
+            throws Exception {
+        var request =
+                new BusinessRunRequest(
+                        ActivityType.CAR_SHOWROOM,
+                        DiscountLevel.TRANSACTION,
+                        TaxPolicy.NET_BASED,
+                        StocktakingMethod.PERIODIC,
+                        false);
+        Path output = Files.createTempDirectory("showroom-e2e-scope-");
+        var suites = BusinessRunSuites.plan(Path.of(""), request, "E2E", output);
+        var names = new HashSet<String>();
+        collectNames(suites, names);
+        Assert.assertTrue(names.contains("Invoice.CarShowroomSalesTest"));
+        Assert.assertFalse(names.contains("Purches.SupplyChainEndToEndTest"));
+        Assert.assertFalse(names.contains("Invoice.SalesEndToEndTest"));
+        Assert.assertFalse(names.contains("StoreTest.ManufacturingSalesEndToEndTest"));
+        Assert.assertTrue(names.contains("StoreTest.WarehouseEndToEndTest"));
+        Assert.assertTrue(
+                Files.readString(output.resolve("activity-applicability.json"))
+                        .contains("Purches.SupplyChainEndToEndTest"));
+    }
+
+    private static void collectNames(List<XmlSuite> suites, Set<String> names) {
+        for (var suite : suites) {
+            for (var test : suite.getTests())
+                for (var type : test.getXmlClasses()) names.add(type.getName());
+            collectNames(suite.getChildSuites(), names);
+        }
+    }
+
+    @Test
     public void restaurantBusinessSmokeAddsTaxAcceptanceOnlyWhenEnabled() throws Exception {
         for (var tax : TaxPolicy.values()) {
             for (boolean enabled : List.of(false, true)) {

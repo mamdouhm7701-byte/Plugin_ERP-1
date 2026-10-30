@@ -127,7 +127,11 @@ final class StoreRecordList {
 
     boolean smHasDocument(String marker) {
         return marker.equals(ownedMarker)
-                && driver.findElements(ownedRow()).stream().anyMatch(WebElement::isDisplayed);
+                && Plugin_ERP.Util.StableDomRead.read(
+                        driver,
+                        () ->
+                                driver.findElements(ownedRow()).stream()
+                                        .anyMatch(WebElement::isDisplayed));
     }
 
     void smDeleteOwn(String marker, boolean confirm) {

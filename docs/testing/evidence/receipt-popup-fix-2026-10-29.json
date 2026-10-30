@@ -1,0 +1,56 @@
+{
+  "rootCause": "Receipt interception delegated to original child.print, opening a blocking native Chrome preview.",
+  "change": "Capture generated receipt at print invocation without delegating to native print, shared by POS and restaurant tests.",
+  "boundary": "Verifies app print request and receipt content; does not claim paper output or native printer setup.",
+  "redEvidence": "target/receipt-capture-red.log",
+  "greenEvidence": "target/receipt-capture-green.log",
+  "localChromeProof": "Native-print counter1 before fix,0 after fix; item and invoice code checked.",
+  "ciTests": 992,
+  "ciFailures": 0,
+  "ciErrors": 0,
+  "ciSkipped": 0,
+  "cleanupInventory": {
+    "ownedBranches": 3,
+    "journalRecords": 163,
+    "date": "2026-10-29"
+  },
+  "cleanupSummary": "target/today-owned-cleanup-2026-10-29.json",
+  "liveValidation": {
+    "folder": "target/receipt-popup-live-2026-10-29",
+    "testsPassed": 4,
+    "scope": [
+      "branch settings",
+      "restaurant exempt receipt print",
+      "POS exempt receipt print",
+      "mixed restaurant VAT-exemption and additional-tax order"
+    ],
+    "nativePreviewSuppressed": true,
+    "cleanupConfirmationPending": false,
+    "branchCleaned": true,
+    "status": 0,
+    "caseNames": [
+      "فاتورة المطعم — طباعة — ضريبة على الأصناف — صنف معفى — سعر عادي",
+      "فاتورة نقاط البيع — طباعة — ضريبة على الأصناف — صنف معفى — سعر عادي",
+      "الصنف المعفى يظل بدون VAT حتى مع الإضافية",
+      "selectedBranchRetainsRequestedPolicies"
+    ]
+  },
+  "cleanupSoFar": {
+    "oldRecordsRemoved": 153,
+    "oldRecordsRetained": 10,
+    "oldBranchesDeleted": 2,
+    "qualificationBranchDeleted": true
+  },
+  "cleanupFinal": {
+    "initialOwnedBranches": 3,
+    "initialRecords": 163,
+    "removedRecords": 153,
+    "deletedOldBranches": 2,
+    "remainingOwnedBranches": 1,
+    "remainingRecords": 10,
+    "branch": "business-422c6afd95401000",
+    "reason": "HTTP400: record is used, for two Stocktakings, one PaymentMethods and one users record; dependent masters retained. Not enough evidence to label this an application bug.",
+    "evidence": "target/today-audit-failure-details-2026-10-29",
+    "qualificationBranchCleaned": true
+  }
+}

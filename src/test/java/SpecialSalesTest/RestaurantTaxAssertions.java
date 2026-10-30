@@ -14,8 +14,7 @@ final class RestaurantTaxAssertions {
         intermediate(actual.get("totalAdditionalTaxes"), expected.additionalTax());
         intermediate(actual.get("netBeforeTaxes"), expected.beforeVat());
         intermediate(actual.get("totalTaxes"), expected.vat());
-        Assert.assertEquals(
-                decimal(actual.get("net")).compareTo(expected.net()), 0, "Final restaurant net");
+        TestSupport.DecimalAmountAssertions.matchesExpected(actual.get("net"), expected.net());
     }
 
     static void intermediate(Object value, BigDecimal expected) {
@@ -39,10 +38,8 @@ final class RestaurantTaxAssertions {
                                 .map(p -> (Map<?, ?>) p)
                                 .toList();
         Assert.assertEquals(owned.size(), 1, "Expected one exact owned payment method");
-        Assert.assertEquals(
-                decimal(owned.getFirst().get("value")).compareTo(expected),
-                0,
-                "Saved payment amount differs from independently expected invoice net");
+        TestSupport.DecimalAmountAssertions.matchesExpected(
+                owned.getFirst().get("value"), expected);
     }
 
     private static BigDecimal decimal(Object value) {

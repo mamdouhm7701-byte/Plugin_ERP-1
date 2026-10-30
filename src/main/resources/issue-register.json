@@ -31,26 +31,30 @@
   {
     "id": "REST-RETURN-001",
     "method": "SpecialSalesTest.RestaurantAdditionalTaxReturnTest.linkedReturnRefundsOriginalAdditionalTaxAndVat",
-    "failureContains": [],
+    "failureContains": [
+      "صافي السند غير مطابق: المتوقع 40.25، الفعلي 23"
+    ],
     "rule": "المرتجع الجزئي يرد إضافية وضريبة الكمية المرتجعة بالقيم الأصلية، بما فيها حد25 للوحدة.",
     "state": "OPEN",
     "ticket": "",
     "fixedIn": "",
     "verifiedIn": "",
-    "notes": "لا يكفي اسم الطريقة لاعتبار أي فشل فيها نفس العيب.",
+    "notes": "رن 29–30 أكتوبر: الفاتورة الأصلية اجتازت مطابقة الإضافية وVAT، ثم مسودة المرتجع لكمية 1 فقدت الإضافية. التوقف قبل حفظ المرتجع؛ لا يثبت أثر المرتجع المحفوظ.",
     "kind": "APPLICATION_DEFECT",
     "confirmed": true
   },
   {
     "id": "REST-RETURN-002",
     "method": "SpecialSalesTest.RestaurantAdditionalTaxReturnTest.linkedReturnRefundsOriginalAdditionalTaxAndVat",
-    "failureContains": [],
+    "failureContains": [
+      "صافي السند غير مطابق: المتوقع 120.75، الفعلي 69"
+    ],
     "rule": "المرتجع الكلي يرد كامل إضافية وضريبة الفاتورة الأصلية.",
     "state": "OPEN",
     "ticket": "",
     "fixedIn": "",
     "verifiedIn": "",
-    "notes": "التحقق السابق توقف في مسودة المرتجع قبل الحفظ.",
+    "notes": "رن 29–30 أكتوبر: الفاتورة الأصلية اجتازت مطابقة الإضافية وVAT، ثم مسودة المرتجع لكمية 3 فقدت الإضافية. التوقف قبل حفظ المرتجع؛ لا يثبت أثر المرتجع المحفوظ.",
     "kind": "APPLICATION_DEFECT",
     "confirmed": true
   },
@@ -67,6 +71,157 @@
     "verifiedIn": "",
     "notes": "تصحيح توضيح المستخدم يوم29 أكتوبر: الفشل القديم سببه توقع الاختبار VAT30 وصافي230 خطأ، وليس عيب تطبيق. النتائج الأصلية تبقى فاشلة تاريخيًا ولا تتحول لنجاح دون إعادة تشغيل. التجارب الحية أثبتت VAT0 وصافي200 مع عميل ضريبي ونسبة صنف0 أو15.",
     "kind": "TEST_DEFECT",
+    "confirmed": true
+  },
+  {
+    "id": "PDF-SUPPLIER-001",
+    "method": "DealerModelTest.SupplierTest.ExportSuppliersToPdf",
+    "failureContains": [
+      "this.hide is not a function"
+    ],
+    "rule": "تصدير الموردين PDF يجب أن ينتج ملفًا دون استثناء واجهة.",
+    "state": "OPEN",
+    "ticket": "",
+    "fixedIn": "",
+    "verifiedIn": "",
+    "notes": "دليل الرن الحالي: ربط بالطريقة ورسالة الفشل فقط. أسعار الأصناف تقرأ القيم المحفوظة فعليًا. خلل PDF موثق سابقًا وأعيد ظهوره؛ كود واجهة التطبيق غير موجود بهذا المستودع.",
+    "kind": "APPLICATION_DEFECT",
+    "confirmed": true
+  },
+  {
+    "id": "PDF-PRICE-LIST-001",
+    "method": "ProductsTest.ProductListTest.PR_ExportPdf",
+    "failureContains": [
+      "this.hide is not a function"
+    ],
+    "rule": "تصدير قوائم الأسعار PDF يجب أن ينتج ملفًا دون استثناء واجهة.",
+    "state": "OPEN",
+    "ticket": "",
+    "fixedIn": "",
+    "verifiedIn": "",
+    "notes": "دليل الرن الحالي: ربط بالطريقة ورسالة الفشل فقط. أسعار الأصناف تقرأ القيم المحفوظة فعليًا. خلل PDF موثق سابقًا وأعيد ظهوره؛ كود واجهة التطبيق غير موجود بهذا المستودع.",
+    "kind": "APPLICATION_DEFECT",
+    "confirmed": true
+  },
+  {
+    "id": "PRODUCT-PRICE-001",
+    "method": "ProductsTest.AddProductsTest.PR_MinimumAboveMaximum",
+    "failureContains": [
+      "Application accepted invalid prices: minimum="
+    ],
+    "rule": "يجب أن يكون الحد الأدنى <= سعر البيع <= الحد الأعلى، مع منع السعر السالب.",
+    "state": "OPEN",
+    "ticket": "",
+    "fixedIn": "",
+    "verifiedIn": "",
+    "notes": "دليل الرن الحالي: ربط بالطريقة ورسالة الفشل فقط. أسعار الأصناف تقرأ القيم المحفوظة فعليًا. خلل PDF موثق سابقًا وأعيد ظهوره؛ كود واجهة التطبيق غير موجود بهذا المستودع.",
+    "kind": "APPLICATION_DEFECT",
+    "confirmed": true
+  },
+  {
+    "id": "PRODUCT-PRICE-002",
+    "method": "ProductsTest.AddProductsTest.PR_MinimumAboveSalePrice",
+    "failureContains": [
+      "Application accepted invalid prices: minimum="
+    ],
+    "rule": "يجب أن يكون الحد الأدنى <= سعر البيع <= الحد الأعلى، مع منع السعر السالب.",
+    "state": "OPEN",
+    "ticket": "",
+    "fixedIn": "",
+    "verifiedIn": "",
+    "notes": "دليل الرن الحالي: ربط بالطريقة ورسالة الفشل فقط. أسعار الأصناف تقرأ القيم المحفوظة فعليًا. خلل PDF موثق سابقًا وأعيد ظهوره؛ كود واجهة التطبيق غير موجود بهذا المستودع.",
+    "kind": "APPLICATION_DEFECT",
+    "confirmed": true
+  },
+  {
+    "id": "PRODUCT-PRICE-003",
+    "method": "ProductsTest.AddProductsTest.PR_SalePriceBelowMinimum",
+    "failureContains": [
+      "Application accepted invalid prices: minimum="
+    ],
+    "rule": "يجب أن يكون الحد الأدنى <= سعر البيع <= الحد الأعلى، مع منع السعر السالب.",
+    "state": "OPEN",
+    "ticket": "",
+    "fixedIn": "",
+    "verifiedIn": "",
+    "notes": "دليل الرن الحالي: ربط بالطريقة ورسالة الفشل فقط. أسعار الأصناف تقرأ القيم المحفوظة فعليًا. خلل PDF موثق سابقًا وأعيد ظهوره؛ كود واجهة التطبيق غير موجود بهذا المستودع.",
+    "kind": "APPLICATION_DEFECT",
+    "confirmed": true
+  },
+  {
+    "id": "PRODUCT-PRICE-004",
+    "method": "ProductsTest.AddProductsTest.PR_MaximumBelowMinimum",
+    "failureContains": [
+      "Application accepted invalid prices: minimum="
+    ],
+    "rule": "يجب أن يكون الحد الأدنى <= سعر البيع <= الحد الأعلى، مع منع السعر السالب.",
+    "state": "OPEN",
+    "ticket": "",
+    "fixedIn": "",
+    "verifiedIn": "",
+    "notes": "دليل الرن الحالي: ربط بالطريقة ورسالة الفشل فقط. أسعار الأصناف تقرأ القيم المحفوظة فعليًا. خلل PDF موثق سابقًا وأعيد ظهوره؛ كود واجهة التطبيق غير موجود بهذا المستودع.",
+    "kind": "APPLICATION_DEFECT",
+    "confirmed": true
+  },
+  {
+    "id": "PRODUCT-PRICE-005",
+    "method": "ProductsTest.AddProductsTest.PR_MaximumBelowSalePrice",
+    "failureContains": [
+      "Application accepted invalid prices: minimum="
+    ],
+    "rule": "يجب أن يكون الحد الأدنى <= سعر البيع <= الحد الأعلى، مع منع السعر السالب.",
+    "state": "OPEN",
+    "ticket": "",
+    "fixedIn": "",
+    "verifiedIn": "",
+    "notes": "دليل الرن الحالي: ربط بالطريقة ورسالة الفشل فقط. أسعار الأصناف تقرأ القيم المحفوظة فعليًا. خلل PDF موثق سابقًا وأعيد ظهوره؛ كود واجهة التطبيق غير موجود بهذا المستودع.",
+    "kind": "APPLICATION_DEFECT",
+    "confirmed": true
+  },
+  {
+    "id": "PRODUCT-PRICE-006",
+    "method": "ProductsTest.AddProductsTest.PR_SalePriceAboveMaximum",
+    "failureContains": [
+      "Application accepted invalid prices: minimum="
+    ],
+    "rule": "يجب أن يكون الحد الأدنى <= سعر البيع <= الحد الأعلى، مع منع السعر السالب.",
+    "state": "OPEN",
+    "ticket": "",
+    "fixedIn": "",
+    "verifiedIn": "",
+    "notes": "دليل الرن الحالي: ربط بالطريقة ورسالة الفشل فقط. أسعار الأصناف تقرأ القيم المحفوظة فعليًا. خلل PDF موثق سابقًا وأعيد ظهوره؛ كود واجهة التطبيق غير موجود بهذا المستودع.",
+    "kind": "APPLICATION_DEFECT",
+    "confirmed": true
+  },
+  {
+    "id": "SALES-CASH-ORDER-001",
+    "method": "Invoice.SalesOrderTest.cashOrderRecordsCustomerAdvanceWithoutStockMovement",
+    "failureContains": [
+      "Expected customer balance delta -345.00, actual 0",
+      "Expected customer balance delta -300.00, actual 0"
+    ],
+    "rule": "حفظ أمر البيع النقدي يسجل دفعة العميل دون تغيير المخزون.",
+    "state": "OPEN",
+    "ticket": "",
+    "fixedIn": "",
+    "verifiedIn": "",
+    "notes": "تكرر في رن 29–30 أكتوبر: أمر محفوظ Cash، paid=345، net=345، بينما currentDebit/currentCredit بقيا صفرًا. أكد المستخدم الأثر المالي. لا يطابق تلقائيًا طريقة SalesFormTest الموروثة لأنها مشتركة بين أنواع مستندات مختلفة.",
+    "kind": "APPLICATION_DEFECT",
+    "confirmed": true
+  },
+  {
+    "id": "REST-HOLD-NOTES-001",
+    "method": "SpecialSalesTest.RestaurantInvoiceTest.reopeningHoldKeepsNotes",
+    "failureContains": [
+      "Held restaurant notes must survive reopening expected ["
+    ],
+    "rule": "استرجاع الطلب المعلق يعيد الملاحظات المحفوظة لنفس الفاتورة.",
+    "state": "OPEN",
+    "ticket": "",
+    "fixedIn": "",
+    "verifiedIn": "",
+    "notes": "أعيد التحقق 30 أكتوبر على Restaurant/NetBased/Transaction/Periodic مع الإضافية. ملاحظات DTO المحفوظ تطابق المطلوب، وبعد استرجاع نفس invoiceId ظلت notes فارغة بعد انتظار 15 ثانية. لا يطابق فشل التحقق من الحفظ السابق للاسترجاع.",
+    "kind": "APPLICATION_DEFECT",
     "confirmed": true
   }
 ]

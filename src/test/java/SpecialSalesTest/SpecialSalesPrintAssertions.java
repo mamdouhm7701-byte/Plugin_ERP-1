@@ -36,11 +36,11 @@ final class SpecialSalesPrintAssertions {
                   window.open=function(...args){
                     const child=originalOpen.apply(this,args);
                     if(child){
-                      const originalPrint=child.print;
                       child.print=function(...printArgs){
                         try{window.__specialSalesPrint.printed.push({text:child.document.body?.innerText||'',html:child.document.documentElement.outerHTML});}
                         catch(error){window.__specialSalesPrint.errors.push(String(error));}
-                        return originalPrint.apply(this,printArgs);
+                        // Capture the application's print request without opening Chrome's blocking preview.
+                        return undefined;
                       };
                     }
                     return child;
@@ -58,7 +58,7 @@ final class SpecialSalesPrintAssertions {
                                                             + " window.__specialSalesPrint.printed.length>0")));
         } catch (org.openqa.selenium.TimeoutException failure) {
             throw new AssertionError(
-                    "Receipt did not reach native browser printing; errors="
+                    "لم يصل طلب طباعة الإيصال إلى الالتقاط؛ أخطاء الشاشة="
                             + js.executeScript("return window.__specialSalesPrint.errors"),
                     failure);
         }
@@ -66,7 +66,7 @@ final class SpecialSalesPrintAssertions {
                 (Map<String, Object>)
                         js.executeScript("return window.__specialSalesPrint.printed.at(-1)");
         Allure.addAttachment(
-                "الإيصال الفعلي المرسل للطباعة",
+                "محتوى الإيصال عند طلب الطباعة — بدون فتح معاينة Chrome",
                 "text/html",
                 receipt.get("html").toString(),
                 ".html");

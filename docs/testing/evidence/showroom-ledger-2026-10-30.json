@@ -1,0 +1,27 @@
+{
+  "status": 0,
+  "branchCleaned": true,
+  "scope": "CarShowroom NetBased: chassis sale and linked return with stock and customer balance assertions",
+  "cases": [
+    {
+      "method": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+      "status": "passed"
+    },
+    {
+      "method": "Invoice.CarShowroomSalesTest.linkedReturnRestoresExactSoldChassisColorAndStock",
+      "status": "passed"
+    },
+    {
+      "method": "Invoice.CarShowroomSalesTest.sellsOwnedChassisAndPreservesItsColorAndStockIdentity",
+      "status": "passed"
+    },
+    {
+      "method": "Invoice.CarShowroomSalesTest.sellsOwnedChassisAndPreservesItsColorAndStockIdentity",
+      "status": "passed"
+    }
+  ],
+  "branchCleanup": {
+    "branchId": "edc2dbef922f8498",
+    "status": "DELETED"
+  }
+}

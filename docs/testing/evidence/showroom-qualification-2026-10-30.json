@@ -1,0 +1,28 @@
+{
+  "scope": "CarShowroom NetBased: profile, owned chassis sale with and without discount, linked same-chassis return",
+  "status": 0,
+  "branchCleaned": true,
+  "branchCleanup": {
+    "branchId": "4bcb8a0ddae1b347",
+    "status": "DELETED"
+  },
+  "cases": [
+    {
+      "method": "Invoice.CarShowroomSalesTest.sellsOwnedChassisAndPreservesItsColorAndStockIdentity",
+      "status": "passed"
+    },
+    {
+      "method": "Invoice.CarShowroomSalesTest.sellsOwnedChassisAndPreservesItsColorAndStockIdentity",
+      "status": "passed"
+    },
+    {
+      "method": "Invoice.CarShowroomSalesTest.linkedReturnRestoresExactSoldChassisColorAndStock",
+      "status": "passed"
+    },
+    {
+      "method": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+      "status": "passed"
+    }
+  ],
+  "comparisonNote": "4 targeted cases; not a rerun of the previous 45 E2E cases"
+}

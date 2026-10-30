@@ -35,6 +35,7 @@ public class BusinessLevelSuitePolicy implements IAlterSuiteListener {
     public void alter(List<XmlSuite> suites) {
         var selected = selectedBusiness();
         if (selected.isEmpty()) return;
+        BusinessActivityApplicability.apply(selected.orElseThrow().activity(), suites);
         for (var original : new ArrayList<>(suites)) {
             String level = original.getParameter("business.level");
             if (level == null) continue;

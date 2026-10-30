@@ -79,7 +79,7 @@ RestaurantAdditionalTaxSmokeTest يعمل على profile مطاعم مجهز م�
 
 أُنشئ فرع Demo مستقل QA-BR-REST-ITEMTAX-f03a918d بمعرف 25740c06aef15d5a، وسياسة ItemBased وإضافية 100%. تحقق حفظ الإعداد وإعادة القراءة واختيار الفرع عبر profile باسم demo-restaurant-itembased. حزمة smoke-restaurant-item-tax-testng.xml تحتوي رحلة مستقلة لصنفين معفيين: خاضع للإضافية وغير خاضع. المتوقع: إضافية 100، وعاء 300، VAT 30، صافي 330؛ وتتضمن الحفظ وإعادة القراءة والمخزون إذا نجح الحساب أولًا. خيار IncludeRestaurantAdditionalTaxSmoke يختار هذه الحزمة تلقائيًا للـItemBased، ويحافظ على الحزمة السابقة لباقي السياسات وعلى Smoke القديم دون تعديل.
 
-الفحص المحلي target/itembased-local-ci.log نجح بـ644 اختبارًا وصفر فشل/خطأ/تخطي وSpotless ناجح. أول تجربة حية للصنف المعفى بنسبة مسجلة صفر أظهرت VAT صفر وصافي 300؛ لا تعتمد كحكم نهائي قبل إعادة التجربة بنسبة 15% مع إبقاء isTaxable=false، حتى تختبر حالة الإعفاء وحدها دون خلطها بنسبة صفر. أدلة المحاولة الأولى محفوظة في target/restaurant-itembased-additional-live.log.
+الفحص المحلي target/itembased-local-ci.log نجح بـ644 اختبارًا وصفر فشل/خطأ/تخطي وSpotless ناجح. التجربة التاريخية للصنف المعفى أظهرت VAT صفر وصافي300 للصنفين، وهي متوافقة مع توضيح المستخدم الأخير. تجربة29 أكتوبر قارنت أيضًا نسبة الصنف0 و15 مع بقاء isTaxable=false؛ في الحالتين بقي VAT صفر، والعميل الفعلي ضريبي. أدلة المقارنة في evidence/restaurant-exemption-tax-flags-2026-10-29.json.
 
 
 ## اختلاف حي مثبت في ItemBased مع الإعفاء والإضافية

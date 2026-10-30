@@ -147,8 +147,9 @@ public abstract class SalesListActions extends SalesScenarioTest {
                                         partialStored))
                         .toString(),
                 ".json");
-        sameNumber(unpaidStored.get("paid"), "0");
-        sameNumber(paidStored.get("paid"), paidStored.get("net").toString());
+        TestSupport.DecimalAmountAssertions.amount(unpaidStored.get("paid"), "0");
+        TestSupport.DecimalAmountAssertions.amount(
+                paidStored.get("paid"), paidStored.get("net").toString());
         Assert.assertTrue(
                 number(partialStored.get("paid")).signum() > 0
                         && number(partialStored.get("paid"))

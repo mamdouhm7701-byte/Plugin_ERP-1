@@ -1,0 +1,23 @@
+{
+  "baseline": "business-9f672f89-ad85-478a-a00b-f3bf730e8a1c",
+  "issue": "REST-HOLD-NOTES-001",
+  "evidence": [
+    {
+      "name": "ملاحظات الطلب المعلق قبل الاسترجاع",
+      "values": {
+        "storedNotes": "QA-SP-509b47cb-a6e3-4bd3-a58c-f3c07d3220c3",
+        "expectedNotes": "QA-SP-509b47cb-a6e3-4bd3-a58c-f3c07d3220c3",
+        "invoiceId": "2df5fd6a3f036cd8"
+      }
+    },
+    {
+      "name": "ملاحظات الطلب بعد الاسترجاع",
+      "values": {
+        "invoiceId": "2df5fd6a3f036cd8",
+        "actualNotes": "",
+        "expectedNotes": "QA-SP-509b47cb-a6e3-4bd3-a58c-f3c07d3220c3",
+        "reopenedInvoiceId": "2df5fd6a3f036cd8"
+      }
+    }
+  ]
+}

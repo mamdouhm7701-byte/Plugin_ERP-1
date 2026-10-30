@@ -104,9 +104,13 @@ public final class RestaurantMinimumAdditionalTaxTest extends SpecialSalesScenar
 
     private void assertAmounts(
             Map<String, Object> document, RestaurantAdditionalTaxCalculator.Totals expected) {
-        number(document.get("totalAdditionalTaxes"), expected.additionalTax().toPlainString());
-        number(document.get("netBeforeTaxes"), expected.beforeVat().toPlainString());
-        number(document.get("totalTaxes"), expected.vat().toPlainString());
-        number(document.get("net"), expected.net().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                document.get("totalAdditionalTaxes"), expected.additionalTax().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                document.get("netBeforeTaxes"), expected.beforeVat().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                document.get("totalTaxes"), expected.vat().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                document.get("net"), expected.net().toPlainString());
     }
 }

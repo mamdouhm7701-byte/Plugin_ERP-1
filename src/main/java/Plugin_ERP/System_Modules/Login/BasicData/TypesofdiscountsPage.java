@@ -219,6 +219,7 @@ public class TypesofdiscountsPage extends AbstractForDealer {
         row.findElement(By.cssSelector("button[data-action-type='delete']")).click();
         utilites.ClickElement(Clickyestodelet);
         new WebDriverWait(driver, Duration.ofSeconds(20))
+                .ignoring(org.openqa.selenium.StaleElementReferenceException.class)
                 .until(
                         d ->
                                 d.findElements(By.cssSelector("tr[data-pk]")).stream()

@@ -334,9 +334,12 @@ public final class ConstructionContractConversionTest extends SalesScenarioTest 
         page.slSettled();
         var record = capture().getLast();
         var stored = data.read(record);
-        sameNumber(stored.get("netBeforeTaxes"), expected.getBeforeTax().toPlainString());
-        sameNumber(stored.get("totalTaxes"), expected.getTax().toPlainString());
-        sameNumber(stored.get("net"), expected.getNet().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                stored.get("netBeforeTaxes"), expected.getBeforeTax().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                stored.get("totalTaxes"), expected.getTax().toPlainString());
+        TestSupport.DecimalAmountAssertions.amount(
+                stored.get("net"), expected.getNet().toPlainString());
         Allure.addAttachment(
                 "Owned activity saved document",
                 "application/json",

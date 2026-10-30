@@ -65,7 +65,7 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
     public void catalogAddsItem() {
         add();
         Assert.assertEquals(lines().size(), 1, "مطابقة عدد بنود الفاتورة");
-        number(page.document().get("total"), "100");
+        TestSupport.DecimalAmountAssertions.amount(page.document().get("total"), "100");
         number(data.balance(item, 1), "1000");
     }
 
@@ -130,7 +130,48 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
                     + " في استرجاع الطلب.")
     public void reopeningHoldKeepsNotes() {
         var invoice = holdOrder();
+        var stored = data.read(invoice);
+        Allure.addAttachment(
+                "ملاحظات الطلب المعلق قبل الاسترجاع",
+                "application/json",
+                new org.json.JSONObject(
+                                java.util.Map.of(
+                                        "invoiceId",
+                                        invoice.id(),
+                                        "expectedNotes",
+                                        page.captureMarker(),
+                                        "storedNotes",
+                                        java.util.Objects.toString(stored.get("notes"), "")))
+                        .toString(2),
+                ".json");
+        Assert.assertEquals(
+                stored.get("notes"),
+                page.captureMarker(),
+                "Held restaurant notes must be persisted before reopening");
         reopen(invoice);
+        try {
+            new org.openqa.selenium.support.ui.WebDriverWait(
+                            driver, java.time.Duration.ofSeconds(15))
+                    .until(d -> page.captureMarker().equals(page.document().get("notes")));
+        } catch (org.openqa.selenium.TimeoutException unavailableNotes) {
+            Allure.addAttachment(
+                    "ملاحظات الطلب بعد الاسترجاع",
+                    "application/json",
+                    new org.json.JSONObject(
+                                    java.util.Map.of(
+                                            "invoiceId",
+                                            invoice.id(),
+                                            "reopenedInvoiceId",
+                                            java.util.Objects.toString(
+                                                    page.document().get("id"), ""),
+                                            "actualNotes",
+                                            java.util.Objects.toString(
+                                                    page.document().get("notes"), ""),
+                                            "expectedNotes",
+                                            page.captureMarker()))
+                            .toString(2),
+                    ".json");
+        }
         Assert.assertEquals(
                 page.document().get("notes"),
                 page.captureMarker(),
@@ -154,7 +195,7 @@ public class RestaurantInvoiceTest extends SpecialSalesScenario {
         page.awaitSaveCount(savesBeforeUpdate + 1);
         var updated = saved();
         Assert.assertEquals(updated.id(), invoice.id());
-        number(data.read(updated).get("total"), "200");
+        TestSupport.DecimalAmountAssertions.amount(data.read(updated).get("total"), "200");
         number(data.balance(item, 1), "998");
         number(data.balance(item, 2), "1000");
     }

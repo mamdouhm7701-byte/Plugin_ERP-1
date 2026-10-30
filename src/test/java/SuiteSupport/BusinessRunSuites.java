@@ -20,10 +20,21 @@ final class BusinessRunSuites {
             Path project, BusinessRunRequest request, String level, int workers, Path output)
             throws Exception {
         if (workers < 1 || workers > 6) throw new IllegalArgumentException("Choose 1–6 browsers");
-        if (level.startsWith("XML:"))
-            return XmlSuiteCatalog.plan(project, level.substring(4), workers, output);
         List<XmlSuite> result;
-        if (!level.equals("Business checks")) {
+        var initialApplicability = new ArrayList<Map<String, Object>>();
+        if (level.startsWith("XML:")) {
+            result =
+                    new ArrayList<>(
+                            XmlSuiteCatalog.plan(project, level.substring(4), workers, output));
+            initialApplicability.addAll(
+                    BusinessActivityApplicability.apply(request.activity(), result));
+            new BusinessLevelSuitePolicy() {
+                @Override
+                Optional<BusinessRunRequest> selectedBusiness() {
+                    return Optional.of(request);
+                }
+            }.alter(result);
+        } else if (!level.equals("Business checks")) {
             result =
                     new ArrayList<>(
                             NativeInteractiveSuiteListener.buildSuites(
@@ -48,7 +59,22 @@ final class BusinessRunSuites {
             test.setXmlClasses(classes);
             result = new ArrayList<>(BusinessSuiteScheduling.partition(List.of(suite), workers));
         }
+        var applicability = BusinessActivityApplicability.apply(request.activity(), result);
+        applicability.addAll(initialApplicability);
         Files.createDirectories(output);
+        Files.writeString(
+                output.resolve("activity-applicability.json"),
+                new org.json.JSONObject(
+                                Map.of(
+                                        "activity",
+                                        request.activity().code(),
+                                        "notApplicable",
+                                        applicability,
+                                        "completeActivityCoverage",
+                                        false,
+                                        "note",
+                                        "هذه حالات خارج نطاق النشاط وليست نجاحًا؛ رحلة الشاسيه لا تغطي تلقائيًا كل التحصيلات أو تحويلات الشراء العامة."))
+                        .toString(2));
         Files.writeString(
                 output.resolve("coverage-scope.json"),
                 new org.json.JSONObject(

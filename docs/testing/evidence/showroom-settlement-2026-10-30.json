@@ -1,0 +1,19 @@
+{
+  "scope": "CarShowroom NetBased: sell owned chassis, partial collection, edit, delete, final collection and stock invariance",
+  "status": 0,
+  "branchCleaned": true,
+  "cases": [
+    {
+      "method": "Invoice.CarShowroomSalesTest.chassisSaleCollectionEditDeleteAndFinalPaymentPreserveCarStock",
+      "status": "passed"
+    },
+    {
+      "method": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+      "status": "passed"
+    }
+  ],
+  "branchCleanup": {
+    "branchId": "6990d721e169a07b",
+    "status": "DELETED"
+  }
+}

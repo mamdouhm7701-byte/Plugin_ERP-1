@@ -8,6 +8,30 @@ import org.testng.annotations.Test;
 
 public final class ScenarioCaseDescriptionTest {
     @Test
+    public void legacyInvoiceAndOrderExplainTheirOwnDocumentInsteadOfAnUnrelatedScreen() {
+        String invoice = ScenarioCaseDescriptions.html("Invoice.InvoiceTest", "AddInvoice");
+        Assert.assertTrue(invoice.contains("فاتورة مبيعات"));
+        Assert.assertTrue(invoice.contains("بمقدار 3"));
+        Assert.assertFalse(invoice.contains("عرض سعر"));
+        String order =
+                ScenarioCaseDescriptions.html(
+                        "Purches.purchOrderTest", "AddPurchesOrderByNameTest");
+        Assert.assertTrue(order.contains("امر شراء"));
+        Assert.assertTrue(order.contains("يبقى رصيد الصنف كما كان"));
+    }
+
+    @Test
+    public void specialTaxReviewExplainsLowPriceAndPerUnitMinimumWithoutPretendingStepsRan() {
+        String html =
+                ScenarioCaseDescriptions.html(
+                        "SpecialSalesTest.RestaurantInvoiceTaxReviewTest", "reviewSpecialInvoice");
+        Assert.assertTrue(html.contains("11.5"));
+        Assert.assertTrue(html.contains("25 لكل وحدة"));
+        Assert.assertTrue(html.contains("الصنف المعفى يظل بلا ضريبة"));
+        Assert.assertTrue(html.contains("وجود الشرح وحده لا يعني أن الحالة نجحت"));
+    }
+
+    @Test
     public void malformedDescriptionNamesResourceCaseAndInvalidField() {
         String json =
                 """
@@ -88,7 +112,7 @@ public final class ScenarioCaseDescriptionTest {
 
     @Test
     public void everyLiveCaseHasStepsAndExpectedWithoutTechnicalPlaceholders() throws Exception {
-        Assert.assertEquals(ScenarioCaseDescriptions.size(), 918);
+        Assert.assertTrue(ScenarioCaseDescriptions.size() >= 1059);
         for (String key : ScenarioCaseDescriptions.references()) {
             String[] parts = key.split("#", 2);
             var type = Class.forName(parts[0]);
@@ -108,5 +132,39 @@ public final class ScenarioCaseDescriptionTest {
                         "DTO", "fixture", "captured", "assertEquals", "راجع النتيجة أدناه"
                     }) Assert.assertFalse(html.contains(technical), key + ": " + technical);
         }
+    }
+
+    @Test
+    public void everyConcreteLiveTestMethodMustHaveItsOwnReadableSteps() throws Exception {
+        var root =
+                java.nio.file.Path.of(
+                        getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
+        var missing = new java.util.TreeSet<String>();
+        try (var paths = java.nio.file.Files.walk(root)) {
+            for (var path :
+                    paths.filter(
+                                    p ->
+                                            p.toString().endsWith(".class")
+                                                    && !p.toString().contains("$"))
+                            .toList()) {
+                String name =
+                        root.relativize(path)
+                                .toString()
+                                .replace('\\', '.')
+                                .replaceAll("\\.class$", "");
+                Class<?> type = Class.forName(name, false, getClass().getClassLoader());
+                if (java.lang.reflect.Modifier.isAbstract(type.getModifiers())
+                        || !Plugin_ERP.Tests.LoginTest.BaseTest.class.isAssignableFrom(type))
+                    continue;
+                for (var method : type.getMethods()) {
+                    var annotation = method.getAnnotation(Test.class);
+                    if (annotation == null || !annotation.enabled()) continue;
+                    String key = name + "#" + method.getName();
+                    if (ScenarioCaseDescriptions.html(name, method.getName()) == null)
+                        missing.add(key);
+                }
+            }
+        }
+        Assert.assertTrue(missing.isEmpty(), "حالات تشغيل حي بلا خطوات عربية: " + missing);
     }
 }

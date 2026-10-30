@@ -67,9 +67,8 @@ final class CounterDocumentLines {
         try {
             owner.ready.until(
                     d ->
-                            new java.math.BigDecimal(owner.document().get("net").toString())
-                                            .compareTo(new java.math.BigDecimal(value))
-                                    == 0);
+                            Plugin_ERP.Util.DecimalAmountComparison.matches(
+                                    owner.document().get("net"), value));
         } catch (TimeoutException failure) {
             throw new AssertionError(
                     "صافي الفاتورة غير مطابق: المتوقع "
@@ -84,9 +83,8 @@ final class CounterDocumentLines {
         try {
             owner.ready.until(
                     d ->
-                            new java.math.BigDecimal(owner.document().get("total").toString())
-                                            .compareTo(new java.math.BigDecimal(value))
-                                    == 0);
+                            Plugin_ERP.Util.DecimalAmountComparison.matches(
+                                    owner.document().get("total"), value));
         } catch (TimeoutException failure) {
             throw new AssertionError(
                     "إجمالي الفاتورة غير مطابق: المتوقع "

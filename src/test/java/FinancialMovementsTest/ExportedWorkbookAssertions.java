@@ -45,12 +45,11 @@ final class ExportedWorkbookAssertions {
             boolean monetaryMatch;
             try {
                 monetaryMatch =
-                        new BigDecimal(
-                                                new Plugin_ERP.Bots.ValidationActions(
-                                                                null, null, null)
-                                                        .normalizePrice(actual))
-                                        .compareTo(amount)
-                                == 0;
+                        Plugin_ERP.Util.DecimalAmountComparison.matches(
+                                new BigDecimal(
+                                        new Plugin_ERP.Bots.ValidationActions(null, null, null)
+                                                .normalizePrice(actual)),
+                                amount);
             } catch (NumberFormatException nonNumeric) {
                 monetaryMatch = false;
             }

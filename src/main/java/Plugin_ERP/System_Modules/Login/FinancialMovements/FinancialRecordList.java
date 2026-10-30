@@ -30,18 +30,29 @@ final class FinancialRecordList {
     }
 
     WebElement row(String note) {
-        return ready.until(
-                d ->
-                        d.findElements(By.cssSelector("tbody tr")).stream()
-                                .filter(WebElement::isDisplayed)
-                                .filter(r -> matchesOwnedRow(r, note))
-                                .findFirst()
-                                .orElse(null));
+        try {
+            return ready.until(
+                    d ->
+                            d.findElements(By.cssSelector("tbody tr")).stream()
+                                    .filter(WebElement::isDisplayed)
+                                    .filter(r -> matchesOwnedRow(r, note))
+                                    .findFirst()
+                                    .orElse(null));
+        } catch (TimeoutException failure) {
+            throw new TimeoutException(
+                    "لم يظهر السند المالي في القائمة؛ الكود المتوقع "
+                            + ownedCodes.getOrDefault(note, "غير مسجل")
+                            + "، ملاحظة الاختبار "
+                            + note,
+                    failure);
+        }
     }
 
     boolean matchesOwnedRow(WebElement row, String note) {
         if (ownedCodes.containsKey(note)) {
-            List<WebElement> headers = driver.findElements(By.cssSelector("thead th"));
+            List<WebElement> headers =
+                    row.findElement(By.xpath("ancestor::table[1]"))
+                            .findElements(By.cssSelector("thead th"));
             for (int i = 0; i < headers.size(); i++)
                 if (headers.get(i).getDomProperty("textContent").contains("الكود")) {
                     List<WebElement> cells = row.findElements(By.cssSelector("td"));

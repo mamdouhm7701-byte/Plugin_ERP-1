@@ -162,10 +162,7 @@ public abstract class FinancialScenarioTest extends BaseTest {
             page.transferParty(2, toType, data.safe(2).name());
         }
         persist(print, "200.25");
-        Assert.assertEquals(
-                new BigDecimal(data.read(saved).get("value").toString())
-                        .compareTo(new BigDecimal("200.25")),
-                0);
+        TestSupport.DecimalAmountAssertions.amount(data.read(saved).get("value"), "200.25");
     }
 
     protected void deleteOwn() {

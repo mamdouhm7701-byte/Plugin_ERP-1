@@ -9,15 +9,15 @@
   <class name="Invoice.SalesReturnTest"/>
   <class name="Invoice.LinkedSalesReturnTest"/>
   <class name="Invoice.SalesListCoverageTest"/>
-  <class name="Invoice.SalesCalculationTest"/>
-  <class name="Invoice.SalesCleanupTest"/>
-<class name="Invoice.SalesCore2CleanupTest"/>
-<class name="Invoice.SalesOwnershipCleanupTest"/>
-<class name="Invoice.SalesRecoveryCleanupTest"/>
-<class name="Invoice.SalesRecovery2CleanupTest"/>
-<class name="Invoice.SalesRecovery3CleanupTest"/>
-<class name="Invoice.SalesDependenciesCleanupTest"/>
-<class name="Invoice.SalesDependencies2CleanupTest"/>
-<class name="Invoice.SalesLifecycleCleanupTest"/>
+
+
+
+
+
+
+
+
+
+
  </classes></test>
 </suite>

@@ -9,6 +9,12 @@
     </listeners>
     <test name="Configuration, arithmetic and owned fixture recovery" preserve-order="true">
         <classes>
+            <class name="Plugin_ERP.Util.DecimalAmountComparisonTest"/>
+            <class name="Plugin_ERP.System_Modules.Login.FinancialMovements.FinancialRecordListTest"/>
+            <class name="SuiteSupport.LiveModuleIsolationTest"/>
+            <class name="DealerModelTest.RouteCalendarReadTest"/>
+            <class name="Plugin_ERP.Util.StableDomReadTest"/>
+            <class name="TestSupport.FixtureCreateRetryTest"/>
             <class name="TestSupport.FixtureJournalEfficiencyTest"/>
             <class name="TestSupport.FixtureContextSnapshotTest"/>
             <class name="Plugin_ERP.Util.BrowserSessionHealthTest"/>

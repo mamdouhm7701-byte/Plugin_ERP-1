@@ -28,6 +28,11 @@ final class StoreFixtureApi {
 
     @SuppressWarnings("unchecked")
     Map<String, Object> call(String action, String endpoint, Map<String, Object> values) {
+        return TestSupport.FixtureCreateRetry.run(action, () -> callOnce(action, endpoint, values));
+    }
+
+    private Map<String, Object> callOnce(
+            String action, String endpoint, Map<String, Object> values) {
         profileGuard.verify(driver);
         Plugin_ERP.Util.RunEnvironmentGate.beforeCreate(action);
         driver.manage()

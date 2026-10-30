@@ -183,6 +183,13 @@ final class XmlSuiteCatalog {
         // Preserve parameters, method filters, suite listeners and ordering. XML runs are
         // sequential initially.
         sequential(suites);
+        boolean parallelReview =
+                selected.equals(INVOICE_REVIEW)
+                        && workers > 1
+                        && parallelReviewEnabled()
+                        && suites.stream().allMatch(XmlSuiteCatalog::canPartition);
+        if (parallelReview)
+            suites = BusinessSuiteScheduling.partition(suites, Math.min(2, workers));
         Files.createDirectories(output);
         Files.writeString(
                 output.resolve("xml-selection.json"),
@@ -195,11 +202,30 @@ final class XmlSuiteCatalog {
                                         "requestedBrowsers",
                                         workers,
                                         "selectedBrowsers",
-                                        1,
+                                        parallelReview ? Math.min(2, workers) : 1,
                                         "reason",
-                                        "XML review preserves ordering and shared settings"))
+                                        parallelReview
+                                                ? "Sales and purchase review classes may run together; POS and restaurant remain exclusive; tax policies remain sequential"
+                                                : "XML review preserves ordering and shared settings"))
                         .toString(2));
         return suites;
+    }
+
+    static boolean parallelReviewEnabled() {
+        return Boolean.parseBoolean(System.getProperty("xml.review.parallel", "true"));
+    }
+
+    private static boolean canPartition(XmlSuite suite) {
+        return suite.getChildSuites().isEmpty()
+                && suite.getParameters().isEmpty()
+                && suite.getListeners().stream()
+                        .allMatch(name -> name.equals(BranchIsolationListener.class.getName()))
+                && suite.getTests().stream()
+                        .allMatch(
+                                test ->
+                                        test.getIncludedGroups().isEmpty()
+                                                && test.getExcludedGroups().isEmpty()
+                                                && test.getLocalParameters().isEmpty());
     }
 
     private static void sequential(List<XmlSuite> suites) {

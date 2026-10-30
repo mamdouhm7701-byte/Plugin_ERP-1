@@ -9,6 +9,10 @@
     </listeners>
     <test name="Configuration, arithmetic and owned fixture recovery" preserve-order="true">
         <classes>
+            <class name="Plugin_ERP.System_Modules.Login.StoreModel.StoreQuantityRejectionTest"/>
+            <class name="Plugin_ERP.BranchProfiles.VerificationSnapshotTest"/>
+            <class name="SuiteSupport.SanityScopeTest"/>
+            <class name="Plugin_ERP.Util.RunPerformanceTest"/>
             <class name="Plugin_ERP.Util.DecimalAmountComparisonTest"/>
             <class name="Plugin_ERP.System_Modules.Login.FinancialMovements.FinancialRecordListTest"/>
             <class name="SuiteSupport.LiveModuleIsolationTest"/>
@@ -32,6 +36,10 @@
             <class name="TestSupport.FixtureRecoveryJournalTest"/>
             <class name="TestSupport.FixtureAttemptCaptureTest"/>
             <class name="TestSupport.FixtureCleanupTest"/>
+            <class name="TestSupport.FixtureAccountPoolTest"/>
+            <class name="Invoice.SalesAccountReuseTest"/>
+            <class name="Purches.PurchaseAccountReuseTest"/>
+            <class name="StoreTest.StoreAccountReuseTest"/>
             <class name="TestSupport.PartialItemRecoveryTest"/>
             <class name="TestSupport.FixtureMasterRecoveryTest"/>
             <class name="TestSupport.FixtureOwnershipTest"/>
@@ -66,6 +74,7 @@
             <class name="Plugin_ERP.Util.Allur.ReportingContractsTest"/>
             <class name="Plugin_ERP.Bots.TextEntryActionsTest"/>
             <class name="Plugin_ERP.Bots.ReadinessWaitTest"/>
+            <class name="Plugin_ERP.Bots.ReportReadinessTest"/>
             <class name="SuiteSupport.RuntimeCompatibilityTest"/>
             <class name="SuiteSupport.BusinessStabilityLauncherTest"/>
             <class name="SuiteSupport.BrowserLifecycleTest"/>
@@ -81,6 +90,7 @@
             <class name="TestSupport.TreasuryAmountsTest"/>
             <class name="Plugin_ERP.Util.ConfigurationPropertiesTest"/>
             <class name="Plugin_ERP.Util.FormInteractionsTest"/>
+            <class name="Plugin_ERP.Util.UiPollingTest"/>
             <class name="Plugin_ERP.Util.DropdownPolicyTest"/>
             <class name="Plugin_ERP.Valditon.LegacyAssertionsTest"/>
             <class name="Plugin_ERP.Util.Allur.AllureReportPolicyTest"/>

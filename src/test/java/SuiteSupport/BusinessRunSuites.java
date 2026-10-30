@@ -59,6 +59,8 @@ final class BusinessRunSuites {
             test.setXmlClasses(classes);
             result = new ArrayList<>(BusinessSuiteScheduling.partition(List.of(suite), workers));
         }
+        if (level.equals("Sanity"))
+            SanityScope.filter(result, System.getProperty("sanity.scope", "All"));
         var applicability = BusinessActivityApplicability.apply(request.activity(), result);
         applicability.addAll(initialApplicability);
         Files.createDirectories(output);

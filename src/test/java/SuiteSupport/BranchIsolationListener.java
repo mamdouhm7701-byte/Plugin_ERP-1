@@ -13,6 +13,8 @@ import org.testng.ITestClass;
 public final class BranchIsolationListener implements IClassListener {
     private static final Set<String> INDEPENDENT =
             Set.of(
+                    "Invoice.SalesInvoiceTaxReviewTest",
+                    "Purches.PurchaseInvoiceTaxReviewTest",
                     "CoverageTest.ReportNavigationCoverageTest",
                     "Invoice.SalesEndToEndTest",
                     "Invoice.SalesSettlementEndToEndTest",
@@ -68,7 +70,14 @@ public final class BranchIsolationListener implements IClassListener {
     @Override
     public void onBeforeClass(ITestClass testClass) {
         Lock lock = independent(testClass.getName()) ? GATE.readLock() : GATE.writeLock();
+        long started = System.nanoTime();
         lock.lock();
+        Class<?> type = testClass.getRealClass();
+        if (type != null
+                && Plugin_ERP.Util.RunEnvironmentGate.ProtectedScenario.class.isAssignableFrom(
+                        type))
+            Plugin_ERP.Util.RunPerformance.lockWait(
+                    testClass.getName(), System.nanoTime() - started);
         heldLocks.get().push(lock);
     }
 

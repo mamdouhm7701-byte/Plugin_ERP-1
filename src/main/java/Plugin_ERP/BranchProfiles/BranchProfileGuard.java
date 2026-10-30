@@ -23,5 +23,6 @@ public final class BranchProfileGuard {
         var state = BranchProfileReader.captureState(driver, Duration.ofSeconds(30));
         expected.orElseThrow().verify(state.profile());
         additional.verify(state.additionalEnabled(), state.additionalRate());
+        VerificationSnapshot.verified(driver, state.profile());
     }
 }

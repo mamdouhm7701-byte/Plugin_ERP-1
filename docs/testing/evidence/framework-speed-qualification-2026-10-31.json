@@ -1,0 +1,179 @@
+{
+  "scope": "Partial qualification only: profile verification, two sales invoices and two purchase invoices per policy; not the complete XML, Smoke, Sanity, E2E or Regression.",
+  "rounds": [
+    {
+      "policy": "NET_BASED",
+      "evidence": "target\\validation\\business-252037d6-60c0-4897-874b-238e5db59cd9",
+      "results": [
+        {
+          "fullName": "Purches.PurchaseInvoiceTaxReviewTest.reviewPurchaseInvoice",
+          "name": "فاتورة المشتريات — تعديل — ضريبة على الصافي — صنف خاضع — سعر عادي",
+          "status": "passed",
+          "start": 1793397218963,
+          "stop": 1793397239498
+        },
+        {
+          "fullName": "Purches.PurchaseInvoiceTaxReviewTest.reviewPurchaseInvoice",
+          "name": "فاتورة المشتريات — إضافة — ضريبة على الصافي — صنف خاضع — سعر عادي",
+          "status": "passed",
+          "start": 1793397195265,
+          "stop": 1793397218891
+        },
+        {
+          "fullName": "Invoice.SalesInvoiceTaxReviewTest.reviewSalesInvoice",
+          "name": "فاتورة المبيعات — إضافة — ضريبة على الصافي — صنف خاضع — سعر عادي",
+          "status": "passed",
+          "start": 1793397195219,
+          "stop": 1793397227361
+        },
+        {
+          "fullName": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+          "name": "selectedBranchRetainsRequestedPolicies",
+          "status": "passed",
+          "start": 1793397184929,
+          "stop": 1793397185718
+        },
+        {
+          "fullName": "Invoice.SalesInvoiceTaxReviewTest.reviewSalesInvoice",
+          "name": "فاتورة المبيعات — منع التعديل — ضريبة على الصافي — صنف خاضع — سعر عادي",
+          "status": "passed",
+          "start": 1793397227442,
+          "stop": 1793397260371
+        }
+      ],
+      "statusCounts": {
+        "passed": 5
+      },
+      "invoiceClassesOverlapped": true,
+      "fixtureCleanupRecords": 45,
+      "allRecordedFixtureCleanupSucceeded": true,
+      "branchId": "8571d09ed5388826",
+      "branchCleanup": "DELETED"
+    },
+    {
+      "policy": "ITEM_BASED",
+      "evidence": "target\\validation\\business-d6266ca6-6a34-4043-b0ef-b83d5e37e252",
+      "results": [
+        {
+          "fullName": "Invoice.SalesInvoiceTaxReviewTest.reviewSalesInvoice",
+          "name": "فاتورة المبيعات — منع التعديل — ضريبة على الأصناف — صنف خاضع — سعر عادي",
+          "status": "passed",
+          "start": 1793397469300,
+          "stop": 1793397499247
+        },
+        {
+          "fullName": "Purches.PurchaseInvoiceTaxReviewTest.reviewPurchaseInvoice",
+          "name": "فاتورة المشتريات — إضافة — ضريبة على الأصناف — صنف خاضع — سعر عادي",
+          "status": "passed",
+          "start": 1793397437826,
+          "stop": 1793397469521
+        },
+        {
+          "fullName": "Invoice.SalesInvoiceTaxReviewTest.reviewSalesInvoice",
+          "name": "فاتورة المبيعات — إضافة — ضريبة على الأصناف — صنف خاضع — سعر عادي",
+          "status": "passed",
+          "start": 1793397437779,
+          "stop": 1793397469222
+        },
+        {
+          "fullName": "Purches.PurchaseInvoiceTaxReviewTest.reviewPurchaseInvoice",
+          "name": "فاتورة المشتريات — تعديل — ضريبة على الأصناف — صنف خاضع — سعر عادي",
+          "status": "passed",
+          "start": 1793397469584,
+          "stop": 1793397493601
+        },
+        {
+          "fullName": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+          "name": "selectedBranchRetainsRequestedPolicies",
+          "status": "passed",
+          "start": 1793397427374,
+          "stop": 1793397428049
+        }
+      ],
+      "statusCounts": {
+        "passed": 5
+      },
+      "invoiceClassesOverlapped": true,
+      "fixtureCleanupRecords": 45,
+      "allRecordedFixtureCleanupSucceeded": true,
+      "branchId": "ccb608d81a25693b",
+      "branchCleanup": "DELETED"
+    },
+    {
+      "policy": "PRICE_INCLUDED",
+      "evidence": "target\\validation\\business-2ea72b1f-5db3-4087-bb3c-93699cf41379",
+      "results": [
+        {
+          "fullName": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+          "name": "selectedBranchRetainsRequestedPolicies",
+          "status": "passed",
+          "start": 1793397663458,
+          "stop": 1793397664256
+        },
+        {
+          "fullName": "Purches.PurchaseInvoiceTaxReviewTest.reviewPurchaseInvoice",
+          "name": "فاتورة المشتريات — تعديل — السعر شامل الضريبة — صنف خاضع — سعر عادي",
+          "status": "passed",
+          "start": 1793397709425,
+          "stop": 1793397735627
+        },
+        {
+          "fullName": "Purches.PurchaseInvoiceTaxReviewTest.reviewPurchaseInvoice",
+          "name": "فاتورة المشتريات — إضافة — السعر شامل الضريبة — صنف خاضع — سعر عادي",
+          "status": "passed",
+          "start": 1793397675893,
+          "stop": 1793397709370
+        },
+        {
+          "fullName": "Invoice.SalesInvoiceTaxReviewTest.reviewSalesInvoice",
+          "name": "فاتورة المبيعات — إضافة — السعر شامل الضريبة — صنف خاضع — سعر عادي",
+          "status": "passed",
+          "start": 1793397674701,
+          "stop": 1793397711283
+        },
+        {
+          "fullName": "Invoice.SalesInvoiceTaxReviewTest.reviewSalesInvoice",
+          "name": "فاتورة المبيعات — منع التعديل — السعر شامل الضريبة — صنف خاضع — سعر عادي",
+          "status": "passed",
+          "start": 1793397711338,
+          "stop": 1793397743438
+        }
+      ],
+      "statusCounts": {
+        "passed": 5
+      },
+      "invoiceClassesOverlapped": true,
+      "fixtureCleanupRecords": 45,
+      "allRecordedFixtureCleanupSucceeded": true,
+      "branchId": "9a8ab34be01d2d67",
+      "branchCleanup": "RETAINED_AFTER_LOGIN_NAVIGATION_FAILURE"
+    }
+  ],
+  "localChecks": {
+    "tests": 1042,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "build": "SUCCESS",
+    "log": "target/framework-speed-finalized-ci.log"
+  },
+  "limitations": [
+    "No matched full-suite before/after wall-time measurement.",
+    "Third policy business cases passed and its recorded fixtures were deleted; final branch removal was blocked at login navigation. Fresh Chrome and Edge recovery attempts also failed before deletion; ownership registry and recovery evidence retained.",
+    "Additional live print pilot was not started because branch recovery failed.",
+    "Read-only synthetic browser pilot verifies report readiness and polling only."
+  ],
+  "navigationBlock": {
+    "phase": "cleanup login page loading",
+    "rootCause": "UNRESOLVED_BROWSER_NAVIGATION",
+    "appEntryHeadStatus": 200,
+    "defaultFactoryPageLoadTimeoutSeconds": 60,
+    "logs": [
+      "target/account-pool-price_included.log",
+      "target/pool-cleanup-recovery.log",
+      "target/pool-cleanup-recovery-edge.log"
+    ]
+  },
+  "syntheticPollingEvidence": "outputs/performance/ui-polling-pilot/verification.json",
+  "baselineCleanupEvidence": "outputs/performance/restaurant-regression-baseline/cleanup-totals.json"
+}

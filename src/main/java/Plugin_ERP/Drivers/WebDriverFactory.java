@@ -32,6 +32,8 @@ public class WebDriverFactory {
         WebDriver driver;
         WebDriver session = null;
         try {
+            // Preparation and cleanup create browsers outside BaseTest as well.
+            rawDriver.manage().timeouts().pageLoadTimeout(java.time.Duration.ofSeconds(60));
             session = Plugin_ERP.Util.BrowserSessionHealth.decorate(rawDriver);
             driver = ThreadGuard.protect(Plugin_ERP.Util.FailureVideoRecorder.decorate(session));
             Plugin_ERP.Util.BrowserSessionHealth.alias(session, driver);

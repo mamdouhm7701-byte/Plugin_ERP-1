@@ -18,7 +18,13 @@ public class BusinessRunListener extends NativeInteractiveSuiteListener {
     }
 
     BusinessRunDialog.Selection selectBusiness() throws Exception {
-        return BusinessRunDialog.choose();
+        var selection = BusinessRunDialog.choose();
+        if (selection != null && selection.level().equals("Sanity")) {
+            String scope = SanityScope.choose();
+            if (scope == null) return null;
+            set("sanity.scope", scope);
+        }
+        return selection;
     }
 
     void confirmedBranchCreated(BranchProfile profile) {
@@ -26,12 +32,31 @@ public class BusinessRunListener extends NativeInteractiveSuiteListener {
     }
 
     void cleanupOwnedBranch(BranchProfile profile, Path output) throws Exception {
-        BusinessBranchCleanup.remove(Path.of("").toAbsolutePath(), profile, output);
+        long started = System.nanoTime();
+        boolean success = false;
+        try {
+            BusinessBranchCleanup.remove(Path.of("").toAbsolutePath(), profile, output);
+            success = true;
+        } finally {
+            Plugin_ERP.Util.RunPerformance.stage(
+                    "cleanup", "owned-branch", System.nanoTime() - started, !success);
+            Plugin_ERP.Util.RunPerformance.write();
+        }
     }
 
     BranchProfile prepare(BusinessRunRequest request, Path project, Path output) throws Exception {
-        return BusinessBranchPreparation.prepare(
-                request, project, output, this::confirmedBranchCreated);
+        long started = System.nanoTime();
+        boolean success = false;
+        try {
+            var profile =
+                    BusinessBranchPreparation.prepare(
+                            request, project, output, this::confirmedBranchCreated);
+            success = true;
+            return profile;
+        } finally {
+            Plugin_ERP.Util.RunPerformance.stage(
+                    "setup", "owned-branch", System.nanoTime() - started, !success);
+        }
     }
 
     List<XmlSuite> plan(Path project, BusinessRunDialog.Selection selection, Path output)

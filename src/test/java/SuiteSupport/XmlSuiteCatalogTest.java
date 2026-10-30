@@ -9,6 +9,40 @@ import org.testng.annotations.Test;
 
 public final class XmlSuiteCatalogTest {
     @Test
+    public void parallelInvoiceReviewKeepsPoliciesAndExclusiveCashierStagesSeparated()
+            throws Exception {
+        String previous = System.getProperty("xml.review.parallel");
+        try {
+            System.setProperty("xml.review.parallel", "true");
+            var suites =
+                    XmlSuiteCatalog.plan(
+                            Path.of(""),
+                            XmlSuiteCatalog.INVOICE_REVIEW,
+                            6,
+                            Files.createTempDirectory("parallel-invoice-review-"));
+            Assert.assertEquals(suites.size(), 3);
+            Assert.assertEquals(suites.get(1).getThreadCount(), 2);
+            var names =
+                    suites.get(1).getTests().getFirst().getXmlClasses().stream()
+                            .map(org.testng.xml.XmlClass::getName)
+                            .collect(java.util.stream.Collectors.toSet());
+            Assert.assertEquals(
+                    names,
+                    java.util.Set.of(
+                            "Invoice.SalesInvoiceTaxReviewTest",
+                            "Purches.PurchaseInvoiceTaxReviewTest"));
+            Assert.assertEquals(
+                    suites.get(2).getParallel(), org.testng.xml.XmlSuite.ParallelMode.NONE);
+            XmlReviewSuiteListener.limitWorkers(suites.get(1), 1);
+            Assert.assertEquals(
+                    suites.get(1).getParallel(), org.testng.xml.XmlSuite.ParallelMode.NONE);
+        } finally {
+            if (previous == null) System.clearProperty("xml.review.parallel");
+            else System.setProperty("xml.review.parallel", previous);
+        }
+    }
+
+    @Test
     public void catalogContainsInvoiceReviewAndExplainsSalesRestrictions() {
         var entries = XmlSuiteCatalog.load(Path.of(""));
         var review =

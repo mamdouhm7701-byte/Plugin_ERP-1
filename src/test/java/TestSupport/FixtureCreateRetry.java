@@ -7,6 +7,11 @@ import java.util.function.Supplier;
 public final class FixtureCreateRetry {
     private FixtureCreateRetry() {}
 
+    public static <T> T run(String action, String endpoint, Supplier<T> operation) {
+        return run(
+                action, () -> Plugin_ERP.Util.RunPerformance.request(action, endpoint, operation));
+    }
+
     public static <T> T run(String action, Supplier<T> operation) {
         for (int attempt = 1; ; attempt++) {
             try {

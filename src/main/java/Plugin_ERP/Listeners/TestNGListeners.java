@@ -29,6 +29,7 @@ public class TestNGListeners
 
     @Override
     public void beforeInvocation(org.testng.IInvokedMethod method, ITestResult result) {
+        Plugin_ERP.Util.RunPerformance.begin(result);
         if (result == null
                 || !(result.getInstance()
                         instanceof Plugin_ERP.Util.RunEnvironmentGate.ProtectedScenario)) return;
@@ -37,6 +38,11 @@ public class TestNGListeners
                 || scenario.isBeforeClassConfiguration()
                 || scenario.isBeforeMethodConfiguration())
             Plugin_ERP.Util.RunEnvironmentGate.current().beforeScenario();
+    }
+
+    @Override
+    public void afterInvocation(org.testng.IInvokedMethod method, ITestResult result) {
+        Plugin_ERP.Util.RunPerformance.end(result);
     }
 
     @Override
@@ -147,6 +153,7 @@ public class TestNGListeners
 
     @Override
     public void onExecutionFinish() {
+        Plugin_ERP.Util.RunPerformance.write();
         System.out.println(">>> Execution Finished");
         Plugin_ERP.Util.Allur.RunFailureOverview.generate();
 

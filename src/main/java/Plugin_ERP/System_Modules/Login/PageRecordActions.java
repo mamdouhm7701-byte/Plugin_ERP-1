@@ -27,7 +27,6 @@ final class PageRecordActions {
 
     void ClickNew() {
         utilites.waits().waitForScreenReady(ClickNew);
-        utilites.waits().waitForOverlayToDisappear();
         utilites.ClickElement(ClickNew);
         utilites.waits().waitForOverlayToDisappear();
     }
@@ -48,7 +47,6 @@ final class PageRecordActions {
     void Edit() {
         utilites.waits().waitForOverlayToDisappear();
         utilites.ClickElement(utilites.getLastEditButtonForCustomerReceipt());
-        utilites.waits().waitForOverlayToDisappear();
         utilites.waits().waitForExchangeEditPage(SaveButton);
 
         LogUtils.error("تم الضغط على زر التعديل لآخر سجل في الجريد");

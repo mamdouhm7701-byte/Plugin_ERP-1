@@ -28,10 +28,7 @@ final class PageNavigation {
 
     void NavigationHelper(Pages route) {
         Plugin_ERP.Util.Allur.ScreenNames.opening(route.getRoute());
-        utilites.waits().waitForOverlayToDisappear();
-
         browserAction.OpenNavigationHelper(Pages.valueOf(route.name()));
-        utilites.waits().waitForOverlayToDisappear();
         driver.navigate().refresh();
         utilites.waits().waitForOverlayToDisappear();
     }

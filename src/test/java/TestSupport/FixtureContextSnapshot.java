@@ -6,6 +6,9 @@ import org.openqa.selenium.WebDriver;
 
 public record FixtureContextSnapshot(String origin, Object branchId) {
     public static FixtureContextSnapshot read(WebDriver driver) {
+        var verified = Plugin_ERP.BranchProfiles.VerificationSnapshot.current(driver);
+        if (verified != null)
+            return new FixtureContextSnapshot(verified.origin(), verified.branchId());
         Object result =
                 Plugin_ERP.Util.VueComponentAccess.execute(
                         driver,

@@ -77,6 +77,75 @@ public final class FormInteractionsTest {
         Assert.assertEquals(harness.clicks, 1);
     }
 
+    @DataProvider
+    public Object[][] exactAndFallbackOptions() {
+        return new Object[][] {
+            {List.of("owned extra", "owned"), "owned"},
+            {List.of("owned extra"), "owned extra"},
+            {List.of("owned first", "owned second"), ""}
+        };
+    }
+
+    @Test(dataProvider = "exactAndFallbackOptions")
+    public void oneDropdownSnapshotPrefersExactMatchAndRejectsAmbiguity(
+            List<String> labels, String expected) {
+        var reads = new java.util.concurrent.atomic.AtomicInteger();
+        var selected = new ArrayList<String>();
+        java.util.function.Function<String, WebElement> option =
+                label ->
+                        (WebElement)
+                                Proxy.newProxyInstance(
+                                        getClass().getClassLoader(),
+                                        new Class<?>[] {WebElement.class},
+                                        (proxy, method, args) ->
+                                                switch (method.getName()) {
+                                                    case "isDisplayed", "isEnabled" -> true;
+                                                    case "getDomProperty" -> "owned";
+                                                    case "getDomAttribute" -> "owned-dropdown";
+                                                    case "getText" -> {
+                                                        reads.incrementAndGet();
+                                                        yield label;
+                                                    }
+                                                    case "click" -> {
+                                                        selected.add(label);
+                                                        yield null;
+                                                    }
+                                                    default ->
+                                                            throw new AssertionError(
+                                                                    method.getName());
+                                                });
+        var options = labels.stream().map(option).toList();
+        WebDriver driver =
+                (WebDriver)
+                        Proxy.newProxyInstance(
+                                getClass().getClassLoader(),
+                                new Class<?>[] {WebDriver.class},
+                                (proxy, method, args) -> {
+                                    if (method.getName().equals("findElements"))
+                                        return args[0].toString().contains("//ul")
+                                                ? options
+                                                : List.of(option.apply("input"));
+                                    throw new AssertionError(method.getName());
+                                });
+        var actions =
+                new FormInteractions(
+                        new WebDriverWait(driver, Duration.ofSeconds(1)), element -> {});
+        Runnable choose =
+                () ->
+                        actions.choose(
+                                By.id("field"),
+                                "owned",
+                                FormInteractions.OptionMatch.EXACT_THEN_CONTAINS);
+        if (expected.isEmpty()) {
+            Assert.expectThrows(AssertionError.class, choose::run);
+            Assert.assertTrue(selected.isEmpty());
+        } else {
+            choose.run();
+            Assert.assertEquals(selected, List.of(expected));
+        }
+        Assert.assertEquals(reads.get(), labels.size());
+    }
+
     private static final class Harness {
         final List<String> keys = new ArrayList<>();
         int clicks;

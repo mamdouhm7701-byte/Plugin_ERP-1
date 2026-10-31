@@ -148,8 +148,20 @@ public abstract class PurchaseScenarioTest extends BaseTest {
                                 return page.puSaves().size() > count;
                             });
         } catch (org.openqa.selenium.TimeoutException failure) {
+            Allure.addAttachment(
+                    "تشخيص تعذر حفظ المشتريات", "application/json", page.puDiagnostics(), ".json");
+            Allure.addAttachment(
+                    "مسودة المشتريات عند تعذر الحفظ",
+                    "application/json",
+                    new org.json.JSONObject(page.puDocument()).toString(),
+                    ".json");
             throw new AssertionError(
-                    "Purchase document was not saved: " + page.puSaveErrors(), failure);
+                    "لم تصل استجابة حفظ مستند المشتريات من نوع "
+                            + documentKind()
+                            + ". أخطاء الحفظ: "
+                            + page.puSaveErrors()
+                            + ". راجع مرفقي التشخيص والمسودة؛ لم نكرر الضغط على حفظ.",
+                    failure);
         }
         page.puSettled();
         var records = capture();

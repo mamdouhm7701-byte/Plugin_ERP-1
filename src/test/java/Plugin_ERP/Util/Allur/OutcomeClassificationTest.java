@@ -11,6 +11,30 @@ import org.testng.annotations.Test;
 
 public final class OutcomeClassificationTest {
     @Test
+    public void explicitDatabaseTimeoutIsDifferentFromAnUnexplainedUiTimeout() {
+        String serverTimeout =
+                "Execution Timeout Expired. The timeout period elapsed prior to completion of the operation or the server is not responding.";
+        Assert.assertEquals(
+                FailureClassification.classify(
+                                new io.qameta.allure.model.TestResult()
+                                        .setStatus(io.qameta.allure.model.Status.FAILED),
+                                new AssertionError(serverTimeout))
+                        .origin(),
+                "شبكة أو بيئة التشغيل");
+        Assert.assertEquals(
+                classify(
+                        "failed",
+                        "Owned barcode did not add its item. status=500 Execution Timeout Expired. The timeout period elapsed prior to completion of the operation or the server is not responding.",
+                        "",
+                        ""),
+                Kind.ENVIRONMENT);
+        Assert.assertEquals(classify("broken", "script timeout", "", ""), Kind.NEEDS_REVIEW);
+        Assert.assertEquals(
+                classify("broken", "Expected condition failed after 35 seconds", "", ""),
+                Kind.NEEDS_REVIEW);
+    }
+
+    @Test
     public void explicitSqlTransientFailureDoesNotLookLikeABusinessAssertion() {
         Assert.assertEquals(
                 classify(

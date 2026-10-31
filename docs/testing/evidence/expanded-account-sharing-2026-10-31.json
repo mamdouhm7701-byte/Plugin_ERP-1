@@ -1,0 +1,276 @@
+{
+  "completion": {
+    "branchCleaned": true,
+    "scope": "Live fixture qualification only: two scenarios each in Financial, SpecialSales and BasicData; independent leaf accounts and owned shared parents; PRICE_INCLUDED; not the full invoice review XML",
+    "status": 0
+  },
+  "evidence": "target/validation/business-98082243-1970-4922-9970-65e70e7dd0d8",
+  "branchCleanup": {
+    "branchId": "753c6b196a9a5692",
+    "status": "DELETED"
+  },
+  "cases": [
+    {
+      "fullName": "FinancialMovementsTest.FinancialPoolLivePilot.independentLeafAccountsShareOnlyTheirOwnedParent",
+      "name": "independentLeafAccountsShareOnlyTheirOwnedParent",
+      "status": "passed",
+      "start": 1793400822497,
+      "stop": 1793400840471
+    },
+    {
+      "fullName": "SpecialSalesTest.SpecialSalesPoolLivePilot.independentLeafAccountsShareOnlyTheirOwnedParent",
+      "name": "independentLeafAccountsShareOnlyTheirOwnedParent",
+      "status": "passed",
+      "start": 1793400848433,
+      "stop": 1793400863942
+    },
+    {
+      "fullName": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+      "name": "selectedBranchRetainsRequestedPolicies",
+      "status": "passed",
+      "start": 1793400813183,
+      "stop": 1793400814149
+    },
+    {
+      "fullName": "TestSupport.BasicDataPoolLivePilot.independentLeafAccountsShareOnlyTheirOwnedParent",
+      "name": "independentLeafAccountsShareOnlyTheirOwnedParent",
+      "status": "passed",
+      "start": 1793400872988,
+      "stop": 1793400884957
+    }
+  ],
+  "statusCounts": {
+    "passed": 4
+  },
+  "settings": {
+    "requestedBrowsers": 1,
+    "selectedBrowsers": 1
+  },
+  "measurements": [
+    {
+      "failedCalls": 0,
+      "target": "Plugin_ERP.Tests.LoginTest.BaseTest.setup",
+      "totalMilliseconds": 32152.9447,
+      "operation": "invocation",
+      "maxMilliseconds": 8907.6798,
+      "calls": 4,
+      "phase": "setup"
+    },
+    {
+      "failedCalls": 0,
+      "target": "FinancialMovementsTest.FinancialPoolLivePilot.independentLeafAccountsShareOnlyTheirOwnedParent",
+      "totalMilliseconds": 17148.3341,
+      "operation": "invocation",
+      "maxMilliseconds": 17148.3341,
+      "calls": 1,
+      "phase": "execution"
+    },
+    {
+      "failedCalls": 0,
+      "target": "owned-branch",
+      "totalMilliseconds": 15881.004,
+      "operation": "branch-lifecycle",
+      "maxMilliseconds": 15881.004,
+      "calls": 1,
+      "phase": "setup"
+    },
+    {
+      "failedCalls": 0,
+      "target": "Accounts",
+      "totalMilliseconds": 15690.4549,
+      "operation": "delete",
+      "maxMilliseconds": 2123.7697,
+      "calls": 9,
+      "phase": "execution"
+    },
+    {
+      "failedCalls": 0,
+      "target": "SpecialSalesTest.SpecialSalesPoolLivePilot.independentLeafAccountsShareOnlyTheirOwnedParent",
+      "totalMilliseconds": 14458.4761,
+      "operation": "invocation",
+      "maxMilliseconds": 14458.4761,
+      "calls": 1,
+      "phase": "execution"
+    },
+    {
+      "failedCalls": 0,
+      "target": "owned-branch",
+      "totalMilliseconds": 13853.0411,
+      "operation": "branch-lifecycle",
+      "maxMilliseconds": 13853.0411,
+      "calls": 1,
+      "phase": "cleanup"
+    },
+    {
+      "failedCalls": 0,
+      "target": "TestSupport.BasicDataPoolLivePilot.independentLeafAccountsShareOnlyTheirOwnedParent",
+      "totalMilliseconds": 11184.6085,
+      "operation": "invocation",
+      "maxMilliseconds": 11184.6085,
+      "calls": 1,
+      "phase": "execution"
+    },
+    {
+      "failedCalls": 0,
+      "target": "Customers",
+      "totalMilliseconds": 9338.6726,
+      "operation": "delete",
+      "maxMilliseconds": 2534.9397,
+      "calls": 4,
+      "phase": "execution"
+    },
+    {
+      "failedCalls": 0,
+      "target": "Accounts",
+      "totalMilliseconds": 5041.3735,
+      "operation": "get",
+      "maxMilliseconds": 785.8971,
+      "calls": 24,
+      "phase": "execution"
+    },
+    {
+      "failedCalls": 0,
+      "target": "overlay-ready",
+      "totalMilliseconds": 4334.5706,
+      "operation": "ui-wait",
+      "maxMilliseconds": 1089.7921,
+      "calls": 4,
+      "phase": "setup"
+    },
+    {
+      "failedCalls": 4,
+      "target": "Customers",
+      "totalMilliseconds": 3771.9937,
+      "operation": "get",
+      "maxMilliseconds": 670.7983,
+      "calls": 16,
+      "phase": "execution"
+    },
+    {
+      "failedCalls": 0,
+      "target": "Customers",
+      "totalMilliseconds": 2558.3426,
+      "operation": "create",
+      "maxMilliseconds": 1275.6108,
+      "calls": 4,
+      "phase": "execution"
+    },
+    {
+      "failedCalls": 0,
+      "target": "Banks",
+      "totalMilliseconds": 1885.8615,
+      "operation": "delete",
+      "maxMilliseconds": 964.0681,
+      "calls": 2,
+      "phase": "execution"
+    },
+    {
+      "failedCalls": 0,
+      "target": "Accounts",
+      "totalMilliseconds": 1691.9603,
+      "operation": "create",
+      "maxMilliseconds": 238.8147,
+      "calls": 9,
+      "phase": "execution"
+    },
+    {
+      "failedCalls": 0,
+      "target": "Banks",
+      "totalMilliseconds": 1194.9438,
+      "operation": "get",
+      "maxMilliseconds": 646.8818,
+      "calls": 6,
+      "phase": "execution"
+    },
+    {
+      "failedCalls": 0,
+      "target": "Banks",
+      "totalMilliseconds": 794.8296,
+      "operation": "create",
+      "maxMilliseconds": 673.9354,
+      "calls": 2,
+      "phase": "execution"
+    },
+    {
+      "failedCalls": 0,
+      "target": "Plugin_ERP.Tests.LoginTest.BaseTest.tearDown",
+      "totalMilliseconds": 526.5515,
+      "operation": "invocation",
+      "maxMilliseconds": 145.3628,
+      "calls": 4,
+      "phase": "cleanup"
+    },
+    {
+      "failedCalls": 0,
+      "target": "Plugin_ERP.Tests.LoginTest.BaseTest.verifyProfileBeforeScenario",
+      "totalMilliseconds": 36.5055,
+      "operation": "invocation",
+      "maxMilliseconds": 9.8122,
+      "calls": 4,
+      "phase": "setup"
+    },
+    {
+      "failedCalls": 0,
+      "target": "Plugin_ERP.Tests.LoginTest.BaseTest.verifyProfileAfterScenario",
+      "totalMilliseconds": 36.0495,
+      "operation": "invocation",
+      "maxMilliseconds": 11.7942,
+      "calls": 4,
+      "phase": "cleanup"
+    },
+    {
+      "failedCalls": 0,
+      "target": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+      "totalMilliseconds": 11.043,
+      "operation": "invocation",
+      "maxMilliseconds": 11.043,
+      "calls": 1,
+      "phase": "execution"
+    },
+    {
+      "failedCalls": 0,
+      "target": "SuiteSupport.BusinessProfileVerificationTest",
+      "totalMilliseconds": 0.0208,
+      "operation": "class-lock-wait",
+      "maxMilliseconds": 0.0208,
+      "calls": 1,
+      "phase": "scheduling"
+    },
+    {
+      "failedCalls": 0,
+      "target": "TestSupport.BasicDataPoolLivePilot",
+      "totalMilliseconds": 0.0052,
+      "operation": "class-lock-wait",
+      "maxMilliseconds": 0.0052,
+      "calls": 1,
+      "phase": "scheduling"
+    },
+    {
+      "failedCalls": 0,
+      "target": "FinancialMovementsTest.FinancialPoolLivePilot",
+      "totalMilliseconds": 0.0031,
+      "operation": "class-lock-wait",
+      "maxMilliseconds": 0.0031,
+      "calls": 1,
+      "phase": "scheduling"
+    },
+    {
+      "failedCalls": 0,
+      "target": "SpecialSalesTest.SpecialSalesPoolLivePilot",
+      "totalMilliseconds": 0.0028,
+      "operation": "class-lock-wait",
+      "maxMilliseconds": 0.0028,
+      "calls": 1,
+      "phase": "scheduling"
+    }
+  ],
+  "cleanupCounts": {
+    "Customers": 4,
+    "Accounts": 9,
+    "Banks": 2
+  },
+  "allFixtureCleanupSucceeded": true,
+  "limitations": [
+    "Fixture API qualification of Financial, SpecialSales and BasicData account isolation and cleanup; not full financial or POS/restaurant UI journeys."
+  ]
+}

@@ -55,6 +55,11 @@ public final class OutcomeClassification {
             return new Decision(
                     Kind.ENVIRONMENT,
                     "السيرفر أبلغ عن عطل SQL مؤقت أثناء التنفيذ أو التنظيف. احتفظ بسجل الاسترجاع؛ التصنيف لا يعني نجاح الحذف ولا يعيد العملية تلقائيًا.");
+        if (text.contains("execution timeout expired")
+                && text.contains("timeout period elapsed prior to completion of the operation"))
+            return new Decision(
+                    Kind.ENVIRONMENT,
+                    "طلب البيانات وصل إلى السيرفر لكنه توقف بمهلة قاعدة البيانات. لا نكرر الحفظ أو الحذف تلقائيًا، ولا نعتبره اختلافًا مثبتًا في قاعدة العمل.");
         if (contains(
                 text,
                 "network error",

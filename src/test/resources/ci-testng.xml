@@ -9,6 +9,9 @@
     </listeners>
     <test name="Configuration, arithmetic and owned fixture recovery" preserve-order="true">
         <classes>
+            <class name="Plugin_ERP.Util.SearchInputTest"/>
+            <class name="Plugin_ERP.Util.CalendarDaySelectionTest"/>
+            <class name="Plugin_ERP.System_Modules.Login.Coverage.ZatcaConfigurationPageTest"/>
             <class name="Plugin_ERP.System_Modules.Login.StoreModel.StoreQuantityRejectionTest"/>
             <class name="Plugin_ERP.BranchProfiles.VerificationSnapshotTest"/>
             <class name="SuiteSupport.SanityScopeTest"/>
@@ -40,6 +43,9 @@
             <class name="Invoice.SalesAccountReuseTest"/>
             <class name="Purches.PurchaseAccountReuseTest"/>
             <class name="StoreTest.StoreAccountReuseTest"/>
+            <class name="FinancialMovementsTest.FinancialAccountReuseTest"/>
+            <class name="SpecialSalesTest.SpecialSalesAccountReuseTest"/>
+            <class name="TestSupport.BasicDataAccountReuseTest"/>
             <class name="TestSupport.PartialItemRecoveryTest"/>
             <class name="TestSupport.FixtureMasterRecoveryTest"/>
             <class name="TestSupport.FixtureOwnershipTest"/>

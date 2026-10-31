@@ -43,6 +43,9 @@ public final class FailureClassification {
         }
         if (!reference.isBlank())
             return new Category(domain, "مشكلة موثقة", "مشكلة معروفة", reference);
+        if (OutcomeClassification.classify("failed", message, "", "").kind()
+                == OutcomeClassification.Kind.ENVIRONMENT)
+            return new Category(domain, "شبكة أو بيئة التشغيل", "لم يثبت أنه عيب في البرنامج", "");
         if (contains(
                 message.toLowerCase(Locale.ROOT),
                 "network error",

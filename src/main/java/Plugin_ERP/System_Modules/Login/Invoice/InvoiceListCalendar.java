@@ -3,7 +3,6 @@
 package Plugin_ERP.System_Modules.Login.Invoice;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Locale;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
@@ -30,7 +29,7 @@ final class InvoiceListCalendar {
         if (parts.length != 3) throw new IllegalArgumentException("Date must use yyyy-MM-dd");
         int year = Integer.parseInt(parts[0]);
         int month = Integer.parseInt(parts[1]);
-        int day = Integer.parseInt(parts[2]);
+        java.time.LocalDate.parse(value);
         wait.until(d -> calendarIsVisible(pickerId));
         String shown = calendarCaption(pickerId);
         java.time.YearMonth target = java.time.YearMonth.of(year, month);
@@ -76,60 +75,7 @@ final class InvoiceListCalendar {
                                         }
                                     });
         }
-        String dayText = String.valueOf(day);
-        By dayButtons =
-                By.cssSelector(".b-calendar button, .b-calendar [role='button'], .b-calendar .btn");
-        try {
-            new WebDriverWait(driver, Duration.ofSeconds(8))
-                    .until(
-                            d -> {
-                                try {
-                                    List<WebElement> candidates =
-                                            d.findElements(dayButtons).stream()
-                                                    .filter(InvoiceListCalendar::isDisplayed)
-                                                    .filter(
-                                                            button ->
-                                                                    button.getText()
-                                                                            .trim()
-                                                                            .replaceAll("\\D", "")
-                                                                            .equals(dayText))
-                                                    .filter(
-                                                            button ->
-                                                                    !button.getAttribute("class")
-                                                                            .contains("text-muted"))
-                                                    .filter(WebElement::isEnabled)
-                                                    .toList();
-                                    WebElement targetDay =
-                                            candidates.stream()
-                                                    .filter(
-                                                            button ->
-                                                                    String.valueOf(
-                                                                                    button
-                                                                                            .getAttribute(
-                                                                                                    "aria-label"))
-                                                                            .contains(
-                                                                                    String.valueOf(
-                                                                                            year)))
-                                                    .findFirst()
-                                                    .orElse(
-                                                            candidates.stream()
-                                                                    .findFirst()
-                                                                    .orElse(null));
-                                    if (targetDay == null) return false;
-                                    targetDay.click();
-                                    return true;
-                                } catch (
-                                        org.openqa.selenium.StaleElementReferenceException
-                                                ignored) {
-                                    Plugin_ERP.Bots.LogUtils.debug(
-                                            "InvoiceListCalendar condition unavailable: "
-                                                    + ignored.getClass().getSimpleName());
-                                    return false;
-                                }
-                            });
-        } catch (org.openqa.selenium.TimeoutException e) {
-            throw new IllegalStateException("Calendar day not found: " + value, e);
-        }
+        Plugin_ERP.Util.CalendarDaySelection.select(driver, pickerId, value);
     }
 
     private boolean calendarIsVisible(String pickerId) {
@@ -172,16 +118,5 @@ final class InvoiceListCalendar {
             }
         }
         throw new IllegalArgumentException("Calendar month not found: " + text);
-    }
-
-    private static boolean isDisplayed(WebElement element) {
-        try {
-            return element.isDisplayed();
-        } catch (org.openqa.selenium.StaleElementReferenceException ignored) {
-            Plugin_ERP.Bots.LogUtils.debug(
-                    "InvoiceListCalendar condition unavailable: "
-                            + ignored.getClass().getSimpleName());
-            return false;
-        }
     }
 }

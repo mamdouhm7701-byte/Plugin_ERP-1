@@ -35,14 +35,7 @@ final class CashRecordActions {
         waitForCashPageLoading();
         if (owner.isCashCreationFormDisplayed()) owner.ClickCloseButton();
         waitForCashAlertToDisappear();
-        WebElement search =
-                new WebDriverWait(driver, Duration.ofSeconds(10))
-                        .until(ExpectedConditions.visibilityOfElementLocated(GridSearch));
-        search.clear();
-        if (searchText != null && !searchText.isEmpty()) {
-            search.sendKeys(searchText);
-        }
-        search.sendKeys(org.openqa.selenium.Keys.ENTER);
+        Plugin_ERP.Util.SearchInput.submit(driver, GridSearch, searchText);
         waitForCashPageLoading();
         new GridProviderWait(driver, "safes").awaitReady();
     }

@@ -1,4 +1,4 @@
-/* شرح الملف: قراءة سندات المورد الذي أنشأته تجربة الشراء، دون تعديلها أو تبني سندات مورد آخر.
+/* شرح الملف: قراءة سندات صرف المورد الذي أنشأته تجربة الشراء، دون تعديلها أو تبني سندات مورد آخر.
  * فائدته: يفصل فحص السندات المرتبطة عن تجهيز فواتير الشراء وتنظيفها، ويتوقف إذا لم تتقدم صفحات النتائج.
  */
 package Purches;
@@ -9,12 +9,12 @@ import Purches.PurchaseTestData.Record;
 import java.util.*;
 import java.util.function.BiFunction;
 
-final class PurchaseSupplierReceipts {
+final class PurchaseSupplierPayments {
     private final PurchaseTestData data;
     private final List<Record> created;
     private final BiFunction<String, Map<String, Object>, Map<String, Object>> get;
 
-    PurchaseSupplierReceipts(
+    PurchaseSupplierPayments(
             PurchaseTestData data,
             List<Record> created,
             BiFunction<String, Map<String, Object>, Map<String, Object>> get) {
@@ -33,7 +33,7 @@ final class PurchaseSupplierReceipts {
         for (int page = 1; ; page++) {
             Object entity =
                     get.apply(
-                                    "Collections?pageNumber="
+                                    "Payments?pageNumber="
                                             + page
                                             + "&pageSize=500&dealerId="
                                             + supplierId,
@@ -42,27 +42,27 @@ final class PurchaseSupplierReceipts {
             if (!(entity instanceof Map<?, ?> dto)
                     || !(dto.get("pageData") instanceof List<?> rows)
                     || !(dto.get("totalRecords") instanceof Number total))
-                throw new AssertionError("Cannot inspect supplier receipts");
+                throw new AssertionError("تعذر قراءة سندات صرف المورد");
             int added = 0;
             for (Object value : rows) {
                 if (!(value instanceof Map<?, ?> row) || row.get("id") == null)
-                    throw new AssertionError("Receipt list has no identity");
+                    throw new AssertionError("قائمة سندات الصرف لا تحتوي هوية السند");
                 if (!seen.add(row.get("id"))) continue;
                 added++;
-                Map<String, Object> receipt =
+                Map<String, Object> payment =
                         row.containsKey("dealerId")
                                 ? (Map<String, Object>) row
                                 : data.read(
                                         new Record(
-                                                "Collections",
+                                                "Payments",
                                                 row.get("id"),
-                                                "QA-PU-read-only-receipt",
+                                                "QA-PU-read-only-payment",
                                                 fields()));
-                if (receipt != null && supplierId.equals(receipt.get("dealerId")))
-                    found.add(receipt);
+                if (payment != null && supplierId.equals(payment.get("dealerId")))
+                    found.add(payment);
             }
             if (seen.size() >= total.longValue()) return found;
-            if (added == 0) throw new AssertionError("Receipt pagination did not advance");
+            if (added == 0) throw new AssertionError("ترقيم صفحات سندات الصرف لم يتقدم");
         }
     }
 }

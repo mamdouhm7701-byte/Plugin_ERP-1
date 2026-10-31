@@ -19,6 +19,7 @@ final class SpecialSalesTestData implements AutoCloseable {
 
     private final WebDriver driver;
     private final SpecialSalesFixtureApi api;
+    final TestSupport.FixtureAccountPool accounts = new TestSupport.FixtureAccountPool();
     private final SpecialSalesFixtureDefinitions definitions =
             new SpecialSalesFixtureDefinitions(this);
     private final String origin;
@@ -61,12 +62,13 @@ final class SpecialSalesTestData implements AutoCloseable {
         scenarioScope = "case-" + (++scenarioSequence) + "-";
     }
 
-    private String fixtureKey(String key) {
+    String fixtureKey(String key) {
         return key.startsWith("QA-SP-")
                         || key.startsWith("unit-")
                         || key.equals("category-main")
                         || key.equals("category")
                         || key.startsWith("store-")
+                        || key.startsWith("account-main-pool-")
                         || key.startsWith("account-main-store-")
                         || key.startsWith("account-sub-store-")
                 ? key
@@ -83,9 +85,7 @@ final class SpecialSalesTestData implements AutoCloseable {
     }
 
     static Map<String, Object> fields(Object... pairs) {
-        Map<String, Object> values = new LinkedHashMap<>();
-        for (int i = 0; i < pairs.length; i += 2) values.put((String) pairs[i], pairs[i + 1]);
-        return values;
+        return TestSupport.FixtureFields.of(pairs);
     }
 
     Record account(String key) {

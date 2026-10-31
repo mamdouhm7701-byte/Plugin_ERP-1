@@ -1,0 +1,118 @@
+{
+  "scope": "Eight targeted results on a fresh owned Restaurant / NetBased / Transaction / Periodic branch after the user smoke process ended. Does not rerun the whole regression or touch its retained data.",
+  "completion": {
+    "scope": "Eight targeted results on a fresh owned Restaurant / NetBased / Transaction / Periodic branch after the user smoke process ended. Does not rerun the whole regression or touch its retained data.",
+    "status": 0,
+    "branchCleaned": true
+  },
+  "preparedEvidence": "target/validation/business-cc944afd-2ad1-40db-95fc-3bce2be2941c",
+  "branchCleanup": {
+    "branchId": "7281a82b9b91c3b9",
+    "status": "DELETED"
+  },
+  "statusCounts": {
+    "passed": 8
+  },
+  "cases": [
+    {
+      "fullName": "Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest.WH_017_SearchSafesByEnglishName",
+      "name": "الخزن — البحث بالاسم الإنجليزي",
+      "status": "passed",
+      "start": 1793446953429,
+      "stop": 1793446960206,
+      "resultFile": "1ab334f4-a299-4e40-bd4c-ace3240a4823-result.json"
+    },
+    {
+      "fullName": "CoverageTest.ZatcaConfigurationCoverageTest.rendersConfigurationStateWithoutExternalRegistration",
+      "name": "إعدادات الربط مع الهيئة — عرض حالة الربط دون تسجيل خارجي",
+      "status": "passed",
+      "start": 1793447185217,
+      "stop": 1793447186424,
+      "resultFile": "27bf08c1-b075-4180-b599-753f3d026961-result.json"
+    },
+    {
+      "fullName": "Purches.PurchaseListCoverageTest.dateRangeDoesNotLeaveStaleRows",
+      "name": "استعراض المشتريات — نطاق تاريخ يوم واحد يعرض فاتورة الاختبار ثم نطاق خال يمسحها",
+      "status": "passed",
+      "start": 1793447079899,
+      "stop": 1793447097474,
+      "resultFile": "6578fc4b-e95c-4c3a-b66c-cdf0725207b6-result.json"
+    },
+    {
+      "fullName": "Plugin_ERP.Tests.LoginTest.BasicDataTest.CashTest.WH_022_CancelSafeEditWithoutSaving",
+      "name": "الخزائن — إلغاء تغيير الاسم في الخزائن",
+      "status": "passed",
+      "start": 1793446945251,
+      "stop": 1793446953185,
+      "resultFile": "866a243c-661d-4c67-8e67-68ce73101e48-result.json"
+    },
+    {
+      "fullName": "Invoice.SalesListCoverageTest.singleDayDateRangeKeepsOwnDocuments",
+      "name": "استعراض المبيعات — فلتر تاريخ يوم واحد يعرض مستندات الاختبار في هذا اليوم",
+      "status": "passed",
+      "start": 1793446979530,
+      "stop": 1793446997116,
+      "resultFile": "9632d614-9c30-4956-be75-f69d92bfd6a9-result.json"
+    },
+    {
+      "fullName": "Purches.PurchaseOrderCoverageTest.cashOrderCreatesReceiptWithoutStockMovement",
+      "name": "أمر الشراء النقدي ينشئ سند صرف للمورد دون زيادة المخزون",
+      "status": "passed",
+      "start": 1793447195197,
+      "stop": 1793447215354,
+      "resultFile": "a8ba9853-306c-4cf1-8156-44ba034a7821-result.json"
+    },
+    {
+      "fullName": "Purches.PurchaseOrderCoverageTest.creditOrderDoesNotCreatePaymentOrChangeBalances",
+      "name": "أمر الشراء الآجل لا ينشئ سند صرف",
+      "status": "passed",
+      "start": 1793447215403,
+      "stop": 1793447231017,
+      "resultFile": "e8d1a5ec-8a94-48cb-80a2-98940599a3aa-result.json"
+    },
+    {
+      "fullName": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+      "name": "selectedBranchRetainsRequestedPolicies",
+      "status": "passed",
+      "start": 1793446936997,
+      "stop": 1793446937056,
+      "resultFile": "f9407723-6826-4ba8-a963-b20d5836e764-result.json"
+    }
+  ],
+  "cashPurchaseOrderProof": {
+    "transactionType": "PurchOrder",
+    "paymentType": "Cash",
+    "orderNet": 300,
+    "orderPaid": 300,
+    "paymentCount": 1,
+    "paymentTotal": "300",
+    "allPaymentsBelongToTheOrderSupplier": true
+  },
+  "fixtureCleanup": {
+    "recordCount": 65,
+    "countsByEndpoint": {
+      "Safes": 2,
+      "Accounts": 24,
+      "ItemTransactions-Sales": 1,
+      "Customers": 1,
+      "Items": 4,
+      "SalesBranchStoreMembership": 2,
+      "Stores": 6,
+      "Units": 3,
+      "ItemCategories": 7,
+      "Agents": 3,
+      "Purchases": 1,
+      "Suppliers": 3,
+      "PurchaseBranchStoreMembership": 4,
+      "PurchaseOrders": 2,
+      "PaymentMethods": 1,
+      "Banks": 1
+    },
+    "allRecordedRemovalsSucceeded": true
+  },
+  "limitations": [
+    "One targeted live run; not the whole regression or a stability proof.",
+    "The other 29 unresolved baseline results were not rerun in this qualification.",
+    "The user's prior smoke data and results were not modified by this run."
+  ]
+}

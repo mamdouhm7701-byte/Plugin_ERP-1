@@ -1,0 +1,91 @@
+{
+  "baseline": "outputs/run-baselines/2026-10-31_restaurant_smoke/manifest.json",
+  "originalCounts": {
+    "passed": 19,
+    "failed": 2
+  },
+  "originalResultsChanged": false,
+  "localChecks": {
+    "complete": {
+      "tests": 1065,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "build": "SUCCESS",
+      "log": "target/smoke-issues-ci-20261031.log"
+    },
+    "finalFocused": {
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "build": "SUCCESS",
+      "log": "target/smoke-issues-focused-20261031.log"
+    }
+  },
+  "findings": [
+    {
+      "method": "CoverageTest.PermissionsCoverageTest.unauthenticatedDirectRouteRequiresLogin",
+      "classification": "TEST_FIX_THREE_LIVE_RETESTS_PASSED",
+      "cause": "Redirect URL was checked before waiting for login controls to mount. Original default failure screenshot belonged to the authenticated parent browser.",
+      "changes": [
+        "Wait for redirect and full login form readiness",
+        "Capture failed child-browser evidence before quit"
+      ],
+      "liveRetestCompleted": true
+    },
+    {
+      "method": "StoreTest.InventoryCoverageScenario.cleanInventoryReferences",
+      "classification": "ENVIRONMENT_RECOVERED",
+      "cause": "Explicit server SQL transient failure while deleting an owned account. Parent account correctly retained.",
+      "oldPolicyRecovery": {
+        "oldBranchDeleted": false,
+        "usedExistingDeletionPolicy": true,
+        "journal": "174dea1c-3f3",
+        "status": "OWNED_ACCOUNTS_CLEANED"
+      },
+      "recoveredAccountIds": [
+        "65cb173bbbf59daf",
+        "e177bb0944ceda18"
+      ],
+      "originalJournalEmpty": true,
+      "backendFixed": false,
+      "subsequentStocktakingCleanupPasses": 3
+    }
+  ],
+  "cleanupSafetyChange": {
+    "reason": "A failed readback must never permit another DELETE before successful existence and ownership verification",
+    "maximumDeleteAttempts": 3,
+    "maximumReadAttemptsPerVerification": 3,
+    "unknownOutcome": "Stop and retain recovery journal"
+  },
+  "liveValidation": {
+    "status": "THREE_TARGETED_ROUNDS_PASSED",
+    "blockedAttempt": "target/smoke-issues-20261031/targeted-1.log",
+    "blockingProcess": 20328,
+    "blockingRunStartedCairo": "2026-10-31 14:03:55",
+    "userConfirmed": "Sanity run intentionally started by user",
+    "requestedFocusedRepeats": 3,
+    "fullSmokeAfterFocused": false,
+    "repeatedLiveSuccessClaimed": true,
+    "previousBlock": {
+      "status": "NOT_STARTED_ACTIVE_USER_SANITY",
+      "blockingProcess": 20328,
+      "blockingRunStartedCairo": "2026-10-31 14:03:55",
+      "userConfirmed": "Sanity run intentionally started by user",
+      "blockedAttempt": "target/smoke-issues-20261031/targeted-1.log"
+    },
+    "fullSmokeReservedForUser": true,
+    "userStoppedSanity": true,
+    "completedFocusedRepeats": 3,
+    "actualClassWorkers": 1,
+    "evidence": "docs/testing/evidence/smoke-two-case-stability-2026-10-31.json"
+  },
+  "sourceHashes": {
+    "src/main/java/Plugin_ERP/System_Modules/Login/Login/LoginPage.java": "6e7e75c6fd2ec4b6ad966b03a87728b6fed585136c8867e848269a6fb46023e7",
+    "src/test/java/CoverageTest/PermissionsCoverageTest.java": "5e659e7b813d401be0333ef865f373ad2f8b72d74c140f91692a78a282359af0",
+    "src/test/java/TestSupport/FixtureRecordDeletion.java": "f0e54fd49572a4355ca236767641517a3eab7f2b28d1db54546478f030e59d8a",
+    "src/test/java/TestSupport/FixtureRecordDeletionTest.java": "662892df55d2059e407486fd1b29a08a705854e6f333d2b57768b4aa4eaec69a",
+    "src/test/java/Plugin_ERP/System_Modules/Login/Login/LoginSessionContractTest.java": "af0463c924984270a6803f3a562516feec785deb670cfcf39a6e4ac19a1124da"
+  }
+}

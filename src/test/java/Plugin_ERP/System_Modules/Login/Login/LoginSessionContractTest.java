@@ -1,5 +1,4 @@
-/* شرح الملف: اختبار سلامة A restricted user can authenticate without permission to render the home
- * page.
+/* شرح الملف: يراجع اكتمال ظهور شاشة الدخول، ويرفض اعتبار المستخدم داخل النظام قبل تأكيد هويته وفرعه حتى لو لم يُسمح له بعرض الصفحة الرئيسية.
  */
 package Plugin_ERP.System_Modules.Login.Login;
 
@@ -12,6 +11,80 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public final class LoginSessionContractTest {
+    @Test
+    public void redirectWaitsForTheDelayedLoginFormInsteadOfCheckingOnlyTheUrl() {
+        var reads = new java.util.concurrent.atomic.AtomicInteger();
+        LoginPage page = loginRedirect("login", reads, true);
+        page.assertRedirectedToLogin();
+        Assert.assertTrue(
+                reads.get() >= 3, "Login fields must be allowed to mount after the redirect");
+    }
+
+    @Test
+    public void loginUrlWithoutTheLoginFormIsNotASuccessfulSecurityCheck() {
+        TimeoutException failure =
+                Assert.expectThrows(
+                        TimeoutException.class,
+                        () ->
+                                loginRedirect(
+                                                "login",
+                                                new java.util.concurrent.atomic.AtomicInteger(),
+                                                false)
+                                        .assertRedirectedToLogin());
+        Assert.assertTrue(failure.getMessage().contains("حقل اسم المستخدم"));
+    }
+
+    @Test
+    public void visibleLoginInputsOnAProtectedRouteDoNotCountAsARedirect() {
+        Assert.expectThrows(
+                TimeoutException.class,
+                () ->
+                        loginRedirect(
+                                        "users",
+                                        new java.util.concurrent.atomic.AtomicInteger(),
+                                        true)
+                                .assertRedirectedToLogin());
+    }
+
+    private LoginPage loginRedirect(
+            String route,
+            java.util.concurrent.atomic.AtomicInteger reads,
+            boolean formEventuallyAppears) {
+        var input =
+                (org.openqa.selenium.WebElement)
+                        Proxy.newProxyInstance(
+                                getClass().getClassLoader(),
+                                new Class<?>[] {org.openqa.selenium.WebElement.class},
+                                (proxy, method, args) ->
+                                        switch (method.getName()) {
+                                            case "isDisplayed", "isEnabled" -> true;
+                                            default -> null;
+                                        });
+        var driver =
+                (WebDriver)
+                        Proxy.newProxyInstance(
+                                getClass().getClassLoader(),
+                                new Class<?>[] {WebDriver.class},
+                                (proxy, method, args) ->
+                                        switch (method.getName()) {
+                                            case "getCurrentUrl" ->
+                                                    "https://example.invalid/#/" + route;
+                                            case "findElement" -> {
+                                                if (args[0].equals(
+                                                                org.openqa.selenium.By.id(
+                                                                        "login-email"))
+                                                        && (!formEventuallyAppears
+                                                                || reads.incrementAndGet() < 3))
+                                                    throw new org.openqa.selenium
+                                                            .NoSuchElementException(
+                                                            "Login component has not mounted");
+                                                yield input;
+                                            }
+                                            default -> null;
+                                        });
+        return new LoginPage(driver, Duration.ofMillis(500));
+    }
+
     private LoginPage page(String route, Object branch) {
         return page(route, branch, true, "owned-user");
     }

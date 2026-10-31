@@ -119,9 +119,22 @@ public class LoginPage {
     }
 
     public void waitForLoginForm() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(username));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(Password));
-        wait.until(ExpectedConditions.elementToBeClickable(LoginButton));
+        wait.withMessage("لم يظهر حقل اسم المستخدم في شاشة الدخول")
+                .until(ExpectedConditions.visibilityOfElementLocated(username));
+        wait.withMessage("لم يظهر حقل كلمة المرور في شاشة الدخول")
+                .until(ExpectedConditions.visibilityOfElementLocated(Password));
+        wait.withMessage("زر تسجيل الدخول لم يصبح جاهزًا للضغط")
+                .until(ExpectedConditions.elementToBeClickable(LoginButton));
+    }
+
+    @Step("التحقق من التحويل إلى الدخول واكتمال ظهور حقول الدخول وزرها")
+    public void assertRedirectedToLogin() {
+        wait.withMessage("لم يُحوّل الرابط المحمي إلى تسجيل الدخول")
+                .until(d -> d.getCurrentUrl().contains("#/login"));
+        waitForLoginForm();
+        Assert.assertTrue(
+                driver.getCurrentUrl().contains("#/login"),
+                "غادر المتصفح شاشة الدخول قبل اكتمال التحقق من منع الوصول");
     }
 
     @Step("التحقق من رفض بيانات الدخول والبقاء خارج النظام")

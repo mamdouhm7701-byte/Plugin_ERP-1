@@ -25,6 +25,7 @@ public final class BasicDataFixtures implements AutoCloseable {
     private final java.util.Set<String> reservedNames = new java.util.HashSet<>();
     private final WebDriver driver;
     private final BasicDataFixturesApi api;
+    final TestSupport.FixtureAccountPool accounts = new TestSupport.FixtureAccountPool();
     private final BasicDataFixturesDefinitions definitions = new BasicDataFixturesDefinitions(this);
     private final String suffix;
     private final TestSupport.FixtureSession session;
@@ -108,8 +109,8 @@ public final class BasicDataFixtures implements AutoCloseable {
         scenarioScope = "case-" + (++scenarioSequence) + "-";
     }
 
-    private String fixtureKey(String key) {
-        return scenarioScope + key;
+    String fixtureKey(String key) {
+        return key.startsWith("account-main-pool-") ? key : scenarioScope + key;
     }
 
     @SuppressWarnings("unchecked")

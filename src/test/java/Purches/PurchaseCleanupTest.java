@@ -12,8 +12,32 @@ import org.testng.annotations.Test;
 
 public class PurchaseCleanupTest {
     @Test
-    @Story("التحقق من مورد سند القبض عبر تفاصيله عندما تخفي القائمة هوية المتعامل دون تعديل أي سند")
-    public void receiptLookupUsesDetailsAndPreservesUnrelatedReceipts() {
+    @Story("وجود سند قبض للمورد لا يعني وجود سند صرف")
+    public void aCollectionDoesNotSatisfyTheSupplierPaymentCheck() {
+        PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
+        try (var data = new PurchaseTestData(api.driver())) {
+            var supplier = data.supplier();
+            api.records.put(
+                    "collection-only",
+                    new LinkedHashMap<>(
+                            Map.of(
+                                    "id",
+                                    "collection-only",
+                                    "dealerId",
+                                    supplier.id(),
+                                    "value",
+                                    300,
+                                    "receipt",
+                                    true)));
+            Assert.assertTrue(data.ownedSupplierPayments(supplier.id()).isEmpty());
+            Assert.assertTrue(api.deletes.isEmpty());
+        }
+        Assert.assertEquals(api.records.keySet(), java.util.Set.of("collection-only"));
+    }
+
+    @Test
+    @Story("قراءة سند صرف المورد الصحيح دون الخلط بسند القبض أو تعديل أي سند")
+    public void paymentLookupUsesDetailsAndPreservesUnrelatedMovements() {
         PurchaseFixtureApiStub api = new PurchaseFixtureApiStub();
         var data = new PurchaseTestData(api.driver());
         var supplier = data.supplier();
@@ -27,7 +51,7 @@ public class PurchaseCleanupTest {
                                 supplier.id(),
                                 "value",
                                 300,
-                                "receipt",
+                                "payment",
                                 true)));
         api.records.put(
                 "existing-receipt",
@@ -39,15 +63,28 @@ public class PurchaseCleanupTest {
                                 "existing-supplier",
                                 "value",
                                 600,
+                                "payment",
+                                true)));
+        api.records.put(
+                "supplier-collection",
+                new LinkedHashMap<>(
+                        Map.of(
+                                "id",
+                                "supplier-collection",
+                                "dealerId",
+                                supplier.id(),
+                                "value",
+                                900,
                                 "receipt",
                                 true)));
-        var found = data.ownedSupplierReceipts(supplier.id());
+        var found = data.ownedSupplierPayments(supplier.id());
         Assert.assertEquals(found.size(), 1);
         Assert.assertEquals(found.get(0).get("id"), "own-receipt");
         Assert.assertTrue(api.deletes.isEmpty());
         data.close();
         Assert.assertEquals(
-                api.records.keySet(), java.util.Set.of("own-receipt", "existing-receipt"));
+                api.records.keySet(),
+                java.util.Set.of("own-receipt", "existing-receipt", "supplier-collection"));
     }
 
     @Test

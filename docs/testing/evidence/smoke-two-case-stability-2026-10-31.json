@@ -1,0 +1,240 @@
+{
+  "scope": "Only the two smoke cases and the required branch profile verification, repeated three times with new owned branches and the same policies. No test-result retry. Full smoke explicitly reserved for the user.",
+  "status": "THREE_TARGETED_ROUNDS_PASSED",
+  "targetedBusinessCaseSuccesses": 6,
+  "profileVerificationSuccesses": 3,
+  "configurationFailures": 0,
+  "actualClassWorkers": 1,
+  "requestedClassWorkers": 3,
+  "workerLimitReason": "Validation JVM was launched with ActiveProcessorCount=3; the normal CPU safety cap selected one class worker. Cases ran sequentially. The unauthenticated-route case also uses its own isolated child browser.",
+  "rounds": [
+    {
+      "round": 1,
+      "completion": {
+        "mode": "targeted",
+        "branchCleaned": true,
+        "requestedBrowsers": 3,
+        "finishedUtc": "2026-10-31T12:18:18.138882100Z",
+        "scope": "Same targeted smoke cases including cleanup; no result retry; new owned branch",
+        "startedUtc": "2026-10-31T12:15:59.393678400Z",
+        "status": 0,
+        "elapsedMilliseconds": 138745.4284
+      },
+      "evidence": "target/validation/business-2833dd8b-d845-46d7-b7fe-1b4e479ef97d",
+      "settings": {
+        "requestedBrowsers": 3,
+        "selectedBrowsers": 1,
+        "execution": "Local",
+        "target": {
+          "environment": "Cloud",
+          "tenant": "Demo",
+          "url": "https://rawdadonia.plugin-erp.com"
+        }
+      },
+      "comparablePolicies": {
+        "origin": "https://rawdadonia.plugin-erp.com",
+        "activityType": "Restaurant",
+        "discountLevel": "Transaction",
+        "taxPolicy": "NetBased",
+        "stocktakingMethod": "Periodic"
+      },
+      "cases": [
+        {
+          "fullName": "CoverageTest.PermissionsCoverageTest.unauthenticatedDirectRouteRequiresLogin",
+          "name": "الصلاحيات — حماية رابط المستخدمين دون جلسة",
+          "status": "passed",
+          "start": 1793448984399,
+          "stop": 1793448987322
+        },
+        {
+          "fullName": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+          "name": "selectedBranchRetainsRequestedPolicies",
+          "status": "passed",
+          "start": 1793449082186,
+          "stop": 1793449082199
+        },
+        {
+          "fullName": "StoreTest.InventoryCoverageScenario.savesFractionalQuantityAndChecksStockEffect",
+          "name": "محضر الجرد — حفظ كمية جرد كسرية لا يرحل المخزون قبل الإغلاق",
+          "status": "passed",
+          "start": 1793448995785,
+          "stop": 1793449007852
+        }
+      ],
+      "branchCleanup": {
+        "branchId": "2d591770599a8ec8",
+        "status": "DELETED"
+      },
+      "cleanup": {
+        "allRecordedRemovalsSucceeded": true,
+        "countsByEndpoint": {
+          "Stocktakings": 2,
+          "Items": 1,
+          "StoreBranchStoreMembership": 2,
+          "Stores": 2,
+          "Accounts": 4,
+          "Units": 1,
+          "ItemCategories": 2
+        },
+        "recordedRemovalEvents": 14,
+        "uniqueRecords": 13,
+        "accountDeleteCalls": 4,
+        "failedAccountDeleteCalls": 0
+      }
+    },
+    {
+      "round": 2,
+      "completion": {
+        "mode": "targeted",
+        "branchCleaned": true,
+        "requestedBrowsers": 3,
+        "finishedUtc": "2026-10-31T12:20:50.388902Z",
+        "scope": "Same targeted smoke cases including cleanup; no result retry; new owned branch",
+        "startedUtc": "2026-10-31T12:18:19.337747500Z",
+        "elapsedMilliseconds": 151050.9724,
+        "status": 0
+      },
+      "evidence": "target/validation/business-f80d4d90-33ad-4e66-93ef-64fc345a11ab",
+      "settings": {
+        "requestedBrowsers": 3,
+        "selectedBrowsers": 1,
+        "execution": "Local",
+        "target": {
+          "tenant": "Demo",
+          "url": "https://rawdadonia.plugin-erp.com",
+          "environment": "Cloud"
+        }
+      },
+      "comparablePolicies": {
+        "origin": "https://rawdadonia.plugin-erp.com",
+        "activityType": "Restaurant",
+        "discountLevel": "Transaction",
+        "taxPolicy": "NetBased",
+        "stocktakingMethod": "Periodic"
+      },
+      "cases": [
+        {
+          "fullName": "CoverageTest.PermissionsCoverageTest.unauthenticatedDirectRouteRequiresLogin",
+          "name": "الصلاحيات — حماية رابط المستخدمين دون جلسة",
+          "status": "passed",
+          "start": 1793449122434,
+          "stop": 1793449125567
+        },
+        {
+          "fullName": "StoreTest.InventoryCoverageScenario.savesFractionalQuantityAndChecksStockEffect",
+          "name": "محضر الجرد — حفظ كمية جرد كسرية لا يرحل المخزون قبل الإغلاق",
+          "status": "passed",
+          "start": 1793449134431,
+          "stop": 1793449155117
+        },
+        {
+          "fullName": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+          "name": "selectedBranchRetainsRequestedPolicies",
+          "status": "passed",
+          "start": 1793449235794,
+          "stop": 1793449235809
+        }
+      ],
+      "branchCleanup": {
+        "branchId": "deee741875b826c7",
+        "status": "DELETED"
+      },
+      "cleanup": {
+        "allRecordedRemovalsSucceeded": true,
+        "countsByEndpoint": {
+          "Stocktakings": 2,
+          "Items": 1,
+          "StoreBranchStoreMembership": 2,
+          "Stores": 2,
+          "Accounts": 4,
+          "Units": 1,
+          "ItemCategories": 2
+        },
+        "recordedRemovalEvents": 14,
+        "uniqueRecords": 13,
+        "accountDeleteCalls": 4,
+        "failedAccountDeleteCalls": 0
+      }
+    },
+    {
+      "round": 3,
+      "completion": {
+        "mode": "targeted",
+        "branchCleaned": true,
+        "requestedBrowsers": 3,
+        "finishedUtc": "2026-10-31T12:23:12.217233300Z",
+        "scope": "Same targeted smoke cases including cleanup; no result retry; new owned branch",
+        "startedUtc": "2026-10-31T12:20:50.806280600Z",
+        "status": 0,
+        "elapsedMilliseconds": 141410.9922
+      },
+      "evidence": "target/validation/business-efcee215-4055-4361-8afe-d9184bdf1667",
+      "settings": {
+        "requestedBrowsers": 3,
+        "selectedBrowsers": 1,
+        "execution": "Local",
+        "target": {
+          "environment": "Cloud",
+          "tenant": "Demo",
+          "url": "https://rawdadonia.plugin-erp.com"
+        }
+      },
+      "comparablePolicies": {
+        "origin": "https://rawdadonia.plugin-erp.com",
+        "activityType": "Restaurant",
+        "discountLevel": "Transaction",
+        "taxPolicy": "NetBased",
+        "stocktakingMethod": "Periodic"
+      },
+      "cases": [
+        {
+          "fullName": "CoverageTest.PermissionsCoverageTest.unauthenticatedDirectRouteRequiresLogin",
+          "name": "الصلاحيات — حماية رابط المستخدمين دون جلسة",
+          "status": "passed",
+          "start": 1793449277448,
+          "stop": 1793449280758
+        },
+        {
+          "fullName": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+          "name": "selectedBranchRetainsRequestedPolicies",
+          "status": "passed",
+          "start": 1793449377565,
+          "stop": 1793449377578
+        },
+        {
+          "fullName": "StoreTest.InventoryCoverageScenario.savesFractionalQuantityAndChecksStockEffect",
+          "name": "محضر الجرد — حفظ كمية جرد كسرية لا يرحل المخزون قبل الإغلاق",
+          "status": "passed",
+          "start": 1793449289620,
+          "stop": 1793449301569
+        }
+      ],
+      "branchCleanup": {
+        "branchId": "59b8d7b738fd2807",
+        "status": "DELETED"
+      },
+      "cleanup": {
+        "allRecordedRemovalsSucceeded": true,
+        "countsByEndpoint": {
+          "Stocktakings": 2,
+          "Items": 1,
+          "StoreBranchStoreMembership": 2,
+          "Stores": 2,
+          "Accounts": 4,
+          "Units": 1,
+          "ItemCategories": 2
+        },
+        "recordedRemovalEvents": 14,
+        "uniqueRecords": 13,
+        "accountDeleteCalls": 4,
+        "failedAccountDeleteCalls": 0
+      }
+    }
+  ],
+  "allThreeOwnedBranchesDeleted": true,
+  "limitations": [
+    "This qualifies repeatability of the selected pair at one class worker only, not the full suite or the three-worker baseline.",
+    "No claim that backend SQL transient failures have been permanently fixed.",
+    "Full smoke was not started, as explicitly requested by the user."
+  ]
+}

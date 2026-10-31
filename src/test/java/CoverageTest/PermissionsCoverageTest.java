@@ -85,18 +85,7 @@ public final class PermissionsCoverageTest extends BasicDataScenarioTest {
                     Set.of("401", "403").contains(String.valueOf(status)),
                     "Backend must deny a user without viewTables; actual HTTP outcome=" + status);
         } catch (RuntimeException | AssertionError failure) {
-            try {
-                io.qameta.allure.Allure.addAttachment(
-                        "رابط جلسة المستخدم المحدود عند التوقف", limited.getCurrentUrl());
-                io.qameta.allure.Allure.addAttachment(
-                        "صورة جلسة المستخدم المحدود",
-                        "image/png",
-                        new java.io.ByteArrayInputStream(
-                                ((TakesScreenshot) limited).getScreenshotAs(OutputType.BYTES)),
-                        ".png");
-            } catch (RuntimeException captureFailure) {
-                failure.addSuppressed(captureFailure);
-            }
+            captureSessionFailure(limited, "المستخدم المحدود", failure);
             throw failure;
         } finally {
             limited.quit();
@@ -109,11 +98,27 @@ public final class PermissionsCoverageTest extends BasicDataScenarioTest {
         WebDriver isolated = new Chrome().createDriver();
         try {
             isolated.get(PropertyReader.getApplicationUrl() + "/#/users");
-            new WebDriverWait(isolated, Duration.ofSeconds(20))
-                    .until(d -> d.getCurrentUrl().contains("/login"));
-            Assert.assertFalse(isolated.findElements(By.cssSelector("#login-email")).isEmpty());
+            new LoginPage(isolated).assertRedirectedToLogin();
+        } catch (RuntimeException | AssertionError failure) {
+            captureSessionFailure(isolated, "المتصفح دون جلسة", failure);
+            throw failure;
         } finally {
             isolated.quit();
+        }
+    }
+
+    private void captureSessionFailure(WebDriver session, String label, Throwable failure) {
+        try {
+            io.qameta.allure.Allure.addAttachment(
+                    "رابط " + label + " عند التوقف", session.getCurrentUrl());
+            io.qameta.allure.Allure.addAttachment(
+                    "صورة " + label + " عند التوقف",
+                    "image/png",
+                    new java.io.ByteArrayInputStream(
+                            ((TakesScreenshot) session).getScreenshotAs(OutputType.BYTES)),
+                    ".png");
+        } catch (RuntimeException captureFailure) {
+            failure.addSuppressed(captureFailure);
         }
     }
 }

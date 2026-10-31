@@ -13,12 +13,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 final class FinancialTestData implements AutoCloseable {
-
     record Record(String endpoint, Object id, String name, Map<String, Object> values)
             implements TestSupport.OwnedFixtureRecord {}
 
     private final WebDriver driver;
     private final FinancialFixtureApi api;
+    final TestSupport.FixtureAccountPool accounts = new TestSupport.FixtureAccountPool();
     private final FinancialFixtureDefinitions definitions = new FinancialFixtureDefinitions(this);
     private final String suffix;
     private final TestSupport.FixtureSession session;
@@ -54,11 +54,12 @@ final class FinancialTestData implements AutoCloseable {
         scenarioScope = "case-" + (++scenarioSequence) + "-";
     }
 
-    private String fixtureKey(String key) {
+    String fixtureKey(String key) {
         return key.startsWith("QA-FM-")
                         || key.equals("invoice-unit")
                         || key.equals("invoice-category-main")
                         || key.equals("invoice-store")
+                        || key.startsWith("account-main-pool-")
                         || key.equals("account-main-store")
                         || key.equals("account-sub-store")
                 ? key
@@ -144,9 +145,7 @@ final class FinancialTestData implements AutoCloseable {
     }
 
     static Map<String, Object> fields(Object... pairs) {
-        Map<String, Object> values = new LinkedHashMap<>();
-        for (int i = 0; i < pairs.length; i += 2) values.put((String) pairs[i], pairs[i + 1]);
-        return values;
+        return TestSupport.FixtureFields.of(pairs);
     }
 
     Record account(String key) {

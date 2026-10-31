@@ -158,10 +158,12 @@ final class PurchaseFixtureApiStub {
                             .toList();
             return Map.of("entity", Map.of("pageData", rows, "totalRecords", rows.size()));
         }
-        if (action.equals("get") && endpoint.startsWith("Collections?")) {
+        if (action.equals("get")
+                && (endpoint.startsWith("Collections?") || endpoint.startsWith("Payments?"))) {
+            String flag = endpoint.startsWith("Payments?") ? "payment" : "receipt";
             var rows =
                     records.values().stream()
-                            .filter(r -> Boolean.TRUE.equals(r.get("receipt")))
+                            .filter(r -> Boolean.TRUE.equals(r.get(flag)))
                             .map(r -> Map.of("id", r.get("id")))
                             .toList();
             return Map.of("entity", Map.of("pageData", rows, "totalRecords", rows.size()));

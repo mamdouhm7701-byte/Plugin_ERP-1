@@ -16,9 +16,10 @@ final class FinancialFixtureDefinitions {
     }
 
     Record account(String key) {
+        var slot = data.accounts.account(key, data.fixtureKey("account-sub-" + key));
         Record parent =
                 data.fixture(
-                        "account-main-" + key,
+                        slot.parentKey(),
                         "Accounts",
                         fields(
                                 "type",
@@ -52,7 +53,7 @@ final class FinancialFixtureDefinitions {
                         "nature",
                         "Debit",
                         "code",
-                        parent.values().get("code") + "01",
+                        parent.values().get("code") + slot.childSuffix(),
                         "finalAccountType",
                         "Budget",
                         "parentId",

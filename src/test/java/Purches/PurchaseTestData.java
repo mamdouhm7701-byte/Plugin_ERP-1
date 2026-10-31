@@ -228,8 +228,8 @@ final class PurchaseTestData implements AutoCloseable {
         deleteRecord(record);
     }
 
-    List<Map<String, Object>> ownedSupplierReceipts(Object supplierId) {
-        return new PurchaseSupplierReceipts(this, created, (url, query) -> call("get", url, query))
+    List<Map<String, Object>> ownedSupplierPayments(Object supplierId) {
+        return new PurchaseSupplierPayments(this, created, (url, query) -> call("get", url, query))
                 .find(supplierId);
     }
 

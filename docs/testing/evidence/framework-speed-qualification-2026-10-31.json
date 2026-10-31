@@ -146,34 +146,51 @@
       "fixtureCleanupRecords": 45,
       "allRecordedFixtureCleanupSucceeded": true,
       "branchId": "9a8ab34be01d2d67",
-      "branchCleanup": "RETAINED_AFTER_LOGIN_NAVIGATION_FAILURE"
+      "branchCleanup": "DELETED",
+      "initialBranchCleanup": "RETAINED_AFTER_LOGIN_NAVIGATION_FAILURE",
+      "cleanupRecovery": {
+        "note": "Fresh authenticated browser recovery after initial cleanup login page did not load; fixture cleanup had already completed",
+        "status": "DELETED",
+        "elapsedMilliseconds": 20186.2621
+      }
     }
   ],
   "localChecks": {
-    "tests": 1042,
+    "tests": 1045,
     "failures": 0,
     "errors": 0,
     "skipped": 0,
     "build": "SUCCESS",
-    "log": "target/framework-speed-finalized-ci.log"
+    "log": "target/framework-speed-expanded-final-ci.log"
   },
   "limitations": [
-    "No matched full-suite before/after wall-time measurement.",
-    "Third policy business cases passed and its recorded fixtures were deleted; final branch removal was blocked at login navigation. Fresh Chrome and Edge recovery attempts also failed before deletion; ownership registry and recovery evidence retained.",
-    "Additional live print pilot was not started because branch recovery failed.",
-    "Read-only synthetic browser pilot verifies report readiness and polling only."
+    "No matched full-suite before/after wall-time measurement or repeated full-suite stability proof.",
+    "Real ERP report readiness qualified on sales and purchase printing only; POS and restaurant printing not rerun in this qualification.",
+    "Expanded account sharing qualified on fixture APIs; full business journeys still require their normal suite runs."
   ],
   "navigationBlock": {
     "phase": "cleanup login page loading",
-    "rootCause": "UNRESOLVED_BROWSER_NAVIGATION",
+    "rootCause": "NETWORK_OUTAGE_REPORTED_BY_USER",
     "appEntryHeadStatus": 200,
     "defaultFactoryPageLoadTimeoutSeconds": 60,
     "logs": [
       "target/account-pool-price_included.log",
       "target/pool-cleanup-recovery.log",
       "target/pool-cleanup-recovery-edge.log"
-    ]
+    ],
+    "resolution": {
+      "status": "RESOLVED_AFTER_USER_RESTORED_NETWORK",
+      "note": "User confirmed network disconnection. The fresh Chrome cleanup after reconnection authenticated and verified deletion of the retained owned branch.",
+      "log": "target/pool-cleanup-restored-network.log",
+      "branchId": "9a8ab34be01d2d67"
+    },
+    "initialClassification": "UNRESOLVED_BROWSER_NAVIGATION"
   },
   "syntheticPollingEvidence": "outputs/performance/ui-polling-pilot/verification.json",
-  "baselineCleanupEvidence": "outputs/performance/restaurant-regression-baseline/cleanup-totals.json"
+  "baselineCleanupEvidence": "outputs/performance/restaurant-regression-baseline/cleanup-totals.json",
+  "additionalEvidence": {
+    "salesPurchasePrinting": "printing-speed-qualification-2026-10-31.json",
+    "expandedAccountSharing": "expanded-account-sharing-2026-10-31.json",
+    "matchedSettingsComparison": "invoice-speed-comparison-2026-10-31.json"
+  }
 }

@@ -14,20 +14,16 @@ public final class FixtureRecordDeletion {
             Function<R, Map<String, Object>> read,
             BiPredicate<R, Map<String, Object>> owns,
             Consumer<R> remove) {
-        Map<String, Object> identity = read.apply(record);
+        Map<String, Object> identity = readConfirmed(record, read);
         if (identity == null) return;
         if (!owns.test(record, identity))
             throw new AssertionError(
                     "Refusing cleanup: fixture ownership changed for " + record.id());
         AssertionError lastFailure = null;
         for (int attempt = 1; attempt <= 3; attempt++) {
-            Map<String, Object> verifiedRecord = null;
-            boolean readCompleted = false;
+            boolean notFoundResponse = false;
             try {
                 remove.accept(record);
-                verifiedRecord = read.apply(record);
-                if (verifiedRecord == null) return;
-                readCompleted = true;
                 lastFailure =
                         new AssertionError(
                                 "Delete did not remove owned record: "
@@ -39,15 +35,10 @@ public final class FixtureRecordDeletion {
                         || failure.status == 410
                         || (failure.status == 400
                                 && failure.getMessage().contains("Common.ObjectNotFound"))) {
-                    if (read.apply(record) == null) return;
-                    throw new AssertionError(
-                            "Delete endpoint did not remove existing owned record: "
-                                    + record.endpoint()
-                                    + "/"
-                                    + record.id(),
-                            failure);
+                    notFoundResponse = true;
+                } else if (!retryable(failure)) {
+                    throw failure;
                 }
-                if (!retryable(failure)) throw failure;
                 lastFailure = failure;
             } catch (org.openqa.selenium.TimeoutException failure) {
                 lastFailure =
@@ -55,27 +46,48 @@ public final class FixtureRecordDeletion {
                                 "Delete response timed out for " + record.endpoint(), failure);
             }
             // A timed-out DELETE may have committed. Read back before sending another DELETE.
+            Map<String, Object> existing;
             try {
-                Map<String, Object> existing = readCompleted ? verifiedRecord : read.apply(record);
-                if (existing == null) {
-                    return;
-                }
-                if (!owns.test(record, existing)) {
-                    throw new AssertionError(
-                            "Refusing cleanup: fixture ownership changed for " + record.id());
-                }
-            } catch (FixtureApiFailure failure) {
-                if (failure.status == 404 || failure.status == 410) return;
-                if (!retryable(failure)) throw failure;
-                lastFailure = failure;
-            } catch (org.openqa.selenium.TimeoutException failure) {
-                lastFailure =
+                existing = readConfirmed(record, read);
+            } catch (RuntimeException | AssertionError failure) {
+                var uncertain =
                         new AssertionError(
-                                "Could not verify timed-out deletion of " + record.endpoint(),
+                                "تعذر تأكيد نتيجة حذف "
+                                        + record.endpoint()
+                                        + "/"
+                                        + record.id()
+                                        + "؛ لم نرسل حذفًا آخر. سجل الاسترجاع محفوظ.",
                                 failure);
+                if (lastFailure != null) uncertain.addSuppressed(lastFailure);
+                throw uncertain;
             }
+            if (existing == null) return;
+            if (!owns.test(record, existing))
+                throw new AssertionError(
+                        "Refusing cleanup: fixture ownership changed for " + record.id());
+            if (notFoundResponse)
+                throw new AssertionError(
+                        "Delete endpoint did not remove existing owned record: "
+                                + record.endpoint()
+                                + "/"
+                                + record.id(),
+                        lastFailure);
         }
         throw lastFailure;
+    }
+
+    private static <R extends OwnedFixtureRecord> Map<String, Object> readConfirmed(
+            R record, Function<R, Map<String, Object>> read) {
+        for (int attempt = 1; ; attempt++) {
+            try {
+                return read.apply(record);
+            } catch (FixtureApiFailure failure) {
+                if (failure.status == 404 || failure.status == 410) return null;
+                if (attempt >= 3 || !retryable(failure)) throw failure;
+            } catch (org.openqa.selenium.TimeoutException failure) {
+                if (attempt >= 3) throw failure;
+            }
+        }
     }
 
     private static boolean retryable(FixtureApiFailure failure) {

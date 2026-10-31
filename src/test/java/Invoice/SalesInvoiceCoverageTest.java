@@ -26,7 +26,7 @@ public final class SalesInvoiceCoverageTest extends SalesFormTest {
                 "New owned item unexpectedly already cached");
         page.slAddBarcodeImmediately(
                 second.values().get("mainUnitBarcode").toString(), second.name());
-        page.slWaitNet("100");
+        page.slWaitNet(salesNet("100"));
         var saved = save(false);
         org.testng.Assert.assertEquals(
                 firstLine(data.read(saved)).get("itemId"), second.id(), "مطابقة الصنف");

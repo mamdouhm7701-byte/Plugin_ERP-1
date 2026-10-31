@@ -112,7 +112,17 @@ final class FinancialRecordList {
     }
 
     void waitForRemoval(String note) {
-        ready.until(d -> !owner.hasRow(note));
+        try {
+            ready.until(d -> !hasRow(note));
+        } catch (TimeoutException failure) {
+            throw new TimeoutException(
+                    "السند المالي ما زال ظاهرًا بعد طلب الحذف؛ الكود "
+                            + ownedCodes.getOrDefault(note, "غير مسجل")
+                            + "، ملاحظة الاختبار "
+                            + note
+                            + ". يجب مراجعة استجابة الحذف وحالة التخصيص قبل تحديد السبب.",
+                    failure);
+        }
     }
 
     boolean hasListHeaders() {

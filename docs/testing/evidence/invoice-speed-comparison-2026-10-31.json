@@ -1,0 +1,1849 @@
+{
+  "scope": "Same five live results, one browser, one policy, including preparation and owned cleanup. Conservative and optimized settings on the new code; not an old checkout or full-suite speed comparison.",
+  "conservative": {
+    "completion": {
+      "mode": "conservative",
+      "branchCleaned": true,
+      "finishedUtc": "2026-10-30T22:43:43.321435700Z",
+      "scope": "Same selected cases: profile + sales add/print + purchase add/print; PRICE_INCLUDED; Restaurant; configured 1 browser in both runs. Conservative uses serial XML, independent main accounts, 500ms polling and fresh context reads. Optimized enables shared main accounts, 200ms polling and scoped verified context reads. XML remains serial with one browser, so this comparison does not measure parallelism. Shared report readiness code is identical in both. This is not a pre-change checkout or a full XML speedup.",
+      "startedUtc": "2026-10-30T22:38:15.251004900Z",
+      "status": 0,
+      "elapsedMilliseconds": 328070.383
+    },
+    "evidence": "target\\validation\\business-69bc5ea5-a2ef-4557-b31f-ce111cafd4d3",
+    "branchCleanup": {
+      "branchId": "9a485228e619142e",
+      "status": "DELETED"
+    },
+    "cases": [
+      {
+        "fullName": "Invoice.SalesInvoiceTaxReviewTest.reviewSalesInvoice",
+        "name": "فاتورة المبيعات — طباعة — السعر شامل الضريبة — صنف خاضع — سعر عادي",
+        "status": "passed",
+        "start": 1793399963072,
+        "stop": 1793399988096
+      },
+      {
+        "fullName": "Invoice.SalesInvoiceTaxReviewTest.reviewSalesInvoice",
+        "name": "فاتورة المبيعات — إضافة — السعر شامل الضريبة — صنف خاضع — سعر عادي",
+        "status": "passed",
+        "start": 1793399935883,
+        "stop": 1793399963003
+      },
+      {
+        "fullName": "Purches.PurchaseInvoiceTaxReviewTest.reviewPurchaseInvoice",
+        "name": "فاتورة المشتريات — إضافة — السعر شامل الضريبة — صنف خاضع — سعر عادي",
+        "status": "passed",
+        "start": 1793400090820,
+        "stop": 1793400109759
+      },
+      {
+        "fullName": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+        "name": "selectedBranchRetainsRequestedPolicies",
+        "status": "passed",
+        "start": 1793399926170,
+        "stop": 1793399927112
+      },
+      {
+        "fullName": "Purches.PurchaseInvoiceTaxReviewTest.reviewPurchaseInvoice",
+        "name": "فاتورة المشتريات — طباعة — السعر شامل الضريبة — صنف خاضع — سعر عادي",
+        "status": "passed",
+        "start": 1793400109811,
+        "stop": 1793400125959
+      }
+    ],
+    "statusCounts": {
+      "passed": 5
+    },
+    "settings": {
+      "requestedBrowsers": 1,
+      "selectedBrowsers": 1
+    },
+    "measurements": [
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Invoice.SalesScenarioTest.retrySalesCleanup",
+        "totalMilliseconds": 94180.0316,
+        "operation": "invocation",
+        "maxMilliseconds": 94180.0316,
+        "calls": 1
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseScenarioTest.cleanPurchasePage",
+        "totalMilliseconds": 82091.3016,
+        "operation": "invocation",
+        "maxMilliseconds": 82091.3016,
+        "calls": 1
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Stores",
+        "totalMilliseconds": 71375.122,
+        "operation": "delete",
+        "maxMilliseconds": 18700.1633,
+        "calls": 4
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Invoice.SalesInvoiceTaxReviewTest.reviewSalesInvoice",
+        "totalMilliseconds": 51342.7952,
+        "operation": "invocation",
+        "maxMilliseconds": 26712.513,
+        "calls": 2
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseInvoiceTaxReviewTest.reviewPurchaseInvoice",
+        "totalMilliseconds": 34118.0055,
+        "operation": "invocation",
+        "maxMilliseconds": 18451.1701,
+        "calls": 2
+      },
+      {
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Plugin_ERP.Tests.LoginTest.BaseTest.setup",
+        "totalMilliseconds": 24787.8968,
+        "operation": "invocation",
+        "maxMilliseconds": 8641.9952,
+        "calls": 3
+      },
+      {
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "owned-branch",
+        "totalMilliseconds": 19002.9428,
+        "operation": "branch-lifecycle",
+        "maxMilliseconds": 19002.9428,
+        "calls": 1
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Accounts",
+        "totalMilliseconds": 18166.9664,
+        "operation": "delete",
+        "maxMilliseconds": 1296.9576,
+        "calls": 16
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "owned-branch",
+        "totalMilliseconds": 15028.784,
+        "operation": "branch-lifecycle",
+        "maxMilliseconds": 15028.784,
+        "calls": 1
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Agents",
+        "totalMilliseconds": 14922.7077,
+        "operation": "delete",
+        "maxMilliseconds": 5277.3965,
+        "calls": 3
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Units",
+        "totalMilliseconds": 12315.0587,
+        "operation": "delete",
+        "maxMilliseconds": 6192.2952,
+        "calls": 2
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Items",
+        "totalMilliseconds": 9656.6281,
+        "operation": "get",
+        "maxMilliseconds": 1390.1832,
+        "calls": 16
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "ItemTransactions-Sales",
+        "totalMilliseconds": 9558.7957,
+        "operation": "delete",
+        "maxMilliseconds": 4929.7427,
+        "calls": 2
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Purchases",
+        "totalMilliseconds": 9238.0141,
+        "operation": "delete",
+        "maxMilliseconds": 4692.8317,
+        "calls": 2
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Items",
+        "totalMilliseconds": 7533.5779,
+        "operation": "delete",
+        "maxMilliseconds": 1962.6919,
+        "calls": 4
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "report-ready",
+        "totalMilliseconds": 5273.3798,
+        "operation": "ui-wait",
+        "maxMilliseconds": 2820.6423,
+        "calls": 2
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "ItemTransactions-Sales",
+        "totalMilliseconds": 4683.3909,
+        "operation": "get",
+        "maxMilliseconds": 1262.7738,
+        "calls": 4
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Accounts",
+        "totalMilliseconds": 4582.5942,
+        "operation": "get",
+        "maxMilliseconds": 428.0499,
+        "calls": 32
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Items",
+        "totalMilliseconds": 4424.434,
+        "operation": "create",
+        "maxMilliseconds": 1381.1656,
+        "calls": 4
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Accounts",
+        "totalMilliseconds": 4084.4067,
+        "operation": "create",
+        "maxMilliseconds": 800.3265,
+        "calls": 16
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "ItemCategories",
+        "totalMilliseconds": 3853.9144,
+        "operation": "delete",
+        "maxMilliseconds": 699.4553,
+        "calls": 6
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Customers",
+        "totalMilliseconds": 3776.8229,
+        "operation": "delete",
+        "maxMilliseconds": 1919.4526,
+        "calls": 2
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Suppliers",
+        "totalMilliseconds": 3560.9813,
+        "operation": "delete",
+        "maxMilliseconds": 1822.7483,
+        "calls": 2
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "ItemTransactions-Sales",
+        "totalMilliseconds": 3377.3082,
+        "operation": "get",
+        "maxMilliseconds": 960.8057,
+        "calls": 4
+      },
+      {
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "overlay-ready",
+        "totalMilliseconds": 3264.8138,
+        "operation": "ui-wait",
+        "maxMilliseconds": 1091.5913,
+        "calls": 3
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Branches",
+        "totalMilliseconds": 2894.1425,
+        "operation": "get",
+        "maxMilliseconds": 1218.7956,
+        "calls": 16
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Items",
+        "totalMilliseconds": 2452.3392,
+        "operation": "get",
+        "maxMilliseconds": 519.1475,
+        "calls": 8
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Stores",
+        "totalMilliseconds": 2070.1587,
+        "operation": "get",
+        "maxMilliseconds": 177.5983,
+        "calls": 16
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Customers",
+        "totalMilliseconds": 1716.0222,
+        "operation": "create",
+        "maxMilliseconds": 979.7125,
+        "calls": 2
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "ItemCategories",
+        "totalMilliseconds": 1619.048,
+        "operation": "get",
+        "maxMilliseconds": 201.8924,
+        "calls": 12
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Stores",
+        "totalMilliseconds": 1507.1431,
+        "operation": "create",
+        "maxMilliseconds": 702.3713,
+        "calls": 4
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Branches",
+        "totalMilliseconds": 1296.8839,
+        "operation": "get",
+        "maxMilliseconds": 459.9685,
+        "calls": 8
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Suppliers",
+        "totalMilliseconds": 1250.578,
+        "operation": "create",
+        "maxMilliseconds": 648.856,
+        "calls": 2
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Agents",
+        "totalMilliseconds": 1245.3861,
+        "operation": "create",
+        "maxMilliseconds": 868.9674,
+        "calls": 3
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 2,
+        "target": "Customers",
+        "totalMilliseconds": 1185.6819,
+        "operation": "get",
+        "maxMilliseconds": 369.5929,
+        "calls": 6
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "ItemCategories",
+        "totalMilliseconds": 1173.4383,
+        "operation": "create",
+        "maxMilliseconds": 339.9168,
+        "calls": 6
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Units",
+        "totalMilliseconds": 1145.1105,
+        "operation": "create",
+        "maxMilliseconds": 683.6387,
+        "calls": 2
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Branches",
+        "totalMilliseconds": 1018.6678,
+        "operation": "update",
+        "maxMilliseconds": 482.3547,
+        "calls": 4
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Agents",
+        "totalMilliseconds": 995.073,
+        "operation": "get",
+        "maxMilliseconds": 230.7438,
+        "calls": 6
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Branches",
+        "totalMilliseconds": 778.2348,
+        "operation": "update",
+        "maxMilliseconds": 207.8561,
+        "calls": 4
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Units",
+        "totalMilliseconds": 645.9418,
+        "operation": "get",
+        "maxMilliseconds": 168.1564,
+        "calls": 4
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Purchases",
+        "totalMilliseconds": 640.4108,
+        "operation": "get",
+        "maxMilliseconds": 230.7778,
+        "calls": 4
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Customers",
+        "totalMilliseconds": 566.1785,
+        "operation": "get",
+        "maxMilliseconds": 402.656,
+        "calls": 2
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Suppliers",
+        "totalMilliseconds": 523.9702,
+        "operation": "get",
+        "maxMilliseconds": 163.0705,
+        "calls": 4
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Purchases",
+        "totalMilliseconds": 483.546,
+        "operation": "get",
+        "maxMilliseconds": 172.7633,
+        "calls": 4
+      },
+      {
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Invoice.SalesScenarioTest.awaitSalesSession",
+        "totalMilliseconds": 411.2841,
+        "operation": "invocation",
+        "maxMilliseconds": 411.2841,
+        "calls": 1
+      },
+      {
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseScenarioTest.awaitPurchaseSession",
+        "totalMilliseconds": 401.225,
+        "operation": "invocation",
+        "maxMilliseconds": 401.225,
+        "calls": 1
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Suppliers",
+        "totalMilliseconds": 349.2981,
+        "operation": "get",
+        "maxMilliseconds": 183.1039,
+        "calls": 2
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Plugin_ERP.Tests.LoginTest.BaseTest.tearDown",
+        "totalMilliseconds": 307.9536,
+        "operation": "invocation",
+        "maxMilliseconds": 113.0237,
+        "calls": 3
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Invoice.SalesScenarioTest.cleanSalesScenario",
+        "totalMilliseconds": 68.6481,
+        "operation": "invocation",
+        "maxMilliseconds": 36.5636,
+        "calls": 2
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseScenarioTest.finishPurchaseCase",
+        "totalMilliseconds": 48.3427,
+        "operation": "invocation",
+        "maxMilliseconds": 26.5356,
+        "calls": 2
+      },
+      {
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Invoice.SalesScenarioTest.beginSalesScenario",
+        "totalMilliseconds": 41.2001,
+        "operation": "invocation",
+        "maxMilliseconds": 36.9859,
+        "calls": 2
+      },
+      {
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Plugin_ERP.Tests.LoginTest.BaseTest.verifyProfileBeforeScenario",
+        "totalMilliseconds": 40.263,
+        "operation": "invocation",
+        "maxMilliseconds": 11.6084,
+        "calls": 5
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Plugin_ERP.Tests.LoginTest.BaseTest.verifyProfileAfterScenario",
+        "totalMilliseconds": 34.8298,
+        "operation": "invocation",
+        "maxMilliseconds": 9.3532,
+        "calls": 5
+      },
+      {
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseScenarioTest.beginPurchaseScenario",
+        "totalMilliseconds": 20.4104,
+        "operation": "invocation",
+        "maxMilliseconds": 17.9751,
+        "calls": 2
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+        "totalMilliseconds": 9.1419,
+        "operation": "invocation",
+        "maxMilliseconds": 9.1419,
+        "calls": 1
+      },
+      {
+        "phase": "scheduling",
+        "failedCalls": 0,
+        "target": "SuiteSupport.BusinessProfileVerificationTest",
+        "totalMilliseconds": 0.01,
+        "operation": "class-lock-wait",
+        "maxMilliseconds": 0.01,
+        "calls": 1
+      },
+      {
+        "phase": "scheduling",
+        "failedCalls": 0,
+        "target": "Invoice.SalesInvoiceTaxReviewTest",
+        "totalMilliseconds": 0.0053,
+        "operation": "class-lock-wait",
+        "maxMilliseconds": 0.0053,
+        "calls": 1
+      },
+      {
+        "phase": "scheduling",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseInvoiceTaxReviewTest",
+        "totalMilliseconds": 0.0025,
+        "operation": "class-lock-wait",
+        "maxMilliseconds": 0.0025,
+        "calls": 1
+      }
+    ],
+    "cleanupCounts": {
+      "ItemTransactions-Sales": 2,
+      "Agents": 3,
+      "Customers": 2,
+      "Accounts": 16,
+      "Items": 4,
+      "ItemCategories": 6,
+      "SalesBranchStoreMembership": 2,
+      "Stores": 4,
+      "Units": 2,
+      "Purchases": 2,
+      "Suppliers": 2,
+      "PurchaseBranchStoreMembership": 2
+    },
+    "allFixtureCleanupSucceeded": true
+  },
+  "optimizedWithCiOverlap": {
+    "completion": {
+      "mode": "optimized",
+      "branchCleaned": true,
+      "finishedUtc": "2026-10-30T22:49:00.027577800Z",
+      "scope": "Same selected cases: profile + sales add/print + purchase add/print; PRICE_INCLUDED; Restaurant; configured 1 browser in both runs. Conservative uses serial XML, independent main accounts, 500ms polling and fresh context reads. Optimized enables shared main accounts, 200ms polling and scoped verified context reads. XML remains serial with one browser, so this comparison does not measure parallelism. Shared report readiness code is identical in both. This is not a pre-change checkout or a full XML speedup.",
+      "startedUtc": "2026-10-30T22:43:43.521934300Z",
+      "status": 0,
+      "elapsedMilliseconds": 316505.9235
+    },
+    "evidence": "target\\validation\\business-c4f89a36-1a11-459a-a3bb-225ccf19e5af",
+    "branchCleanup": {
+      "branchId": "58ea74eb9406f133",
+      "status": "DELETED"
+    },
+    "cases": [
+      {
+        "fullName": "Invoice.SalesInvoiceTaxReviewTest.reviewSalesInvoice",
+        "name": "فاتورة المبيعات — إضافة — السعر شامل الضريبة — صنف خاضع — سعر عادي",
+        "status": "passed",
+        "start": 1793400258374,
+        "stop": 1793400280333
+      },
+      {
+        "fullName": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+        "name": "selectedBranchRetainsRequestedPolicies",
+        "status": "passed",
+        "start": 1793400248161,
+        "stop": 1793400249299
+      },
+      {
+        "fullName": "Purches.PurchaseInvoiceTaxReviewTest.reviewPurchaseInvoice",
+        "name": "فاتورة المشتريات — إضافة — السعر شامل الضريبة — صنف خاضع — سعر عادي",
+        "status": "passed",
+        "start": 1793400397051,
+        "stop": 1793400418053
+      },
+      {
+        "fullName": "Purches.PurchaseInvoiceTaxReviewTest.reviewPurchaseInvoice",
+        "name": "فاتورة المشتريات — طباعة — السعر شامل الضريبة — صنف خاضع — سعر عادي",
+        "status": "passed",
+        "start": 1793400418151,
+        "stop": 1793400438818
+      },
+      {
+        "fullName": "Invoice.SalesInvoiceTaxReviewTest.reviewSalesInvoice",
+        "name": "فاتورة المبيعات — طباعة — السعر شامل الضريبة — صنف خاضع — سعر عادي",
+        "status": "passed",
+        "start": 1793400280403,
+        "stop": 1793400299618
+      }
+    ],
+    "statusCounts": {
+      "passed": 5
+    },
+    "settings": {
+      "requestedBrowsers": 1,
+      "selectedBrowsers": 1
+    },
+    "measurements": [
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Invoice.SalesScenarioTest.retrySalesCleanup",
+        "totalMilliseconds": 87746.1544,
+        "operation": "invocation",
+        "maxMilliseconds": 87746.1544,
+        "calls": 1
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseScenarioTest.cleanPurchasePage",
+        "totalMilliseconds": 83655.2009,
+        "operation": "invocation",
+        "maxMilliseconds": 83655.2009,
+        "calls": 1
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Stores",
+        "totalMilliseconds": 73129.8898,
+        "operation": "delete",
+        "maxMilliseconds": 19499.8354,
+        "calls": 4
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseInvoiceTaxReviewTest.reviewPurchaseInvoice",
+        "totalMilliseconds": 40536.8722,
+        "operation": "invocation",
+        "maxMilliseconds": 20542.5138,
+        "calls": 2
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Invoice.SalesInvoiceTaxReviewTest.reviewSalesInvoice",
+        "totalMilliseconds": 40478.587,
+        "operation": "invocation",
+        "maxMilliseconds": 21584.9653,
+        "calls": 2
+      },
+      {
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Plugin_ERP.Tests.LoginTest.BaseTest.setup",
+        "totalMilliseconds": 26361.4645,
+        "operation": "invocation",
+        "maxMilliseconds": 9067.5812,
+        "calls": 3
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "owned-branch",
+        "totalMilliseconds": 17271.1353,
+        "operation": "branch-lifecycle",
+        "maxMilliseconds": 17271.1353,
+        "calls": 1
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Accounts",
+        "totalMilliseconds": 16208.0732,
+        "operation": "delete",
+        "maxMilliseconds": 1366.0939,
+        "calls": 14
+      },
+      {
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "owned-branch",
+        "totalMilliseconds": 14247.6411,
+        "operation": "branch-lifecycle",
+        "maxMilliseconds": 14247.6411,
+        "calls": 1
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Agents",
+        "totalMilliseconds": 12566.7114,
+        "operation": "delete",
+        "maxMilliseconds": 4381.5887,
+        "calls": 3
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Units",
+        "totalMilliseconds": 12157.768,
+        "operation": "delete",
+        "maxMilliseconds": 6295.2168,
+        "calls": 2
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Purchases",
+        "totalMilliseconds": 9229.7352,
+        "operation": "delete",
+        "maxMilliseconds": 4733.5635,
+        "calls": 2
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Items",
+        "totalMilliseconds": 9007.6974,
+        "operation": "get",
+        "maxMilliseconds": 1152.8559,
+        "calls": 16
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "ItemTransactions-Sales",
+        "totalMilliseconds": 8742.4646,
+        "operation": "delete",
+        "maxMilliseconds": 4404.8951,
+        "calls": 2
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Items",
+        "totalMilliseconds": 7431.085,
+        "operation": "delete",
+        "maxMilliseconds": 1933.6734,
+        "calls": 4
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Items",
+        "totalMilliseconds": 4532.6185,
+        "operation": "create",
+        "maxMilliseconds": 1406.6816,
+        "calls": 4
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "ItemTransactions-Sales",
+        "totalMilliseconds": 4196.5945,
+        "operation": "get",
+        "maxMilliseconds": 1113.8915,
+        "calls": 4
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Accounts",
+        "totalMilliseconds": 4156.7299,
+        "operation": "get",
+        "maxMilliseconds": 605.0831,
+        "calls": 28
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "report-ready",
+        "totalMilliseconds": 4126.5705,
+        "operation": "ui-wait",
+        "maxMilliseconds": 2225.6067,
+        "calls": 2
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "ItemCategories",
+        "totalMilliseconds": 3840.2301,
+        "operation": "delete",
+        "maxMilliseconds": 740.753,
+        "calls": 6
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Customers",
+        "totalMilliseconds": 3596.872,
+        "operation": "delete",
+        "maxMilliseconds": 1816.3097,
+        "calls": 2
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Suppliers",
+        "totalMilliseconds": 3536.6857,
+        "operation": "delete",
+        "maxMilliseconds": 1801.7247,
+        "calls": 2
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "ItemTransactions-Sales",
+        "totalMilliseconds": 3306.2542,
+        "operation": "get",
+        "maxMilliseconds": 917.6587,
+        "calls": 4
+      },
+      {
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "overlay-ready",
+        "totalMilliseconds": 3264.9557,
+        "operation": "ui-wait",
+        "maxMilliseconds": 1097.9924,
+        "calls": 3
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Accounts",
+        "totalMilliseconds": 2664.4654,
+        "operation": "create",
+        "maxMilliseconds": 246.4252,
+        "calls": 14
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Suppliers",
+        "totalMilliseconds": 2460.2332,
+        "operation": "create",
+        "maxMilliseconds": 1678.2375,
+        "calls": 2
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Stores",
+        "totalMilliseconds": 2118.8743,
+        "operation": "get",
+        "maxMilliseconds": 177.5151,
+        "calls": 16
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Items",
+        "totalMilliseconds": 1884.9676,
+        "operation": "get",
+        "maxMilliseconds": 387.5018,
+        "calls": 8
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Branches",
+        "totalMilliseconds": 1878.2066,
+        "operation": "get",
+        "maxMilliseconds": 168.724,
+        "calls": 16
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Stores",
+        "totalMilliseconds": 1760.9105,
+        "operation": "create",
+        "maxMilliseconds": 668.4506,
+        "calls": 4
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "ItemCategories",
+        "totalMilliseconds": 1654.4538,
+        "operation": "get",
+        "maxMilliseconds": 193.5482,
+        "calls": 12
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Branches",
+        "totalMilliseconds": 1342.7042,
+        "operation": "get",
+        "maxMilliseconds": 409.0009,
+        "calls": 8
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Customers",
+        "totalMilliseconds": 1285.8957,
+        "operation": "create",
+        "maxMilliseconds": 674.7412,
+        "calls": 2
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Units",
+        "totalMilliseconds": 1101.8799,
+        "operation": "create",
+        "maxMilliseconds": 608.9994,
+        "calls": 2
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "ItemCategories",
+        "totalMilliseconds": 1072.427,
+        "operation": "create",
+        "maxMilliseconds": 237.48,
+        "calls": 6
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 2,
+        "target": "Customers",
+        "totalMilliseconds": 932.2039,
+        "operation": "get",
+        "maxMilliseconds": 201.1439,
+        "calls": 6
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Branches",
+        "totalMilliseconds": 857.5874,
+        "operation": "update",
+        "maxMilliseconds": 231.4124,
+        "calls": 4
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Agents",
+        "totalMilliseconds": 814.5483,
+        "operation": "get",
+        "maxMilliseconds": 181.9644,
+        "calls": 6
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Branches",
+        "totalMilliseconds": 676.4563,
+        "operation": "update",
+        "maxMilliseconds": 205.5084,
+        "calls": 4
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Units",
+        "totalMilliseconds": 671.7308,
+        "operation": "get",
+        "maxMilliseconds": 172.3631,
+        "calls": 4
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Suppliers",
+        "totalMilliseconds": 660.6564,
+        "operation": "get",
+        "maxMilliseconds": 476.2931,
+        "calls": 2
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Purchases",
+        "totalMilliseconds": 607.8986,
+        "operation": "get",
+        "maxMilliseconds": 192.671,
+        "calls": 4
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Agents",
+        "totalMilliseconds": 597.7329,
+        "operation": "create",
+        "maxMilliseconds": 221.722,
+        "calls": 3
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Suppliers",
+        "totalMilliseconds": 538.7239,
+        "operation": "get",
+        "maxMilliseconds": 173.0299,
+        "calls": 4
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Purchases",
+        "totalMilliseconds": 505.3946,
+        "operation": "get",
+        "maxMilliseconds": 187.1915,
+        "calls": 4
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Plugin_ERP.Tests.LoginTest.BaseTest.tearDown",
+        "totalMilliseconds": 412.4326,
+        "operation": "invocation",
+        "maxMilliseconds": 149.2722,
+        "calls": 3
+      },
+      {
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Invoice.SalesScenarioTest.awaitSalesSession",
+        "totalMilliseconds": 407.0579,
+        "operation": "invocation",
+        "maxMilliseconds": 407.0579,
+        "calls": 1
+      },
+      {
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseScenarioTest.awaitPurchaseSession",
+        "totalMilliseconds": 395.9528,
+        "operation": "invocation",
+        "maxMilliseconds": 395.9528,
+        "calls": 1
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Customers",
+        "totalMilliseconds": 339.9186,
+        "operation": "get",
+        "maxMilliseconds": 173.7875,
+        "calls": 2
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Plugin_ERP.Tests.LoginTest.BaseTest.verifyProfileAfterScenario",
+        "totalMilliseconds": 84.6635,
+        "operation": "invocation",
+        "maxMilliseconds": 52.1834,
+        "calls": 5
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Invoice.SalesScenarioTest.cleanSalesScenario",
+        "totalMilliseconds": 59.0209,
+        "operation": "invocation",
+        "maxMilliseconds": 35.2093,
+        "calls": 2
+      },
+      {
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseScenarioTest.finishPurchaseCase",
+        "totalMilliseconds": 47.6075,
+        "operation": "invocation",
+        "maxMilliseconds": 24.7752,
+        "calls": 2
+      },
+      {
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Plugin_ERP.Tests.LoginTest.BaseTest.verifyProfileBeforeScenario",
+        "totalMilliseconds": 39.4923,
+        "operation": "invocation",
+        "maxMilliseconds": 9.1767,
+        "calls": 5
+      },
+      {
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Invoice.SalesScenarioTest.beginSalesScenario",
+        "totalMilliseconds": 34.9736,
+        "operation": "invocation",
+        "maxMilliseconds": 30.8901,
+        "calls": 2
+      },
+      {
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseScenarioTest.beginPurchaseScenario",
+        "totalMilliseconds": 28.9751,
+        "operation": "invocation",
+        "maxMilliseconds": 23.862,
+        "calls": 2
+      },
+      {
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+        "totalMilliseconds": 11.1007,
+        "operation": "invocation",
+        "maxMilliseconds": 11.1007,
+        "calls": 1
+      },
+      {
+        "phase": "scheduling",
+        "failedCalls": 0,
+        "target": "SuiteSupport.BusinessProfileVerificationTest",
+        "totalMilliseconds": 0.0153,
+        "operation": "class-lock-wait",
+        "maxMilliseconds": 0.0153,
+        "calls": 1
+      },
+      {
+        "phase": "scheduling",
+        "failedCalls": 0,
+        "target": "Invoice.SalesInvoiceTaxReviewTest",
+        "totalMilliseconds": 0.0044,
+        "operation": "class-lock-wait",
+        "maxMilliseconds": 0.0044,
+        "calls": 1
+      },
+      {
+        "phase": "scheduling",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseInvoiceTaxReviewTest",
+        "totalMilliseconds": 0.0038,
+        "operation": "class-lock-wait",
+        "maxMilliseconds": 0.0038,
+        "calls": 1
+      }
+    ],
+    "cleanupCounts": {
+      "ItemTransactions-Sales": 2,
+      "Agents": 3,
+      "Customers": 2,
+      "Accounts": 14,
+      "Items": 4,
+      "ItemCategories": 6,
+      "SalesBranchStoreMembership": 2,
+      "Stores": 4,
+      "Units": 2,
+      "Purchases": 2,
+      "Suppliers": 2,
+      "PurchaseBranchStoreMembership": 2
+    },
+    "allFixtureCleanupSucceeded": true
+  },
+  "ciOverlap": {
+    "log": "target/framework-speed-expanded-ci.log",
+    "overlappedOptimizedRound": true,
+    "reason": "The first optimized round overlapped local CI. The final optimized repeat completed without a concurrent local build or test run and is used for the stated comparison.",
+    "isolatedRepeatCompleted": true
+  },
+  "optimizedIsolatedRepeat": {
+    "completion": {
+      "mode": "optimized",
+      "branchCleaned": true,
+      "finishedUtc": "2026-10-30T23:00:11.305304300Z",
+      "scope": "Same selected cases: profile + sales add/print + purchase add/print; PRICE_INCLUDED; Restaurant; configured 1 browser in both runs. Conservative uses serial XML, independent main accounts, 500ms polling and fresh context reads. Optimized enables shared main accounts, 200ms polling and scoped verified context reads. XML remains serial with one browser, so this comparison does not measure parallelism. Shared report readiness code is identical in both. This is not a pre-change checkout or a full XML speedup.",
+      "startedUtc": "2026-10-30T22:54:59.229242100Z",
+      "status": 0,
+      "elapsedMilliseconds": 312075.9931
+    },
+    "evidence": "target/validation/business-1b6b758d-7cfa-4d99-a3be-a84b6f079f90",
+    "branchCleanup": {
+      "branchId": "d41e4bcd7f0a41f7",
+      "status": "DELETED"
+    },
+    "cases": [
+      {
+        "fullName": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+        "name": "selectedBranchRetainsRequestedPolicies",
+        "status": "passed",
+        "start": 1793400925745,
+        "stop": 1793400926883
+      },
+      {
+        "fullName": "Invoice.SalesInvoiceTaxReviewTest.reviewSalesInvoice",
+        "name": "فاتورة المبيعات — إضافة — السعر شامل الضريبة — صنف خاضع — سعر عادي",
+        "status": "passed",
+        "start": 1793400935837,
+        "stop": 1793400960598
+      },
+      {
+        "fullName": "Purches.PurchaseInvoiceTaxReviewTest.reviewPurchaseInvoice",
+        "name": "فاتورة المشتريات — طباعة — السعر شامل الضريبة — صنف خاضع — سعر عادي",
+        "status": "passed",
+        "start": 1793401092901,
+        "stop": 1793401108826
+      },
+      {
+        "fullName": "Invoice.SalesInvoiceTaxReviewTest.reviewSalesInvoice",
+        "name": "فاتورة المبيعات — طباعة — السعر شامل الضريبة — صنف خاضع — سعر عادي",
+        "status": "passed",
+        "start": 1793400960670,
+        "stop": 1793400981907
+      },
+      {
+        "fullName": "Purches.PurchaseInvoiceTaxReviewTest.reviewPurchaseInvoice",
+        "name": "فاتورة المشتريات — إضافة — السعر شامل الضريبة — صنف خاضع — سعر عادي",
+        "status": "passed",
+        "start": 1793401074146,
+        "stop": 1793401092850
+      }
+    ],
+    "statusCounts": {
+      "passed": 5
+    },
+    "settings": {
+      "requestedBrowsers": 1,
+      "selectedBrowsers": 1
+    },
+    "measurements": [
+      {
+        "operation": "invocation",
+        "maxMilliseconds": 83490.6737,
+        "calls": 1,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Invoice.SalesScenarioTest.retrySalesCleanup",
+        "totalMilliseconds": 83490.6737
+      },
+      {
+        "operation": "invocation",
+        "maxMilliseconds": 82071.7096,
+        "calls": 1,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseScenarioTest.cleanPurchasePage",
+        "totalMilliseconds": 82071.7096
+      },
+      {
+        "operation": "delete",
+        "maxMilliseconds": 17346.8204,
+        "calls": 4,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Stores",
+        "totalMilliseconds": 67075.8289
+      },
+      {
+        "operation": "invocation",
+        "maxMilliseconds": 24380.8831,
+        "calls": 2,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Invoice.SalesInvoiceTaxReviewTest.reviewSalesInvoice",
+        "totalMilliseconds": 45270.5351
+      },
+      {
+        "operation": "invocation",
+        "maxMilliseconds": 18381.2708,
+        "calls": 2,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseInvoiceTaxReviewTest.reviewPurchaseInvoice",
+        "totalMilliseconds": 33837.6017
+      },
+      {
+        "operation": "invocation",
+        "maxMilliseconds": 8583.5244,
+        "calls": 3,
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Plugin_ERP.Tests.LoginTest.BaseTest.setup",
+        "totalMilliseconds": 25117.4419
+      },
+      {
+        "operation": "branch-lifecycle",
+        "maxMilliseconds": 20107.8068,
+        "calls": 1,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "owned-branch",
+        "totalMilliseconds": 20107.8068
+      },
+      {
+        "operation": "branch-lifecycle",
+        "maxMilliseconds": 16664.7439,
+        "calls": 1,
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "owned-branch",
+        "totalMilliseconds": 16664.7439
+      },
+      {
+        "operation": "delete",
+        "maxMilliseconds": 1239.2477,
+        "calls": 14,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Accounts",
+        "totalMilliseconds": 15628.8835
+      },
+      {
+        "operation": "delete",
+        "maxMilliseconds": 4380.6404,
+        "calls": 3,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Agents",
+        "totalMilliseconds": 12550.9675
+      },
+      {
+        "operation": "delete",
+        "maxMilliseconds": 6056.315,
+        "calls": 2,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Units",
+        "totalMilliseconds": 11589.7087
+      },
+      {
+        "operation": "delete",
+        "maxMilliseconds": 4803.5195,
+        "calls": 2,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Purchases",
+        "totalMilliseconds": 9169.9018
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 908.6163,
+        "calls": 16,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Items",
+        "totalMilliseconds": 8798.6333
+      },
+      {
+        "operation": "delete",
+        "maxMilliseconds": 4294.577,
+        "calls": 2,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "ItemTransactions-Sales",
+        "totalMilliseconds": 8426.9092
+      },
+      {
+        "operation": "delete",
+        "maxMilliseconds": 2509.1096,
+        "calls": 4,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Items",
+        "totalMilliseconds": 8036.8333
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 1239.2224,
+        "calls": 4,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "ItemTransactions-Sales",
+        "totalMilliseconds": 4567.0602
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 910.3668,
+        "calls": 28,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Accounts",
+        "totalMilliseconds": 4487.2402
+      },
+      {
+        "operation": "create",
+        "maxMilliseconds": 1052.0901,
+        "calls": 4,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Items",
+        "totalMilliseconds": 4066.4059
+      },
+      {
+        "operation": "ui-wait",
+        "maxMilliseconds": 2362.1016,
+        "calls": 2,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "report-ready",
+        "totalMilliseconds": 3972.4315
+      },
+      {
+        "operation": "delete",
+        "maxMilliseconds": 2077.5759,
+        "calls": 2,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Suppliers",
+        "totalMilliseconds": 3935.4916
+      },
+      {
+        "operation": "delete",
+        "maxMilliseconds": 1830.3224,
+        "calls": 2,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Customers",
+        "totalMilliseconds": 3612.1381
+      },
+      {
+        "operation": "create",
+        "maxMilliseconds": 603.6097,
+        "calls": 14,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Accounts",
+        "totalMilliseconds": 3591.8574
+      },
+      {
+        "operation": "delete",
+        "maxMilliseconds": 585.5518,
+        "calls": 6,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "ItemCategories",
+        "totalMilliseconds": 3405.1613
+      },
+      {
+        "operation": "ui-wait",
+        "maxMilliseconds": 1094.6751,
+        "calls": 3,
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "overlay-ready",
+        "totalMilliseconds": 3269.4057
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 779.4786,
+        "calls": 4,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "ItemTransactions-Sales",
+        "totalMilliseconds": 3012.814
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 1506.496,
+        "calls": 8,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Items",
+        "totalMilliseconds": 2987.221
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 296.0772,
+        "calls": 16,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Stores",
+        "totalMilliseconds": 2208.9526
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 608.4284,
+        "calls": 12,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "ItemCategories",
+        "totalMilliseconds": 1960.7315
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 175.4396,
+        "calls": 16,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Branches",
+        "totalMilliseconds": 1853.5357
+      },
+      {
+        "operation": "create",
+        "maxMilliseconds": 742.0089,
+        "calls": 2,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Customers",
+        "totalMilliseconds": 1465.6144
+      },
+      {
+        "operation": "create",
+        "maxMilliseconds": 570.6394,
+        "calls": 4,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Stores",
+        "totalMilliseconds": 1379.1662
+      },
+      {
+        "operation": "create",
+        "maxMilliseconds": 714.8843,
+        "calls": 2,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Suppliers",
+        "totalMilliseconds": 1366.0517
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 427.7773,
+        "calls": 8,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Branches",
+        "totalMilliseconds": 1265.5784
+      },
+      {
+        "operation": "create",
+        "maxMilliseconds": 802.0352,
+        "calls": 3,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Agents",
+        "totalMilliseconds": 1259.7411
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 257.8534,
+        "calls": 6,
+        "phase": "cleanup",
+        "failedCalls": 2,
+        "target": "Customers",
+        "totalMilliseconds": 1104.1243
+      },
+      {
+        "operation": "update",
+        "maxMilliseconds": 582.6693,
+        "calls": 4,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Branches",
+        "totalMilliseconds": 1046.5021
+      },
+      {
+        "operation": "create",
+        "maxMilliseconds": 208.1755,
+        "calls": 6,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "ItemCategories",
+        "totalMilliseconds": 998.7659
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 453.2109,
+        "calls": 2,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Suppliers",
+        "totalMilliseconds": 900.8018
+      },
+      {
+        "operation": "update",
+        "maxMilliseconds": 264.0702,
+        "calls": 4,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Branches",
+        "totalMilliseconds": 876.5134
+      },
+      {
+        "operation": "create",
+        "maxMilliseconds": 655.1275,
+        "calls": 2,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Units",
+        "totalMilliseconds": 834.8467
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 191.4005,
+        "calls": 6,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Agents",
+        "totalMilliseconds": 804.6596
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 168.8798,
+        "calls": 4,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Units",
+        "totalMilliseconds": 640.0363
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 179.001,
+        "calls": 4,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Suppliers",
+        "totalMilliseconds": 587.733
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 181.7363,
+        "calls": 4,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Purchases",
+        "totalMilliseconds": 567.4443
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 174.9986,
+        "calls": 4,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Purchases",
+        "totalMilliseconds": 493.9562
+      },
+      {
+        "operation": "get",
+        "maxMilliseconds": 231.8866,
+        "calls": 2,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "Customers",
+        "totalMilliseconds": 435.8642
+      },
+      {
+        "operation": "invocation",
+        "maxMilliseconds": 397.5272,
+        "calls": 1,
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Invoice.SalesScenarioTest.awaitSalesSession",
+        "totalMilliseconds": 397.5272
+      },
+      {
+        "operation": "invocation",
+        "maxMilliseconds": 390.6384,
+        "calls": 1,
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseScenarioTest.awaitPurchaseSession",
+        "totalMilliseconds": 390.6384
+      },
+      {
+        "operation": "invocation",
+        "maxMilliseconds": 141.7014,
+        "calls": 3,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Plugin_ERP.Tests.LoginTest.BaseTest.tearDown",
+        "totalMilliseconds": 377.0897
+      },
+      {
+        "operation": "invocation",
+        "maxMilliseconds": 34.8201,
+        "calls": 2,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Invoice.SalesScenarioTest.cleanSalesScenario",
+        "totalMilliseconds": 59.7783
+      },
+      {
+        "operation": "invocation",
+        "maxMilliseconds": 26.0056,
+        "calls": 2,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseScenarioTest.finishPurchaseCase",
+        "totalMilliseconds": 46.0701
+      },
+      {
+        "operation": "invocation",
+        "maxMilliseconds": 11.3892,
+        "calls": 5,
+        "phase": "cleanup",
+        "failedCalls": 0,
+        "target": "Plugin_ERP.Tests.LoginTest.BaseTest.verifyProfileAfterScenario",
+        "totalMilliseconds": 43.1067
+      },
+      {
+        "operation": "invocation",
+        "maxMilliseconds": 11.3501,
+        "calls": 5,
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Plugin_ERP.Tests.LoginTest.BaseTest.verifyProfileBeforeScenario",
+        "totalMilliseconds": 40.5554
+      },
+      {
+        "operation": "invocation",
+        "maxMilliseconds": 29.1808,
+        "calls": 2,
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Invoice.SalesScenarioTest.beginSalesScenario",
+        "totalMilliseconds": 33.4989
+      },
+      {
+        "operation": "invocation",
+        "maxMilliseconds": 15.0192,
+        "calls": 2,
+        "phase": "setup",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseScenarioTest.beginPurchaseScenario",
+        "totalMilliseconds": 18.3247
+      },
+      {
+        "operation": "invocation",
+        "maxMilliseconds": 11.4047,
+        "calls": 1,
+        "phase": "execution",
+        "failedCalls": 0,
+        "target": "SuiteSupport.BusinessProfileVerificationTest.selectedBranchRetainsRequestedPolicies",
+        "totalMilliseconds": 11.4047
+      },
+      {
+        "operation": "class-lock-wait",
+        "maxMilliseconds": 0.0208,
+        "calls": 1,
+        "phase": "scheduling",
+        "failedCalls": 0,
+        "target": "SuiteSupport.BusinessProfileVerificationTest",
+        "totalMilliseconds": 0.0208
+      },
+      {
+        "operation": "class-lock-wait",
+        "maxMilliseconds": 0.0059,
+        "calls": 1,
+        "phase": "scheduling",
+        "failedCalls": 0,
+        "target": "Invoice.SalesInvoiceTaxReviewTest",
+        "totalMilliseconds": 0.0059
+      },
+      {
+        "operation": "class-lock-wait",
+        "maxMilliseconds": 0.0023,
+        "calls": 1,
+        "phase": "scheduling",
+        "failedCalls": 0,
+        "target": "Purches.PurchaseInvoiceTaxReviewTest",
+        "totalMilliseconds": 0.0023
+      }
+    ],
+    "cleanupCounts": {
+      "ItemTransactions-Sales": 2,
+      "Agents": 3,
+      "Customers": 2,
+      "Accounts": 14,
+      "Items": 4,
+      "ItemCategories": 6,
+      "SalesBranchStoreMembership": 2,
+      "Stores": 4,
+      "Units": 2,
+      "Purchases": 2,
+      "Suppliers": 2,
+      "PurchaseBranchStoreMembership": 2
+    },
+    "allFixtureCleanupSucceeded": true
+  },
+  "observedComparison": {
+    "conservativeMilliseconds": 328070.383,
+    "optimizedIsolatedMilliseconds": 312075.9931,
+    "differenceMilliseconds": 15994.389899999951,
+    "observedReductionPercent": 4.875292232642638,
+    "accountCreateCalls": {
+      "conservative": 16,
+      "optimizedIsolated": 14
+    },
+    "limitations": [
+      "One small matched sample with a separate optimized repeat; not a statistically established performance gain.",
+      "Current code in both modes; not an old checkout versus new checkout comparison.",
+      "One browser, so this does not measure parallelism or full Regression, Smoke, Sanity, E2E or all invoice review cases.",
+      "First optimized round overlapped local CI and is excluded from the stated comparison."
+    ]
+  }
+}
